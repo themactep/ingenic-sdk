@@ -1,0 +1,13 @@
+ifeq ($(FAMILY),)
+	@echo FAMILY must be set
+endif
+
+ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
+ccflags-y += -I$(src)/isp/$(FAMILY)/include
+
+include $(src)/sinfo/Kbuild
+include $(src)/gpio/Kbuild
+include $(src)/avpu/$(FAMILY)/Kbuild
+include $(src)/isp/$(FAMILY)/Kbuild
+include $(src)/sensors/$(FAMILY)/gc4653/Kbuild
+include $(src)/audio/$(FAMILY)/oss2/Kbuild

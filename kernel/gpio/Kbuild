@@ -1,0 +1,12 @@
+MODULE_NAME := gpio
+OUT := $(MODULE_NAME)
+
+DIR=$(MODULE_NAME)
+
+SRCS := $(DIR)/gpio.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
