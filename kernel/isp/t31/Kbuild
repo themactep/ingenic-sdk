@@ -1,0 +1,15 @@
+MODULE_NAME := tx-isp-t31
+OUT := $(MODULE_NAME)
+
+DIR=isp/$(FAMILY)
+
+SRCS := \
+  $(DIR)/tx-isp-debug.c \
+  $(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(DIR)/libt31-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
