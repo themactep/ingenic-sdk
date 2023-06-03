@@ -34,8 +34,6 @@
 
 #define DEV_NAME "avpu"
 
-#define AVPU_DRIVER_VERSION "H20220528a"
-
 int avpu_codec_major;
 int avpu_codec_nr_devs = AVPU_NR_DEVS;
 module_param(avpu_codec_nr_devs, int, S_IRUGO);
@@ -593,7 +591,6 @@ int avpu_codec_probe(struct platform_device *pdev)
 
 	codec->minor = current_minor;
 	++current_minor;
-	printk("@@@@ avpu driver ok(version %s) @@@@@\n", AVPU_DRIVER_VERSION);
 
 	return 0;
 
