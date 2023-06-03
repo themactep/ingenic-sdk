@@ -1,0 +1,15 @@
+MODULE_NAME := tx-isp-t40
+OUT := $(MODULE_NAME)
+
+DIR=isp/$(FAMILY)
+
+SRCS := \
+  $(DIR)/tx-isp-funcs.c \
+  $(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(DIR)/libt40-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

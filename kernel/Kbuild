@@ -7,9 +7,16 @@ ccflags-y += -I$(src)/isp/$(FAMILY)/include
 
 include $(src)/sinfo/Kbuild
 include $(src)/gpio/Kbuild
-include $(src)/audio/$(FAMILY)/oss2/Kbuild
+
+ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40),y)
 include $(src)/avpu/$(FAMILY)/Kbuild
 include $(src)/isp/$(FAMILY)/Kbuild
+ifneq ($(CONFIG_SOC_T40),y)
+include $(src)/audio/$(FAMILY)/oss2/Kbuild
+endif
+endif
+
+ifeq ($(CONFIG_SOC_T31),y)
 include $(src)/sensors/$(FAMILY)/gc2053/Kbuild
 include $(src)/sensors/$(FAMILY)/gc2083/Kbuild
 include $(src)/sensors/$(FAMILY)/gc4653/Kbuild
@@ -23,3 +30,11 @@ include $(src)/sensors/$(FAMILY)/sc2232h/Kbuild
 include $(src)/sensors/$(FAMILY)/sc2335/Kbuild
 include $(src)/sensors/$(FAMILY)/sc3338/Kbuild
 include $(src)/sensors/$(FAMILY)/sc5235/Kbuild
+endif
+
+ifeq ($(CONFIG_SOC_T40),y)
+include $(src)/sensors/$(FAMILY)/imx307/Kbuild
+include $(src)/sensors/$(FAMILY)/imx334/Kbuild
+include $(src)/sensors/$(FAMILY)/imx335/Kbuild
+include $(src)/sensors/$(FAMILY)/imx415/Kbuild
+endif
