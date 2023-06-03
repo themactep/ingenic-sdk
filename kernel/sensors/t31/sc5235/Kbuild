@@ -1,0 +1,12 @@
+MODULE_NAME := sensor_sc5235_t31
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(FAMILY)
+
+SRCS := $(DIR)/sc5235/sc5235.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
