@@ -1,0 +1,12 @@
+MODULE_NAME := sensor_jxh62_t31
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(FAMILY)
+
+SRCS := $(DIR)/jxh62/jxh62.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

@@ -1340,7 +1340,7 @@ static int gc4653_g_chip_ident(struct tx_isp_subdev *sd,
 				client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc4653 chip found @ 0x%02x (%s)\n sensor drv version %s", client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_WARNING("gc4653 chip found @ 0x%02x (%s)\n sensor drv version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "gc4653", sizeof("gc4653"));
 		chip->ident = ident;

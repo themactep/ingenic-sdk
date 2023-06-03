@@ -11,4 +11,4 @@ make \
     M=$PWD
 ```
 
-where `FAMILY` can be set to options `t31`, `t40`
+where `FAMILY` can be set to options `t31`, `t40` and other wip.
