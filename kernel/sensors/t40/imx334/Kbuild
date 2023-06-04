@@ -1,7 +1,7 @@
 MODULE_NAME := sensor_imx334_t40
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(FAMILY)
+DIR=sensors/$(SOC)
 
 SRCS := $(DIR)/imx334/imx334.c
 

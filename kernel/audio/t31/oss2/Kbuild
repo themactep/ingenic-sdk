@@ -1,7 +1,7 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(MODULE_NAME)/$(FAMILY)
+DIR=$(MODULE_NAME)/$(SOC)
 
 ifeq ($(CONFIG_JZ_TS_DMIC),y)
 SRCS := \
