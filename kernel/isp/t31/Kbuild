@@ -1,7 +1,7 @@
 MODULE_NAME := tx-isp-t31
 OUT := $(MODULE_NAME)
 
-DIR=isp/$(FAMILY)
+DIR=isp/$(SOC)
 
 SRCS := \
   $(DIR)/tx-isp-debug.c \
