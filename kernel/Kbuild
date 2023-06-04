@@ -36,8 +36,14 @@ include $(src)/sensors/$(FAMILY)/sc5235/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T40),y)
+#include $(src)/sensors/$(FAMILY)/gc4653/Kbuild
 include $(src)/sensors/$(FAMILY)/imx307/Kbuild
 include $(src)/sensors/$(FAMILY)/imx334/Kbuild
 include $(src)/sensors/$(FAMILY)/imx335/Kbuild
 include $(src)/sensors/$(FAMILY)/imx415/Kbuild
+#include $(src)/sensors/$(FAMILY)/jxk04/Kbuild
+#include $(src)/sensors/$(FAMILY)/sc2232h/Kbuild
+#include $(src)/sensors/$(FAMILY)/sc3335/Kbuild
+#include $(src)/sensors/$(FAMILY)/sc500ai/Kbuild
+#include $(src)/sensors/$(FAMILY)/sc5235/Kbuild
 endif
