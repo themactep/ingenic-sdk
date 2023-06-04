@@ -1,49 +1,49 @@
-ifeq ($(FAMILY),)
-  @echo FAMILY must be set
+ifeq ($(SOC),)
+  @echo SOC must be set
 endif
 
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
-ccflags-y += -I$(src)/isp/$(FAMILY)/include
-ccflags-y += -I$(src)/audio/$(FAMILY)/oss3/include
+ccflags-y += -I$(src)/isp/$(SOC)/include
+ccflags-y += -I$(src)/audio/$(SOC)/oss3/include
 
 include $(src)/sinfo/Kbuild
 include $(src)/gpio/Kbuild
 
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40),y)
-include $(src)/avpu/$(FAMILY)/Kbuild
-include $(src)/isp/$(FAMILY)/Kbuild
+include $(src)/avpu/$(SOC)/Kbuild
+include $(src)/isp/$(SOC)/Kbuild
 ifeq ($(CONFIG_SOC_T40),y)
-include $(src)/audio/$(FAMILY)/oss3/Kbuild
+include $(src)/audio/$(SOC)/oss3/Kbuild
 else
-include $(src)/audio/$(FAMILY)/oss2/Kbuild
+include $(src)/audio/$(SOC)/oss2/Kbuild
 endif
 endif
 
 ifeq ($(CONFIG_SOC_T31),y)
-include $(src)/sensors/$(FAMILY)/gc2053/Kbuild
-include $(src)/sensors/$(FAMILY)/gc2083/Kbuild
-include $(src)/sensors/$(FAMILY)/gc4653/Kbuild
-include $(src)/sensors/$(FAMILY)/imx307/Kbuild
-include $(src)/sensors/$(FAMILY)/jxf37/Kbuild
-include $(src)/sensors/$(FAMILY)/jxh62/Kbuild
-include $(src)/sensors/$(FAMILY)/jxq03/Kbuild
-include $(src)/sensors/$(FAMILY)/jxq03p/Kbuild
-include $(src)/sensors/$(FAMILY)/sc200ai/Kbuild
-include $(src)/sensors/$(FAMILY)/sc2232h/Kbuild
-include $(src)/sensors/$(FAMILY)/sc2335/Kbuild
-include $(src)/sensors/$(FAMILY)/sc3338/Kbuild
-include $(src)/sensors/$(FAMILY)/sc5235/Kbuild
+include $(src)/sensors/$(SOC)/gc2053/Kbuild
+include $(src)/sensors/$(SOC)/gc2083/Kbuild
+include $(src)/sensors/$(SOC)/gc4653/Kbuild
+include $(src)/sensors/$(SOC)/imx307/Kbuild
+include $(src)/sensors/$(SOC)/jxf37/Kbuild
+include $(src)/sensors/$(SOC)/jxh62/Kbuild
+include $(src)/sensors/$(SOC)/jxq03/Kbuild
+include $(src)/sensors/$(SOC)/jxq03p/Kbuild
+include $(src)/sensors/$(SOC)/sc200ai/Kbuild
+include $(src)/sensors/$(SOC)/sc2232h/Kbuild
+include $(src)/sensors/$(SOC)/sc2335/Kbuild
+include $(src)/sensors/$(SOC)/sc3338/Kbuild
+include $(src)/sensors/$(SOC)/sc5235/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T40),y)
-#include $(src)/sensors/$(FAMILY)/gc4653/Kbuild
-include $(src)/sensors/$(FAMILY)/imx307/Kbuild
-include $(src)/sensors/$(FAMILY)/imx334/Kbuild
-include $(src)/sensors/$(FAMILY)/imx335/Kbuild
-include $(src)/sensors/$(FAMILY)/imx415/Kbuild
-#include $(src)/sensors/$(FAMILY)/jxk04/Kbuild
-#include $(src)/sensors/$(FAMILY)/sc2232h/Kbuild
-#include $(src)/sensors/$(FAMILY)/sc3335/Kbuild
-#include $(src)/sensors/$(FAMILY)/sc500ai/Kbuild
-#include $(src)/sensors/$(FAMILY)/sc5235/Kbuild
+#include $(src)/sensors/$(SOC)/gc4653/Kbuild
+include $(src)/sensors/$(SOC)/imx307/Kbuild
+include $(src)/sensors/$(SOC)/imx334/Kbuild
+include $(src)/sensors/$(SOC)/imx335/Kbuild
+include $(src)/sensors/$(SOC)/imx415/Kbuild
+#include $(src)/sensors/$(SOC)/jxk04/Kbuild
+#include $(src)/sensors/$(SOC)/sc2232h/Kbuild
+#include $(src)/sensors/$(SOC)/sc3335/Kbuild
+#include $(src)/sensors/$(SOC)/sc500ai/Kbuild
+#include $(src)/sensors/$(SOC)/sc5235/Kbuild
 endif
