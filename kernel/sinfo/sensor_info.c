@@ -176,7 +176,8 @@ SENSOR_INFO_T g_sinfo[] =
 	{"sc3338", 0x30,  "cgu_cim", 24000000, {0xcc, 0x41}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"imx334", 0x1a,  "cgu_cim", 37125000, {0x20, 0x03}, 1, {0x302e, 0x302f}, 2, 2, NULL},
 	{"imx335", 0x1a,  "cgu_cim", 37125000, {0x08, 0x0}, 1, {0x302e, 0x302f}, 2, 2, NULL},
-	{"imx415", 0x1a,  "cgu_cim", 37125000, {0x28, 0x23}, 1, {0x3b00, 0x3b06}, 2, 2, NULL}
+	{"imx415", 0x1a,  "cgu_cim", 37125000, {0x28, 0x23}, 1, {0x3b00, 0x3b06}, 2, 2, NULL},
+        {"sc2336", 0x30,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL}
 };
 
 static int8_t g_sensor_id = -1;
