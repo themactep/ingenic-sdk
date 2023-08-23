@@ -1,4 +1,4 @@
-MODULE_NAME := tx-isp-t20
+MODULE_NAME := tx-isp-$(SOC)
 OUT := $(MODULE_NAME)
 
 DIR=isp/$(SOC)
