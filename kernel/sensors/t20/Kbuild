@@ -11,6 +11,7 @@ include $(src)/sensors/$(SOC)/imx291/Kbuild
 include $(src)/sensors/$(SOC)/imx322/Kbuild
 include $(src)/sensors/$(SOC)/imx323/Kbuild
 include $(src)/sensors/$(SOC)/jxf22/Kbuild
+include $(src)/sensors/$(SOC)/jxf23/Kbuild
 include $(src)/sensors/$(SOC)/jxh42/Kbuild
 include $(src)/sensors/$(SOC)/jxh61/Kbuild
 include $(src)/sensors/$(SOC)/jxh62/Kbuild
