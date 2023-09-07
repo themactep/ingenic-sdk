@@ -9,43 +9,15 @@ ccflags-y += -I$(src)/audio/$(SOC)/oss3/include
 include $(src)/sinfo/Kbuild
 include $(src)/gpio/Kbuild
 
+include $(src)/isp/$(SOC)/Kbuild
+include $(src)/sensors/$(SOC)/Kbuild
+
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40),y)
 include $(src)/avpu/$(SOC)/Kbuild
-include $(src)/isp/$(SOC)/Kbuild
+endif
+
 ifeq ($(CONFIG_SOC_T40),y)
 include $(src)/audio/$(SOC)/oss3/Kbuild
 else
 include $(src)/audio/$(SOC)/oss2/Kbuild
-endif
-endif
-
-ifeq ($(CONFIG_SOC_T31),y)
-include $(src)/sensors/$(SOC)/gc2053/Kbuild
-include $(src)/sensors/$(SOC)/gc2083/Kbuild
-include $(src)/sensors/$(SOC)/gc4653/Kbuild
-include $(src)/sensors/$(SOC)/imx307/Kbuild
-include $(src)/sensors/$(SOC)/jxf37/Kbuild
-include $(src)/sensors/$(SOC)/jxh62/Kbuild
-include $(src)/sensors/$(SOC)/jxq03/Kbuild
-include $(src)/sensors/$(SOC)/jxq03p/Kbuild
-include $(src)/sensors/$(SOC)/sc200ai/Kbuild
-include $(src)/sensors/$(SOC)/sc2232h/Kbuild
-include $(src)/sensors/$(SOC)/sc2335/Kbuild
-include $(src)/sensors/$(SOC)/sc2336/Kbuild
-include $(src)/sensors/$(SOC)/sc3338/Kbuild
-include $(src)/sensors/$(SOC)/sc5235/Kbuild
-include $(src)/sensors/$(SOC)/sc4236/Kbuild
-endif
-
-ifeq ($(CONFIG_SOC_T40),y)
-#include $(src)/sensors/$(SOC)/gc4653/Kbuild
-include $(src)/sensors/$(SOC)/imx307/Kbuild
-include $(src)/sensors/$(SOC)/imx334/Kbuild
-include $(src)/sensors/$(SOC)/imx335/Kbuild
-include $(src)/sensors/$(SOC)/imx415/Kbuild
-#include $(src)/sensors/$(SOC)/jxk04/Kbuild
-#include $(src)/sensors/$(SOC)/sc2232h/Kbuild
-#include $(src)/sensors/$(SOC)/sc3335/Kbuild
-#include $(src)/sensors/$(SOC)/sc500ai/Kbuild
-#include $(src)/sensors/$(SOC)/sc5235/Kbuild
 endif

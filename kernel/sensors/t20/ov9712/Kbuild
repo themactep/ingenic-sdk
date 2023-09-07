@@ -1,0 +1,12 @@
+MODULE_NAME := sensor_ov9712_$(SOC)
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(SOC)
+
+SRCS := $(DIR)/ov9712/ov9712.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
