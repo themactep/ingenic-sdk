@@ -46,7 +46,7 @@ system_tab stab ;
 static int isp_clk = ISP_CLK_960P_MODE;
 #elif defined(CONFIG_SOC_T20)
 static int isp_clk = ISP_CLK_1080P_MODE;
-#elif defined(CONFIG_SOC_T30)
+#elif (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 static int isp_clk = ISP_CLK_1080P_MODE;
 #endif
 module_param(isp_clk, int, S_IRUGO);

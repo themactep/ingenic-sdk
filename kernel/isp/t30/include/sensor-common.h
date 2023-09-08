@@ -34,7 +34,7 @@
 static inline int set_sensor_gpio_function(int func_set)
 {
 	int ret = 0;
-#if (defined(CONFIG_SOC_T10) || defined(CONFIG_SOC_T20) || defined(CONFIG_SOC_T30))
+#if (defined(CONFIG_SOC_T10) || defined(CONFIG_SOC_T20) || defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 	switch (func_set) {
 	case DVP_PA_LOW_8BIT:
 		ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x000340ff);
