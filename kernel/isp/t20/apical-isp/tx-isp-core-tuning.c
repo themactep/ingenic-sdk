@@ -9,42 +9,42 @@
 /** the kernel command line whether the mem of WDR and Temper exist. **/
 extern unsigned long ispmem_base;
 extern unsigned long ispmem_size;
-extern system_tab stab ;
+extern system_tab stab;
 
 static inline int wb_value_v4l2_to_apical(int val)
 {
 	int ret = 0;
 	switch(val){
-		case V4L2_WHITE_BALANCE_MANUAL:
-			ret = AWB_MANUAL;
-			break;
-		case V4L2_WHITE_BALANCE_AUTO:
-			ret = AWB_AUTO;
-			break;
-		case V4L2_WHITE_BALANCE_INCANDESCENT:
-			ret = AWB_INCANDESCENT;
-			break;
-		case V4L2_WHITE_BALANCE_FLUORESCENT:
-			ret = AWB_FLOURESCENT;
-			break;
-		case V4L2_WHITE_BALANCE_FLUORESCENT_H:
-			ret = AWB_WARM_FLOURESCENT;
-			break;
-		case V4L2_WHITE_BALANCE_HORIZON:
-			ret = AWB_TWILIGHT;
-			break;
-		case V4L2_WHITE_BALANCE_DAYLIGHT:
-			ret = AWB_DAY_LIGHT;
-			break;
-		case V4L2_WHITE_BALANCE_CLOUDY:
-			ret = AWB_CLOUDY;
-			break;
-		case V4L2_WHITE_BALANCE_SHADE:
-			ret = AWB_SHADE;
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case V4L2_WHITE_BALANCE_MANUAL:
+		ret = AWB_MANUAL;
+		break;
+	case V4L2_WHITE_BALANCE_AUTO:
+		ret = AWB_AUTO;
+		break;
+	case V4L2_WHITE_BALANCE_INCANDESCENT:
+		ret = AWB_INCANDESCENT;
+		break;
+	case V4L2_WHITE_BALANCE_FLUORESCENT:
+		ret = AWB_FLOURESCENT;
+		break;
+	case V4L2_WHITE_BALANCE_FLUORESCENT_H:
+		ret = AWB_WARM_FLOURESCENT;
+		break;
+	case V4L2_WHITE_BALANCE_HORIZON:
+		ret = AWB_TWILIGHT;
+		break;
+	case V4L2_WHITE_BALANCE_DAYLIGHT:
+		ret = AWB_DAY_LIGHT;
+		break;
+	case V4L2_WHITE_BALANCE_CLOUDY:
+		ret = AWB_CLOUDY;
+		break;
+	case V4L2_WHITE_BALANCE_SHADE:
+		ret = AWB_SHADE;
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -64,48 +64,48 @@ static int apical_isp_wb_s_control(struct tx_isp_core_device *core, struct v4l2_
 	api.type = TALGORITHMS;
 	api.dir = COMMAND_SET;
 	switch(control->id){
-		case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
-			api.id = AWB_MODE_ID;
-			api.value = wb_value_v4l2_to_apical(wb_mode->val);
-			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			break;
-		case IMAGE_TUNING_CID_AWB_ATTR:
-			copy_from_user(attr, (const void __user *)control->value, sizeof(*attr));
-			/* sets the lowest color temperature that the AWB algorithm can select */
-			api.id = AWB_RANGE_LOW_ID;
-			api.value = attr->low_color_temp / 100;
-			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			/* sets the highest color temperature that the AWB algorithm can select */
-			api.id = AWB_RANGE_HIGH_ID;
-			api.value = attr->high_color_temp / 100;
-			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			/*
-			* select which zones are used to gather AWB statistics.
-			* the region of interest is defined as rectangle with top-left coordinates(startx, starty)
-			* and bottom-right coordinates(endx, endy).
-			*/
-			api.id = AWB_ROI_ID;
-			api.value = attr->zone_sel.val;
-			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
+		api.id = AWB_MODE_ID;
+		api.value = wb_value_v4l2_to_apical(wb_mode->val);
+		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		break;
+	case IMAGE_TUNING_CID_AWB_ATTR:
+		copy_from_user(attr, (const void __user *)control->value, sizeof(*attr));
+		/* sets the lowest color temperature that the AWB algorithm can select */
+		api.id = AWB_RANGE_LOW_ID;
+		api.value = attr->low_color_temp / 100;
+		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		/* sets the highest color temperature that the AWB algorithm can select */
+		api.id = AWB_RANGE_HIGH_ID;
+		api.value = attr->high_color_temp / 100;
+		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		/*
+		 * select which zones are used to gather AWB statistics.
+		 * the region of interest is defined as rectangle with top-left coordinates(startx, starty)
+		 * and bottom-right coordinates(endx, endy).
+		 */
+		api.id = AWB_ROI_ID;
+		api.value = attr->zone_sel.val;
+		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
 #if 0
-			/* config the weight of every zone  */
-			for(i = 0; i < WEIGHT_ZONE_NUM; i++)
+		/* config the weight of every zone  */
+		for(i = 0; i < WEIGHT_ZONE_NUM; i++)
 #endif
 			break;
-		case IMAGE_TUNING_CID_MWB_ATTR:
-			copy_from_user(mattr, (const void __user *)control->value, sizeof(*mattr));
-			if(wb_mode->cur.val == V4L2_WHITE_BALANCE_MANUAL){
-				api.id = AWB_RGAIN_ID;
-				api.value = mattr->red_gain;
-				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-				api.id = AWB_BGAIN_ID;
-				api.value = mattr->blue_gain;
-				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			}
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case IMAGE_TUNING_CID_MWB_ATTR:
+		copy_from_user(mattr, (const void __user *)control->value, sizeof(*mattr));
+		if(wb_mode->cur.val == V4L2_WHITE_BALANCE_MANUAL){
+			api.id = AWB_RGAIN_ID;
+			api.value = mattr->red_gain;
+			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+			api.id = AWB_BGAIN_ID;
+			api.value = mattr->blue_gain;
+			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		}
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -114,15 +114,15 @@ static inline int ae_value_v4l2_to_apical(int val)
 {
 	int ret = 0;
 	switch(val){
-		case V4L2_EXPOSURE_AUTO:
-			ret = AE_AUTO;
-			break;
-		case V4L2_EXPOSURE_MANUAL:
-			ret = AE_FULL_MANUAL;
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case V4L2_EXPOSURE_AUTO:
+		ret = AE_AUTO;
+		break;
+	case V4L2_EXPOSURE_MANUAL:
+		ret = AE_FULL_MANUAL;
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -142,48 +142,48 @@ static int apical_isp_ae_s_control(struct tx_isp_core_device *core, struct v4l2_
 	api.dir = COMMAND_SET;
 
 	switch(control->id){
-		case V4L2_CID_EXPOSURE_AUTO:
-			if(exp_mode->is_new){
-				api.id = AE_MODE_ID;
-				api.value = ae_value_v4l2_to_apical(exp_mode->val);
-				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			}
-
-			/* set absolut exposure */
-			ctrl = tuning->ctrls.manual_exp;
-			if(ctrl->is_new && exp_mode->cur.val == V4L2_EXPOSURE_MANUAL){
-					api.id = AE_EXPOSURE_ID;
-					api.value = ctrl->val;
-					status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			}
-			/* set exposure gain */
-			ctrl = tuning->ctrls.exp_gain;
-			if(ctrl->is_new){
-				api.id = AE_GAIN_ID;
-				api.value = ctrl->val;
-				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			}
-			/* set exposure compensation */
-			ctrl = tuning->ctrls.exp_compensation;
-			if(ctrl->is_new){
-				api.id = AE_COMPENSATION_ID;
-				api.value = ctrl->val;
-				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			}
-			break;
-		case IMAGE_TUNING_CID_AE_ATTR:
-			copy_from_user(attr, (const void __user *)control->value, sizeof(*attr));
-			api.id = AE_ROI_ID;
-			api.value = attr->zone_sel.val;
+	case V4L2_CID_EXPOSURE_AUTO:
+		if(exp_mode->is_new){
+			api.id = AE_MODE_ID;
+			api.value = ae_value_v4l2_to_apical(exp_mode->val);
 			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		}
+
+		/* set absolut exposure */
+		ctrl = tuning->ctrls.manual_exp;
+		if(ctrl->is_new && exp_mode->cur.val == V4L2_EXPOSURE_MANUAL){
+				api.id = AE_EXPOSURE_ID;
+				api.value = ctrl->val;
+				status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		}
+		/* set exposure gain */
+		ctrl = tuning->ctrls.exp_gain;
+		if(ctrl->is_new){
+			api.id = AE_GAIN_ID;
+			api.value = ctrl->val;
+			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		}
+		/* set exposure compensation */
+		ctrl = tuning->ctrls.exp_compensation;
+		if(ctrl->is_new){
+			api.id = AE_COMPENSATION_ID;
+			api.value = ctrl->val;
+			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
+		}
+		break;
+	case IMAGE_TUNING_CID_AE_ATTR:
+		copy_from_user(attr, (const void __user *)control->value, sizeof(*attr));
+		api.id = AE_ROI_ID;
+		api.value = attr->zone_sel.val;
+		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
 #if 0
-			/* config the weight of every zone  */
-			for(i = 0; i < WEIGHT_ZONE_NUM; i++)
+		/* config the weight of every zone  */
+		for(i = 0; i < WEIGHT_ZONE_NUM; i++)
 #endif
 			break;
-		default:
-			ret = -EINVAL;
-			break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return 0;
 }
@@ -218,7 +218,7 @@ static int apical_isp_ae_g_attr(struct tx_isp_core_device *core, struct v4l2_con
 	/* config the weight of every zone  */
 	for(i = 0; i < WEIGHT_ZONE_NUM; i++)
 #endif
-	return 0;
+		return 0;
 }
 
 /* the format of return value is 8.8 */
@@ -235,10 +235,12 @@ static inline int apical_isp_g_totalgain(struct tx_isp_core_device *core, struct
 	copy_to_user((void __user *)control->value, (const void *)&total_gain, sizeof(unsigned int));
 	return ISP_SUCCESS;
 }
+
 static inline int af_value_v4l2_to_apical(int val)
 {
 	return val + AF_AUTO_SINGLE;
 }
+
 static int apical_isp_af_s_control(struct tx_isp_core_device *core, struct v4l2_control *control)
 {
 	struct video_device *video = core->tun;
@@ -453,23 +455,23 @@ static int apical_isp_temper_dns_s_control(struct tx_isp_core_device *core, stru
 	api.dir = COMMAND_SET;
 	api.id = SYSTEM_MANUAL_TEMPER;
 	switch(temper->val){
-		case ISPCORE_TEMPER_MODE_DISABLE:
-			api.value = OFF;
-			break;
-		case ISPCORE_TEMPER_MODE_AUTO:
-		case ISPCORE_TEMPER_MODE_MANUAL:
-			if(tuning->temper_paddr == 0){
-				return -EPERM;
-			}
-			apical_isp_temper_temper2_mode_write(1);
-			apical_isp_temper_frame_buffer_active_width_write(contrl->inwidth);
-			apical_isp_temper_frame_buffer_active_height_write(contrl->inheight);
-			apical_isp_temper_frame_buffer_line_offset_write(contrl->inwidth * 4);
-			api.value = temper->val == ISPCORE_TEMPER_MODE_AUTO ? 0 : 1;
-			break;
-		default:
-			ret = -ISP_ERROR;
-			break;
+	case ISPCORE_TEMPER_MODE_DISABLE:
+		api.value = OFF;
+		break;
+	case ISPCORE_TEMPER_MODE_AUTO:
+	case ISPCORE_TEMPER_MODE_MANUAL:
+		if(tuning->temper_paddr == 0){
+			return -EPERM;
+		}
+		apical_isp_temper_temper2_mode_write(1);
+		apical_isp_temper_frame_buffer_active_width_write(contrl->inwidth);
+		apical_isp_temper_frame_buffer_active_height_write(contrl->inheight);
+		apical_isp_temper_frame_buffer_line_offset_write(contrl->inwidth * 4);
+		api.value = temper->val == ISPCORE_TEMPER_MODE_AUTO ? 0 : 1;
+		break;
+	default:
+		ret = -ISP_ERROR;
+		break;
 	}
 	if(ret != ISP_SUCCESS)
 		return ret;
@@ -578,27 +580,27 @@ static inline int rawdrc_value_v4l2_to_apical(int val)
 {
 	int ret = 0;
 	switch(val){
-		case 0:
-			ret = MANUAL;
-			break;
-		case 1:
-			ret = UNLIMIT;
-			break;
-		case 2:
-			ret = HIGH;
-			break;
-		case 3:
-			ret = MEDIUM;
-			break;
-		case 4:
-			ret = LOW;
-			break;
-		case 5:
-			ret = OFF;
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case 0:
+		ret = MANUAL;
+		break;
+	case 1:
+		ret = UNLIMIT;
+		break;
+	case 2:
+		ret = HIGH;
+		break;
+	case 3:
+		ret = MEDIUM;
+		break;
+	case 4:
+		ret = LOW;
+		break;
+	case 5:
+		ret = OFF;
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -789,7 +791,6 @@ static inline int apical_isp_wdr_s_attr(struct tx_isp_core_device *core, struct 
 	return ISP_SUCCESS;
 }
 
-
 static int apical_isp_bypass_s_control(struct tx_isp_core_device *core, struct v4l2_control *control)
 {
 	struct video_device *video = core->tun;
@@ -834,7 +835,6 @@ static int apical_isp_freeze_s_control(struct tx_isp_core_device *core, struct v
 
 	return ISP_SUCCESS;
 }
-
 
 static inline int apical_isp_test_s_control(struct tx_isp_core_device *core, struct v4l2_control *control)
 {
@@ -930,6 +930,7 @@ static inline int apical_isp_flicker_s_control(struct tx_isp_core_device *core, 
 	unsigned char status = 0;
 	int reason = 0;
 	int ret = ISP_SUCCESS;
+
 	api.type = TALGORITHMS;
 	api.dir = COMMAND_SET;
 	api.id = ANTIFLICKER_MODE_ID;
@@ -1089,17 +1090,17 @@ static int apical_isp_antifog_s_control(struct tx_isp_core_device *core, struct 
 		/* set present mode */
 		api.id = ANTIFOG_PRESET_ID;
 		switch(fog->val){
-			case 3:
-				api.value = ANTIFOG_WEAK;
-				break;
-			case 2:
-				api.value = ANTIFOG_MEDIUM;
-				break;
-			case 1:
-				api.value = ANTIFOG_STRONG;
-				break;
-			default:
-				break;
+		case 3:
+			api.value = ANTIFOG_WEAK;
+			break;
+		case 2:
+			api.value = ANTIFOG_MEDIUM;
+			break;
+		case 1:
+			api.value = ANTIFOG_STRONG;
+			break;
+		default:
+			break;
 		}
 		status = apical_command(api.type, api.id, api.value, api.dir, &reason);
 		/* enable anti fog modules */
@@ -1121,48 +1122,48 @@ static inline int scene_value_v4l2_to_apical(int val)
 {
 	int ret = 0;
 	switch(val){
-		case V4L2_SCENE_MODE_NONE:
-			ret = AUTO;
-			break;
-		case V4L2_SCENE_MODE_BEACH_SNOW:
-			ret = BEACH_SNOW;
-			break;
-		case V4L2_SCENE_MODE_CANDLE_LIGHT:
-			ret = CANDLE;
-			break;
-		case V4L2_SCENE_MODE_DAWN_DUSK:
-			ret = DAWN;
-			break;
-		case V4L2_SCENE_MODE_FIREWORKS:
-			ret = FIREWORKS;
-			break;
-		case V4L2_SCENE_MODE_LANDSCAPE:
-			ret = LANDSCAPE;
-			break;
-		case V4L2_SCENE_MODE_NIGHT:
-			ret = NIGHT;
-			break;
-		case V4L2_SCENE_MODE_PARTY_INDOOR:
-			ret = INDOOR;
-			break;
-		case V4L2_SCENE_MODE_PORTRAIT:
-			ret = PORTRAIT;
-			break;
-		case V4L2_SCENE_MODE_SPORTS:
-			ret = MOTION;
-			break;
-		case V4L2_SCENE_MODE_SUNSET:
-			ret = SUNSET;
-			break;
-		case V4L2_SCENE_MODE_TEXT:
-			ret = TEXT;
-			break;
-		case V4L2_SCENE_MODE_TEXT + 1:
-			ret = NIGHT_PORTRAIT;
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case V4L2_SCENE_MODE_NONE:
+		ret = AUTO;
+		break;
+	case V4L2_SCENE_MODE_BEACH_SNOW:
+		ret = BEACH_SNOW;
+		break;
+	case V4L2_SCENE_MODE_CANDLE_LIGHT:
+		ret = CANDLE;
+		break;
+	case V4L2_SCENE_MODE_DAWN_DUSK:
+		ret = DAWN;
+		break;
+	case V4L2_SCENE_MODE_FIREWORKS:
+		ret = FIREWORKS;
+		break;
+	case V4L2_SCENE_MODE_LANDSCAPE:
+		ret = LANDSCAPE;
+		break;
+	case V4L2_SCENE_MODE_NIGHT:
+		ret = NIGHT;
+		break;
+	case V4L2_SCENE_MODE_PARTY_INDOOR:
+		ret = INDOOR;
+		break;
+	case V4L2_SCENE_MODE_PORTRAIT:
+		ret = PORTRAIT;
+		break;
+	case V4L2_SCENE_MODE_SPORTS:
+		ret = MOTION;
+		break;
+	case V4L2_SCENE_MODE_SUNSET:
+		ret = SUNSET;
+		break;
+	case V4L2_SCENE_MODE_TEXT:
+		ret = TEXT;
+		break;
+	case V4L2_SCENE_MODE_TEXT + 1:
+		ret = NIGHT_PORTRAIT;
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -1189,24 +1190,24 @@ static inline int colorfx_value_v4l2_to_apical(int val)
 {
 	int ret = 0;
 	switch(val){
-		case V4L2_COLORFX_NONE:
-			ret = NORMAL;
-			break;
-		case V4L2_COLORFX_BW:
-			ret = BLACK_AND_WHITE;
-			break;
-		case V4L2_COLORFX_SEPIA:
-			ret = SEPIA;
-			break;
-		case V4L2_COLORFX_NEGATIVE:
-			ret = NEGATIVE;
-			break;
-		case V4L2_COLORFX_VIVID:
-			ret = VIVID;
-			break;
-		default:
-			ret = -EINVAL;
-			break;
+	case V4L2_COLORFX_NONE:
+		ret = NORMAL;
+		break;
+	case V4L2_COLORFX_BW:
+		ret = BLACK_AND_WHITE;
+		break;
+	case V4L2_COLORFX_SEPIA:
+		ret = SEPIA;
+		break;
+	case V4L2_COLORFX_NEGATIVE:
+		ret = NEGATIVE;
+		break;
+	case V4L2_COLORFX_VIVID:
+		ret = VIVID;
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 	return ret;
 }
@@ -1852,8 +1853,8 @@ static inline int apical_isp_awb_cwf_s_shift(struct tx_isp_core_device *core, st
 		*(uint16_t *)(table[_CALIBRATION_LIGHT_SRC]->ptr) = control->value >> 16;
 		*((uint16_t *)(table[_CALIBRATION_LIGHT_SRC]->ptr) + 1) = control->value & 0xffff;
 		apical_api_calibration(CALIBRATION_LIGHT_SRC,COMMAND_SET, table[_CALIBRATION_LIGHT_SRC]->ptr,
-				table[_CALIBRATION_LIGHT_SRC]->rows * table[_CALIBRATION_LIGHT_SRC]->cols
-				* table[_CALIBRATION_LIGHT_SRC]->width, &ret);
+				       table[_CALIBRATION_LIGHT_SRC]->rows * table[_CALIBRATION_LIGHT_SRC]->cols
+				       * table[_CALIBRATION_LIGHT_SRC]->width, &ret);
 	}
 	return ret;
 }
@@ -1880,9 +1881,9 @@ static inline int apical_isp_sat_s_control(struct tx_isp_core_device *core, stru
 		goto set_saturation_val;
 
 	if(tuning->ctrls.daynight == ISP_CORE_RUNING_MODE_DAY_MODE){
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].saturation;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].saturation;
 	}else{
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].saturation;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].saturation;
 	}
 
 	/* the amended value */
@@ -1920,9 +1921,9 @@ static inline int apical_isp_bright_s_control(struct tx_isp_core_device *core, s
 		goto set_bright_val;
 
 	if(tuning->ctrls.daynight == ISP_CORE_RUNING_MODE_DAY_MODE){
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].brightness;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].brightness;
 	}else{
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].brightness;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].brightness;
 	}
 
 	/* the amended value */
@@ -1968,9 +1969,9 @@ static inline int apical_isp_contrast_s_control(struct tx_isp_core_device *core,
 	total_gain = math_exp2(total_gain,5,5);
 
 	if(tuning->ctrls.daynight == ISP_CORE_RUNING_MODE_DAY_MODE){
-			curves = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].contrast;
+		curves = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].contrast;
 	}else{
-			curves = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].contrast;
+		curves = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].contrast;
 	}
 
 	/* When curve[0][0] == 0xff, the curves is invalid. */
@@ -2094,9 +2095,9 @@ static inline int apical_isp_sharp_s_control(struct tx_isp_core_device *core, st
 		goto set_sharpness_val;
 
 	if(tuning->ctrls.daynight == ISP_CORE_RUNING_MODE_DAY_MODE){
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].sharpness;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_DAY_MODE].sharpness;
 	}else{
-			mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].sharpness;
+		mid_node = param->customer[TX_ISP_PRIV_PARAM_NIGHT_MODE].sharpness;
 	}
 
 	/* the amended value */
@@ -2173,22 +2174,22 @@ static inline int af_status_apical_to_v4l2(unsigned int val)
 {
 	int ret = ISP_SUCCESS;
 	switch(val){
-		case AF_NOT_FOCUSED:
-			ret = V4L2_AUTO_FOCUS_STATUS_IDLE;
-			break;
-		case AF_SUCCESS:
-		case AF_LOCKED:
-			ret = V4L2_AUTO_FOCUS_STATUS_REACHED;
-			break;
-		case AF_FAIL:
-			ret = V4L2_AUTO_FOCUS_STATUS_FAILED;
-			break;
-		case AF_RUNNING:
-			ret = V4L2_AUTO_FOCUS_STATUS_BUSY;
-			break;
-		default:
-			ret = -ISP_ERROR;
-			break;
+	case AF_NOT_FOCUSED:
+		ret = V4L2_AUTO_FOCUS_STATUS_IDLE;
+		break;
+	case AF_SUCCESS:
+	case AF_LOCKED:
+		ret = V4L2_AUTO_FOCUS_STATUS_REACHED;
+		break;
+	case AF_FAIL:
+		ret = V4L2_AUTO_FOCUS_STATUS_FAILED;
+		break;
+	case AF_RUNNING:
+		ret = V4L2_AUTO_FOCUS_STATUS_BUSY;
+		break;
+	default:
+		ret = -ISP_ERROR;
+		break;
 	}
 	return ret;
 }
@@ -2306,8 +2307,8 @@ static int apical_isp_gamma_s_attr(struct tx_isp_core_device *core, struct v4l2_
 		copy_from_user(&attr, (const void __user*)control->value, sizeof(attr));
 	}
 	apical_api_calibration(CALIBRATION_GAMMA_LINEAR, COMMAND_SET, attr.gamma, sizeof(attr.gamma), &ret);
-		if (ret != ISP_SUCCESS)
-			goto err_set_def_gamma;
+	if (ret != ISP_SUCCESS)
+		goto err_set_def_gamma;
 	return ret;
 
 err_set_def_gamma:
@@ -2471,19 +2472,19 @@ static int apical_isp_af_hist_s_attr(struct tx_isp_core_device *core, struct v4l
 	struct isp_core_af_sta_info info;
 	copy_from_user(&info, (const void __user*)control->value, sizeof(info));
 
-	 apical_isp_metering_af_metrics_shift_write(info.af_metrics_shift);
-	 apical_isp_metering_af_threshold_write_write(info.af_thresh);
-	 apical_isp_metering_af_threshold_alt_write_write(info.af_thresh_alt);
-	 apical_isp_metering_af_nodes_used_horiz_write(info.af_stat_nodeh);
-	 apical_isp_metering_af_nodes_used_vert_write(info.af_stat_nodev);
-	 apical_isp_metering_af_np_offset_write(info.af_np_offset);
-	 apical_isp_metering_af_intensity_norm_mode_write(info.af_intensity_mode);
-	 apical_isp_metering_skip_x_write(info.af_skipx);
-	 apical_isp_metering_offset_x_write(info.af_offsetx);
-	 apical_isp_metering_skip_y_write(info.af_skipy);
-	 apical_isp_metering_offset_y_write(info.af_offsety);
-	 apical_isp_metering_scale_top_write(info.af_scale_top);
-	 apical_isp_metering_scale_bottom_write(info.af_scale_bottom);
+	apical_isp_metering_af_metrics_shift_write(info.af_metrics_shift);
+	apical_isp_metering_af_threshold_write_write(info.af_thresh);
+	apical_isp_metering_af_threshold_alt_write_write(info.af_thresh_alt);
+	apical_isp_metering_af_nodes_used_horiz_write(info.af_stat_nodeh);
+	apical_isp_metering_af_nodes_used_vert_write(info.af_stat_nodev);
+	apical_isp_metering_af_np_offset_write(info.af_np_offset);
+	apical_isp_metering_af_intensity_norm_mode_write(info.af_intensity_mode);
+	apical_isp_metering_skip_x_write(info.af_skipx);
+	apical_isp_metering_offset_x_write(info.af_offsetx);
+	apical_isp_metering_skip_y_write(info.af_skipy);
+	apical_isp_metering_offset_y_write(info.af_offsety);
+	apical_isp_metering_scale_top_write(info.af_scale_top);
+	apical_isp_metering_scale_bottom_write(info.af_scale_bottom);
 
 	return 0;
 }
@@ -2869,7 +2870,6 @@ static int apical_isp_rgb_coefft_wb_g_ctrl(struct tx_isp_core_device *core, stru
 	return 0;
 }
 
-
 static int apical_isp_wb_g_ctrl(struct tx_isp_core_device *core, struct v4l2_control *control)
 {
 	struct isp_core_wb_attr wb_attr;
@@ -3189,28 +3189,28 @@ static int apical_isp_table_g_attr(struct tx_isp_core_device *core, struct v4l2_
 	id = tinfo.id;
 
 	switch(id) {
-		case CALIBRATION_TEMPER_STRENGTH:
-			rows = table[_CALIBRATION_TEMPER_STRENGTH]->rows;
-			cols = table[_CALIBRATION_TEMPER_STRENGTH]->cols;
-			width = table[_CALIBRATION_TEMPER_STRENGTH]->width;
-			tid = _CALIBRATION_TEMPER_STRENGTH;
-			break;
-		case CALIBRATION_SINTER_STRENGTH_LINEAR:
-			rows = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->rows;
-			cols = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->cols;
-			width = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->width;
-			tid = _CALIBRATION_SINTER_STRENGTH_LINEAR;
-			break;
-		case CALIBRATION_DP_SLOPE_LINEAR:
-			rows = table[_CALIBRATION_DP_SLOPE_LINEAR]->rows;
-			cols = table[_CALIBRATION_DP_SLOPE_LINEAR]->cols;
-			width = table[_CALIBRATION_DP_SLOPE_LINEAR]->width;
-			tid = _CALIBRATION_DP_SLOPE_LINEAR;
-			break;
-		default:
-			printk("%s,%d, err id: %d\n", __func__, __LINE__, id);
-			ret = -EPERM;
-			break;
+	case CALIBRATION_TEMPER_STRENGTH:
+		rows = table[_CALIBRATION_TEMPER_STRENGTH]->rows;
+		cols = table[_CALIBRATION_TEMPER_STRENGTH]->cols;
+		width = table[_CALIBRATION_TEMPER_STRENGTH]->width;
+		tid = _CALIBRATION_TEMPER_STRENGTH;
+		break;
+	case CALIBRATION_SINTER_STRENGTH_LINEAR:
+		rows = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->rows;
+		cols = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->cols;
+		width = table[_CALIBRATION_SINTER_STRENGTH_LINEAR]->width;
+		tid = _CALIBRATION_SINTER_STRENGTH_LINEAR;
+		break;
+	case CALIBRATION_DP_SLOPE_LINEAR:
+		rows = table[_CALIBRATION_DP_SLOPE_LINEAR]->rows;
+		cols = table[_CALIBRATION_DP_SLOPE_LINEAR]->cols;
+		width = table[_CALIBRATION_DP_SLOPE_LINEAR]->width;
+		tid = _CALIBRATION_DP_SLOPE_LINEAR;
+		break;
+	default:
+		printk("%s,%d, err id: %d\n", __func__, __LINE__, id);
+		ret = -EPERM;
+		break;
 	}
 	tinfo.rows = rows;
 	tinfo.cols = cols;
@@ -3296,7 +3296,6 @@ struct isp_frame_done_info {
 	uint64_t cnt;
 	int reserved;
 };
-
 
 uint64_t frame_done_cnt = 0;
 DECLARE_WAIT_QUEUE_HEAD(frame_done_wq);
@@ -3428,120 +3427,120 @@ static int apical_isp_core_ops_g_ctrl(struct tx_isp_core_device *core, struct v4
 
 	/* printk("%s[%d] ctrl->id = 0x%08x\n", __func__, __LINE__, ctrl->id); */
 	switch(ctrl->id){
-		case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
-			apical_isp_af_g_status(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_ATTR:
-			break;
-		case IMAGE_TUNING_CID_WB_STAINFO:
-			break;
-		case IMAGE_TUNING_CID_AE_ATTR:
-			ret = apical_isp_ae_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_STAINFO:
-			break;
-		case IMAGE_TUNING_CID_AF_ATTR:
-			break;
-		case IMAGE_TUNING_CID_AF_STAINFO:
-			break;
-	        case IMAGE_TUNING_CID_TEMPER_STRENGTH:
-			ret = apical_isp_temper_dns_g_strength(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_TEMPER_ATTR:
-			ret = apical_isp_temper_dns_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_WDR_ATTR:
-			break;
-		case IMAGE_TUNING_CID_DIS_STAINFO:
-			break;
-		case IMAGE_TUNING_CID_FC_ATTR:
-			break;
-		case IMAGE_TUNING_CID_SHARP_ATTR:
-			break;
-		case IMAGE_TUNING_CID_DEMO_ATTR:
-			break;
-		case IMAGE_TUNING_CID_DRC_ATTR:
-			ret = apical_isp_drc_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SHAD_ATTR:
-			break;
-		case IMAGE_TUNING_CID_CONTROL_FPS:
-			ret = apical_isp_fps_g_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_GET_TOTAL_GAIN:
-			ret = apical_isp_g_totalgain(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_DAY_OR_NIGHT:
-			ret = apical_isp_day_or_night_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_STRATEGY:
-			ret = apical_isp_ae_strategy_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_GAMMA_ATTR:
-			ret = apical_isp_gamma_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SYSTEM_TAB:
-			ret = apical_isp_stab_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_EXPR_ATTR:
-			ret = apical_isp_expr_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_ROI:
-			ret = apical_isp_ae_g_roi(core, ctrl);;
-			break;
-		case IMAGE_TUNING_CID_WB_ATTR:
-			ret = apical_isp_wb_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_WB_STATIS_ATTR:
-			ret = apical_isp_wb_statis_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_RGB_COEFFT_WB_ATTR:
-			ret = apical_isp_rgb_coefft_wb_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_MAX_AGAIN_ATTR:
-			ret = apical_isp_max_again_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_MAX_DGAIN_ATTR:
-			ret = apical_isp_max_dgain_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_HILIGHT_DEPRESS_STRENGTH:
-			ret = apical_isp_hi_light_depress_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_COMP:
-			ret = apical_isp_ae_comp_g_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_ISP_TABLE_ATTR:
-			ret = apical_isp_table_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_ISP_WAIT_FRAME_ATTR:
-			ret = apical_isp_wait_frame_done(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_ISP_EV_ATTR:
-			ret = apical_isp_ev_g_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_CWF_SHIFT:
-		 	ret = apical_isp_awb_cwf_g_shift(core, ctrl);
-		 	break;
-		case IMAGE_TUNING_CID_AE_WEIGHT:
-		 	ret = apical_isp_ae_weight_g_attr(core, ctrl);
-		 	break;
-		case IMAGE_TUNING_CID_AWB_WEIGHT:
-		 	ret = apical_isp_awb_weight_g_attr(core, ctrl);
-		 	break;
-		case IMAGE_TUNING_CID_AE_HIST:
-		 	ret = apical_isp_ae_hist_g_attr(core, ctrl);
-		 	break;
-		case IMAGE_TUNING_CID_AWB_HIST:
-		 	ret = apical_isp_awb_hist_g_attr(core, ctrl);
-		 	break;
-		case IMAGE_TUNING_CID_AF_HIST:
-			ret = apical_isp_af_hist_g_attr(core, ctrl);
-			break;
-		default:
-		 	ret = -EPERM;
-		 	break;
+	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
+		apical_isp_af_g_status(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_ATTR:
+		break;
+	case IMAGE_TUNING_CID_WB_STAINFO:
+		break;
+	case IMAGE_TUNING_CID_AE_ATTR:
+		ret = apical_isp_ae_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_STAINFO:
+		break;
+	case IMAGE_TUNING_CID_AF_ATTR:
+		break;
+	case IMAGE_TUNING_CID_AF_STAINFO:
+		break;
+	case IMAGE_TUNING_CID_TEMPER_STRENGTH:
+		ret = apical_isp_temper_dns_g_strength(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_TEMPER_ATTR:
+		ret = apical_isp_temper_dns_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_WDR_ATTR:
+		break;
+	case IMAGE_TUNING_CID_DIS_STAINFO:
+		break;
+	case IMAGE_TUNING_CID_FC_ATTR:
+		break;
+	case IMAGE_TUNING_CID_SHARP_ATTR:
+		break;
+	case IMAGE_TUNING_CID_DEMO_ATTR:
+		break;
+	case IMAGE_TUNING_CID_DRC_ATTR:
+		ret = apical_isp_drc_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SHAD_ATTR:
+		break;
+	case IMAGE_TUNING_CID_CONTROL_FPS:
+		ret = apical_isp_fps_g_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_GET_TOTAL_GAIN:
+		ret = apical_isp_g_totalgain(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_DAY_OR_NIGHT:
+		ret = apical_isp_day_or_night_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_STRATEGY:
+		ret = apical_isp_ae_strategy_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_GAMMA_ATTR:
+		ret = apical_isp_gamma_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SYSTEM_TAB:
+		ret = apical_isp_stab_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_EXPR_ATTR:
+		ret = apical_isp_expr_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_ROI:
+		ret = apical_isp_ae_g_roi(core, ctrl);;
+		break;
+	case IMAGE_TUNING_CID_WB_ATTR:
+		ret = apical_isp_wb_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_WB_STATIS_ATTR:
+		ret = apical_isp_wb_statis_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_RGB_COEFFT_WB_ATTR:
+		ret = apical_isp_rgb_coefft_wb_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_MAX_AGAIN_ATTR:
+		ret = apical_isp_max_again_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_MAX_DGAIN_ATTR:
+		ret = apical_isp_max_dgain_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_HILIGHT_DEPRESS_STRENGTH:
+		ret = apical_isp_hi_light_depress_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_COMP:
+		ret = apical_isp_ae_comp_g_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_ISP_TABLE_ATTR:
+		ret = apical_isp_table_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_ISP_WAIT_FRAME_ATTR:
+		ret = apical_isp_wait_frame_done(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_ISP_EV_ATTR:
+		ret = apical_isp_ev_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_CWF_SHIFT:
+		ret = apical_isp_awb_cwf_g_shift(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_WEIGHT:
+		ret = apical_isp_ae_weight_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_WEIGHT:
+		ret = apical_isp_awb_weight_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_HIST:
+		ret = apical_isp_ae_hist_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_HIST:
+		ret = apical_isp_awb_hist_g_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AF_HIST:
+		ret = apical_isp_af_hist_g_attr(core, ctrl);
+		break;
+	default:
+		ret = -EPERM;
+		break;
 	}
 	return ret;
 }
@@ -3550,196 +3549,196 @@ static int apical_isp_core_ops_s_ctrl(struct tx_isp_core_device *core, struct v4
 {
 	int ret = ISP_SUCCESS;
 	switch (ctrl->id) {
-		case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
-		case IMAGE_TUNING_CID_AWB_ATTR:
-		case IMAGE_TUNING_CID_MWB_ATTR:
-			/*ret = apical_isp_wb_s_control(core, ctrl);*/
-			break;
-		case V4L2_CID_EXPOSURE_AUTO:
-			/*ret = apical_isp_ae_s_control(core, ctrl);*/
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
-		case IMAGE_TUNING_CID_AF_ATTR:
-			/*ret = apical_isp_af_s_control(core, ctrl);*/
-			break;
-		case V4L2_CID_3A_LOCK:
-			/*ret = apical_isp_3alock_s_control(core, ctrl);*/
-			break;
-		case V4L2_CID_HFLIP:
-			ret = apical_isp_hflip_s_control(core, ctrl);
-			break;
-		case V4L2_CID_VFLIP:
-			ret = apical_isp_vflip_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_SINTER_DNS:
-			ret = apical_isp_sinter_dns_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SINTER_ATTR:
-			ret = apical_isp_sinter_dns_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_TEMPER_DNS:
-			ret = apical_isp_temper_dns_s_control(core, ctrl);
-			break;
-	        case IMAGE_TUNING_CID_TEMPER_STRENGTH:
-			ret = apical_isp_temper_dns_s_strength(core, ctrl);
-		        break;
-		case IMAGE_TUNING_CID_TEMPER_ATTR:
-			ret = apical_isp_temper_dns_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_WDR_FLT:
-			ret = apical_isp_wdr_lut_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_NOISE_PROFILE_ATTR:
-			ret = apical_isp_noise_profile_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_WDR:
-			ret = apical_isp_wdr_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_WDR_ATTR:
-			ret = apical_isp_wdr_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_ISP_PROCESS:
-			ret = apical_isp_bypass_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_ISP_FREEZE:
-			ret = apical_isp_freeze_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_TEST_PATTERN:
-			ret = apical_isp_test_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_BL:
-			ret = apical_isp_blacklevel_s_control(core, ctrl);
-			break;
-		case V4L2_CID_IMAGE_STABILIZATION:
-			ret = apical_isp_dis_s_control(core, ctrl);
-			break;
-		case V4L2_CID_POWER_LINE_FREQUENCY:
-			ret = apical_isp_flicker_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_SHAD:
-			ret = apical_isp_lens_shad_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SHAD_ATTR:
-			ret = apical_isp_lens_shad_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_GE_ATTR:
-			ret = apical_isp_ge_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_DYNAMIC_DP:
-		case IMAGE_TUNING_CID_CUSTOM_GE:
-			ret = apical_isp_dynamic_dp_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_DYNAMIC_DP_ATTR:
-			ret = apical_isp_dynamic_dp_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_STATIC_DP:
-			ret = apical_isp_static_dp_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_STATIC_DP_ATTR:
-			ret = apical_isp_static_dp_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_ANTI_FOG:
-			ret = apical_isp_antifog_s_control(core, ctrl);
-			break;
-		case V4L2_CID_SCENE_MODE:
-			ret = apical_isp_scene_s_control(core, ctrl);
-			break;
-		case V4L2_CID_COLORFX:
-			ret = apical_isp_colorfx_s_control(core, ctrl);
-			break;
-		case V4L2_CID_SATURATION:
-			ret = apical_isp_sat_s_control(core, ctrl);
-			break;
-		case V4L2_CID_BRIGHTNESS:
-			ret = apical_isp_bright_s_control(core, ctrl);
-			break;
-		case V4L2_CID_CONTRAST:
-			ret = apical_isp_contrast_s_control(core, ctrl);
-			break;
-		case V4L2_CID_SHARPNESS:
-			ret = apical_isp_sharp_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SHARP_ATTR:
-			ret = apical_isp_sharp_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_RESOLUTION:
-			ret = apical_isp_resolution_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_DRC:
-			ret = apical_isp_drc_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_DRC_ATTR:
-			ret = apical_isp_drc_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_DEMO_ATTR:
-			ret = apical_isp_demosaic_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_FC_ATTR:
-			ret = apical_isp_fc_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CONTROL_FPS:
-			ret = apical_isp_fps_s_control(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_DAY_OR_NIGHT:
-			ret = apical_isp_day_or_night_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_STRATEGY:
-			ret = apical_isp_ae_strategy_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_GAMMA_ATTR:
-			ret = apical_isp_gamma_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_SYSTEM_TAB:
-			ret = apical_isp_stab_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_EXPR_ATTR:
-			ret = apical_isp_expr_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_ROI:
-			ret = apical_isp_ae_s_roi(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_WB_ATTR:
-			ret = apical_isp_wb_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_RGB_COEFFT_WB_ATTR:
-			ret = apical_isp_rgb_coefft_wb_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_MAX_AGAIN_ATTR:
-			ret = apical_isp_max_again_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_MAX_DGAIN_ATTR:
-			ret = apical_isp_max_dgain_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_HILIGHT_DEPRESS_STRENGTH:
-			ret = apical_isp_hi_light_depress_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_COMP:
-			ret = apical_isp_ae_comp_s_ctrl(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_ISP_TABLE_ATTR:
-			ret = apical_isp_table_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_CWF_SHIFT:
-			ret = apical_isp_awb_cwf_s_shift(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_WEIGHT:
-			ret = apical_isp_ae_weight_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_WEIGHT:
-			ret = apical_isp_awb_weight_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AE_HIST:
-			ret = apical_isp_ae_hist_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AWB_HIST:
-			ret = apical_isp_awb_hist_s_attr(core, ctrl);
-			break;
-		case IMAGE_TUNING_CID_AF_HIST:
-			ret = apical_isp_af_hist_s_attr(core, ctrl);
-			break;
-		default:
-			ret = -EPERM;
-			break;
+	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
+	case IMAGE_TUNING_CID_AWB_ATTR:
+	case IMAGE_TUNING_CID_MWB_ATTR:
+		/*ret = apical_isp_wb_s_control(core, ctrl);*/
+		break;
+	case V4L2_CID_EXPOSURE_AUTO:
+		/*ret = apical_isp_ae_s_control(core, ctrl);*/
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
+	case IMAGE_TUNING_CID_AF_ATTR:
+		/*ret = apical_isp_af_s_control(core, ctrl);*/
+		break;
+	case V4L2_CID_3A_LOCK:
+		/*ret = apical_isp_3alock_s_control(core, ctrl);*/
+		break;
+	case V4L2_CID_HFLIP:
+		ret = apical_isp_hflip_s_control(core, ctrl);
+		break;
+	case V4L2_CID_VFLIP:
+		ret = apical_isp_vflip_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_SINTER_DNS:
+		ret = apical_isp_sinter_dns_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SINTER_ATTR:
+		ret = apical_isp_sinter_dns_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_TEMPER_DNS:
+		ret = apical_isp_temper_dns_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_TEMPER_STRENGTH:
+		ret = apical_isp_temper_dns_s_strength(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_TEMPER_ATTR:
+		ret = apical_isp_temper_dns_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_WDR_FLT:
+		ret = apical_isp_wdr_lut_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_NOISE_PROFILE_ATTR:
+		ret = apical_isp_noise_profile_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_WDR:
+		ret = apical_isp_wdr_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_WDR_ATTR:
+		ret = apical_isp_wdr_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_ISP_PROCESS:
+		ret = apical_isp_bypass_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_ISP_FREEZE:
+		ret = apical_isp_freeze_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_TEST_PATTERN:
+		ret = apical_isp_test_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_BL:
+		ret = apical_isp_blacklevel_s_control(core, ctrl);
+		break;
+	case V4L2_CID_IMAGE_STABILIZATION:
+		ret = apical_isp_dis_s_control(core, ctrl);
+		break;
+	case V4L2_CID_POWER_LINE_FREQUENCY:
+		ret = apical_isp_flicker_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_SHAD:
+		ret = apical_isp_lens_shad_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SHAD_ATTR:
+		ret = apical_isp_lens_shad_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_GE_ATTR:
+		ret = apical_isp_ge_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_DYNAMIC_DP:
+	case IMAGE_TUNING_CID_CUSTOM_GE:
+		ret = apical_isp_dynamic_dp_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_DYNAMIC_DP_ATTR:
+		ret = apical_isp_dynamic_dp_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_STATIC_DP:
+		ret = apical_isp_static_dp_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_STATIC_DP_ATTR:
+		ret = apical_isp_static_dp_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_ANTI_FOG:
+		ret = apical_isp_antifog_s_control(core, ctrl);
+		break;
+	case V4L2_CID_SCENE_MODE:
+		ret = apical_isp_scene_s_control(core, ctrl);
+		break;
+	case V4L2_CID_COLORFX:
+		ret = apical_isp_colorfx_s_control(core, ctrl);
+		break;
+	case V4L2_CID_SATURATION:
+		ret = apical_isp_sat_s_control(core, ctrl);
+		break;
+	case V4L2_CID_BRIGHTNESS:
+		ret = apical_isp_bright_s_control(core, ctrl);
+		break;
+	case V4L2_CID_CONTRAST:
+		ret = apical_isp_contrast_s_control(core, ctrl);
+		break;
+	case V4L2_CID_SHARPNESS:
+		ret = apical_isp_sharp_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SHARP_ATTR:
+		ret = apical_isp_sharp_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_RESOLUTION:
+		ret = apical_isp_resolution_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_DRC:
+		ret = apical_isp_drc_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_DRC_ATTR:
+		ret = apical_isp_drc_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_DEMO_ATTR:
+		ret = apical_isp_demosaic_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_FC_ATTR:
+		ret = apical_isp_fc_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CONTROL_FPS:
+		ret = apical_isp_fps_s_control(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_DAY_OR_NIGHT:
+		ret = apical_isp_day_or_night_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_STRATEGY:
+		ret = apical_isp_ae_strategy_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_GAMMA_ATTR:
+		ret = apical_isp_gamma_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_SYSTEM_TAB:
+		ret = apical_isp_stab_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_EXPR_ATTR:
+		ret = apical_isp_expr_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_ROI:
+		ret = apical_isp_ae_s_roi(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_WB_ATTR:
+		ret = apical_isp_wb_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_RGB_COEFFT_WB_ATTR:
+		ret = apical_isp_rgb_coefft_wb_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_MAX_AGAIN_ATTR:
+		ret = apical_isp_max_again_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_MAX_DGAIN_ATTR:
+		ret = apical_isp_max_dgain_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_HILIGHT_DEPRESS_STRENGTH:
+		ret = apical_isp_hi_light_depress_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_COMP:
+		ret = apical_isp_ae_comp_s_ctrl(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_ISP_TABLE_ATTR:
+		ret = apical_isp_table_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_CWF_SHIFT:
+		ret = apical_isp_awb_cwf_s_shift(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_WEIGHT:
+		ret = apical_isp_ae_weight_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_WEIGHT:
+		ret = apical_isp_awb_weight_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AE_HIST:
+		ret = apical_isp_ae_hist_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AWB_HIST:
+		ret = apical_isp_awb_hist_s_attr(core, ctrl);
+		break;
+	case IMAGE_TUNING_CID_AF_HIST:
+		ret = apical_isp_af_hist_s_attr(core, ctrl);
+		break;
+	default:
+		ret = -EPERM;
+		break;
 	}
 	return ret;
 }
@@ -3800,15 +3799,15 @@ static long image_tuning_vidioc_default(struct file *file, void *fh, bool valid_
 
 	ctrl = (struct isp_image_tuning_default_ctrl *)arg;
 	switch(cmd){
-		case VIDIOC_DEFAULT_CMD_ISP_TUNING:
-			if(ctrl->dir == TX_ISP_PRIVATE_IOCTL_SET)
-				ret = v4l2_subdev_call(tuning->parent, core, s_ctrl, &ctrl->control);
-			else
-				ret = v4l2_subdev_call(tuning->parent, core, g_ctrl, &ctrl->control);
-			break;
-		default :
-			ret = -EPERM;
-			break;
+	case VIDIOC_DEFAULT_CMD_ISP_TUNING:
+		if(ctrl->dir == TX_ISP_PRIVATE_IOCTL_SET)
+			ret = v4l2_subdev_call(tuning->parent, core, s_ctrl, &ctrl->control);
+		else
+			ret = v4l2_subdev_call(tuning->parent, core, g_ctrl, &ctrl->control);
+		break;
+	default:
+		ret = -EPERM;
+		break;
 	}
 	return ret;
 }
@@ -3876,12 +3875,12 @@ static int image_tuning_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
 	//	printk("*** %s[%d] tuning = %p  id = 0x%08x ***\n", __func__,__LINE__, tuning, ctrl->id);
 	control.id = ctrl->id;
 	switch (ctrl->id) {
-		case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
-		case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
-			v4l2_subdev_call(tuning->parent, core, g_ctrl, &control);
-			break;
-		default:
-			break;
+	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
+	case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
+		v4l2_subdev_call(tuning->parent, core, g_ctrl, &control);
+		break;
+	default:
+		break;
 	}
 
 	return 0;
@@ -3903,20 +3902,20 @@ static int image_tuning_s_ctrl(struct v4l2_ctrl *ctrl)
 		return -EPERM;
 	}
 	switch (ctrl->id) {
-		case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
-			ret = image_tuning_set_wb_ctrl(tuning, ctrl);
-			break;
-		case V4L2_CID_EXPOSURE_AUTO:
-			ret = image_tuning_set_ae_ctrl(tuning, ctrl);
-			break;
-		case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
-			ret = image_tuning_set_af_ctrl(tuning, ctrl);
-			break;
-		default:
-			control.id = ctrl->id;
-			control.value = (int)ctrl;
-			ret = v4l2_subdev_call(tuning->parent, core, s_ctrl, &control);
-			break;
+	case V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE:
+		ret = image_tuning_set_wb_ctrl(tuning, ctrl);
+		break;
+	case V4L2_CID_EXPOSURE_AUTO:
+		ret = image_tuning_set_ae_ctrl(tuning, ctrl);
+		break;
+	case IMAGE_TUNING_CID_CUSTOM_AF_MODE:
+		ret = image_tuning_set_af_ctrl(tuning, ctrl);
+		break;
+	default:
+		control.id = ctrl->id;
+		control.value = (int)ctrl;
+		ret = v4l2_subdev_call(tuning->parent, core, s_ctrl, &control);
+		break;
 	}
 	return ret;
 }

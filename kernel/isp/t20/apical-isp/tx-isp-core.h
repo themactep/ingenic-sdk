@@ -29,6 +29,7 @@ struct isp_reg_t {
 	unsigned int reg;
 	unsigned int value;
 };
+
 #define ISP_DMA_WRITE_MAXBASE_NUM 5
 #define ISP_DMA_WRITE_BANK_FLAG_UNCONFIG 0
 #define ISP_DMA_WRITE_BANK_FLAG_CONFIG 1

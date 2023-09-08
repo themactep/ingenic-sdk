@@ -1488,8 +1488,9 @@ static int isp_core_frame_channel_streamon(struct tx_isp_core_device *core, int 
 		default:
 			break;
 	}
+
 	/* streamon */
-	spin_lock_irqsave(&chan->slock, flags);
+	spin_lock_irqsave(&chan->slock, flags)
 	chan->state = TX_ISP_STATE_RUN;
 	spin_unlock_irqrestore(&chan->slock, flags);
 	apical_isp_input_port_field_mode_write(0); // Temporary measures
@@ -1965,8 +1966,8 @@ static int isp_core_frame_channel_init(struct tx_isp_core_device *core)
 		goto err_fr_channel;
 	}
 	attr = &(video->attr);
-	attr->max_width = TX_ISP_FR_CAHNNEL_MAX_WIDTH;
-	attr->max_height = TX_ISP_FR_CAHNNEL_MAX_HEIGHT;
+	attr->max_width = TX_ISP_FR_CHANNEL_MAX_WIDTH;
+	attr->max_height = TX_ISP_FR_CHANNEL_MAX_HEIGHT;
 	attr->min_width = 128;
 	attr->min_height = 128;
 	attr->step_width = 8;
@@ -1985,8 +1986,8 @@ static int isp_core_frame_channel_init(struct tx_isp_core_device *core)
 		goto err_ds1_channel;
 	}
 	attr = &(video->attr);
-	attr->max_width = TX_ISP_DS1_CAHNNEL_MAX_WIDTH;
-	attr->max_height = TX_ISP_DS1_CAHNNEL_MAX_HEIGHT;
+	attr->max_width = TX_ISP_DS1_CHANNEL_MAX_WIDTH;
+	attr->max_height = TX_ISP_DS1_CHANNEL_MAX_HEIGHT;
 	attr->min_width = 128;
 	attr->min_height = 128;
 	attr->step_width = 8;
@@ -2006,8 +2007,8 @@ static int isp_core_frame_channel_init(struct tx_isp_core_device *core)
 		goto err_ds2_channel;
 	}
 	attr = &(video->attr);
-	attr->max_width = TX_ISP_DS2_CAHNNEL_MAX_WIDTH;
-	attr->max_height = TX_ISP_DS2_CAHNNEL_MAX_HEIGHT;
+	attr->max_width = TX_ISP_DS2_CHANNEL_MAX_WIDTH;
+	attr->max_height = TX_ISP_DS2_CHANNEL_MAX_HEIGHT;
 	attr->min_width = 128;
 	attr->min_height = 128;
 	attr->step_width = 8;
