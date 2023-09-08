@@ -38,7 +38,7 @@ SRCS := \
     $(DIR)/videoin/tx-isp-video-in.o
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(DIR)/libapical_isp.a
+OBJS += $(DIR)/apical-isp/libapical_isp.a
 
 $(OUT)-objs := $(OBJS)
 
