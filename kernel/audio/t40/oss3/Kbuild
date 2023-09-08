@@ -1,0 +1,18 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+DIR=$(MODULE_NAME)/$(SOC)
+
+SRCS := \
+  $(DIR)/oss3/audio_dsp.c \
+  $(DIR)/oss3/audio_debug.c \
+  $(DIR)/oss3/host/audio_aic.c \
+  $(DIR)/oss3/host/audio_dmic.c \
+  $(DIR)/oss3/inner_codecs/codec.c \
+  $(DIR)/oss3/board/t40_platform.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

@@ -1,0 +1,10 @@
+#include $(src)/sensors/$(SOC)/gc4653/Kbuild
+include $(src)/sensors/$(SOC)/imx307/Kbuild
+include $(src)/sensors/$(SOC)/imx334/Kbuild
+include $(src)/sensors/$(SOC)/imx335/Kbuild
+include $(src)/sensors/$(SOC)/imx415/Kbuild
+#include $(src)/sensors/$(SOC)/jxk04/Kbuild
+#include $(src)/sensors/$(SOC)/sc2232h/Kbuild
+#include $(src)/sensors/$(SOC)/sc3335/Kbuild
+#include $(src)/sensors/$(SOC)/sc500ai/Kbuild
+#include $(src)/sensors/$(SOC)/sc5235/Kbuild

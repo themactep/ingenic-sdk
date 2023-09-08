@@ -1,0 +1,34 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+DIR=$(MODULE_NAME)/$(SOC)
+
+ifeq ($(CONFIG_JZ_TS_DMIC),y)
+SRCS := \
+  $(DIR)/oss2/devices/ex_codecs/codec_i2c_dev.c \
+  $(DIR)/oss2/devices/ex_codecs/es8374_codec.c \
+  $(DIR)/oss2/devices/codecs/jz_t10_codec.c \
+  $(DIR)/oss2/devices/xb47xx_i2s_v12.c \
+  $(DIR)/oss2/devices/dmic/mic.c \
+  $(DIR)/oss2/devices/dmic/mic_sys.c \
+  $(DIR)/oss2/devices/dmic/mic_ops.c \
+  $(DIR)/oss2/devices/dmic/mic_dma.c \
+  $(DIR)/oss2/devices/dmic/mic_hrtimer.c \
+  $(DIR)/oss2/devices/dmic/dmic_hal.c \
+  $(DIR)/oss2/interface/xb_snd_dsp.c \
+  $(DIR)/oss2/xb_snd_card.c
+else
+SRCS := \
+  $(DIR)/oss2/devices/ex_codecs/codec_i2c_dev.c \
+  $(DIR)/oss2/devices/ex_codecs/es8374_codec.c \
+  $(DIR)/oss2/devices/codecs/jz_t10_codec.c \
+  $(DIR)/oss2/devices/xb47xx_i2s_v12.c \
+  $(DIR)/oss2/interface/xb_snd_dsp.c \
+  $(DIR)/oss2/xb_snd_card.c
+endif
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
