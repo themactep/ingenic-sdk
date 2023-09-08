@@ -26,7 +26,7 @@ int codec_i2c_dev_init(void)
 	int i2c_id = 0;
 #if (defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100))
 	i2c_id = 1;
-#elif CONFIG_SOC_T30
+#elif defined(CONFIG_SOC_T30)
 	i2c_id = 2;
 #endif
 

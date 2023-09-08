@@ -20,7 +20,7 @@
 #define PHY_TST_CTRL0       0x30
 #define PHY_TST_CTRL1       0x34
 
-#if defined(CONFIG_SOC_T30)
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 #define PHY_CRTL0                0x000
 #define PHY_CRTL1                0x080
 #define CK_LANE_SETTLE_TIME      0x100

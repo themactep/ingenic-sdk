@@ -1,7 +1,7 @@
 #ifndef __TX_LDC_REG_H__
 #define __TX_LDC_REG_H__
 
-#ifdef CONFIG_SOC_T30
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 
 #define LDC_CTR			0x0    //view_mode<<4 + int_en<<3 + 1
 #define LDC_SAT 		0x4

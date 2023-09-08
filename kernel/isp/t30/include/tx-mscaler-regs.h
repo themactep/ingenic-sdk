@@ -1,7 +1,7 @@
 #ifndef __TX_MSCALER_REGS_H__
 #define __TX_MSCALER_REGS_H__
 
-#ifdef CONFIG_SOC_T30
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 #define MSCA_CTRL			(0x0000)
 #define MSCA_CH_EN			(0x0004)
 #define MSCA_CH_STAT		(0x0008)

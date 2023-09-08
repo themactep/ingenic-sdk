@@ -46,7 +46,7 @@
 #define TX_ISP_DS2_CHANNEL_MAX_WIDTH	800
 #define TX_ISP_DS2_CHANNEL_MAX_HEIGHT	800
 
-#elif defined(CONFIG_SOC_T30)
+#elif (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 /* T30 */
 #define TX_ISP_EXIST_FR_CHANNEL 1
 #define TX_ISP_EXIST_DS2_CHANNEL 0

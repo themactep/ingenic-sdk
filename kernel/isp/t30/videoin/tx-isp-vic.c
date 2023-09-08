@@ -42,7 +42,7 @@ void check_vic_error(void){
 	}
 }
 
-#ifdef CONFIG_SOC_T30
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 void isp_lfb_ctrl_flb_enable(int on)
 {
 	volatile unsigned int value = tx_isp_vic_readl(dump_vsd, LFB_CONTROL);
@@ -269,7 +269,7 @@ static int tx_isp_vic_start(struct tx_isp_vic_device *vsd)
 #if defined(CONFIG_SOC_T10) || defined(CONFIG_SOC_T20)
 		tx_isp_vic_writel(vsd,VIC_GLOBAL_CFG, ISP_PRESET_MODE1);//ISP_PRESET_MODE1);
 #endif
-#if defined(CONFIG_SOC_T30)
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 		tx_isp_vic_writel(vsd,VIC_FRM_ECC, FRAME_ECC_EN);//ISP_PRESET_MODE1);
 #endif
 		tx_isp_vic_writel(vsd,VIC_CONTROL, REG_ENABLE);
@@ -361,7 +361,7 @@ static int tx_isp_vic_start(struct tx_isp_vic_device *vsd)
 		if(vin->attr->dvp.blanking.vblanking)
 			tx_isp_vic_writel(vsd, VIC_INPUT_VSYNC_BLANKING, vin->attr->dvp.blanking.vblanking);
 
-#if defined(CONFIG_SOC_T30)
+#if (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
 		tx_isp_vic_writel(vsd, VIC_INPUT_HSYNC_BLANKING, vin->mbus.width + (vin->attr->dvp.blanking.hblanking << 16));
 		tx_isp_vic_writel(vsd, 0x150, 0x2);
 #endif
