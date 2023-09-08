@@ -23,10 +23,10 @@
 
 #define TX_ISP_INPUT_PORT_MAX_WIDTH		1280
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	960
-#define TX_ISP_FR_CAHNNEL_MAX_WIDTH		1280
-#define TX_ISP_FR_CAHNNEL_MAX_HEIGHT	960
-#define TX_ISP_DS1_CAHNNEL_MAX_WIDTH	640
-#define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT	640
+#define TX_ISP_FR_CHANNEL_MAX_WIDTH		1280
+#define TX_ISP_FR_CHANNEL_MAX_HEIGHT	960
+#define TX_ISP_DS1_CHANNEL_MAX_WIDTH	640
+#define TX_ISP_DS1_CHANNEL_MAX_HEIGHT	640
 
 #elif defined(CONFIG_SOC_T20)
 /* T20 */
@@ -36,10 +36,10 @@
 
 #define TX_ISP_INPUT_PORT_MAX_WIDTH		2048
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	1536
-#define TX_ISP_DS1_CAHNNEL_MAX_WIDTH	2048
-#define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT	1536
-#define TX_ISP_DS2_CAHNNEL_MAX_WIDTH	800
-#define TX_ISP_DS2_CAHNNEL_MAX_HEIGHT	800
+#define TX_ISP_DS1_CHANNEL_MAX_WIDTH	2048
+#define TX_ISP_DS1_CHANNEL_MAX_HEIGHT	1536
+#define TX_ISP_DS2_CHANNEL_MAX_WIDTH	800
+#define TX_ISP_DS2_CHANNEL_MAX_HEIGHT	800
 
 #else /* other soc */
 
@@ -166,8 +166,8 @@ struct v4l2_tx_isp_sensor_register_info{
 
 typedef struct tx_isp_sensor_ctrl{
 	/* isp_gain mean that the value is output of ISP-FW,it is not a gain multiplier unit.
-	*  gain_mutiplier = (2^(isp_gain/(2^LOG_GAIN_SHIFT))).
-	*  the fuction will convert gain_mutiplier to sensor_Xgain.
+	*  gain_multiplier = (2^(isp_gain/(2^LOG_GAIN_SHIFT))).
+	*  the function will convert gain_multiplier to sensor_Xgain.
 	*  the return value is isp_gain of sensor_Xgain's inverse conversion.
 	*/
 	unsigned int (*alloc_again)(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again);
@@ -183,9 +183,9 @@ struct tx_isp_sensor_attribute{
 	unsigned int cbus_device;
 	enum tx_sensor_data_bus_type dbus_type;
 	union {
-		struct tx_isp_mipi_bus 		mipi;
-		struct tx_isp_dvp_bus 		dvp;
-		struct tx_isp_bt1120_bus 	bt1120;
+		struct tx_isp_mipi_bus		mipi;
+		struct tx_isp_dvp_bus		dvp;
+		struct tx_isp_bt1120_bus	bt1120;
 		struct tx_isp_bt656_bus		bt656bus;
 		struct tx_isp_bt601_bus		bt601bus;
 		char string[64];
@@ -215,6 +215,7 @@ enum tx_isp_priv_ioctl_direction {
 	TX_ISP_PRIVATE_IOCTL_SET,
 	TX_ISP_PRIVATE_IOCTL_GET,
 };
+
 enum tx_isp_priv_ioctl_command {
 	/* the commands of pipeline are defined as follows. */
 	TX_ISP_PRIVATE_IOCTL_MODULE_CLK,
@@ -242,6 +243,7 @@ enum tx_isp_priv_ioctl_command {
 	TX_ISP_PRIVATE_IOCTL_FRAME_CHAN_STREAM_OFF,
 	TX_ISP_PRIVATE_IOCTL_FRAME_CHAN_QUEUE_BUFFER,
 };
+
 struct isp_private_ioctl {
 	enum tx_isp_priv_ioctl_direction dir;
 	enum tx_isp_priv_ioctl_command cmd;
@@ -265,15 +267,15 @@ struct isp_image_tuning_default_ctrl {
 	struct v4l2_control control;
 };
 
-#define VIDIOC_ISP_PRIVATE_IOCTL	 _IOW('V', BASE_VIDIOC_PRIVATE, struct isp_private_ioctl)
-#define VIDIOC_REGISTER_SENSOR		 _IOW('V', BASE_VIDIOC_PRIVATE + 1, struct v4l2_tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR		 _IOW('V', BASE_VIDIOC_PRIVATE + 2, struct v4l2_tx_isp_sensor_register_info)
-//#define VIDIOC_DEFAULT_CMD_BYPASS_ISP	 _IOW('V', BASE_VIDIOC_PRIVATE + 3, int)
-#define VIDIOC_DEFAULT_CMD_SCALER_CAP	 _IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_scalercap)
-#define VIDIOC_DEFAULT_CMD_SET_SCALER	 _IOW('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_scaler)
-#define VIDIOC_DEFAULT_CMD_SET_BANKS	 _IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
 
-#define VIDIOC_DEFAULT_CMD_ISP_TUNING	 _IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
+#define VIDIOC_ISP_PRIVATE_IOCTL		_IOW('V', BASE_VIDIOC_PRIVATE, struct isp_private_ioctl)
+#define VIDIOC_REGISTER_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct v4l2_tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct v4l2_tx_isp_sensor_register_info)
+//#define VIDIOC_DEFAULT_CMD_BYPASS_ISP		_IOW('V', BASE_VIDIOC_PRIVATE + 3, int)
+#define VIDIOC_DEFAULT_CMD_SCALER_CAP		_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_scalercap)
+#define VIDIOC_DEFAULT_CMD_SET_SCALER		_IOW('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_scaler)
+#define VIDIOC_DEFAULT_CMD_SET_BANKS		_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
+#define VIDIOC_DEFAULT_CMD_ISP_TUNING		_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,

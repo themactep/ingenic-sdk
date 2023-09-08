@@ -2,8 +2,8 @@
 #define __VIC_REG_H__
 
 #ifdef CONFIG_SOC_T10
-#define VIC_SUPPORT_MIPI                0
-#define VIC_DB_CFG		         0x0
+#define VIC_SUPPORT_MIPI		0
+#define VIC_DB_CFG			0x0
 #define DVP_DATA_POS			(1<<24)
 #define DVP_RGB_ORDER			(1<<21)
 #define DVP_RAW_ALIG			(1<<20)
@@ -16,9 +16,9 @@
 #define DVP_BRG565_16BIT		(5<<DVP_DATA_TYPE)
 #define DVP_YUV422_8BIT			(6<<DVP_DATA_TYPE)
 #define DVP_RGB565_8BIT			(7<<DVP_DATA_TYPE)
-#define DVP_HREF_MODE		(0 << 15)
-#define DVP_HSYNC_MODE		(1 << 15)
-#define DVP_SONY_MODE		(2 << 15)
+#define DVP_HREF_MODE			(0 << 15)
+#define DVP_HSYNC_MODE			(1 << 15)
+#define DVP_SONY_MODE			(2 << 15)
 
 #define DVP_TIMEING_MODE		(1<<15)
 #define BT_INTF_WIDE			(1<<11)
@@ -37,29 +37,29 @@
 #define VIC_INPUT_HSYNC_BLANKING	0x04
 #define VIC_INPUT_VSYNC_BLANKING	0x08
 
-/* #define VIC_VCNT0                       0x0C */
-/* #define VIC_VCNY1                       0x10 */
-/* #define VIC_VCNY2                       0x14 */
+/* #define VIC_VCNT0			0x0C */
+/* #define VIC_VCNY1			0x10 */
+/* #define VIC_VCNY2			0x14 */
 
-/* #define VIC_INTF_TYPE                   0x1C */
-/* #define INTF_TYPE_BT656			0x0 */
-/* #define INTF_TYPE_BT601			0x1 */
-/* #define INTF_TYPE_MIPI			0x2 */
-/* #define INTF_TYPE_DVP			0x3 */
+/* #define VIC_INTF_TYPE		0x1C */
+/* #define INTF_TYPE_BT656		0x0 */
+/* #define INTF_TYPE_BT601		0x1 */
+/* #define INTF_TYPE_MIPI		0x2 */
+/* #define INTF_TYPE_DVP		0x3 */
 /* #define INTF_TYPE_BT1120		0x4 */
 
-#define VIC_RESOLUTION	 	        0x0C
+#define VIC_RESOLUTION			0x0C
 #define H_RESOLUTION			(1<<16)
 #define V_RESOLUTION			(1)
 
-#define VIC_H_BLANK_NUM		        (0x10)
-#define VIC_V_BLANK_NUM		        (0x14)
+#define VIC_H_BLANK_NUM			(0x10)
+#define VIC_V_BLANK_NUM			(0x14)
 
-#define VIC_AB_VALUE		        (0x18)
+#define VIC_AB_VALUE			(0x18)
 #define A_VALUE				(1<<16)
 #define B_VALUE				(1)
 
-#define VIC_GLOBAL_CFG             	(0x1c)
+#define VIC_GLOBAL_CFG			(0x1c)
 #define ISP_PRESET_MODE1		(0<<5)
 #define ISP_PRESET_MODE2		(1<<5)
 #define ISP_PRESET_MODE3		(2<<5)
@@ -74,7 +74,7 @@
 #define REG_ENABLE			(1<<1)
 #define VIC_SRART			(1<<0)
 
-#define ISP_VPLCK_GATE                  0x24
+#define ISP_VPLCK_GATE			0x24
 #define VIC_PIXEL			0x28
 #define VIC_LINE			0x2c
 #define VIC_STATE			0x30
@@ -93,8 +93,8 @@
 #define BK_NUM_CB1			0x70
 
 #elif defined(CONFIG_SOC_T20)
-#define VIC_SUPPORT_MIPI                1
-#define VIC_DB_CFG		        0x10
+#define VIC_SUPPORT_MIPI		1
+#define VIC_DB_CFG			0x10
 #define DVP_DATA_POS			(1<<24)
 #define DVP_RGB_ORDER			(1<<21)
 #define DVP_RAW_ALIG			(1<<20)
@@ -109,7 +109,7 @@
 #define DVP_RGB565_8BIT			(7<<DVP_DATA_TYPE)
 
 #define DVP_TIMEING_MODE		(1<<15)
-#define DVP_SONY_MODE		        (2 << 15)
+#define DVP_SONY_MODE			(2 << 15)
 #define BT_INTF_WIDE			(1<<11)
 #define BT_LINE_MODE			(1<<10)
 #define BT_601_TIMING_MODE		(1<<9)
@@ -123,28 +123,28 @@
 #define HSYN_POLAR			(1<<1)
 #define VSYN_POLAR			(1<<0)
 
-#define VIC_HCNT0                       0x04
-#define VIC_HCNT1                       0x08
+#define VIC_HCNT0			0x04
+#define VIC_HCNT1			0x08
 
-/* #define VIC_VCNT0                       0x0C */
-/* #define VIC_VCNY1                       0x10 */
-/* #define VIC_VCNY2                       0x14 */
+/* #define VIC_VCNT0			0x0C */
+/* #define VIC_VCNY1			0x10 */
+/* #define VIC_VCNY2			0x14 */
 
-#define VIC_INTF_TYPE                   0x0C
+#define VIC_INTF_TYPE			0x0C
 #define INTF_TYPE_BT656			0x0
 #define INTF_TYPE_BT601			0x1
 #define INTF_TYPE_MIPI			0x2
 #define INTF_TYPE_DVP			0x3
 #define INTF_TYPE_BT1120		0x4
 
-#define VIC_RESOLUTION	 	        0x04
+#define VIC_RESOLUTION			0x04
 #define H_RESOLUTION			(1<<16)
 #define V_RESOLUTION			(1)
 
-/* #define VIC_H_BLANK_NUM		        (0x10) */
-/* #define VIC_V_BLANK_NUM		        (0x14) */
+/* #define VIC_H_BLANK_NUM		(0x10) */
+/* #define VIC_V_BLANK_NUM		(0x14) */
 
-#define VIC_IDI_TYPE                    (0x14)/* VIC_INPUT_MIPI */
+#define VIC_IDI_TYPE			(0x14)/* VIC_INPUT_MIPI */
 #define MIPI_RAW8			0x0
 #define MIPI_RAW10			0x1
 #define MIPI_RAW12			0x2
@@ -155,11 +155,11 @@
 #define MIPI_YUV422			0x7
 #define MIPI_YUV422_10BIT		0x8
 
-#define VIC_AB_VALUE		        (0x18)
+#define VIC_AB_VALUE			(0x18)
 #define A_VALUE				(1<<16)
 #define B_VALUE				(1)
 
-#define VIC_GLOBAL_CFG             	(0x50)
+#define VIC_GLOBAL_CFG			(0x50)
 #define ISP_PRESET_MODE1		(0<<5)
 #define ISP_PRESET_MODE2		(1<<5)
 #define ISP_PRESET_MODE3		(2<<5)
@@ -174,7 +174,7 @@
 #define REG_ENABLE			(1<<1)
 #define VIC_SRART			(1<<0)
 
-#define ISP_VPLCK_GATE                  0x24
+#define ISP_VPLCK_GATE			0x24
 #define VIC_PIXEL			0x94
 #define VIC_LINE			0x98
 #define VIC_STATE			0x90
