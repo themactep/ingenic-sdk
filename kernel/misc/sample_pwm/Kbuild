@@ -1,0 +1,26 @@
+DIR := misc
+
+PWM_CORE_MODULE := sample_pwm_core
+OBJS1 := $(DIR)/sample_pwm/pwm_core.o
+
+PWM_HAL_MODULE := sample_pwm_hal
+OBJS2 := $(DIR)/sample_pwm/pwm_hal.o
+
+obj-m += $(PWM_CORE_MODULE).o
+obj-m += $(PWM_HAL_MODULE).o
+
+$(PWM_CORE_MODULE)-objs := $(OBJS1)
+$(PWM_HAL_MODULE)-objs := $(OBJS2)
+
+# Definitions
+DEFS =
+DEFS += -DCONFIG_PWM0
+DEFS += -DCONFIG_PWM1
+DEFS += -DCONFIG_PWM2
+DEFS += -DCONFIG_PWM3
+#DEFS += -DCONFIG_PWM4
+#DEFS += -DCONFIG_PWM5
+#DEFS += -DCONFIG_PWM6
+#DEFS += -DCONFIG_PWM7
+
+EXTRA_CFLAGS += $(DEFS)
