@@ -1597,26 +1597,26 @@ static int sc5235_probe(struct i2c_client *client,
 
 	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
 		if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_500)){
-		wsize = &sc5235_win_sizes[0];
-		memcpy((void*)(&(sc5235_attr.mipi)),(void*)(&sc5235_mipi_linear),sizeof(sc5235_mipi_linear));
-		sc5235_attr.max_integration_time_native = 2662;
-		sc5235_attr.integration_time_limit = 2662;
-		sc5235_attr.total_width = 3000;
-		sc5235_attr.total_height = 2662;
-		sc5235_attr.max_integration_time = 2662;
-		printk("------------> linear is ok <-------------\n");
-		}else  if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_400)){
-		wsize = &sc5235_win_sizes[2];
-		memcpy((void*)(&(sc5235_attr.mipi)),(void*)(&sc5235_mipi_linear),sizeof(sc5235_mipi_linear));
-		sc5235_attr.max_integration_time_native = 1650;
-		sc5235_attr.integration_time_limit = 1650;
-		sc5235_attr.total_width = 3000;
-		sc5235_attr.total_height = 1650;
-		sc5235_attr.max_integration_time = 1650;
-		printk("------------> linear is ok <-------------\n");
+			wsize = &sc5235_win_sizes[0];
+			memcpy((void*)(&(sc5235_attr.mipi)),(void*)(&sc5235_mipi_linear),sizeof(sc5235_mipi_linear));
+			sc5235_attr.max_integration_time_native = 2662;
+			sc5235_attr.integration_time_limit = 2662;
+			sc5235_attr.total_width = 3000;
+			sc5235_attr.total_height = 2662;
+			sc5235_attr.max_integration_time = 2662;
+			printk("------------> linear is ok <-------------\n");
+		}else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_400)){
+			wsize = &sc5235_win_sizes[2];
+			memcpy((void*)(&(sc5235_attr.mipi)),(void*)(&sc5235_mipi_linear),sizeof(sc5235_mipi_linear));
+			sc5235_attr.max_integration_time_native = 1650;
+			sc5235_attr.integration_time_limit = 1650;
+			sc5235_attr.total_width = 3000;
+			sc5235_attr.total_height = 1650;
+			sc5235_attr.max_integration_time = 1650;
+			printk("------------> linear is ok <-------------\n");
 		}else{
-		ISP_ERROR("Can not support this data type!!!\n");
-	}
+			ISP_ERROR("Can not support this data type!!!\n");
+		}
 	}else if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
 		sc5235_attr.wdr_cache = wdr_bufsize;
 		wsize = &sc5235_win_sizes[1];
