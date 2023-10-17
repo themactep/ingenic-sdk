@@ -36,7 +36,6 @@ include $(src)/sensors/$(SOC)/jxk04/Kbuild
 include $(src)/sensors/$(SOC)/jxk05/Kbuild
 include $(src)/sensors/$(SOC)/jxq03/Kbuild
 include $(src)/sensors/$(SOC)/jxq03p/Kbuild
-include $(src)/sensors/$(SOC)/Kbuild/Kbuild
 include $(src)/sensors/$(SOC)/mis2006/Kbuild
 include $(src)/sensors/$(SOC)/mis2008/Kbuild
 include $(src)/sensors/$(SOC)/mis4001/Kbuild
