@@ -8,6 +8,7 @@ ccflags-y += -I$(src)/audio/$(SOC)/oss3/include
 
 include $(src)/sinfo/Kbuild
 include $(src)/gpio/Kbuild
+include $(src)/misc/sample_pwm/Kbuild
 
 include $(src)/isp/$(SOC)/Kbuild
 include $(src)/sensors/$(SOC)/Kbuild
