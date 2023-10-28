@@ -999,7 +999,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x13,0x07},
 	{0xfe,0x00},
 	{0x3e,0x40},
-
 	{GC2053_REG_END, 0x00},	/* END MARKER */
 };
 
@@ -1631,8 +1630,10 @@ static int gc2053_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch(cmd){
 		case TX_ISP_EVENT_SENSOR_EXPO:
+#if 0
 			if(arg)
 				ret = gc2053_set_expo(sd, *(int*)arg);
+#endif
 			break;
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
 //			if(arg)
