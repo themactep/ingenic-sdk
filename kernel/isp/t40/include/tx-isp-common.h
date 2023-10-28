@@ -150,7 +150,7 @@ typedef enum {
 	TX_SENSOR_MAX_FPS_60 = 60,
 	TX_SENSOR_MAX_FPS_50 = 50,
 	TX_SENSOR_MAX_FPS_45 = 45,
-	TX_SENSOR_MAX_FPS_40 = 30,
+	TX_SENSOR_MAX_FPS_40 = 40,
 	TX_SENSOR_MAX_FPS_30 = 30,
 	TX_SENSOR_MAX_FPS_25 = 25,
 	TX_SENSOR_MAX_FPS_20 = 20,
@@ -586,11 +586,11 @@ struct tx_isp_sensor{
 };
 #define sd_to_sensor_device(_ep) container_of(_ep, struct tx_isp_sensor, sd)
 
-#define tx_isp_readl(base, reg)		__raw_readl((base) + (reg))
+#define tx_isp_readl(base, reg)			__raw_readl((base) + (reg))
 #define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
-#define tx_isp_readw(base, reg)		__raw_readw((base) + (reg))
+#define tx_isp_readw(base, reg)			__raw_readw((base) + (reg))
 #define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
-#define tx_isp_readb(base, reg)		__raw_readb((base) + (reg))
+#define tx_isp_readb(base, reg)			__raw_readb((base) + (reg))
 #define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
 
 #endif /*__TX_ISP_COMMON_H__*/

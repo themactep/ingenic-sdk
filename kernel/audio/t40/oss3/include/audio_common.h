@@ -53,7 +53,7 @@ struct dsp_data_fragment {
 	struct list_head	list;
 	bool 				state;
 	void 				*vaddr;
-	dma_addr_t          paddr;
+	dma_addr_t			paddr;
 	void *priv;			/* when enable aec function, it points aec fragment */
 };
 
@@ -66,7 +66,7 @@ struct dsp_data_manage {
 	unsigned int 		sample_size; // samplesize = channel * format_to_bytes(format) / 8;
 	unsigned int 		fragment_size;
 	unsigned int 		fragment_cnt;
-	struct list_head    fragments_head;
+	struct list_head	fragments_head;
 	unsigned int		buffersize;			/* current using the total size of fragments data */
 	unsigned int dma_tracer;				/* It's offset in buffer */
 	unsigned int new_dma_tracer;			/* It's offset in buffer */

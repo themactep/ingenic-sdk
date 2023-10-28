@@ -60,7 +60,10 @@ struct jz_pwm_gpio pwm_pin[PWM_NUM] = {
 	// [5] = {.group = GPIO_PORT_B, .pins = 1 << 26, .func = GPIO_FUNC_1},
 	[5] = {.group = GPIO_PORT_C, .pins = 1 << 7, .func = GPIO_FUNC_2},
 
+	// [6] = {.group = GPIO_PORT_B, .pins = 1 << 6, .func = GPIO_FUNC_1},
 	[6] = {.group = GPIO_PORT_D, .pins = 1 << 22, .func = GPIO_FUNC_2},
+
+	// [7] = {.group = GPIO_PORT_B, .pins = 1 << 7, .func = GPIO_FUNC_1},
 	[7] = {.group = GPIO_PORT_D, .pins = 1 << 23, .func = GPIO_FUNC_2},
 };
 
@@ -116,14 +119,14 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 #ifdef CONFIG_SOC_T40
 	struct ingenic_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 
-    tcu_start_counter(tcu_pwm->cib.id);
+	tcu_start_counter(tcu_pwm->cib.id);
 	tcu_enable_counter(tcu_pwm->cib.id);
 
 	jz_pwm_en[tcu_pwm->cib.id] = 1;
 #else
 	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 
-    jz_tcu_start_counter(tcu_pwm);
+	jz_tcu_start_counter(tcu_pwm);
 	jz_tcu_enable_counter(tcu_pwm);
 
 	jz_pwm_en[tcu_pwm->index] = 1;
@@ -132,9 +135,9 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 #if defined(CONFIG_SOC_T21)
 	if(tcu_pwm->index == 1 || tcu_pwm->index == 0) {
 		jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_0,BIT(tcu_pwm->gpio & 0x1f));
-    } else {
+	} else {
 		jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_1,BIT(tcu_pwm->gpio & 0x1f));
-    }
+	}
 #elif (defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100))
 	if (tcu_pwm->gpio == 14)
 	{
@@ -150,11 +153,20 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 	}
 #elif defined(CONFIG_SOC_T40)
 	jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group,pwm_pin[tcu_pwm->cib.id].func,pwm_pin[tcu_pwm->cib.id].pins);
+#elif defined(CONFIG_SOC_T23)
+	if (tcu_pwm->gpio == (32 + 17) ||tcu_pwm->gpio == (32 + 18))
+	{
+		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
+	}
+	else
+	{
+		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
+	}
 #else
 	jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_0,BIT(tcu_pwm->gpio & 0x1f));
 #endif
 
-    return 0;
+	return 0;
 }
 
 static void jz_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
@@ -169,7 +181,7 @@ static void jz_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
 	jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group,tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1 , pwm_pin[tcu_pwm->cib.id].pins);
 	jz_pwm_en[tcu_pwm->cib.id] = 0;
 #else
-    struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
+	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 	jz_tcu_disable_counter(tcu_pwm);
 
 	jz_tcu_stop_counter(tcu_pwm);
@@ -280,6 +292,15 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
 		else
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
+#elif defined(CONFIG_SOC_T23)
+		if (tcu_pwm->gpio == (32 + 17) || tcu_pwm->gpio == (32 + 18))
+		{
+			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
+		}
+		else
+		{
+			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
+		}
 #else
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
 #endif

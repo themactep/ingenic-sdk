@@ -28,7 +28,7 @@ static int dmic_enable = 0; // disable dmic
 module_param(dmic_enable, int, S_IRUGO);
 MODULE_PARM_DESC(dmic_enable, "Enable or disable dmic");
 
-static int aic_enable = 1; // disable aic
+static int aic_enable = 1; // enable aic
 module_param(aic_enable, int, S_IRUGO);
 MODULE_PARM_DESC(aic_enable, "Enable or disable aic");
 
@@ -60,21 +60,25 @@ static void dsp_workqueue_handle(struct work_struct *work)
 
 	/* first: save new dma tracer */
 	spin_lock_irqsave(&dsp->slock, lock_flags);
+
 	/* amic */
 	amic_route = &(dsp->routes[AUDIO_ROUTE_AMIC_ID]);
 	if(amic_route && amic_route->state == AUDIO_BUSY_STATE){
 		amic_new_tracer = amic_route->manage.new_dma_tracer;
 	}
+
 	/* dmic */
 	dmic_route = &(dsp->routes[AUDIO_ROUTE_DMIC_ID]);
 	if(dmic_route && dmic_route->state == AUDIO_BUSY_STATE){
 		dmic_new_tracer = dmic_route->manage.new_dma_tracer;
 	}
+
 	/* aec */
 	aec_route = &(dsp->routes[AUDIO_ROUTE_AEC_ID]);
 	if(aec_route && aec_route->state == AUDIO_BUSY_STATE){
 		aec_new_tracer = aec_route->manage.new_dma_tracer;
 	}
+
 	/* ao */
 	ao_route = &(dsp->routes[AUDIO_ROUTE_SPK_ID]);
 	if(ao_route && ao_route->state == AUDIO_BUSY_STATE){
@@ -193,6 +197,7 @@ static void dsp_workqueue_handle(struct work_struct *work)
 		}
 		mutex_unlock(&dmic_route->mlock);
 	}
+
 	/* ao */
 	if(ao_route){
 		mutex_lock(&ao_route->mlock);
@@ -491,9 +496,11 @@ static long dsp_create_dma_chan(struct audio_route *route)
 		manage->fragment_cnt = parent->manage.fragment_cnt;
 	}else
 		manage->fragment_cnt = pipe->reservesize / manage->fragment_size;
+
 	if (manage->fragment_cnt >= CACHED_FRAGMENT)
 		manage->fragment_cnt = CACHED_FRAGMENT;
-	manage->fragments = pr_kzalloc(sizeof(struct dsp_data_fragment) * manage->fragment_cnt);//20ms数据量
+
+	manage->fragments = pr_kzalloc(sizeof(struct dsp_data_fragment) * manage->fragment_cnt);//20ms data volume
 	if(manage->fragments == NULL){
 		audio_warn_print("%d, Can't malloc manage!\n",__LINE__);
 		ret = -ENOMEM;
@@ -534,6 +541,7 @@ static long dsp_create_dma_chan(struct audio_route *route)
 		goto out;
 	}
 	dmaengine_submit(desc);
+
 out:
 	return ret;
 }
@@ -946,7 +954,7 @@ static long dsp_disable_amic_ao(struct audio_dsp_device *dsp)
 
 	ao_route = &(dsp->routes[AUDIO_ROUTE_SPK_ID]);
 	if(ao_route == NULL){
-		audio_warn_print("%d; The route of dmic record hasn't been created!\n",__LINE__);
+		audio_warn_print("%d; The route of spk hasn't been created!\n",__LINE__);
 		ret = -EPERM;
 		goto exit;
 	}
@@ -1004,7 +1012,7 @@ static long dsp_enable_amic_aec(struct audio_dsp_device *dsp, unsigned long arg)
 
 	ai_route = &(dsp->routes[AUDIO_ROUTE_AMIC_ID]);
 	if(ai_route == NULL){
-		audio_warn_print("The route of dmic record hasn't been created!\n");
+		audio_warn_print("The route of amic record hasn't been created!\n");
 		ret = -EPERM;
 		return ret;
 	}
@@ -1035,7 +1043,7 @@ static long dsp_disable_amic_aec(struct audio_dsp_device *dsp)
 
 	ai_route = &(dsp->routes[AUDIO_ROUTE_AMIC_ID]);
 	if(ai_route == NULL){
-		audio_warn_print("The route of dmic record hasn't been created!\n");
+		audio_warn_print("The route of aec hasn't been created!\n");
 		ret = -EPERM;
 		return ret;
 	}
@@ -1393,8 +1401,7 @@ static int dsp_open(struct inode *inode, struct file *file)
 		return 0;
 	}
 
-	for(index = 0; index < AUDIO_ROUTE_MAX_ID; index++)
-	{
+	for(index = 0; index < AUDIO_ROUTE_MAX_ID; index++) {
 		if (index == AUDIO_ROUTE_DMIC_ID && dmic_enable == 0)
 			continue;
 		route = &(dsp->routes[index]);
@@ -1420,6 +1427,7 @@ static int dsp_open(struct inode *inode, struct file *file)
 	dsp->state = AUDIO_OPEN_STATE;
 	mutex_unlock(&dsp->mlock);
 	return 0;
+
 error:
 	while(index--){
 		route = &(dsp->routes[index]);
@@ -1735,12 +1743,14 @@ int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index)
 
 	if(!dsp || index >= AUDIO_ROUTE_MAX_ID)
 		return -AUDIO_EPERM;
+
 	mutex_lock(&dsp->mlock);
 	if(dsp->routes[index].pipe){
 		audio_warn_print("the pipe has been registered! index = %d\n", index);
 		mutex_unlock(&dsp->mlock);
 		return -AUDIO_EPERM;
 	};
+
 	dsp->routes[index].pipe = pipe;
 	dsp->routes[index].index = index;
 	dsp->routes[index].state = AUDIO_IDLE_STATE;
@@ -1749,12 +1759,15 @@ int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index)
 	mutex_init(&(dsp->routes[index].mlock));
 	mutex_init(&(dsp->routes[index].stream_mlock));
 	init_completion(&(dsp->routes[index].done_completion));
+
 	if(index == AUDIO_ROUTE_AEC_ID)
 		dsp->routes[index].parent = &(dsp->routes[AUDIO_ROUTE_AMIC_ID]);
 	else
 		dsp->routes[index].parent = NULL;
 	dsp->routes[index].priv = dsp;
+
 	mutex_unlock(&dsp->mlock);
+
 	return AUDIO_SUCCESS;
 }
 
@@ -1828,6 +1841,7 @@ static int audio_dsp_probe(struct platform_device *pdev)
 	hrtimer_init(&dspdev->hr_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	dspdev->hr_timer.function = jz_audio_hrtimer_callback;
 	dspdev->expires = ns_to_ktime(1000*1000*fragment_time*10*2);	// the time section is default 40ms.
+
 	INIT_WORK(&dspdev->workqueue, dsp_workqueue_handle);
 
 	globe_dspdev = dspdev;
@@ -1846,9 +1860,10 @@ static int audio_dsp_probe(struct platform_device *pdev)
 	platform_set_drvdata(pdev, dspdev);
 	globe_dspdev = dspdev;
 	dspdev->refcnt = 0;
-
 	dspdev->version = AUDIO_DRIVER_VERSION;
+
 	printk("@@@@ audio driver ok(version %s) @@@@@\n", dspdev->version);
+
 	return 0;
 
 failed_to_proc:
@@ -1866,13 +1881,13 @@ static int __exit audio_dsp_remove(struct platform_device *pdev)
 
 	misc_deregister(&dspdev->miscdev);
 	proc_remove(dspdev->proc);
-
 	subdevs = pdev->dev.platform_data;
 
 	if(aic_enable){
 		platform_device_unregister(subdevs[0]);
 		platform_driver_unregister(&audio_aic_driver);
 	}
+
 	if(dmic_enable){
 		platform_device_unregister(subdevs[1]);
 		platform_driver_unregister(&audio_dmic_driver);
@@ -1923,7 +1938,7 @@ static int __init audio_dsp_init(void)
 
 	ret = platform_device_register(&audio_dsp_platform_device);
 	if(ret){
-		printk("Failed to insmod isp driver!!!\n");
+		printk("Failed to insmod dsp driver!!!\n");
 		return ret;
 	}
 

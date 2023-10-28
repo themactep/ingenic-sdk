@@ -23,15 +23,15 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define JXF37P_CHIP_ID_H	(0x08)
-#define JXF37P_CHIP_ID_L	(0x41)
-#define JXF37P_REG_END		0xff
+#define JXF37P_CHIP_ID_H		(0x08)
+#define JXF37P_CHIP_ID_L		(0x41)
+#define JXF37P_REG_END			0xff
 #define JXF37P_REG_DELAY		0xfe
-#define JXF37P_SUPPORT_30FPS_SCLK_MIPI (86400000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_RES_13 13
-#define SENSOR_VERSION	"H20210419a"
+#define JXF37P_SUPPORT_30FPS_SCLK_MIPI	(86400000)
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_RES_13			13
+#define SENSOR_VERSION			"H20210419a"
 
 /* VGA@70fps: insmod sensor_jxf37p_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_jxf37p_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
@@ -375,6 +375,7 @@ static struct tx_isp_sensor_win_setting jxf37p_win_sizes[] = {
 		.regs 		= jxf37p_init_regs_1920_1080_30fps_mipi,
 	},
 };
+
 /*
  * the part of driver was fixed.
  */
@@ -399,8 +400,7 @@ static struct regval_list jxf37p_stream_off_mipi[] = {
 	{JXF37P_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxf37p_read(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char *value)
+int jxf37p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -425,8 +425,7 @@ int jxf37p_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxf37p_write(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char value)
+int jxf37p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
 {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -535,6 +534,7 @@ static int jxf37p_set_logic(struct tx_isp_subdev *sd, int value)
 
 	return 0;
 }
+
 static int jxf37p_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
@@ -680,8 +680,7 @@ static int jxf37p_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxf37p_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+static int jxf37p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -786,7 +785,6 @@ static int jxf37p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 				ret = jxf37p_write_array(sd, jxf37p_stream_off_dvp);
 			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 				ret = jxf37p_write_array(sd, jxf37p_stream_off_mipi);
-
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
@@ -796,7 +794,6 @@ static int jxf37p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 				ret = jxf37p_write_array(sd, jxf37p_stream_on_dvp);
 			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 				ret = jxf37p_write_array(sd, jxf37p_stream_on_mipi);
-
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 				ret = -1;
@@ -890,7 +887,6 @@ static int jxf37p_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-
 
 	struct tx_isp_sensor_win_setting *wsize = &jxf37p_win_sizes[0];
 

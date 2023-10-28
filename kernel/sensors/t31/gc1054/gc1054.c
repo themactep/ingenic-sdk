@@ -20,22 +20,23 @@
 #include <linux/proc_fs.h>
 
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
 #define GC1054_CHIP_ID_H	(0x10)
 #define GC1054_CHIP_ID_L	(0x54)
+
 #define GC1054_FLAG_END		0x00
 #define GC1054_FLAG_DELAY	0xff
 #define GC1054_PAGE_REG		0xfe
-#define GC1054_SUPPORT_30FPS_SCLK_DVP   (39*1000*1000)
-#define GC1054_SUPPORT_30FPS_SCLK_MIPI  (39*1000*1000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+
+#define GC1054_SUPPORT_30FPS_SCLK_DVP	(39*1000*1000)
+#define GC1054_SUPPORT_30FPS_SCLK_MIPI	(39*1000*1000)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION	"H20210622a"
+#define SENSOR_VERSION		"H20210622a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -283,7 +284,6 @@ unsigned int gc1054_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	*sensor_again = regs;
 
 	return isp_gain1;
-
 }
 
 unsigned int gc1054_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
@@ -293,6 +293,7 @@ unsigned int gc1054_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
+
 struct tx_isp_mipi_bus gc1054_mipi={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 400,
@@ -364,9 +365,7 @@ struct tx_isp_sensor_attribute gc1054_attr={
 	.sensor_ctrl.alloc_dgain = gc1054_alloc_dgain,
 };
 static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
-	/////////////////////////////////////////////////////
-	//////////////////////   SYS   //////////////////////
-	/////////////////////////////////////////////////////
+	/* SYS */
 	{0xf2,0x00},
 	{0xf6,0x00},
 	{0xfc,0x04},
@@ -375,9 +374,7 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0xf9,0x06},
 	{0xfa,0x80},
 	{0xfc,0x0e},
-	///////////////////////////////////////////////////
-	//////////////  ANALOG&CISCTL  ////////////////////
-	///////////////////////////////////////////////////
+	/* ANALOG & CISCTL */
 	{0xfe,0x00},
 	{0x03,0x02},
 	{0x04,0xa6},
@@ -423,9 +420,7 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0xfe,0x01},
 	{0xe3,0x01},
 	{0xe6,0x10}, //ramps offset
-	///////////////////////////////////////////////////
-	////////////////////   ISP   //////////////////////
-	///////////////////////////////////////////////////
+	/* ISP */
 	{0xfe,0x01},
 	{0x80,0x50},
 	{0x88,0x73},
@@ -437,9 +432,7 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0x96,0xd0},
 	{0x97,0x05}, //crop win width
 	{0x98,0x00},
-	///////////////////////////////////////////////////
-	////////////////////   BLK   //////////////////////
-	///////////////////////////////////////////////////
+	/* BLK */
 	{0xfe,0x01},
 	{0x40,0x22},
 	{0x43,0x03},
@@ -447,9 +440,7 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0x4f,0x00},
 	{0x60,0x00},
 	{0x61,0x80},
-	///////////////////////////////////////////////////
-	////////////////////   GAIN   /////////////////////
-	///////////////////////////////////////////////////
+	/* GAIN */
 	{0xfe,0x01},
 	{0xb0,0x48},
 	{0xb1,0x01},
@@ -496,9 +487,7 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0xcd,0x50},
 	{0xce,0x00},
 	{0xcf,0xa1},
-	///////////////////////////////////////////////////
-	/////////////////  DARKSUN   //////////////////////
-	///////////////////////////////////////////////////
+	/* DARKSUN */
 	{0xfe,0x02},
 	{0x54,0xf7},
 	{0x55,0xf0},
@@ -506,14 +495,10 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0x57,0x00},
 	{0x58,0x00},
 	{0x5a,0x04},
-	///////////////////////////////////////////////////
-	////////////////////   DD    //////////////////////
-	///////////////////////////////////////////////////
+	/* DD */
 	{0xfe,0x04},
 	{0x81,0x8a},
-	///////////////////////////////////////////////////
-	////////////////////  MIPI   //////////////////////
-	///////////////////////////////////////////////////
+	/* MIPI */
 	{0xfe,0x03},
 	{0x01,0x03},
 	{0x02,0x11},
@@ -533,13 +518,12 @@ static struct regval_list gc1054_init_regs_1280_720_mipi[] = {
 	{0x2a,0x04},
 	{0x2b,0x04},
 	{0xfe,0x00},
+
 	{GC1054_FLAG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
-/////////////////////////////////////////////////////
-//////////////////////   SYS   //////////////////////
-/////////////////////////////////////////////////////
+	/* SYS */
 	{0xf2,0x00},
 	{0xf6,0x00},
 	{0xfc,0x04},
@@ -548,9 +532,7 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0xf9,0x00},
 	{0xfa,0x80},
 	{0xfc,0x0e},
-	///////////////////////////////////
-	/// ANALOG & CISCTL   /////////////
-	///////////////////////////////////
+	/* ANALOG & CISCTL */
 	{0xfe,0x00},
 	{0x03,0x02},
 	{0x04,0xa6},
@@ -596,9 +578,7 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0xfe,0x01},
 	{0xe3,0x01},
 	{0xe6,0x10}, //ramps offset
-	///////////////////////////////////
-	////   ISP   //////////////////////
-	///////////////////////////////////
+	/* ISP */
 	{0xfe,0x01},
 	{0x80,0x50},
 	{0x88,0x23},
@@ -610,9 +590,7 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0x96,0xd0},
 	{0x97,0x05}, //crop win width
 	{0x98,0x00},
-	///////////////////////////////////
-	////   BLK   //////////////////////
-	///////////////////////////////////
+	/* BLK */
 	{0xfe,0x01},
 	{0x40,0x22},
 	{0x43,0x03},
@@ -620,9 +598,7 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0x4f,0x00},
 	{0x60,0x00},
 	{0x61,0x80},
-	///////////////////////////////////
-	////   GAIN   /////////////////////
-	///////////////////////////////////
+	/* GAIN */
 	{0xfe,0x01},
 	{0xb0,0x48},
 	{0xb1,0x01},
@@ -679,14 +655,10 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0x57,0x00},
 	{0x58,0x00},
 	{0x5a,0x04},
-	///////////////////////////////////
-	/////   DD   //////////////////////
-	///////////////////////////////////
+	/* DD */
 	{0xfe,0x04},
 	{0x81,0x8a},
-	//////////////////////////////////
-	////	 MIPI	/////////////////////
-	///////////////////////////////////
+	/* MIPI */
 	{0xfe,0x03},
 	{0x01,0x00},
 	{0x02,0x00},
@@ -695,9 +667,7 @@ static struct regval_list gc1054_init_regs_1280_720_dvp[] = {
 	{0x15,0x00},
 	{0x40,0x01},
 	{0x41,0x00},
-	///////////////////////////////////
-	////   pad enable   ///////////////
-	///////////////////////////////////
+	/* pad enable */
 	{0xfe,0x00},
 	{0xf2,0x0f},
 
@@ -727,9 +697,11 @@ static struct tx_isp_sensor_win_setting gc1054_win_sizes[] = {
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &gc1054_win_sizes[0];
+
 /*
  * the part of driver was fixed.
  */
+
 static struct regval_list gc1054_stream_on_dvp[] = {
 	{GC1054_FLAG_END, 0x00},	/* END MARKER */
 };
@@ -739,12 +711,12 @@ static struct regval_list gc1054_stream_off_dvp[] = {
 };
 
 static struct regval_list gc1054_stream_on_mipi[] = {
-         {GC1054_FLAG_END, 0x00},        /* END MARKER */
-  };
+	{GC1054_FLAG_END, 0x00},	/* END MARKER */
+};
 
 static struct regval_list gc1054_stream_off_mipi[] = {
-          {GC1054_FLAG_END, 0x00},        /* END MARKER */
-  };
+	{GC1054_FLAG_END, 0x00},	/* END MARKER */
+};
 
 int gc1054_read(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char *value)
@@ -1018,7 +990,7 @@ static int gc1054_set_fps(struct tx_isp_subdev *sd, int fps)
 
 static int gc1054_set_mode(struct tx_isp_subdev *sd, int value)
 {
-        struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 	wsize = &gc1054_win_sizes[0];
@@ -1077,8 +1049,8 @@ static int gc1054_g_chip_ident(struct tx_isp_subdev *sd,
 		memcpy(chip->name, "gc1054", sizeof("gc1054"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
-        }
-        return 0;
+	}
+	return 0;
 }
 
 static int gc1054_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
@@ -1092,11 +1064,11 @@ static int gc1054_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
 			if(arg)
 				ret = gc1054_set_integration_time(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_AGAIN:
-                if(arg)
-		ret = gc1054_set_analog_gain(sd, *(int*)arg);
-		break;
+			break;
+		case TX_ISP_EVENT_SENSOR_AGAIN:
+			if(arg)
+				ret = gc1054_set_analog_gain(sd, *(int*)arg);
+			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
 			if(arg)
 				ret = gc1054_set_digital_gain(sd, *(int*)arg);
@@ -1111,11 +1083,11 @@ static int gc1054_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = gc1054_write_array(sd, gc1054_stream_off_dvp);
+				ret = gc1054_write_array(sd, gc1054_stream_off_dvp);
 			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = gc1054_write_array(sd, gc1054_stream_off_mipi);
-			}else{
-			ISP_ERROR("Don't support this Sensor Data interface\n");
+				ret = gc1054_write_array(sd, gc1054_stream_off_mipi);
+			} else {
+				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
@@ -1132,17 +1104,17 @@ static int gc1054_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			if(arg)
 				ret = gc1054_set_fps(sd, *(int*)arg);
 			break;
-	        default:
-		        break;
+		default:
+			break;
 	}
 
-	return   ret;
+	return ret;
 }
 
 static int gc1054_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
-        int len = 0;
+	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
@@ -1214,6 +1186,7 @@ static int gc1054_probe(struct i2c_client *client,
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 	int ret ;
+
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if(!sensor){
 		ISP_ERROR("Failed to allocate sensor subdev.\n");

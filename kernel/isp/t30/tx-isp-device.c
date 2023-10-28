@@ -26,7 +26,7 @@
 #include "videoin/tx-isp-csi.h"
 #include "videoin/tx-isp-video-in.h"
 #include "apical-isp/tx-isp-core.h"
-/*#include "board/soc-t30/platform.h"*/
+#include "board/soc-t30/platform.h"
 
 extern struct platform_device tx_isp_platform_device;
 #define TX_ISP_DRIVER_VERSION "H20190725b"

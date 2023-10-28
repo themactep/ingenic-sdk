@@ -31,16 +31,12 @@
 #define GC1034_FLAG_DELAY	0xff
 #define GC1034_PAGE_REG		0xfe
 
-#define GC1034_SUPPORT_PCLK (39*1000*1000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+#define GC1034_SUPPORT_PCLK	(39*1000*1000)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION	"H20200116a"
+#define SENSOR_VERSION		"H20200116a"
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -49,16 +45,20 @@ static int pwdn_gpio = GPIO_PA(19);
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
+struct regval_list {
+	unsigned char reg_num;
+	unsigned char value;
+};
 
-const unsigned int  ANALOG_GAIN_1 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_2 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_3 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_4 =		(2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.85*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_5 =		(4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.03*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_6 =		(5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.77*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_7 =		(8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.06*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_8 =		(11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.53*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_9 =		(16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.12*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_3 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_4 = (2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.85*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_5 = (4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.03*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_6 = (5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.77*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_7 = (8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.06*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_8 = (11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.53*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_9 = (16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.12*(1<<TX_ISP_GAIN_FIXED_POINT)));
 
 struct tx_isp_sensor_attribute gc1034_attr;
 
@@ -340,160 +340,160 @@ struct tx_isp_sensor_attribute gc1034_attr={
 
 static struct regval_list gc1034_init_regs_1280_720[] = {
 	/* SYS */
-	{0xf2,0x00},
-	{0xf6,0x00},
-	{0xfc,0x04},
-	{0xf7,0x01},
-	{0xf8,0x0c},
-	{0xf9,0x06},
-	{0xfa,0x80},
-	{0xfc,0x0e},
+	{0xf2, 0x00},
+	{0xf6, 0x00},
+	{0xfc, 0x04},
+	{0xf7, 0x01},
+	{0xf8, 0x0c},
+	{0xf9, 0x06},
+	{0xfa, 0x80},
+	{0xfc, 0x0e},
 	/* ANALOG & CISCTL */
-	{0xfe,0x00},
-	{0x03,0x02},
-	{0x04,0xa6},
-	{0x05,0x02},
-	{0x06,0x07},
-	{0x07,0x00},
-	{0x08,0xa3}, /*hb*/
-	{0x09,0x00},
-	{0x0a,0x04},
-	{0x0b,0x00},
-	{0x0c,0x00},
-	{0x0d,0x02},
-	{0x0e,0xd4},
-	{0x0f,0x05},
-	{0x10,0x08},
-	{0x17,0xc0},
-	{0x18,0x02},
-	{0x19,0x08},
-	{0x1a,0x18},
-	{0x1e,0x50},
-	{0x1f,0x80},
-	{0x21,0x30},
-	{0x23,0xf8},
-	{0x25,0x10},
-	{0x28,0x20},
-	{0x34,0x08},
-	{0x3c,0x10},
-	{0x3d,0x0e},
-	{0x86,0x51},
-	{0x8e,0x0c},/*drop frame while change VB*/
-	{0xcc,0x8e},
-	{0xcd,0x9a},
-	{0xcf,0x70},
-	{0xd0,0xab},
-	{0xd1,0xc5},
-	{0xd2,0xed},
-	{0xd8,0x3c},
-	{0xd9,0x7a},
-	{0xda,0x12},
-	{0xdb,0x50},
-	{0xde,0x0c},
-	{0xe3,0x60},
-	{0xe4,0x78},
-	{0xfe,0x01},
-	{0xe3,0x01},
-	{0xe6,0x10},
+	{0xfe, 0x00},
+	{0x03, 0x02},
+	{0x04, 0xa6},
+	{0x05, 0x02},
+	{0x06, 0x07},
+	{0x07, 0x00},
+	{0x08, 0xa3}, /*hb*/
+	{0x09, 0x00},
+	{0x0a, 0x04},
+	{0x0b, 0x00},
+	{0x0c, 0x00},
+	{0x0d, 0x02},
+	{0x0e, 0xd4},
+	{0x0f, 0x05},
+	{0x10, 0x08},
+	{0x17, 0xc0},
+	{0x18, 0x02},
+	{0x19, 0x08},
+	{0x1a, 0x18},
+	{0x1e, 0x50},
+	{0x1f, 0x80},
+	{0x21, 0x30},
+	{0x23, 0xf8},
+	{0x25, 0x10},
+	{0x28, 0x20},
+	{0x34, 0x08},
+	{0x3c, 0x10},
+	{0x3d, 0x0e},
+	{0x86, 0x51},
+	{0x8e, 0x0c},/*drop frame while change VB*/
+	{0xcc, 0x8e},
+	{0xcd, 0x9a},
+	{0xcf, 0x70},
+	{0xd0, 0xab},
+	{0xd1, 0xc5},
+	{0xd2, 0xed},
+	{0xd8, 0x3c},
+	{0xd9, 0x7a},
+	{0xda, 0x12},
+	{0xdb, 0x50},
+	{0xde, 0x0c},
+	{0xe3, 0x60},
+	{0xe4, 0x78},
+	{0xfe, 0x01},
+	{0xe3, 0x01},
+	{0xe6, 0x10},
 	/* ISP */
-	{0xfe,0x01},
-	{0x80,0x50},
-	{0x88,0x73},
-	{0x89,0x03},
-	{0x90,0x01},
-	{0x92,0x68},
-	{0x93,0x01},
-	{0x94,0x81},
-	{0x95,0x02},
-	{0x96,0x00},
-	{0x97,0x02},
-	{0x98,0x00},
+	{0xfe, 0x01},
+	{0x80, 0x50},
+	{0x88, 0x73},
+	{0x89, 0x03},
+	{0x90, 0x01},
+	{0x92, 0x68},
+	{0x93, 0x01},
+	{0x94, 0x81},
+	{0x95, 0x02},
+	{0x96, 0x00},
+	{0x97, 0x02},
+	{0x98, 0x00},
 	/* BLK */
-	{0xfe,0x01},
-	{0x40,0x22},
-	{0x43,0x03},
-	{0x4e,0x3c},
-	{0x4f,0x00},
-	{0x60,0x00},
-	{0x61,0x80},
+	{0xfe, 0x01},
+	{0x40, 0x22},
+	{0x43, 0x03},
+	{0x4e, 0x3c},
+	{0x4f, 0x00},
+	{0x60, 0x00},
+	{0x61, 0x80},
 	/* GAIN */
-	{0xfe,0x01},
-	{0xb0,0x48},
-	{0xb1,0x01},
-	{0xb2,0x00},
-	{0xb6,0x00},
-	{0xfe,0x02},
-	{0x01,0x00},
-	{0x02,0x01},
-	{0x03,0x02},
-	{0x04,0x03},
-	{0x05,0x04},
-	{0x06,0x05},
-	{0x07,0x06},
-	{0x08,0x0e},
-	{0x09,0x16},
-	{0x0a,0x1e},
-	{0x0b,0x36},
-	{0x0c,0x3e},
-	{0x0d,0x56},
-	{0xfe,0x02},
-	{0xb0,0x00},
-	{0xb1,0x00},
-	{0xb2,0x00},
-	{0xb3,0x11},
-	{0xb4,0x22},
-	{0xb5,0x54},
-	{0xb6,0xb8},
-	{0xb7,0x60},
-	{0xb9,0x00},
-	{0xba,0xc0},
-	{0xc0,0x20},
-	{0xc1,0x2d},
-	{0xc2,0x40},
-	{0xc3,0x5b},
-	{0xc4,0x80},
-	{0xc5,0xb5},
-	{0xc6,0x00},
-	{0xc7,0x6a},
-	{0xc8,0x00},
-	{0xc9,0xd4},
-	{0xca,0x00},
-	{0xcb,0xa8},
-	{0xcc,0x00},
-	{0xcd,0x50},
-	{0xce,0x00},
-	{0xcf,0xa1},
+	{0xfe, 0x01},
+	{0xb0, 0x48},
+	{0xb1, 0x01},
+	{0xb2, 0x00},
+	{0xb6, 0x00},
+	{0xfe, 0x02},
+	{0x01, 0x00},
+	{0x02, 0x01},
+	{0x03, 0x02},
+	{0x04, 0x03},
+	{0x05, 0x04},
+	{0x06, 0x05},
+	{0x07, 0x06},
+	{0x08, 0x0e},
+	{0x09, 0x16},
+	{0x0a, 0x1e},
+	{0x0b, 0x36},
+	{0x0c, 0x3e},
+	{0x0d, 0x56},
+	{0xfe, 0x02},
+	{0xb0, 0x00},
+	{0xb1, 0x00},
+	{0xb2, 0x00},
+	{0xb3, 0x11},
+	{0xb4, 0x22},
+	{0xb5, 0x54},
+	{0xb6, 0xb8},
+	{0xb7, 0x60},
+	{0xb9, 0x00},
+	{0xba, 0xc0},
+	{0xc0, 0x20},
+	{0xc1, 0x2d},
+	{0xc2, 0x40},
+	{0xc3, 0x5b},
+	{0xc4, 0x80},
+	{0xc5, 0xb5},
+	{0xc6, 0x00},
+	{0xc7, 0x6a},
+	{0xc8, 0x00},
+	{0xc9, 0xd4},
+	{0xca, 0x00},
+	{0xcb, 0xa8},
+	{0xcc, 0x00},
+	{0xcd, 0x50},
+	{0xce, 0x00},
+	{0xcf, 0xa1},
 	/* DARKSUN */
-	{0xfe,0x02},
-	{0x54,0xf7},
-	{0x55,0xf0},
-	{0x56,0x00},
-	{0x57,0x00},
-	{0x58,0x00},
-	{0x5a,0x04},
+	{0xfe, 0x02},
+	{0x54, 0xf7},
+	{0x55, 0xf0},
+	{0x56, 0x00},
+	{0x57, 0x00},
+	{0x58, 0x00},
+	{0x5a, 0x04},
 	/* DD */
-	{0xfe,0x04},
-	{0x81,0x8a},
+	{0xfe, 0x04},
+	{0x81, 0x8a},
 	/* MIPI */
-	{0xfe,0x03},
-	{0x01,0x83},
-	{0x02,0x11},
-	{0x03,0x90},
-	{0x10,0x90},
-	{0x11,0x2b},
-	{0x12,0x80},
-	{0x13,0x02},
-	{0x15,0x01},
-	{0x21,0x10},
-	{0x22,0x05},
-	{0x23,0x08},
-	{0x24,0x02},
-	{0x25,0x10},
-	{0x26,0x04},
-	{0x29,0x06},
-	{0x2a,0x04},
-	{0x2b,0x04},
-	{0xfe,0x00},
+	{0xfe, 0x03},
+	{0x01, 0x83},
+	{0x02, 0x11},
+	{0x03, 0x90},
+	{0x10, 0x90},
+	{0x11, 0x2b},
+	{0x12, 0x80},
+	{0x13, 0x02},
+	{0x15, 0x01},
+	{0x21, 0x10},
+	{0x22, 0x05},
+	{0x23, 0x08},
+	{0x24, 0x02},
+	{0x25, 0x10},
+	{0x26, 0x04},
+	{0x29, 0x06},
+	{0x2a, 0x04},
+	{0x2b, 0x04},
+	{0xfe, 0x00},
 
 	{GC1034_FLAG_END, 0x00},	/* END MARKER */
 };
@@ -526,13 +526,12 @@ static struct regval_list gc1034_stream_on[] = {
 
 static struct regval_list gc1034_stream_off[] = {
 	//{0xfe, 0x03},
-	//{0x10 ,0x80},
-	//{0xfe ,0x00},
+	//{0x10, 0x80},
+	//{0xfe, 0x00},
 	{GC1034_FLAG_END, 0x00},	/* END MARKER */
 };
 
-int gc1034_read(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char *value)
+int gc1034_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -557,8 +556,7 @@ int gc1034_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-static int gc1034_write(struct tx_isp_subdev *sd, unsigned char reg,
-			unsigned char value)
+static int gc1034_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
@@ -581,8 +579,8 @@ static int gc1034_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != GC1034_FLAG_END) {
-		if(vals->reg_num == GC1034_FLAG_DELAY) {
-				msleep(vals->value);
+		if (vals->reg_num == GC1034_FLAG_DELAY) {
+			msleep(vals->value);
 		} else {
 			ret = gc1034_read(sd, vals->reg_num, &val);
 			if (ret < 0)
@@ -598,12 +596,13 @@ static int gc1034_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
+
 static int gc1034_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	while (vals->reg_num != GC1034_FLAG_END) {
 		if (vals->reg_num == GC1034_FLAG_DELAY) {
-				msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = gc1034_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
@@ -695,6 +694,7 @@ static int gc1034_init(struct tx_isp_subdev *sd, int enable)
 
 	if(!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -714,6 +714,7 @@ static int gc1034_init(struct tx_isp_subdev *sd, int enable)
 static int gc1034_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
+
 	if (enable) {
 		ret = gc1034_write_array(sd, gc1034_stream_on);
 		pr_debug("gc1034 stream on\n");
@@ -730,13 +731,13 @@ static int gc1034_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int pclk = GC1034_SUPPORT_PCLK;
-	unsigned short win_width=0;
-	unsigned short win_high=0;
+	unsigned short win_width = 0;
+	unsigned short win_high = 0;
 	unsigned short vts = 0;
-	unsigned short hb=0;
-	unsigned short sh_delay=0;
+	unsigned short hb = 0;
+	unsigned short sh_delay = 0;
 	unsigned short vb = 0;
-	unsigned short hts=0;
+	unsigned short hts = 0;
 	unsigned char tmp;
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
@@ -784,7 +785,7 @@ static int gc1034_set_fps(struct tx_isp_subdev *sd, int fps)
 
 static int gc1034_set_mode(struct tx_isp_subdev *sd, int value)
 {
-        struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 	wsize = &gc1034_win_sizes[0];
@@ -801,8 +802,7 @@ static int gc1034_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int gc1034_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+static int gc1034_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -843,9 +843,10 @@ static int gc1034_g_chip_ident(struct tx_isp_subdev *sd,
 		memcpy(chip->name, "gc1034", sizeof("gc1034"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
-        }
-        return 0;
+	}
+	return 0;
 }
+
 static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
@@ -857,11 +858,11 @@ static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
 			if(arg)
 				ret = gc1034_set_integration_time(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_AGAIN:
-                if(arg)
-		ret = gc1034_set_analog_gain(sd, *(int*)arg);
-		break;
+			break;
+		case TX_ISP_EVENT_SENSOR_AGAIN:
+			if(arg)
+				ret = gc1034_set_analog_gain(sd, *(int*)arg);
+			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
 			if(arg)
 				ret = gc1034_set_digital_gain(sd, *(int*)arg);
@@ -884,17 +885,17 @@ static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			if(arg)
 				ret = gc1034_set_fps(sd, *(int*)arg);
 			break;
-	        default:
-		        break;
+		default:
+			break;
 	}
 
-	return 0;
+	return ret;
 }
 
 static int gc1034_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
-        int len = 0;
+	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
@@ -921,6 +922,7 @@ static int gc1034_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 	gc1034_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+
 	return 0;
 }
 
@@ -959,8 +961,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int gc1034_probe(struct i2c_client *client,
-		const struct i2c_device_id *id)
+static int gc1034_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
