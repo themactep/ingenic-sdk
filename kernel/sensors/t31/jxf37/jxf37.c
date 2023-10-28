@@ -23,18 +23,18 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define JXF37_CHIP_ID_H	(0x0f)
-#define JXF37_CHIP_ID_L	(0x37)
-#define JXF37_REG_END		0xff
-#define JXF37_REG_DELAY		0xfe
-#define JXF37_SUPPORT_30FPS_SCLK_DVP (86400000)
-#define JXF37_SUPPORT_30FPS_SCLK_MIPI (129600000)
-#define JXF37_SUPPORT_VGA_70FPS_SCLK_MIPI (71939840)
-#define JXF37_SUPPORT_13_110FPS_SCLK_MIPI (64768000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_RES_13 13
-#define SENSOR_VERSION	"H20210331a"
+#define JXF37_CHIP_ID_H				(0x0f)
+#define JXF37_CHIP_ID_L				(0x37)
+#define JXF37_REG_END				0xff
+#define JXF37_REG_DELAY				0xfe
+#define JXF37_SUPPORT_30FPS_SCLK_DVP		(86400000)
+#define JXF37_SUPPORT_30FPS_SCLK_MIPI		(129600000)
+#define JXF37_SUPPORT_VGA_70FPS_SCLK_MIPI	(71939840)
+#define JXF37_SUPPORT_13_110FPS_SCLK_MIPI	(64768000)
+#define SENSOR_OUTPUT_MAX_FPS			30
+#define SENSOR_OUTPUT_MIN_FPS			5
+#define SENSOR_RES_13				13
+#define SENSOR_VERSION				"H20210331a"
 
 /* VGA@70fps: insmod sensor_jxf37_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_jxf37_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
@@ -1307,8 +1307,7 @@ static struct regval_list jxf37_stream_off_mipi[] = {
 	{JXF37_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg,
-	       unsigned char *value)
+int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -1333,8 +1332,7 @@ int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char value)
+int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
 {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -1537,7 +1535,6 @@ static int jxf37_set_expo(struct tx_isp_subdev *sd, int value)
 	if (ret < 0)
 		return ret;
 
-
 	return 0;
 }
 
@@ -1643,25 +1640,25 @@ static int jxf37_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("Now we do not support this data interface!!!\n");
 	}
 
-	if(data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		sclk = JXF37_SUPPORT_30FPS_SCLK_DVP;
-	} else if(data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-		switch(sensor_resolution){
-			max_fps = 30;
-		case TX_SENSOR_RES_200:
-			sclk = JXF37_SUPPORT_30FPS_SCLK_MIPI;
-			break;
-		case TX_SENSOR_RES_30:
-			max_fps = 70;
-			sclk = JXF37_SUPPORT_VGA_70FPS_SCLK_MIPI;
-			break;
-		case SENSOR_RES_13:
-			max_fps = 110;
-			sclk = JXF37_SUPPORT_13_110FPS_SCLK_MIPI;
-			break;
-		default:
-			ISP_ERROR("Now we do not support this data interface!!!\n");
-			return -1;
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+		switch(sensor_resolution) {
+			case TX_SENSOR_RES_200:
+				max_fps = 30;
+				sclk = JXF37_SUPPORT_30FPS_SCLK_MIPI;
+				break;
+			case TX_SENSOR_RES_30:
+				max_fps = 70;
+				sclk = JXF37_SUPPORT_VGA_70FPS_SCLK_MIPI;
+				break;
+			case SENSOR_RES_13:
+				max_fps = 110;
+				sclk = JXF37_SUPPORT_13_110FPS_SCLK_MIPI;
+				break;
+			default:
+				ISP_ERROR("Now we do not support this data interface!!!\n");
+				return -1;
 		}
 	} else {
 		ISP_ERROR("Now we do not support this data interface!!!\n");
@@ -1806,8 +1803,7 @@ static int jxf37_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxf37_g_chip_ident(struct tx_isp_subdev *sd,
-			      struct tx_isp_chip_ident *chip)
+static int jxf37_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -1897,81 +1893,79 @@ static int jxf37_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 		return -EINVAL;
 	}
 	switch(cmd){
-	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if(arg)
-			ret = jxf37_set_logic(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-			ret = jxf37_set_expo(sd, *(int*)arg);
-		break;
+		case TX_ISP_EVENT_SENSOR_LOGIC:
+			if(arg)
+				ret = jxf37_set_logic(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_EXPO:
+			if(arg)
+				ret = jxf37_set_expo(sd, *(int*)arg);
+			break;
 		/* case TX_ISP_EVENT_SENSOR_INT_TIME: */
 		/* 	if(arg) */
 		/* 		ret = jxf37_set_integration_time(sd, *(int*)arg); */
 		/* 	break; */
-	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		if(arg)
-			ret = jxf37_set_integration_time_short(sd, *(int*)arg);
-		break;
+		case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
+			if(arg)
+				ret = jxf37_set_integration_time_short(sd, *(int*)arg);
+			break;
 		/* case TX_ISP_EVENT_SENSOR_AGAIN: */
 		/* 	if(arg) */
 		/* 		ret = jxf37_set_analog_gain(sd, *(int*)arg); */
 		/* 	break; */
-	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-		if(arg)
-			ret = jxf37_set_analog_gain_short(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = jxf37_set_digital_gain(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = jxf37_get_black_pedestal(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = jxf37_set_mode(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf37_write_array(sd, jxf37_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf37_write_array(sd, jxf37_stream_off_mipi);
-
-		} else {
-			ISP_ERROR("Don't support this Sensor Data interface\n");
-		}
-		break;
-	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf37_write_array(sd, jxf37_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf37_write_array(sd, jxf37_stream_on_mipi);
-
-		} else {
-			ISP_ERROR("Don't support this Sensor Data interface\n");
-			ret = -1;
-		}
-		break;
-	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = jxf37_set_fps(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = jxf37_set_vflip(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_WDR:
-		if(arg)
-			ret = jxf37_set_wdr(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_WDR_STOP:
-		if(arg)
-			ret = jxf37_set_wdr_stop(sd, *(int*)arg);
-		break;
-	default:
-		break;;
+		case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
+			if(arg)
+				ret = jxf37_set_analog_gain_short(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_DGAIN:
+			if(arg)
+				ret = jxf37_set_digital_gain(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
+			if(arg)
+				ret = jxf37_get_black_pedestal(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_RESIZE:
+			if(arg)
+				ret = jxf37_set_mode(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+				ret = jxf37_write_array(sd, jxf37_stream_off_dvp);
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+				ret = jxf37_write_array(sd, jxf37_stream_off_mipi);
+			} else {
+				ISP_ERROR("Don't support this Sensor Data interface\n");
+			}
+			break;
+		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+				ret = jxf37_write_array(sd, jxf37_stream_on_dvp);
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+				ret = jxf37_write_array(sd, jxf37_stream_on_mipi);
+			} else {
+				ISP_ERROR("Don't support this Sensor Data interface\n");
+				ret = -1;
+			}
+			break;
+		case TX_ISP_EVENT_SENSOR_FPS:
+			if(arg)
+				ret = jxf37_set_fps(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_VFLIP:
+			if(arg)
+				ret = jxf37_set_vflip(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_WDR:
+			if(arg)
+				ret = jxf37_set_wdr(sd, *(int*)arg);
+			break;
+		case TX_ISP_EVENT_SENSOR_WDR_STOP:
+			if(arg)
+				ret = jxf37_set_wdr_stop(sd, *(int*)arg);
+			break;
+		default:
+			break;;
 	}
 
 	return ret;

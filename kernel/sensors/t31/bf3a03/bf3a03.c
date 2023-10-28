@@ -392,8 +392,7 @@ static int bf3a03_set_expo(struct tx_isp_subdev* sd, int value)
 	int expo = (value & 0x0000ffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	if(ag_last != again)
-	{
+	if (ag_last != again) {
 		ret = bf3a03_write(sd, 0x87, (unsigned char)((value) & 0xff));
 		if (ret < 0) {
 			printk("bf3a03_write analog gain error\n");
@@ -435,7 +434,7 @@ static int bf3a03_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &bf3a03_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;

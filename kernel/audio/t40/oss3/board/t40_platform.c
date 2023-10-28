@@ -59,7 +59,6 @@ struct platform_device jz_codec_device = {
 	.num_resources  = ARRAY_SIZE(jz_codec_resources),
 };
 
-
 /* aic device */
 static u64 jz_aic_dmamask = ~(u32) 0;
 static struct resource jz_aic_resources[] = {

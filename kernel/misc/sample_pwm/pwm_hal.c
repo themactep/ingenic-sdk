@@ -28,10 +28,11 @@
 #else /* other soc type */
 #define PWM_NUM		4
 #endif
-#define PWM_CONFIG	0x001
-#define PWM_CONFIG_DUTY	0x002
-#define PWM_ENABLE	0x010
-#define PWM_DISABLE 0x100
+#define PWM_CONFIG		0x001
+#define PWM_CONFIG_DUTY		0x002
+#define PWM_ENABLE		0x010
+#define PWM_DISABLE		0x100
+#define PWM_QUERY_STATUS	0x200
 
 struct platform_device pwm_device = {
 	.name = "pwm-jz",
@@ -98,12 +99,14 @@ struct pwm_ioctl_t {
 	int duty;
 	int period;
 	int polarity;
+	int enabled;
 };
 
 struct pwm_device_t {
 	int duty;
 	int period;
 	int polarity;
+	int enabled;
 	struct pwm_device *pwm_device;
 };
 
@@ -216,6 +219,7 @@ static long pwm_jz_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				pwm_set_polarity(gpwm->pwm_device_t[id]->pwm_device, PWM_POLARITY_NORMAL);
 
 			pwm_enable(gpwm->pwm_device_t[id]->pwm_device);
+			gpwm->pwm_device_t[id]->enabled = 1;
 
 			pwm_config(gpwm->pwm_device_t[id]->pwm_device, gpwm->pwm_device_t[id]->duty, gpwm->pwm_device_t[id]->period);
 			break;
@@ -241,13 +245,46 @@ static long pwm_jz_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			}
 
 			pwm_disable(gpwm->pwm_device_t[id]->pwm_device);
+			gpwm->pwm_device_t[id]->enabled = 0;
 
 			break;
+		case PWM_QUERY_STATUS:
+			if (copy_from_user(&pwm_ioctl, (struct pwm_ioctl_t __user *)arg, sizeof(pwm_ioctl))) {
+				dev_err(gpwm->dev, "Error copying data from user space!\n");
+				ret = -EFAULT;
+				break;
+			}
+
+			id = pwm_ioctl.index;
+
+			if((id >= PWM_NUM) || (id < 0)) {
+				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
+				ret = -1;
+				break;
+			}
+
+			dev_info(gpwm->dev, "Queried PWM Channel: %d\n", id);
+
+			pwm_ioctl.duty = gpwm->pwm_device_t[id]->duty;
+			pwm_ioctl.period = gpwm->pwm_device_t[id]->period;
+			pwm_ioctl.polarity = gpwm->pwm_device_t[id]->polarity;
+			pwm_ioctl.enabled = gpwm->pwm_device_t[id]->enabled;
+
+			dev_info(gpwm->dev, "Channel %d - Duty: %d, Period: %d, Polarity: %d\n",
+				id, pwm_ioctl.duty, pwm_ioctl.period, pwm_ioctl.polarity);
+
+			if (copy_to_user((void __user *)arg, &pwm_ioctl, sizeof(pwm_ioctl))) {
+				dev_err(gpwm->dev, "Error copying data to user space!\n");
+				ret = -EFAULT;
+			}
+			break;
+
 		default:
 			dev_err(gpwm->dev, "unsupport cmd !\n");
 			break;
 	}
-    mutex_unlock(&gpwm->mlock);
+
+	mutex_unlock(&gpwm->mlock);
 
 	return ret;
 }
@@ -324,8 +361,8 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		gpwm->pwm_device_t[i]->polarity = -1;
 	}
 
-    spin_lock_init(&gpwm->pwm_lock);
-    mutex_init(&gpwm->mlock);
+	spin_lock_init(&gpwm->pwm_lock);
+	mutex_init(&gpwm->mlock);
 	gpwm->mdev.minor = MISC_DYNAMIC_MINOR;
 	gpwm->mdev.name = "pwm";
 	gpwm->mdev.fops = &pwm_jz_fops;

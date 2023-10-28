@@ -23,14 +23,14 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define AR1337_CHIP_ID_H	(0x02)
-#define AR1337_CHIP_ID_L	(0x53)
-#define AR1337_REG_END		0xffff
-#define AR1337_REG_DELAY	0xfffe
-#define AR1337_SUPPORT_25FPS_SCLK (441567840)
-#define SENSOR_OUTPUT_MAX_FPS 25
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20211008a"
+#define AR1337_CHIP_ID_H		(0x02)
+#define AR1337_CHIP_ID_L		(0x53)
+#define AR1337_REG_END			0xffff
+#define AR1337_REG_DELAY		0xfffe
+#define AR1337_SUPPORT_25FPS_SCLK	(441567840)
+#define SENSOR_OUTPUT_MAX_FPS		25
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_VERSION			"H20211008a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -2854,7 +2854,7 @@ static struct regval_list AR1337_init_regs_1920_1080_25fps_mipi[] ={
 	{AR1337_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting AR1337_win_sizes[] ={
+static struct tx_isp_sensor_win_setting AR1337_win_sizes[] = {
 	/* [0] 1920*1080 @25fps */
 	{
 		.width		= 1920,
@@ -2867,13 +2867,13 @@ static struct tx_isp_sensor_win_setting AR1337_win_sizes[] ={
 };
 struct tx_isp_sensor_win_setting *wsize = &AR1337_win_sizes[0];
 
-static struct regval_list AR1337_stream_on_mipi[] ={
-	//	{0x301A, 0x021c},
+static struct regval_list AR1337_stream_on_mipi[] = {
+//	{0x301A, 0x021c},
 	{AR1337_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list AR1337_stream_off_mipi[] ={
-	//	{0x301A, 0x0218},
+static struct regval_list AR1337_stream_off_mipi[] = {
+//	{0x301A, 0x0218},
 	{AR1337_REG_END, 0x00},	/* END MARKER */
 };
 
@@ -3068,7 +3068,6 @@ static int AR1337_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-
 static int AR1337_set_logic(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
@@ -3183,8 +3182,7 @@ static int AR1337_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int AR1337_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+static int AR1337_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -3229,8 +3227,6 @@ static int AR1337_g_chip_ident(struct tx_isp_subdev *sd,
 
 	return 0;
 }
-
-
 
 static int AR1337_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
@@ -3334,7 +3330,7 @@ static int AR1337_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops AR1337_core_ops ={
+static struct tx_isp_subdev_core_ops AR1337_core_ops = {
 	.g_chip_ident = AR1337_g_chip_ident,
 	.reset = AR1337_reset,
 	.init = AR1337_init,
@@ -3343,15 +3339,15 @@ static struct tx_isp_subdev_core_ops AR1337_core_ops ={
 	.s_register = AR1337_s_register,
 };
 
-static struct tx_isp_subdev_video_ops AR1337_video_ops ={
+static struct tx_isp_subdev_video_ops AR1337_video_ops = {
 	.s_stream = AR1337_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	AR1337_sensor_ops ={
+static struct tx_isp_subdev_sensor_ops	AR1337_sensor_ops = {
 	.ioctl	= AR1337_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops AR1337_ops ={
+static struct tx_isp_subdev_ops AR1337_ops = {
 	.core = &AR1337_core_ops,
 	.video = &AR1337_video_ops,
 	.sensor = &AR1337_sensor_ops,
@@ -3359,7 +3355,7 @@ static struct tx_isp_subdev_ops AR1337_ops ={
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
-struct platform_device sensor_platform_device ={
+struct platform_device sensor_platform_device = {
 	.name = "AR1337",
 	.id = -1,
 	.dev ={
@@ -3438,13 +3434,13 @@ static int AR1337_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id AR1337_id[] ={
+static const struct i2c_device_id AR1337_id[] = {
 	{ "ar1337", 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, AR1337_id);
 
-static struct i2c_driver AR1337_driver ={
+static struct i2c_driver AR1337_driver = {
 	.driver ={
 		.owner	= THIS_MODULE,
 		.name	= "ar1337",
