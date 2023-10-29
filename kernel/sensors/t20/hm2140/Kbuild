@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_hm2140_$(SOC)
+MODULE_NAME := sensor_hm2140_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/hm2140/hm2140.c
 

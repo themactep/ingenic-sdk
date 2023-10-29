@@ -1,7 +1,7 @@
 MODULE_NAME := sensor_mis8001_t40
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/mis8001/mis8001.c
 

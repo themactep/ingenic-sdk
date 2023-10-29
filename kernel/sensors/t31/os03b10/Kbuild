@@ -1,7 +1,7 @@
 MODULE_NAME := sensor_os03b10_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/os03b10/os03b10.c
 

@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_ps5230_$(SOC)
+MODULE_NAME := sensor_ps5230_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/ps5230/ps5230.c
 

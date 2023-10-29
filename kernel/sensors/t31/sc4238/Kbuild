@@ -1,7 +1,7 @@
 MODULE_NAME := sensor_sc4238_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/sc4238/sc4238.c
 

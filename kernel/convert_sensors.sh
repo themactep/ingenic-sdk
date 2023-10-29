@@ -4,7 +4,7 @@ TEMPLATE='
 MODULE_NAME := sensor_xxx_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/xxx/xxx.c
 

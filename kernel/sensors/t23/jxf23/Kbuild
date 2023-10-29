@@ -2,7 +2,7 @@
 MODULE_NAME := sensor_jxf23_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/jxf23/jxf23.c
 
@@ -11,4 +11,3 @@ OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
-

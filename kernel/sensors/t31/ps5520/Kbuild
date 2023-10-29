@@ -1,7 +1,7 @@
 MODULE_NAME := sensor_ps5520_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/ps5520/ps5520.c
 
