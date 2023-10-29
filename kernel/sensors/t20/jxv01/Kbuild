@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_jxv01_$(SOC)
+MODULE_NAME := sensor_jxv01_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/jxv01/jxv01.c
 

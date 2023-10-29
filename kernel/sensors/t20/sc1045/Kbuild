@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_sc1045_$(SOC)
+MODULE_NAME := sensor_sc1045_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/sc1045/sc1045.c
 

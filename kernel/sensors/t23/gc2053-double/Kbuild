@@ -2,7 +2,7 @@
 MODULE_NAME := sensor_gc2053-double_t31
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/gc2053-double/gc2053-double.c
 
@@ -11,4 +11,3 @@ OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
-

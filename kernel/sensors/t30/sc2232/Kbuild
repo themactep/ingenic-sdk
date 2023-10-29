@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_sc2232_$(SOC)
+MODULE_NAME := sensor_sc2232_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/sc2232/sc2232.c
 

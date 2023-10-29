@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_ov2710_$(SOC)
+MODULE_NAME := sensor_ov2710_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/ov2710/ov2710.c
 

@@ -1,7 +1,7 @@
-MODULE_NAME := sensor_ar0130_$(SOC)
+MODULE_NAME := sensor_ar0130_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=sensors/$(SOC)
+DIR=sensors/$(SOC_FAMILY)
 
 SRCS := $(DIR)/ar0130/ar0130.c
 
