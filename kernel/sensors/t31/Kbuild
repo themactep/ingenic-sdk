@@ -1,5 +1,0 @@
-ifeq ($(SENSOR_MODEL),)
-$(error SENSOR_MODEL missing)
-endif
-
-include $(src)/sensors/$(SOC_FAMILY)/$(SENSOR_MODEL)/Kbuild

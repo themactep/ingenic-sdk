@@ -1,8 +1,0 @@
-include $(src)/sensors/$(SOC_FAMILY)/gc2053
-include $(src)/sensors/$(SOC_FAMILY)/gc2053-double
-include $(src)/sensors/$(SOC_FAMILY)/imx327
-include $(src)/sensors/$(SOC_FAMILY)/jxf23
-include $(src)/sensors/$(SOC_FAMILY)/sc200ai
-include $(src)/sensors/$(SOC_FAMILY)/sc2310
-include $(src)/sensors/$(SOC_FAMILY)/sc2331
-include $(src)/sensors/$(SOC_FAMILY)/sc301IoT

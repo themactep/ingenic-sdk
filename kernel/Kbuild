@@ -2,10 +2,6 @@ ifeq ($(SOC_FAMILY),)
 $(error SOC_FAMILY missing)
 endif
 
-ifeq ($(SENSOR_MODEL),)
-$(error SENSOR_MODEL missing)
-endif
-
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
 ccflags-y += -I$(src)/isp/$(SOC_FAMILY)/include
 ccflags-y += -I$(src)/audio/$(SOC_FAMILY)/oss3/include
@@ -15,7 +11,12 @@ include $(src)/gpio/Kbuild
 include $(src)/misc/sample_pwm/Kbuild
 
 include $(src)/isp/$(SOC_FAMILY)/Kbuild
-include $(src)/sensors/$(SOC_FAMILY)/Kbuild
+
+ifeq ($(SENSOR_MODEL),)
+$(error SENSOR_MODEL missing)
+else
+include $(src)/sensors/$(SOC_FAMILY)/$(SENSOR_MODEL)/Kbuild
+endif
 
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40),y)
 include $(src)/avpu/$(SOC_FAMILY)/Kbuild
