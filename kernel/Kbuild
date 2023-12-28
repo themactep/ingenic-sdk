@@ -1,5 +1,5 @@
 ifeq ($(SOC_FAMILY),)
-	@echo SOC_FAMILY must be set
+@echo SOC_FAMILY must be set
 endif
 
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
@@ -13,18 +13,17 @@ include $(src)/misc/sample_pwm/Kbuild
 include $(src)/isp/$(SOC_FAMILY)/Kbuild
 
 ifneq ($(SENSOR),)
-	include $(src)/sensors/$(SOC_FAMILY)/Kbuild
+include $(src)/sensors/$(SOC_FAMILY)/Kbuild
 else
-	@echo SOC_FAMILY must be set
-	$(error SOC_FAMILY must be set!!!!!)
+@echo SOC_FAMILY must be set
 endif
 
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40),y)
-	include $(src)/avpu/$(SOC_FAMILY)/Kbuild
+include $(src)/avpu/$(SOC_FAMILY)/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T40),y)
-	include $(src)/audio/$(SOC_FAMILY)/oss3/Kbuild
+include $(src)/audio/$(SOC_FAMILY)/oss3/Kbuild
 else
-	include $(src)/audio/$(SOC_FAMILY)/oss2/Kbuild
+include $(src)/audio/$(SOC_FAMILY)/oss2/Kbuild
 endif
