@@ -1,1 +1,5 @@
+ifeq ($(SENSOR),)
+$(error SENSOR missing)
+endif
+
 include $(src)/sensors/$(SOC_FAMILY)/$(SENSOR)/Kbuild
