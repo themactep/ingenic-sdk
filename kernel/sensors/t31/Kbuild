@@ -1,1 +1,1 @@
-include $(src)/sensors/$(SOC_FAMILY)/$(BR2_OPENIPC_SENSOR)/Kbuild
+include $(src)/sensors/$(SOC_FAMILY)/$(SENSOR)/Kbuild
