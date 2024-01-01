@@ -977,6 +977,17 @@ static int jz_codec_register(struct platform_device *pdev)
 			printk(KERN_DEBUG"request spk en gpio %d error!\n", codec_platform_data->gpio_spk_en.gpio);
 		}
 		printk(KERN_DEBUG"request spk en gpio %d ok!\n", codec_platform_data->gpio_spk_en.gpio);
+		/* Mute the amp right away. gpio_request() alone leaves this pin
+		 * floating until the first codec_set_speaker()/codec_turn_off()
+		 * call (replay open/close) ever drives it. A capture-only session
+		 * (mic-only, no two-way audio) never opens replay, so on boards
+		 * where the floating enable line couples analog/clock activity
+		 * from mic capture into the amp, that shows up as a persistent
+		 * audible whine for as long as capture runs. Driving it to the
+		 * inactive level here once at probe time is enough - no repeated
+		 * toggling, which some amp ICs don't tolerate well long-term. */
+		gpio_direction_output(codec_platform_data->gpio_spk_en.gpio,
+				      !codec_platform_data->gpio_spk_en.active_level);
 	}
 
 	pdev->dev.platform_data = codec_platform_data;
