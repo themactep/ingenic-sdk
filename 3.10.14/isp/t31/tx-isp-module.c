@@ -14,8 +14,18 @@
 extern int tx_isp_init(void);
 extern void tx_isp_exit(void);
 
+#ifdef CONFIG_JZ_ISP_TRACE
+#include <mach/txx-funcs.h>
+extern void *get_driver_common_interfaces(void);
+extern void jz_isp_vtable_trace_init(struct jz_driver_common_interfaces *p);
+#endif
+
 static int __init tx_isp_module_init(void)
 {
+#ifdef CONFIG_JZ_ISP_TRACE
+	jz_isp_vtable_trace_init(
+		(struct jz_driver_common_interfaces *)get_driver_common_interfaces());
+#endif
 	return tx_isp_init();
 }
 
