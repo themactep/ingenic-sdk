@@ -18,4 +18,3 @@ int avpu_dmabuf_get_address(struct device *dev, u32 fd, u32 *bus_address)
 	pr_err("dmabuf interface not supported");
 	return -EINVAL;
 }
-
