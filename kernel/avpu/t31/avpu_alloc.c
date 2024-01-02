@@ -39,5 +39,3 @@ void avpu_free_dma(struct device *dev, struct avpu_dma_buffer *buf)
 				  buf->dma_handle);
 	kfree(buf);
 }
-
-

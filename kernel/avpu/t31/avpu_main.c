@@ -34,6 +34,8 @@
 
 #define DEV_NAME "avpu"
 
+#define AVPU_DRIVER_VERSION "H20220825a"
+
 int avpu_codec_major;
 int avpu_codec_nr_devs = AVPU_NR_DEVS;
 module_param(avpu_codec_nr_devs, int, S_IRUGO);
@@ -45,7 +47,6 @@ module_param(avpu_clk, int, S_IRUGO);
 MODULE_PARM_DESC(avpu_clk, "avpu clock freq");
 static struct class *module_class;
 
-#if 1
 struct flush_cache_info {
 	unsigned int	addr;
 	unsigned int	len;
@@ -54,11 +55,10 @@ struct flush_cache_info {
 #define WBACK_INV	DMA_BIDIRECTIONAL
 	unsigned int	dir;
 };
-#endif
 
 static void jz_avpu_release(struct device *dev)
 {
-    return;
+	return;
 }
 
 #if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
@@ -492,7 +492,92 @@ int avpu_codec_probe(struct platform_device *pdev)
 	}
 
 #ifdef CONFIG_SOC_T41
+#ifdef CONFIG_KERNEL_4_4_94
+	codec->ahb1_gate = clk_get(&pdev->dev, "div_ispa");
+	if (IS_ERR(codec->ahb1_gate)) {
+		avpu_err("ahb1_gate get failed\n");
+		err = PTR_ERR(codec->ahb1_gate);
+		goto out_get_ahb1_clk_gate;
+	}
 
+	codec->clk_gate_ivdc = clk_get(&pdev->dev, "gate_ivdc");
+	if (IS_ERR(codec->clk_gate_ivdc)) {
+		avpu_err("clk_gate_ivdc get failed\n");
+		err = PTR_ERR(codec->clk_gate_ivdc);
+		goto out_get_clk_gate;
+	}
+	clk_prepare_enable(codec->clk_gate_ivdc);
+
+	codec->clk_gate = clk_get(&pdev->dev, "gate_el200");
+	if (IS_ERR(codec->clk_gate)) {
+		avpu_err("clk_gate get failed\n");
+		err = PTR_ERR(codec->clk_gate);
+		goto out_get_clk_gate;
+	}
+
+	codec->clk_mux = clk_get(&pdev->dev,"mux_el200");
+	if (IS_ERR(codec->clk_mux)) {
+		avpu_err("clk get failed\n");
+		err = PTR_ERR(codec->clk_mux);
+		goto out_get_vpu_clk_cgu;
+	}
+
+	ret = clk_set_parent(codec->clk_mux, clk_get(NULL, clk_name));
+	if (ret){
+		printk("clk_set_parent failed!!! parent name = %s\n", clk_name);
+	}
+	codec->clk = clk_get(&pdev->dev,"div_el200");
+	if (IS_ERR(codec->clk)) {
+		avpu_err("clk get failed\n");
+		err = PTR_ERR(codec->clk);
+		goto out_get_vpu_clk_cgu;
+	}
+	clk_set_rate(codec->clk, avpu_clk);
+
+	clk_prepare_enable(codec->ahb1_gate);
+	clk_prepare_enable(codec->clk_gate);
+	clk_prepare_enable(codec->clk);
+#elif defined(CONFIG_KERNEL_3_10)
+	codec->ahb1_gate = clk_get(&pdev->dev, "cgu_ispa");
+	if (IS_ERR(codec->ahb1_gate)) {
+		avpu_err("ahb1_gate get failed\n");
+		err = PTR_ERR(codec->ahb1_gate);
+		goto out_get_ahb1_clk_gate;
+	}
+
+	codec->clk_gate_ivdc = clk_get(&pdev->dev, "ivdc");
+	if (IS_ERR(codec->clk_gate_ivdc)) {
+		avpu_err("clk_gate_ivdc get failed\n");
+		err = PTR_ERR(codec->clk_gate_ivdc);
+		goto out_get_clk_gate;
+	}
+	clk_enable(codec->clk_gate_ivdc);
+
+	codec->clk_gate = clk_get(&pdev->dev, "avpu");
+	if (IS_ERR(codec->clk_gate)) {
+		avpu_err("clk_gate get failed\n");
+		err = PTR_ERR(codec->clk_gate);
+		goto out_get_clk_gate;
+	}
+
+	codec->clk = clk_get(&pdev->dev,"cgu_vpu");
+	if (IS_ERR(codec->clk)) {
+		avpu_err("clk get failed\n");
+		err = PTR_ERR(codec->clk);
+		goto out_get_vpu_clk_cgu;
+	}
+
+	ret = clk_set_parent(codec->clk, clk_get(NULL, clk_name));
+	if (ret){
+		printk("clk_set_parent failed!!! parent name = %s\n", clk_name);
+	}
+
+	clk_set_rate(codec->clk, avpu_clk);
+
+	clk_enable(codec->ahb1_gate);
+	clk_enable(codec->clk_gate);
+	clk_enable(codec->clk);
+#endif
 #elif defined(CONFIG_SOC_T40)
 	codec->ahb1_gate = clk_get(&pdev->dev, "gate_ahb1");
 	if (IS_ERR(codec->ahb1_gate)) {
@@ -591,6 +676,7 @@ int avpu_codec_probe(struct platform_device *pdev)
 
 	codec->minor = current_minor;
 	++current_minor;
+	printk("@@@@ avpu driver ok(version %s) @@@@@\n", AVPU_DRIVER_VERSION);
 
 	return 0;
 
@@ -610,7 +696,21 @@ int avpu_codec_remove(struct platform_device *pdev)
 	dev_t dev = MKDEV(avpu_codec_major, codec->minor);
 
 #ifdef CONFIG_SOC_T41
-
+#ifdef CONFIG_KERNEL_4_4_94
+	clk_disable_unprepare(codec->clk);
+	clk_disable_unprepare(codec->clk_gate);
+	clk_disable_unprepare(codec->clk_gate_ivdc);
+	clk_disable_unprepare(codec->ahb1_gate);
+#elif defined(CONFIG_KERNEL_3_10)
+	clk_disable(codec->clk);
+	clk_disable(codec->clk_gate);
+	clk_disable(codec->clk_gate_ivdc);
+	clk_disable(codec->ahb1_gate);
+	clk_put(codec->clk);
+	clk_put(codec->clk_gate);
+	clk_put(codec->clk_gate_ivdc);
+	clk_put(codec->ahb1_gate);
+#endif
 #elif defined(CONFIG_SOC_T40)
 	clk_disable_unprepare(codec->clk);
 	clk_disable_unprepare(codec->clk_gate);
