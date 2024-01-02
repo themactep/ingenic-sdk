@@ -27,11 +27,12 @@
 #define SC3336_CHIP_ID_L	(0x41)
 #define SC3336_REG_END		0xffff
 #define SC3336_REG_DELAY	0xfffe
-#define SC3336_SUPPORT_SCLK_RES_300 (1250*1632*25)
+#define SC3336_SUPPORT_SCLK_RES_300 (1250*1632*25*2)
 #define SC3336_SUPPORT_SCLK_RES_100 (2500*1320*15)
+#define SC3336_SUPPORT_SCLK_RES_200 (2500*1360*30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION	"H20220303a"
+#define SENSOR_VERSION	"H20220608a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -370,6 +371,34 @@ struct tx_isp_mipi_bus sc3336_mipi_1m={
     .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
+struct tx_isp_mipi_bus sc3336_mipi_2={
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 510,
+	.lans = 2,
+	.settle_time_apative_en = 1,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.image_twidth = 1920,
+	.image_theight = 1080,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = RAW10,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
 struct tx_isp_sensor_attribute sc3336_attr={
 	.name = "sc3336",
 	.chip_id = 0xcc41,
@@ -380,8 +409,8 @@ struct tx_isp_sensor_attribute sc3336_attr={
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 432803,
 	.max_dgain = 0,
-	.min_integration_time = 1,
-	.min_integration_time_native = 1,
+	.min_integration_time = 2,
+	.min_integration_time_native = 2,
 	.max_integration_time_native = 1632 - 8,
 	.integration_time_limit = 1632 - 8,
 	.total_width = 2500,
@@ -704,6 +733,164 @@ static struct regval_list sc3336_init_regs_1152_648_30fps_binning_mipi[] = {
 	{SC3336_REG_END, 0x00},	/* END MARKER */
 };
 
+static struct regval_list sc3336_init_regs_1920_1080_30fps_mipi[] = {
+	/* cleaned_0x0a_SC3336_MIPI_24Minput_2Lane_10bit_510Mbps_1920x1080_30fps*/
+	{0x0103,0x01},
+	{0x36e9,0x80},
+	{0x37f9,0x80},
+	{0x301f,0x0a},
+	{0x30b8,0x33},
+	{0x3200,0x00},
+	{0x3201,0x00},
+	{0x3202,0x00},
+	{0x3203,0x6c},
+	{0x3204,0x09},
+	{0x3205,0x07},
+	{0x3206,0x04},
+	{0x3207,0xab},
+	{0x3208,0x07},
+	{0x3209,0x80},
+	{0x320a,0x04},
+	{0x320b,0x38},
+	{0x320e,0x05},
+	{0x320f,0x50},
+	{0x3210,0x00},
+	{0x3211,0xc4},
+	{0x3212,0x00},
+	{0x3213,0x04},
+	{0x3253,0x10},
+	{0x325f,0x20},
+	{0x3301,0x04},
+	{0x3306,0x50},
+	{0x3309,0xa8},
+	{0x330a,0x00},
+	{0x330b,0xd8},
+	{0x3314,0x13},
+	{0x331f,0x99},
+	{0x3333,0x10},
+	{0x3334,0x40},
+	{0x335e,0x06},
+	{0x335f,0x0a},
+	{0x3364,0x5e},
+	{0x337c,0x02},
+	{0x337d,0x0e},
+	{0x3390,0x01},
+	{0x3391,0x03},
+	{0x3392,0x07},
+	{0x3393,0x04},
+	{0x3394,0x04},
+	{0x3395,0x04},
+	{0x3396,0x08},
+	{0x3397,0x0b},
+	{0x3398,0x1f},
+	{0x3399,0x04},
+	{0x339a,0x0a},
+	{0x339b,0x3a},
+	{0x339c,0xa0},
+	{0x33a2,0x04},
+	{0x33ac,0x08},
+	{0x33ad,0x1c},
+	{0x33ae,0x10},
+	{0x33af,0x30},
+	{0x33b1,0x80},
+	{0x33b3,0x48},
+	{0x33f9,0x60},
+	{0x33fb,0x74},
+	{0x33fc,0x4b},
+	{0x33fd,0x5f},
+	{0x349f,0x03},
+	{0x34a6,0x4b},
+	{0x34a7,0x5f},
+	{0x34a8,0x20},
+	{0x34a9,0x18},
+	{0x34ab,0xe8},
+	{0x34ac,0x01},
+	{0x34ad,0x00},
+	{0x34f8,0x5f},
+	{0x34f9,0x18},
+	{0x3630,0xc0},
+	{0x3631,0x84},
+	{0x3632,0x64},
+	{0x3633,0x32},
+	{0x363b,0x03},
+	{0x363c,0x08},
+	{0x3641,0x38},
+	{0x3670,0x4e},
+	{0x3674,0xc0},
+	{0x3675,0xc0},
+	{0x3676,0xc0},
+	{0x3677,0x86},
+	{0x3678,0x86},
+	{0x3679,0x86},
+	{0x367c,0x48},
+	{0x367d,0x49},
+	{0x367e,0x4b},
+	{0x367f,0x5f},
+	{0x3690,0x32},
+	{0x3691,0x32},
+	{0x3692,0x42},
+	{0x369c,0x4b},
+	{0x369d,0x5f},
+	{0x36b0,0x87},
+	{0x36b1,0x90},
+	{0x36b2,0xa1},
+	{0x36b3,0xd8},
+	{0x36b4,0x49},
+	{0x36b5,0x4b},
+	{0x36b6,0x4f},
+	{0x36ea,0x11},
+	{0x36eb,0x0d},
+	{0x36ec,0x1c},
+	{0x36ed,0x26},
+	{0x370f,0x01},
+	{0x3722,0x09},
+	{0x3724,0x41},
+	{0x3725,0xc1},
+	{0x3771,0x09},
+	{0x3772,0x09},
+	{0x3773,0x05},
+	{0x377a,0x48},
+	{0x377b,0x5f},
+	{0x37fa,0x11},
+	{0x37fb,0x33},
+	{0x37fc,0x11},
+	{0x37fd,0x08},
+	{0x3904,0x04},
+	{0x3905,0x8c},
+	{0x391d,0x04},
+	{0x3921,0x20},
+	{0x3926,0x21},
+	{0x3933,0x80},
+	{0x3934,0x0a},
+	{0x3935,0x00},
+	{0x3936,0x2a},
+	{0x3937,0x6a},
+	{0x3938,0x6a},
+	{0x39dc,0x02},
+	{0x3e01,0x54},
+	{0x3e02,0x80},
+	{0x3e09,0x00},
+	{0x440e,0x02},
+	{0x4509,0x20},
+	{0x5ae0,0xfe},
+	{0x5ae1,0x40},
+	{0x5ae2,0x38},
+	{0x5ae3,0x30},
+	{0x5ae4,0x28},
+	{0x5ae5,0x38},
+	{0x5ae6,0x30},
+	{0x5ae7,0x28},
+	{0x5ae8,0x3f},
+	{0x5ae9,0x34},
+	{0x5aea,0x2c},
+	{0x5aeb,0x3f},
+	{0x5aec,0x34},
+	{0x5aed,0x2c},
+	{0x36e9,0x54},
+	{0x37f9,0x47},
+	{0x0100,0x01},
+	{SC3336_REG_END, 0x00},	/* END MARKER */
+};
 static struct tx_isp_sensor_win_setting sc3336_win_sizes[] = {
 	/* [0] 2304*1296 @max 30fps, default 25fps*/
 	{
@@ -723,6 +910,16 @@ static struct tx_isp_sensor_win_setting sc3336_win_sizes[] = {
 		.colorspace	= V4L2_COLORSPACE_SRGB,
 		.regs 		= sc3336_init_regs_1152_648_30fps_binning_mipi,
 	},
+	/* [2] 1920*1080  30fps*/
+	{
+		.width		= 1920,
+		.height		= 1080,
+		.fps		= 30 << 16 | 1,
+		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace	= V4L2_COLORSPACE_SRGB,
+		.regs 		= sc3336_init_regs_1920_1080_30fps_mipi,
+	}
+
 };
 struct tx_isp_sensor_win_setting *wsize = &sc3336_win_sizes[0];
 
@@ -976,6 +1173,9 @@ static int sc3336_set_fps(struct tx_isp_subdev *sd, int fps)
 	case TX_SENSOR_RES_100:
 		sclk = SC3336_SUPPORT_SCLK_RES_100;
 		break;
+	case TX_SENSOR_RES_200:
+		sclk = SC3336_SUPPORT_SCLK_RES_200;
+		break;
 	default:
 		break;
 	}
@@ -992,7 +1192,7 @@ static int sc3336_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("err: sc3336 read err\n");
 		return ret;
 	}
-	hts = (hts << 8) + tmp;
+	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
 	ret += sc3336_write(sd, 0x320f, (unsigned char)(vts & 0xff));
@@ -1258,6 +1458,14 @@ static int sc3336_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sc3336_attr.total_width = 2500;
 		sc3336_attr.total_height = 1320;
 		sc3336_attr.max_integration_time = 1320 - 8;
+	}else if(sensor_resolution == TX_SENSOR_RES_200){
+		wsize = &sc3336_win_sizes[2];
+		memcpy((void*)(&(sc3336_attr.mipi)),(void*)(&sc3336_mipi_2),sizeof(sc3336_mipi_2));
+		sc3336_attr.max_integration_time_native = 1360 - 8;
+		sc3336_attr.integration_time_limit = 1360 - 8;
+		sc3336_attr.total_width = 2500;
+		sc3336_attr.total_height = 1360;
+		sc3336_attr.max_integration_time = 1360 - 8;
 	}else{
 		ISP_ERROR("do not support resolution  %d in mipi mode\n",sensor_resolution);
 	}

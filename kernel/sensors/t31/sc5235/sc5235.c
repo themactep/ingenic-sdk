@@ -1207,8 +1207,8 @@ static int sc5235_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc5235_attr.max_integration_time_short = 240;
 		sc5235_attr.min_integration_time = 3;
 		sc5235_attr.min_integration_time_short = 3;
+		sc5235_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		printk("------------> switch wdr ok <-------------\n");
-
 	} else if (wdr_en == 0){
 		wsize = &sc5235_win_sizes[0];
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -1220,6 +1220,7 @@ static int sc5235_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc5235_attr.total_width = 3000;
 		sc5235_attr.total_height = 2662;
 		sc5235_attr.max_integration_time = 2662;
+		sc5235_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		printk("------------> switch linear ok <-------------\n");
 	} else{
 		ISP_ERROR("Can not support this data type!!!");
@@ -1302,8 +1303,7 @@ static int sc5235_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
-		switch (sensor_resolution)
-		{
+		switch (sensor_resolution) {
 			case SENSOR_RES_500:
 				sclk = SC5235_SUPPORT_SCLK_5M_FPS_15 ;
 				break;
@@ -1491,7 +1491,7 @@ static int sc5235_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
 		if(arg)
-		ret = sc5235_set_wdr_stop(sd, *(int*)arg);
+			ret = sc5235_set_wdr_stop(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if(arg)
@@ -1605,6 +1605,7 @@ static int sc5235_probe(struct i2c_client *client,
 			sc5235_attr.total_width = 3000;
 			sc5235_attr.total_height = 2662;
 			sc5235_attr.max_integration_time = 2662;
+			sc5235_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 			printk("------------> linear is ok <-------------\n");
 		}else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_400)){
 			wsize = &sc5235_win_sizes[2];
@@ -1614,6 +1615,7 @@ static int sc5235_probe(struct i2c_client *client,
 			sc5235_attr.total_width = 3000;
 			sc5235_attr.total_height = 1650;
 			sc5235_attr.max_integration_time = 1650;
+			sc5235_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 			printk("------------> linear is ok <-------------\n");
 		}else{
 			ISP_ERROR("Can not support this data type!!!\n");
@@ -1634,6 +1636,7 @@ static int sc5235_probe(struct i2c_client *client,
 		sc5235_attr.max_integration_time = 2880;
 		sc5235_attr.total_width = 0x546;
 		sc5235_attr.total_height = 0xbb8;
+		sc5235_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		printk("------------> wdr is ok <-------------\n");
 	}else{
 		ISP_ERROR("Can not support this data type!!!\n");

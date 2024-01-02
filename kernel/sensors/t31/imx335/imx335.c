@@ -23,14 +23,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define IMX335_CHIP_ID_H	(0x08)
-#define IMX335_CHIP_ID_L	(0x00)
+#define IMX335_CHIP_ID_H	(0x38)
+#define IMX335_CHIP_ID_L	(0x0a)
 #define IMX335_REG_END		0xffff
 #define IMX335_REG_DELAY	0xfffe
-#define IMX335_SUPPORT_SCLK     (74250000)
-#define SENSOR_OUTPUT_MAX_FPS 25
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20200622a"
+#define IMX335_SUPPORT_SCLK	(74250000)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_VERSION		"H20220622a"
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
@@ -47,7 +47,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
+static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
@@ -56,262 +56,11 @@ struct regval_list {
 	unsigned char value;
 };
 
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
-
-struct again_lut imx335_again_lut[] = {
-	/* analog gain */
-	{0x0, 0},
-	{0x1, 3265},
-	{0x2, 6531},
-	{0x3, 9796},
-	{0x4, 13062},
-	{0x5, 16327},
-	{0x6, 19593},
-	{0x7, 22859},
-	{0x8, 26124},
-	{0x9, 29390},
-	{0xa, 32655},
-	{0xb, 35921},
-	{0xc, 39187},
-	{0xd, 42452},
-	{0xe, 45718},
-	{0xf, 48983},
-	{0x10, 52249},
-	{0x11, 55514},
-	{0x12, 58780},
-	{0x13, 62046},
-	{0x14, 65311},
-	{0x15, 68577},
-	{0x16, 71842},
-	{0x17, 75108},
-	{0x18, 78374},
-	{0x19, 81639},
-	{0x1a, 84905},
-	{0x1b, 88170},
-	{0x1c, 91436},
-	{0x1d, 94702},
-	{0x1e, 97967},
-	{0x1f, 101233},
-	{0x20, 104498},
-	{0x21, 107764},
-	{0x22, 111029},
-	{0x23, 114295},
-	{0x24, 117561},
-	{0x25, 120826},
-	{0x26, 124092},
-	{0x27, 127357},
-	{0x28, 130623},
-	{0x29, 133889},
-	{0x2a, 137154},
-	{0x2b, 140420},
-	{0x2c, 143685},
-	{0x2d, 146951},
-	{0x2e, 150217},
-	{0x2f, 153482},
-	{0x30, 156748},
-	{0x31, 160013},
-	{0x32, 163279},
-	{0x33, 166544},
-	{0x34, 169810},
-	{0x35, 173076},
-	{0x36, 176341},
-	{0x37, 179607},
-	{0x38, 182872},
-	{0x39, 186138},
-	{0x3a, 189404},
-	{0x3b, 192669},
-	{0x3c, 195935},
-	{0x3d, 199200},
-	{0x3e, 202466},
-	{0x3f, 205732},
-	{0x40, 208997},
-	{0x41, 212263},
-	{0x42, 215528},
-	{0x43, 218794},
-	{0x44, 222059},
-	{0x45, 225325},
-	{0x46, 228591},
-	{0x47, 231856},
-	{0x48, 235122},
-	{0x49, 238387},
-	{0x4a, 241653},
-	{0x4b, 244919},
-	{0x4c, 248184},
-	{0x4d, 251450},
-	{0x4e, 254715},
-	{0x4f, 257981},
-	{0x50, 261247},
-	{0x51, 264512},
-	{0x52, 267778},
-	{0x53, 271043},
-	{0x54, 274309},
-	{0x55, 277574},
-	{0x56, 280840},
-	{0x57, 284106},
-	{0x58, 287371},
-	{0x59, 290637},
-	{0x5a, 293902},
-	{0x5b, 297168},
-	{0x5c, 300434},
-	{0x5d, 303699},
-	{0x5e, 306965},
-	{0x5f, 310230},
-	{0x60, 313496},
-	{0x61, 316762},
-	{0x62, 320027},
-	{0x63, 323293},
-	{0x64, 326558},
-	/* analog+digital */
-	{0x65, 329824},
-	{0x66, 333089},
-	{0x67, 336355},
-	{0x68, 339621},
-	{0x69, 342886},
-	{0x6a, 346152},
-	{0x6b, 349417},
-	{0x6c, 352683},
-	{0x6d, 355949},
-	{0x6e, 359214},
-	{0x6f, 362480},
-	{0x70, 365745},
-	{0x71, 369011},
-	{0x72, 372277},
-	{0x73, 375542},
-	{0x74, 378808},
-	{0x75, 382073},
-	{0x76, 385339},
-	{0x77, 388604},
-	{0x78, 391870},
-	{0x79, 395136},
-	{0x7a, 398401},
-	{0x7b, 401667},
-	{0x7c, 404932},
-	{0x7d, 408198},
-	{0x7e, 411464},
-	{0x7f, 414729},
-	{0x80, 417995},
-	{0x81, 421260},
-	{0x82, 424526},
-	{0x83, 427792},
-	{0x84, 431057},
-	{0x85, 434323},
-	{0x86, 437588},
-	{0x87, 440854},
-	{0x88, 444119},
-	{0x89, 447385},
-	{0x8a, 450651},
-	{0x8b, 453916},
-	{0x8c, 457182},
-	{0x8d, 460447},
-	{0x8e, 463713},
-	{0x8f, 466979},
-	{0x90, 470244},
-	{0x91, 473510},
-	{0x92, 476775},
-	{0x93, 480041},
-	{0x94, 483307},
-	{0x95, 486572},
-	{0x96, 489838},
-	{0x97, 493103},
-	{0x98, 496369},
-	{0x99, 499634},
-	{0x9a, 502900},/*204x*/
-	{0x9b, 506166},
-	{0x9c, 509431},
-	{0x9d, 512697},
-	{0x9e, 515962},
-	{0x9f, 519228},
-	{0xa0, 522494},
-	{0xa1, 525759},
-	{0xa2, 529025},
-	{0xa3, 532290},
-	{0xa4, 535556},
-	{0xa5, 538822},
-	{0xa6, 542087},
-	{0xa7, 545353},
-	{0xa8, 548618},
-	{0xa9, 551884},
-	{0xaa, 555149},
-	{0xab, 558415},
-	{0xac, 561681},
-	{0xad, 564946},
-	{0xae, 568212},
-	{0xaf, 571477},
-	{0xb0, 574743},
-	{0xb1, 578009},
-	{0xb2, 581274},
-	{0xb3, 584540},
-	{0xb4, 587805},
-	{0xb5, 591071},
-	{0xb6, 594337},
-	{0xb7, 597602},
-	{0xb8, 600868},
-	{0xb9, 604133},
-	{0xba, 607399},
-	{0xbb, 610664},
-	{0xbc, 613930},
-	{0xbd, 617196},
-	{0xbe, 620461},
-	{0xbf, 623727},
-	{0xc0, 626992},
-	{0xc1, 630258},
-	{0xc2, 633524},
-	{0xc3, 636789},
-	{0xc4, 640055},
-	{0xc5, 643320},
-	{0xc6, 646586},
-	{0xc7, 649852},
-	{0xc8, 653117},
-	{0xc9, 656383},
-	{0xca, 659648},
-	{0xcb, 662914},
-	{0xcc, 666179},
-	{0xcd, 669445},
-	{0xce, 672711},
-	{0xcf, 675976},
-	{0xd0, 679242},
-	{0xd1, 682507},
-	{0xd2, 685773},
-	{0xd3, 689039},
-	{0xd4, 692304},
-	{0xd5, 695570},
-	{0xd6, 698835},
-	{0xd7, 702101},
-	{0xd8, 705367},
-	{0xd9, 708632},
-	{0xda, 711898},
-	{0xdb, 715163},
-	{0xdc, 718429},
-	{0xdd, 721694},
-	{0xde, 724960},
-	{0xdf, 728226},
-	{0xe0, 731491},
-	{0xe1, 734757},
-	{0xe2, 738022},
-	{0xe3, 741288},
-	{0xe4, 744554},
-	{0xe5, 747819},
-	{0xe6, 751085},
-	{0xe7, 754350},
-	{0xe8, 757616},
-	{0xe9, 760882},
-	{0xea, 764147},
-	{0xeb, 767413},
-	{0xec, 770678},
-	{0xed, 773944},
-	{0xee, 777209},
-	{0xef, 780475},
-	{0xf0, 783741},
-};
-
-struct tx_isp_sensor_attribute imx335_attr;
-
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
+
+struct tx_isp_sensor_attribute imx335_attr;
 
 unsigned int imx335_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
@@ -326,13 +75,10 @@ unsigned int imx335_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-
-
 unsigned int imx335_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
-
 
 struct tx_isp_sensor_attribute imx335_attr={
 	.name = "imx335",
@@ -505,7 +251,7 @@ static struct regval_list imx335_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3303, 0x00},
 	{0x3414, 0x05},
 	{0x3416, 0x18},
-	{0x341C, 0xff},//0xFF},
+	{0x341C, 0xff},//0xFF
 	{0x341D, 0x01},
 	{0x3648, 0x01},
 	{0x364A, 0x04},
@@ -606,7 +352,7 @@ static struct regval_list imx335_init_regs_2592_1944_15fps_mipi[] = {
 	{IMX335_REG_END, 0x00},/* END MARKER */
 };
 
-static struct regval_list imx335_init_regs_2592_1944_25fps_mipi[] = {
+static struct regval_list imx335_init_regs_2592_1944_30fps_mipi[] = {
 	{0x3000, 0x01},
 	{0x3001, 0x00},
 	{0x3002, 0x01},
@@ -723,7 +469,7 @@ static struct tx_isp_sensor_win_setting imx335_win_sizes[] = {
 		.fps		= 25 << 16 | 1,
 		.mbus_code	= V4L2_MBUS_FMT_SRGGB10_1X10,
 		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= imx335_init_regs_2592_1944_25fps_mipi,
+		.regs 		= imx335_init_regs_2592_1944_30fps_mipi,
 	}//[1]
 
 };
@@ -833,8 +579,7 @@ static int imx335_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 	int ret;
 
-
-	ret = imx335_read(sd, 0x3112, &v);
+	ret = imx335_read(sd, 0x302e, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -842,7 +587,7 @@ static int imx335_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 		return -ENODEV;
 	*ident = v;
 
-	ret = imx335_read(sd, 0x3113, &v);
+	ret = imx335_read(sd, 0x302f, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -853,6 +598,7 @@ static int imx335_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
+#if 0
 static int imx335_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -883,6 +629,7 @@ static int imx335_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	return 0;
 }
+#endif
 
 static int imx335_set_expo(struct tx_isp_subdev *sd, int value)
 {
@@ -1114,7 +861,7 @@ static int imx335_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = imx335_set_fps(sd, *(int*)arg);
 		break;
 	default:
-		break;;
+		break;
 	}
 
 	return 0;
@@ -1231,7 +978,7 @@ static int imx335_probe(struct i2c_client *client,
 	private_clk_set_rate(sensor->mclk, 37125000);
 	private_clk_enable(sensor->mclk);
 
-	if(sensor_max_fps == TX_SENSOR_MAX_FPS_25){
+	if(sensor_max_fps == TX_SENSOR_MAX_FPS_30){
 		wsize = &imx335_win_sizes[1];
 		imx335_attr.total_width = 550;
 		imx335_attr.total_height = 5400;

@@ -516,7 +516,7 @@ static struct tx_isp_sensor_win_setting mis4001_win_sizes[] = {
 	{
 		.width		= 2560,
 		.height		= 1440,
-		.fps		= 25 << 16 | 2,
+		.fps		= 25 << 16 | 1,
 		.mbus_code	= V4L2_MBUS_FMT_SGRBG12_1X12,
 		.colorspace	= V4L2_COLORSPACE_SRGB,
 		.regs 		= mis4001_init_regs_2560_1440_25fps,
