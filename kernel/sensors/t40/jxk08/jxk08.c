@@ -22,14 +22,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXK08_CHIP_ID_H	(0x06)
-#define JXK08_CHIP_ID_L	(0x05)
-#define JXK08_REG_END		0xff
-#define JXK08_REG_DELAY	0xfe
-#define JXK08_SUPPORT_30FPS_SCLK (36000000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220516a"
+#define JXK08_CHIP_ID_H			(0x06)
+#define JXK08_CHIP_ID_L			(0x05)
+#define JXK08_REG_END			0xff
+#define JXK08_REG_DELAY			0xfe
+#define JXK08_SUPPORT_30FPS_SCLK	(36000000)
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_VERSION			"H20220516a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -38,7 +38,8 @@ static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-struct regval_list {
+struct regval_list
+{
 	unsigned char reg_num;
 	unsigned char value;
 };
@@ -46,7 +47,8 @@ struct regval_list {
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
-struct again_lut {
+struct again_lut
+{
 	unsigned int value;
 	unsigned int gain;
 };

@@ -27,13 +27,13 @@
 #define IMX327_CHIP_ID_L	(0x01)
 #define IMX327_REG_END		0xffff
 #define IMX327_REG_DELAY	0xfffe
-#define IMX327_SUPPORT_SCLK (148500000)
-#define SENSOR_OUTPUT_MAX_FPS 25
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20190822"
-#define AGAIN_MAX_DB 0x64
-#define DGAIN_MAX_DB 0x64
-#define LOG2_GAIN_SHIFT 16
+#define IMX327_SUPPORT_SCLK	(148500000)
+#define SENSOR_OUTPUT_MAX_FPS	25
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_VERSION		"H20190822"
+#define AGAIN_MAX_DB		0x64
+#define DGAIN_MAX_DB		0x64
+#define LOG2_GAIN_SHIFT		16
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);
@@ -69,22 +69,22 @@ unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	// Limit Max gain
 	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
-	/* p_ctx->again=again; */
-	*sensor_again=again;
-	isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
+	/* p_ctx->again = again; */
+	*sensor_again = again;
+	isp_gain = (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
 
 	return isp_gain;
 }
 
 unsigned int imx327_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
+	uint16_t again = (isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
-	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again = AGAIN_MAX_DB+DGAIN_MAX_DB;
 
-	/* p_ctx->again=again; */
-	*sensor_again=again;
-	isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
+	/* p_ctx->again = again; */
+	*sensor_again = again;
+	isp_gain = (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
 
 	return isp_gain;
 }
@@ -407,7 +407,7 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.fps		= 25 << 16 | 1,
 		.mbus_code	= TISP_VI_FMT_SRGGB12_1X12,
 		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= imx327_init_regs_1920_1080_30fps_mipi,
+		.regs		= imx327_init_regs_1920_1080_30fps_mipi,
 	},
 	/* 1948*1109 [1]*/
 	{
@@ -416,7 +416,7 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.fps		= 25 << 16 | 1,
 		.mbus_code	= TISP_VI_FMT_SRGGB12_1X12,
 		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg,
+		.regs		= imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg,
 	}
 };
 
@@ -1124,8 +1124,8 @@ static struct tx_isp_subdev_video_ops imx327_video_ops = {
 	.s_stream = imx327_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	imx327_sensor_ops = {
-	.ioctl	= imx327_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops imx327_sensor_ops = {
+	.ioctl = imx327_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops imx327_ops = {

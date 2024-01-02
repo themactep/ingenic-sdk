@@ -27,13 +27,13 @@
 #define IMX335_CHIP_ID_L	(0x0a)
 #define IMX335_REG_END		0xffff
 #define IMX335_REG_DELAY	0xfffe
-#define IMX335_SUPPORT_SCLK     (74250000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define AGAIN_MAX_DB 0x64
-#define DGAIN_MAX_DB 0x64
-#define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION	"H20220531a"
+#define IMX335_SUPPORT_SCLK	(74250000)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define AGAIN_MAX_DB		0x64
+#define DGAIN_MAX_DB		0x64
+#define LOG2_GAIN_SHIFT		16
+#define SENSOR_VERSION		"H20220531a"
 
 /* t40 sensor hvflip function only takes effect when shvflip == 1 */
 static int shvflip = 1;
@@ -481,11 +481,10 @@ static struct regval_list imx335_stream_off_mipi[] = {
 	{IMX335_REG_END, 0x00},	/* END MARKER */
 };
 
-int imx335_read(struct tx_isp_subdev *sd, uint16_t reg,	unsigned char *value)
+int imx335_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 {
-	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
+	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
 			.addr	= client->addr,
@@ -500,7 +499,7 @@ int imx335_read(struct tx_isp_subdev *sd, uint16_t reg,	unsigned char *value)
 			.buf	= value,
 		}
 	};
-
+	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
 		ret = 0;
@@ -511,7 +510,7 @@ int imx335_read(struct tx_isp_subdev *sd, uint16_t reg,	unsigned char *value)
 int imx335_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
+	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
 		.addr	= client->addr,
 		.flags	= 0,
@@ -542,6 +541,7 @@ static int imx335_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		pr_debug("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
+
 	return 0;
 }
 #endif
@@ -549,6 +549,7 @@ static int imx335_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int imx335_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
+
 	while (vals->reg_num != IMX335_REG_END) {
 		if (vals->reg_num == IMX335_REG_DELAY) {
 			msleep(vals->value);
@@ -570,8 +571,8 @@ static int imx335_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 
 static int imx335_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
-	unsigned char v;
 	int ret;
+	unsigned char v;
 
 	ret = imx335_read(sd, 0x302e, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
@@ -737,26 +738,27 @@ static int imx335_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
+
 	ret += imx335_read(sd, 0x3035, &tmp);
 	hts = tmp & 0x0f;
 	ret += imx335_read(sd, 0x3034, &tmp);
-	if(ret < 0)
+	if (ret < 0) {
 		return -1;
+	}
 	hts = (hts << 8) + tmp;
-
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += imx335_write(sd, 0x3001, 0x01);
 	ret = imx335_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += imx335_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += imx335_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	ret += imx335_write(sd, 0x3001, 0x00);
-	if(ret < 0)
+	if (ret < 0) {
 		return -1;
-
+	}
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 9;
 	sensor->video.attr->integration_time_limit = vts - 9;
@@ -863,7 +865,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx335_attr.max_integration_time_native = 5400 - 9;
 		break;
 	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
+		ISP_ERROR("Have no this Setting Source!!!\n");
 	}
 
 	switch(info->video_interface){
@@ -879,7 +881,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx335_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
+		ISP_ERROR("Have no this Interface Source!!!\n");
 	}
 
 	switch(info->mclk){
@@ -967,10 +969,11 @@ static int imx335_g_chip_ident(struct tx_isp_subdev *sd,
 	ret = imx335_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an imx335 chip.\n",
-				client->addr, client->adapter->name);
+			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("imx335 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name,SENSOR_VERSION);
+	ISP_WARNING("imx335 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "imx335", sizeof("imx335"));
 		chip->ident = ident;
@@ -1109,7 +1112,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int imx335_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
