@@ -26,10 +26,10 @@
 #define MIS2008_CHIP_ID_L	(0x08)
 #define MIS2008_REG_END		0xffff
 #define MIS2008_REG_DELAY	0xfffe
-#define MIS2008_SUPPORT_PCLK (76000000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220228a"
+#define MIS2008_SUPPORT_PCLK	(76000000)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_VERSION		"H20220518a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -50,6 +50,10 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static int shvflip = 0;
+module_param(shvflip, int, S_IRUGO);
+MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
 struct regval_list {
 	unsigned int reg_num;
@@ -299,9 +303,9 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3006,0x02},
 	{0x3637,0x1e},
 	{0x3c40,0x8d},
-	{0x3c01,0x10},//
-	{0x3c0e,0xf7},//
-	{0x3c0f,0x34},//
+	{0x3c01,0x10},
+	{0x3c0e,0xf7},
+	{0x3c0f,0x34},
 	{0x3b01,0x3f},
 	{0x3b03,0x3f},
 	{0x3902,0x01},
@@ -400,7 +404,7 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3601,0x02},
 	{0x360f,0x00},
 	{0x360e,0x00},
-	{0x3610,0x02},//修改高温高增益blc跟随快慢
+	{0x3610,0x02},/*修改高温高增益blc跟随快慢 / Modify high temp high gain blc to follow fast and slow*/
 	{0x3707,0x00},
 	{0x3708,0x40},
 	{0x3709,0x00},
@@ -410,29 +414,29 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_mipi[] = {
 	{0x370d,0x00},
 	{0x370e,0x40},
 	{0x3800,0x01},
-	{0x3a02,0x0a},    //0x0b
-	{0x3a03,0x1b},//3f
-	{0x3a08,0x34},//b4
+	{0x3a02,0x0a},
+	{0x3a03,0x1b},
+	{0x3a08,0x34},
 	{0x3a1b,0x54},
 	{0x3a1e,0x00},
 	{0x3100,0x04},
 	{0x3101,0x64},
-	{0x3a1c,0x1f},//
-	{0x3a0C,0x04},//
-	{0x3a0D,0x12},//
-	{0x3a0E,0x15},//
-	{0x3a0F,0x18},//
-	{0x3a10,0x20},//
-	{0x3a11,0x3C},//
+	{0x3a1c,0x1f},
+	{0x3a0C,0x04},
+	{0x3a0D,0x12},
+	{0x3a0E,0x15},
+	{0x3a0F,0x18},
+	{0x3a10,0x20},
+	{0x3a11,0x3C},
 	//MCLK=24Mhz,PCLK=76Mhz
-	{0x3300,0x5f},
-	{0x3301,0x01},
-	{0x3302,0x06},
-	{0x3303,0x08},
+	{0x3300,0x26},
+	{0x3301,0x00},
+	{0x3302,0x02},
+	{0x3303,0x06},
 	{0x330d,0x00},
 	{0x330b,0x01},
-	{0x330f,0x07},
-	//Windows（2252*1350）
+	{0x330f,0x0a},
+	/* Windows 2252*1350 */
 	{0x3201,0x46},
 	{0x3200,0x05},
 	{0x3203,0xcc},
@@ -455,9 +459,9 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3006,0x02},
 	{0x3637,0x1e},
 	{0x3c40,0x8d},
-	{0x3c01,0x10},//
-	{0x3c0e,0xf7},//
-	{0x3c0f,0x34},//
+	{0x3c01,0x10},
+	{0x3c0e,0xf7},
+	{0x3c0f,0x34},
 	{0x3b01,0x3f},
 	{0x3b03,0x3f},
 	{0x3902,0x01},
@@ -469,7 +473,7 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3907,0x10},
 	{0x390a,0xff},
 	{0x3909,0x1f},
-	{0x390c,0x83},//c3
+	{0x390c,0x83},
 	{0x390b,0x03},
 	{0x390e,0x77},
 	{0x390d,0x00},
@@ -563,29 +567,29 @@ static struct regval_list mis2008_init_regs_1920_1080_25fps_dvp[] = {
 	{0x370d,0x00},
 	{0x370e,0x40},
 	{0x3800,0x01},
-	{0x3a02,0x0a}, //0x0b
-	{0x3a03,0x1b},//3f
-	{0x3a08,0x34},//b4
+	{0x3a02,0x0a},
+	{0x3a03,0x1b},
+	{0x3a08,0x34},
 	{0x3a1b,0x54},
 	{0x3a1e,0x00},
 	{0x3100,0x04},
 	{0x3101,0x64},
-	{0x3a1c,0x1f},//
-	{0x3a0C,0x04},//
-	{0x3a0D,0x12},//
-	{0x3a0E,0x15},//
-	{0x3a0F,0x18},//
-	{0x3a10,0x20},//
-	{0x3a11,0x3C},//
-	//MCLK=24Mhz,PCLK=76Mhz
-	{0x3300,0x5f},
-	{0x3301,0x01},
-	{0x3302,0x06},
-	{0x3303,0x08},
+	{0x3a1c,0x1f},
+	{0x3a0C,0x04},
+	{0x3a0D,0x12},
+	{0x3a0E,0x15},
+	{0x3a0F,0x18},
+	{0x3a10,0x20},
+	{0x3a11,0x3C},
+	/* MCLK=24Mhz,PCLK=76Mhz */
+	{0x3300,0x26},
+	{0x3301,0x00},
+	{0x3302,0x02},
+	{0x3303,0x06},
 	{0x330d,0x00},
 	{0x330b,0x01},
-	{0x330f,0x07},
-	//Windows（2252*1350）
+	{0x330f,0x0a},
+	/* Windows（2252*1350）*/
 	{0x3201,0x46},
 	{0x3200,0x05},
 	{0x3203,0xcc},
@@ -612,7 +616,7 @@ static struct tx_isp_sensor_win_setting mis2008_win_sizes[] = {
 		.width		= 1920,
 		.height		= 1080,
 		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SGRBG12_1X12,//GRBG
+		.mbus_code	= V4L2_MBUS_FMT_SGRBG12_1X12,
 		.colorspace	= V4L2_COLORSPACE_SRGB,
 		.regs 		= mis2008_init_regs_1920_1080_25fps_mipi,
 	},
@@ -620,21 +624,13 @@ static struct tx_isp_sensor_win_setting mis2008_win_sizes[] = {
 		.width		= 1920,
 		.height		= 1080,
 		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SGRBG12_1X12,//GRBG
+		.mbus_code	= V4L2_MBUS_FMT_SGRBG12_1X12,
 		.colorspace	= V4L2_COLORSPACE_SRGB,
 		.regs 		= mis2008_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
 struct tx_isp_sensor_win_setting *wsize = &mis2008_win_sizes[0];
-
-static enum v4l2_mbus_pixelcode mis2008_mbus_code[] = {
-	V4L2_MBUS_FMT_SGRBG12_1X12,
-};
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list mis2008_stream_on_dvp[] = {
 	{MIS2008_REG_END, 0x00},	/* END MARKER */
@@ -855,7 +851,6 @@ static int mis2008_s_stream(struct tx_isp_subdev *sd, int enable)
 
 static int mis2008_set_fps(struct tx_isp_subdev *sd, int fps)
 {
-
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned int pclk = MIS2008_SUPPORT_PCLK;
@@ -863,6 +858,7 @@ static int mis2008_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int vts = 0;
 	unsigned char tmp;
 	unsigned int newformat = 0; //the format is 24.8
+
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
@@ -892,6 +888,32 @@ static int mis2008_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
+static int mis2008_set_vflip(struct tx_isp_subdev *sd, int enable)
+{
+	int ret = -1;
+	unsigned char flip = 0x0;
+	unsigned char h_start = 0;
+	unsigned char h_end = 0;
+
+	ret = mis2008_read(sd, 0x3007, &flip);
+	if(enable & 0x02){
+		flip |= 0x02;
+		h_start = 0x05;
+		h_end = 0x40;
+	}else{
+		flip &= 0xfd;
+		h_start = 0x04;
+		h_end = 0x3f;
+	}
+	ret += mis2008_write(sd, 0x3007, flip);
+	ret += mis2008_write(sd, 0x3205, h_start);
+	ret += mis2008_write(sd, 0x3207, h_end);
+	if(0 != ret)
+		ISP_ERROR("err: mis2008_write err\n");
+
+	return ret;
+}
+
 static int mis2008_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -914,11 +936,6 @@ static int mis2008_set_mode(struct tx_isp_subdev *sd, int value)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 	return ret;
-}
-
-static int mis2008_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	return 0;
 }
 
 static int mis2008_g_chip_ident(struct tx_isp_subdev *sd,
@@ -1020,13 +1037,13 @@ static int mis2008_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if(arg)
-//			ret = mis2008_set_vflip(sd, *(int*)arg);
+			ret = mis2008_set_vflip(sd, *(int*)arg);
 		break;
 	default:
-		break;;
+		break;
 	}
 
-	return 0;
+	return ret;
 }
 
 static int mis2008_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
@@ -1143,6 +1160,7 @@ static int mis2008_probe(struct i2c_client *client, const struct i2c_device_id *
 	mis2008_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
+	sensor->video.shvflip = shvflip;
 	sensor->video.attr = &mis2008_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;

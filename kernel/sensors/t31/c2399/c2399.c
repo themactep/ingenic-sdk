@@ -24,15 +24,15 @@
 #include <txx-funcs.h>
 
 
-#define C2399_CHIP_ID_H	(0x02)
-#define C2399_CHIP_ID_L	(0x0b)
-#define C2399_REG_END		0xFFFF
-#define C2399_REG_DELAY		0xFFFE
-#define C2399_SUPPORT_30FPS_SCLK (65600000)
+#define C2399_CHIP_ID_H			(0x02)
+#define C2399_CHIP_ID_L			(0x0b)
+#define C2399_REG_END			0xFFFF
+#define C2399_REG_DELAY			0xFFFE
+#define C2399_SUPPORT_30FPS_SCLK	(65600000)
 
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20201128"
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_VERSION			"H20220704a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -248,7 +248,7 @@ struct tx_isp_sensor_attribute c2399_attr={
 static struct regval_list c2399_init_regs_1920_1080_30fps_mipi[] = {
 	// C2399_1080p_mipi1lane_30fps_V2P0.ini
 	{0x0103,0x01},
-	{C2399_REG_DELAY, 0xa}, 
+	{C2399_REG_DELAY, 0xa},
 	{0x3288,0x50},
 	{0x0401,0x3b},
 	{0x0403,0x00},
@@ -277,8 +277,9 @@ static struct regval_list c2399_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3118,0x50},
 	{0x311b,0x01},
 	{0x3126,0x02},
-	{0x0202,0x03},
-	{0x0203,0xe0},
+	{0x0202,0x00},
+	{0x0203,0x64},
+	{0x0205,0x00},
 	{0x3584,0x22},
 	{0x3009,0x05},
 	{0x022d,0x1f},
@@ -287,7 +288,7 @@ static struct regval_list c2399_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0341,0x2d}, /* 25fps vts 1325*/
 	{0x0342,0x07},
 	{0x0343,0xbc}, /* hts 1980 */
-	
+
 	/*AECAWB*/
 	{0x3082,0x00},
 	{0x3083,0x0a},
@@ -700,6 +701,7 @@ static int c2399_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
+#if 0
 static int c2399_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -727,6 +729,7 @@ static int c2399_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	}
 	return 0;
 }
+#endif
 
 static int c2399_set_expo(struct tx_isp_subdev *sd, int value)
 {

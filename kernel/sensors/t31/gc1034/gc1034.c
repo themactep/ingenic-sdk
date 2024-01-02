@@ -37,6 +37,10 @@
 #define DRIVE_CAPABILITY_2
 #define SENSOR_VERSION		"H20200116a"
 
+struct regval_list {
+	unsigned char reg_num;
+	unsigned char value;
+};
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -44,11 +48,6 @@ MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 static int pwdn_gpio = GPIO_PA(19);
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
@@ -850,29 +849,29 @@ static int gc1034_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc1034_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -882,7 +881,7 @@ static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = gc1034_write_array(sd, gc1034_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_fps(sd, *(int*)arg);
 			break;
 		default:

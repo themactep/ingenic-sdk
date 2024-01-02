@@ -1,0 +1,12 @@
+MODULE_NAME := sensor_jxf28p_t31
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(SOC_FAMILY)
+
+SRCS := $(DIR)/jxf28p/jxf28p.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

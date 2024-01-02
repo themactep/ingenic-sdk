@@ -1,0 +1,12 @@
+MODULE_NAME := sensor_gc3003a_t31
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(SOC_FAMILY)
+
+SRCS := $(DIR)/gc3003a/gc3003a.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

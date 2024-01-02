@@ -24,19 +24,17 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC1054_CHIP_ID_H	(0x10)
-#define GC1054_CHIP_ID_L	(0x54)
-
-#define GC1054_FLAG_END		0x00
-#define GC1054_FLAG_DELAY	0xff
-#define GC1054_PAGE_REG		0xfe
-
+#define GC1054_CHIP_ID_H		(0x10)
+#define GC1054_CHIP_ID_L		(0x54)
+#define GC1054_FLAG_END			0x00
+#define GC1054_FLAG_DELAY		0xff
+#define GC1054_PAGE_REG			0xfe
 #define GC1054_SUPPORT_30FPS_SCLK_DVP	(39*1000*1000)
 #define GC1054_SUPPORT_30FPS_SCLK_MIPI	(39*1000*1000)
-#define SENSOR_OUTPUT_MAX_FPS	30
-#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION		"H20210622a"
+#define SENSOR_VERSION			"H20210622a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
