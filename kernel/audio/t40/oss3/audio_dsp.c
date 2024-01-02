@@ -887,7 +887,6 @@ out:
 	return ret;
 }
 
-
 static long dsp_enable_amic_ao(struct audio_dsp_device *dsp)
 {
 	unsigned long lock_flags;
@@ -1703,16 +1702,16 @@ static long dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			if(ret == AUDIO_SUCCESS)
 				copy_to_user((__user void*)arg, &vol, sizeof(vol));
 			break;
+		case AMIC_SPK_SET_MUTE:
+			copy_from_user(&mute, (__user void*)arg, sizeof(mute));
+			ret = dsp_route_ioctl(dsp, AUDIO_ROUTE_SPK_ID, AUDIO_CMD_SET_MUTE, &mute);
+			break;
 		case DMIC_AI_SET_VOLUME:
 			if (get_user(dmic_vol, (int*)arg)){
 				ret = -EFAULT;
 				goto EXIT_IOCTRL;
 			}
 			ret = dsp_route_ioctl(dsp, AUDIO_ROUTE_DMIC_ID, AUDIO_CMD_SET_GAIN, &dmic_vol);
-			break;
-		case AMIC_SPK_SET_MUTE:
-			copy_from_user(&mute, (__user void*)arg, sizeof(mute));
-			ret = dsp_route_ioctl(dsp, AUDIO_ROUTE_SPK_ID, AUDIO_CMD_SET_MUTE, &mute);
 			break;
 		case DMIC_AI_GET_VOLUME:
 			ret = dsp_route_ioctl(dsp, AUDIO_ROUTE_DMIC_ID, AUDIO_CMD_GET_GAIN, &dmic_vol);
