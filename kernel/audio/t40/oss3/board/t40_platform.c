@@ -43,34 +43,34 @@ static void audio_release_device(struct device *dev)
 /* inner codec device */
 static struct resource jz_codec_resources[] = {
 	[0] = {
-		.start  = CODEC_IOBASE,
-		.end    = CODEC_IOBASE + 0x130,
-		.flags  = IORESOURCE_MEM,
+		.start = CODEC_IOBASE,
+		.end = CODEC_IOBASE + 0x130,
+		.flags = IORESOURCE_MEM,
 	},
 };
 
 struct platform_device jz_codec_device = {
-	.name   = "jz-inner-codec",
+	.name = "jz-inner-codec",
 	.id = -1,
 	.dev = {
 		.release = audio_release_codec_device,
 	},
-	.resource   = jz_codec_resources,
-	.num_resources  = ARRAY_SIZE(jz_codec_resources),
+	.resource = jz_codec_resources,
+	.num_resources = ARRAY_SIZE(jz_codec_resources),
 };
 
 /* aic device */
 static u64 jz_aic_dmamask = ~(u32) 0;
 static struct resource jz_aic_resources[] = {
 	[0] = {
-	       .start = AIC0_IOBASE,
-	       .end = AIC0_IOBASE + 0x70 - 1,
-	       .flags = IORESOURCE_MEM,
-	       },
+		.start = AIC0_IOBASE,
+		.end = AIC0_IOBASE + 0x70 - 1,
+		.flags = IORESOURCE_MEM,
+	},
 	[1] = {
-	       .start = IRQ_AIC0,
-	       .end = IRQ_AIC0,
-	       .flags = IORESOURCE_IRQ,
+		.start = IRQ_AIC0,
+		.end = IRQ_AIC0,
+		.flags = IORESOURCE_IRQ,
 	},
 };
 
@@ -96,24 +96,24 @@ static struct resource jz_dmic_resource[] = {
 	},
 	[1] = {
 		.start = IRQ_DMIC,
-		.end   = IRQ_DMIC,
+		.end = IRQ_DMIC,
 		.flags = IORESOURCE_IRQ,
 	},
 	[2] = {
-		.start          = INGENIC_DMA_REQ_DMIC_RX,
-		.end            = INGENIC_DMA_REQ_DMIC_RX,
-		.flags          = IORESOURCE_DMA,
+		.start = INGENIC_DMA_REQ_DMIC_RX,
+		.end = INGENIC_DMA_REQ_DMIC_RX,
+		.flags = IORESOURCE_DMA,
 	},
 };
 
 struct platform_device jz_dmic_device = {
-	.name             = "jz-dmic",
-	.id               = -1,
+	.name = "jz-dmic",
+	.id = -1,
 	.dev = {
 		.release = audio_release_dmic_device,
 	},
-	.num_resources    = ARRAY_SIZE(jz_dmic_resource),
-	.resource         = jz_dmic_resource,
+	.num_resources = ARRAY_SIZE(jz_dmic_resource),
+	.resource = jz_dmic_resource,
 };
 
 struct platform_device *audio_devices[] = {
@@ -124,8 +124,8 @@ struct platform_device *audio_devices[] = {
 };
 
 struct platform_device audio_dsp_platform_device = {
-	.name             = "jz-dsp",
-	.id               = -1,
+	.name = "jz-dsp",
+	.id = -1,
 	.dev = {
 		.dma_mask = &jz_aic_dmamask,
 		.coherent_dma_mask = 0xffffffff,
