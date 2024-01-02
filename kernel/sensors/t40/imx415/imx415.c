@@ -1,4 +1,5 @@
-/* imx415.c
+/*
+ * imx415.c
  *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
@@ -26,14 +27,14 @@
 #define IMX415_CHIP_ID_L	(0x23)
 #define IMX415_REG_END		0xffff
 #define IMX415_REG_DELAY	0xfffe
-#define IMX415_SUPPORT_SCLK_8M (72002970)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define AGAIN_MAX_DB 0x64
-#define DGAIN_MAX_DB 0x64
-#define MCLK 24000000
-#define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION	"H20220118a"
+#define IMX415_SUPPORT_SCLK_8M	(72002970)
+#define SENSOR_OUTPUT_MAX_FPS	30
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define AGAIN_MAX_DB		0x64
+#define DGAIN_MAX_DB		0x64
+#define MCLK			24000000
+#define LOG2_GAIN_SHIFT		16
+#define SENSOR_VERSION		"H20220118a"
 
 static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
@@ -233,7 +234,6 @@ static struct regval_list imx415_init_regs_3840_2160_30fps_mipi[] = {
 	{0x4074, 0x01},	// INCKSEL7 [2:0]
 	{0x3000, 0x00},	// STANDBY
 	{0x3002, 0x00},	// XMASTER
-
 	{IMX415_REG_END, 0x00},/* END MARKER */
 };
 
@@ -347,7 +347,6 @@ static struct regval_list imx415_init_regs_3840_2160_15fps_mipi[] = {
     {IMX415_REG_END, 0x00},/* END MARKER */
 };
 
-
 static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {
 	/* 3840*2160@30fps [0]*/
 	{
@@ -454,6 +453,7 @@ static int imx415_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int imx415_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
+
 	while (vals->reg_num != IMX415_REG_END) {
 		if (vals->reg_num == IMX415_REG_DELAY) {
 			msleep(vals->value);
@@ -502,8 +502,10 @@ static int imx415_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	unsigned short shs = 0;
 	unsigned short vmax = 0;
+
 	vmax = imx415_attr.total_height;
 	shs = vmax - value + 8;
+
 	ret = imx415_write(sd, 0x3050, (unsigned char)(shs & 0xff));
 	ret += imx415_write(sd, 0x3051, (unsigned char)((shs >> 8) & 0xff));
 	ret += imx415_write(sd, 0x3052, (unsigned char)((shs >> 16) & 0x0f));
@@ -529,13 +531,13 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	sensor->video.vi_max_width = wsize->width;
-    sensor->video.vi_max_height = wsize->height;
-    sensor->video.mbus.width = wsize->width;
-    sensor->video.mbus.height = wsize->height;
-    sensor->video.mbus.code = wsize->mbus_code;
-    sensor->video.mbus.field = TISP_FIELD_NONE;
-    sensor->video.mbus.colorspace = wsize->colorspace;
-    sensor->video.fps = wsize->fps;
+	sensor->video.vi_max_height = wsize->height;
+	sensor->video.mbus.width = wsize->width;
+	sensor->video.mbus.height = wsize->height;
+	sensor->video.mbus.code = wsize->mbus_code;
+	sensor->video.mbus.field = TISP_FIELD_NONE;
+	sensor->video.mbus.colorspace = wsize->colorspace;
+	sensor->video.fps = wsize->fps;
 
 	return 0;
 
@@ -584,7 +586,6 @@ static int imx415_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = imx415_write_array(sd, imx415_stream_on_mipi);
 			ISP_WARNING("imx415 stream on\n");
 		}
-
 	} else {
 		ret = imx415_write_array(sd, imx415_stream_off_mipi);
 		ISP_WARNING("imx415 stream off\n");
@@ -597,8 +598,8 @@ static int imx415_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int wpclk = 0;
-	unsigned short vts = 0;
 	unsigned short hts=0;
+	unsigned short vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
 	unsigned int newformat = 0; //the format is 24.8
@@ -619,15 +620,17 @@ static int imx415_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
+
 	ret += imx415_read(sd, 0x3029, &tmp);
 	hts = tmp & 0x0f;
 	ret += imx415_read(sd, 0x3028, &tmp);
-	if(ret < 0)
+	if(ret < 0) {
 		return -1;
+	}
 	hts = (hts << 8) + tmp;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
@@ -636,8 +639,9 @@ static int imx415_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += imx415_write(sd, 0x3025, (unsigned char)((vts & 0xff00) >> 8));
 	ret += imx415_write(sd, 0x3024, (unsigned char)(vts & 0xff));
 	ret += imx415_write(sd, 0x3001, 0x00);
-	if(ret < 0)
+	if (ret < 0) {
 		return -1;
+	}
 
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts- 4 ;
@@ -715,7 +719,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx415_attr.max_integration_time = 4503 - 4;
 		break;
 	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
+		ISP_ERROR("Have no this Setting Source!!!\n");
 	}
 
 	switch(info->video_interface){
@@ -724,7 +728,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx415_attr.mipi.index = 0;
 		break;
 	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
+		ISP_ERROR("Have no this Interface Source!!!\n");
 	}
 
 	switch(info->mclk){
@@ -750,26 +754,26 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-    if (((rate / 1000) % (MCLK / 1000)) != 0) {
-        uint8_t sclk_name_num = sizeof(sclk_name)/sizeof(sclk_name[0]);
-        for (i=0; i < sclk_name_num; i++) {
-            tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
-            ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
-            if (IS_ERR(tclk)) {
-                pr_err("get sclka failed\n");
-            } else {
-                rate = private_clk_get_rate(tclk);
-                if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
-                    if (((MCLK / 1000) % 27000) != 0 || ((MCLK / 1000) % 37125) != 0)
-                        private_clk_set_rate(tclk, 891000000);
-                    else if (((MCLK / 1000) % 24000) != 0)
-                        private_clk_set_rate(tclk, 1200000000);
-                } else if (((rate / 1000) % (MCLK / 1000)) == 0) {
-                    break;
-                }
-            }
-        }
-    }
+	if (((rate / 1000) % (MCLK / 1000)) != 0) {
+		uint8_t sclk_name_num = sizeof(sclk_name)/sizeof(sclk_name[0]);
+		for (i=0; i < sclk_name_num; i++) {
+			tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
+			ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
+			if (IS_ERR(tclk)) {
+				pr_err("get sclka failed\n");
+			} else {
+				rate = private_clk_get_rate(tclk);
+				if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
+					if (((MCLK / 1000) % 27000) != 0 || ((MCLK / 1000) % 37125) != 0)
+						private_clk_set_rate(tclk, 891000000);
+					else if (((MCLK / 1000) % 24000) != 0)
+						private_clk_set_rate(tclk, 1200000000);
+				} else if (((rate / 1000) % (MCLK / 1000)) == 0) {
+					break;
+				}
+			}
+		}
+	}
 
 	private_clk_set_rate(sensor->mclk, MCLK);
 	private_clk_prepare_enable(sensor->mclk);
@@ -835,7 +839,6 @@ static int imx415_g_chip_ident(struct tx_isp_subdev *sd,
 
 static int imx415_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
-	
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
@@ -935,8 +938,8 @@ static struct tx_isp_subdev_video_ops imx415_video_ops = {
 	.s_stream = imx415_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	imx415_sensor_ops = {
-	.ioctl	= imx415_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops imx415_sensor_ops = {
+	.ioctl = imx415_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops imx415_ops = {
@@ -957,7 +960,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int imx415_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
