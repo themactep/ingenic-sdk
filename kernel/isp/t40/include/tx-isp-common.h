@@ -107,7 +107,7 @@ enum tx_sensor_csi_fmt {
 	TX_SENSOR_RAW8 = 0,
 	TX_SENSOR_RAW10,
 	TX_SENSOR_RAW12,
-        TX_SENSOR_YUV422 = 7,
+	TX_SENSOR_YUV422 = 7,
 };
 
 typedef enum {
@@ -350,8 +350,8 @@ struct tx_isp_sensor_attribute{
 		char string[64];
 	};
 	enum tx_sensor_data_type data_type;
-	unsigned int max_again;	//the format is .16
-	unsigned int max_dgain;	//the format is .16
+	unsigned int max_again; //the format is .16
+	unsigned int max_dgain; //the format is .16
 	unsigned int again;
 	unsigned int dgain;
 	unsigned short min_integration_time;
@@ -370,13 +370,13 @@ struct tx_isp_sensor_attribute{
 	unsigned short min_integration_time_short;
 	unsigned short max_integration_time_short;
 	unsigned int integration_time_short;
-	unsigned int max_again_short;	//the format is .16
+	unsigned int max_again_short; //the format is .16
 	unsigned int again_short;
-	unsigned int wdr_cache;	//the format is .16
+	unsigned int wdr_cache; //the format is .16
 	unsigned int expo;
 	unsigned int expo_fs;
 	unsigned int sensor_num;
-	unsigned int max_dgain_short;	//the format is .16
+	unsigned int max_dgain_short; //the format is .16
 	unsigned int dgain_short;
 	unsigned short again_short_apply_delay;
 	unsigned short dgain_short_apply_delay;
@@ -391,8 +391,8 @@ enum tx_isp_priv_ioctl_direction {
 	TX_ISP_PRIVATE_IOCTL_GET,
 };
 
-#define NOTIFICATION_TYPE_CORE_OPS      (0x1 << 24)
-#define NOTIFICATION_TYPE_SENSOR_OPS    (0x2 << 24)
+#define NOTIFICATION_TYPE_CORE_OPS	(0x1 << 24)
+#define NOTIFICATION_TYPE_SENSOR_OPS	(0x2 << 24)
 #define NOTIFICATION_TYPE_FS_OPS 	(0x3 << 24)
 #define NOTIFICATION_TYPE_TUN_OPS 	(0x4 << 24)
 #define NOTIFICATION_TYPE_OPS(n)	((n) & (0xff << 24))
@@ -558,8 +558,8 @@ struct tx_isp_video_in {
 	unsigned int mbus_change;
 	struct tx_isp_sensor_attribute *attr;
 	struct tx_isp_sensor_register_info *info;
-	unsigned int vi_max_width;	//the max width of sensor output setting
-	unsigned int vi_max_height;	//the max height of sensor output setting
+	unsigned int vi_max_width; //the max width of sensor output setting
+	unsigned int vi_max_height; //the max height of sensor output setting
 	unsigned int fps;
 	int grp_id;
 	int vic_id;

@@ -15,9 +15,6 @@
 #include "apical_sbus.h"
 #include "log.h"
 
-
-
-
 void init_sensor_interface(sensor_ApicalDefault_iface_ptr_t p_iface)
 {
 }

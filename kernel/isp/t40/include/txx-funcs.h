@@ -41,17 +41,16 @@
 #include <linux/hrtimer.h>
 
 #ifndef U16_MAX
-#define U16_MAX 					0xFFFF
+#define U16_MAX 			0xFFFF
 #endif
 
-#define ISP_INFO_LEVEL		0x0
-#define ISP_WARNING_LEVEL	0x1
-#define ISP_ERROR_LEVEL		0x2
-#define ISP_PRINT(level, format, ...)			\
-	isp_printf(level, format, ##__VA_ARGS__)
-#define ISP_INFO(...) ISP_PRINT(ISP_INFO_LEVEL, __VA_ARGS__)
-#define ISP_WARNING(...) ISP_PRINT(ISP_WARNING_LEVEL, __VA_ARGS__)
-#define ISP_ERROR(...) ISP_PRINT(ISP_ERROR_LEVEL, __VA_ARGS__)
+#define ISP_INFO_LEVEL			0x0
+#define ISP_WARNING_LEVEL		0x1
+#define ISP_ERROR_LEVEL			0x2
+#define ISP_PRINT(level, format, ...)	isp_printf(level, format, ##__VA_ARGS__)
+#define ISP_INFO(...)			ISP_PRINT(ISP_INFO_LEVEL, __VA_ARGS__)
+#define ISP_WARNING(...)		ISP_PRINT(ISP_WARNING_LEVEL, __VA_ARGS__)
+#define ISP_ERROR(...)			ISP_PRINT(ISP_ERROR_LEVEL, __VA_ARGS__)
 
 //extern unsigned int isp_print_level;
 /*int isp_debug_init(void);*/
@@ -64,7 +63,7 @@ int get_isp_memopt(void);
 void *private_vmalloc(unsigned long size);
 void private_vfree(const void *addr);
 
-#define paddr2vaddr(phyaddr) ((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
+#define paddr2vaddr(phyaddr)		((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
 
 /* platform interfaces */
 int private_platform_driver_register(struct platform_driver *drv);
@@ -73,29 +72,24 @@ void private_platform_set_drvdata(struct platform_device *pdev, void *data);
 void *private_platform_get_drvdata(struct platform_device *pdev);
 int private_platform_device_register(struct platform_device *pdev);
 void private_platform_device_unregister(struct platform_device *pdev);
-struct resource *private_platform_get_resource(struct platform_device *dev,
-					       unsigned int type, unsigned int num);
+struct resource *private_platform_get_resource(struct platform_device *dev, unsigned int type, unsigned int num);
 void private_dev_set_drvdata(struct device *dev, void *data);
 void* private_dev_get_drvdata(const struct device *dev);
 int private_platform_get_irq(struct platform_device *dev, unsigned int num);
-struct resource * private_request_mem_region(resource_size_t start, resource_size_t n,
-					     const char *name);
+struct resource * private_request_mem_region(resource_size_t start, resource_size_t n, const char *name);
 void private_release_mem_region(resource_size_t start, resource_size_t n);
 
 void __iomem * private_ioremap(phys_addr_t offset, unsigned long size);
 void private_iounmap(const volatile void __iomem *addr);
 /* interrupt interfaces */
-int private_request_threaded_irq(unsigned int irq, irq_handler_t handler,
-				 irq_handler_t thread_fn, unsigned long irqflags,
-				 const char *devname, void *dev_id);
+int private_request_threaded_irq(unsigned int irq, irq_handler_t handler, irq_handler_t thread_fn, unsigned long irqflags, const char *devname, void *dev_id);
 void private_enable_irq(unsigned int irq);
 void private_disable_irq(unsigned int irq);
 void private_free_irq(unsigned int irq, void *dev_id);
 
 /* lock and mutex interfaces */
 void __private_spin_lock_irqsave(spinlock_t *lock, unsigned long *flags);
-#define private_spin_lock_irqsave(lock, flags)		\
-	__private_spin_lock_irqsave(lock, (&flags));
+#define private_spin_lock_irqsave(lock, flags)	__private_spin_lock_irqsave(lock, (&flags));
 void private_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags);
 void private_spin_lock_init(spinlock_t *lock);
 void private_mutex_lock(struct mutex *lock);
@@ -170,8 +164,7 @@ struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode, 
 ssize_t private_seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos);
 loff_t private_seq_lseek(struct file *file, loff_t offset, int whence);
 int private_single_release(struct inode *inode, struct file *file);
-int private_single_open_size(struct file *file, int (*show)(struct seq_file *, void *),
-			     void *data, size_t size);
+int private_single_open_size(struct file *file, int (*show)(struct seq_file *, void *), void *data, size_t size);
 struct proc_dir_entry* private_jz_proc_mkdir(char *s);
 void private_proc_remove(struct proc_dir_entry *de);
 void private_seq_printf(struct seq_file *m, const char *f, ...);
@@ -195,8 +188,7 @@ ssize_t private_vfs_write(struct file *file, const char __user *buf, size_t coun
 loff_t private_vfs_llseek(struct file *file, loff_t offset, int whence);
 mm_segment_t private_get_fs(void);
 void private_set_fs(mm_segment_t val);
-void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
-			    enum dma_data_direction direction);
+void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size, enum dma_data_direction direction);
 void private_getrawmonotonic(struct timespec *ts);
 struct net *private_get_init_net(void);
 

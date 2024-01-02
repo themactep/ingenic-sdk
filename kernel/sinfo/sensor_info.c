@@ -56,14 +56,14 @@ module_param(cim1_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(cim1_gpio, "Cim1 GPIO NUM");
 #endif
 
-#define SENSOR_INFO_IOC_MAGIC  'S'
-#define IOCTL_SINFO_GET			_IO(SENSOR_INFO_IOC_MAGIC, 100)
-#define IOCTL_SINFO_FLASH		_IO(SENSOR_INFO_IOC_MAGIC, 101)
+#define SENSOR_INFO_IOC_MAGIC	'S'
+#define IOCTL_SINFO_GET		_IO(SENSOR_INFO_IOC_MAGIC, 100)
+#define IOCTL_SINFO_FLASH	_IO(SENSOR_INFO_IOC_MAGIC, 101)
 
 #define SENSOR_TYPE_INVALID	-1
 
-#define I2C_WRITE 0
-#define I2C_READ  1
+#define I2C_WRITE		0
+#define I2C_READ		1
 
 struct i2c_trans {
 	uint32_t addr;
@@ -228,7 +228,8 @@ int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, ui
 		printk("error: %s,%d wlen = %d\n", __func__, __LINE__, wlen);
 	}
 	ret = i2c_transfer(adap, msg, 2);
-	if (ret > 0) ret = 0;
+	if (ret > 0)
+		ret = 0;
 	if (0 != ret)
 		printk("error: %s,%d ret = %d\n", __func__, __LINE__, ret);
 	if (1 == rlen) {
@@ -268,9 +269,9 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 	}
 
 #ifdef CONFIG_SOC_T40
-	if(cim1_gpio != -1){
+	if (cim1_gpio != -1) {
 		ret = gpio_request(cim1_gpio,"cim1");
-		if(!ret){
+		if (!ret) {
 			jzgpio_set_func((cim1_gpio / 32), GPIO_FUNC_1, 1 << (cim1_gpio % 32));
 		}
 	}
@@ -293,34 +294,34 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 #else
 		clk_enable(mclk);
 #endif
-		if(reset_gpio != -1){
+		if (reset_gpio != -1) {
 			ret = gpio_request(reset_gpio,"reset");
-			if(!ret){
+			if (!ret)  {
 				gpio_direction_output(reset_gpio, 1);
 				msleep(20);
 				gpio_direction_output(reset_gpio, 0);
-				if(strcmp(g_sinfo[i].name, "sp1409") == 0)
+				if (strcmp(g_sinfo[i].name, "sp1409") == 0)
 					msleep(600);
-				else{
+				else {
 					msleep(20);
 					gpio_direction_output(reset_gpio, 1);
 					msleep(20);
 				}
-			}else{
+			} else {
 				printk("gpio requrest fail %d\n",reset_gpio);
 			}
 		}
-		if(pwdn_gpio != -1){
+		if (pwdn_gpio != -1) {
 			ret = gpio_request(pwdn_gpio,"pwdn");
-			if(!ret){
+			if (!ret) {
 				gpio_direction_output(pwdn_gpio, 1);
 				msleep(150);
 				gpio_direction_output(pwdn_gpio, 0);
-				if(strcmp(g_sinfo[i].name, "sp1409") == 0)
+				if (strcmp(g_sinfo[i].name, "sp1409") == 0)
 					msleep(600);
 				else
 					msleep(10);
-			}else{
+			} else {
 				printk("gpio requrest fail %d\n",pwdn_gpio);
 			}
 		}
@@ -332,7 +333,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 				printk("err sensor read addr = 0x%x, value = 0x%x\n", g_sinfo[i].id_addr[j], value);
 				break;
 			}
-			if(strcmp(g_sinfo[i].name, "ov2735b") == 0 && j == 2){
+			if (strcmp(g_sinfo[i].name, "ov2735b") == 0 && j == 2) {
 				if (value == g_sinfo[i].id_value[j])
 					j++;
 			}
@@ -386,27 +387,27 @@ static int32_t sensor_open(void)
 #else
 	clk_enable(mclk);
 #endif
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"reset");
-		if(!ret){
+		if (!ret){
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(150);
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -470,14 +471,14 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 	if (I2C_WRITE == t->r_w) {
 		if (1 == len) {
 			buf[0] = (t->data)&0xff;
-		} else if (2 == len){
+		} else if (2 == len) {
 			buf[0] = ((t->data)>>8)&0xff;
 			buf[1] = (t->data)&0xff;
-		} else if (3 == len){
+		} else if (3 == len) {
 			buf[0] = ((t->data)>>16)&0xff;
 			buf[1] = ((t->data)>>8)&0xff;
 			buf[2] = (t->data)&0xff;
-		} else if (4 == len){
+		} else if (4 == len) {
 			buf[0] = ((t->data)>>24)&0xff;
 			buf[1] = ((t->data)>>16)&0xff;
 			buf[2] = ((t->data)>>8)&0xff;
@@ -487,18 +488,19 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 		}
 	}
 	ret = i2c_transfer(adap, &msg, 1);
-	if (ret > 0) ret = 0;
+	if (ret > 0)
+		ret = 0;
 	if (0 != ret)
 		printk("error: %s,%d ret = %d\n", __func__, __LINE__, ret);
 
 	if (I2C_READ == t->r_w) {
 		if (1 == len) {
 			value = buf[0];
-		} else if (2 == len){
+		} else if (2 == len) {
 			value = (buf[0]<<8)|buf[1];
-		} else if (3 == len){
+		} else if (3 == len) {
 			value = (buf[0]<<16)|(buf[1]<<8)|buf[2];
-		} else if (4 == len){
+		} else if (4 == len) {
 			value = (buf[0]<<24)|(buf[1]<<16)|(buf[2]<<8)|buf[3];
 		} else {
 			printk("error: %s,%d len = %d\n", __func__, __LINE__, len);
@@ -593,8 +595,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 		printk("err: cmd too long\n");
 		return -EFAULT;
 	}
-	if(copy_from_user(cmd, buf, len))
-	{
+	if (copy_from_user(cmd, buf, len)) {
 		return -EFAULT;
 	}
 	/* probe sensor */
