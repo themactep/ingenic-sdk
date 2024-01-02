@@ -33,11 +33,12 @@
 #include <soc/gpio.h>
 #include <soc/base.h>
 /* #include <soc/irq.h> */
-#include <dt-bindings/interrupt-controller/t40-irq.h>
-
 /* #include <mach/platform.h> */
 /* #include <mach/jzdma.h> */
 /* #include <mach/jzsnd.h> */
+
+#include <dt-bindings/interrupt-controller/t40-irq.h>
+
 #include <linux/spi/spi.h>
 #include <asm/io.h>
 #include <asm/irq.h>
@@ -55,7 +56,7 @@ MODULE_PARM_DESC(print_level, "isp print level");
 
 static char *clk_name = "mpll";
 module_param(clk_name, charp, S_IRUGO);
-MODULE_PARM_DESC(clk_name, "chose parent clk");
+MODULE_PARM_DESC(clk_name, "select the isp parent clock");
 
 static int isp_clk = 200000000;
 module_param(isp_clk, int, S_IRUGO);
