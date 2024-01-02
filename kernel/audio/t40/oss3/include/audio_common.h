@@ -63,7 +63,7 @@ struct dsp_data_fragment {
 struct dsp_data_manage {
 	/* buffer manager */
 	struct dsp_data_fragment *fragments;
-	unsigned int sample_size;	// samplesize = channel * format_to_bytes(format) / 8;
+	unsigned int sample_size; // samplesize = channel * format_to_bytes(format) / 8;
 	unsigned int fragment_size;
 	unsigned int fragment_cnt;
 	struct list_head fragments_head;
@@ -78,13 +78,13 @@ struct audio_pipe {
 	char *name;
 	/* dma */
 	struct dma_chan *dma_chan;
-	struct dma_slave_config dma_config;	/* define by device */
+	struct dma_slave_config dma_config; /* define by device */
 	int dma_type;
 
 	/* dma buffer */
 	void *vaddr;
 	dma_addr_t paddr;
-	unsigned int reservesize;	/* the size must be setted when initing this driver */
+	unsigned int reservesize; /* the size must be setted when initing this driver */
 	spinlock_t pipe_lock;
 	volatile bool is_trans;
 	/* operation */
@@ -95,19 +95,19 @@ struct audio_pipe {
 };
 
 struct volume {
-	unsigned int channel;		//1-left 2-right 3-stereo
-	unsigned int gain[2];		//0-left 1-right
+	unsigned int channel; //1-left 2-right 3-stereo
+	unsigned int gain[2]; //0-left 1-right
 };
 
 struct channel_mute {
-	unsigned int channel;		//1-left 2-right 3-stereo
-	unsigned int mute_en;		//0-left 1-right
+	unsigned int channel; //1-left 2-right 3-stereo
+	unsigned int mute_en; //0-left 1-right
 };
 
 struct alc_gain {
-	unsigned int channel;		//1-left 2-right 3-stereo
+	unsigned int channel; //1-left 2-right 3-stereo
 	unsigned int maxgain[2];
-	unsigned int mingain[2];	//0-left 1-right
+	unsigned int mingain[2]; //0-left 1-right
 };
 
 #endif /* _JZ_AUDIO_COMMON_H_ */

@@ -89,11 +89,11 @@ struct audio_route {
 
 	/* manage fragments */
 	struct dsp_data_manage manage;
-	int aec_sample_offset;					/*When route is AMIC or DMIC, the value is sample offset in case AEC enable.
-												0: ai and aec are synchronous;
-												less than 0: the value is the count of invalid aec sample.
-												greater than 0: the value is the count of invalid ai sample.
-												*/
+	int aec_sample_offset;	/*When route is AMIC or DMIC, the value is sample offset in case AEC enable.
+					0: ai and aec are synchronous;
+					less than 0: the value is the count of invalid aec sample.
+					greater than 0: the value is the count of invalid ai sample.
+				*/
 	unsigned int wait_cnt;
 	bool wait_flag;
 	struct completion done_completion;
