@@ -135,26 +135,26 @@ struct audio_aic_device {
 /**
  * registers
  **/
-#define AICFR		0x0
-#define AICCR		0x4
-#define AICCR1		0x8
-#define AICCR2		0xc
-#define I2SCR		0x10
-#define AICSR		0x14
-#define A0CSR		0x18
-#define I2SSR		0x1c
-#define A0CCAR		0x20
-#define A0CCDR		0x24
-#define A0CSAR		0x28
-#define A0CSDR		0x2c
-#define I2SDIV		0x30
-#define AICDR		0x34
-#define AICLR		0x38
-#define AICTFLR		0x3c
-#define CKCFG		0xa0
-#define RGADW		0xa4
-#define RGDATA		0xa8
-#define DMICDR		0x30
+#define AICFR			0x0
+#define AICCR			0x4
+#define AICCR1			0x8
+#define AICCR2			0xc
+#define I2SCR			0x10
+#define AICSR			0x14
+#define A0CSR			0x18
+#define I2SSR			0x1c
+#define A0CCAR			0x20
+#define A0CCDR			0x24
+#define A0CSAR			0x28
+#define A0CSDR			0x2c
+#define I2SDIV			0x30
+#define AICDR			0x34
+#define AICLR			0x38
+#define AICTFLR			0x3c
+#define CKCFG			0xa0
+#define RGADW			0xa4
+#define RGDATA			0xa8
+#define DMICDR			0x30
 
 static unsigned long read_val;
 static unsigned long tmp_val;
@@ -162,10 +162,10 @@ static unsigned long tmp_val;
 /**
  * i2s register control
  **/
-#define i2s_write_reg(i2s_dev, addr,val)	\
+#define i2s_write_reg(i2s_dev, addr,val)				\
 	writel(val,i2s_dev->i2s_iomem+addr)
 
-#define i2s_read_reg(i2s_dev, addr)		\
+#define i2s_read_reg(i2s_dev, addr)					\
 	readl(i2s_dev->i2s_iomem+addr)
 
 #define i2s_set_reg(i2s_dev, addr,val,mask,offset)\
@@ -181,10 +181,10 @@ static unsigned long tmp_val;
 		spin_unlock_irqrestore(&i2s_dev->i2s_lock, flags);	\
 	} while(0)
 
-#define i2s_get_reg(i2s_dev, addr,mask,offset)	\
+#define i2s_get_reg(i2s_dev, addr,mask,offset)				\
 	((i2s_read_reg(i2s_dev, addr) & mask) >> offset)
 
-#define i2s_clear_reg(i2s_dev, addr,mask)	\
+#define i2s_clear_reg(i2s_dev, addr,mask)				\
 	i2s_write_reg(i2s_dev, addr,~mask)
 
 /* AICFR */
@@ -217,91 +217,87 @@ static unsigned long tmp_val;
 #define I2S_RFTH_OFFSET		(24)
 #define I2S_RFTH_MASK		(0xf << I2S_RFTH_OFFSET)
 
-#define __aic_select_i2s(i2s_dev)			\
+#define __aic_select_i2s(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_AUSEL_MASK,I2S_AUSEL_OFFSET)
-#define __aic_select_aclink(i2s_dev)			\
+#define __aic_select_aclink(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_AUSEL_MASK,I2S_AUSEL_OFFSET)
-#define __i2s_set_transmit_trigger(i2s_dev, n)		\
+#define __i2s_set_transmit_trigger(i2s_dev, n)				\
 	i2s_set_reg(i2s_dev, AICFR,n,I2S_TFTH_MASK,I2S_TFTH_OFFSET)
-#define __i2s_set_receive_trigger(i2s_dev, n)		\
+#define __i2s_set_receive_trigger(i2s_dev, n)				\
 	i2s_set_reg(i2s_dev, AICFR,n,I2S_RFTH_MASK,I2S_RFTH_OFFSET)
-
-#define __i2s_internal_codec_master(i2s_dev)		\
+#define __i2s_internal_codec_master(i2s_dev)				\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ICS_MASK,I2S_ICS_OFFSET);	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ICDC_MASK,I2S_ICDC_OFFSET);	\
 } while (0)
-#define __i2s_internal_codec_slave(i2s_dev)		\
+#define __i2s_internal_codec_slave(i2s_dev)				\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ICS_MASK,I2S_ICS_OFFSET);	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ICDC_MASK,I2S_ICDC_OFFSET);	\
 } while (0)
-
-#define __i2s_external_codec(i2s_dev)			\
+#define __i2s_external_codec(i2s_dev)					\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ICS_MASK,I2S_ICS_OFFSET);	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ICDC_MASK,I2S_ICDC_OFFSET);	\
 } while(0)
-
-#define __i2s_select_share_clk(i2s_dev)			\
+#define __i2s_select_share_clk(i2s_dev)					\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_DMODE_MASK,I2S_DMODE_OFFSET);\
 } while (0)
-
-#define __i2s_select_spilt_clk(i2s_dev)			\
+#define __i2s_select_spilt_clk(i2s_dev)					\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_DMODE_MASK,I2S_DMODE_OFFSET);\
 } while (0)
 
-#define __i2s_bclk_input(i2s_dev)			\
+#define __i2s_bclk_input(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_BCKD_MASK,I2S_BCKD_OFFSET)
-#define __i2s_bclk_output(i2s_dev)			\
+#define __i2s_bclk_output(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_BCKD_MASK,I2S_BCKD_OFFSET)
-#define __i2s_sync_input(i2s_dev)			\
+#define __i2s_sync_input(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_SYNCD_MASK,I2S_SYNCD_OFFSET)
-#define __i2s_sync_output(i2s_dev)			\
+#define __i2s_sync_output(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_SYNCD_MASK,I2S_SYNCD_OFFSET)
-#define __i2s_ibclk_input(i2s_dev)			\
+#define __i2s_ibclk_input(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_IBCKD_MASK,I2S_IBCKD_OFFSET)
-#define __i2s_ibclk_output(i2s_dev)			\
+#define __i2s_ibclk_output(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_IBCKD_MASK,I2S_IBCKD_OFFSET)
-#define __i2s_isync_input(i2s_dev)			\
+#define __i2s_isync_input(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ISYNCD_MASK,I2S_ISYNCD_OFFSET)
-#define __i2s_enable_24bitmsb(i2s_dev)			\
+#define __i2s_enable_24bitmsb(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_MSB_MASK,I2S_MSB_OFFSET)
-#define __i2s_disable_24bitmsb(i2s_dev)			\
+#define __i2s_disable_24bitmsb(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_MSB_MASK,I2S_MSB_OFFSET)
-#define __i2s_isync_output(i2s_dev)			\
+#define __i2s_isync_output(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ISYNCD_MASK,I2S_ISYNCD_OFFSET)
 
-#define __i2s_slave_clkset(i2s_dev)			\
-	do {						\
-		__i2s_bclk_input(i2s_dev);		\
-		__i2s_sync_input(i2s_dev);		\
-		__i2s_isync_input(i2s_dev);		\
-		__i2s_ibclk_input(i2s_dev);		\
+#define __i2s_slave_clkset(i2s_dev)					\
+	do {								\
+		__i2s_bclk_input(i2s_dev);				\
+		__i2s_sync_input(i2s_dev);				\
+		__i2s_isync_input(i2s_dev);				\
+		__i2s_ibclk_input(i2s_dev);				\
 	}while(0)
 
-#define __i2s_master_clkset(i2s_dev)			\
-	do {						\
-		__i2s_bclk_output(i2s_dev);		\
-		__i2s_sync_output(i2s_dev);		\
+#define __i2s_master_clkset(i2s_dev)					\
+	do {								\
+		__i2s_bclk_output(i2s_dev);				\
+		__i2s_sync_output(i2s_dev);				\
 	}while(0)
-		/*__i2s_isync_output(i2s_dev);		\
-		__i2s_ibclk_output(i2s_dev);		\*/
+		/*__i2s_isync_output(i2s_dev);				\
+		__i2s_ibclk_output(i2s_dev);				\*/
 
 
-#define __i2s_play_zero(i2s_dev)			\
+#define __i2s_play_zero(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_LSMP_MASK,I2S_LSMP_OFFSET)
-#define __i2s_play_lastsample(i2s_dev)			\
+#define __i2s_play_lastsample(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_LSMP_MASK,I2S_LSMP_OFFSET)
 
-#define __i2s_reset(i2s_dev)				\
+#define __i2s_reset(i2s_dev)						\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_RST_MASK,I2S_RST_OFFSET)
 
-#define __i2s_enable(i2s_dev)				\
+#define __i2s_enable(i2s_dev)						\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ENB_MASK,I2S_ENB_OFFSET)
-#define __i2s_disable(i2s_dev)				\
+#define __i2s_disable(i2s_dev)						\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ENB_MASK,I2S_ENB_OFFSET)
 
 /* AICCR */
@@ -360,106 +356,106 @@ do {	\
 #define I2S_PACK16_MASK		(0x1 << I2S_PACK16_OFFSET)
 
 
-#define __i2s_enable_pack16(i2s_dev)          \
+#define __i2s_enable_pack16(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_PACK16_MASK,I2S_PACK16_OFFSET)
-#define __i2s_disable_pack16(i2s_dev)         \
+#define __i2s_disable_pack16(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_PACK16_MASK,I2S_PACK16_OFFSET)
-#define __i2s_out_channel_select(i2s_dev, n)    \
+#define __i2s_out_channel_select(i2s_dev, n)				\
 	i2s_set_reg(i2s_dev, AICCR,n,I2S_CHANNEL_MASK,I2S_CHANNEL_OFFSET)
-#define __i2s_set_oss_sample_size(i2s_dev, n)   \
+#define __i2s_set_oss_sample_size(i2s_dev, n)				\
 	i2s_set_reg(i2s_dev, AICCR,n,I2S_OSS_MASK,I2S_OSS_OFFSET)
-#define __i2s_set_iss_sample_size(i2s_dev, n)   \
+#define __i2s_set_iss_sample_size(i2s_dev, n)				\
 	i2s_set_reg(i2s_dev, AICCR,n,I2S_ISS_MASK,I2S_ISS_OFFSET)
 
-#define __i2s_enable_transmit_dma(i2s_dev)    \
+#define __i2s_enable_transmit_dma(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_TDMS_MASK,I2S_TDMS_OFFSET)
-#define __i2s_disable_transmit_dma(i2s_dev)   \
+#define __i2s_disable_transmit_dma(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_TDMS_MASK,I2S_TDMS_OFFSET)
-#define __i2s_enable_receive_dma(i2s_dev)     \
+#define __i2s_enable_receive_dma(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_RDMS_MASK,I2S_RDMS_OFFSET)
-#define __i2s_disable_receive_dma(i2s_dev)    \
+#define __i2s_disable_receive_dma(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_RDMS_MASK,I2S_RDMS_OFFSET)
 
-#define __i2s_enable_mono2stereo(i2s_dev)     \
+#define __i2s_enable_mono2stereo(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_M2S_MASK,I2S_M2S_OFFSET)
-#define __i2s_disable_mono2stereo(i2s_dev)    \
+#define __i2s_disable_mono2stereo(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_M2S_MASK,I2S_M2S_OFFSET)
 
-#define __i2s_enable_monoctr_left(i2s_dev) \
+#define __i2s_enable_monoctr_left(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR, 2, I2S_STEREOCTR_MASK, I2S_MONOCTR_RIGHT_OFFSET)
-#define __i2s_disable_monoctr_left(i2s_dev) \
+#define __i2s_disable_monoctr_left(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR, 0, I2S_STEREOCTR_MASK, I2S_MONOCTR_RIGHT_OFFSET)
 
-#define __i2s_enable_monoctr_right(i2s_dev)\
+#define __i2s_enable_monoctr_right(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR, 1, I2S_STEREOCTR_MASK, I2S_MONOCTR_RIGHT_OFFSET)
-#define __i2s_disable_monoctr_right(i2s_dev)\
+#define __i2s_disable_monoctr_right(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR, 0, I2S_STEREOCTR_MASK, I2S_MONOCTR_RIGHT_OFFSET)
 
-#define __i2s_enable_stereo(i2s_dev)\
+#define __i2s_enable_stereo(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR, 0, I2S_STEREOCTR_MASK, I2S_MONOCTR_RIGHT_OFFSET)
 
-#define __i2s_enable_tloop(i2s_dev) \
+#define __i2s_enable_tloop(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR, 1, I2S_TLDMS_MASK, I2S_TLDMS_OFFSET)
-#define __i2s_disable_tloop(i2s_dev) \
+#define __i2s_disable_tloop(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR, 0, I2S_TLDMS_MASK, I2S_TLDMS_OFFSET)
 
-#define __i2s_enable_etfl(i2s_dev) \
+#define __i2s_enable_etfl(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR, 1, I2S_ETFL_MASK, I2S_ETFL_OFFSET)
-#define __i2s_disable_etfl(i2s_dev) \
+#define __i2s_disable_etfl(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR, 0, I2S_ETFL_MASK, I2S_ETFL_OFFSET)
 
-#define __i2s_enable_byteswap(i2s_dev)        \
+#define __i2s_enable_byteswap(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ENDSW_MASK,I2S_ENDSW_OFFSET)
-#define __i2s_disable_byteswap(i2s_dev)       \
+#define __i2s_disable_byteswap(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ENDSW_MASK,I2S_ENDSW_OFFSET)
 
-#define __i2s_enable_signadj(i2s_dev)       \
+#define __i2s_enable_signadj(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ASVTSU_MASK,I2S_ASVTSU_OFFSET)
-#define __i2s_disable_signadj(i2s_dev)      \
+#define __i2s_disable_signadj(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ASVTSU_MASK,I2S_ASVTSU_OFFSET)
 
-#define __i2s_flush_tfifo(i2s_dev)            \
+#define __i2s_flush_tfifo(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_TFLUSH_MASK,I2S_TFLUSH_OFFSET)
-#define __i2s_flush_rfifo(i2s_dev)            \
+#define __i2s_flush_rfifo(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_RFLUSH_MASK,I2S_RFLUSH_OFFSET)
-#define __i2s_test_flush_tfifo(i2s_dev)               \
+#define __i2s_test_flush_tfifo(i2s_dev)					\
 	i2s_get_reg(i2s_dev, AICCR,I2S_TFLUSH_MASK,I2S_TFLUSH_OFFSET)
-#define __i2s_test_flush_rfifo(i2s_dev)               \
+#define __i2s_test_flush_rfifo(i2s_dev)					\
 	i2s_get_reg(i2s_dev, AICCR,I2S_RFLUSH_MASK,I2S_RFLUSH_OFFSET)
 
-#define __i2s_enable_overrun_intr(i2s_dev)    \
+#define __i2s_enable_overrun_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_EROR_MASK,I2S_EROR_OFFSET)
-#define __i2s_disable_overrun_intr(i2s_dev)   \
+#define __i2s_disable_overrun_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_EROR_MASK,I2S_EROR_OFFSET)
 
-#define __i2s_enable_underrun_intr(i2s_dev)   \
+#define __i2s_enable_underrun_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ETUR_MASK,I2S_ETUR_OFFSET)
-#define __i2s_disable_underrun_intr(i2s_dev)  \
+#define __i2s_disable_underrun_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ETUR_MASK,I2S_ETUR_OFFSET)
 
-#define __i2s_enable_transmit_intr(i2s_dev)   \
+#define __i2s_enable_transmit_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ETFS_MASK,I2S_ETFS_OFFSET)
-#define __i2s_disable_transmit_intr(i2s_dev)  \
+#define __i2s_disable_transmit_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ETFS_MASK,I2S_ETFS_OFFSET)
 
-#define __i2s_enable_receive_intr(i2s_dev)    \
+#define __i2s_enable_receive_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ERFS_MASK,I2S_ERFS_OFFSET)
-#define __i2s_disable_receive_intr(i2s_dev)   \
+#define __i2s_disable_receive_intr(i2s_dev)				\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ERFS_MASK,I2S_ERFS_OFFSET)
 
-#define __i2s_enable_loopback(i2s_dev)        \
+#define __i2s_enable_loopback(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ENLBF_MASK,I2S_ENLBF_OFFSET)
-#define __i2s_disable_loopback(i2s_dev)       \
+#define __i2s_disable_loopback(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ENLBF_MASK,I2S_ENLBF_OFFSET)
 
-#define __i2s_enable_replay(i2s_dev)          \
+#define __i2s_enable_replay(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_ERPL_MASK,I2S_ERPL_OFFSET)
-#define __i2s_disable_replay(i2s_dev)         \
+#define __i2s_disable_replay(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_ERPL_MASK,I2S_ERPL_OFFSET)
 
-#define __i2s_enable_record(i2s_dev)          \
+#define __i2s_enable_record(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,1,I2S_EREC_MASK,I2S_EREC_OFFSET)
-#define __i2s_disable_record(i2s_dev)         \
+#define __i2s_disable_record(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICCR,0,I2S_EREC_MASK,I2S_EREC_OFFSET)
 
 /* I2SCR */
@@ -476,33 +472,33 @@ do {	\
 #define I2S_RFIRST_OFFSET	(17)
 #define I2S_RFIRST_MASK		(0x1 << I2S_RFIRST_OFFSET)
 
-#define __i2s_send_rfirst(i2s_dev)		\
+#define __i2s_send_rfirst(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_RFIRST_MASK,I2S_RFIRST_OFFSET)
-#define __i2s_send_lfirst(i2s_dev)		\
+#define __i2s_send_lfirst(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_RFIRST_MASK,I2S_RFIRST_OFFSET)
 
-#define __i2s_switch_lr(i2s_dev)		\
+#define __i2s_switch_lr(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_SWLH_MASK,I2S_SWLH_OFFSET)
-#define __i2s_unswitch_lr(i2s_dev)		\
+#define __i2s_unswitch_lr(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_SWLH_MASK,I2S_SWLH_OFFSET)
 
-#define __i2s_stop_bitclk(i2s_dev)		\
+#define __i2s_stop_bitclk(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_STPBK_MASK,I2S_STPBK_OFFSET)
-#define __i2s_start_bitclk(i2s_dev)		\
+#define __i2s_start_bitclk(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_STPBK_MASK,I2S_STPBK_OFFSET)
 
-#define __i2s_stop_ibitclk(i2s_dev)		\
+#define __i2s_stop_ibitclk(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_ISTPBK_MASK,I2S_ISTPBK_OFFSET)
-#define __i2s_start_ibitclk(i2s_dev)		\
+#define __i2s_start_ibitclk(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_ISTPBK_MASK,I2S_ISTPBK_OFFSET)
 
-#define __i2s_enable_sysclk_output(i2s_dev)	\
+#define __i2s_enable_sysclk_output(i2s_dev)				\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_ESCLK_MASK,I2S_ESCLK_OFFSET)
-#define __i2s_disable_sysclk_output(i2s_dev)	\
+#define __i2s_disable_sysclk_output(i2s_dev)				\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_ESCLK_MASK,I2S_ESCLK_OFFSET)
-#define __i2s_select_i2s(i2s_dev)		\
+#define __i2s_select_i2s(i2s_dev)					\
 	i2s_set_reg(i2s_dev, I2SCR,0,I2S_AMSL_MASK,I2S_AMSL_OFFSET)
-#define __i2s_select_msbjustified(i2s_dev)	\
+#define __i2s_select_msbjustified(i2s_dev)				\
 	i2s_set_reg(i2s_dev, I2SCR,1,I2S_AMSL_MASK,I2S_AMSL_OFFSET)
 
 
@@ -520,21 +516,21 @@ do {	\
 #define I2S_RFL_OFFSET		(24)
 #define I2S_RFL_MASK		(0x3f << I2S_RFL_OFFSET)
 
-#define __i2s_clear_tur(i2s_dev)		\
+#define __i2s_clear_tur(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICSR,0,I2S_TUR_MASK,I2S_TUR_OFFSET)
-#define __i2s_test_tur(i2s_dev)			\
+#define __i2s_test_tur(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_TUR_MASK,I2S_TUR_OFFSET)
-#define __i2s_clear_ror(i2s_dev)		\
+#define __i2s_clear_ror(i2s_dev)					\
 	i2s_set_reg(i2s_dev, AICSR,0,I2S_ROR_MASK,I2S_ROR_OFFSET)
-#define __i2s_test_ror(i2s_dev)			\
+#define __i2s_test_ror(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_ROR_MASK,I2S_ROR_OFFSET)
-#define __i2s_test_tfs(i2s_dev)			\
+#define __i2s_test_tfs(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_TFS_MASK,I2S_TFS_OFFSET)
-#define __i2s_test_rfs(i2s_dev)			\
+#define __i2s_test_rfs(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_RFS_MASK,I2S_RFS_OFFSET)
-#define __i2s_test_tfl(i2s_dev)			\
+#define __i2s_test_tfl(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_TFL_MASK,I2S_TFL_OFFSET)
-#define __i2s_test_rfl(i2s_dev)			\
+#define __i2s_test_rfl(i2s_dev)						\
 	i2s_get_reg(i2s_dev, AICSR,I2S_RFL_MASK,I2S_RFL_OFFSET)
 /* I2SSR */
 #define I2S_BSY_OFFSET		(2)
@@ -546,21 +542,21 @@ do {	\
 #define I2S_CHBSY_OFFSET	(5)
 #define I2S_CHBSY_MASK		(0X1 << I2S_CHBSY_OFFSET)
 
-#define __i2s_is_busy(i2s_dev)			\
+#define __i2s_is_busy(i2s_dev)						\
 	i2s_get_reg(i2s_dev, I2SSR,I2S_BSY_MASK,I2S_BSY_OFFSET)
-#define __i2s_rx_is_busy(i2s_dev)		\
+#define __i2s_rx_is_busy(i2s_dev)					\
 	i2s_get_reg(i2s_dev, I2SSR,I2S_RBSY_MASK,I2S_RBSY_OFFSET)
-#define __i2s_tx_is_busy(i2s_dev)		\
+#define __i2s_tx_is_busy(i2s_dev)					\
 	i2s_get_reg(i2s_dev, I2SSR,I2S_TBSY_MASK,I2S_TBSY_OFFSET)
-#define __i2s_channel_is_busy(i2s_dev)		\
+#define __i2s_channel_is_busy(i2s_dev)					\
 	i2s_get_reg(i2s_dev, I2SSR,I2S_CHBSY_MASK,I2S_CHBSY_OFFSET)
 /* AICDR */
 #define I2S_DATA_OFFSET		(0)
 #define I2S_DATA_MASK		(0xffffff << I2S_DATA_OFFSET)
 
-#define __i2s_write_tfifo(i2s_dev, v)		\
+#define __i2s_write_tfifo(i2s_dev, v)					\
 	i2s_set_reg(i2s_dev, AICDR,v,I2S_DATA_MASK,I2S_DATA_OFFSET)
-#define __i2s_read_rfifo(i2s_dev)		\
+#define __i2s_read_rfifo(i2s_dev)					\
 	i2s_get_reg(i2s_dev, AICDR,I2S_DATA_MASK,I2S_DATA_OFFSET)
 
 
@@ -568,16 +564,16 @@ do {	\
 #define I2S_LOOP_DATA_OFFSET	(0)
 #define I2S_LOOP_DATA_MASK	(0xffffff << I2S_LOOP_DATA_OFFSET)
 
-#define __i2s_read_loopdata(i2s_dev) \
+#define __i2s_read_loopdata(i2s_dev)					\
 	i2s_get_reg(i2s_dev, AICLR,I2S_LOOP_DATA_MASK,I2S_LOOP_DATA_OFFSET)
 
 /*AICTFLR*/
 #define I2S_TFIFO_LOOP_OFFSET	(0)
 #define I2S_TFIFO_LOOP_MASK	(0xf << I2S_TFIFO_LOOP_OFFSET)
 
-#define __i2s_read_tfifo_loop(i2s_dev)\
+#define __i2s_read_tfifo_loop(i2s_dev)					\
 	i2s_get_reg(i2s_dev, AICTFLR, I2S_TFIFO_LOOP_MASK, I2S_LOOP_DATA_OFFSET)
-#define __i2s_write_tfifo_loop(i2s_dev, v) \
+#define __i2s_write_tfifo_loop(i2s_dev, v 				\
 	i2s_set_reg(i2s_dev, AICTFLR, v, I2S_TFIFO_LOOP_MASK, I2S_LOOP_DATA_OFFSET)
 
 /* I2SDIV */

@@ -76,22 +76,22 @@ static struct resource jz_avpu_irq_resources[] = {			\
 		.flags          = IORESOURCE_MEM,			\
 	},								\
 	[1] = {								\
-		.start          = 32+30+8,		\
-		.end            = 32+30+8,	\
+		.start          = 32+30+8,				\
+		.end            = 32+30+8,				\
 		.flags          = IORESOURCE_IRQ,			\
 	},
 };
 
-struct platform_device jz_avpu_irq_device = {					\
+struct platform_device jz_avpu_irq_device = {				\
 	.name = "avpu",							\
-	.id = 0,								\
-	.dev = {								\
-		.dma_mask				= &avpu_dmamask,			\
-		.coherent_dma_mask      = 0xffffffff,				\
-		.release                = jz_avpu_release,				\
-	},									\
-	.num_resources  = ARRAY_SIZE(jz_avpu_irq_resources),			\
-	.resource       = jz_avpu_irq_resources,				\
+	.id = 0,							\
+	.dev = {							\
+		.dma_mask               = &avpu_dmamask,		\
+		.coherent_dma_mask      = 0xffffffff,			\
+		.release                = jz_avpu_release,		\
+	},								\
+	.num_resources  = ARRAY_SIZE(jz_avpu_irq_resources),		\
+	.resource       = jz_avpu_irq_resources,			\
 };
 
 int channel_is_ready(struct avpu_codec_chan *chan)
@@ -349,25 +349,25 @@ static long avpu_codec_ioctl(struct file *filp, unsigned int cmd,
 	struct avpu_codec_desc *codec = chan->codec;
 
 	switch (cmd) {
-	case GET_DMA_MMAP:
-		return avpu_ioctl_get_dma_mmap(codec->device, chan, arg);
-	case GET_DMA_FD:
-		return avpu_ioctl_get_dma_fd(codec->device, arg);
-	case GET_DMA_PHY:
-		return avpu_ioctl_get_dmabuf_dma_addr(codec->device, arg);
-	case AL_CMD_UNBLOCK_CHANNEL:
-		return unblock_channel(chan);
-	case AL_CMD_IP_WAIT_IRQ:
-		return wait_irq(chan, arg);
-	case AL_CMD_IP_READ_REG:
-		return read_reg(chan, arg);
-	case AL_CMD_IP_WRITE_REG:
-		return write_reg(chan, arg);
-	case JZ_CMD_FLUSH_CACHE:
-		return jz_cmd_flush_cache(arg);
-	default:
-		avpu_err("Unknown ioctl: 0x%.8X\n", cmd);
-		return -EINVAL;
+		case GET_DMA_MMAP:
+			return avpu_ioctl_get_dma_mmap(codec->device, chan, arg);
+		case GET_DMA_FD:
+			return avpu_ioctl_get_dma_fd(codec->device, arg);
+		case GET_DMA_PHY:
+			return avpu_ioctl_get_dmabuf_dma_addr(codec->device, arg);
+		case AL_CMD_UNBLOCK_CHANNEL:
+			return unblock_channel(chan);
+		case AL_CMD_IP_WAIT_IRQ:
+			return wait_irq(chan, arg);
+		case AL_CMD_IP_READ_REG:
+			return read_reg(chan, arg);
+		case AL_CMD_IP_WRITE_REG:
+			return write_reg(chan, arg);
+		case JZ_CMD_FLUSH_CACHE:
+			return jz_cmd_flush_cache(arg);
+		default:
+			avpu_err("Unknown ioctl: 0x%.8X\n", cmd);
+			return -EINVAL;
 	}
 }
 

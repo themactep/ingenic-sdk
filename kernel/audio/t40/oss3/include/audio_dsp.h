@@ -116,7 +116,7 @@ struct audio_dsp_device {
 	/* task manage */
 	struct hrtimer hr_timer;
 	ktime_t expires;
-	atomic_t	timer_stopped;
+	atomic_t timer_stopped;
 	struct work_struct workqueue;
 
 

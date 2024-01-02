@@ -57,11 +57,11 @@ struct avpu_codec_desc {
 	spinlock_t i_lock;
 	struct kmem_cache *cache;
 	int minor;
-	struct clk          *clk;
-	struct clk          *clk_mux;
-	struct clk          *clk_gate;
-	struct clk          *clk_gate_ivdc;
-	struct clk          *ahb1_gate;
+	struct clk *clk;
+	struct clk *clk_mux;
+	struct clk *clk_gate;
+	struct clk *clk_gate_ivdc;
+	struct clk *ahb1_gate;
 };
 
 struct avpu_dma_buf_mmap {
@@ -79,12 +79,9 @@ struct avpu_codec_chan {
 	struct avpu_codec_desc *codec;
 };
 
-int avpu_codec_bind_channel(struct avpu_codec_chan *chan,
-			    struct inode *inode);
+int avpu_codec_bind_channel(struct avpu_codec_chan *chan, struct inode *inode);
 void avpu_codec_unbind_channel(struct avpu_codec_chan *chan);
-int avpu_codec_read_register(struct avpu_codec_chan *chan,
-			     struct avpu_reg *reg);
-void avpu_codec_write_register(struct avpu_codec_chan *chan,
-			       struct avpu_reg *reg);
+int avpu_codec_read_register(struct avpu_codec_chan *chan, struct avpu_reg *reg);
+void avpu_codec_write_register(struct avpu_codec_chan *chan, struct avpu_reg *reg);
 irqreturn_t avpu_irq_handler(int irq, void *data);
 irqreturn_t avpu_hardirq_handler(int irq, void *data);

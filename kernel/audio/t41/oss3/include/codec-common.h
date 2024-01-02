@@ -58,7 +58,7 @@ struct codec_sign_configure {
 	enum codec_data_mode data;
 	enum codec_sequence_mode seq;
 	enum codec_sync_polarity sync;
-	unsigned int rate2mclk;				// this is the coefficient rate to mclk, the default value is 256.
+	unsigned int rate2mclk; // this is the coefficient rate to mclk, the default value is 256.
 };
 
 struct audio_data_type {
@@ -106,19 +106,19 @@ struct codec_attributes {
 	struct file_operations *debug_ops;
 	struct codec_endpoint *record;
 	struct codec_endpoint *playback;
-	void *host_priv;	/* save this module pointer */
-	void *dev_priv;		/* save device message */
+	void *host_priv; /* save this module pointer */
+	void *dev_priv; /* save device message */
 };
 
 static inline void set_codec_devdata(struct codec_attributes *attrs, void *priv)
 {
-	if(attrs)
+	if (attrs)
 		attrs->dev_priv = priv;
 }
 
 static inline void *get_codec_devdata(struct codec_attributes *attrs)
 {
-	if(attrs)
+	if (attrs)
 		return attrs->dev_priv;
 	else
 		return NULL;
@@ -126,13 +126,13 @@ static inline void *get_codec_devdata(struct codec_attributes *attrs)
 
 static inline void set_codec_hostdata(struct codec_attributes *attrs, void *priv)
 {
-	if(attrs)
+	if (attrs)
 		attrs->host_priv = priv;
 }
 
 static inline void *get_codec_hostdata(struct codec_attributes *attrs)
 {
-	if(attrs)
+	if (attrs)
 		return attrs->host_priv;
 	else
 		return NULL;

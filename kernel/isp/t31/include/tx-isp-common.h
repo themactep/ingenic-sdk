@@ -389,8 +389,8 @@ struct tx_isp_sensor_attribute{
 		char string[64];
 	};
 	enum tx_sensor_data_type data_type;
-	unsigned int max_again;	//the format is .16
-	unsigned int max_dgain;	//the format is .16
+	unsigned int max_again; //the format is .16
+	unsigned int max_dgain; //the format is .16
 	unsigned int again;
 	unsigned int dgain;
 	unsigned short min_integration_time;
@@ -409,9 +409,9 @@ struct tx_isp_sensor_attribute{
 	unsigned short min_integration_time_short;
 	unsigned short max_integration_time_short;
 	unsigned int integration_time_short;
-	unsigned int max_again_short;	//the format is .16
+	unsigned int max_again_short; //the format is .16
 	unsigned int again_short;
-	unsigned int wdr_cache;		//the format is .16
+	unsigned int wdr_cache; //the format is .16
 	unsigned int expo;
 	unsigned int expo_fs;
 	void *priv; /* point to struct tx_isp_sensor_board_info */
@@ -618,8 +618,8 @@ struct tx_isp_video_in {
 	struct v4l2_mbus_framefmt mbus;
 	unsigned int mbus_change;
 	struct tx_isp_sensor_attribute *attr;
-	unsigned int vi_max_width;	//the max width of sensor output setting
-	unsigned int vi_max_height;	//the max height of sensor output setting
+	unsigned int vi_max_width; //the max width of sensor output setting
+	unsigned int vi_max_height; //the max height of sensor output setting
 	unsigned int fps;
 	int grp_id;
 	unsigned int shvflip;

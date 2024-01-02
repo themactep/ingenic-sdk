@@ -36,7 +36,7 @@
 
 struct platform_device pwm_device = {
 	.name = "pwm-jz",
-	.id   = -1,
+	.id = -1,
 };
 
 
