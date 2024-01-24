@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------------ //
 //     This confidential and proprietary software/information may be used only    //
 //        as authorized by a licensing agreement from Apical Limited              //
-/                                                                                 //
+//                                                                                //
 //                     (C) COPYRIGHT 2014 Apical Limited                          //
 //                           ALL RIGHTS RESERVED                                  //
 //                                                                                //
