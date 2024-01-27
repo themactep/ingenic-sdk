@@ -23,7 +23,6 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-
 #define C2399_CHIP_ID_H			(0x02)
 #define C2399_CHIP_ID_L			(0x0b)
 #define C2399_REG_END			0xFFFF
@@ -235,13 +234,13 @@ struct tx_isp_sensor_attribute c2399_attr={
 	.total_width = 1980,
 	.total_height = 1325,
 	.max_integration_time = 1321,
+	.one_line_expr_in_us = 30,
 	.integration_time_apply_delay = 0,
 	.again_apply_delay = 0,
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = c2399_alloc_again,
 	.sensor_ctrl.alloc_dgain = c2399_alloc_dgain,
-	.one_line_expr_in_us = 30,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	//void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 
@@ -578,17 +577,17 @@ static struct regval_list c2399_stream_on_dvp[] = {
 };
 
 static struct regval_list c2399_stream_off_dvp[] = {
-	{0x0100,0x00},
+	{0x0100, 0x00},
 	{C2399_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list c2399_stream_on_mipi[] = {
-	{0x0100,0x01},
+	{0x0100, 0x01},
 	{C2399_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list c2399_stream_off_mipi[] = {
-	{0x0100,0x00},
+	{0x0100, 0x00},
 	{C2399_REG_END, 0x00},	/* END MARKER */
 };
 
@@ -770,9 +769,11 @@ static int c2399_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
+
 	ret = c2399_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
@@ -784,16 +785,16 @@ static int c2399_s_stream(struct tx_isp_subdev *sd, int enable)
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = c2399_write_array(sd, c2399_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = c2399_write_array(sd, c2399_stream_on_mipi);
 		}
 		pr_debug("c2399 stream on\n");
 	} else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = c2399_write_array(sd, c2399_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = c2399_write_array(sd, c2399_stream_off_mipi);
 		}
 		pr_debug("c2399 stream off\n");
@@ -840,6 +841,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += c2399_read(sd, 0x0343, &tmp);
 	if(ret < 0)
 		return -1;
+
 	hts = (hts << 8) + tmp;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
@@ -847,6 +849,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += c2399_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if(ret < 0)
 		return -1;
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -854,7 +857,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	return 0;
+	return ret;
 }
 
 static int c2399_set_mode(struct tx_isp_subdev *sd, int value)
@@ -882,29 +885,29 @@ static int c2399_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"c2399_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"c2399_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -915,12 +918,13 @@ static int c2399_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	ISP_WARNING("c2399 chip found @ 0x%02x (%s),version %s\n", client->addr, client->adapter->name,SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "c2399", sizeof("c2399"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-	return 0;
+
+	return ret;
 }
 
 static int c2399_set_vflip(struct tx_isp_subdev *sd, int enable)
@@ -932,7 +936,7 @@ static int c2399_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret = c2399_read(sd, 0x0101, &val);
 
-	if(enable & 0x2) {
+	if (enable & 0x2) {
 		val |= 0x02;
 		startx = 0x05;
 		starty = 0x0f;
@@ -963,52 +967,52 @@ static int c2399_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	     	ret = c2399_set_expo(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if(arg)
+		//if (arg)
 		//	ret = c2399_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if(arg)
+		//if (arg)
 		//	ret = c2399_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = c2399_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = c2399_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = c2399_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = c2399_write_array(sd, c2399_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = c2399_write_array(sd, c2399_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = c2399_write_array(sd, c2399_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = c2399_write_array(sd, c2399_stream_on_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
+		if (arg)
 			ret = c2399_set_fps(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = c2399_set_vflip(sd, *(int*)arg);
 		break;
 	default:
@@ -1118,7 +1122,7 @@ static int c2399_probe(struct i2c_client *client, const struct i2c_device_id *id
 	*/
 	c2399_attr.dbus_type = data_interface;
 
-	if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
+	if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		wsize = &c2399_win_sizes[0];
 		memcpy((void*)(&(c2399_attr.mipi)),(void*)(&c2399_mipi),sizeof(c2399_mipi));
 	} else {
@@ -1196,7 +1200,7 @@ static __init int init_c2399(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init c2399 dirver.\n");
 		return -1;
 	}

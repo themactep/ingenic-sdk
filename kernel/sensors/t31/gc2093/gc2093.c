@@ -26,14 +26,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define GC2093_CHIP_ID_H	(0x20)
-#define GC2093_CHIP_ID_L	(0x93)
-#define GC2093_REG_END	0xffff
-#define GC2093_REG_DELAY   0x0000
-#define GC2093_SUPPORT_30FPS_SCLK (58725000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220408a"
+#define GC2093_CHIP_ID_H		(0x20)
+#define GC2093_CHIP_ID_L		(0x93)
+#define GC2093_REG_END			0xffff
+#define GC2093_REG_DELAY		0x0000
+#define GC2093_SUPPORT_30FPS_SCLK	(58725000)
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_VERSION			"H20220408a"
 #ifdef FAST_AE
 #define GC2093_FAST_AE 0xfffe
 unsigned long long time_reg = 0;
@@ -89,36 +89,35 @@ struct again_lut {
 	unsigned char regb5;
 	unsigned char regb6;
 	unsigned char regb7;
-
 	unsigned int gain;
 };
 
 struct again_lut gc2093_again_lut[] = {
-	{0x0,0x00,0x00,0x01,0x00,0x68,0x07,0x00,0xf8,0},
-	{0x1,0x00,0x10,0x01,0x0c,0x68,0x07,0x00,0xf8,14997},
-	{0x2,0x00,0x20,0x01,0x1b,0x6c,0x07,0x00,0xf8,32233},
-	{0x3,0x00,0x30,0xf01,0x2c,0x6c,0x07,0x00,0xf8,46808},
-	{0x4,0x00,0x40,0x01,0x3f,0x7c,0x07,0x00,0xf8,60995},
-	{0x5,0x00,0x50,0x02,0x16,0x7c,0x07,0x00,0xf8,75348},
-	{0x6,0x00,0x60,0x02,0x35,0x7c,0x08,0x00,0xf9,90681},
-	{0x7,0x00,0x70,0x03,0x16,0x7c,0x0b,0x00,0xfc,104361},
-	{0x8,0x00,0x80,0x04,0x02,0x7c,0x0d,0x00,0xfe,118021},
-	{0x9,0x00,0x90,0x04,0x31,0x7c,0x0f,0x08,0x00,131438},
-	{0xA,0x00,0xa0,0x05,0x32,0x7c,0x11,0x08,0x02,145749},
-	{0xB,0x00,0xb0,0x06,0x35,0x7c,0x14,0x08,0x05,159553},
-	{0xC,0x00,0xc0,0x08,0x04,0x7c,0x16,0x08,0x07,172553},
-	{0xD,0x00,0x5a,0x09,0x19,0x7c,0x18,0x08,0x09,183132},
-	{0xE,0x00,0x83,0x0b,0x0f,0x7c,0x1b,0x08,0x0c,198614},
-	{0xF,0x00,0x93,0x0d,0x12,0x7c,0x1e,0x08,0x0f,212697},
-	{0x10,0x00,0x84,0x10,0x00,0x7c,0x22,0x08,0x13,226175},
-	{0x11,0x00,0x94,0x12,0x3a,0x7c,0x26,0x08,0x17,240788},
-	{0x12,0x00,0x5d,0x1a,0x02,0x7c,0x30,0x08,0x21,271536},
-	{0x13,0x00,0x9b,0x1b,0x20,0x7c,0x30,0x08,0x21,272451},
-	{0x14,0x00,0x8c,0x20,0x0f,0x7c,0x35,0x08,0x26,287144},
-	{0x15,0x00,0x9c,0x26,0x07,0x7c,0x3b,0x08,0x2c,302425},
-	{0x16,0x00,0xB6,0x36,0x21,0x7c,0x43,0x08,0x34,334228},
-	{0x17,0x00,0xad,0x37,0x3a,0x7c,0x43,0x08,0x34,351574},
-	{0x18,0x00,0xbd,0x3d,0x02,0x7c,0x43,0x08,0x34,367506},
+	{0x00, 0x00, 0x00, 0x01, 0x00, 0x68, 0x07, 0x00, 0xf8, 0},
+	{0x01, 0x00, 0x10, 0x01, 0x0c, 0x68, 0x07, 0x00, 0xf8, 14997},
+	{0x02, 0x00, 0x20, 0x01, 0x1b, 0x6c, 0x07, 0x00, 0xf8, 32233},
+	{0x03, 0x00, 0x30, 0xf01, 0x2c, 0x6c, 0x07, 0x00, 0xf8, 46808},
+	{0x04, 0x00, 0x40, 0x01, 0x3f, 0x7c, 0x07, 0x00, 0xf8, 60995},
+	{0x05, 0x00, 0x50, 0x02, 0x16, 0x7c, 0x07, 0x00, 0xf8, 75348},
+	{0x06, 0x00, 0x60, 0x02, 0x35, 0x7c, 0x08, 0x00, 0xf9, 90681},
+	{0x07, 0x00, 0x70, 0x03, 0x16, 0x7c, 0x0b, 0x00, 0xfc, 104361},
+	{0x08, 0x00, 0x80, 0x04, 0x02, 0x7c, 0x0d, 0x00, 0xfe, 118021},
+	{0x09, 0x00, 0x90, 0x04, 0x31, 0x7c, 0x0f, 0x08, 0x00, 131438},
+	{0x0A, 0x00, 0xa0, 0x05, 0x32, 0x7c, 0x11, 0x08, 0x02, 145749},
+	{0x0B, 0x00, 0xb0, 0x06, 0x35, 0x7c, 0x14, 0x08, 0x05, 159553},
+	{0x0C, 0x00, 0xc0, 0x08, 0x04, 0x7c, 0x16, 0x08, 0x07, 172553},
+	{0x0D, 0x00, 0x5a, 0x09, 0x19, 0x7c, 0x18, 0x08, 0x09, 183132},
+	{0x0E, 0x00, 0x83, 0x0b, 0x0f, 0x7c, 0x1b, 0x08, 0x0c, 198614},
+	{0x0F, 0x00 , 0x93, 0x0d, 0x12, 0x7c, 0x1e, 0x08, 0x0f, 212697},
+	{0x10, 0x00, 0x84, 0x10, 0x00, 0x7c, 0x22, 0x08, 0x13, 226175},
+	{0x11, 0x00, 0x94, 0x12, 0x3a, 0x7c, 0x26, 0x08, 0x17, 240788},
+	{0x12, 0x00, 0x5d, 0x1a, 0x02, 0x7c, 0x30, 0x08, 0x21, 271536},
+	{0x13, 0x00, 0x9b, 0x1b, 0x20, 0x7c, 0x30, 0x08, 0x21, 272451},
+	{0x14, 0x00, 0x8c, 0x20, 0x0f, 0x7c, 0x35, 0x08, 0x26, 287144},
+	{0x15, 0x00, 0x9c, 0x26, 0x07, 0x7c, 0x3b, 0x08, 0x2c, 302425},
+	{0x16, 0x00, 0xB6, 0x36, 0x21, 0x7c, 0x43, 0x08, 0x34, 334228},
+	{0x17, 0x00, 0xad, 0x37, 0x3a, 0x7c, 0x43, 0x08, 0x34, 351574},
+	{0x18, 0x00, 0xbd, 0x3d, 0x02, 0x7c, 0x43, 0x08, 0x34, 367506},
 };
 
 struct tx_isp_sensor_attribute gc2093_attr;
@@ -128,10 +127,10 @@ unsigned int gc2093_alloc_integration_time(unsigned int it, unsigned char shift,
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 #if 0
-	if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
+	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		if (expo % 2 == 0)
 			expo = expo - 1;
-		if(expo < gc2093_attr.min_integration_time)
+		if (expo < gc2093_attr.min_integration_time)
 			expo = 3;
 	}
 	isp_it = expo << shift;
@@ -148,11 +147,11 @@ unsigned int gc2093_alloc_integration_time_short(unsigned int it, unsigned char 
 #if 0
 	if (expo % 2 == 0)
 		expo = expo - 1;
-	if(expo < gc2093_attr.min_integration_time_short)
+	if (expo < gc2093_attr.min_integration_time_short)
 		expo = 3;
 	isp_it = expo << shift;
 	expo = (expo - 1) / 2;
-	if(expo < 0)
+	if (expo < 0)
 		expo = 0;
 #endif
 	*sensor_it = expo;
@@ -163,20 +162,20 @@ unsigned int gc2093_alloc_integration_time_short(unsigned int it, unsigned char 
 unsigned int gc2093_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct again_lut *lut = gc2093_again_lut;
-	while(lut->gain <= gc2093_attr.max_again){
-		if(isp_gain == 0) {
+
+	while (lut->gain <= gc2093_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return lut[0].gain;
-		} else if(isp_gain < lut->gain){
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->index;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == gc2093_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == gc2093_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->index;
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
 
@@ -186,22 +185,22 @@ unsigned int gc2093_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 unsigned int gc2093_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct again_lut *lut = gc2093_again_lut;
+
 	while(lut->gain <= gc2093_attr.max_again_short) {
-		if(isp_gain == 0) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->gain;
 			return (lut - 1)->gain;
 		}
 		else{
-			if((lut->gain == gc2093_attr.max_again_short) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == gc2093_attr.max_again_short) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->index;
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
 
@@ -218,7 +217,7 @@ struct tx_isp_mipi_bus gc2093_mipi_linear = {
 	.clk = 392,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -271,7 +270,7 @@ struct tx_isp_mipi_bus gc2093_mipi_wdr = {
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-struct tx_isp_sensor_attribute gc2093_attr={
+struct tx_isp_sensor_attribute gc2093_attr = {
 	.name = "gc2093",
 	.chip_id = 0x2093,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -328,143 +327,145 @@ struct tx_isp_sensor_attribute gc2093_attr={
 	.sensor_ctrl.alloc_dgain = gc2093_alloc_dgain,
 	.sensor_ctrl.alloc_integration_time = gc2093_alloc_integration_time,
 	.sensor_ctrl.alloc_integration_time_short = gc2093_alloc_integration_time_short,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
+
 #if 0
-static struct regval_list gc2093_init_regs_1920_1080_30fps_mipi[]={
-	{0x03fe,0xf0},
-	{0x03fe,0xf0},
-	{0x03fe,0xf0},
-	{0x03fe,0x00},
-	{0x03f2,0x00},
-	{0x03f3,0x00},
-	{0x03f4,0x36},
-	{0x03f5,0xc0},
-	{0x03f6,0x0A},
-	{0x03f7,0x01},
-	{0x03f8,0x1d},
-	{0x03f9,0x10},
-	{0x03fc,0x8e},
+static struct regval_list gc2093_init_regs_1920_1080_30fps_mipi[] = {
+	{0x03fe, 0xf0},
+	{0x03fe, 0xf0},
+	{0x03fe, 0xf0},
+	{0x03fe, 0x00},
+	{0x03f2, 0x00},
+	{0x03f3, 0x00},
+	{0x03f4, 0x36},
+	{0x03f5, 0xc0},
+	{0x03f6, 0x0A},
+	{0x03f7, 0x01},
+	{0x03f8, 0x1d},
+	{0x03f9, 0x10},
+	{0x03fc, 0x8e},
 	/****CISCTL & ANALOG****/
-	{0x0087,0x18},
-	{0x00ee,0x30},
-	{0x00d0,0xbf},
-	{0x01a0,0x00},
-	{0x01a4,0x40},
-	{0x01a5,0x40},
-	{0x01a6,0x40},
-	{0x01af,0x09},
-	{0x0001,0x00},
-	{0x0002,0x02},
-	{0x0003,0x04},
-	{0x0004,0x00},
-	{0x0005,0x02},
-	{0x0006,0xd5},
-	{0x0007,0x00},
-//	{0x0008,0x11},
-	{0x0008,0xf2},//jz vb=242
-	{0x0009,0x00},
-	{0x000a,0x02},
-	{0x000b,0x00},
-	{0x000c,0x04},
-	{0x000d,0x04},
-	{0x000e,0x40},
-	{0x000f,0x07},
-	{0x0010,0x8c},
-	{0x0013,0x15},
-//	{0x0018,0x00},
-	{0x0019,0x0c},
-	{0x0041,0x05},
-	{0x0042,0x46},
-	{0x0053,0x60},
-	{0x008d,0x92},
-	{0x0090,0x00},
-	{0x00c7,0xe1},
-	{0x001b,0x73},
-	{0x0028,0x0d},
-	{0x0029,0x24},
-	{0x002b,0x04},
-	{0x002e,0x23},
-	{0x0037,0x03},
-	{0x0043,0x04},
-	{0x0044,0x38},
-	{0x004a,0x01},
-	{0x004b,0x28},
-	{0x0055,0x38},
-	{0x006b,0x44},
-	{0x0077,0x00},
-	{0x0078,0x20},
-	{0x007c,0xa1},
-	{0x00ce,0x7c},
-	{0x00d3,0xd4},
-	{0x00e6,0x50},
+	{0x0087, 0x18},
+	{0x00ee, 0x30},
+	{0x00d0, 0xbf},
+	{0x01a0, 0x00},
+	{0x01a4, 0x40},
+	{0x01a5, 0x40},
+	{0x01a6, 0x40},
+	{0x01af, 0x09},
+	{0x0001, 0x00},
+	{0x0002, 0x02},
+	{0x0003, 0x04},
+	{0x0004, 0x00},
+	{0x0005, 0x02},
+	{0x0006, 0xd5},
+	{0x0007, 0x00},
+//	{0x0008, 0x11},
+	{0x0008, 0xf2},//jz vb=242
+	{0x0009, 0x00},
+	{0x000a, 0x02},
+	{0x000b, 0x00},
+	{0x000c, 0x04},
+	{0x000d, 0x04},
+	{0x000e, 0x40},
+	{0x000f, 0x07},
+	{0x0010, 0x8c},
+	{0x0013, 0x15},
+//	{0x0018, 0x00},
+	{0x0019, 0x0c},
+	{0x0041, 0x05},
+	{0x0042, 0x46},
+	{0x0053, 0x60},
+	{0x008d, 0x92},
+	{0x0090, 0x00},
+	{0x00c7, 0xe1},
+	{0x001b, 0x73},
+	{0x0028, 0x0d},
+	{0x0029, 0x24},
+	{0x002b, 0x04},
+	{0x002e, 0x23},
+	{0x0037, 0x03},
+	{0x0043, 0x04},
+	{0x0044, 0x38},
+	{0x004a, 0x01},
+	{0x004b, 0x28},
+	{0x0055, 0x38},
+	{0x006b, 0x44},
+	{0x0077, 0x00},
+	{0x0078, 0x20},
+	{0x007c, 0xa1},
+	{0x00ce, 0x7c},
+	{0x00d3, 0xd4},
+	{0x00e6, 0x50},
 	/*gain*/
-	{0x00b6,0xc0},
-	{0x00b0,0x60},
-	{0x00b3,0x00},
-	{0x00b8,0x01},
-	{0x00b9,0x00},
-	{0x00b1,0x01},
-	{0x00b2,0x00},
+	{0x00b6, 0xc0},
+	{0x00b0, 0x60},
+	{0x00b3, 0x00},
+	{0x00b8, 0x01},
+	{0x00b9, 0x00},
+	{0x00b1, 0x01},
+	{0x00b2, 0x00},
 	/*isp*/
-	{0x0102,0x89},
-	{0x0104,0x01},
-	{0x0158,0x00},
+	{0x0102, 0x89},
+	{0x0104, 0x01},
+	{0x0158, 0x00},
 	/*dark sun*/
-	{0x0123,0x08},
-	{0x0123,0x00},
-	{0x0120,0x00},
-	{0x0121,0x00},
-	{0x0122,0x0f},
-	{0x0124,0x03},
-	{0x0125,0xff},
-	{0x0126,0x3c},
-	{0x001a,0x8c},
-	{0x00c6,0xe0},
+	{0x0123, 0x08},
+	{0x0123, 0x00},
+	{0x0120, 0x00},
+	{0x0121, 0x00},
+	{0x0122, 0x0f},
+	{0x0124, 0x03},
+	{0x0125, 0xff},
+	{0x0126, 0x3c},
+	{0x001a, 0x8c},
+	{0x00c6, 0xe0},
 	/*blk*/
-	{0x0026,0x30},
-	{0x0142,0x00},
-	{0x0149,0x1e},
-	{0x014a,0x07},
-	{0x014b,0x80},
-	{0x0155,0x07},
-	{0x0414,0x7e},
-	{0x0415,0x7e},
-	{0x0416,0x7e},
-	{0x0417,0x7e},
-	{0x04e0,0x18},
+	{0x0026, 0x30},
+	{0x0142, 0x00},
+	{0x0149, 0x1e},
+	{0x014a, 0x07},
+	{0x014b, 0x80},
+	{0x0155, 0x07},
+	{0x0414, 0x7e},
+	{0x0415, 0x7e},
+	{0x0416, 0x7e},
+	{0x0417, 0x7e},
+	{0x04e0, 0x18},
 	/*window*/
-	{0x0192,0x02},
-	{0x0194,0x03},
-	{0x0195,0x04},
-	{0x0196,0x38},
-	{0x0197,0x07},
-	{0x0198,0x80},
-	{0x01b0,0x01},
-	{0x01b1,0x00},
-	{0x01b2,0x20},
-	{0x01b3,0x00},
-	{0x01b4,0xf0},
-	{0x01b5,0x80},
-	{0x01b6,0x05},
-	{0x01b8,0x01},
-	{0x01b9,0xe0},
-	{0x01ba,0x01},
-	{0x01bb,0x80},
+	{0x0192, 0x02},
+	{0x0194, 0x03},
+	{0x0195, 0x04},
+	{0x0196, 0x38},
+	{0x0197, 0x07},
+	{0x0198, 0x80},
+	{0x01b0, 0x01},
+	{0x01b1, 0x00},
+	{0x01b2, 0x20},
+	{0x01b3, 0x00},
+	{0x01b4, 0xf0},
+	{0x01b5, 0x80},
+	{0x01b6, 0x05},
+	{0x01b8, 0x01},
+	{0x01b9, 0xe0},
+	{0x01ba, 0x01},
+	{0x01bb, 0x80},
 	/****DVP & MIPI****/
-	{0x019a ,0x06},
-	{0x007b ,0x2a},
-	{0x0023 ,0x2d},
-	{0x0201 ,0x27},
-	{0x0202 ,0x56},
-	{0x0203 ,0xb6},
-	{0x0212 ,0x80},
-	{0x0213 ,0x07},
-	{0x0215 ,0x12},
-	{0x003e ,0x91},
+	{0x019a , 0x06},
+	{0x007b , 0x2a},
+	{0x0023 , 0x2d},
+	{0x0201 , 0x27},
+	{0x0202 , 0x56},
+	{0x0203 , 0xb6},
+	{0x0212 , 0x80},
+	{0x0213 , 0x07},
+	{0x0215 , 0x12},
+	{0x003e , 0x91},
 	{GC2093_REG_END, 0x00}, /* END MARKER */
 };
 #endif
+
 static struct regval_list gc2093_init_regs_1920_1080_30fps_mipi_lin[] = {
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
@@ -746,144 +747,145 @@ static struct regval_list gc2093_init_regs_1920_1080_15fps_mipi_wdr[] = {
 	{0x003e, 0x91},
 	{GC2093_REG_END, 0x00}, /* END MARKER */
 };
+
 #ifdef FAST_AE
 static struct regval_list gc2093_init_regs_1920_1080_30fps_mipi_ae[] = {
 /****system****/
-	{0x03fe,0xf0},
-	{0x03fe,0xf0},
-	{0x03fe,0xf0},
-	{0x03fe,0x10},
-	{0x03f2,0x00},
-	{0x03f3,0x00},
-	{0x03f4,0x36},
-	{0x03f5,0xc0},
-	{0x03f6,0x0c},//0A
-	{0x03f7,0x01},
-	{0x03f8,0x63},//2C
-	{0x03f9,0x80},
-	{0x03fc,0x8e},
+	{0x03fe, 0xf0},
+	{0x03fe, 0xf0},
+	{0x03fe, 0xf0},
+	{0x03fe, 0x10},
+	{0x03f2, 0x00},
+	{0x03f3, 0x00},
+	{0x03f4, 0x36},
+	{0x03f5, 0xc0},
+	{0x03f6, 0x0c},//0A
+	{0x03f7, 0x01},
+	{0x03f8, 0x63},//2C
+	{0x03f9, 0x80},
+	{0x03fc, 0x8e},
 
-	{0x01e1,0x08},//qcifnum
-	{0x0183,0x01},
-	{0x0187,0x51},//50
-	{0x01a0,0x00},//awb_en
-	{0x01af,0x09},//aec_en
+	{0x01e1, 0x08},//qcifnum
+	{0x0183, 0x01},
+	{0x0187, 0x51},//50
+	{0x01a0, 0x00},//awb_en
+	{0x01af, 0x09},//aec_en
 
 
 	/****CISCTL&ANALOG****/
-	{0x0087,0x18},
-	{0x00ee,0x30},
-	{0x00d0,0xbf},
-	{0x00d3,0xd4},
-	{0x007c,0xa3},
+	{0x0087, 0x18},
+	{0x00ee, 0x30},
+	{0x00d0, 0xbf},
+	{0x00d3, 0xd4},
+	{0x007c, 0xa3},
 
-	{0x0005,0x08},//04
-	{0x0006,0x98},//4c
-	{0x000a,0x02},
-	{0x000c,0x04},
-	{0x000e,0x40},
-	{0x0010,0x8c},
-	{0x0019,0x0c},
-	{0x0053,0x60},
-	{0x008d,0x92},
-	{0x0090,0x01},
-	{0x009d,0x11},
-	{0x00c7,0xe1},
+	{0x0005, 0x08},//04
+	{0x0006, 0x98},//4c
+	{0x000a, 0x02},
+	{0x000c, 0x04},
+	{0x000e, 0x40},
+	{0x0010, 0x8c},
+	{0x0019, 0x0c},
+	{0x0053, 0x60},
+	{0x008d, 0x92},
+	{0x0090, 0x01},
+	{0x009d, 0x11},
+	{0x00c7, 0xe1},
 
-	{0x001b,0x73},
-	{0x0028,0x0d},
-	{0x002b,0x04},
-	{0x002e,0x23},
-	{0x0037,0x03},
-	{0x0044,0x20},
-	{0x0046,0x0b},
-	{0x004a,0x01},
-	{0x004b,0x20},
-	{0x0055,0x30},
+	{0x001b, 0x73},
+	{0x0028, 0x0d},
+	{0x002b, 0x04},
+	{0x002e, 0x23},
+	{0x0037, 0x03},
+	{0x0044, 0x20},
+	{0x0046, 0x0b},
+	{0x004a, 0x01},
+	{0x004b, 0x20},
+	{0x0055, 0x30},
 
-	{0x006b,0x44},
-	{0x0077,0x00},
-	{0x0078,0x20},
-	{0x00ce,0x7c},
-	{0x00e6,0x50},
+	{0x006b, 0x44},
+	{0x0077, 0x00},
+	{0x0078, 0x20},
+	{0x00ce, 0x7c},
+	{0x00e6, 0x50},
 
 	/*gain*/
-	{0x00b6,0xc0},
-	{0x00b0,0x60},
+	{0x00b6, 0xc0},
+	{0x00b0, 0x60},
 
 	/*isp*/
-	{0x0102,0x89},
-	{0x0158,0x00},
+	{0x0102, 0x89},
+	{0x0158, 0x00},
 
 	/*darksun*/
-	//{0x0123,0x08},
-	//{0x0123,0x00},
-	//{0x0120,0x00},
-	//{0x0121,0x04},
-	//{0x0122,0xe0},
-	//{0x0124,0x03},
-	//{0x0125,0xff},
-	//{0x0126,0x3c},
-	//{0x001a,0x8c},
-	//{0x00c6,0xe0},
+	//{0x0123, 0x08},
+	//{0x0123, 0x00},
+	//{0x0120, 0x00},
+	//{0x0121, 0x04},
+	//{0x0122, 0xe0},
+	//{0x0124, 0x03},
+	//{0x0125, 0xff},
+	//{0x0126, 0x3c},
+	//{0x001a, 0x8c},
+	//{0x00c6, 0xe0},
 
 	/*blk*/
-	{0x0026,0x20},
-	{0x0149,0x1e},
-	{0x0140,0x20},
-	{0x0155,0x07},//00
-	{0x0160,0x40},
-	{0x0414,0x7e},//00
-	{0x0415,0x7e},//00
-	{0x0416,0x7e},//00
-	{0x0417,0x7e},//00
-	{0x04e0,0x18},
+	{0x0026, 0x20},
+	{0x0149, 0x1e},
+	{0x0140, 0x20},
+	{0x0155, 0x07},//00
+	{0x0160, 0x40},
+	{0x0414, 0x7e},//00
+	{0x0415, 0x7e},//00
+	{0x0416, 0x7e},//00
+	{0x0417, 0x7e},//00
+	{0x04e0, 0x18},
 
 	/*window*/
-	{0x0192,0x02},
-	{0x0194,0x03},
-	{0x01b0,0x00},//aec max exp high
-	{0x01b1,0x90}, //aec max exp low
-	{0x01b2,0x02}, //aec min exp
-	{0x01b3,0x03}, //aec_gain_max[9:8]
-	{0x01b4,0xff}, //aec_gain_max[7:0]
-	{0x01b5,0x20}, //aec_y_target
-	{0x01b6,0x05}, //aec_margin
-	{0x01b8,0x01}, //aec_win_x0
-	{0x01b9,0xe0}, //aec_win_x1
-	{0x01ba,0x01}, //aec_win_y0
-	{0x01bb,0x80}, //aec_win_y1
+	{0x0192, 0x02},
+	{0x0194, 0x03},
+	{0x01b0, 0x00},//aec max exp high
+	{0x01b1, 0x90}, //aec max exp low
+	{0x01b2, 0x02}, //aec min exp
+	{0x01b3, 0x03}, //aec_gain_max[9:8]
+	{0x01b4, 0xff}, //aec_gain_max[7:0]
+	{0x01b5, 0x20}, //aec_y_target
+	{0x01b6, 0x05}, //aec_margin
+	{0x01b8, 0x01}, //aec_win_x0
+	{0x01b9, 0xe0}, //aec_win_x1
+	{0x01ba, 0x01}, //aec_win_y0
+	{0x01bb, 0x80}, //aec_win_y1
 
 	/****DVP & MIPI****/
-	{0x019a,0x06},
-	{0x007b,0x2a},
-	{0x0023,0x2d},
-	{0x0201,0x27},
-	{0x0202,0x56},
-	{0x0203,0xb6},
-	{0x0212,0x80},
-	{0x0213,0x07},
-	{0x0215,0x10},
-	{0x003e,0x91},
+	{0x019a, 0x06},
+	{0x007b, 0x2a},
+	{0x0023, 0x2d},
+	{0x0201, 0x27},
+	{0x0202, 0x56},
+	{0x0203, 0xb6},
+	{0x0212, 0x80},
+	{0x0213, 0x07},
+	{0x0215, 0x10},
+	{0x003e, 0x91},
 
-	{0x01af,0x0b},//aec,0xen
-	{0x01a0,0xc0},//awb,0xen + awb_write_valid
-	{0x01e0,0x03},//speed mode
-	{0x03fe,0x00},//cisctrl rst
+	{0x01af, 0x0b},//aec, 0xen
+	{0x01a0, 0xc0},//awb, 0xen + awb_write_valid
+	{0x01e0, 0x03},//speed mode
+	{0x03fe, 0x00},//cisctrl rst
 
 	{GC2093_FAST_AE, 0x00},
-	/*isp 控制操作*/
-	//{0x0140,0x23},
-	//{0x04e0,0x18},
-	//{0x01af,0x09}, //aec off
-	//{0x01a0,0x00}, //awb,0xoff
-	//{0x01a4,0x40},
-	//{0x01a5,0x40},
-	//{0x01a6,0x40},
-	//0x00a9    y_avg读亮度信息。
-	//isp根据    y_avg信息，下aec及awb相关参数
+	/*isp control operation*/
+	//{0x0140, 0x23},
+	//{0x04e0, 0x18},
+	//{0x01af, 0x09}, //aec off
+	//{0x01a0, 0x00}, //awb, 0xoff
+	//{0x01a4, 0x40},
+	//{0x01a5, 0x40},
+	//{0x01a6, 0x40},
+	//0x00a9    y_avg reads brightness information.
+	//The isp is based on the y_avg information, under the aec and awb related parameters
 
-	//{0x01e0, 0x07}, flag 置位，sensor出图。
+	//{0x01e0, 0x07}, flag set, sensor out of map.
 	{GC2093_REG_END, 0x00}, /* END MARKER */
 };
 #endif
@@ -922,7 +924,6 @@ static struct tx_isp_sensor_win_setting gc2093_win_sizes[] = {
 	},
 #endif
 };
-
 
 struct tx_isp_sensor_win_setting *wsize = &gc2093_win_sizes[0];
 
@@ -1065,15 +1066,14 @@ static int gc2093_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	struct again_lut *val_lut = gc2093_again_lut;
 
 
-	ret += gc2093_write(sd,0xb4,val_lut[value].regb0);
-	ret += gc2093_write(sd,0xb3,val_lut[value].regb1);
-	ret += gc2093_write(sd,0xb8,val_lut[value].regb2);
-	ret += gc2093_write(sd,0xb9,val_lut[value].regb3);
-	ret += gc2093_write(sd,0xce,val_lut[value].regb4);
-	ret += gc2093_write(sd,0xc2,val_lut[value].regb5);
-	ret += gc2093_write(sd,0xcf,val_lut[value].regb6);
-	ret += gc2093_write(sd,0xd9,val_lut[value].regb7);
-
+	ret += gc2093_write(sd, 0xb4,val_lut[value].regb0);
+	ret += gc2093_write(sd, 0xb3,val_lut[value].regb1);
+	ret += gc2093_write(sd, 0xb8,val_lut[value].regb2);
+	ret += gc2093_write(sd, 0xb9,val_lut[value].regb3);
+	ret += gc2093_write(sd, 0xce,val_lut[value].regb4);
+	ret += gc2093_write(sd, 0xc2,val_lut[value].regb5);
+	ret += gc2093_write(sd, 0xcf,val_lut[value].regb6);
+	ret += gc2093_write(sd, 0xd9,val_lut[value].regb7);
 	if (ret < 0) {
 		ISP_ERROR("gc2093_write error  %d" ,__LINE__ );
 		return ret;
@@ -1100,19 +1100,14 @@ static int gc2093_get_analog_gain_ratio(struct tx_isp_subdev *sd, unsigned long 
 	unsigned long long loop_d;
 	unsigned long long ratio_dgain[]={1000,1182,1400,1659,2000,2370,2800,3318,4000,4740,5600,6636,8000,9480,11200,13272,16000,18960,22400,26544,32000,37920,44800,53088,64000};
 	loop_d = value * 1000 / 64;
-	for(loop = 0 ;loop < 24 ;loop++)
-	{
-		if(loop_d == ratio_dgain[loop])
-		{
+	for (loop = 0; loop < 24; loop++) {
+		if (loop_d == ratio_dgain[loop]) {
 			ratio_i = loop;
 			break;
-		}
-		else if((loop_d > ratio_dgain[loop]) && (loop_d < ratio_dgain[loop + 1]))
-		{
+		} else if ((loop_d > ratio_dgain[loop]) && (loop_d < ratio_dgain[loop + 1])) {
 			ratio_i = (loop_d - ratio_dgain[loop]) > (ratio_dgain[loop + 1] - loop_d) ? loop + 1 : loop;
 			break;
-		}
-		else
+		} else
 			ratio_i = 24;
 	}
 	ration_num = ratio_i;
@@ -1131,7 +1126,7 @@ static int gc2093_set_analog_gain_ae(struct tx_isp_subdev *sd, unsigned int *ide
 	ret += gc2093_read(sd, 0x00b2, &dgain);
 	again = ((again & 0x0f) << 6) | (dgain >> 2);
 	ret += gc2093_get_analog_gain_ratio(sd,again);
-	ret += gc2093_write(sd,0xb3,val_lut[ration_num].regb1);
+	ret += gc2093_write(sd, 0xb3,val_lut[ration_num].regb1);
 	ret += gc2093_write(sd, 0x00b4, 0x00);
 	if (ret < 0)
 		pr_debug("set again failed is ae\n");
@@ -1144,12 +1139,12 @@ static int gc2093_read_integration_time(struct tx_isp_subdev *sd, unsigned int *
 	int ret;
 	unsigned char expt = 0;
 	unsigned long long sGain;
-	ret = gc2093_read(sd,0x0003,&expt);
+	ret = gc2093_read(sd, 0x0003,&expt);
 	sGain = expt;
-	ret += gc2093_read(sd,0x0004,&expt);
+	ret += gc2093_read(sd, 0x0004,&expt);
 	sGain = (sGain << 8) | expt;
 	time_reg = sGain;
-	if(ret < 0)
+	if (ret < 0)
 		pr_debug("get exposuer failed\n");
 
 	return 0;
@@ -1158,17 +1153,17 @@ static int gc2093_read_integration_time(struct tx_isp_subdev *sd, unsigned int *
 static int fast_ae_set_reg(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
-	ret = gc2093_write(sd,0x0140,0x23);
+	ret = gc2093_write(sd, 0x0140, 0x23);
 	ret += gc2093_read_integration_time(sd,NULL);
 	ret += gc2093_set_integration_time(sd,time_reg);
-	ret += gc2093_write(sd,0x01af,0x09);
+	ret += gc2093_write(sd, 0x01af, 0x09);
 	ret += gc2093_set_analog_gain_ae(sd,NULL);
 
-	ret += gc2093_write(sd,0x01a0,0x00);
-	ret += gc2093_write(sd,0x01a4,0x40);
-	ret += gc2093_write(sd,0x01a5,0x40);
-	ret += gc2093_write(sd,0x01a6,0x40);
-	if(ret < 0)
+	ret += gc2093_write(sd, 0x01a0, 0x00);
+	ret += gc2093_write(sd, 0x01a4, 0x40);
+	ret += gc2093_write(sd, 0x01a5, 0x40);
+	ret += gc2093_write(sd, 0x01a6, 0x40);
+	if (ret < 0)
 		pr_debug("set time and analgo failed\n");
 
 	return ret;
@@ -1177,18 +1172,18 @@ static int fast_ae_set_reg(struct tx_isp_subdev *sd, unsigned int *ident)
 static int fast_ae_set_reg_default(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret = 0;
-	ret = gc2093_write(sd,0x0140,0x23);
-	ret += gc2093_write(sd,0x04,0x10);
-	ret += gc2093_write(sd,0x03,0x00);
-	ret += gc2093_write(sd,0x01af,0x09);
-	ret += gc2093_write(sd,0xb3,0x00);
-	ret += gc2093_write(sd,0xb4,0x00);
+	ret = gc2093_write(sd, 0x0140, 0x23);
+	ret += gc2093_write(sd, 0x04, 0x10);
+	ret += gc2093_write(sd, 0x03, 0x00);
+	ret += gc2093_write(sd, 0x01af, 0x09);
+	ret += gc2093_write(sd, 0xb3, 0x00);
+	ret += gc2093_write(sd, 0xb4, 0x00);
 
-	ret += gc2093_write(sd,0x01a0,0x00);
-	ret += gc2093_write(sd,0x01a4,0x40);
-	ret += gc2093_write(sd,0x01a5,0x40);
-	ret += gc2093_write(sd,0x01a6,0x40);
-	if(ret < 0)
+	ret += gc2093_write(sd, 0x01a0, 0x00);
+	ret += gc2093_write(sd, 0x01a4, 0x40);
+	ret += gc2093_write(sd, 0x01a5, 0x40);
+	ret += gc2093_write(sd, 0x01a6, 0x40);
+	if (ret < 0)
 		pr_debug("set time and analgo failed\n");
 
 	return ret;
@@ -1198,37 +1193,37 @@ static int setting_fast_ae(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char y_avg = 0,y_target = 0;
 	int ret = 0,loop = 0;
-	gc2093_read(sd,0x00a9,&y_avg);
-	gc2093_read(sd,0x01b5,&y_target);
-	while((y_avg >= y_target ? y_avg - y_target : y_target - y_avg) > 0x8)
-	{
+	gc2093_read(sd, 0x00a9,&y_avg);
+	gc2093_read(sd, 0x01b5,&y_target);
+	while ((y_avg >= y_target ? y_avg - y_target : y_target - y_avg) > 0x8) {
 		private_msleep(2);
-		if(loop > 30) {
+		if (loop > 30) {
 			pr_debug("y_avg != y_target,set failed!!!\n");
 			break;
 		}
-		gc2093_read(sd,0x01b5,&y_target);
-		gc2093_read(sd,0x00a9,&y_avg);
+		gc2093_read(sd, 0x01b5,&y_target);
+		gc2093_read(sd, 0x00a9,&y_avg);
 		loop++;
 	}
-	if(loop <= 30) {
+	if (loop <= 30) {
 		ret = fast_ae_set_reg(sd,NULL);
 		pr_debug("set time and analgo of right value\n");
 	} else {
 		ret = fast_ae_set_reg_default(sd,NULL);
 		pr_debug("set time and analgo of default value\n");
 	}
-	gc2093_write(sd,0x01e0,0x07);
+	gc2093_write(sd, 0x01e0, 0x07);
 
 	return ret;
 }
 #endif
+
 static int gc2093_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -1280,7 +1275,7 @@ static int gc2093_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
@@ -1288,27 +1283,28 @@ static int gc2093_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += gc2093_read(sd, 0x05, &tmp);
 	hts = tmp & 0x0f;
 	ret += gc2093_read(sd, 0x06, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
+
 	hts = ((hts << 8) + tmp) << 1; //1450
 
-	if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
+	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		hts <<= 1; //2900
 
 	//vts = vb + 20 +win_width;win_width = 1108
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = gc2093_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += gc2093_write(sd, 0x42, (unsigned char)(vts & 0xff));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
+
 	vb = vts - 20 - 1088;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts;
-	if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
-	{
+	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		sensor->video.attr->max_integration_time = vb < 200 ? vts - vb - 4: vts - 200 - 4;
 		sensor->video.attr->max_integration_time_short = vb < 200 ? vb - 4 : 200 - 4;
 	}
@@ -1334,6 +1330,7 @@ static int gc2093_set_integration_time_short(struct tx_isp_subdev *sd, int value
 static int gc2093_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 {
 	int ret = 0;
+
 	ret = gc2093_write(sd, 0x03fe, 0xf0);
 	ret = gc2093_write(sd, 0x03fe, 0xf0),
 	ret = gc2093_write(sd, 0x03fe, 0xf0),
@@ -1341,16 +1338,17 @@ static int gc2093_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 	private_msleep(5);
 
 	ret = gc2093_write_array(sd, wsize->regs);
-	ret = gc2093_write_array(sd, gc2093_stream_on);
-	return 0;
+	ret += gc2093_write_array(sd, gc2093_stream_on);
+
+	return ret;
 }
 
 static int gc2093_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 {
-	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
+	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(wdr_en == 1){
+	if (wdr_en == 1) {
 		sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 		wsize = &gc2093_win_sizes[1];
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
@@ -1364,8 +1362,7 @@ static int gc2093_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		gc2093_attr.integration_time_limit = 1150 - 4;
 		gc2093_attr.total_width = 1450;
 		gc2093_attr.total_height = 1350;
-	}
-	else if (wdr_en == 0){
+	} else if (wdr_en == 0) {
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 		wsize = &gc2093_win_sizes[0];
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -1377,9 +1374,7 @@ static int gc2093_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		gc2093_attr.max_integration_time_native = 1350 - 4;
 		gc2093_attr.total_width = 1450;
 		gc2093_attr.total_height = 1350;
-	}
-	else
-	{
+	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
 	}
@@ -1405,7 +1400,7 @@ static int gc2093_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1425,9 +1420,9 @@ static int gc2093_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"gc2093_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
@@ -1438,9 +1433,9 @@ static int gc2093_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"gc2093_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
@@ -1458,7 +1453,7 @@ static int gc2093_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	ISP_WARNING("gc2093 chip found @ 0x%02x (%s)\n sensor drv version %s", client->addr, client->adapter->name, SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "gc2093", sizeof("gc2093"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1469,29 +1464,29 @@ static int gc2093_g_chip_ident(struct tx_isp_subdev *sd,
 static int gc2093_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc2093_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -1501,20 +1496,20 @@ static int gc2093_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = gc2093_write_array(sd, gc2093_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_fps(sd, *(int*)arg);
 			break;
 #ifdef __WDR__
 		case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_integration_time_short(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_WDR:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_wdr(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_WDR_STOP:
-			if(arg)
+			if (arg)
 				ret = gc2093_set_wdr_stop(sd, *(int*)arg);
 			break;
 #endif
@@ -1532,7 +1527,7 @@ static int gc2093_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1549,7 +1544,7 @@ static int gc2093_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1604,7 +1599,7 @@ static int gc2093_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1641,8 +1636,7 @@ static int gc2093_probe(struct i2c_client *client, const struct i2c_device_id *i
 	 */
 
 #ifdef __WDR__
-	if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
-	{
+	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &gc2093_win_sizes[1];
 		memcpy(&gc2093_attr.mipi, &gc2093_mipi_wdr, sizeof(gc2093_mipi_wdr));
 		gc2093_attr.data_type = data_type;
@@ -1654,29 +1648,27 @@ static int gc2093_probe(struct i2c_client *client, const struct i2c_device_id *i
 		gc2093_attr.max_integration_time_short = 200 - 4;
 		gc2093_attr.total_width = 1450;
 		gc2093_attr.total_height = 1350;
-	}
-	else
-	{
+	} else {
 #ifdef FAST_AE
-			wsize = &gc2093_win_sizes[2];
-			memcpy(&gc2093_attr.mipi, &gc2093_mipi_linear, sizeof(gc2093_mipi_linear));
-			gc2093_attr.one_line_expr_in_us = 30;
-			gc2093_attr.max_integration_time_native = 1350 - 4;
-			gc2093_attr.integration_time_limit = 1350 - 4;
-			gc2093_attr.max_integration_time = 1350 - 4;
-			gc2093_attr.total_width = 1450;
-			gc2093_attr.total_height = 1350;
-			pr_debug("probe in fast ae------->gc2093\n");
+		wsize = &gc2093_win_sizes[2];
+		memcpy(&gc2093_attr.mipi, &gc2093_mipi_linear, sizeof(gc2093_mipi_linear));
+		gc2093_attr.one_line_expr_in_us = 30;
+		gc2093_attr.max_integration_time_native = 1350 - 4;
+		gc2093_attr.integration_time_limit = 1350 - 4;
+		gc2093_attr.max_integration_time = 1350 - 4;
+		gc2093_attr.total_width = 1450;
+		gc2093_attr.total_height = 1350;
+		pr_debug("probe in fast ae------->gc2093\n");
 #else
-			wsize = &gc2093_win_sizes[0];
-			memcpy(&gc2093_attr.mipi, &gc2093_mipi_linear, sizeof(gc2093_mipi_linear));
-			gc2093_attr.one_line_expr_in_us = 30;
-			gc2093_attr.max_integration_time_native = 1350 - 4;
-			gc2093_attr.integration_time_limit = 1350 - 4;
-			gc2093_attr.max_integration_time = 1350 - 4;
-			gc2093_attr.total_width = 1450;
-			gc2093_attr.total_height = 1350;
-			pr_debug("probe in default------->gc2093\n");
+		wsize = &gc2093_win_sizes[0];
+		memcpy(&gc2093_attr.mipi, &gc2093_mipi_linear, sizeof(gc2093_mipi_linear));
+		gc2093_attr.one_line_expr_in_us = 30;
+		gc2093_attr.max_integration_time_native = 1350 - 4;
+		gc2093_attr.integration_time_limit = 1350 - 4;
+		gc2093_attr.max_integration_time = 1350 - 4;
+		gc2093_attr.total_width = 1450;
+		gc2093_attr.total_height = 1350;
+		pr_debug("probe in default------->gc2093\n");
 #endif
 	}
 #endif
@@ -1719,9 +1711,9 @@ static int gc2093_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1751,7 +1743,7 @@ static __init int init_gc2093(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init gc2093 dirver.\n");
 		return -1;
 	}

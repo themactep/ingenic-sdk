@@ -1,7 +1,6 @@
 #!/bin/sh
 
-TEMPLATE='
-MODULE_NAME := sensor_xxx_t31
+TEMPLATE='MODULE_NAME := sensor_xxx_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
 DIR=sensors/$(SOC_FAMILY)
@@ -12,8 +11,7 @@ OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 
 $(OUT)-objs := $(OBJS)
 
-obj-m += $(OUT).o
-'
+obj-m += $(OUT).o'
 
 for i in */; do
 	cd $i;

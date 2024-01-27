@@ -83,36 +83,36 @@ struct again_lut {
 };
 
 struct again_lut gc2053_again_lut[] = {
-//	 inx,  0x00b4 0x00b3 0x00b8 0x00b9 gain
-	{0x00, 0x00,  0x00,  0x01,  0x00,  0},        //   1.000000
-	{0x01, 0x00,  0x10,  0x01,  0x0c,  13726},    //   1.156250
-	{0x02, 0x00,  0x20,  0x01,  0x1b,  31177},    //   1.390625
-	{0x03, 0x00,  0x30,  0x01,  0x2c,  44067},    //   1.593750
-	{0x04, 0x00,  0x40,  0x01,  0x3f,  64793},    //   1.984375
-	{0x05, 0x00,  0x50,  0x02,  0x16,  78621},    //   2.296875
-	{0x06, 0x00,  0x60,  0x02,  0x35,  96180},    //   2.765625
-	{0x07, 0x00,  0x70,  0x03,  0x16,  109138},   //   3.171875
-	{0x08, 0x00,  0x80,  0x04,  0x02,  132537},   //   4.062500
-	{0x09, 0x00,  0x90,  0x04,  0x31,  146067},   //   4.687500
-	{0x0a, 0x00,  0xa0,  0x05,  0x32,  163567},   //   5.640625
-	{0x0b, 0x00,  0xb0,  0x06,  0x35,  176747},   //   6.484375
-	{0x0c, 0x00,  0xc0,  0x08,  0x04,  195118},   //   7.875000
-	{0x0d, 0x00,  0x5a,  0x09,  0x19,  208560},   //   9.078125
-	{0x0e, 0x00,  0x83,  0x0b,  0x0f,  229103},   //  11.281250
-	{0x0f, 0x00,  0x93,  0x0d,  0x12,  242511},   //  13.000000
-	{0x10, 0x00,  0x84,  0x10,  0x00,  262419},   //  16.046875
-	{0x11, 0x00,  0x94,  0x12,  0x3a,  275710},   //  18.468750
-	{0x12, 0x01,  0x2c,  0x1a,  0x02,  292252},   //  22.000000
-	{0x13, 0x01,  0x3c,  0x1b,  0x20,  305571},   //  25.328125
-	{0x14, 0x00,  0x8c,  0x20,  0x0f,  324962},   //  31.093750
-	{0x15, 0x00,  0x9c,  0x26,  0x07,  338280},   //  35.796875
-	{0x16, 0x02,  0x64,  0x36,  0x21,  358923},   //  44.531250
-	{0x17, 0x02,  0x74,  0x37,  0x3a,  372267},   //  51.281250
-	{0x18, 0x00,  0xc6,  0x3d,  0x02,  392101},   //  63.250000
-	{0x19, 0x00,  0xdc,  0x3f,  0x3f,  415415},   //  80.937500
-	{0x1a, 0x02,  0x85,  0x3f,  0x3f,  421082},   //  85.937500
-	{0x1b, 0x02,  0x95,  0x3f,  0x3f,  440360},   // 105.375000
-	{0x1c, 0x00,  0xce,  0x3f,  0x3f,  444864},   // 110.515625
+	//inx, 0xb4 0xb3 0xb8 0xb9 gain
+	{0x00, 0x00, 0x00, 0x01, 0x00, 0},        //   1.000000
+	{0x01, 0x00, 0x10, 0x01, 0x0c, 13726},    //   1.156250
+	{0x02, 0x00, 0x20, 0x01, 0x1b, 31177},    //   1.390625
+	{0x03, 0x00, 0x30, 0x01, 0x2c, 44067},    //   1.593750
+	{0x04, 0x00, 0x40, 0x01, 0x3f, 64793},    //   1.984375
+	{0x05, 0x00, 0x50, 0x02, 0x16, 78621},    //   2.296875
+	{0x06, 0x00, 0x60, 0x02, 0x35, 96180},    //   2.765625
+	{0x07, 0x00, 0x70, 0x03, 0x16, 109138},   //   3.171875
+	{0x08, 0x00, 0x80, 0x04, 0x02, 132537},   //   4.062500
+	{0x09, 0x00, 0x90, 0x04, 0x31, 146067},   //   4.687500
+	{0x0a, 0x00, 0xa0, 0x05, 0x32, 163567},   //   5.640625
+	{0x0b, 0x00, 0xb0, 0x06, 0x35, 176747},   //   6.484375
+	{0x0c, 0x00, 0xc0, 0x08, 0x04, 195118},   //   7.875000
+	{0x0d, 0x00, 0x5a, 0x09, 0x19, 208560},   //   9.078125
+	{0x0e, 0x00, 0x83, 0x0b, 0x0f, 229103},   //  11.281250
+	{0x0f, 0x00, 0x93, 0x0d, 0x12, 242511},   //  13.000000
+	{0x10, 0x00, 0x84, 0x10, 0x00, 262419},   //  16.046875
+	{0x11, 0x00, 0x94, 0x12, 0x3a, 275710},   //  18.468750
+	{0x12, 0x01, 0x2c, 0x1a, 0x02, 292252},   //  22.000000
+	{0x13, 0x01, 0x3c, 0x1b, 0x20, 305571},   //  25.328125
+	{0x14, 0x00, 0x8c, 0x20, 0x0f, 324962},   //  31.093750
+	{0x15, 0x00, 0x9c, 0x26, 0x07, 338280},   //  35.796875
+	{0x16, 0x02, 0x64, 0x36, 0x21, 358923},   //  44.531250
+	{0x17, 0x02, 0x74, 0x37, 0x3a, 372267},   //  51.281250
+	{0x18, 0x00, 0xc6, 0x3d, 0x02, 392101},   //  63.250000
+	{0x19, 0x00, 0xdc, 0x3f, 0x3f, 415415},   //  80.937500
+	{0x1a, 0x02, 0x85, 0x3f, 0x3f, 421082},   //  85.937500
+	{0x1b, 0x02, 0x95, 0x3f, 0x3f, 440360},   // 105.375000
+	{0x1c, 0x00, 0xce, 0x3f, 0x3f, 444864},   // 110.515625
 };
 
 struct tx_isp_sensor_attribute gc2053_attr;
@@ -223,8 +223,9 @@ struct tx_isp_sensor_attribute gc2053_attr = {
  * mipi data rate=624mbps/lane
  * wpclk=156mhz
  * row_time=28.2us
- * frame length=1418,25fps
- * */
+ * frame length=1418
+ * 25fps
+ */
 static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	/* SYS */
 	{0xfe, 0x80},
@@ -240,7 +241,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0xf8, 0x68},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
@@ -1253,6 +1253,7 @@ int gc2053_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 
 int gc2053_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
 {
+	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -1261,7 +1262,6 @@ int gc2053_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 		.len	= 2,
 		.buf	= buf,
 	};
-	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
@@ -1315,7 +1315,6 @@ static int gc2053_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
-
 	ret = gc2053_read(sd, 0xf0, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
@@ -1363,16 +1362,15 @@ static int gc2053_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += gc2053_write(sd, 0xb3, val_lut[again].regb3);
 	ret += gc2053_write(sd, 0xb8, val_lut[again].dpc);
 	ret += gc2053_write(sd, 0xb9, val_lut[again].blc);
-
 	if (ret < 0) {
-		ISP_ERROR("gc2053_write error  %d" ,__LINE__ );
+		ISP_ERROR("gc2053_write error  %d\n" ,__LINE__ );
 		return ret;
 	}
 
 	return 0;
 }
-
 #endif
+
 #if 1
 static int gc2053_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
@@ -1396,11 +1394,11 @@ static int gc2053_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret = gc2053_write(sd, 0xfe, 0x00);
 	ret += gc2053_write(sd, 0xb4, val_lut[value].regb4);
 	ret += gc2053_write(sd, 0xb3, val_lut[value].regb3);
-	//ret += gc2053_write(sd, 0xb2, val_lut[value].regb2);
+//	ret += gc2053_write(sd, 0xb2, val_lut[value].regb2);
 	ret += gc2053_write(sd, 0xb8, val_lut[value].dpc);
 	ret += gc2053_write(sd, 0xb9, val_lut[value].blc);
 	if (ret < 0) {
-		ISP_ERROR("gc2053_write error  %d" ,__LINE__ );
+		ISP_ERROR("gc2053_write error  %d\n" ,__LINE__ );
 		return ret;
 	}
 
@@ -1423,7 +1421,7 @@ static int gc2053_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -1477,22 +1475,22 @@ static int gc2053_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
+	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 		wpclk = GC2053_SUPPORT_30FPS_DVP_SCLK;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		wpclk = GC2053_SUPPORT_15FPS_DVP_SCLK;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 		wpclk = GC2053_SUPPORT_30FPS_MIPI_SCLK;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		max_fps = TX_SENSOR_MAX_FPS_25;
 		wpclk = GC2053_SUPPORT_25FPS_MIPI_SCLK;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		wpclk = GC2053_SUPPORT_15FPS_MIPI_SCLK;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_40)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_40)) {
 		max_fps = TX_SENSOR_MAX_FPS_40;
 		wpclk = GC2053_SUPPORT_40FPS_MIPI_SCLK;
 	} else {
@@ -1520,7 +1518,7 @@ static int gc2053_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	ret = gc2053_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += gc2053_write(sd, 0x42, (unsigned char)(vts & 0xff));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 
 	sensor->video.fps = fps;
@@ -1542,13 +1540,13 @@ static int gc2053_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret = gc2053_write(sd, 0xfe, 0x0);
 	ret += gc2053_read(sd, 0x17, &val);
 
-	if(enable & 0x2)
+	if (enable & 0x2)
 		val |= 0x02;
 	else
 		val &= 0xfd;
 
 	ret += gc2053_write(sd, 0x17, val);
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
@@ -1631,55 +1629,55 @@ static int gc2053_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch(cmd){
 		case TX_ISP_EVENT_SENSOR_EXPO:
 #if 0
-			if(arg)
+			if (arg)
 				ret = gc2053_set_expo(sd, *(int*)arg);
 #endif
 			break;
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-//			if(arg)
+//			if (arg)
 //				ret = gc2053_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-//			if(arg)
+//			if (arg)
 //				ret = gc2053_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc2053_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc2053_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc2053_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = gc2053_write_array(sd, gc2053_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = gc2053_write_array(sd, gc2053_stream_off_mipi);
-			}else{
+			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = gc2053_write_array(sd, gc2053_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = gc2053_write_array(sd, gc2053_stream_on_mipi);
-			}else{
+			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 				ret = -1;
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc2053_set_fps(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
+			if (arg)
 				ret = gc2053_set_vflip(sd, *(int*)arg);
 			break;
 		default:
@@ -1762,10 +1760,10 @@ struct platform_device sensor_platform_device = {
 
 static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
+	int ret;
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if(!sensor){
@@ -1784,7 +1782,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_enable(sensor->mclk);
 
 	gc2053_attr.dbus_type = data_interface;
-	if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
+	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
@@ -1802,7 +1800,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		vts1 = 0x46;
 		vtsn0 = 0x05;
 		vtsn1 = 0x46;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
@@ -1820,7 +1818,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		vts1 = 0x65;
 		vtsn0 = 0x04;
 		vtsn1 = 0x65;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		wsize = &gc2053_win_sizes[2];
 		memcpy((void*)(&(gc2053_attr.mipi)),(void*)(&gc2053_mipi),sizeof(gc2053_mipi));
 		gc2053_attr.max_integration_time_native = 0x58a - 8;
@@ -1833,7 +1831,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		vts1 = 0x8a;
 		vtsn0 = 0x05;
 		vtsn1 = 0x8a;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		wsize = &gc2053_win_sizes[3];
 		memcpy((void*)(&(gc2053_attr.mipi)),(void*)(&gc2053_mipi),sizeof(gc2053_mipi));
 		gc2053_attr.max_integration_time_native = 0x51c - 8;
@@ -1846,7 +1844,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		vts1 = 0x1c;
 		vtsn0 = 0x05;
 		vtsn1 = 0x1c;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		wsize = &gc2053_win_sizes[4];
 		memcpy((void*)(&(gc2053_attr.mipi)),(void*)(&gc2053_mipi),sizeof(gc2053_mipi));
 		gc2053_attr.max_integration_time_native = 0x49d - 8;
@@ -1859,7 +1857,7 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		vts1 = 0x9d;
 		vtsn0 = 0x04;
 		vtsn1 = 0x9d;
-	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_40)){
+	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_40)) {
 		wsize = &gc2053_win_sizes[5];
 		memcpy((void*)(&(gc2053_attr.mipi)),(void*)(&gc2053_mipi),sizeof(gc2053_mipi));
 		gc2053_attr.max_integration_time_native = 0x465 - 8;
@@ -1927,6 +1925,7 @@ static int gc2053_remove(struct i2c_client *client)
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
+
 	kfree(sensor);
 
 	return 0;
@@ -1952,7 +1951,7 @@ static __init int init_gc2053(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init gc2053 dirver.\n");
 		return -1;
 	}
