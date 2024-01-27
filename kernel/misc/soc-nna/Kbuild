@@ -1,0 +1,15 @@
+MODULE_NAME := soc-nna
+OUT := $(MODULE_NAME)
+
+DIR=misc/soc-nna
+
+SRCS := \
+  $(DIR)/soc_nna_main.c \
+  $(DIR)/platform.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
+
