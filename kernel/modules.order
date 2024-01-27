@@ -1,0 +1,8 @@
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/sinfo.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/gpio.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/sample_pwm_core.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/sample_pwm_hal.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/tx-isp-t31.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/sensor_sc2336_t31.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/avpu.ko
+kernel//home/paul/localwork/openipc/openingenic-themactep/kernel/audio.ko

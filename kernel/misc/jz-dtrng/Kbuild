@@ -1,0 +1,15 @@
+# Match the factory module name
+MODULE_NAME := dtrng_dev
+OUT := $(MODULE_NAME)
+
+DIR=misc/jz-dtrng
+
+SRCS := \
+  $(DIR)/jz-dtrng.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
+
