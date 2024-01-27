@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-export OUTPUT_DIR=/home/paul/openipc-fw-output/t31_lite-br2023.08.1
+export OUTPUT_DIR=/home/paul/openipc-fw-output/cinnado_d1-br2023.11
 export PATH=$OUTPUT_DIR/host/bin:$PATH
 export CROSS_COMPILE=mipsel-openipc-linux-musl-
 export ISP_ENV_KERNEL_DIR=$OUTPUT_DIR/build/linux-custom

@@ -58,12 +58,12 @@ struct codec_sign_configure {
 	enum codec_data_mode data;
 	enum codec_sequence_mode seq;
 	enum codec_sync_polarity sync;
-	unsigned int rate2mclk;				// this is the coefficient rate to mclk, the default value is 256.
+	unsigned int rate2mclk;		// this is the coefficient rate to mclk, the default value is 256.
 };
 
 struct audio_data_type {
 	unsigned int frame_size;
-	unsigned int frame_vsize; // valid size in a frame size
+	unsigned int frame_vsize;	// valid size in a frame size
 	unsigned int sample_rate;
 	unsigned int sample_channel;
 };
