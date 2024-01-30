@@ -24,7 +24,6 @@
 #include <linux/mutex.h>
 #include <jz_proc.h>
 
-#include <linux/module.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 
@@ -40,6 +39,8 @@ MODULE_PARM_DESC(i2c_adapter_nr, "sensor used i2c_adapter nr");
 
 #ifdef CONFIG_SOC_T40
 static int reset_gpio = GPIO_PC(27);
+#elif defined CONFIG_SOC_T41
+static int reset_gpio = GPIO_PC(28);
 #else
 static int reset_gpio = GPIO_PA(18);
 #endif
@@ -54,6 +55,12 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int cim1_gpio = GPIO_PC(30);
 module_param(cim1_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(cim1_gpio, "Cim1 GPIO NUM");
+#endif
+
+#ifdef CONFIG_SOC_T41
+static int cim_gpio = GPIO_PA(15);
+module_param(cim_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(cim_gpio, "Cim GPIO NUM");
 #endif
 
 #define SENSOR_INFO_IOC_MAGIC	'S'
@@ -72,116 +79,145 @@ struct i2c_trans {
 	uint32_t datalen;
 };
 
+uint8_t *sclk_name;
+
 typedef struct SENSOR_INFO_S
 {
-	uint8_t *name;
-	uint8_t i2c_addr;
-	uint8_t *clk_name;
-	uint32_t clk;
+	uint8_t *name;         // Sensor name
+	uint8_t i2c_addr;      // I2C address
+	uint8_t *mclk_name;    // Clock source
+	uint32_t clk;          // Clock frequency
 
-	uint32_t id_value[8];
-	uint32_t id_value_len;
-	uint32_t id_addr[8];
-	uint32_t id_addr_len;
-	uint8_t id_cnt;
+	uint32_t id_value[8];  // Sensor identification values
+	uint32_t id_value_len; // Length of id_value
+	uint32_t id_addr[8];   // Sensor configuration values
+	uint32_t id_addr_len;  // Length of id_addr
+	uint8_t id_cnt;        // Additional counter or length parameter
 
-	struct i2c_adapter *adap;
+	struct i2c_adapter *adap; // I2C adapter pointer: Points to the I2C adapter structure
+
 } SENSOR_INFO_T, *SENSOR_INFO_P;
+
+/*  Example entry
+{
+    "sensor_name",   // Name of the sensor (e.g., "gc1024")
+    i2c_address,     // I2C address of the sensor (e.g., 0x3c)
+    "clock_name",    // Name of the clock source (e.g., "cgu_cim")
+    clock_frequency, // Clock frequency in Hz (e.g., 24000000 for 24 MHz)
+    {id_val1, id_val2}, // Array of sensor identification values (e.g., {0x10, 0x04})
+    id_val_len,      // Length of the id_value array (number of elements, e.g., 1)
+    {reg_addr1, reg_addr2}, // Array of register addresses for sensor configuration (e.g., {0xf0, 0xf1})
+    reg_addr_len,    // Length of the id_addr array (number of elements, e.g., 1)
+    additional_count, // Additional counter or length parameter (e.g., 2)
+    pointer          // Pointer to additional data or NULL if not used
+}
+*/
 
 SENSOR_INFO_T g_sinfo[] =
 {
-	{"ov9712", 0x30,  "cgu_cim", 24000000, {0x97, 0x11}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"ov9732", 0x36,  "cgu_cim", 24000000, {0x97, 0x32}, 1, {0x300a, 0x300b}, 2, 2, NULL},
-	{"ov9750", 0x36,  "cgu_cim", 24000000, {0x97, 0x50}, 1, {0x300b, 0x300c}, 2, 2, NULL},
-	{"jxh42",  0x30,  "cgu_cim", 24000000, {0xa0, 0x42, 0x81}, 1, {0xa, 0xb, 0x9}, 1, 3, NULL},
-	{"sc1035", 0x30,  "cgu_cim", 24000000, {0xf0, 0x00}, 1, {0x580b, 0x3c05}, 2, 2, NULL},
-	{"sc1135", 0x30,  "cgu_cim", 24000000, {0x00, 0x35}, 1, {0x580b, 0x2148}, 2, 2, NULL},
-	{"sc1045", 0x30,  "cgu_cim", 24000000, {0x10, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc1145", 0x30,  "cgu_cim", 24000000, {0x11, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"ar0130", 0x10,  "cgu_cim", 24000000, {0x2402}, 2, {0x3000}, 2, 1, NULL},
-	{"jxh61",  0x30,  "cgu_cim", 24000000, {0xa0, 0x42, 0x3}, 1, {0xa, 0xb, 0x9}, 1, 3, NULL},
-	{"gc2083", 0x37,  "cgu_cim", 24000000, {0x20, 0x83}, 1, {0x3f0, 0x3f1}, 2, 2, NULL},
+	{"ar0237", 0x10,  "cgu_cim", 27000000, {0x0256}, 2, {0x3000}, 2, 1, NULL},
+	{"bf3115", 0x6e,  "cgu_cim", 24000000, {0x31, 0x16}, 1, {0xfc, 0xfd}, 1, 2, NULL},
+	{"bg0806", 0x32,  "cgu_cim", 24000000, {0x08, 0x06}, 1, {0x0000, 0x0001}, 2, 2, NULL},
+	{"c23a98", 0x36,  "cgu_cim", 24000000, {0x23, 0x98}, 1, {0x0000, 0x0001}, 2, 2, NULL},
 	{"gc1024", 0x3c,  "cgu_cim", 24000000, {0x10, 0x04}, 1, {0xf0, 0xf1}, 1, 2, NULL},
+	{"gc1034", 0x21,  "cgu_cim", 24000000, {0x10, 0x34}, 1, {0xf0, 0xf1}, 1, 2, NULL},
 	{"gc1064", 0x3c,  "cgu_cim", 24000000, {0x10, 0x24}, 1, {0xf0, 0xf1}, 1, 2, NULL},
 	{"gc2023", 0x37,  "cgu_cim", 24000000, {0x20, 0x23}, 1, {0xf0, 0xf1}, 1, 2, NULL},
-	{"bf3115", 0x6e,  "cgu_cim", 24000000, {0x31, 0x16}, 1, {0xfc, 0xfd}, 1, 2, NULL},
-	{"imx225", 0x1a,  "cgu_cim", 24000000, {0x10, 0x01}, 1, {0x3004, 0x3013}, 2, 2, NULL},
-	{"ov2710", 0x36,  "cgu_cim", 24000000, {0x27, 0x10}, 1, {0x300a, 0x300b}, 2, 2, NULL},
-	{"imx323", 0x1a,  "cgu_cim", 37125000, {0x50, 0x0}, 1, {0x301c, 0x301d}, 2, 2, NULL},
-	{"sc2135", 0x30,  "cgu_cim", 24000000, {0x21, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sp1409", 0x34,  "cgu_cim", 24000000, {0x14, 0x09}, 1, {0x04, 0x05}, 1, 2, NULL},
-	{"jxh62",  0x30,  "cgu_cim", 24000000, {0xa0, 0x62}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"bg0806", 0x32,  "cgu_cim", 24000000, {0x08, 0x06}, 1, {0x0000, 0x0001}, 2, 2, NULL},
-	{"ov4689", 0x36,  "cgu_cim", 24000000, {0x46, 0x88}, 1, {0x300a, 0x300b}, 2, 2, NULL},
-	{"jxf22",  0x40,  "cgu_cim", 24000000, {0x0f, 0x22}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"imx322", 0x1a,  "cgu_cim", 37125000, {0x50, 0x0}, 1, {0x301c, 0x301d}, 2, 2, NULL},
-	{"imx307", 0x1a,  "cgu_cim", 37125000, {0xA0, 0xB2}, 1, {0x3008, 0x301e}, 2, 2, NULL},
-	{"imx291", 0x1a,  "cgu_cim", 37125000, {0xA0, 0xB2}, 1, {0x3008, 0x301e}, 2, 2, NULL},
-	{"ov2735", 0x3c,  "cgu_cim", 24000000, {0x27, 0x35, 0x05}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
-	{"sc3035", 0x30,  "cgu_cim", 24000000, {0x30, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"ar0237", 0x10,  "cgu_cim", 27000000, {0x0256}, 2, {0x3000}, 2, 1, NULL},
-	{"sc2145", 0x30,  "cgu_cim", 24000000, {0x21, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"jxh65",  0x30,  "cgu_cim", 24000000, {0x0a, 0x65}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"sc2300", 0x30,  "cgu_cim", 24000000, {0x23, 0x00}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"ov2735b", 0x3c,  "cgu_cim", 24000000, {0x27, 0x35, 0x6, 0x7}, 1, {0x02, 0x03, 0x04, 0x04}, 1, 4, NULL},
-	{"jxv01",  0x21,  "cgu_cim", 27000000, {0x0e, 0x04}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"ps5230", 0x48,  "cgu_cim", 24000000, {0x52, 0x30}, 1, {0x00, 0x01}, 1, 2, NULL},
-	{"ps5250", 0x48,  "cgu_cim", 24000000, {0x52, 0x50}, 1, {0x00, 0x01}, 1, 2, NULL},
-	{"ov2718", 0x36,  "cgu_cim", 24000000, {0x27, 0x70}, 1, {0x300a, 0x300b}, 2, 2, NULL},
-	{"ov2732", 0x36,  "cgu_cim", 24000000, {0x00, 0x27, 0x32}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
-	{"sc2235", 0x30,  "cgu_cim", 24000000, {0x22, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"jxk02",  0x40,  "cgu_cim", 24000000, {0x04, 0x03}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"ov7740", 0x21,  "cgu_cim", 24000000, {0x77, 0x42}, 1, {0x0a, 0x0b}, 1, 2, NULL},
-	{"hm2140", 0x24,  "cgu_cim", 24000000, {0x21, 0x40}, 1, {0x0000, 0x0001}, 2, 2, NULL},
 	{"gc2033", 0x37,  "cgu_cim", 24000000, {0x20, 0x33}, 1, {0xf0, 0xf1}, 1, 2, NULL},
-	{"jxf28",  0x40,  "cgu_cim", 24000000, {0x0f, 0x28}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"os02b10", 0x3c,  "cgu_cim", 24000000, {0x23, 0x08}, 1, {0x02, 0x03}, 1, 2, NULL},
-	{"os05a10", 0x36,  "cgu_cim", 24000000, {0x53, 0x05, 0x41}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
-	{"sc2232", 0x30,  "cgu_cim", 24000000, {0x22, 0x32, 0x01}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
-	{"sc2232h", 0x30,  "cgu_cim", 24000000, {0xcb, 0x07, 0x01}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
-	{"sc2230", 0x30,  "cgu_cim", 24000000, {0x22, 0x32, 0x20}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
-	{"sc4236", 0x30,  "cgu_cim", 24000000, {0x32, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc1245", 0x30,  "cgu_cim", 24000000, {0x12, 0x45, 0x03}, 1, {0x3107, 0x3108, 0x3020}, 2, 3, NULL},
-	{"sc1245a", 0x30,  "cgu_cim", 24000000, {0x12, 0x45, 0x02}, 1, {0x3107, 0x3108, 0x3020}, 2, 3, NULL},
-	{"gc1034", 0x21,  "cgu_cim", 24000000, {0x10, 0x34}, 1, {0xf0, 0xf1}, 1, 2, NULL},
-	{"sc1235", 0x30,  "cgu_cim", 24000000, {0x12, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"jxf23",  0x40,  "cgu_cim", 24000000, {0x0f, 0x23}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"ps5270", 0x48,  "cgu_cim", 24000000, {0x52, 0x70}, 1, {0x00, 0x01}, 1, 2, NULL},
-	{"sp140a", 0x3c,  "cgu_cim", 24000000, {0x14, 0x0a}, 1, {0x02, 0x03}, 1, 2, NULL},
-	{"sc2310", 0x30,  "cgu_cim", 24000000, {0x23, 0x11}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"gc2083", 0x37,  "cgu_cim", 24000000, {0x20, 0x83}, 1, {0x3f0, 0x3f1}, 2, 2, NULL},
+	{"gc4023", 0x21,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
+	{"gc4023", 0x29,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
 	{"hm2131", 0x24,  "cgu_cim", 24000000, {0x14, 0x0a}, 1, {0x0000, 0x0001}, 2, 2, NULL},
-	{"mis2003", 0x30,  "cgu_cim", 24000000, {0x20, 0x03}, 1, {0x3000, 0x3001}, 2, 2, NULL},
-	{"jxk03",  0x40,  "cgu_cim", 24000000, {0x05, 0x03}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"sc5235", 0x30,  "cgu_cim", 24000000, {0x52, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"ov5648", 0x36,  "cgu_cim", 24000000, {0x56, 0x48}, 1, {0x300a, 0x300b}, 2, 2, NULL},
-	{"ps5280", 0x48,  "cgu_cim", 24000000, {0x52, 0x80}, 1, {0x00, 0x01}, 1, 2, NULL},
-	{"jxf23s", 0x40,  "cgu_cim", 24000000, {0x0f, 0x23}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"gc2053", 0x37,  "cgu_cim", 24000000, {0x20, 0x53}, 1, {0xf0, 0xf1}, 1, 2, NULL},
-	{"sc4335", 0x30,  "cgu_cim", 27000000, {0xcd, 0x01}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"ps5260", 0x48,  "cgu_cim", 24000000, {0x52, 0x60}, 1, {0x00, 0x01}, 1, 2, NULL},
-	{"os04b10", 0x3c,  "cgu_cim", 24000000, {0x43, 0x08, 0x01}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
-	{"jxk05",  0x40,  "cgu_cim", 24000000, {0x05, 0x05}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"jxh63",  0x40,  "cgu_cim", 24000000, {0x0a, 0x63}, 1, {0x0a, 0x0b}, 1, 2, NULL},
-	{"sc2335", 0x30,  "cgu_cim", 24000000, {0xcb, 0x14}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"jxf37",  0x40,  "cgu_cim", 24000000, {0x0f, 0x37}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"gc4653", 0x29,  "cgu_cim", 24000000, {0x46, 0x53}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
-	{"c23a98", 0x36,  "cgu_cim", 24000000, {0x23, 0x98}, 1, {0x0000, 0x0001}, 2, 2, NULL},
-	{"sc3335", 0x30,  "cgu_cim", 24000000, {0xcc, 0x1a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc3235", 0x30,  "cgu_cim", 24000000, {0xcc, 0x05}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc200ai", 0x30,  "cgu_cim", 24000000, {0xcb, 0x1c}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc401ai", 0x30,  "cgu_cim", 24000000, {0xcd, 0x2e}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc500ai", 0x30,  "cgu_cim", 24000000, {0xce, 0x1f}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"jxq03",  0x40,  "cgu_cim", 24000000, {0x05, 0x07}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"jxq03p",  0x40,  "cgu_cim", 24000000, {0x08, 0x43}, 1, {0xa, 0xb}, 1, 2, NULL},
-	{"sc3338", 0x30,  "cgu_cim", 24000000, {0xcc, 0x41}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"hm2140", 0x24,  "cgu_cim", 24000000, {0x21, 0x40}, 1, {0x0000, 0x0001}, 2, 2, NULL},
+	// Several Sony sensors share identical ID's, for now, lets leave the imx307 enabled and disable the others.
+	//{"imx219", 0x1a,  "div_cim", 24000000, {0xA0, 0xB2}, 1, {0x3008, 0x301e}, 2, 2, NULL},
+	{"imx225", 0x1a,  "cgu_cim", 24000000, {0x10, 0x01}, 1, {0x3004, 0x3013}, 2, 2, NULL},
+	//{"imx291", 0x1a,  "cgu_cim", 37125000, {0xA0, 0xB2}, 1, {0x3008, 0x301e}, 2, 2, NULL},
+	{"imx307", 0x1a,  "cgu_cim", 37125000, {0xA0, 0xB2}, 1, {0x3008, 0x301e}, 2, 2, NULL},
+	{"imx322", 0x1a,  "cgu_cim", 37125000, {0x50, 0x0}, 1, {0x301c, 0x301d}, 2, 2, NULL},
+	{"imx323", 0x1a,  "cgu_cim", 37125000, {0x50, 0x0}, 1, {0x301c, 0x301d}, 2, 2, NULL},
+	{"imx327", 0x1a,  "cgu_cim", 37125000, {0xB2, 0x01}, 1, {0x301e, 0x301f}, 2, 2, NULL},
 	{"imx334", 0x1a,  "cgu_cim", 37125000, {0x20, 0x03}, 1, {0x302e, 0x302f}, 2, 2, NULL},
 	{"imx335", 0x1a,  "cgu_cim", 37125000, {0x08, 0x0}, 1, {0x302e, 0x302f}, 2, 2, NULL},
 	{"imx415", 0x1a,  "cgu_cim", 37125000, {0x28, 0x23}, 1, {0x3b00, 0x3b06}, 2, 2, NULL},
-	{"sc2336", 0x30,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"gc4023", 0x21,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
-	{"gc4023", 0x29,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
+	{"jxf22",  0x40,  "cgu_cim", 24000000, {0x0f, 0x22}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxf23",  0x40,  "cgu_cim", 24000000, {0x0f, 0x23}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxf23s", 0x40,  "cgu_cim", 24000000, {0x0f, 0x23}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxf28",  0x40,  "cgu_cim", 24000000, {0x0f, 0x28}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxf37",  0x40,  "cgu_cim", 24000000, {0x0f, 0x37}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxh42",  0x30,  "cgu_cim", 24000000, {0xa0, 0x42, 0x81}, 1, {0xa, 0xb, 0x9}, 1, 3, NULL},
+	{"jxh61",  0x30,  "cgu_cim", 24000000, {0xa0, 0x42, 0x3}, 1, {0xa, 0xb, 0x9}, 1, 3, NULL},
+	{"jxh62",  0x30,  "cgu_cim", 24000000, {0xa0, 0x62}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxh63",  0x40,  "cgu_cim", 24000000, {0x0a, 0x63}, 1, {0x0a, 0x0b}, 1, 2, NULL},
+	{"jxh65",  0x30,  "cgu_cim", 24000000, {0x0a, 0x65}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxk02",  0x40,  "cgu_cim", 24000000, {0x04, 0x03}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxk03",  0x40,  "cgu_cim", 24000000, {0x05, 0x03}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxk04",  0x40,  "cgu_cim", 24000000, {0x04, 0x04}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxk05",  0x40,  "cgu_cim", 24000000, {0x05, 0x05}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxq03",  0x40,  "cgu_cim", 24000000, {0x05, 0x07}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxq03p",  0x40,  "cgu_cim", 24000000, {0x08, 0x43}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"jxv01",  0x21,  "cgu_cim", 27000000, {0x0e, 0x04}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"mis2003", 0x30,  "cgu_cim", 24000000, {0x20, 0x03}, 1, {0x3000, 0x3001}, 2, 2, NULL},
+	{"os02b10", 0x3c,  "cgu_cim", 24000000, {0x23, 0x08}, 1, {0x02, 0x03}, 1, 2, NULL},
 	{"os03b10", 0x3c,  "cgu_cim", 24000000, {0x53, 0x03, 0x42}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
-	{"jxk04",  0x40,  "cgu_cim", 24000000, {0x04, 0x04}, 1, {0xa, 0xb}, 1, 2, NULL}
+	{"os04b10", 0x3c,  "cgu_cim", 24000000, {0x43, 0x08, 0x01}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
+	{"os05a10", 0x36,  "cgu_cim", 24000000, {0x53, 0x05, 0x41}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
+	{"ov2710", 0x36,  "cgu_cim", 24000000, {0x27, 0x10}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov2718", 0x36,  "cgu_cim", 24000000, {0x27, 0x70}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov2732", 0x36,  "cgu_cim", 24000000, {0x00, 0x27, 0x32}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
+	{"ov2735", 0x3c,  "cgu_cim", 24000000, {0x27, 0x35, 0x05}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
+	{"ov2735b", 0x3c,  "cgu_cim", 24000000, {0x27, 0x35, 0x6, 0x7}, 1, {0x02, 0x03, 0x04, 0x04}, 1, 4, NULL},
+	{"ov4689", 0x36,  "cgu_cim", 24000000, {0x46, 0x88}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov5647", 0x36,  "cgu_cim", 24000000, {0x56, 0x47}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov5648", 0x36,  "cgu_cim", 24000000, {0x56, 0x48}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov7740", 0x21,  "cgu_cim", 24000000, {0x77, 0x42}, 1, {0x0a, 0x0b}, 1, 2, NULL},
+	{"ov9712", 0x30,  "cgu_cim", 24000000, {0x97, 0x11}, 1, {0xa, 0xb}, 1, 2, NULL},
+	{"ov9732", 0x36,  "cgu_cim", 24000000, {0x97, 0x32}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"ov9750", 0x36,  "cgu_cim", 24000000, {0x97, 0x50}, 1, {0x300b, 0x300c}, 2, 2, NULL},
+	{"ps5230", 0x48,  "cgu_cim", 24000000, {0x52, 0x30}, 1, {0x00, 0x01}, 1, 2, NULL},
+	{"ps5250", 0x48,  "cgu_cim", 24000000, {0x52, 0x50}, 1, {0x00, 0x01}, 1, 2, NULL},
+	{"ps5260", 0x48,  "cgu_cim", 24000000, {0x52, 0x60}, 1, {0x00, 0x01}, 1, 2, NULL},
+	{"ps5270", 0x48,  "cgu_cim", 24000000, {0x52, 0x70}, 1, {0x00, 0x01}, 1, 2, NULL},
+	{"ps5280", 0x48,  "cgu_cim", 24000000, {0x52, 0x80}, 1, {0x00, 0x01}, 1, 2, NULL},
+	{"sc1035", 0x30,  "cgu_cim", 24000000, {0xf0, 0x00}, 1, {0x580b, 0x3c05}, 2, 2, NULL},
+	{"sc1045", 0x30,  "cgu_cim", 24000000, {0x10, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc1135", 0x30,  "cgu_cim", 24000000, {0x00, 0x35}, 1, {0x580b, 0x2148}, 2, 2, NULL},
+	{"sc1145", 0x30,  "cgu_cim", 24000000, {0x11, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc1235", 0x30,  "cgu_cim", 24000000, {0x12, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc1245", 0x30,  "cgu_cim", 24000000, {0x12, 0x45, 0x03}, 1, {0x3107, 0x3108, 0x3020}, 2, 3, NULL},
+	{"sc1245a", 0x30,  "cgu_cim", 24000000, {0x12, 0x45, 0x02}, 1, {0x3107, 0x3108, 0x3020}, 2, 3, NULL},
+	{"sc200ai", 0x30,  "cgu_cim", 24000000, {0xcb, 0x1c}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2135", 0x30,  "cgu_cim", 24000000, {0x21, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2145", 0x30,  "cgu_cim", 24000000, {0x21, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2230", 0x30,  "cgu_cim", 24000000, {0x22, 0x32, 0x20}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
+	{"sc2232", 0x30,  "cgu_cim", 24000000, {0x22, 0x32, 0x01}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
+	{"sc2232h", 0x30,  "cgu_cim", 24000000, {0xcb, 0x07, 0x01}, 1, {0x3107, 0x3108, 0x3109}, 2, 3, NULL},
+	{"sc2235", 0x30,  "cgu_cim", 24000000, {0x22, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2300", 0x30,  "cgu_cim", 24000000, {0x23, 0x00}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2310", 0x30,  "cgu_cim", 24000000, {0x23, 0x11}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2332", 0x30,  "cgu_cim", 24000000, {0xcb, 0x17}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2335", 0x30,  "cgu_cim", 24000000, {0xcb, 0x14}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2336", 0x30,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc3035", 0x30,  "cgu_cim", 24000000, {0x30, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc3235", 0x30,  "cgu_cim", 24000000, {0xcc, 0x05}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc3335", 0x30,  "cgu_cim", 24000000, {0xcc, 0x1a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc3338", 0x30,  "cgu_cim", 24000000, {0xcc, 0x41}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc401ai", 0x30,  "cgu_cim", 24000000, {0xcd, 0x2e}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc4236", 0x30,  "cgu_cim", 24000000, {0x32, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc4335", 0x30,  "cgu_cim", 27000000, {0xcd, 0x01}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc500ai", 0x30,  "cgu_cim", 24000000, {0xce, 0x1f}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc5235", 0x30,  "cgu_cim", 24000000, {0x52, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc8238", 0x30,  "cgu_cim", 24000000, {0x82, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sp1409", 0x34,  "cgu_cim", 24000000, {0x14, 0x09}, 1, {0x04, 0x05}, 1, 2, NULL},
+	{"sp140a", 0x3c,  "cgu_cim", 24000000, {0x14, 0x0a}, 1, {0x02, 0x03}, 1, 2, NULL},
+#ifdef CONFIG_SOC_T41
+	{"gc2063", 0x37,  "cgu_cim", 24000000, {0x20, 0x53}, 1, {0xf0, 0xf1}, 1, 2, NULL},
+	{"gc4663", 0x29,  "cgu_cim", 24000000, {0x46, 0x53}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
+#else
+	{"gc2053", 0x37,  "cgu_cim", 24000000, {0x20, 0x53}, 1, {0xf0, 0xf1}, 1, 2, NULL},
+	{"gc4653", 0x29,  "cgu_cim", 24000000, {0x46, 0x53}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
+#endif
 };
 
 static int8_t g_sensor_id = -1;
@@ -225,13 +261,13 @@ int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, ui
 		buf[2] = (addr>>8)&0xff;
 		buf[3] = addr&0xff;
 	} else {
-		printk("error: %s,%d wlen = %d\n", __func__, __LINE__, wlen);
+		pr_debug("sinfo: [Error] Function: %s, Line: %d, Invalid write length (wlen): %d\n", __func__, __LINE__, wlen);
 	}
 	ret = i2c_transfer(adap, msg, 2);
 	if (ret > 0)
 		ret = 0;
 	if (0 != ret)
-		printk("error: %s,%d ret = %d\n", __func__, __LINE__, ret);
+		pr_debug("sinfo: [Error] Function: %s, Line: %d, I2C transfer failed with return code: %d\n", __func__, __LINE__, ret);
 	if (1 == rlen) {
 		*value = data[0];
 	} else if (2 == rlen){
@@ -241,16 +277,18 @@ int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, ui
 	} else if (4 == rlen){
 		*value = (data[0]<<24)|(data[1]<<16)|(data[2]<<8)|data[3];
 	} else {
-		printk("error: %s,%d rlen = %d\n", __func__, __LINE__, rlen);
+		pr_debug("sinfo: [Error] Function: %s, Line: %d, Invalid read length (rlen): %d\n", __func__, __LINE__, rlen);
 	}
-	printk(" sensor_read: addr=0x%x value = 0x%x\n", addr, *value);
+	pr_debug("sinfo: Read from address: 0x%x, Value: 0x%x\n", addr, *value);
 	return ret;
 }
+
 static int32_t process_one_adapter(struct device *dev, void *data)
 {
 	int32_t ret;
 	int32_t i = 0;
 	int32_t j = 0;
+	struct clk *sclk;
 	struct clk *mclk;
 	struct i2c_adapter *adap;
 	uint8_t scnt = sizeof(g_sinfo)/sizeof(g_sinfo[0]);
@@ -261,7 +299,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 	}
 
 	adap = to_i2c_adapter(dev);
-	printk("name : %s nr : %d\n", adap->name, adap->nr);
+	pr_debug("sinfo: Processing I2C bus: %s, Number: %d\n", adap->name, adap->nr);
 
 	if (adap->nr != i2c_adapter_nr) {
 		mutex_unlock(&g_mutex);
@@ -276,24 +314,52 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		}
 	}
 #endif
+#ifdef CONFIG_SOC_T41
+	if (cim_gpio != -1) {
+		ret = gpio_request(cim_gpio,"cim");
+		if (!ret) {
+			jzgpio_set_func((cim_gpio / 32), GPIO_FUNC_1, 1 << (cim_gpio % 32));
+		}
+	}
+
+#endif
 
 	for (i = 0; i < scnt; i++) {
 		uint8_t idcnt = g_sinfo[i].id_cnt;
+
 #ifdef CONFIG_SOC_T40
-		g_sinfo[i].clk_name = "div_cim1";
+		g_sinfo[i].mclk_name = "div_cim1";
 #endif
-		mclk = clk_get(NULL, g_sinfo[i].clk_name);
+
+#ifdef CONFIG_SOC_T41
+#ifdef CONFIG_KERNEL_4_4_94
+		sclk_name = "mux_cim";
+		g_sinfo[i].mclk_name = "div_cim";
+		sclk = clk_get(NULL, sclk_name);
+		if (IS_ERR(sclk)) {
+			pr_debug("sinfo: [Error] Failed to get sensor input clock 'mux_cim'\n");
+			mutex_unlock(&g_mutex);
+			return PTR_ERR(sclk);
+		}
+		clk_set_rate(sclk, (unsigned long)clk_get(NULL, "vpll"));
+#endif
+#endif
+
+		mclk = clk_get(NULL, g_sinfo[i].mclk_name);
 		if (IS_ERR(mclk)) {
-			printk("Cannot get sensor input clock cgu_cim\n");
+			pr_debug("sinfo: [Error] Failed to get sensor input clock 'div_cim'\n");
 			mutex_unlock(&g_mutex);
 			return PTR_ERR(mclk);
 		}
+
 		clk_set_rate(mclk, g_sinfo[i].clk);
-#ifdef CONFIG_SOC_T40
+
+#if defined (CONFIG_SOC_T40) || (CONFIG_SOC_T41)
 		clk_prepare_enable(mclk);
 #else
 		clk_enable(mclk);
 #endif
+
 		if (reset_gpio != -1) {
 			ret = gpio_request(reset_gpio,"reset");
 			if (!ret)  {
@@ -308,7 +374,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 					msleep(20);
 				}
 			} else {
-				printk("gpio requrest fail %d\n",reset_gpio);
+				pr_debug("sinfo: [Error] GPIO request failed for reset GPIO number: %d\n", reset_gpio);
 			}
 		}
 		if (pwdn_gpio != -1) {
@@ -322,7 +388,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 				else
 					msleep(10);
 			} else {
-				printk("gpio requrest fail %d\n",pwdn_gpio);
+				pr_debug("sinfo: [Error] GPIO request failed for power down GPIO number: %d\n", pwdn_gpio);
 			}
 		}
 
@@ -330,7 +396,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 			uint32_t value = 0;
 			ret = sensor_read(&g_sinfo[i], adap, g_sinfo[i].id_addr[j], &value);
 			if (0 != ret) {
-				printk("err sensor read addr = 0x%x, value = 0x%x\n", g_sinfo[i].id_addr[j], value);
+				pr_debug("sinfo: [Error] Failed to read sensor at address 0x%x, value read: 0x%x\n", g_sinfo[i].id_addr[j], value);
 				break;
 			}
 			if (strcmp(g_sinfo[i].name, "ov2735b") == 0 && j == 2) {
@@ -349,13 +415,17 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		clk_disable(mclk);
 		clk_put(mclk);
 		if (j == idcnt) {
-			printk("info: success sensor find : %s\n", g_sinfo[i].name);
 			g_sinfo[i].adap = adap;
 			g_sensor_id = i;
+			if (g_sinfo[i].adap) {
+				printk("sinfo: Successful sensor detection: %s, I2C Bus: %d, I2C Address: 0x%X\n", g_sinfo[i].name, g_sinfo[i].adap->nr, g_sinfo[i].i2c_addr);
+			} else {
+				printk("sinfo: Successful sensor detection: %s, I2C Bus: unknown, I2C Address: 0x%X\n", g_sinfo[i].name, g_sinfo[i].i2c_addr);
+		}
 			goto end_sensor_find;
 		}
 	}
-	printk("info: failed sensor find\n");
+	printk("sinfo: [Info] Failed to find sensor\n");
 	g_sensor_id = -1;
 	mutex_unlock(&g_mutex);
 	return 0;
@@ -367,26 +437,44 @@ end_sensor_find:
 static int32_t sensor_open(void)
 {
 	int ret = -1;
+	struct clk *sclk;
 	struct clk *mclk;
 	if (-1 == g_sensor_id)
 		return 0;
 
 	mutex_lock(&g_mutex);
 #ifdef CONFIG_SOC_T40
-	g_sinfo[g_sensor_id].clk_name = "div_cim1";
+	g_sinfo[g_sensor_id].mclk_name = "div_cim1";
 #endif
-	mclk = clk_get(NULL, g_sinfo[g_sensor_id].clk_name);
+
+#ifdef CONFIG_SOC_T41
+#ifdef CONFIG_KERNEL_4_4_94
+		sclk_name = "mux_cim";
+		g_sinfo[g_sensor_id].mclk_name = "div_cim";
+		sclk = clk_get(NULL, sclk_name);
+		if (IS_ERR(sclk)) {
+			pr_debug("sinfo: [Error] Failed to get sensor input clock 'mux_cim'\n");
+			mutex_unlock(&g_mutex);
+			return PTR_ERR(sclk);
+		}
+		clk_set_rate(sclk, (unsigned long)clk_get(NULL, "vpll"));
+#endif
+#endif
+
+	mclk = clk_get(NULL, g_sinfo[g_sensor_id].mclk_name);
 	if (IS_ERR(mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		pr_debug("sinfo: [Error] Failed to get sensor input clock 'cgu_cim'\n");
 		mutex_unlock(&g_mutex);
 		return PTR_ERR(mclk);
 	}
 	clk_set_rate(mclk, g_sinfo[g_sensor_id].clk);
-#ifdef CONFIG_SOC_T40
+
+#if defined (CONFIG_SOC_T40) || (CONFIG_SOC_T41)
 	clk_prepare_enable(mclk);
 #else
 	clk_enable(mclk);
 #endif
+
 	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"reset");
 		if (!ret){
@@ -397,7 +485,7 @@ static int32_t sensor_open(void)
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 		} else {
-			printk("gpio requrest fail %d\n",reset_gpio);
+			pr_debug("sinfo: [Error] GPIO request failed for reset GPIO number: %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -408,7 +496,7 @@ static int32_t sensor_open(void)
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio requrest fail %d\n",pwdn_gpio);
+			pr_debug("sinfo: [Error] GPIO request failed for power down GPIO number: %d\n", pwdn_gpio);
 		}
 	}
 	mutex_unlock(&g_mutex);
@@ -421,9 +509,9 @@ static int32_t sensor_release(void)
 	if (-1 == g_sensor_id)
 		return 0;
 	mutex_lock(&g_mutex);
-	mclk = clk_get(NULL, g_sinfo[g_sensor_id].clk_name);
+	mclk = clk_get(NULL, g_sinfo[g_sensor_id].mclk_name);
 	if (IS_ERR(mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		pr_debug("sinfo: [Error] Failed to get sensor input clock 'cgu_cim'\n");
 		mutex_unlock(&g_mutex);
 		return PTR_ERR(mclk);
 	}
@@ -461,7 +549,7 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 	}
 
 	adap = to_i2c_adapter(dev);
-	printk("name : %s nr : %d\n", adap->name, adap->nr);
+	pr_debug("sinfo: Processing I2C adapter: Name: %s, Number: %d\n", adap->name, adap->nr);
 
 	if (adap->nr != i2c_adapter_nr) {
 		mutex_unlock(&g_mutex);
@@ -484,14 +572,14 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 			buf[2] = ((t->data)>>8)&0xff;
 			buf[3] = (t->data)&0xff;
 		} else {
-			printk("error: %s,%d len = %d\n", __func__, __LINE__, len);
+			pr_debug("sinfo: [Error] Function: %s, Line: %d, I2C transfer failed with return code: %d\n", __func__, __LINE__, ret);
 		}
 	}
 	ret = i2c_transfer(adap, &msg, 1);
 	if (ret > 0)
 		ret = 0;
 	if (0 != ret)
-		printk("error: %s,%d ret = %d\n", __func__, __LINE__, ret);
+		pr_debug("sinfo: [Error] Function: %s, Line: %d, I2C transfer failed with return code: %d\n", __func__, __LINE__, ret);
 
 	if (I2C_READ == t->r_w) {
 		if (1 == len) {
@@ -503,9 +591,9 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 		} else if (4 == len) {
 			value = (buf[0]<<24)|(buf[1]<<16)|(buf[2]<<8)|buf[3];
 		} else {
-			printk("error: %s,%d len = %d\n", __func__, __LINE__, len);
+			pr_debug("sinfo: [Error] Function: %s, Line: %d, I2C transfer failed with return code: %d\n", __func__, __LINE__, ret);
 		}
-		printk(" i2c: addr=0x%x value = 0x%x\n", t->addr, value);
+		pr_debug("sinfo: I2C read from address: 0x%x, Value: 0x%x\n", t->addr, value);
 	}
 	mutex_unlock(&g_mutex);
 	return 0;
@@ -523,7 +611,7 @@ static long sinfo_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		else
 			data = g_sensor_id;
 		if (copy_to_user((void *)arg, &data, sizeof(data))) {
-			printk("copy_from_user error!!!\n");
+			pr_debug("sinfo: [Error] copy_from_user failed in IOCTL operation\n");
 			ret = -EFAULT;
 			break;
 		}
@@ -532,7 +620,7 @@ static long sinfo_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		i2c_for_each_dev(NULL, process_one_adapter);
 		break;
 	default:
-		printk("invalid command: 0x%08x\n", cmd);
+		pr_debug("sinfo: [Error] Invalid IOCTL command received: 0x%08x\n", cmd);
 		ret = -EINVAL;
 	}
 	mutex_unlock(&g_mutex);
@@ -545,7 +633,7 @@ static int sinfo_open(struct inode *inode, struct file *filp)
 }
 static int sinfo_release(struct inode *inode, struct file *filp)
 {
-	printk ("misc sinfo_release\n");
+	pr_debug("sinfo: Sensor release function invoked\n");
 	sensor_release();
 	return 0;
 }
@@ -592,7 +680,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 	uint32_t addr,data,datalen;
 
 	if (len > 100) {
-		printk("err: cmd too long\n");
+		pr_debug("sinfo: [Error] Command too long in proc write\n");
 		return -EFAULT;
 	}
 	if (copy_from_user(cmd, buf, len)) {
@@ -618,21 +706,21 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 	} else if (!strncmp(cmd, "i2c-w:", strlen("i2c-w:"))) {
 		ret = sscanf(cmd, "i2c-w:%i-%i-%i", &addr, &data, &datalen);
 		if (3 != ret) {
-			printk("err: cmd error %s\n", cmd);
+			pr_debug("sinfo: [Error] Command parsing error: %s\n", cmd);
 			return len;
 		} else {
 			struct i2c_trans t = {addr, I2C_WRITE, data, datalen};
-			printk("info: i2c-w:%d-%d-%d\n", addr, data, datalen);
+			pr_debug("sinfo: I2C write command: Address: 0x%x, Data: 0x%x, Data Length: %d\n", addr, data, datalen);
 			i2c_for_each_dev(&t, i2c_read_write);
 		}
 	} else if (!strncmp(cmd, "i2c-r:", strlen("i2c-r:"))) {
 		ret = sscanf(cmd, "i2c-r:%i-%i", &addr, &datalen);
 		if (2 != ret) {
-			printk("err: cmd error %s\n", cmd);
+			pr_debug("sinfo: [Error] Command parsing error: %s\n", cmd);
 			return len;
 		} else {
 			struct i2c_trans t = {addr, I2C_READ, 0, datalen};
-			printk("info: i2c-r:%d-%d\n", addr, datalen);
+			pr_debug("sinfo: I2C read command: Address: 0x%x, Data Length: %d\n", addr, datalen);
 			i2c_for_each_dev(&t, i2c_read_write);
 		}
 	} else if (!strncmp(cmd, "open", strlen("open"))) {
@@ -640,7 +728,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 		char s[20] = {0};
 		ret = sscanf(cmd, "open:%s", s);
 		if (1 != ret) {
-			printk("err: cmd error %s\n", cmd);
+			pr_debug("sinfo: [Error] Command parsing error: %s\n", cmd);
 			return len;
 		} else {
 			uint8_t scnt = sizeof(g_sinfo)/sizeof(g_sinfo[0]);
@@ -651,7 +739,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 				}
 			}
 			if (i >= scnt) {
-				printk("err: sensor not found %s, cmd %s\n", s, cmd);
+				pr_debug("sinfo: [Error] Sensor '%s' not found, command: %s\n", s, cmd);
 				return len;
 			}
 			sensor_open();
@@ -659,7 +747,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 	} else if (!strncmp(cmd, "release", strlen("release"))) {
 		sensor_release();
 	} else {
-		printk("err: cmd not support\n");
+		pr_debug("sinfo: [Error] Command not supported\n");
 	}
 	return len;
 }
@@ -683,7 +771,7 @@ static __init int init_sinfo(void)
 #endif
 	g_sinfo_proc = proc_mkdir("jz/sinfo", 0);
 	if (!g_sinfo_proc) {
-		printk("err: jz_proc_mkdir failed\n");
+		pr_debug("sinfo: [Error] Failed to create proc directory 'jz/sinfo'\n");
 	}
 	proc_create_data("info", S_IRUGO, g_sinfo_proc, &sinfo_proc_fops, NULL);
 	/* i2c_for_each_dev(NULL, process_one_adapter); */
@@ -702,5 +790,5 @@ static __exit void exit_sinfo(void)
 module_init(init_sinfo);
 module_exit(exit_sinfo);
 
-MODULE_DESCRIPTION("A Simple driver for get sensors info ");
+MODULE_DESCRIPTION("Ingenic T-Series Sensor Info Driver");
 MODULE_LICENSE("GPL");
