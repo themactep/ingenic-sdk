@@ -31,7 +31,7 @@
 
 #define SENSOR_OUTPUT_MAX_FPS		30
 #define SENSOR_OUTPUT_MIN_FPS		5
-#define SENSOR_VERSION			"H20220704a"
+#define SENSOR_VERSION			"H20201128"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -234,13 +234,13 @@ struct tx_isp_sensor_attribute c2399_attr={
 	.total_width = 1980,
 	.total_height = 1325,
 	.max_integration_time = 1321,
-	.one_line_expr_in_us = 30,
 	.integration_time_apply_delay = 0,
 	.again_apply_delay = 0,
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = c2399_alloc_again,
 	.sensor_ctrl.alloc_dgain = c2399_alloc_dgain,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	.one_line_expr_in_us = 30,
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 
@@ -276,9 +276,8 @@ static struct regval_list c2399_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3118,0x50},
 	{0x311b,0x01},
 	{0x3126,0x02},
-	{0x0202,0x00},
-	{0x0203,0x64},
-	{0x0205,0x00},
+	{0x0202,0x03},
+	{0x0203,0xe0},
 	{0x3584,0x22},
 	{0x3009,0x05},
 	{0x022d,0x1f},
@@ -700,7 +699,6 @@ static int c2399_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-#if 0
 static int c2399_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -728,7 +726,6 @@ static int c2399_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	}
 	return 0;
 }
-#endif
 
 static int c2399_set_expo(struct tx_isp_subdev *sd, int value)
 {
@@ -769,7 +766,6 @@ static int c2399_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = c2399_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -839,7 +835,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += c2399_read(sd, 0x0342, &tmp);
 	hts = tmp;
 	ret += c2399_read(sd, 0x0343, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 
 	hts = (hts << 8) + tmp;
@@ -847,7 +843,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = c2399_write(sd, 0x0340, (unsigned char)((vts & 0xff00) >> 8));
 	ret += c2399_write(sd, 0x0341, (unsigned char)(vts & 0xff));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 
 	sensor->video.fps = fps;
@@ -857,7 +853,7 @@ static int c2399_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	return ret;
+	return 0;
 }
 
 static int c2399_set_mode(struct tx_isp_subdev *sd, int value)
@@ -923,7 +919,6 @@ static int c2399_g_chip_ident(struct tx_isp_subdev *sd,
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return ret;
 }
 

@@ -36,7 +36,7 @@
 #define GC2033_SUPPORT_WPCLK_FPS_15 (48000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20190423a"
+#define SENSOR_VERSION	"H20190708a"
 
 struct regval_list {
 	unsigned char reg_num;
@@ -46,7 +46,7 @@ static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
-static int pwdn_gpio = GPIO_PA(19);
+static int pwdn_gpio = -1;
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
@@ -675,7 +675,7 @@ static int gc2053_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	unsigned char val;
 	while (vals->reg_num != GC2053_FLAG_END) {
 		if (vals->reg_num == GC2053_FLAG_DELAY) {
-				msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = gc2053_read(sd, vals->reg_num, &val);
 			if (ret < 0)
@@ -696,7 +696,7 @@ static int gc2053_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	int ret;
 	while (vals->reg_num != GC2053_FLAG_END) {
 		if (vals->reg_num == GC2053_FLAG_DELAY) {
-				msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = gc2053_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
@@ -843,18 +843,19 @@ static int gc2053_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		switch (sensor_max_fps) {
-		case TX_SENSOR_MAX_FPS_25:
-			wpclk = GC2033_SUPPORT_WPCLK_FPS_30;
-			max_fps = SENSOR_OUTPUT_MAX_FPS;
-			break;
-		case TX_SENSOR_MAX_FPS_15:
-			wpclk = GC2033_SUPPORT_WPCLK_FPS_15;
-			max_fps = TX_SENSOR_MAX_FPS_15;
-			break;
-		default:
-			printk("Now we do not support this framerate!!!\n");
+			case TX_SENSOR_MAX_FPS_25:
+				wpclk = GC2033_SUPPORT_WPCLK_FPS_30;
+				max_fps = SENSOR_OUTPUT_MAX_FPS;
+				break;
+			case TX_SENSOR_MAX_FPS_15:
+				wpclk = GC2033_SUPPORT_WPCLK_FPS_15;
+				max_fps = TX_SENSOR_MAX_FPS_15;
+				break;
+			default:
+				ret = -1;
+				printk("Now we do not support this framerate!!!\n");
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 		wpclk = GC2033_SUPPORT_WPCLK_FPS_30;
@@ -941,7 +942,7 @@ static int gc2053_set_vflip(struct tx_isp_subdev *sd, int enable)
 }
 
 static int gc2053_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -976,10 +977,10 @@ static int gc2053_g_chip_ident(struct tx_isp_subdev *sd,
 	ret = gc2053_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an gc2053 chip.\n",
-				client->addr, client->adapter->name);
+		       client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("gc2053 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("sensor version=%s, gc2053 chip found @ 0x%02x (%s)\n", SENSOR_VERSION, client->addr, client->adapter->name);
 	if(chip){
 		memcpy(chip->name, "gc2053", sizeof("gc2053"));
 		chip->ident = ident;
@@ -1105,7 +1106,7 @@ struct platform_device sensor_platform_device = {
 
 
 static int gc2053_probe(struct i2c_client *client,
-		const struct i2c_device_id *id)
+			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -1135,19 +1136,22 @@ static int gc2053_probe(struct i2c_client *client,
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
+
 		switch(sensor_gpio_func){
-		case DVP_PA_LOW_10BIT:
-		case DVP_PA_HIGH_10BIT:
-			mbus = gc2053_mbus_code[0];
-			break;
-		case DVP_PA_12BIT:
-			mbus = gc2053_mbus_code[1];
-			break;
-		default:
-			goto err_set_sensor_gpio;
+			case DVP_PA_LOW_10BIT:
+			case DVP_PA_HIGH_10BIT:
+				mbus = gc2053_mbus_code[0];
+				break;
+			case DVP_PA_12BIT:
+				mbus = gc2053_mbus_code[1];
+				break;
+			default:
+				goto err_set_sensor_gpio;
 		}
-		for(i = 0; i < ARRAY_SIZE(gc2053_win_sizes); i++)
+
+		for (i = 0; i < ARRAY_SIZE(gc2053_win_sizes); i++)
 			gc2053_win_sizes[i].mbus_code = mbus;
+
 		wsize->regs = gc2053_init_regs_1920_1080_25fps_dvp;
 		memcpy((void*)(&(gc2053_attr.dvp)),(void*)(&gc2053_dvp),sizeof(gc2053_dvp));
 		gc2053_attr.dvp.gpio = sensor_gpio_func;
@@ -1158,9 +1162,9 @@ static int gc2053_probe(struct i2c_client *client,
 		printk("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
-	 /*
-		convert sensor-gain into isp-gain,
-	 */
+	/*
+	  convert sensor-gain into isp-gain,
+	*/
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		break;

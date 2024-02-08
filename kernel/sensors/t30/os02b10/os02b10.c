@@ -138,7 +138,7 @@ unsigned int os02b10_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 
 unsigned int os02b10_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_sensor_attribute os02b10_attr={
@@ -169,6 +169,7 @@ struct tx_isp_sensor_attribute os02b10_attr={
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = os02b10_alloc_again,
 	.sensor_ctrl.alloc_dgain = os02b10_alloc_dgain,
+	.one_line_expr_in_us = 29,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
@@ -309,7 +310,7 @@ static struct regval_list os02b10_stream_off[] = {
 };
 
 int os02b10_read(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char *value)
+		 unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -335,7 +336,7 @@ int os02b10_read(struct tx_isp_subdev *sd, unsigned char reg,
 }
 
 static int os02b10_write(struct tx_isp_subdev *sd, unsigned char reg,
-			unsigned char value)
+			 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
@@ -359,7 +360,7 @@ static int os02b10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	unsigned char val;
 	while (vals->reg_num != OS02B10_REG_END) {
 		if (vals->reg_num == OS02B10_REG_DELAY) {
-				msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = os02b10_read(sd, vals->reg_num, &val);
 			if (ret < 0)
@@ -380,7 +381,7 @@ static int os02b10_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 	int ret;
 	while (vals->reg_num != OS02B10_REG_END) {
 		if (vals->reg_num == OS02B10_REG_DELAY) {
-				msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = os02b10_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
@@ -570,32 +571,8 @@ static int os02b10_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int os02b10_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	ret = os02b10_write(sd, 0xfd, 0x01);
-	ret += os02b10_read(sd, 0x3f, &val);
-	if (enable){
-		val = val | 0x02;
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
-	} else {
-		val = val & 0xfd;
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
-	}
-	sensor->video.mbus_change = 1;
-	ret += os02b10_write(sd, 0x3f, val);
-	ret += os02b10_write(sd, 0x01, 0x01);
-
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-	return ret;
-}
-
 static int os02b10_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+				struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -628,7 +605,7 @@ static int os02b10_g_chip_ident(struct tx_isp_subdev *sd,
 	ret = os02b10_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an os02b10 chip.\n",
-				client->addr, client->adapter->name);
+		       client->addr, client->adapter->name);
 		return ret;
 	}
 	printk("ov2735 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
@@ -676,10 +653,6 @@ static int os02b10_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		case TX_ISP_EVENT_SENSOR_FPS:
 			if(arg)
 				ret = os02b10_set_fps(sd, *(int*)arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
-				ret = os02b10_set_vflip(sd, *(int*)arg);
 			break;
 		default:
 			break;;
@@ -756,7 +729,7 @@ struct platform_device sensor_platform_device = {
 
 
 static int os02b10_probe(struct i2c_client *client,
-		const struct i2c_device_id *id)
+			 const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -782,32 +755,14 @@ static int os02b10_probe(struct i2c_client *client,
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)
 		goto err_set_sensor_gpio;
+
 	os02b10_attr.dvp.gpio = sensor_gpio_func;
-
-#if 0
-	switch(sensor_gpio_func){
-		case DVP_PA_LOW_10BIT:
-		case DVP_PA_HIGH_10BIT:
-			mbus = os02b10_mbus_code[0];
-			break;
-		case DVP_PA_12BIT:
-			mbus = os02b10_mbus_code[1];
-			break;
-		default:
-			goto err_set_sensor_gpio;
-	}
-
-	for(i = 0; i < ARRAY_SIZE(os02b10_win_sizes); i++)
-		os02b10_win_sizes[i].mbus_code = mbus;
-
-#endif
 
 	os02b10_attr.max_again = 259142;
 	os02b10_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &os02b10_attr;
-	sensor->video.mbus_change = 1;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;

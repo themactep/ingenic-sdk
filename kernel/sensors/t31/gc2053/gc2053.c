@@ -32,7 +32,7 @@
 #define GC2053_SUPPORT_15FPS_MIPI_SCLK	(39000000)
 #define GC2053_SUPPORT_30FPS_DVP_SCLK	(74250000)
 #define GC2053_SUPPORT_15FPS_DVP_SCLK	(37125000)
-#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MAX_FPS		40
 #define SENSOR_OUTPUT_MIN_FPS		5
 #define SENSOR_VERSION			"H20230726a"
 
@@ -289,7 +289,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-
 	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
@@ -299,7 +298,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-
 	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
@@ -311,7 +309,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-
 	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
@@ -320,7 +317,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-
 	/*ISP*/
 	{0xfe, 0x01},
 	{0x01, 0x05},
@@ -360,7 +356,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-
 	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
@@ -395,7 +390,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0xf8, 0x3c},
 	{0xf9, 0x82},
 	{0xfc, 0x8e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
@@ -444,7 +438,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-
 	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
@@ -454,7 +447,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-
 	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
@@ -466,7 +458,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-
 	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
@@ -475,7 +466,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-
 	/* ISP */
 	{0xfe, 0x01},
 	{0x01, 0x05},
@@ -515,7 +505,6 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-
 	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
@@ -556,7 +545,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0xf8, 0x68},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
@@ -605,7 +593,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-
 	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
@@ -615,7 +602,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-
 	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
@@ -627,7 +613,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-
 	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
@@ -636,7 +621,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-
 	/* ISP */
 	{0xfe, 0x01},
 	{0x01, 0x05},
@@ -676,7 +660,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-
 	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
@@ -711,7 +694,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
@@ -760,7 +742,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-
 	/* GAIN */
 	{0xb6,0xc0},
 	{0xb0,0x70},
@@ -770,7 +751,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0xb4,0x00},
 	{0xb8,0x01},
 	{0xb9,0x00},
-
 	/* BLK */
 	{0x26,0x30},
 	{0xfe,0x01},
@@ -782,7 +762,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0x15,0x78},
 	{0x16,0x78},
 	{0x17,0x78},
-
 	/* WINDOW */
 	{0xfe,0x01},
 	{0x92,0x00},
@@ -791,7 +770,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0x96,0x38},
 	{0x97,0x07},
 	{0x98,0x80},
-
 	/* ISP */
 	{0xfe,0x01},
 	{0x01,0x05},
@@ -831,7 +809,6 @@ static struct regval_list gc2053_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3d,0x62},
 	{0x3e,0x62},
 	{0x3f,0x62},
-
 	/* DVP & MIPI */
 	{0xfe,0x01},
 	{0x9a,0x06},
@@ -864,7 +841,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
@@ -913,7 +889,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-
 	/* GAIN */
 	{0xb6,0xc0},
 	{0xb0,0x70},
@@ -923,7 +898,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0xb4,0x00},
 	{0xb8,0x01},
 	{0xb9,0x00},
-
 	/* BLK */
 	{0x26,0x30},
 	{0xfe,0x01},
@@ -935,7 +909,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x15,0x78},
 	{0x16,0x78},
 	{0x17,0x78},
-
 	/* WINDOW */
 	{0xfe,0x01},
 	{0x92,0x00},
@@ -944,7 +917,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x96,0x38},
 	{0x97,0x07},
 	{0x98,0x80},
-
 	/* ISP */
 	{0xfe,0x01},
 	{0x01,0x05},
@@ -984,7 +956,6 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x3d,0x62},
 	{0x3e,0x62},
 	{0x3f,0x62},
-
 	/* DVP & MIPI */
 	{0xfe,0x01},
 	{0x9a,0x06},
@@ -1226,7 +1197,8 @@ static struct regval_list gc2053_stream_off_mipi[] = {
 	{GC2053_REG_END, 0x00},	/* END MARKER */
 };
 
-int gc2053_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
+int gc2053_read(struct tx_isp_subdev *sd, unsigned char reg,
+		unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -1251,9 +1223,9 @@ int gc2053_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	return ret;
 }
 
-int gc2053_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
+int gc2053_write(struct tx_isp_subdev *sd, unsigned char reg,
+		 unsigned char value)
 {
-	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -1262,6 +1234,7 @@ int gc2053_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 		.len	= 2,
 		.buf	= buf,
 	};
+	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
@@ -1284,7 +1257,6 @@ static int gc2053_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 #endif
@@ -1566,11 +1538,11 @@ static int gc2053_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
 	return ret;
 }
 
-static int gc2053_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
+static int gc2053_g_chip_ident(struct tx_isp_subdev *sd,
+			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -1615,7 +1587,6 @@ static int gc2053_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -1760,10 +1731,10 @@ struct platform_device sensor_platform_device = {
 
 static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
-	int ret;
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
+	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if(!sensor){
@@ -1777,7 +1748,6 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
@@ -1899,7 +1869,6 @@ static int gc2053_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_i2c_set_clientdata(client, sd);
 
 	pr_debug("probe ok ------->gc2053\n");
-
 	return 0;
 
 err_set_sensor_data_interface:
@@ -1925,9 +1894,7 @@ static int gc2053_remove(struct i2c_client *client)
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
-
 	kfree(sensor);
-
 	return 0;
 }
 

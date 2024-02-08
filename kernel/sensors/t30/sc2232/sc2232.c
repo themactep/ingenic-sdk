@@ -358,7 +358,7 @@ static struct regval_list sc2232_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3222, 0x29},
 	{0x3901, 0x02},
 	{0x3905, 0x98},
-	{0x3e1e, 0x34},
+	{0x3e1e, 0x34}, // digital finegain enable
 	{0x3314, 0x04},
 	{0x3301, 0x06},
 	{0x3306, 0x48},
@@ -728,56 +728,56 @@ static int sc2232_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sc2232_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc2232_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
-	if (ret < 0)
-		return ret;
 	/* denoise logic */
 	if (value < 0x110) {
-		sc2232_write(sd,0x3812,0x00);
+		//sc2232_write(sd,0x3812,0x00);
 		sc2232_write(sd,0x3301,0x06);
 		sc2232_write(sd,0x3306,0x48);
 		sc2232_write(sd,0x3632,0x08);
 		sc2232_write(sd,0x5781,0x04);
 		sc2232_write(sd,0x5785,0x18);
-		sc2232_write(sd,0x3812,0x30);
+		//sc2232_write(sd,0x3812,0x30);
 	}
 	else if (value>=0x110&&value<0x310){
-		sc2232_write(sd,0x3812,0x00);
+		//sc2232_write(sd,0x3812,0x00);
 		sc2232_write(sd,0x3301,0x14);
 		sc2232_write(sd,0x3306,0x48);
 		sc2232_write(sd,0x3632,0x08);
 		sc2232_write(sd,0x5781,0x04);
 		sc2232_write(sd,0x5785,0x18);
-		sc2232_write(sd,0x3812,0x30);
+		//sc2232_write(sd,0x3812,0x30);
 	}
 	else if(value>=0x310&&value<0x710){
-		sc2232_write(sd,0x3812,0x00);
+		//sc2232_write(sd,0x3812,0x00);
 		sc2232_write(sd,0x3301,0x18);
 		sc2232_write(sd,0x3306,0x48);
 		sc2232_write(sd,0x3632,0x08);
 		sc2232_write(sd,0x5781,0x04);
 		sc2232_write(sd,0x5785,0x18);
-		sc2232_write(sd,0x3812,0x30);
+		//sc2232_write(sd,0x3812,0x30);
 	}
 	else if(value>=0x710&&value<=0x71e){
-		sc2232_write(sd,0x3812,0x00);
+		//sc2232_write(sd,0x3812,0x00);
 		sc2232_write(sd,0x3301,0x15);
 		sc2232_write(sd,0x3306,0x48);
 		sc2232_write(sd,0x3632,0x08);
 		sc2232_write(sd,0x5781,0x02);
 		sc2232_write(sd,0x5785,0x18);
-		sc2232_write(sd,0x3812,0x30);
+		//sc2232_write(sd,0x3812,0x30);
 	}
 	else{ //may be flick
-		sc2232_write(sd,0x3812,0x00);
+		//sc2232_write(sd,0x3812,0x00);
 		sc2232_write(sd,0x3301,0xa1);
 		sc2232_write(sd,0x3306,0x78);
 		sc2232_write(sd,0x3632,0x48);
 		sc2232_write(sd,0x5781,0x01);
 		sc2232_write(sd,0x5785,0x18);
-		sc2232_write(sd,0x3812,0x30);
+		//sc2232_write(sd,0x3812,0x30);
 	}
+	ret = sc2232_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sc2232_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
+	if (ret < 0)
+		return ret;
 
 	return 0;
 }
@@ -924,21 +924,6 @@ static int sc2232_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc2232_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	val = enable ? 0x60 : 0;
-	ret += sc2232_write(sd, 0x3221, val);
-	sensor->video.mbus_change = 0;
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
-	return ret;
-}
-
 static int sc2232_g_chip_ident(struct tx_isp_subdev *sd,
 		struct tx_isp_chip_ident *chip)
 {
@@ -1038,10 +1023,6 @@ static int sc2232_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			if(arg)
 				ret = sc2232_set_fps(sd, *(int*)arg);
 			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
-				ret = sc2232_set_vflip(sd, *(int*)arg);
-			break;
 		default:
 			break;;
 	}
@@ -1136,6 +1117,7 @@ static int sc2232_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
+
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		printk("Cannot get sensor input clock cgu_cim\n");
@@ -1180,7 +1162,6 @@ static int sc2232_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sc2232_attr;
-	sensor->video.mbus_change = 0;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;

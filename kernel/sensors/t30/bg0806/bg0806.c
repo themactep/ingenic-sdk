@@ -32,6 +32,8 @@
 #define SENSOR_VERSION	"H20170911a"
 #define DRIVE_CAPABILITY_1
 
+#define Vrefh_min_tlb 0x0c
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -63,6 +65,8 @@ struct again_lut {
 
 struct tx_isp_sensor_attribute bg0806_attr;
 
+static int g_vrefh = 0x7f;
+
 unsigned int bg0806_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	unsigned int gain_one = 0;
@@ -84,12 +88,13 @@ unsigned int bg0806_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	mask = mask << (TX_ISP_GAIN_FIXED_POINT-4);
 	gain_one1 = gain_one&mask;
 	isp_gain1 = private_log2_fixed_to_fixed(gain_one1, TX_ISP_GAIN_FIXED_POINT, shift);
+	
 	return isp_gain1;
 }
 
 unsigned int bg0806_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_mipi_bus bg0806_mipi={
@@ -101,6 +106,10 @@ struct tx_isp_dvp_bus bg0806_dvp={
 	.blanking = {
 		.vblanking = 0,
 		.hblanking = 0,
+	},
+	.polar = {
+			.hsync_polar = DVP_POLARITY_DEFAULT,
+			.vsync_polar = DVP_POLARITY_LOW,
 	},
 };
 
@@ -116,6 +125,10 @@ struct tx_isp_sensor_attribute bg0806_attr={
 		.blanking = {
 			.vblanking = 0,
 			.hblanking = 0,
+		},
+		.polar = {
+			.hsync_polar = DVP_POLARITY_DEFAULT,
+			.vsync_polar = DVP_POLARITY_LOW,
 		},
 	},
 	.max_again = 390214,
@@ -147,18 +160,18 @@ static struct regval_list bg0806_init_regs_1920_1080_30fps_dvp[] = {
 	*/
 	{0x0200, 0x0001},
 	{0x000e, 0x0008},//0806_4times_74.25M_30fps
-	{0x000f, 0x00ae},//row time F_W=2200 //0x0098
+	{0x000f, 0x00ae},//row time F_W=2222 //0x08ae
 	{0x0013, 0x0001},
 	{0x0021, 0x0001},
 	{0x0022, 0x000e},//vblank //0025
 	{0x0028, 0x0000},
 	{0x0029, 0x0030},
 	{0x002a, 0x0000},
-	{0x002b, 0x0030},
+	{0x002b, 0x0050},//renzhq 20170621
 	{0x0030, 0x0000},
-	{0x0031, 0x00d0},//rstb2rmp1 gap
+	{0x0031, 0x00c0},//rstb2rmp1 gap//renzhq 20170621
 	{0x0034, 0x0000},
-	{0x0035, 0x00d0},//tx2rmp2 gap
+	{0x0035, 0x00c0},//tx2rmp2 gap//renzhq 20170621
 	{0x003c, 0x0001},
 	{0x003d, 0x0084},//rmp1_w@pclk domain  //0x80
 	{0x003e, 0x0005},//ncp
@@ -176,7 +189,7 @@ static struct regval_list bg0806_init_regs_1920_1080_30fps_dvp[] = {
 	{0x0081, 0x0000},
 	{0x0082, 0x000b},
 	{0x0084, 0x0008},
-	{0x0088, 0x0005},//pclk dly
+	{0x0088, 0x0005},//pclk dly 0x5
 	{0x008e, 0x0000},
 	{0x008f, 0x0000},
 	{0x0090, 0x0001},//hxb 20170210  change system voltage 2.8V to 3.3V
@@ -216,7 +229,7 @@ static struct regval_list bg0806_init_regs_1920_1080_30fps_dvp[] = {
 
 	{0x006d, 0x000c},//pclk_ctrl, 03 for 1p25,0c for 1p5
 	{0x006c, 0x0000},//ldo_ctrl,00
-	{0x008d, 0x003f},//
+	{0x008d, 0x0033},//0x3f
 	{0x008e, 0x0000},//oen_ctrl,0c
 	{0x008f, 0x0000},//io_sel_ctrl,03
 	{0x00fa, 0x008F},//ispc,c7
@@ -421,7 +434,36 @@ static int bg0806_set_integration_time(struct tx_isp_subdev *sd, int value)
 	ret = bg0806_write(sd, 0x000d, (unsigned char)(expo & 0xff));
 	if (ret < 0)
 		return ret;
+#if 0
+	if (g_vrefh==Vrefh_min_tlb) {  //Maximum gain
+		printk("bg0806_set_integration_time:expo = %d\n",expo);
+		if (expo > 2400 ) {
+			// low fps
+			ret  = bg0806_write(sd, 0x0082, 0x04);
+			// ret += bg0806_write(sd, 0x007f, 0x01);
+			ret += bg0806_write(sd, 0x0052, 0x07);
+			ret += bg0806_write(sd, 0x00f2, 0x07);
+			ret += bg0806_write(sd, 0x00fb, 0x02);
+		} else {
+			ret  = bg0806_write(sd, 0x0082, 0x08);
+			// ret += bg0806_write(sd, 0x007f, 0x01);
+			ret += bg0806_write(sd, 0x0052, 0x06);
+			ret += bg0806_write(sd, 0x00f2, 0x06);
+			ret += bg0806_write(sd, 0x00fb, 0x01);
+		}
+	}
+	else{
+			//normal
+		ret  = bg0806_write(sd, 0x0082, 0x0b);
+		// ret += bg0806_write(sd, 0x007f, 0x01);
+		ret += bg0806_write(sd, 0x0052, 0x06);
+		ret += bg0806_write(sd, 0x00f2, 0x06);
+		ret += bg0806_write(sd, 0x00fb, 0x01);
+	}
+#endif
+	
 	ret = bg0806_write(sd, 0x001d, 0x02);
+	
 	return 0;
 }
 
@@ -438,22 +480,23 @@ static unsigned int bg0806_clip(unsigned int value, unsigned int limit_l, unsign
 static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	unsigned char vrefh;
-	unsigned char vrefh_min_tlb = 0x0c;//hxb 20170210  change system voltage 2.8V to 3.3V
+	// unsigned char Vrefh_min_tlb = 0x0c;//hxb 20170210  change system voltage 2.8V to 3.3V
 	unsigned int dgain = 0,again;
 	unsigned int total_gain = value;
 	int ret = 0;
 	total_gain = bg0806_clip(total_gain, 0x0040, 0x0f00);
 	vrefh = (128<<6)/total_gain - 1;
-	vrefh = bg0806_clip(vrefh, vrefh_min_tlb, 0x7F);
+	vrefh = bg0806_clip(vrefh, Vrefh_min_tlb, 0x7F);
 	again = (128<<6)/(vrefh+1); //recaculate real again
 	dgain = total_gain*512/again; // dgain
 	dgain = bg0806_clip(dgain, 512, 512); //min=1x,max=8x
 //	temp = (128<<6)%(total_gain+1);
 
-	if((vrefh>vrefh_min_tlb)&&(vrefh<=0x7f)) {
-		ret = bg0806_write(sd, 0x002b, 0x30);
-		ret += bg0806_write(sd, 0x0030, 0x00);
+	if((vrefh>Vrefh_min_tlb)&&(vrefh<=0x7f)) {
+		ret  = bg0806_write(sd, 0x0030, 0x00);
+		ret += bg0806_write(sd, 0x0031, 0xc0);
 		ret += bg0806_write(sd, 0x0034, 0x00);
+		ret += bg0806_write(sd, 0x0035, 0xc0);
 		ret += bg0806_write(sd, 0x004d, 0x00);
 		ret += bg0806_write(sd, 0x004f, 0x09);
 		ret += bg0806_write(sd, 0x0061, 0x04);
@@ -461,10 +504,11 @@ static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		ret += bg0806_write(sd, 0x0068, 0x90);
 		if (ret < 0)
 			return ret;
-	} else if(vrefh==vrefh_min_tlb)	{
-		ret = bg0806_write(sd, 0x002b, 0x10);
-		ret += bg0806_write(sd, 0x0030, 0x01);
+	} else if(vrefh==Vrefh_min_tlb)	{
+		ret  = bg0806_write(sd, 0x0030, 0x01);
+		ret += bg0806_write(sd, 0x0031, 0xb0);
 		ret += bg0806_write(sd, 0x0034, 0x01);
+		ret += bg0806_write(sd, 0x0035, 0xb0);
 		ret += bg0806_write(sd, 0x004d, 0x03);
 		ret += bg0806_write(sd, 0x004f, 0x0c);
 		ret += bg0806_write(sd, 0x0061, 0x02);
@@ -473,6 +517,9 @@ static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		if (ret < 0)
 			return ret;
 	}
+
+	g_vrefh = vrefh ;
+	
 	ret += bg0806_write(sd, 0x00B1, vrefh);
 	ret += bg0806_write(sd, 0x00BC, 0xFF&(dgain>>8));
 	ret += bg0806_write(sd, 0x00BD, 0xFF&(dgain>>0));
@@ -543,7 +590,7 @@ static int bg0806_init(struct tx_isp_subdev *sd, int enable)
 	for (i=0; i<768; i++)
 	{
 		ret = bg0806_write(sd, 0x0400+i, Tab_sensor_dsc[i]);
-		msleep(1);
+		msleep(10);
 		if (ret < 0)
 			return ret;
 	}
@@ -875,6 +922,7 @@ static int bg0806_probe(struct i2c_client *client,
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
+
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		printk("Cannot get sensor input clock cgu_cim\n");
@@ -886,6 +934,7 @@ static int bg0806_probe(struct i2c_client *client,
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)
 		goto err_set_sensor_gpio;
+
 	bg0806_attr.dvp.gpio = sensor_gpio_func;
 
 	bg0806_attr.dbus_type = data_interface;

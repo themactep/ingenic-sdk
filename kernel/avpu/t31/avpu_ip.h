@@ -60,7 +60,9 @@ struct avpu_codec_desc {
 	struct clk *clk;
 	struct clk *clk_mux;
 	struct clk *clk_gate;
+#ifdef CONFIG_SOC_T41
 	struct clk *clk_gate_ivdc;
+#endif
 	struct clk *ahb1_gate;
 };
 

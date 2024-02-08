@@ -381,6 +381,7 @@ static struct regval_list sc2232h_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3632, 0x08},
 	{0x3034, 0x01},
 	{0x3039, 0x24},
+	{SC2232H_REG_DELAY, 0x0a},
 
 	{SC2232H_REG_END, 0x00},	/* END MARKER */
 };
@@ -556,6 +557,7 @@ static struct regval_list sc2232h_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3632, 0x08},
 	{0x3034, 0x01},
 	{0x3039, 0x24},
+	{SC2232H_REG_DELAY, 0x0a},
 
 	{SC2232H_REG_END, 0x00},	/* END MARKER */
 };
@@ -869,28 +871,22 @@ static int sc2232h_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sc2232h_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sc2232h_read(sd, 0x320d, &tmp);
-	if(ret < 0)
-		return -1;
-	hts = ((hts << 8) + tmp);
 	if (0 != ret) {
 		printk("err: sc2232h read err\n");
 		return ret;
 	}
-
+	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
 	ret = sc2232h_write(sd,0x3812,0x00);
 	ret += sc2232h_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sc2232h_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	ret += sc2232h_write(sd,0x3812,0x30);
-
-	if(ret < 0)
-		return -1;
-
 	if (0 != ret) {
 		printk("err: sc2232h_write err\n");
 		return ret;
 	}
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 2;
 	sensor->video.attr->integration_time_limit = vts - 2;
@@ -922,21 +918,6 @@ static int sc2232h_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
-	return ret;
-}
-
-static int sc2232h_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	val = enable ? 0xe0 : 0x80;
-	ret += sc2232h_write(sd, 0x3221, val);
-	sensor->video.mbus_change = 0;
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
@@ -1039,10 +1020,6 @@ static int sc2232h_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		case TX_ISP_EVENT_SENSOR_FPS:
 			if(arg)
 				ret = sc2232h_set_fps(sd, *(int*)arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
-				ret = sc2232h_set_vflip(sd, *(int*)arg);
 			break;
 		default:
 			break;;

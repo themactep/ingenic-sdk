@@ -8,10 +8,11 @@
 /*#include <linux/list.h>*/
 #include <linux/gpio.h>
 #include <linux/time.h>
-#include <linux/sched.h>
 /*#include <linux/delay.h>*/
+#include <linux/sched.h>
 #include <linux/module.h>
 #include <linux/debugfs.h>
+/*#include <linux/seq_file.h>*/
 #include <linux/kthread.h>
 #include <linux/mfd/core.h>
 #include <linux/mempolicy.h>
@@ -30,7 +31,6 @@
 #include <asm/cacheflush.h>
 #include <soc/gpio.h>
 #include <mach/platform.h>
-/*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
 
 struct jz_driver_common_interfaces {
@@ -135,7 +135,6 @@ struct jz_driver_common_interfaces {
 	void (*get_isp_priv_mem)(unsigned int *phyaddr, unsigned int *size);
 	unsigned int flags_1;			// The flags must be checked.
 };
-
 
 
 #ifndef U16_MAX

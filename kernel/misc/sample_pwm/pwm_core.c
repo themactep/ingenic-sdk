@@ -133,33 +133,25 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 #endif
 
 #if defined(CONFIG_SOC_T21)
-	if(tcu_pwm->index == 1 || tcu_pwm->index == 0) {
+	if (tcu_pwm->index == 1 || tcu_pwm->index == 0) {
 		jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_0,BIT(tcu_pwm->gpio & 0x1f));
 	} else {
 		jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_1,BIT(tcu_pwm->gpio & 0x1f));
 	}
 #elif (defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100))
-	if (tcu_pwm->gpio == 14)
-	{
+	if (tcu_pwm->gpio == 14) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_2, BIT(tcu_pwm->gpio & 0x1f));
-	}
-	else if (tcu_pwm->gpio == (32 + 27) || tcu_pwm->gpio == (32 + 28))
-	{
+	} else if (tcu_pwm->gpio == (32 + 27) || tcu_pwm->gpio == (32 + 28)) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
-	}
-	else
-	{
+	} else {
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
 	}
 #elif defined(CONFIG_SOC_T40)
 	jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group,pwm_pin[tcu_pwm->cib.id].func,pwm_pin[tcu_pwm->cib.id].pins);
 #elif defined(CONFIG_SOC_T23)
-	if (tcu_pwm->gpio == (32 + 17) ||tcu_pwm->gpio == (32 + 18))
-	{
+	if (tcu_pwm->gpio == (32 + 17) ||tcu_pwm->gpio == (32 + 18)) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
-	}
-	else
-	{
+	} else {
 		jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
 	}
 #else
@@ -248,18 +240,13 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	ingenic_tcu_config(tcu_pwm);
 	ingenic_tcu_set_period(tcu_pwm->cib.id, tcu_pwm->full_num);
 	ingenic_tcu_set_duty(tcu_pwm->cib.id, tcu_pwm->half_num);
-	if (duty_ns == 0)
-	{
+	if (duty_ns == 0) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 0;
-	}
-	else if (duty_ns == period_ns)
-	{
+	} else if (duty_ns == period_ns) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, tcu_pwm->init_level > 0 ? GPIO_OUTPUT1 : GPIO_OUTPUT0, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 0;
-	}
-	else if (pwm_func[tcu_pwm->cib.id] == 0 && jz_pwm_en[tcu_pwm->cib.id])
-	{
+	} else if (pwm_func[tcu_pwm->cib.id] == 0 && jz_pwm_en[tcu_pwm->cib.id]) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, pwm_pin[tcu_pwm->cib.id].func, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 1;
 	}
@@ -268,18 +255,13 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	jz_tcu_config_chn(tcu_pwm);
 	jz_tcu_set_period(tcu_pwm, tcu_pwm->full_num);
 	jz_tcu_set_duty(tcu_pwm, tcu_pwm->half_num);
-	if (duty_ns == 0)
-	{
+	if (duty_ns == 0) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1, BIT(tcu_pwm->gpio & 0x1f));
 		pwm_func[tcu_pwm->index] = 0;
-	}
-	else if (duty_ns == period_ns)
-	{
+	} else if (duty_ns == period_ns) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, tcu_pwm->init_level > 0 ? GPIO_OUTPUT1 : GPIO_OUTPUT0, BIT(tcu_pwm->gpio & 0x1f));
 		pwm_func[tcu_pwm->index] = 0;
-	}
-	else if (pwm_func[tcu_pwm->index] == 0 && jz_pwm_en[tcu_pwm->index])
-	{
+	} else if (pwm_func[tcu_pwm->index] == 0 && jz_pwm_en[tcu_pwm->index]) {
 #if defined(CONFIG_SOC_T21)
 		if (tcu_pwm->index == 1 || tcu_pwm->index == 0)
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
@@ -293,12 +275,9 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 		else
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
 #elif defined(CONFIG_SOC_T23)
-		if (tcu_pwm->gpio == (32 + 17) || tcu_pwm->gpio == (32 + 18))
-		{
+		if (tcu_pwm->gpio == (32 + 17) || tcu_pwm->gpio == (32 + 18)) {
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));
-		}
-		else
-		{
+		} else {
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_1, BIT(tcu_pwm->gpio & 0x1f));
 		}
 #else
@@ -322,10 +301,10 @@ int jz_pwm_set_polarity(struct pwm_chip *chip,struct pwm_device *pwm, enum pwm_p
 	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 #endif
 
-	if(polarity == PWM_POLARITY_INVERSED)
+	if (polarity == PWM_POLARITY_INVERSED)
 		tcu_pwm->init_level = 0;
 
-	if(polarity == PWM_POLARITY_NORMAL)
+	if (polarity == PWM_POLARITY_NORMAL)
 		tcu_pwm->init_level = 1;
 
 	return 0;
@@ -376,7 +355,7 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		goto err_free;
 	}
 
-	if(pdev->dev.driver)
+	if (pdev->dev.driver)
 		printk("%s[%d] d_name = %s\n", __func__,__LINE__,pdev->dev.driver->name);
 	platform_set_drvdata(pdev, jz);
 

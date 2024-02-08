@@ -1040,7 +1040,7 @@ static long dsp_disable_amic_aec(struct audio_dsp_device *dsp)
 
 	ai_route = &(dsp->routes[AUDIO_ROUTE_AMIC_ID]);
 	if (ai_route == NULL) {
-		audio_warn_print("The route of aec hasn't been created!\n");
+		audio_warn_print("The route of amic hasn't been created!\n");
 		ret = -EPERM;
 		return ret;
 	}

@@ -165,26 +165,26 @@ struct tisp_plane {
  * I/O methods.
  */
 struct tisp_buffer {
-	uint32_t			index;
-	uint32_t			type;
-	uint32_t			bytesused;
-	uint32_t			flags;
-	uint32_t			field;
+	uint32_t		index;
+	uint32_t		type;
+	uint32_t		bytesused;
+	uint32_t		flags;
+	uint32_t		field;
 	struct timeval		timestamp;
 	struct tisp_timecode	timecode;
-	uint32_t			sequence;
+	uint32_t		sequence;
 
 	/* memory location */
-	uint32_t			memory;
+	uint32_t		memory;
 	union {
-		uint32_t           offset;
-		unsigned long   userptr;
-		struct tisp_plane *planes;
-		__s32		fd;
+		uint32_t		offset;
+		unsigned long		userptr;
+		struct tisp_plane	*planes;
+		__s32			fd;
 	} m;
-	uint32_t			length;
-	uint32_t			reserved2;
-	uint32_t			reserved;
+	uint32_t		length;
+	uint32_t		reserved2;
+	uint32_t		reserved;
 };
 
 struct tisp_rect {
@@ -200,18 +200,18 @@ struct tisp_fract {
 };
 
 struct tisp_clip {
-	struct tisp_rect        c;
+	struct tisp_rect	c;
 	struct tisp_clip	__user *next;
 };
 
 struct tisp_window {
-	struct tisp_rect        w;
-	uint32_t			field;	 /* enum tisp_field */
-	uint32_t			chromakey;
+	struct tisp_rect	w;
+	uint32_t		field;	 /* enum tisp_field */
+	uint32_t		chromakey;
 	struct tisp_clip	__user *clips;
-	uint32_t			clipcount;
+	uint32_t		clipcount;
 	void			__user *bitmap;
-	uint8_t                    global_alpha;
+	uint8_t			global_alpha;
 };
 
 struct tisp_vbi_format {
@@ -219,7 +219,7 @@ struct tisp_vbi_format {
 	uint32_t	offset;
 	uint32_t	samples_per_line;
 	uint32_t	sample_format;		/* tisp_PIX_FMT_* */
-	__s32	start[2];
+	__s32		start[2];
 	uint32_t	count[2];
 	uint32_t	flags;			/* tisp_VBI_* */
 	uint32_t	reserved[2];		/* must be zero */
@@ -237,12 +237,12 @@ struct tisp_sliced_vbi_format {
 };
 
 struct tisp_pix_format {
-	uint32_t	 		width;
+	uint32_t			width;
 	uint32_t			height;
 	uint32_t			pixelformat;
 	uint32_t			field;		/* enum tisp_field */
-	uint32_t	    	bytesperline;	/* for padding, zero if unused */
-	uint32_t	  		sizeimage;
+	uint32_t			bytesperline;	/* for padding, zero if unused */
+	uint32_t			sizeimage;
 	uint32_t			colorspace;	/* enum tisp_colorspace */
 	uint32_t			priv;		/* private data, depends on pixelformat */
 	uint32_t			flags;		/* format flags (V4L2_PIX_FMT_FLAG_*) */
@@ -315,32 +315,32 @@ struct tisp_format {
 };
 
 struct tisp_input {
-	uint32_t	     	index;		/*  Which input */
-	uint8_t	     		name[32];		/*  Label */
-	uint32_t	     	type;		/*  Type of input */
-	uint32_t	     	audioset;		/*  Associated audios (bitfield) */
-	uint32_t		tuner;             /*  enum tisp_tuner_type */
-	uint64_t  			std;
-	uint32_t	     	status;
-	uint32_t	     	capabilities;
-	uint32_t	     	reserved[3];
+	uint32_t		index;		/*  Which input */
+	uint8_t			name[32];	/*  Label */
+	uint32_t		type;		/*  Type of input */
+	uint32_t		audioset;	/*  Associated audios (bitfield) */
+	uint32_t		tuner;		/*  enum tisp_tuner_type */
+	uint64_t		std;
+	uint32_t		status;
+	uint32_t		capabilities;
+	uint32_t		reserved[3];
 };
 
 struct tisp_control {
-	uint32_t		     id;
-	__s32		     value;
+	uint32_t		id;
+	__s32			value;
 };
 
 struct tisp_mbus_framefmt {
-	uint32_t			width;
-	uint32_t			height;
-	uint32_t			code;
-	uint32_t			field;
-	uint32_t			colorspace;
-	uint16_t			ycbcr_enc;
-	uint16_t			quantization;
-	uint16_t			xfer_func;
-	uint16_t			reserved[11];
+	uint32_t		width;
+	uint32_t		height;
+	uint32_t		code;
+	uint32_t		field;
+	uint32_t		colorspace;
+	uint16_t		ycbcr_enc;
+	uint16_t		quantization;
+	uint16_t		xfer_func;
+	uint16_t		reserved[11];
 };
 
 /* External v4l2 format info. */
@@ -500,82 +500,82 @@ enum input_mbus_fmt {
 #define BASE_DEVICE1_PRIVATE		140
 
 //device ioctl
-#define TISP_VIDIOC_DRIVER_VERSION				_IOW('T', BASE_DEVICE_PRIVATE + 1, int)
-#define TISP_VIDIOC_ENUMINPUT					_IOWR('T', BASE_DEVICE_PRIVATE + 2, int)
-#define TISP_VIDIOC_G_INPUT					_IOW('T', BASE_DEVICE_PRIVATE + 3, struct tx_isp_initarg)
-#define TISP_VIDIOC_S_INPUT					_IOWR('T', BASE_DEVICE_PRIVATE + 4, struct tx_isp_initarg)
-#define TISP_VIDIOC_REGISTER_SENSOR				_IOW('T', BASE_DEVICE_PRIVATE + 5, struct tx_isp_sensor_register_info)
-#define TISP_VIDIOC_RELEASE_SENSOR				_IOW('T', BASE_DEVICE_PRIVATE + 6, struct tx_isp_sensor_register_info)
-#define TISP_VIDIOC_STREAMON					_IOW('T', BASE_DEVICE_PRIVATE + 7, struct tx_isp_initarg)
-#define TISP_VIDIOC_STREAMOFF					_IOW('T', BASE_DEVICE_PRIVATE + 8, struct tx_isp_initarg)
-#define TISP_VIDIOC_CREATE_SUBDEV_LINKS				_IOW('T', BASE_DEVICE_PRIVATE + 9, struct tx_isp_initarg)
-#define TISP_VIDIOC_DESTROY_SUBDEV_LINKS			_IOW('T', BASE_DEVICE_PRIVATE + 10, struct tx_isp_initarg)
-#define TISP_VIDIOC_LINKS_STREAMON				_IOWR('T',BASE_DEVICE_PRIVATE + 11, struct tx_isp_initarg)
-#define TISP_VIDIOC_LINKS_STREAMOFF				_IOWR('T',BASE_DEVICE_PRIVATE + 12, struct tx_isp_initarg)
-#define TISP_VIDIOC_SET_SENSOR_REGISTER				_IOWR('T',BASE_DEVICE_PRIVATE + 13, struct tx_isp_dbg_register)
-#define TISP_VIDIOC_GET_SENSOR_REGISTER				_IOW('T', BASE_DEVICE_PRIVATE + 14, struct tx_isp_dbg_register)
-#define TISP_VIDIOC_SET_MDNS_BUF_INFO				_IOW('T', BASE_DEVICE_PRIVATE + 15, struct isp_buf_info)
-#define TISP_VIDIOC_GET_MDNS_BUF_INFO				_IOW('T', BASE_DEVICE_PRIVATE + 16, struct isp_buf_info)
-#define TISP_VIDIOC_SET_WDR_BUF_INFO				_IOW('T', BASE_DEVICE_PRIVATE + 17, struct isp_buf_info)
-#define TISP_VIDIOC_GET_WDR_BUF_INFO				_IOW('T', BASE_DEVICE_PRIVATE + 18, struct isp_buf_info)
-#define TISP_VIDIOC_ISP_WDR_ENABLE				_IOW('T', BASE_DEVICE_PRIVATE + 19, int)
-#define TISP_VIDIOC_ISP_WDR_DISABLE				_IOW('T', BASE_DEVICE_PRIVATE + 20, int)
-#define TISP_VIDIOC_SET_DUALSENSOR_MODE				_IOWR('T',BASE_DEVICE_PRIVATE + 21, int)
-#define TISP_VIDIOC_SET_DUALSENSOR_BUF_INFO			_IOWR('T',BASE_DEVICE_PRIVATE + 22, struct isp_buf_info)
-#define TISP_VIDIOC_GET_DUALSENSOR_BUF_INFO			_IOW('T', BASE_DEVICE_PRIVATE + 23, struct isp_buf_info)
-#define TISP_VIDIOC_BYPASS_SENSOR				_IOW('T', BASE_DEVICE_PRIVATE + 24, struct tx_isp_initarg)
-#define TISP_VIDIOC_SET_DUALSENSOR_SELECT			_IOWR('T',BASE_DEVICE_PRIVATE + 25, int)
-#define TISP_VIDIOC_SET_AE_ALGO_FUNC				_IOWR('T',BASE_DEVICE_PRIVATE + 26, int)
-#define TISP_VIDIOC_GET_AE_ALGO_HANDLE				_IOWR('T',BASE_DEVICE_PRIVATE + 27, int)
-#define TISP_VIDIOC_SET_AE_ALGO_HANDLE				_IOWR('T',BASE_DEVICE_PRIVATE + 28, int)
-#define TISP_VIDIOC_SET_AE_ALGO_OPEN				_IOWR('T',BASE_DEVICE_PRIVATE + 29, int)
-#define TISP_VIDIOC_SET_AE_ALGO_CLOSE				_IOWR('T',BASE_DEVICE_PRIVATE + 30, int)
-#define TISP_VIDIOC_SET_AE_ALGO_CTRL				_IOWR('T',BASE_DEVICE_PRIVATE + 31, int)
-#define TISP_VIDIOC_GET_AE_ALGO_HANDLE_SEC			_IOWR('T',BASE_DEVICE_PRIVATE + 32, int)
-#define TISP_VIDIOC_SET_AE_ALGO_HANDLE_SEC			_IOWR('T',BASE_DEVICE_PRIVATE + 33, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_FUNC				_IOWR('T',BASE_DEVICE_PRIVATE + 34, int)
-#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE				_IOWR('T',BASE_DEVICE_PRIVATE + 35, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE				_IOWR('T',BASE_DEVICE_PRIVATE + 36, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_OPEN				_IOWR('T',BASE_DEVICE_PRIVATE + 37, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_CLOSE				_IOWR('T',BASE_DEVICE_PRIVATE + 38, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_CTRL				_IOWR('T',BASE_DEVICE_PRIVATE + 39, int)
-#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE_SEC			_IOWR('T',BASE_DEVICE_PRIVATE + 40, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE_SEC			_IOWR('T',BASE_DEVICE_PRIVATE + 41, int)
-#define TISP_VIDIOC_SET_DEFAULT_BIN_PATH			_IOWR('T',BASE_DEVICE_PRIVATE + 42, int)
-#define TISP_VIDIOC_GET_DEFAULT_BIN_PATH			_IOWR('T',BASE_DEVICE_PRIVATE + 43, int)
-#define TISP_VIDIOC_SET_FRAME_DROP				_IOWR('T',BASE_DEVICE_PRIVATE + 44, int)
-#define TISP_VIDIOC_GET_FRAME_DROP				_IOWR('T',BASE_DEVICE_PRIVATE + 45, int)
-#define TISP_VIDIOC_START_NIGHT_MODE				_IOWR('T',BASE_DEVICE_PRIVATE + 46, int)
-#define TISP_VIDIOC_SET_CHANNEL_ATTR				_IOWR('T',BASE_DEVICE_PRIVATE + 47, int)
-#define TISP_VIDIOC_GET_CHANNEL_ATTR				_IOWR('T',BASE_DEVICE_PRIVATE + 48, int)
-#define TISP_VIDIOC_SET_VIC_DONE_CB				_IOWR('T',BASE_DEVICE_PRIVATE + 49, int)
-#define TISP_VIDIOC_GET_VIC_DONE_CB				_IOWR('T',BASE_DEVICE_PRIVATE + 50, int)
+#define TISP_VIDIOC_DRIVER_VERSION		_IOW('T', BASE_DEVICE_PRIVATE + 1, int)
+#define TISP_VIDIOC_ENUMINPUT			_IOWR('T', BASE_DEVICE_PRIVATE + 2, int)
+#define TISP_VIDIOC_G_INPUT			_IOW('T', BASE_DEVICE_PRIVATE + 3, struct tx_isp_initarg)
+#define TISP_VIDIOC_S_INPUT			_IOWR('T', BASE_DEVICE_PRIVATE + 4, struct tx_isp_initarg)
+#define TISP_VIDIOC_REGISTER_SENSOR		_IOW('T', BASE_DEVICE_PRIVATE + 5, struct tx_isp_sensor_register_info)
+#define TISP_VIDIOC_RELEASE_SENSOR		_IOW('T', BASE_DEVICE_PRIVATE + 6, struct tx_isp_sensor_register_info)
+#define TISP_VIDIOC_STREAMON			_IOW('T', BASE_DEVICE_PRIVATE + 7, struct tx_isp_initarg)
+#define TISP_VIDIOC_STREAMOFF			_IOW('T', BASE_DEVICE_PRIVATE + 8, struct tx_isp_initarg)
+#define TISP_VIDIOC_CREATE_SUBDEV_LINKS		_IOW('T', BASE_DEVICE_PRIVATE + 9, struct tx_isp_initarg)
+#define TISP_VIDIOC_DESTROY_SUBDEV_LINKS	_IOW('T', BASE_DEVICE_PRIVATE + 10, struct tx_isp_initarg)
+#define TISP_VIDIOC_LINKS_STREAMON		_IOWR('T',BASE_DEVICE_PRIVATE + 11, struct tx_isp_initarg)
+#define TISP_VIDIOC_LINKS_STREAMOFF		_IOWR('T',BASE_DEVICE_PRIVATE + 12, struct tx_isp_initarg)
+#define TISP_VIDIOC_SET_SENSOR_REGISTER		_IOWR('T',BASE_DEVICE_PRIVATE + 13, struct tx_isp_dbg_register)
+#define TISP_VIDIOC_GET_SENSOR_REGISTER		_IOW('T', BASE_DEVICE_PRIVATE + 14, struct tx_isp_dbg_register)
+#define TISP_VIDIOC_SET_MDNS_BUF_INFO		_IOW('T', BASE_DEVICE_PRIVATE + 15, struct isp_buf_info)
+#define TISP_VIDIOC_GET_MDNS_BUF_INFO		_IOW('T', BASE_DEVICE_PRIVATE + 16, struct isp_buf_info)
+#define TISP_VIDIOC_SET_WDR_BUF_INFO		_IOW('T', BASE_DEVICE_PRIVATE + 17, struct isp_buf_info)
+#define TISP_VIDIOC_GET_WDR_BUF_INFO		_IOW('T', BASE_DEVICE_PRIVATE + 18, struct isp_buf_info)
+#define TISP_VIDIOC_ISP_WDR_ENABLE		_IOW('T', BASE_DEVICE_PRIVATE + 19, int)
+#define TISP_VIDIOC_ISP_WDR_DISABLE		_IOW('T', BASE_DEVICE_PRIVATE + 20, int)
+#define TISP_VIDIOC_SET_DUALSENSOR_MODE		_IOWR('T',BASE_DEVICE_PRIVATE + 21, int)
+#define TISP_VIDIOC_SET_DUALSENSOR_BUF_INFO	_IOWR('T',BASE_DEVICE_PRIVATE + 22, struct isp_buf_info)
+#define TISP_VIDIOC_GET_DUALSENSOR_BUF_INFO	_IOW('T', BASE_DEVICE_PRIVATE + 23, struct isp_buf_info)
+#define TISP_VIDIOC_BYPASS_SENSOR		_IOW('T', BASE_DEVICE_PRIVATE + 24, struct tx_isp_initarg)
+#define TISP_VIDIOC_SET_DUALSENSOR_SELECT	_IOWR('T',BASE_DEVICE_PRIVATE + 25, int)
+#define TISP_VIDIOC_SET_AE_ALGO_FUNC		_IOWR('T',BASE_DEVICE_PRIVATE + 26, int)
+#define TISP_VIDIOC_GET_AE_ALGO_HANDLE		_IOWR('T',BASE_DEVICE_PRIVATE + 27, int)
+#define TISP_VIDIOC_SET_AE_ALGO_HANDLE		_IOWR('T',BASE_DEVICE_PRIVATE + 28, int)
+#define TISP_VIDIOC_SET_AE_ALGO_OPEN		_IOWR('T',BASE_DEVICE_PRIVATE + 29, int)
+#define TISP_VIDIOC_SET_AE_ALGO_CLOSE		_IOWR('T',BASE_DEVICE_PRIVATE + 30, int)
+#define TISP_VIDIOC_SET_AE_ALGO_CTRL		_IOWR('T',BASE_DEVICE_PRIVATE + 31, int)
+#define TISP_VIDIOC_GET_AE_ALGO_HANDLE_SEC	_IOWR('T',BASE_DEVICE_PRIVATE + 32, int)
+#define TISP_VIDIOC_SET_AE_ALGO_HANDLE_SEC	_IOWR('T',BASE_DEVICE_PRIVATE + 33, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_FUNC		_IOWR('T',BASE_DEVICE_PRIVATE + 34, int)
+#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE		_IOWR('T',BASE_DEVICE_PRIVATE + 35, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE		_IOWR('T',BASE_DEVICE_PRIVATE + 36, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_OPEN		_IOWR('T',BASE_DEVICE_PRIVATE + 37, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_CLOSE		_IOWR('T',BASE_DEVICE_PRIVATE + 38, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_CTRL		_IOWR('T',BASE_DEVICE_PRIVATE + 39, int)
+#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE_SEC	_IOWR('T',BASE_DEVICE_PRIVATE + 40, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE_SEC	_IOWR('T',BASE_DEVICE_PRIVATE + 41, int)
+#define TISP_VIDIOC_SET_DEFAULT_BIN_PATH	_IOWR('T',BASE_DEVICE_PRIVATE + 42, int)
+#define TISP_VIDIOC_GET_DEFAULT_BIN_PATH	_IOWR('T',BASE_DEVICE_PRIVATE + 43, int)
+#define TISP_VIDIOC_SET_FRAME_DROP		_IOWR('T',BASE_DEVICE_PRIVATE + 44, int)
+#define TISP_VIDIOC_GET_FRAME_DROP		_IOWR('T',BASE_DEVICE_PRIVATE + 45, int)
+#define TISP_VIDIOC_START_NIGHT_MODE		_IOWR('T',BASE_DEVICE_PRIVATE + 46, int)
+#define TISP_VIDIOC_SET_CHANNEL_ATTR		_IOWR('T',BASE_DEVICE_PRIVATE + 47, int)
+#define TISP_VIDIOC_GET_CHANNEL_ATTR		_IOWR('T',BASE_DEVICE_PRIVATE + 48, int)
+#define TISP_VIDIOC_SET_VIC_DONE_CB		_IOWR('T',BASE_DEVICE_PRIVATE + 49, int)
+#define TISP_VIDIOC_GET_VIC_DONE_CB		_IOWR('T',BASE_DEVICE_PRIVATE + 50, int)
 //device1 ioctl
-#define TISP_VIDIOC_SET_ISP_WDR_OPEN				_IOWR('T',BASE_DEVICE1_PRIVATE + 1, int)
+#define TISP_VIDIOC_SET_ISP_WDR_OPEN		_IOWR('T',BASE_DEVICE1_PRIVATE + 1, int)
 
 //tuning ioctl
-#define TISP_VIDIOC_S_CTRL					_IOWR('T', BASE_TUNING_PRIVATE + 1, struct tisp_control)
-#define TISP_VIDIOC_G_CTRL					_IOWR('T', BASE_TUNING_PRIVATE + 2, struct tisp_control)
-#define TISP_VIDIOC_DEFAULT_CMD_ISP_TUNING			_IOWR('T', BASE_TUNING_PRIVATE + 3, struct isp_image_tuning_default_ctrl)
+#define TISP_VIDIOC_S_CTRL			_IOWR('T', BASE_TUNING_PRIVATE + 1, struct tisp_control)
+#define TISP_VIDIOC_G_CTRL			_IOWR('T', BASE_TUNING_PRIVATE + 2, struct tisp_control)
+#define TISP_VIDIOC_DEFAULT_CMD_ISP_TUNING	_IOWR('T', BASE_TUNING_PRIVATE + 3, struct isp_image_tuning_default_ctrl)
 
 //ivdc ioctl
-#define TISP_VIDIOC_SET_JPEG					_IO('T', BASE_IVDC_PRIVATE + 1)
-#define TISP_VIDIOC_SET_H264_H265				_IO('T', BASE_IVDC_PRIVATE + 2)
-#define TISP_VIDIOC_GET_DIRECT					_IOWR('T', BASE_IVDC_PRIVATE + 3, int)
-#define TISP_VIDIOC_SET_DIRECT					_IOWR('T', BASE_IVDC_PRIVATE + 4, int)
-#define TISP_VIDIOC_SET_PADDR					_IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
-#define TISP_VIDIOC_MEM_LINE					_IOWR('T', BASE_IVDC_PRIVATE + 6, int)
+#define TISP_VIDIOC_SET_JPEG			_IO('T', BASE_IVDC_PRIVATE + 1)
+#define TISP_VIDIOC_SET_H264_H265		_IO('T', BASE_IVDC_PRIVATE + 2)
+#define TISP_VIDIOC_GET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 3, int)
+#define TISP_VIDIOC_SET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 4, int)
+#define TISP_VIDIOC_SET_PADDR			_IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
+#define TISP_VIDIOC_MEM_LINE			_IOWR('T', BASE_IVDC_PRIVATE + 6, int)
 
 //frame channel ioctl
-#define TISP_VIDIOC_SET_FRAME_FORMAT		 		_IOWR('T', BASE_FS_PRIVATE + 1, struct frame_image_format)
-#define TISP_VIDIOC_GET_FRAME_FORMAT				_IOWR('T', BASE_FS_PRIVATE + 2, struct frame_image_format)
-#define TISP_VIDIOC_REQBUFS		 			_IOWR('T', BASE_FS_PRIVATE + 3, struct tisp_requestbuffers)
-#define TISP_VIDIOC_QUERYBUF					_IOWR('T', BASE_FS_PRIVATE + 4, struct tisp_buffer)
-#define TISP_VIDIOC_QBUF					_IOWR('T', BASE_FS_PRIVATE + 5,	struct tisp_buffer)
-#define TISP_VIDIOC_DQBUF		 			_IOWR('T', BASE_FS_PRIVATE + 6,	struct tisp_buffer)
-#define TISP_VIDIOC_FRAME_STREAMON				_IOWR('T', BASE_FS_PRIVATE + 7, int)
-#define TISP_VIDIOC_FRAME_STREAMOFF		 		_IOWR('T', BASE_FS_PRIVATE + 8, int)
-#define TISP_VIDIOC_DEFAULT_CMD_SET_BANKS			_IOWR('T', BASE_FS_PRIVATE + 9, int)
-#define TISP_VIDIOC_DEFAULT_CMD_LISTEN_BUF			_IOWR('T', BASE_FS_PRIVATE + 10, int)
-#define TISP_VIDIOC_IMAGE_ALIGN					_IOWR('T', BASE_FS_PRIVATE + 11, int)
+#define TISP_VIDIOC_SET_FRAME_FORMAT		_IOWR('T', BASE_FS_PRIVATE + 1, struct frame_image_format)
+#define TISP_VIDIOC_GET_FRAME_FORMAT		_IOWR('T', BASE_FS_PRIVATE + 2, struct frame_image_format)
+#define TISP_VIDIOC_REQBUFS		 	_IOWR('T', BASE_FS_PRIVATE + 3, struct tisp_requestbuffers)
+#define TISP_VIDIOC_QUERYBUF			_IOWR('T', BASE_FS_PRIVATE + 4, struct tisp_buffer)
+#define TISP_VIDIOC_QBUF			_IOWR('T', BASE_FS_PRIVATE + 5,	struct tisp_buffer)
+#define TISP_VIDIOC_DQBUF		 	_IOWR('T', BASE_FS_PRIVATE + 6,	struct tisp_buffer)
+#define TISP_VIDIOC_FRAME_STREAMON		_IOWR('T', BASE_FS_PRIVATE + 7, int)
+#define TISP_VIDIOC_FRAME_STREAMOFF		_IOWR('T', BASE_FS_PRIVATE + 8, int)
+#define TISP_VIDIOC_DEFAULT_CMD_SET_BANKS	_IOWR('T', BASE_FS_PRIVATE + 9, int)
+#define TISP_VIDIOC_DEFAULT_CMD_LISTEN_BUF	_IOWR('T', BASE_FS_PRIVATE + 10, int)
+#define TISP_VIDIOC_IMAGE_ALIGN			_IOWR('T', BASE_FS_PRIVATE + 11, int)
 #endif /* __TISP_VIDEODEV_H__*/

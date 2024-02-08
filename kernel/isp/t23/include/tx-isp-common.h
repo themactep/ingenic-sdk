@@ -25,11 +25,11 @@
 
 /* T31 */
 #define TX_ISP_INPUT_PORT_MAX_WIDTH		4096
-#define TX_ISP_INPUT_PORT_MAX_HEIGHT	4096
+#define TX_ISP_INPUT_PORT_MAX_HEIGHT		4096
 #define TX_ISP_FR_CAHNNEL_MAX_WIDTH		2624
-#define TX_ISP_FR_CAHNNEL_MAX_HEIGHT	2048
-#define TX_ISP_DS1_CAHNNEL_MAX_WIDTH	1920
-#define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT	1080
+#define TX_ISP_FR_CAHNNEL_MAX_HEIGHT		2048
+#define TX_ISP_DS1_CAHNNEL_MAX_WIDTH		1920
+#define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT		1080
 
 
 /*****************************************************
@@ -41,26 +41,26 @@
 #define SENSOR_B_BLACK_LEVEL	3
 
 /* External v4l2 format info. */
-#define V4L2_I2C_REG_MAX					(150)
-#define V4L2_I2C_ADDR_16BIT					(0x0002)
-#define V4L2_I2C_DATA_16BIT					(0x0004)
-#define V4L2_SBUS_MASK_SAMPLE_8BITS			0x01
+#define V4L2_I2C_REG_MAX			(150)
+#define V4L2_I2C_ADDR_16BIT			(0x0002)
+#define V4L2_I2C_DATA_16BIT			(0x0004)
+#define V4L2_SBUS_MASK_SAMPLE_8BITS		0x01
 #define V4L2_SBUS_MASK_SAMPLE_16BITS		0x02
 #define V4L2_SBUS_MASK_SAMPLE_32BITS		0x04
-#define V4L2_SBUS_MASK_ADDR_8BITS			0x08
-#define V4L2_SBUS_MASK_ADDR_16BITS			0x10
-#define V4L2_SBUS_MASK_ADDR_32BITS			0x20
+#define V4L2_SBUS_MASK_ADDR_8BITS		0x08
+#define V4L2_SBUS_MASK_ADDR_16BITS		0x10
+#define V4L2_SBUS_MASK_ADDR_32BITS		0x20
 #define V4L2_SBUS_MASK_ADDR_STEP_16BITS		0x40
 #define V4L2_SBUS_MASK_ADDR_STEP_32BITS		0x80
 #define V4L2_SBUS_MASK_SAMPLE_SWAP_BYTES	0x100
 #define V4L2_SBUS_MASK_SAMPLE_SWAP_WORDS	0x200
 #define V4L2_SBUS_MASK_ADDR_SWAP_BYTES		0x400
 #define V4L2_SBUS_MASK_ADDR_SWAP_WORDS		0x800
-#define V4L2_SBUS_MASK_ADDR_SKIP			0x1000
+#define V4L2_SBUS_MASK_ADDR_SKIP		0x1000
 #define V4L2_SBUS_MASK_SPI_READ_MSB_SET		0x2000
 #define V4L2_SBUS_MASK_SPI_INVERSE_DATA		0x4000
 #define V4L2_SBUS_MASK_SPI_HALF_ADDR		0x8000
-#define V4L2_SBUS_MASK_SPI_LSB				0x10000
+#define V4L2_SBUS_MASK_SPI_LSB			0x10000
 
 //RGBIR
 enum rgbir_mbus_fmt{
@@ -608,25 +608,25 @@ struct isp_set_gpio_attr{
 	uint16_t free;
 };
 
-#define VIDIOC_REGISTER_SENSOR				_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR				_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
-#define VIDIOC_SET_FRAME_FORMAT				_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
-#define VIDIOC_GET_FRAME_FORMAT				_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
+#define VIDIOC_REGISTER_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
+#define VIDIOC_SET_FRAME_FORMAT			_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
+#define VIDIOC_GET_FRAME_FORMAT			_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
 #define VIDIOC_DEFAULT_CMD_SET_BANKS		_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
 #define VIDIOC_DEFAULT_CMD_ISP_TUNING		_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
-#define VIDIOC_SET_DEFAULT_BIN_PATH			_IOWR('V',BASE_VIDIOC_PRIVATE + 7, int)
-#define VIDIOC_GET_DEFAULT_BIN_PATH			_IOWR('V',BASE_VIDIOC_PRIVATE + 8, int)
+#define VIDIOC_SET_DEFAULT_BIN_PATH		_IOWR('V',BASE_VIDIOC_PRIVATE + 7, int)
+#define VIDIOC_GET_DEFAULT_BIN_PATH		_IOWR('V',BASE_VIDIOC_PRIVATE + 8, int)
 
-#define VIDIOC_CREATE_SUBDEV_LINKS			_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
-#define VIDIOC_DESTROY_SUBDEV_LINKS			_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
-#define VIDIOC_LINKS_STREAMON				_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
-#define VIDIOC_LINKS_STREAMOFF				_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
-#define VIDIOC_SET_BUF_INFO					_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
-#define VIDIOC_GET_BUF_INFO					_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
-#define VIDIOC_SET_WDR_BUF_INFO				_IOW('V', BASE_VIDIOC_PRIVATE + 22, struct isp_buf_info)
-#define VIDIOC_GET_WDR_BUF_INFO				_IOW('V', BASE_VIDIOC_PRIVATE + 23, struct isp_buf_info)
-#define VIDIOC_ISP_WDR_ENABLE				_IOW('V', BASE_VIDIOC_PRIVATE + 24, int)
-#define VIDIOC_ISP_WDR_DISABLE				_IOW('V', BASE_VIDIOC_PRIVATE + 25, int)
+#define VIDIOC_CREATE_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
+#define VIDIOC_DESTROY_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
+#define VIDIOC_LINKS_STREAMON			_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
+#define VIDIOC_LINKS_STREAMOFF			_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
+#define VIDIOC_SET_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
+#define VIDIOC_GET_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
+#define VIDIOC_SET_WDR_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 22, struct isp_buf_info)
+#define VIDIOC_GET_WDR_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 23, struct isp_buf_info)
+#define VIDIOC_ISP_WDR_ENABLE			_IOW('V', BASE_VIDIOC_PRIVATE + 24, int)
+#define VIDIOC_ISP_WDR_DISABLE			_IOW('V', BASE_VIDIOC_PRIVATE + 25, int)
 
 #define TISP_VIDIOC_SET_AE_ALGO_FUNC		_IOW('V',BASE_VIDIOC_PRIVATE + 26, int)
 #define TISP_VIDIOC_GET_AE_ALGO_HANDLE		_IOW('V',BASE_VIDIOC_PRIVATE + 27, int)
@@ -640,25 +640,25 @@ struct isp_set_gpio_attr{
 #define TISP_VIDIOC_SET_AWB_ALGO_OPEN		_IOWR('V',BASE_VIDIOC_PRIVATE + 35, int)
 #define TISP_VIDIOC_SET_AWB_ALGO_CLOSE		_IOWR('V',BASE_VIDIOC_PRIVATE + 36, int)
 #define TISP_VIDIOC_SET_AWB_ALGO_CTRL		_IOWR('V',BASE_VIDIOC_PRIVATE + 37, int)
-#define TISP_VIDIOC_SET_FRAME_DROP			_IOWR('V',BASE_VIDIOC_PRIVATE + 38, int)
-#define TISP_VIDIOC_GET_FRAME_DROP			_IOWR('V',BASE_VIDIOC_PRIVATE + 39, int)
+#define TISP_VIDIOC_SET_FRAME_DROP		_IOWR('V',BASE_VIDIOC_PRIVATE + 38, int)
+#define TISP_VIDIOC_GET_FRAME_DROP		_IOWR('V',BASE_VIDIOC_PRIVATE + 39, int)
 
-#define VIDIOC_SET_GPIO_INIT				_IOWR('V',BASE_VIDIOC_PRIVATE + 40, int)
-#define VIDIOC_SET_GPIO_STA					_IOWR('V',BASE_VIDIOC_PRIVATE + 41, int)
+#define VIDIOC_SET_GPIO_INIT			_IOWR('V',BASE_VIDIOC_PRIVATE + 40, int)
+#define VIDIOC_SET_GPIO_STA			_IOWR('V',BASE_VIDIOC_PRIVATE + 41, int)
 
 #ifdef SENSOR_DOUBLE
-#define TISP_VIDIOC_SET_FRAME_DROP1			_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
-#define TISP_VIDIOC_GET_FRAME_DROP1			_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
+#define TISP_VIDIOC_SET_FRAME_DROP1		_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
+#define TISP_VIDIOC_GET_FRAME_DROP1		_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
 #endif
 
 //ivdc ioctl
-#define BASE_IVDC_PRIVATE					60
-#define TISP_VIDIOC_SET_JPEG				_IO('T', BASE_IVDC_PRIVATE + 1)
-#define TISP_VIDIOC_SET_H264_H265			_IO('T', BASE_IVDC_PRIVATE + 2)
-#define TISP_VIDIOC_GET_DIRECT				_IOWR('T', BASE_IVDC_PRIVATE + 3, int)
-#define TISP_VIDIOC_SET_DIRECT				_IOWR('T', BASE_IVDC_PRIVATE + 4, int)
-#define TISP_VIDIOC_SET_PADDR				_IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
-#define TISP_VIDIOC_MEM_LINE				_IOWR('T', BASE_IVDC_PRIVATE + 6, int)
+#define BASE_IVDC_PRIVATE			60
+#define TISP_VIDIOC_SET_JPEG			_IO('T', BASE_IVDC_PRIVATE + 1)
+#define TISP_VIDIOC_SET_H264_H265		_IO('T', BASE_IVDC_PRIVATE + 2)
+#define TISP_VIDIOC_GET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 3, int)
+#define TISP_VIDIOC_SET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 4, int)
+#define TISP_VIDIOC_SET_PADDR			_IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
+#define TISP_VIDIOC_MEM_LINE			_IOWR('T', BASE_IVDC_PRIVATE + 6, int)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -721,11 +721,11 @@ struct tx_isp_sensor{
 };
 #define sd_to_sensor_device(_ep) container_of(_ep, struct tx_isp_sensor, sd)
 
-#define tx_isp_readl(base, reg)				__raw_readl((base) + (reg))
+#define tx_isp_readl(base, reg)			__raw_readl((base) + (reg))
 #define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
-#define tx_isp_readw(base, reg)				__raw_readw((base) + (reg))
+#define tx_isp_readw(base, reg)			__raw_readw((base) + (reg))
 #define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
-#define tx_isp_readb(base, reg)				__raw_readb((base) + (reg))
+#define tx_isp_readb(base, reg)			__raw_readb((base) + (reg))
 #define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
 
 #endif /*__TX_ISP_COMMON_H__*/

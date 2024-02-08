@@ -169,21 +169,21 @@ struct tx_isp_subdev_ops {
 	struct tx_isp_subdev_internal_ops	*internal;
 };
 
-#define tx_isp_call_module_notify(ent, args...)				  \
-	(!(ent) ? -ENOENT : (((ent)->notify) ? \
-	(ent)->notify(((ent)->parent), ##args) : -ENOIOCTLCMD))
+#define tx_isp_call_module_notify(ent, args...)				\
+	(!(ent) ? -ENOENT : (((ent)->notify) ?				\
+			     (ent)->notify(((ent)->parent), ##args) : -ENOIOCTLCMD))
 
-#define tx_isp_call_subdev_notify(ent, args...)				  \
-	(!(ent) ? -ENOENT : (((ent)->module.notify) ?\
-		((ent)->module.notify(&((ent)->module), ##args)): -ENOIOCTLCMD))
+#define tx_isp_call_subdev_notify(ent, args...)				\
+	(!(ent) ? -ENOENT : (((ent)->module.notify) ?			\
+			     ((ent)->module.notify(&((ent)->module), ##args)): -ENOIOCTLCMD))
 
-#define tx_isp_call_subdev_event(ent, args...)				  \
-	(!(ent) ? -ENOENT : (((ent)->event) ? \
-	(ent)->event((ent), ##args) : -ENOIOCTLCMD))
+#define tx_isp_call_subdev_event(ent, args...)				\
+	(!(ent) ? -ENOENT : (((ent)->event) ?				\
+			     (ent)->event((ent), ##args) : -ENOIOCTLCMD))
 
 #define tx_isp_subdev_call(sd, o, f, args...)				\
-	(!(sd) ? -ENODEV : (((sd)->ops->o && (sd)->ops->o->f) ?	\
-		(sd)->ops->o->f((sd) , ##args) : -ENOIOCTLCMD))
+	(!(sd) ? -ENODEV : (((sd)->ops->o && (sd)->ops->o->f) ?		\
+			    (sd)->ops->o->f((sd) , ##args) : -ENOIOCTLCMD))
 
 struct tx_isp_subdev {
 	struct tx_isp_module module;
@@ -236,9 +236,9 @@ struct tx_isp_device {
 #define module_to_ispdev(mod) (container_of(mod, struct tx_isp_device, module))
 
 
-#define tx_isp_sd_readl(sd, reg)						\
+#define tx_isp_sd_readl(sd, reg)		\
 	tx_isp_readl(((sd)->base), reg)
-#define tx_isp_sd_writel(sd, reg, value)					\
+#define tx_isp_sd_writel(sd, reg, value)	\
 	tx_isp_writel(((sd)->base), reg, value)
 
 int private_reset_tx_isp_module(enum tx_isp_subdev_id id);

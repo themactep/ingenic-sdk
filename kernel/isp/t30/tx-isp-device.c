@@ -19,6 +19,8 @@
 #include <linux/delay.h>
 #include <linux/gpio.h>
 
+#include <mach/platform.h>
+
 #include <tx-isp-common.h>
 #include "tx-isp-interrupt.h"
 #include "tx-isp-debug.h"
@@ -26,10 +28,11 @@
 #include "videoin/tx-isp-csi.h"
 #include "videoin/tx-isp-video-in.h"
 #include "apical-isp/tx-isp-core.h"
-#include "board/soc-t30/platform.h"
 
 extern struct platform_device tx_isp_platform_device;
+
 #define TX_ISP_DRIVER_VERSION "H20190725b"
+
 static struct tx_isp_device* globe_ispdev = NULL;
 
 static int private_cpm_reset(unsigned int addr, unsigned int bit)

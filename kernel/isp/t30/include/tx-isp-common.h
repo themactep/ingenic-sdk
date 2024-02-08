@@ -23,37 +23,43 @@
 
 #if defined(CONFIG_SOC_T10)
 /* T10 */
-#define TX_ISP_EXIST_FR_CHANNEL 1
-#define TX_ISP_EXIST_DS2_CHANNEL 0
-
-#define TX_ISP_INPUT_PORT_MAX_WIDTH		1280
+#define TX_ISP_EXIST_FR_CHANNEL		1
+#define TX_ISP_EXIST_DS2_CHANNEL	0
+#define TX_ISP_INPUT_PORT_MAX_WIDTH	1280
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	960
-#define TX_ISP_FR_CHANNEL_MAX_WIDTH		1280
+#define TX_ISP_FR_CHANNEL_MAX_WIDTH	1280
 #define TX_ISP_FR_CHANNEL_MAX_HEIGHT	960
 #define TX_ISP_DS1_CHANNEL_MAX_WIDTH	640
 #define TX_ISP_DS1_CHANNEL_MAX_HEIGHT	640
 
 #elif defined(CONFIG_SOC_T20)
 /* T20 */
-#define TX_ISP_EXIST_CSI_DEVICE 1
-#define TX_ISP_EXIST_FR_CHANNEL 0
-#define TX_ISP_EXIST_DS2_CHANNEL 1
-
-#define TX_ISP_INPUT_PORT_MAX_WIDTH		2048
+#define TX_ISP_EXIST_CSI_DEVICE		1
+#define TX_ISP_EXIST_FR_CHANNEL		0
+#define TX_ISP_EXIST_DS2_CHANNEL	1
+#define TX_ISP_INPUT_PORT_MAX_WIDTH	2048
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	1536
 #define TX_ISP_DS1_CHANNEL_MAX_WIDTH	2048
 #define TX_ISP_DS1_CHANNEL_MAX_HEIGHT	1536
 #define TX_ISP_DS2_CHANNEL_MAX_WIDTH	800
 #define TX_ISP_DS2_CHANNEL_MAX_HEIGHT	800
 
-#elif (defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21))
-/* T30 */
-#define TX_ISP_EXIST_FR_CHANNEL 1
-#define TX_ISP_EXIST_DS2_CHANNEL 0
-
-#define TX_ISP_INPUT_PORT_MAX_WIDTH		2688
+#elif defined(CONFIG_SOC_T21)
+/* T21 */
+#define TX_ISP_INPUT_PORT_MAX_WIDTH	2688
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	2048
-#define TX_ISP_FR_CHANNEL_MAX_WIDTH		2688
+#define TX_ISP_FR_CAHNNEL_MAX_WIDTH	2688
+#define TX_ISP_FR_CAHNNEL_MAX_HEIGHT	2048
+#define TX_ISP_DS1_CAHNNEL_MAX_WIDTH	1920
+#define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT	1080
+
+#elif defined(CONFIG_SOC_T30)
+/* T30 */
+#define TX_ISP_EXIST_FR_CHANNEL		1
+#define TX_ISP_EXIST_DS2_CHANNEL	0
+#define TX_ISP_INPUT_PORT_MAX_WIDTH	2688
+#define TX_ISP_INPUT_PORT_MAX_HEIGHT	2048
+#define TX_ISP_FR_CHANNEL_MAX_WIDTH	2688
 #define TX_ISP_FR_CHANNEL_MAX_HEIGHT	2048
 #define TX_ISP_DS1_CHANNEL_MAX_WIDTH	1920
 #define TX_ISP_DS1_CHANNEL_MAX_HEIGHT	1920
@@ -105,14 +111,14 @@ struct tx_isp_sensor_win_setting {
 
 
 /***************************************************
-*  Provide extensions to v4l2 for ISP driver.
-****************************************************/
+ *  Provide extensions to v4l2 for ISP driver.
+ ****************************************************/
 #define V4L2_PIX_FMT_RGB310   v4l2_fourcc('R', 'G', 'B', 'A') /* 32  RGB-10-10-10  */
 #define V4L2_MBUS_FMT_RGB888_3X8_LE (V4L2_MBUS_FMT_Y8_1X8 - 0x10)
 
 /*
-*------ definition sensor associated structure -----
-*/
+ *------ definition sensor associated structure -----
+ */
 
 /* define control bus */
 enum tx_sensor_control_bus_type{
@@ -186,6 +192,11 @@ typedef struct {
 	unsigned short hblanking;
 } sensor_dvp_blanking;
 
+typedef enum {
+	FRAME_ECC_ON,
+	FRAME_ECC_OFF,
+} sensor_dvp_frame_ecc;
+
 typedef struct {
 	unsigned char hsync_polar;
 	unsigned char vsync_polar;
@@ -203,6 +214,7 @@ struct tx_isp_dvp_bus{
 	sensor_dvp_timing_mode mode;
 	sensor_dvp_blanking blanking;
 	sensor_dvp_polar polar;
+	sensor_dvp_frame_ecc frame_ecc;
 };
 
 struct tx_isp_bt1120_bus{
@@ -231,10 +243,10 @@ struct tx_isp_sensor_register_info{
 
 typedef struct tx_isp_sensor_ctrl{
 	/* isp_gain mean that the value is output of ISP-FW,it is not a gain multiplier unit.
-	*  gain_multiplier = (2^(isp_gain/(2^LOG_GAIN_SHIFT))).
-	*  the function will convert gain_multiplier to sensor_Xgain.
-	*  the return value is isp_gain of sensor_Xgain's inverse conversion.
-	*/
+	 *  gain_multiplier = (2^(isp_gain/(2^LOG_GAIN_SHIFT))).
+	 *  the function will convert gain_multiplier to sensor_Xgain.
+	 *  the return value is isp_gain of sensor_Xgain's inverse conversion.
+	 */
 	unsigned int (*alloc_again)(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again);
 	unsigned int (*alloc_dgain)(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain);
 } TX_ISP_SENSOR_CTRL;
@@ -379,17 +391,17 @@ enum tx_isp_module_link_id {
 	LINK_ISP_DDR_FS,
 };
 
-#define VIDIOC_REGISTER_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
-#define VIDIOC_SET_FRAME_FORMAT			_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
-#define VIDIOC_GET_FRAME_FORMAT			_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
-#define VIDIOC_DEFAULT_CMD_SET_BANKS		_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
-#define VIDIOC_DEFAULT_CMD_ISP_TUNING		_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
+#define VIDIOC_REGISTER_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
+#define VIDIOC_SET_FRAME_FORMAT		_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
+#define VIDIOC_GET_FRAME_FORMAT		_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
+#define VIDIOC_DEFAULT_CMD_SET_BANKS	_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
+#define VIDIOC_DEFAULT_CMD_ISP_TUNING	_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
 
-#define VIDIOC_CREATE_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
-#define VIDIOC_DESTROY_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
-#define VIDIOC_LINKS_STREAMON			_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
-#define VIDIOC_LINKS_STREAMOFF			_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
+#define VIDIOC_CREATE_SUBDEV_LINKS	_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
+#define VIDIOC_DESTROY_SUBDEV_LINKS	_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
+#define VIDIOC_LINKS_STREAMON		_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
+#define VIDIOC_LINKS_STREAMOFF		_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -437,11 +449,11 @@ struct tx_isp_sensor{
 };
 #define sd_to_sensor_device(_ep) container_of(_ep, struct tx_isp_sensor, sd)
 
-#define tx_isp_readl(base, reg)		__raw_readl((base) + (reg))
+#define tx_isp_readl(base, reg)			__raw_readl((base) + (reg))
 #define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
-#define tx_isp_readw(base, reg)		__raw_readw((base) + (reg))
+#define tx_isp_readw(base, reg)			__raw_readw((base) + (reg))
 #define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
-#define tx_isp_readb(base, reg)		__raw_readb((base) + (reg))
+#define tx_isp_readb(base, reg)			__raw_readb((base) + (reg))
 #define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
 
 #endif /*__TX_ISP_COMMON_H__*/
