@@ -33,12 +33,11 @@
 #include <soc/gpio.h>
 #include <soc/base.h>
 /* #include <soc/irq.h> */
+#include <dt-bindings/interrupt-controller/t40-irq.h>
+
 /* #include <mach/platform.h> */
 /* #include <mach/jzdma.h> */
 /* #include <mach/jzsnd.h> */
-
-#include <dt-bindings/interrupt-controller/t40-irq.h>
-
 #include <linux/spi/spi.h>
 #include <asm/io.h>
 #include <asm/irq.h>

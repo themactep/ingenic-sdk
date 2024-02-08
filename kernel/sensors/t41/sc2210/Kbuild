@@ -1,4 +1,4 @@
-MODULE_NAME := sensor_sc2210_t41
+MODULE_NAME := sensor_sc2210_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
 DIR=sensors/$(SOC_FAMILY)

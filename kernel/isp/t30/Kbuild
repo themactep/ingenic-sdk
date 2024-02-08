@@ -24,6 +24,7 @@ SRCS := \
     $(DIR)/apical-isp/tx-isp-core-tuning.c \
     $(DIR)/apical-isp/tx-isp-core.c \
     $(DIR)/apical-isp/tx-isp-load-parameters.c \
+    $(DIR)/platform.c \
     $(DIR)/tx-isp-debug.c \
     $(DIR)/tx-isp-device.c \
     $(DIR)/tx-isp-frame-channel.c \

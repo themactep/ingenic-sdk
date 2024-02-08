@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-
 #define DEBUG
 
 #include <linux/init.h>
@@ -25,19 +24,19 @@
 
 #define JXF23_CHIP_ID_H	(0x0f)
 #define JXF23_CHIP_ID_L	(0x23)
-#define JXF23_REG_END		0xfe
-#define JXF23_REG_DELAY		0xff
+#define JXF23_REG_END		0xff
+#define JXF23_REG_DELAY		0xfe
 #define JXF23_SUPPORT_30FPS_SCLK (86400000)
 #define JXF23_SUPPORT_15FPS_SCLK (43200000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20180717a"
+#define SENSOR_VERSION	"H20181031a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
-static int pwdn_gpio = -1;
+static int pwdn_gpio = GPIO_PA(22);
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
@@ -52,6 +51,9 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static unsigned char val_99 = 0x0F;
+static unsigned char val_9b = 0x0F;
 
 struct regval_list {
 	unsigned char reg_num;
@@ -156,8 +158,8 @@ unsigned int jxf23_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	struct again_lut *lut = jxf23_again_lut;
 	while(lut->gain <= jxf23_attr.max_again) {
 		if(isp_gain == 0) {
-			*sensor_again = lut[0].value;
-			return lut[0].gain;
+			*sensor_again = 0;
+			return 0;
 		}
 		else if(isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
@@ -178,12 +180,12 @@ unsigned int jxf23_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 
 unsigned int jxf23_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_mipi_bus jxf23_mipi={
 	.clk = 800,
-	.lans = 2,
+	.lans = 1,
 };
 struct tx_isp_dvp_bus jxf23_dvp={
 	.mode = SENSOR_DVP_HREF_MODE,
@@ -216,6 +218,7 @@ struct tx_isp_sensor_attribute jxf23_attr={
 	.total_width = 2560,
 	.total_height = 1350,
 	.max_integration_time = 1350 - 4,
+	.one_line_expr_in_us = 30,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
@@ -224,110 +227,8 @@ struct tx_isp_sensor_attribute jxf23_attr={
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
+
 static struct regval_list jxf23_init_regs_1920_1080_25fps_mipi[] = {
-	{0x0E, 0x11},
-	{0x0F, 0x14},
-	{0x10, 0x40},
-	{0x11, 0x80},
-	{0x48, 0x05},
-	{0x96, 0xAA},
-	{0x94, 0xC0},
-	{0x97, 0x8D},
-	{0x96, 0x00},
-	{0x12, 0x40},
-	{0x0E, 0x11},
-	{0x0F, 0x14},
-	{0x10, 0x24},
-	{0x11, 0x80},
-	{0x0D, 0xA0},
-	{0x5F, 0x41},
-	{0x60, 0x20},
-	{0x58, 0x12},
-	{0x57, 0x60},
-	{0x9D, 0x00},
-	{0x20, 0x00},
-	{0x21, 0x05},
-	{0x22, 0x46},
-	{0x23, 0x05},
-	{0x24, 0xC0},
-	{0x25, 0x38},
-	{0x26, 0x43},
-	{0x27, 0xC3},
-	{0x28, 0x19},
-	{0x29, 0x04},
-	{0x2C, 0x00},
-	{0x2D, 0x00},
-	{0x2E, 0x18},
-	{0x2F, 0x44},
-	{0x41, 0xC9},
-	{0x42, 0x13},
-	{0x46, 0x00},
-	{0x76, 0x60},
-	{0x77, 0x09},
-	{0x1D, 0x00},
-	{0x1E, 0x04},
-	{0x6C, 0x40},
-	{0x68, 0x00},
-	{0x6E, 0x2C},
-	{0x70, 0x6C},
-	{0x71, 0x8a},/*ths-zero,tck-zero*/
-	{0x72, 0x88},/*ths-prepare,tck-post*/
-	{0x73, 0x36},
-	{0x74, 0x02},
-	{0x78, 0x9E},
-	{0x89, 0x01},
-	{0x2A, 0xB1},
-	{0x2B, 0x24},
-	{0x31, 0x08},
-	{0x32, 0x4F},
-	{0x33, 0x20},
-	{0x34, 0x5E},
-	{0x35, 0x5E},
-	{0x3A, 0xAF},
-	{0x56, 0x32},
-	{0x59, 0xBF},
-	{0x5A, 0x04},
-	{0x85, 0x5A},
-	{0x8A, 0x04},
-	{0x8F, 0x90},
-	{0x91, 0x13},
-	{0x5B, 0xA0},
-	{0x5C, 0xF0},
-	{0x5D, 0xF4},
-	{0x5E, 0x1F},
-	{0x62, 0x04},
-	{0x63, 0x0F},
-	{0x64, 0xC0},
-	{0x66, 0x44},
-	{0x67, 0x73},
-	{0x69, 0x7C},
-	{0x6A, 0x28},
-	{0x7A, 0xC0},
-	{0x4A, 0x05},
-	{0x7E, 0xCD},
-	{0x49, 0x10},
-	{0x50, 0x02},
-	{0x7B, 0x4A},
-	{0x7C, 0x0C},
-	{0x7F, 0x57},
-	{0x90, 0x00},
-	{0x8E, 0x00},
-	{0x8C, 0xFF},
-	{0x8D, 0xC7},
-	{0x8B, 0x01},
-	{0x0C, 0x40},
-	{0x65, 0x02},
-	{0x80, 0x1A},
-	{0x81, 0xC0},
-	{0x19, 0x20},
-	{0x12, 0x00},
-	{0x48, 0x8A},
-	{JXF23_REG_DELAY, 250},
-	{0x48, 0x0A},
-	{0x99, 0x0F},
-	{0x9B, 0x0F},
-	{0x17, 0x00},
-	{0x16, 0x4F},
 
 	{JXF23_REG_END, 0x00},	/* END MARKER */
 };
@@ -343,6 +244,8 @@ static struct regval_list jxf23_init_regs_1920_1080_25fps_dvp[] = {
 	{0x97,0x8D},
 	{0x96,0x00},
 	{0x12,0x40},
+	{0x48,0x85},
+	{0x48,0x05},
 	{0x0E,0x11},
 	{0x0F,0x14},
 	{0x10,0x48},
@@ -422,11 +325,11 @@ static struct regval_list jxf23_init_regs_1920_1080_25fps_dvp[] = {
 	{0x12,0x00},
 	{0x48,0x85},
 	{JXF23_REG_DELAY, 250},
+	{JXF23_REG_DELAY, 250},
 	{0x48,0x05},
 	{0x1F,0x01},
-	{0x99,0x0F},
-	{0x9b,0x0F},
-
+	//	{0x99,0x0F},
+	//	{0x9b,0x0F},
 	{JXF23_REG_END, 0x00},	/* END MARKER */
 };
 
@@ -521,6 +424,7 @@ static struct regval_list jxf23_init_regs_1920_1080_15fps_dvp[] = {
 	{0x12,0x00},
 	{0x48,0x85},
 	{JXF23_REG_DELAY, 250},
+	{JXF23_REG_DELAY, 250},
 	{0x48,0x05},
 	{0x99,0x0F},
 	{0x9B,0x0F},
@@ -569,7 +473,7 @@ static struct regval_list jxf23_stream_off_mipi[] = {
 };
 
 int jxf23_read(struct tx_isp_subdev *sd, unsigned char reg,
-		unsigned char *value)
+	       unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -619,7 +523,7 @@ static int jxf23_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	unsigned char val;
 	while (vals->reg_num != JXF23_REG_END) {
 		if (vals->reg_num == JXF23_REG_DELAY) {
-				private_msleep(vals->value);
+			private_msleep(vals->value);
 		} else {
 			ret = jxf23_read(sd, vals->reg_num, &val);
 			if (ret < 0)
@@ -627,7 +531,6 @@ static int jxf23_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 static int jxf23_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
@@ -635,7 +538,7 @@ static int jxf23_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	int ret;
 	while (vals->reg_num != JXF23_REG_END) {
 		if (vals->reg_num == JXF23_REG_DELAY) {
-				private_msleep(vals->value);
+			private_msleep(vals->value);
 		} else {
 			ret = jxf23_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
@@ -643,7 +546,6 @@ static int jxf23_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -673,7 +575,6 @@ static int jxf23_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (v != JXF23_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
-
 	return 0;
 }
 
@@ -685,31 +586,47 @@ static int jxf23_set_integration_time(struct tx_isp_subdev *sd, int value)
 	ret += jxf23_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
-
 	return 0;
 }
 
 static int jxf23_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
+	unsigned char tmp1;
+	unsigned char tmp2;
+	unsigned char tmp99;
+	unsigned char tmp9b;
 	int ret = 0;
 	if(value<0x10){
-	ret += jxf23_write(sd, 0x0C, 0x00);
-	ret += jxf23_write(sd, 0x66, 0x04);
-	/* ret += jxf23_write(sd, 0x66, 0x41); */
-	if (ret < 0)
-		return ret;
+		tmp1 = 0x00;
+		tmp2 = 0x04;
 	}else if(value>=0x10 && value <0x30){
-	ret += jxf23_write(sd, 0x0C, 0x00);
-	ret += jxf23_write(sd, 0x66, 0x24);
-	if (ret < 0)
-		return ret;
+		tmp1 = 0x00;
+		tmp2 = 0x24;
 	}else{
-	ret += jxf23_write(sd, 0x0C, 0x40);
+		tmp1 = 0x40;
+		tmp2 = 0x24;
 	}
 
 	ret += jxf23_write(sd, 0x00, (unsigned char)(value & 0x7f));
+
+	//complement the steak
+	if(value <= 0x40){
+		tmp99 = (unsigned char)(val_99 & 0x0f);
+		tmp9b = (unsigned char)(val_9b & 0x0f);
+	} else {
+		tmp99 = (unsigned char)(val_99);
+		tmp9b = (unsigned char)(val_9b);
+	}
+
+
+	jxf23_write(sd, 0x0c, tmp1);
+	jxf23_write(sd, 0x66, tmp2);
+	jxf23_write(sd, 0x99, tmp99);
+	jxf23_write(sd, 0x9b, tmp9b);
+
 	if (ret < 0)
 		return ret;
+
 	return 0;
 }
 
@@ -732,27 +649,6 @@ static int jxf23_init(struct tx_isp_subdev *sd, int enable)
 	if(!enable)
 		return ISP_SUCCESS;
 
-
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-		switch (sensor_max_fps) {
-		case TX_SENSOR_MAX_FPS_25:
-			wsize->fps = 25 << 16 | 1;
-			wsize->regs = jxf23_init_regs_1920_1080_25fps_dvp;
-			break;
-		case TX_SENSOR_MAX_FPS_15:
-			wsize->fps = 15 << 16 | 1;
-			wsize->regs = jxf23_init_regs_1920_1080_15fps_dvp;
-			break;
-		default:
-			printk("Now we do not support this framerate!!!\n");
-		}
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-		wsize->fps = 25 << 16 | 1;
-		wsize->regs = jxf23_init_regs_1920_1080_25fps_mipi;
-	} else {
-		printk("Don't support this Sensor Data interface\n");
-	}
-
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -760,11 +656,14 @@ static int jxf23_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 	ret = jxf23_write_array(sd, wsize->regs);
+
+	ret += jxf23_read(sd, 0x99, &val_99);
+	ret += jxf23_read(sd, 0x9b, &val_9b);
+
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
-
 	return 0;
 }
 
@@ -795,7 +694,6 @@ static int jxf23_s_stream(struct tx_isp_subdev *sd, int enable)
 		}
 		pr_debug("jxf23 stream off\n");
 	}
-
 	return ret;
 }
 
@@ -810,8 +708,7 @@ static int jxf23_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	unsigned int max_fps = 0;
 
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-		switch (sensor_max_fps) {
+	switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_25:
 			sclk = JXF23_SUPPORT_30FPS_SCLK;
 			max_fps = SENSOR_OUTPUT_MAX_FPS;
@@ -821,13 +718,8 @@ static int jxf23_set_fps(struct tx_isp_subdev *sd, int fps)
 			max_fps = TX_SENSOR_MAX_FPS_15;
 			break;
 		default:
+			ret = -1;
 			printk("Now we do not support this framerate!!!\n");
-		}
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-		sclk = JXF23_SUPPORT_30FPS_SCLK;
-		max_fps = SENSOR_OUTPUT_MAX_FPS;
-	} else {
-		printk("Don't support this Sensor Data interface\n");
 	}
 
 
@@ -873,7 +765,6 @@ static int jxf23_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
@@ -898,35 +789,11 @@ static int jxf23_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
-	return ret;
-}
-
-static int jxf23_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	ret += jxf23_read(sd, 0x12, &val);
-	if (enable){
-		val = val | 0x10;
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
-	} else {
-		val = val & 0xef;
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
-	}
-	sensor->video.mbus_change = 1;
-	ret += jxf23_write(sd, 0x12, val);
-
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
 static int jxf23_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
+			      struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
@@ -955,27 +822,27 @@ static int jxf23_g_chip_ident(struct tx_isp_subdev *sd,
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
+
 	ret = jxf23_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an jxf23 chip.\n",
-				client->addr, client->adapter->name);
+		       client->addr, client->adapter->name);
 		return ret;
 	}
 	printk("jxf23 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "jxf23", sizeof("jxf23"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
 static int jxf23_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
@@ -1001,38 +868,32 @@ static int jxf23_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 				ret = jxf23_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = jxf23_write_array(sd, jxf23_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = jxf23_write_array(sd, jxf23_stream_off_mipi);
-
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = jxf23_write_array(sd, jxf23_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = jxf23_write_array(sd, jxf23_stream_on_mipi);
-
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
+				ret = -1;
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = jxf23_set_fps(sd, *(int*)arg);
 			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
-				ret = jxf23_set_vflip(sd, *(int*)arg);
-			break;
 		default:
-			break;;
+			break;
 	}
-
-	return 0;
+	return ret;
 }
 
 static int jxf23_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
@@ -1050,7 +911,6 @@ static int jxf23_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register
 	ret = jxf23_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
-
 	return ret;
 }
 
@@ -1065,7 +925,6 @@ static int jxf23_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_re
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 	jxf23_write(sd, reg->reg & 0xffff, reg->val & 0xff);
-
 	return 0;
 }
 
@@ -1120,6 +979,9 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
+	//	*(volatile unsigned int*)(0xB0010100) = 0x1;
+	//	*(volatile unsigned int*)(0xB0010134) = 0xC0000000;
+
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		printk("Cannot get sensor input clock cgu_cim\n");
@@ -1128,44 +990,49 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
+	ret = set_sensor_gpio_function(sensor_gpio_func);
+	if (ret < 0)
+		goto err_set_sensor_gpio;
+
+	jxf23_attr.dvp.gpio = sensor_gpio_func;
+
 	jxf23_attr.dbus_type = data_interface;
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-		ret = set_sensor_gpio_function(sensor_gpio_func);
-		if (ret < 0)
-			goto err_set_sensor_gpio;
-		switch (sensor_max_fps) {
-		case TX_SENSOR_MAX_FPS_25:
-			wsize->regs = jxf23_init_regs_1920_1080_25fps_dvp;
-			break;
-		case TX_SENSOR_MAX_FPS_15:
-			wsize->regs = jxf23_init_regs_1920_1080_15fps_dvp;
-			jxf23_attr.max_integration_time_native = 1121;
-			jxf23_attr.integration_time_limit = 1121;
-			jxf23_attr.total_width = 2560;
-			jxf23_attr.total_height = 1125;
-			jxf23_attr.max_integration_time = 1121;
-			break;
-		default:
-			printk("Now we do not support this framerate!!!\n");
-		}
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+		wsize->regs = jxf23_init_regs_1920_1080_25fps_dvp;
 		memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
-		jxf23_attr.dvp.gpio = sensor_gpio_func;
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->regs = jxf23_init_regs_1920_1080_25fps_mipi;
 		memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi),sizeof(jxf23_mipi));
-	} else{
+	} else {
 		printk("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
-	 /*
-		convert sensor-gain into isp-gain,
+	/*
+	  convert sensor-gain into isp-gain,
 	 */
+		switch (sensor_max_fps) {
+			case TX_SENSOR_MAX_FPS_25:
+				wsize->fps = 25 << 16 | 1;
+				wsize->regs = jxf23_init_regs_1920_1080_25fps_dvp;
+				break;
+			case TX_SENSOR_MAX_FPS_15:
+				wsize->fps = 15 << 16 | 1;
+				wsize->regs = jxf23_init_regs_1920_1080_15fps_dvp;
+				jxf23_attr.max_integration_time_native = 1121;
+				jxf23_attr.integration_time_limit = 1121;
+				jxf23_attr.total_width = 2560;
+				jxf23_attr.total_height = 1125;
+				jxf23_attr.max_integration_time = 1121;
+				jxf23_attr.one_line_expr_in_us = 59;
+				break;
+			default:
+				printk("Now we do not support this framerate!!!\n");
+		}
 	jxf23_attr.max_again = 324678;
 	jxf23_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &jxf23_attr;
-	sensor->video.mbus_change = 1;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1180,7 +1047,6 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 	private_i2c_set_clientdata(client, sd);
 
 	pr_debug("probe ok ------->jxf23\n");
-
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -1206,7 +1072,6 @@ static int jxf23_remove(struct i2c_client *client)
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
-
 	return 0;
 }
 
@@ -1234,7 +1099,6 @@ static __init int init_jxf23(void)
 		printk("Failed to init jxf23 dirver.\n");
 		return -1;
 	}
-
 	return private_i2c_add_driver(&jxf23_driver);
 }
 

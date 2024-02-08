@@ -160,7 +160,7 @@ unsigned int sc1245a_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 
 unsigned int sc1245a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_sensor_attribute sc1245a_attr={
@@ -897,6 +897,11 @@ static int sc1245a_probe(struct i2c_client *client,
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
+
+//	*(volatile unsigned int*)(0xB0010100) = 0x1;
+//	*(volatile unsigned int*)(0xB0010130) = 0xCAAAAAAA;
+
+
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		printk("Cannot get sensor input clock cgu_cim\n");

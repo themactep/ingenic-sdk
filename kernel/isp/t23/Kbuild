@@ -1,0 +1,15 @@
+MODULE_NAME := tx-isp-t23
+OUT := $(MODULE_NAME)
+
+DIR=isp/$(SOC)
+
+SRCS := \
+  $(DIR)/tx-isp-debug.c \
+  $(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(DIR)/libt23-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

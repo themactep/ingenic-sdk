@@ -522,7 +522,7 @@ static long dsp_create_dma_chan(struct audio_route *route)
 
 	// if(route->index == AUDIO_ROUTE_DMIC_ID){
 	if(0){
-		//配置dma参数
+		//Configuring dma parameters
 		// ingenic_dmic_dma_init(pipe->paddr, manage->fragment_size,manage->fragment_cnt);
 	}else{
 		dmaengine_slave_config(pipe->dma_chan, &pipe->dma_config);

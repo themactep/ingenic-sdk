@@ -1,0 +1,16 @@
+MODULE_NAME := tx-isp-t21
+OUT := $(MODULE_NAME)
+
+DIR=isp/$(SOC)
+
+SRCS := \
+  $(DIR)/tx-isp-debug.c \
+  $(DIR)/tx-isp-module.c \
+  $(DIR)/txx-funcs.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(DIR)/libt21-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

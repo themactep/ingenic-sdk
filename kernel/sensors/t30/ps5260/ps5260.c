@@ -176,7 +176,7 @@ unsigned int ps5260_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 unsigned int ps5260_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_sensor_attribute ps5260_attr={
@@ -192,6 +192,12 @@ struct tx_isp_sensor_attribute ps5260_attr={
 			.vblanking = 0,
 			.hblanking = 0,
 		},
+		.polar = {
+			.pclk_polar = 0,
+			.hsync_polar = 0,
+			.vsync_polar = 0,
+		},
+		.frame_ecc = FRAME_ECC_OFF,
 	},
 	.max_again = 327675,
 	.max_dgain = 0,
@@ -282,7 +288,7 @@ static struct regval_list ps5260_init_regs_1920_1080_15fps[] = {
 	{0xA7, 0x00},
 	{0xA8, 0x00},
 	{0xA9, 0x07},
-	{0xAA, 0x80},
+	{0xAA, 0x80},//788
 	{0xAB, 0x04},
 	{0xAE, 0x28},
 	{0xB0, 0x28},
@@ -695,30 +701,6 @@ static int ps5260_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
-	return ret;
-}
-
-static int ps5260_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	ret = ps5260_write(sd, 0xef, 0x01);
-	ret += ps5260_read(sd, 0x1d, &val);
-	if (enable)
-		val = val | 0x80;
-	else
-		val = val & 0x7F;
-
-	ret += ps5260_write(sd, 0xef, 0x01);
-	ret += ps5260_write(sd, 0x1d, val);
-	ret += ps5260_write(sd, 0x09, 0x01);
-	sensor->video.mbus_change = 0;
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
@@ -806,10 +788,6 @@ static int ps5260_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if(arg)
 			ret = ps5260_set_fps(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = ps5260_set_vflip(sd, *(int*)arg);
 		break;
 	default:
 		break;;
@@ -900,6 +878,9 @@ static int ps5260_probe(struct i2c_client *client,
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
+	*(volatile unsigned int*)(0xB0010100) = 0x1;
+	*(volatile unsigned int*)(0xB0010134) = 0xC0000000;
+
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		printk("Cannot get sensor input clock cgu_cim\n");

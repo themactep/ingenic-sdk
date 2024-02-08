@@ -1307,7 +1307,8 @@ static struct regval_list jxf37_stream_off_mipi[] = {
 	{JXF37_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
+int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg,
+	       unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
@@ -1332,7 +1333,8 @@ int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value
 	return ret;
 }
 
-int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
+int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg,
+		unsigned char value)
 {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);

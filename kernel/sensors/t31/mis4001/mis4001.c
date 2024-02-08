@@ -743,7 +743,8 @@ static int mis4001_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 /*
-    供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
+   For direct modification of the VTS will be broken,
+   need to modify the HTS to achieve real-time modification of the frame rate
 */
 static int mis4001_set_fps(struct tx_isp_subdev *sd, int fps)
 {

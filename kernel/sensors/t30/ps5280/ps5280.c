@@ -38,7 +38,7 @@
 #define NE_NEP_CONST_LINEAR	(0x708+0x32)
 #define NE_NEP_CONST_WDR	(0xfa0+0x32)
 
-#define SENSOR_VERSION	"H20170911a"
+#define SENSOR_VERSION	"H20190530a"
 
 typedef enum {
 	SENSOR_RAW_MODE_LINEAR = 0,
@@ -233,6 +233,7 @@ struct tx_isp_sensor_attribute ps5280_attr={
 			.vblanking = 0,
 			.hblanking = 0,
 		},
+		.frame_ecc = FRAME_ECC_OFF,
 	},
 	.max_again = 458752,
 	.max_dgain = 0,
@@ -875,9 +876,7 @@ static int ps5280_set_fps(struct tx_isp_subdev *sd, int fps)
 	else
 		printk("Now ps5280 Do not support this sensor raw mode.\n");
 
-	printk("#### hts=0x%x=%d\n",hts,hts);
 	vts = (pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16));
-	printk("#### vts=0x%x=%d\n",vts,vts);
 	Cmd_Lpf = vts -1;
 	ret = ps5280_write(sd, 0xef, 0x01);
 	ret += ps5280_write(sd, 0x0b, (unsigned char)(Cmd_Lpf & 0xff));
@@ -940,30 +939,6 @@ static int ps5280_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
-	return ret;
-}
-
-static int ps5280_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0;
-
-	ret = ps5280_write(sd, 0xef, 0x01);
-	ret += ps5280_read(sd, 0x1d, &val);
-	if (enable)
-		val = val | 0x80;
-	else
-		val = val & 0x7F;
-
-	ret += ps5280_write(sd, 0xef, 0x01);
-	ret += ps5280_write(sd, 0x1d, val);
-	ret += ps5280_write(sd, 0x09, 0x01);
-	sensor->video.mbus_change = 0;
-
-	if(!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
@@ -1052,10 +1027,6 @@ static int ps5280_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if(arg)
 		ret = ps5280_set_fps(sd, *(int*)arg);
-		break;
-	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = ps5280_set_vflip(sd, *(int*)arg);
 		break;
 	default:
 		break;;
