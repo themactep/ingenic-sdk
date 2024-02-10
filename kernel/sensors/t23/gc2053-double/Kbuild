@@ -1,5 +1,5 @@
 
-MODULE_NAME := sensor_gc2053-double_t31
+MODULE_NAME := sensor_gc2053-double_$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
 DIR=sensors/$(SOC_FAMILY)
