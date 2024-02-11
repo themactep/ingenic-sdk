@@ -1304,7 +1304,6 @@ static int gc2053_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-#if 0
 static int gc2053_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -1341,7 +1340,6 @@ static int gc2053_set_expo(struct tx_isp_subdev *sd, int value)
 
 	return 0;
 }
-#endif
 
 #if 1
 static int gc2053_set_integration_time(struct tx_isp_subdev *sd, int value)
