@@ -1597,10 +1597,8 @@ static int gc2053_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_EXPO:
-#if 0
 			if (arg)
 				ret = gc2053_set_expo(sd, *(int*)arg);
-#endif
 			break;
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
 //			if (arg)
