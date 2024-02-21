@@ -108,19 +108,19 @@ static inline int set_sensor_gpio_function(int func_set) {
 			pr_info("set sensor gpio as PA-low-8bit\n");
 			break;
 		case DVP_PA_HIGH_8BIT:
-			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | ff0);
+			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | 0xff0);
 			pr_info("set sensor gpio as PA-high-8bit\n");
 			break;
 		case DVP_PA_LOW_10BIT:
-			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | 3ff);
+			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | 0x3ff);
 			pr_info("set sensor gpio as PA-low-10bit\n");
 			break;
 		case DVP_PA_HIGH_10BIT:
-			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | ffc);
+			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | 0xffc);
 			pr_info("set sensor gpio as PA-high-10bit\n");
 			break;
 		case DVP_PA_12BIT:
-			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | fff);
+			ret = private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, ADDRBASE | 0xfff);
 			pr_info("set sensor gpio as PA-12bit\n");
 			break;
 		default:
