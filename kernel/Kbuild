@@ -21,8 +21,8 @@ ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 include $(src)/audio/$(SOC_FAMILY)/oss3/Kbuild
 endif
 
-ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
-include $(src)/avpu/$(SOC_FAMILY)/Kbuild
+ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
+include $(src)/avpu/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T10)$(CONFIG_SOC_T20)$(CONFIG_SOC_T21)$(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
