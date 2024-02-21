@@ -85,8 +85,12 @@ struct tx_isp_sensor_win_setting {
 };
 #endif
 
-# FIXME: # need alias for T10 and T20:
-# jzgpio_set_func to private_jzgpio_set_func
+/*
+# FIXME: an alias for T10 and T20
+int jzgpio_set_func(enum gpio_port port, enum gpio_function func, unsigned long pins) {
+	private_jzgpio_set_func(port, func, pins);
+}
+*/
 
 static inline int set_sensor_gpio_function(int func_set) {
 	int ret = 0;
