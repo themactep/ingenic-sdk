@@ -1,7 +1,7 @@
-MODULE_NAME := tx-isp-t23
+MODULE_NAME := tx-isp-$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
 
-DIR=isp/$(SOC)
+DIR=isp/$(SOC_FAMILY)
 
 SRCS := \
   $(DIR)/tx-isp-debug.c \
