@@ -1,7 +1,7 @@
 #ifndef __TX_SENSOR_COMMON_H__
 #define __TX_SENSOR_COMMON_H__
 
-#if defined(CONFIG_SOC_T10)
+#if defined(CONFIG_SOC_T10) || defined(CONFIG_SOC_T20)
 #include <linux/videodev2.h>
 #include <media/v4l2-device.h>
 #include <media/v4l2-chip-ident.h>
@@ -10,10 +10,8 @@
 #include <soc/gpio.h>
 #include "tx-isp-common.h"
 #else
-
 #include <soc/gpio.h>
 #include <txx-funcs.h>
-
 #endif
 
 #if !defined(CONFIG_SOC_T40) && !defined(CONFIG_SOC_T41)
