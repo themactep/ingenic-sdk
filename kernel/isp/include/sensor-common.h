@@ -12,6 +12,8 @@
 #else
 #include <soc/gpio.h>
 #include <txx-funcs.h>
+
+#define private_jzgpio_set_func jzgpio_set_func
 #endif
 
 #if !defined(CONFIG_SOC_T40) && !defined(CONFIG_SOC_T41)
@@ -71,8 +73,6 @@
 #define SEN_BCLK "cgu_cim"
 #endif
 #endif
-
-#define jzgpio_set_func private_jzgpio_set_func
 
 #if defined(CONFIG_SOC_T10)
 struct tx_isp_sensor_win_setting {
