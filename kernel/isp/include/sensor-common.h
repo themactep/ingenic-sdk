@@ -72,6 +72,8 @@
 #endif
 #endif
 
+#define jzgpio_set_func private_jzgpio_set_func
+
 #if defined(CONFIG_SOC_T10)
 struct tx_isp_sensor_win_setting {
 	int width;
@@ -82,13 +84,6 @@ struct tx_isp_sensor_win_setting {
 	void *regs;	/* Regs to tweak; the default fps is fast */
 };
 #endif
-
-/*
-# FIXME: an alias for T10 and T20
-int jzgpio_set_func(enum gpio_port port, enum gpio_function func, unsigned long pins) {
-	private_jzgpio_set_func(port, func, pins);
-}
-*/
 
 static inline int set_sensor_gpio_function(int func_set) {
 	int ret = 0;
