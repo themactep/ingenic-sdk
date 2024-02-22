@@ -9,11 +9,10 @@
 #include <linux/i2c.h>
 #include <soc/gpio.h>
 #include "tx-isp-common.h"
+#define private_jzgpio_set_func jzgpio_set_func
 #else
 #include <soc/gpio.h>
 #include <txx-funcs.h>
-
-#define private_jzgpio_set_func jzgpio_set_func
 #endif
 
 #if !defined(CONFIG_SOC_T40) && !defined(CONFIG_SOC_T41)
