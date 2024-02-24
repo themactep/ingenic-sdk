@@ -9,7 +9,6 @@ ccflags-y += -I$(src)/isp/$(SOC_FAMILY)/include
 ccflags-y += -I$(src)/audio/$(SOC_FAMILY)/oss3/include
 
 #### ALL #####
-# include $(src)/sinfo/Kbuild
 include $(src)/gpio/Kbuild
 include $(src)/misc/sample_pwm/Kbuild
 include $(src)/misc/motor/Kbuild
