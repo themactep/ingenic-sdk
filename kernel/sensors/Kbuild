@@ -1,0 +1,13 @@
+MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
+OUT := $(MODULE_NAME)
+
+DIR=sensors/$(SOC_FAMILY)
+
+SRCS := $(DIR)/$(SENSOR_MODEL).c
+
+OBJS := $(SRCS:%.c=%.o) \
+	$(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
