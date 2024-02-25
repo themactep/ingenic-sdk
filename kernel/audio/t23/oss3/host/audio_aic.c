@@ -23,7 +23,7 @@
 #include "../include/audio_common.h"
 #include "../include/codec-common.h"
 #include "../include/audio_dsp.h"
-#include "../../include/audio_debug.h"
+#include "../include/audio_debug.h"
 
 
 #define AUDIO_DRIVER_VERSION "V30-20230210a"
