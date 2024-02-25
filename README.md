@@ -1,8 +1,13 @@
-![OpenIPC logo][logo]
+## Opensourced Ingenic kernel modules
 
-## OpenIngenic
-_Opensource Ingenic SoCs SDK_
+### Building
 
-Used by OpenIPC firmware and can be used by your software as well (libraries are MIT and kernel modules are GPL)
+```console
+export PATH=/path/to/openipc_sdk/bin:$PATH
+make ARCH=mips CROSS_COMPILE=mipsel-openipc-linux-musl- \
+    -C ~/git/firmware/output/build/linux-3.10.14 \
+    SOC=t31 M=$PWD
+```
 
-[logo]: https://openipc.org/assets/openipc-logo-black.svg
+where `SOC` is your Ingenic SoC model: `t31`, `t40`, etc.
+
