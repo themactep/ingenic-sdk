@@ -56,8 +56,7 @@ struct flush_cache_info {
 	unsigned int	dir;
 };
 
-static void jz_avpu_release(struct device *dev)
-{
+static void jz_avpu_release(struct device *dev) {
 	return;
 }
 
@@ -94,8 +93,7 @@ struct platform_device jz_avpu_irq_device = {				\
 	.resource       = jz_avpu_irq_resources,			\
 };
 
-int channel_is_ready(struct avpu_codec_chan *chan)
-{
+int channel_is_ready(struct avpu_codec_chan *chan) {
 	unsigned long flags;
 	int ret = chan->unblock;
 
@@ -105,8 +103,7 @@ int channel_is_ready(struct avpu_codec_chan *chan)
 	return ret;
 }
 
-static int avpu_codec_open(struct inode *inode, struct file *filp)
-{
+static int avpu_codec_open(struct inode *inode, struct file *filp) {
 	struct avpu_codec_chan *chan;
 	int ret;
 	/* initialize channel */
@@ -140,8 +137,7 @@ fail:
 	return ret;
 }
 
-static int avpu_codec_release(struct inode *inode, struct file *filp)
-{
+static int avpu_codec_release(struct inode *inode, struct file *filp) {
 	struct avpu_codec_chan *chan = filp->private_data;
 	struct avpu_dma_buf_mmap *tmp;
 	struct list_head *pos, *n;
@@ -158,9 +154,7 @@ static int avpu_codec_release(struct inode *inode, struct file *filp)
 	return 0;
 }
 
-static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd,
-				    unsigned long arg)
-{
+static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
 	long ret = -ENOIOCTLCMD;
 
 	if (file->f_op->unlocked_ioctl)
@@ -169,8 +163,7 @@ static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd,
 	return ret;
 }
 
-static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int desc_id)
-{
+static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int desc_id) {
 	struct avpu_dma_buf_mmap *cur_buf_mmap;
 
 	list_for_each_entry(cur_buf_mmap, &chan->mem, list){
@@ -181,8 +174,7 @@ static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int 
 	return NULL;
 }
 
-static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma)
-{
+static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma) {
 	struct avpu_codec_chan *chan = filp->private_data;
 	unsigned long start = vma->vm_start;
 	unsigned long vsize = vma->vm_end - start;
@@ -208,16 +200,14 @@ static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma)
 	return 0;
 }
 
-static int unblock_channel(struct avpu_codec_chan *chan)
-{
+static int unblock_channel(struct avpu_codec_chan *chan) {
 	chan->unblock = 1;
 //	printk("--------------%s(%d)-----------\n", __func__, __LINE__);
 	wake_up_interruptible(&chan->irq_queue);
 	return 0;
 }
 
-static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg)
-{
+static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg) {
 	struct avpu_codec_desc *codec = chan->codec;
 	int callback;
 	struct r_irq *i_callback;
@@ -251,8 +241,7 @@ static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg)
 	return ret;
 }
 
-static int read_reg(struct avpu_codec_chan *chan, unsigned long arg)
-{
+static int read_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 	struct avpu_reg reg;
 	struct avpu_codec_desc *codec = chan->codec;
 	int err;
@@ -292,8 +281,7 @@ static int read_reg(struct avpu_codec_chan *chan, unsigned long arg)
 	return 0;
 }
 
-static int write_reg(struct avpu_codec_chan *chan, unsigned long arg)
-{
+static int write_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 	struct avpu_reg reg;
 	struct avpu_codec_desc *codec = chan->codec;
 
@@ -328,9 +316,10 @@ static int write_reg(struct avpu_codec_chan *chan, unsigned long arg)
 
 	return 0;
 }
+
 #if 1
-static long jz_cmd_flush_cache(long arg)
-{
+
+static long jz_cmd_flush_cache(long arg) {
 	struct flush_cache_info info;
 	long ret = 0;
 	if (copy_from_user(&info, (void *)arg, sizeof(info))) {
@@ -342,9 +331,8 @@ static long jz_cmd_flush_cache(long arg)
 	return ret;
 }
 #endif
-static long avpu_codec_ioctl(struct file *filp, unsigned int cmd,
-			     unsigned long arg)
-{
+
+static long avpu_codec_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
 	struct avpu_codec_chan *chan = filp->private_data;
 	struct avpu_codec_desc *codec = chan->codec;
 
@@ -380,13 +368,11 @@ const struct file_operations avpu_codec_fops = {
 	.mmap		= avpu_dma_mmap,
 };
 
-void clean_up_avpu_codec_cdev(struct avpu_codec_desc *dev)
-{
+void clean_up_avpu_codec_cdev(struct avpu_codec_desc *dev) {
 	cdev_del(&dev->cdev);
 }
 
-int setup_chrdev_region(void)
-{
+int setup_chrdev_region(void) {
 	dev_t dev = 0;
 	int err;
 
@@ -403,9 +389,7 @@ int setup_chrdev_region(void)
 	return 0;
 }
 
-int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor,
-			  const char *device_name)
-{
+int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor, const char *device_name) {
 	struct device *device;
 	int err, devno =
 		MKDEV(avpu_codec_major, minor);
@@ -431,8 +415,7 @@ int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor,
 	return 0;
 }
 
-static int init_codec_desc(struct avpu_codec_desc *codec)
-{
+static int init_codec_desc(struct avpu_codec_desc *codec) {
 	INIT_LIST_HEAD(&codec->irq_masks);
 	spin_lock_init(&codec->i_lock);
 	/* make chan requirement explicit */
@@ -446,13 +429,11 @@ static int init_codec_desc(struct avpu_codec_desc *codec)
 	return 0;
 }
 
-static void deinit_codec_desc(struct avpu_codec_desc *codec)
-{
+static void deinit_codec_desc(struct avpu_codec_desc *codec) {
 	kmem_cache_destroy(codec->cache);
 }
 
-int avpu_codec_probe(struct platform_device *pdev)
-{
+int avpu_codec_probe(struct platform_device *pdev) {
 	int err, irq;
     int ret = -1;
 	static int current_minor;
@@ -690,8 +671,7 @@ out_no_resource:
 
 }
 
-int avpu_codec_remove(struct platform_device *pdev)
-{
+int avpu_codec_remove(struct platform_device *pdev) {
 	struct avpu_codec_desc *codec = platform_get_drvdata(pdev);
 	dev_t dev = MKDEV(avpu_codec_major, codec->minor);
 
@@ -747,8 +727,7 @@ static struct platform_driver avpu_platform_driver = {
 	},
 };
 
-static int create_module_class(void)
-{
+static int create_module_class(void) {
 	module_class = class_create(THIS_MODULE, "avpu_class");
 	if (IS_ERR(module_class))
 		return PTR_ERR(module_class);
@@ -756,13 +735,11 @@ static int create_module_class(void)
 	return 0;
 }
 
-static void destroy_module_class(void)
-{
+static void destroy_module_class(void) {
 	class_destroy(module_class);
 }
 
-int avpu_module_init(void)
-{
+int avpu_module_init(void) {
 	int ret;
 
 	ret = platform_device_register(&jz_avpu_irq_device);
@@ -776,14 +753,12 @@ int avpu_module_init(void)
 	return ret;
 }
 
-void avpu_module_deinit(void)
-{
+void avpu_module_deinit(void) {
 	platform_driver_unregister(&avpu_platform_driver);
 	platform_device_unregister(&jz_avpu_irq_device);
 }
 
-static int __init avpu_codec_init(void)
-{
+static int __init avpu_codec_init(void) {
 	dev_t devno;
 	int err = setup_chrdev_region();
 
@@ -807,8 +782,7 @@ fail:
 	return err;
 }
 
-static void __exit avpu_codec_exit(void)
-{
+static void __exit avpu_codec_exit(void) {
 	dev_t devno = MKDEV(avpu_codec_major, 0);
 
 	avpu_module_deinit();
