@@ -571,8 +571,8 @@ static LookupTable calibration_iridix_asymmetry = { .ptr = _calibration_iridix_a
 uint32_t get_static_calibrations( ApicalCalibrations * c ) {
     uint32_t result = 0;
     if (c != 0) {
-	    c->calibrations[ _CALIBRATION_BLACK_LEVEL_FS ] = &calibration_black_level_fs ;
-       c->calibrations[ _CALIBRATION_DEFECT_PIXELS ] = &calibration_defect_pixels;
+	    c->calibrations[ _CALIBRATION_BLACK_LEVEL_FS ] = &calibration_black_level_fs;
+        c->calibrations[ _CALIBRATION_DEFECT_PIXELS ] = &calibration_defect_pixels;
         c->calibrations[_CALIBRATION_LIGHT_SRC] = &calibration_light_src;
         c->calibrations[_CALIBRATION_RG_POS] = &calibration_rg_pos;
         c->calibrations[_CALIBRATION_BG_POS] = &calibration_bg_pos;

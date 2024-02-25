@@ -1,14 +1,8 @@
-MODULE_NAME := tx-isp-t40
-OUT := $(MODULE_NAME)
-
-DIR=isp/$(SOC_FAMILY)
-
-SRCS := \
-  $(DIR)/tx-isp-funcs.c \
-  $(DIR)/tx-isp-module.c
+SRCS := $(DIR)/tx-isp-funcs.c \
+	$(DIR)/tx-isp-module.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(DIR)/libt40-firmware.a
+OBJS += sdk/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 

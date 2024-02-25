@@ -9,25 +9,20 @@ ccflags-y += -I$(src)/isp/$(SOC_FAMILY)/include
 ccflags-y += -I$(src)/audio/$(SOC_FAMILY)/oss3/include
 
 #### ALL #####
+include $(src)/isp/Kbuild
 include $(src)/gpio/Kbuild
 include $(src)/misc/sample_pwm/Kbuild
 include $(src)/misc/motor/Kbuild
 
 #### PLATFORM ####
-ifeq ($(CONFIG_SOC_T10)$(CONFIG_SOC_T20)$(CONFIG_SOC_T21)$(CONFIG_SOC_T31),y)
-include $(src)/audio/$(SOC_FAMILY)/oss2/Kbuild
-endif
-
 ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 include $(src)/audio/$(SOC_FAMILY)/oss3/Kbuild
+else
+include $(src)/audio/$(SOC_FAMILY)/oss2/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 include $(src)/avpu/Kbuild
-endif
-
-ifeq ($(CONFIG_SOC_T10)$(CONFIG_SOC_T20)$(CONFIG_SOC_T21)$(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
-include $(src)/isp/$(SOC_FAMILY)/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
@@ -38,7 +33,7 @@ endif
 
 #### SENSORS ####
 ifeq ($(SENSOR_MODEL),)
-$(error SENSOR_MODEL missing)
+$(warning SENSOR_MODEL missing)
 else
 $(info Bulding for sensor $(SENSOR_MODEL))
 include $(src)/sensors/$(SOC_FAMILY)/$(SENSOR_MODEL)/Kbuild

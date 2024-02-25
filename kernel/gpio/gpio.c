@@ -19,7 +19,7 @@ module_param(debug, int, 0644);
 MODULE_PARM_DESC(debug, "Enable debugging output: 0=off, 1=on");
 
 #define DEBUG_PRINTK(fmt, ...) do { if (debug) printk(fmt, ##__VA_ARGS__); } while (0)
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+//#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 int claim_gpio(int gpio) {
     dynamic_pr_debug("gpio_claim: GPIO[%i] Requesting...\n", gpio);

@@ -1,11 +1,5 @@
-MODULE_NAME := tx-isp-t41
-OUT := $(MODULE_NAME)
-
-DIR=isp/$(SOC_FAMILY)
-
-SRCS := \
-  $(DIR)/tx-isp-funcs.c \
-  $(DIR)/tx-isp-module.c
+SRCS := $(DIR)/tx-isp-funcs.c \
+	$(DIR)/tx-isp-module.c
 
 # Determine the kernel version based on SOC type and KDIR
 ifeq ($(SOC),t41)
@@ -19,7 +13,7 @@ else ifeq ($(SOC),t40)
 endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(DIR)/libt41-firmware-$(KVERSION).a
+OBJS += sdk/lib$(SOC_FAMILY)-firmware-$(KVERSION).a
 
 $(OUT)-objs := $(OBJS)
 

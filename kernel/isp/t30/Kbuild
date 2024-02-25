@@ -1,45 +1,39 @@
-MODULE_NAME := tx-isp-$(SOC_FAMILY)
-OUT := $(MODULE_NAME)
-
-DIR=isp/$(SOC_FAMILY)
-
-SRCS := \
-    $(DIR)/apical-isp/ApicalDefault.c \
-    $(DIR)/apical-isp/apical_calibrations.c \
-    $(DIR)/apical-isp/apical_calibrations_init.c \
-    $(DIR)/apical-isp/apical_custom_initialization.c \
-    $(DIR)/apical-isp/apical_dynamic_calibrations.c \
-    $(DIR)/apical-isp/apical_isp_io.c \
-    $(DIR)/apical-isp/apical_static_calibrations.c \
-    $(DIR)/apical-isp/log.c \
-    $(DIR)/apical-isp/sensor_drv.c \
-    $(DIR)/apical-isp/system_chardev.c \
-    $(DIR)/apical-isp/system_i2c.c \
-    $(DIR)/apical-isp/system_io.c \
-    $(DIR)/apical-isp/system_isp_io.c \
-    $(DIR)/apical-isp/system_semaphore.c \
-    $(DIR)/apical-isp/system_spi.c \
-    $(DIR)/apical-isp/system_timer.c \
-    $(DIR)/apical-isp/system_uart.c \
-    $(DIR)/apical-isp/tx-isp-core-tuning.c \
-    $(DIR)/apical-isp/tx-isp-core.c \
-    $(DIR)/apical-isp/tx-isp-load-parameters.c \
-    $(DIR)/platform.c \
-    $(DIR)/tx-isp-debug.c \
-    $(DIR)/tx-isp-device.c \
-    $(DIR)/tx-isp-frame-channel.c \
-    $(DIR)/tx-isp-interrupt.c \
-    $(DIR)/tx-isp-ldc.c \
-    $(DIR)/tx-isp-mscaler.c \
-    $(DIR)/tx-isp-ncu.c \
-    $(DIR)/tx-isp-videobuf.c \
-    $(DIR)/txx-funcs.c \
-    $(DIR)/videoin/tx-isp-csi.c \
-    $(DIR)/videoin/tx-isp-vic.c \
-    $(DIR)/videoin/tx-isp-video-in.c
+SRCS := $(DIR)/apical-isp/ApicalDefault.c \
+	$(DIR)/apical-isp/apical_calibrations.c \
+	$(DIR)/apical-isp/apical_calibrations_init.c \
+	$(DIR)/apical-isp/apical_custom_initialization.c \
+	$(DIR)/apical-isp/apical_dynamic_calibrations.c \
+	$(DIR)/apical-isp/apical_isp_io.c \
+	$(DIR)/apical-isp/apical_static_calibrations.c \
+	$(DIR)/apical-isp/log.c \
+	$(DIR)/apical-isp/sensor_drv.c \
+	$(DIR)/apical-isp/system_chardev.c \
+	$(DIR)/apical-isp/system_i2c.c \
+	$(DIR)/apical-isp/system_io.c \
+	$(DIR)/apical-isp/system_isp_io.c \
+	$(DIR)/apical-isp/system_semaphore.c \
+	$(DIR)/apical-isp/system_spi.c \
+	$(DIR)/apical-isp/system_timer.c \
+	$(DIR)/apical-isp/system_uart.c \
+	$(DIR)/apical-isp/tx-isp-core-tuning.c \
+	$(DIR)/apical-isp/tx-isp-core.c \
+	$(DIR)/apical-isp/tx-isp-load-parameters.c \
+	$(DIR)/platform.c \
+	$(DIR)/tx-isp-debug.c \
+	$(DIR)/tx-isp-device.c \
+	$(DIR)/tx-isp-frame-channel.c \
+	$(DIR)/tx-isp-interrupt.c \
+	$(DIR)/tx-isp-ldc.c \
+	$(DIR)/tx-isp-mscaler.c \
+	$(DIR)/tx-isp-ncu.c \
+	$(DIR)/tx-isp-videobuf.c \
+	$(DIR)/txx-funcs.c \
+	$(DIR)/videoin/tx-isp-csi.c \
+	$(DIR)/videoin/tx-isp-vic.c \
+	$(DIR)/videoin/tx-isp-video-in.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(DIR)/apical-isp/libapical_isp.a
+OBJS += sdk/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 
