@@ -40,9 +40,10 @@ static struct audio_dsp_device* globe_dspdev = NULL;
 //extern void jzdma_dump(struct dma_chan *chan);
 
 extern dma_addr_t ingenic_dmic_get_dma_current_trans_addr(void);
+
 extern int ingenic_dmic_dma_init(dma_addr_t dma_addr, unsigned int fragment_size, unsigned int fragment_cnt);
-static void dsp_workqueue_handle(struct work_struct *work)
-{
+
+static void dsp_workqueue_handle(struct work_struct *work) {
 	struct audio_dsp_device *dsp = container_of(work, struct audio_dsp_device, workqueue);
 	struct audio_route *amic_route = NULL;
 	struct audio_route *dmic_route = NULL;
@@ -240,7 +241,7 @@ static void dsp_workqueue_handle(struct work_struct *work)
 				memset(ao_route->manage.fragments[dma_tracer].vaddr, 0, ao_route->manage.fragment_size);
 				dma_sync_single_for_device(NULL, ao_route->manage.fragments[dma_tracer].paddr,
 						ao_route->manage.fragment_size, DMA_TO_DEVICE);
-				memset(ao_route->manage.fragments[dma_tracer+1].vaddr, 0, ao_route->manage.fragment_size);
+				memset(ao_route->manage.fragments[dma_tracer + 1].vaddr, 0, ao_route->manage.fragment_size);
 				dma_sync_single_for_device(NULL, ao_route->manage.fragments[dma_tracer+1].paddr,
 						ao_route->manage.fragment_size, DMA_TO_DEVICE);
 				dma_tracer = (dma_tracer + 2) % ao_route->manage.fragment_cnt;
@@ -305,10 +306,8 @@ static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) 
 		if (route && route->state == AUDIO_BUSY_STATE) {
 			if (route->index != AUDIO_ROUTE_DMIC_ID) {
 				pipe = route->pipe;
-				dma_currentaddr = pipe->dma_chan->device->get_current_trans_addr(pipe->dma_chan, NULL, NULL,
-					pipe->dma_config.direction);
+				dma_currentaddr = pipe->dma_chan->device->get_current_trans_addr(pipe->dma_chan, NULL, NULL, pipe->dma_config.direction);
 				index = (dma_currentaddr - pipe->paddr) / route->manage.fragment_size % route->manage.fragment_cnt;
-
 				route->manage.new_dma_tracer = index;
 				if (route->index == AUDIO_ROUTE_AMIC_ID) {
 					getrawmonotonic(&ts);
@@ -394,14 +393,12 @@ static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) 
 	}
 
 	spin_unlock_irqrestore(&dsp->slock, lock_flags);
-
 	schedule_work(&dsp->workqueue);
 out:
 	return HRTIMER_NORESTART;
 }
 
-static inline long dsp_ioctl_sync_ao_stream(struct audio_dsp_device *dsp)
-{
+static inline long dsp_ioctl_sync_ao_stream(struct audio_dsp_device *dsp) {
 	long ret = 0;
 	unsigned long lock_flags;
 	unsigned int new_dma_tracer = 0;
@@ -443,8 +440,7 @@ out:
 	return ret;
 }
 
-static inline long dsp_ioctl_clear_ao_stream(struct audio_dsp_device *dsp)
-{
+static inline long dsp_ioctl_clear_ao_stream(struct audio_dsp_device *dsp) {
 	long ret = 0;
 	unsigned int dma_tracer = 0;
 	unsigned int io_tracer = 0;
@@ -476,8 +472,7 @@ out:
 
 
 static long dsp_config_route_param(struct audio_dsp_device *dsp, enum auido_route_index index,
-					unsigned int cmd, struct audio_parameter *param)
-{
+				   unsigned int cmd, struct audio_parameter *param) {
 	struct audio_route *route = NULL;
 	long ret = AUDIO_SUCCESS;
 
@@ -505,8 +500,7 @@ out:
 	return ret;
 }
 
-static long dsp_config_aec_route_param(struct audio_dsp_device *dsp, unsigned int cmd, struct audio_parameter *param)
-{
+static long dsp_config_aec_route_param(struct audio_dsp_device *dsp, unsigned int cmd, struct audio_parameter *param) {
 	struct audio_route *route = NULL;
 	long ret = AUDIO_SUCCESS;
 
@@ -541,8 +535,7 @@ out:
 	return ret;
 }
 
-static inline unsigned int format_to_bytes(unsigned int format)
-{
+static inline unsigned int format_to_bytes(unsigned int format) {
 	if (format <= 8)
 		return 1;
 	else if (format <= 16)
@@ -551,8 +544,7 @@ static inline unsigned int format_to_bytes(unsigned int format)
 		return 4;
 }
 
-static long dsp_create_dma_chan(struct audio_route *route)
-{
+static long dsp_create_dma_chan(struct audio_route *route) {
 	struct dsp_data_manage *manage = NULL;
 	struct audio_pipe *pipe = NULL;
 	struct audio_route *parent = NULL;
@@ -650,8 +642,7 @@ out:
 	return ret;
 }
 
-static int dsp_destroy_dma_chan(struct audio_route *route)
-{
+static int dsp_destroy_dma_chan(struct audio_route *route) {
 	struct dsp_data_manage *manage = NULL;
 	struct audio_pipe *pipe = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -676,8 +667,7 @@ out:
 	return ret;
 }
 
-static long dsp_enable_amic_ai_and_aec(struct audio_dsp_device *dsp)
-{
+static long dsp_enable_amic_ai_and_aec(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	struct audio_route *aec_route = NULL;
@@ -758,8 +748,7 @@ out:
 	return ret;
 }
 
-static long dsp_disable_amic_ai_and_aec(struct audio_dsp_device *dsp)
-{
+static long dsp_disable_amic_ai_and_aec(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	struct audio_route *aec_route = NULL;
@@ -832,8 +821,7 @@ exit:
 	return ret;
 }
 
-static long dsp_enable_dmic_ai(struct audio_dsp_device *dsp)
-{
+static long dsp_enable_dmic_ai(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -888,8 +876,7 @@ out:
 	return ret;
 }
 
-static long dsp_enable_dmic_aec(struct audio_dsp_device *dsp, unsigned long arg)
-{
+static long dsp_enable_dmic_aec(struct audio_dsp_device *dsp, unsigned long arg) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	struct audio_route *aec_route = NULL;
@@ -994,8 +981,7 @@ out:
 	return ret;
 }
 
-static long dsp_enable_amic_ao(struct audio_dsp_device *dsp)
-{
+static long dsp_enable_amic_ao(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ao_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1052,8 +1038,7 @@ out:
 	return ret;
 }
 
-static long dsp_disable_amic_ao(struct audio_dsp_device *dsp)
-{
+static long dsp_disable_amic_ao(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ao_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1110,8 +1095,7 @@ exit:
 }
 
 
-static long dsp_enable_amic_aec(struct audio_dsp_device *dsp, unsigned long arg)
-{
+static long dsp_enable_amic_aec(struct audio_dsp_device *dsp, unsigned long arg) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1138,8 +1122,7 @@ out:
 	return ret;
 }
 
-static long dsp_disable_amic_aec(struct audio_dsp_device *dsp)
-{
+static long dsp_disable_amic_aec(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1167,8 +1150,7 @@ out:
 	return ret;
 }
 
-static long dsp_disable_dmic_aec(struct audio_dsp_device *dsp)
-{
+static long dsp_disable_dmic_aec(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1200,8 +1182,7 @@ out:
 	return ret;
 }
 
-static long dsp_disable_dmic_ai(struct audio_dsp_device *dsp)
-{
+static long dsp_disable_dmic_ai(struct audio_dsp_device *dsp) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
 	long ret = AUDIO_SUCCESS;
@@ -1262,8 +1243,7 @@ exit:
 	return ret;
 }
 
-static long dsp_get_mic_stream(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned long arg)
-{
+static long dsp_get_mic_stream(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned long arg) {
 	struct audio_route *ai_route = NULL;
 	struct audio_route *aec_route = NULL;
 	int cnt = 0, aec_cnt = 0, i = 0;
@@ -1387,8 +1367,7 @@ exit:
 	return ret;
 }
 
-static long dsp_set_spk_stream(struct audio_dsp_device *dsp, unsigned long arg)
-{
+static long dsp_set_spk_stream(struct audio_dsp_device *dsp, unsigned long arg) {
 	struct audio_route *ao_route = NULL;
 	int cnt = 0, i = 0;
 	unsigned int dma_tracer = 0;
@@ -1476,8 +1455,7 @@ exit:
 	return ret;
 }
 
-static int disable_route_stream(struct audio_route *route)
-{
+static int disable_route_stream(struct audio_route *route) {
 	int ret = AUDIO_SUCCESS;
 	if (route == NULL)
 		return AUDIO_SUCCESS;
@@ -1503,8 +1481,7 @@ static int disable_route_stream(struct audio_route *route)
 }
 
 
-static int dsp_open(struct inode *inode, struct file *file)
-{
+static int dsp_open(struct inode *inode, struct file *file) {
 	struct miscdevice *dev = file->private_data;
 	struct audio_dsp_device *dsp = misc_get_audiodsp(dev);
 	struct audio_route *route = NULL;
@@ -1575,8 +1552,7 @@ error:
 	return -EPERM;
 }
 
-static int dsp_release(struct inode *inode, struct file *file)
-{
+static int dsp_release(struct inode *inode, struct file *file) {
 	struct miscdevice *dev = file->private_data;
 	struct audio_dsp_device *dsp = misc_get_audiodsp(dev);
 	struct audio_route *route = NULL;
@@ -1606,19 +1582,16 @@ out:
 	return 0;
 }
 
-static ssize_t dsp_read(struct file *file, char __user * buffer, size_t count, loff_t * ppos)
-{
+static ssize_t dsp_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos) {
 	return 0;
 }
 
-static ssize_t dsp_write(struct file *file, const char __user * buffer, size_t count, loff_t * ppos)
-{
+static ssize_t dsp_write(struct file *file, const char __user *buffer, size_t count, loff_t* ppos) {
 	return 0;
 }
 
 
-static long dsp_route_ioctl(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned int cmd, void *arg)
-{
+static long dsp_route_ioctl(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned int cmd, void *arg) {
 	struct audio_route *route = NULL;
 	long ret = AUDIO_SUCCESS;
 
@@ -1642,8 +1615,7 @@ out:
 
 }
 
-static long dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-{
+static long dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
 	struct miscdevice *dev = file->private_data;
 	struct audio_dsp_device *dsp = misc_get_audiodsp(dev);
 	struct audio_route *route = NULL;
@@ -1859,8 +1831,7 @@ const struct file_operations audio_dsp_fops = {
 	.release = dsp_release,
 };
 
-int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index)
-{
+int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index) {
 	struct audio_dsp_device* dsp = globe_dspdev;
 
 	if (!dsp || index >= AUDIO_ROUTE_MAX_ID)
@@ -1893,8 +1864,7 @@ int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index)
 	return AUDIO_SUCCESS;
 }
 
-int release_audio_pipe(struct audio_pipe *pipe)
-{
+int release_audio_pipe(struct audio_pipe *pipe) {
 	struct audio_dsp_device* dsp = globe_dspdev;
 	struct audio_route *route = NULL;
 	int index = 0;
@@ -1912,8 +1882,7 @@ int release_audio_pipe(struct audio_pipe *pipe)
 	return AUDIO_SUCCESS;
 }
 
-int register_audio_debug_ops(char *name, struct file_operations *debug_ops, void* data)
-{
+int register_audio_debug_ops(char *name, struct file_operations *debug_ops, void *data) {
 	struct audio_dsp_device* dsp = globe_dspdev;
 	if (!dsp)
 		return -AUDIO_EPERM;
@@ -1926,8 +1895,7 @@ int register_audio_debug_ops(char *name, struct file_operations *debug_ops, void
 extern struct platform_driver audio_aic_driver;
 extern struct platform_driver ingenic_dmic_platform_driver;
 
-static int audio_dsp_probe(struct platform_device *pdev)
-{
+static int audio_dsp_probe(struct platform_device *pdev) {
 	struct audio_dsp_device* dspdev = NULL;
 	struct platform_device **subdevs = NULL;
 	int ret = AUDIO_SUCCESS;
@@ -2058,8 +2026,7 @@ static struct platform_driver audio_dsp_driver = {
 };
 
 extern struct platform_device audio_dsp_platform_device;
-static int __init audio_dsp_init(void)
-{
+static int __init audio_dsp_init(void) {
 	int ret = AUDIO_SUCCESS;
 
 	ret = platform_device_register(&audio_dsp_platform_device);
@@ -2075,8 +2042,7 @@ static int __init audio_dsp_init(void)
 	return ret;
 }
 
-static void __exit audio_dsp_exit(void)
-{
+static void __exit audio_dsp_exit(void) {
 	platform_driver_unregister(&audio_dsp_driver);
 	platform_device_unregister(&audio_dsp_platform_device);
 }

@@ -19,6 +19,7 @@
 #include <soc/irq.h>
 
 #include <mach/platform.h>
+
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 
 /* the widget is the controller of  all sensors */

@@ -1,11 +1,11 @@
 #ifndef __TX_CODEC_COMMON_H__
 #define __TX_CODEC_COMMON_H__
+
 #include <linux/gpio.h>
 #include <soc/gpio.h>
 #include "audio_common.h"
 
-static inline int audio_set_gpio_function(int port, int func, unsigned int gpio)
-{
+static inline int audio_set_gpio_function(int port, int func, unsigned int gpio) {
 	int ret = 0;
 	enum gpio_port ports[] = {
 		GPIO_PORT_A,
@@ -110,28 +110,24 @@ struct codec_attributes {
 	void *dev_priv;		/* save device message */
 };
 
-static inline void set_codec_devdata(struct codec_attributes *attrs, void *priv)
-{
+static inline void set_codec_devdata(struct codec_attributes *attrs, void *priv) {
 	if(attrs)
 		attrs->dev_priv = priv;
 }
 
-static inline void *get_codec_devdata(struct codec_attributes *attrs)
-{
+static inline void *get_codec_devdata(struct codec_attributes *attrs) {
 	if(attrs)
 		return attrs->dev_priv;
 	else
 		return NULL;
 }
 
-static inline void set_codec_hostdata(struct codec_attributes *attrs, void *priv)
-{
+static inline void set_codec_hostdata(struct codec_attributes *attrs, void *priv) {
 	if(attrs)
 		attrs->host_priv = priv;
 }
 
-static inline void *get_codec_hostdata(struct codec_attributes *attrs)
-{
+static inline void *get_codec_hostdata(struct codec_attributes *attrs) {
 	if(attrs)
 		return attrs->host_priv;
 	else
@@ -143,4 +139,4 @@ struct codec_spk_gpio {
 	int active_level;
 };
 
-#endif// __TX_CODEC_COMMON_H__
+#endif /*__TX_CODEC_COMMON_H__*/
