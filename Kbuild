@@ -36,5 +36,5 @@ ifeq ($(SENSOR_MODEL),)
 $(warning SENSOR_MODEL missing)
 else
 $(info Bulding for sensor $(SENSOR_MODEL))
-include $(src)/sensors/Kbuild
+include $(src)/sensor-src/Kbuild
 endif
