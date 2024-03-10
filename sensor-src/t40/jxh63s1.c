@@ -790,6 +790,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxh63_attr.min_integration_time_native = 1;
 		jxh63_attr.max_integration_time_native = 900 - 1;
 		jxh63_attr.integration_time_limit = 900 - 1;
+		jxh63_attr.again = 0;
+		jxh63_attr.integration_time = 0x1f;
 		pr_debug("----->dvp\n");
 		break;
 	case 1:
@@ -803,6 +805,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxh63_attr.min_integration_time_native = 1;
 		jxh63_attr.max_integration_time_native = 900 - 4;
 		jxh63_attr.integration_time_limit = 900 - 4;
+		jxh63_attr.again = 0;
+		jxh63_attr.integration_time = 0x1f;
 		pr_debug("----->mipi\n");
 		break;
 	default:

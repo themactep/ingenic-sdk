@@ -776,6 +776,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
 	    case 0:
             mis2006_attr.dbus_type = data_interface;
+		mis2006_attr.again = 0;
+		mis2006_attr.integration_time = 0x464;
             if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
                 wsize->regs = mis2006_init_regs_1920_1080_25fps_dvp;
                 memcpy((void*)(&(mis2006_attr.dvp)),(void*)(&mis2006_dvp),sizeof(mis2006_dvp));
@@ -791,6 +793,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         default:
             ISP_ERROR("Have no this setting!!!\n");
 	}
+
 
 	switch(info->video_interface){
         case TISP_SENSOR_VI_MIPI_CSI0:

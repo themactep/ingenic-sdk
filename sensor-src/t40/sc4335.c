@@ -380,6 +380,7 @@ static struct regval_list sc4335_init_regs_2560_1440_25fps_mipi[] = {
 	{0x399d, 0x28},
 	{0x399e, 0x18},
 	{0x399f, 0x0c},
+	{0x3e00, 0x00},//
 	{0x3e01, 0xbb},
 	{0x3e02, 0x00},
 	{0x3e09, 0x20},
@@ -764,7 +765,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->default_boot){
         case 0:
-
+		wsize = &sc4335_win_sizes[0];
+	    sc4335_attr.again = 0;
+            sc4335_attr.integration_time = 0xbb0;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");

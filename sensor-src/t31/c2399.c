@@ -31,7 +31,7 @@
 
 #define SENSOR_OUTPUT_MAX_FPS		30
 #define SENSOR_OUTPUT_MIN_FPS		5
-#define SENSOR_VERSION			"H20201128"
+#define SENSOR_VERSION	"H20220704a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -276,8 +276,9 @@ static struct regval_list c2399_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3118,0x50},
 	{0x311b,0x01},
 	{0x3126,0x02},
-	{0x0202,0x03},
-	{0x0203,0xe0},
+	{0x0202,0x00},
+	{0x0203,0x64},
+	{0x0205,0x00},
 	{0x3584,0x22},
 	{0x3009,0x05},
 	{0x022d,0x1f},
@@ -699,6 +700,7 @@ static int c2399_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
+#if 0
 static int c2399_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -726,6 +728,7 @@ static int c2399_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	}
 	return 0;
 }
+#endif
 
 static int c2399_set_expo(struct tx_isp_subdev *sd, int value)
 {
@@ -919,7 +922,7 @@ static int c2399_g_chip_ident(struct tx_isp_subdev *sd,
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-	return ret;
+	return 0;
 }
 
 static int c2399_set_vflip(struct tx_isp_subdev *sd, int enable)

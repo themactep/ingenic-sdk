@@ -25,18 +25,18 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXK08_CHIP_ID_H			(0x06)
-#define JXK08_CHIP_ID_L			(0x05)
-#define JXK08_REG_END			0xff
-#define JXK08_REG_DELAY			0xfe
-#define JXK08_SUPPORT_30FPS_SCLK	3200 * 1575 * 30
-#define SENSOR_OUTPUT_MAX_FPS		30
-#define SENSOR_OUTPUT_MIN_FPS		5
-#define SENSOR_VERSION			"H20230403a"
+#define JXK08_CHIP_ID_H (0x06)
+#define JXK08_CHIP_ID_L (0x05)
+#define JXK08_REG_END 0xff
+#define JXK08_REG_DELAY 0xfe
+#define JXK08_SUPPORT_30FPS_SCLK 4000*2400*15
+#define SENSOR_OUTPUT_MAX_FPS 15
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20230802a"
 
 uint8_t dismode;
 static int rst_gpio = GPIO_PA(18);
-static int pwdn_gpio = -1;
+//static int pwdn_gpio = -1;
 
 static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
@@ -80,7 +80,7 @@ struct again_lut jxk08_again_lut[] = {
 	{0x1b, 115008},
 	{0x1c, 118446},
 	{0x1d, 121764},
-	{0x1e, 115759},
+	{0x1e, 124009},
 	{0x1f, 128070},
 	{0x20, 131072},
 	{0x21, 136803},
@@ -178,15 +178,15 @@ struct tx_isp_sensor_attribute jxk08_attr = {
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 378,
+		.clk = 360,
 		.lans = 2,
 		.settle_time_apative_en = 0,
 		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 		.mipi_sc.hcrop_diff_en = 0,
 		.mipi_sc.mipi_vcomp_en = 0,
 		.mipi_sc.mipi_hcomp_en = 0,
-		.image_twidth = 2688,
-		.image_theight = 1520,
+		.image_twidth = 3840,
+		.image_theight = 2160,
 		.mipi_sc.mipi_crop_start0x = 0,
 		.mipi_sc.mipi_crop_start0y = 0,
 		.mipi_sc.mipi_crop_start1x = 0,
@@ -209,11 +209,11 @@ struct tx_isp_sensor_attribute jxk08_attr = {
 	.max_dgain = 0,
 	.min_integration_time = 2,
 	.min_integration_time_native = 2,
-	.max_integration_time_native = 1575 - 4,
-	.integration_time_limit = 1575 - 4,
-	.total_width = 3200,
-	.total_height = 1575,
-	.max_integration_time = 1575 - 4,
+	.max_integration_time_native = 2400 - 4,
+	.integration_time_limit = 2400 - 4,
+	.total_width = 4000,
+	.total_height = 2400,
+	.max_integration_time = 2400 - 4,
 	.one_line_expr_in_us = 15,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
@@ -222,6 +222,7 @@ struct tx_isp_sensor_attribute jxk08_attr = {
 	.sensor_ctrl.alloc_dgain = jxk08_alloc_dgain,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
+
 
 static struct regval_list jxk08_init_regs_2688_1520_30fps_mipi[] = {
 	{0x12, 0x60},
@@ -330,11 +331,126 @@ static struct regval_list jxk08_init_regs_2688_1520_30fps_mipi[] = {
 	{JXK08_REG_END, 0x00}, /* END MARKER */
 };
 
+
+static struct regval_list jxk08_init_regs_3840_2160_15fps_mipi[] = {
+	{0x12,0x60},
+	{0xAD,0x01},
+	{0xAD,0x00},
+	{0x0E,0x11},
+	{0x0F,0x44},
+	{0x10,0x3C},
+	{0x11,0x80},
+	{0x67,0xA6},
+	{0x0D,0x11},
+	{0x64,0x21},
+	{0x65,0x1B},
+	{0xBE,0x1B},
+	{0xBF,0x60},
+	{0xBC,0xD9},
+	{0xCB,0x0F},
+	{0x20,0xE8},
+	{0x21,0x03},
+	{0x22,0x60},
+	{0x23,0x09},
+	{0x24,0xC0},
+	{0x25,0x70},
+	{0x26,0x83},
+	{0x27,0x08},
+	{0x28,0x0B},
+	{0x29,0x00},
+	{0x2B,0x0C},
+	{0x2C,0x00},
+	{0x2D,0x04},
+	{0x2E,0x21},
+	{0x2F,0x38},
+	{0x30,0xC4},
+	{0x87,0x82},
+	{0x9F,0xDC},
+	{0x9D,0xB1},
+	{0xAC,0x00},
+	{0x1D,0x00},
+	{0x1E,0x10},
+	{0x3A,0xD1},
+	{0x3B,0x88},
+	{0x3C,0x42},
+	{0x3D,0x56},
+	{0x3E,0x12},
+	{0x3F,0x13},
+	{0x42,0x08},
+	{0x43,0x00},
+	{0x70,0x00},
+	{0x71,0x24},
+	{0x31,0x0C},
+	{0x32,0x0A},
+	{0x33,0x5A},
+	{0x34,0x04},
+	{0x36,0x0F},
+	{0x39,0xF0},
+	{0x5A,0x08},
+	{0xB5,0x28},
+	{0xB6,0x41},
+	{0xB7,0x42},
+	{0xB8,0x0C},
+	{0xB9,0x08},
+	{0xBA,0x8F},
+	{0x56,0xB0},
+	{0x57,0x40},
+	{0x58,0xC1},
+	{0x59,0x13},
+	{0x5D,0x80},
+	{0x5E,0xC1},
+	{0x5F,0x40},
+	{0x60,0xC1},
+	{0x61,0x13},
+	{0x62,0x1C},
+	{0x66,0x31},
+	{0x68,0x00},
+	{0x69,0xA0},
+	{0x6A,0x00},
+	{0x6B,0x84},
+	{0x6C,0x27},
+	{0xC4,0xC0},
+	{0xE1,0xE0},
+	{0x4A,0x20},
+	{0x88,0x0A},
+	{0x80,0x80},
+	{0x81,0x14},
+	{0x84,0x84},
+	{0xE7,0x0E},
+	{0x49,0x10},
+	{0x8D,0x0D},
+	{0x8B,0x20},
+	{0x82,0x25},
+	{0x83,0x05},
+	{0x85,0x80},
+	{0xB4,0x01},
+	{0xB3,0x3F},
+	{0xD2,0x80},
+	{0xD0,0x00},
+	{0xD3,0x2B},
+	{0x38,0x0A},
+	{0xE9,0x00},
+	{0x89,0x00},
+	{0x12,0x20},
+	{0x08,0x23},
+	{0x07,0xE7},
+	{JXK08_REG_END, 0x00}, /* END MARKER */
+};
+
 /*
  * the order of the jxk08_win_sizes is [full_resolution, preview_resolution].
  */
 static struct tx_isp_sensor_win_setting jxk08_win_sizes[] = {
 	/* [0] 2560*1440@30fps linear */
+	{
+		.width = 3840,
+		.height = 2160,
+		.fps = 15 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = jxk08_init_regs_3840_2160_15fps_mipi,
+	},
+		/* [1] 2560*1440@30fps linear */
 	{
 		.width = 2688,
 		.height = 1520,
@@ -420,7 +536,7 @@ static int jxk08_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int jxk08_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	unsigned char val;
+
 	while (vals->reg_num != JXK08_REG_END)
 	{
 		if (vals->reg_num == JXK08_REG_DELAY)
@@ -597,10 +713,18 @@ static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned char val = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
-
-	sclk = 3200 * 1575 * 30;
-	max_fps = SENSOR_OUTPUT_MAX_FPS;
-
+	struct tx_isp_sensor_register_info *info = &sensor->info;
+	switch (info->default_boot)
+	{
+		case 0:
+			sclk = 1000 * 2400 * 15;
+			max_fps = SENSOR_OUTPUT_MAX_FPS;
+		case 1:
+			sclk = 320 * 1575 * 30;
+			max_fps = SENSOR_OUTPUT_MAX_FPS;
+		default:
+			ISP_WARNING("warn: fps(%d) no in range\n", fps);
+	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
 	{
@@ -632,7 +756,7 @@ static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
 	jxk08_write(sd, 0x1f, val);
 	pr_debug("after register 0x1f value : 0x%02x\n", val);
 #else
-	vts = vts >> 2;
+	//vts = vts >> 2;
 	ret = jxk08_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += jxk08_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif
@@ -716,6 +840,18 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	{
 	case 0:
 		wsize = &jxk08_win_sizes[0];
+		jxk08_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		jxk08_attr.max_integration_time_native = 2400 - 4;
+		jxk08_attr.integration_time_limit = 2400 - 4;
+		jxk08_attr.total_width = 4000;
+		jxk08_attr.total_height = 2400;
+		jxk08_attr.max_integration_time = 2400 - 4;
+		jxk08_attr.again = 0;
+		jxk08_attr.max_again = 259142,
+		jxk08_attr.integration_time = 0x1;
+		break;
+	case 1:
+		wsize = &jxk08_win_sizes[1];
 		jxk08_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		jxk08_attr.max_integration_time_native = 1575 - 4;
 		jxk08_attr.integration_time_limit = 1575 - 4;

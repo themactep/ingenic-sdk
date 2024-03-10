@@ -838,6 +838,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
 		case 0:
 			wsize = &c2399_win_sizes[0];
+	    c2399_attr.again = 0;
+	    c2399_attr.integration_time = 0x3e0;
 			break;
 		default:
 			ISP_ERROR("not supported setting: %d!!!\n",info->default_boot);
@@ -940,7 +942,7 @@ static int c2399_g_chip_ident(struct tx_isp_subdev *sd,
 		chip->revision = SENSOR_VERSION;
 	}
 
-	return ret;
+	return 0;
 }
 
 static int c2399_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)

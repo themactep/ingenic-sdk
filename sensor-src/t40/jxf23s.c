@@ -818,6 +818,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf23s_attr.total_width = 2560;
 		jxf23s_attr.total_height = 1350;
 		jxf23s_attr.max_integration_time = 1350 - 4;
+		jxf23s_attr.again = 0;
+		jxf23s_attr.integration_time = 0xFF;
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
@@ -833,6 +835,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf23s_attr.total_width = 3072;
 		jxf23s_attr.total_height = 1125;
 		jxf23s_attr.max_integration_time = 1125 - 4;
+		jxf23s_attr.again = 0;
+		jxf23s_attr.integration_time = 0xFF;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

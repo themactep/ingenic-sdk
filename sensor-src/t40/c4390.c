@@ -603,6 +603,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     switch(info->default_boot){
         case 0:
             wsize = &c4390_win_sizes[0];
+            c4390_attr.again = 0;
+	    c4390_attr.integration_time = 0xF4;
             break;
         default:
             ISP_ERROR("not supported setting: %d!!!\n",info->default_boot);

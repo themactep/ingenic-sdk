@@ -11,6 +11,7 @@
  * sboot        resolution      fps       interface              mode
  *   0           2048*1536      25        mipi_2lane             linear
  *   1           2048*1536      25        mipi_2lane             hdr
+ *   2           2048*1536      30        mipi_2lane             linear
  */
 #define DEBUG
 
@@ -34,9 +35,10 @@
 #define SC301IOT_REG_DELAY	0xfffe
 #define SC301IOT_SUPPORT_25FPS_SCLK (54000000)
 #define SC301IOT_SUPPORT_25FPS_HDR_SCLK (108000000)
+#define SC301IOT_SUPPORT_30FPS_SCLK (54000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20221118a"
+#define SENSOR_VERSION	"H20230822a"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
@@ -390,6 +392,35 @@ struct tx_isp_mipi_bus sc301iot_mipi_dol={
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
+struct tx_isp_mipi_bus sc301iot_mipi_30fps_linear = {
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 540,
+	.lans = 2,
+	.settle_time_apative_en = 0,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.image_twidth = 2048,
+	.image_theight = 1536,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = RAW10,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
 struct tx_isp_sensor_attribute sc301iot_attr={
 	.name = "sc301iot",
 	.chip_id = 0xcc40,
@@ -721,8 +752,154 @@ static struct regval_list sc301iot_init_regs_2048_1536_25fps_hdr_mipi[] = {
 	{SC301IOT_REG_END, 0x00},	/* END MARKER */
 };
 
+static struct regval_list sc301iot_init_regs_2048_1536_30fps_mipi[] = {
+	{0x0103,0x01},
+	{0x0100,0x00},
+	{0x36e9,0x80},
+	{0x37f9,0x80},
+	{0x301c,0x78},
+	{0x301f,0x11},
+	{0x30b8,0x44},
+	{0x3208,0x08},
+	{0x3209,0x00},
+	{0x320a,0x06},
+	{0x320b,0x00},
+	{0x320c,0x04},//hts -> 0x465 = 1125
+	{0x320d,0x65},//
+	{0x320e,0x06},//vts -> 0x640 = 1600
+	{0x320f,0x40},//
+	{0x3214,0x11},
+	{0x3215,0x11},
+	{0x3223,0xd0},
+	{0x3231,0x01},
+	{0x3253,0x0c},
+	{0x3274,0x09},
+	{0x3301,0x08},
+	{0x3306,0x58},
+	{0x3308,0x08},
+	{0x330a,0x00},
+	{0x330b,0xe0},
+	{0x330e,0x10},
+	{0x3314,0x14},
+	{0x331e,0x55},
+	{0x331f,0x7d},
+	{0x3333,0x10},
+	{0x3334,0x40},
+	{0x335e,0x06},
+	{0x335f,0x08},
+	{0x3364,0x5e},
+	{0x337c,0x02},
+	{0x337d,0x0a},
+	{0x3390,0x01},
+	{0x3391,0x03},
+	{0x3392,0x07},
+	{0x3393,0x08},
+	{0x3394,0x08},
+	{0x3395,0x08},
+	{0x3396,0x08},
+	{0x3397,0x09},
+	{0x3398,0x1f},
+	{0x3399,0x08},
+	{0x339a,0x0a},
+	{0x339b,0x40},
+	{0x339c,0x88},
+	{0x33a2,0x04},
+	{0x33ad,0x0c},
+	{0x33b1,0x80},
+	{0x33b3,0x30},
+	{0x33f9,0x68},
+	{0x33fb,0x80},
+	{0x33fc,0x48},
+	{0x33fd,0x5f},
+	{0x349f,0x03},
+	{0x34a6,0x48},
+	{0x34a7,0x5f},
+	{0x34a8,0x30},
+	{0x34a9,0x30},
+	{0x34aa,0x00},
+	{0x34ab,0xf0},
+	{0x34ac,0x01},
+	{0x34ad,0x08},
+	{0x34f8,0x5f},
+	{0x34f9,0x10},
+	{0x3630,0xf0},
+	{0x3631,0x85},
+	{0x3632,0x74},
+	{0x3633,0x22},
+	{0x3637,0x4d},
+	{0x3638,0xcb},
+	{0x363a,0x8b},
+	{0x363b,0x02},
+	{0x363c,0x08},
+	{0x3640,0x00},
+	{0x3641,0x38},
+	{0x3670,0x4e},
+	{0x3674,0xc0},
+	{0x3675,0xb0},
+	{0x3676,0xa0},
+	{0x3677,0x85},
+	{0x3678,0x87},
+	{0x3679,0x8a},
+	{0x367c,0x49},
+	{0x367d,0x4f},
+	{0x367e,0x48},
+	{0x367f,0x4b},
+	{0x3690,0x33},
+	{0x3691,0x33},
+	{0x3692,0x44},
+	{0x3699,0x8a},
+	{0x369a,0xa1},
+	{0x369b,0xc2},
+	{0x369c,0x48},
+	{0x369d,0x4f},
+	{0x36a2,0x4b},
+	{0x36a3,0x4f},
+	{0x36ea,0x09},
+	{0x36eb,0x0d},
+	{0x36ec,0x1c},
+	{0x36ed,0x25},
+	{0x370f,0x01},
+	{0x3714,0x80},
+	{0x3722,0x09},
+	{0x3724,0x41},
+	{0x3725,0xc1},
+	{0x3728,0x00},
+	{0x3771,0x09},
+	{0x3772,0x05},
+	{0x3773,0x05},
+	{0x377a,0x48},
+	{0x377b,0x49},
+	{0x37fa,0x09},
+	{0x37fb,0x33},
+	{0x37fc,0x11},
+	{0x37fd,0x18},
+	{0x3905,0x8d},
+	{0x391d,0x08},
+	{0x3922,0x1a},
+	{0x3926,0x21},
+	{0x3933,0x80},
+	{0x3934,0x0d},
+	{0x3937,0x6a},
+	{0x3939,0x00},
+	{0x393a,0x0e},
+	{0x39dc,0x02},
+	{0x3e00,0x00},
+	{0x3e01,0x63},
+	{0x3e02,0x80},
+	{0x3e03,0x0b},
+	{0x3e1b,0x2a},
+	{0x4407,0x34},
+	{0x440e,0x02},
+	{0x5001,0x40},
+	{0x5007,0x80},
+	{0x36e9,0x24},
+	{0x37f9,0x24},
+	{0x0100,0x01},
+	{SC301IOT_REG_END, 0x00},	/* END MARKER */
+};
+
 static struct tx_isp_sensor_win_setting sc301iot_win_sizes[] = {
-	/* [0] resolution 2048*1536 @max 30fps*/
+	/* [0] resolution 2048*1536 @max 25fps*/
 	{
 		.width		= 2048,
 		.height		= 1536,
@@ -739,6 +916,15 @@ static struct tx_isp_sensor_win_setting sc301iot_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs 		= sc301iot_init_regs_2048_1536_25fps_hdr_mipi,
+	},
+	/* [0] resolution 2048*1536 @max 30fps*/
+	{
+		.width		= 2048,
+		.height		= 1536,
+		.fps		= 30 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= sc301iot_init_regs_2048_1536_30fps_mipi,
 	},
 };
 
@@ -823,15 +1009,12 @@ static int sc301iot_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int sc301iot_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	//unsigned char val;
 
 	while (vals->reg_num != SC301IOT_REG_END) {
 		if (vals->reg_num == SC301IOT_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sc301iot_write(sd, vals->reg_num, vals->value);
-			//ret = sc301iot_read(sd, vals->reg_num, &val);
-			//printk("	{0x%x, 0x%x}\n",  vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1040,6 +1223,10 @@ static int sc301iot_set_fps(struct tx_isp_subdev *sd, int fps)
 	case 1:
 		sclk = SC301IOT_SUPPORT_25FPS_HDR_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_25;
+	case 2:
+		sclk = SC301IOT_SUPPORT_30FPS_SCLK;
+		max_fps = TX_SENSOR_MAX_FPS_30;
+		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
@@ -1071,6 +1258,7 @@ static int sc301iot_set_fps(struct tx_isp_subdev *sd, int fps)
 	switch (sensor->info.default_boot)
 	{
 	case 0:
+	case 2:
 		sensor->video.attr->max_integration_time_native = vts - 4;
 		sensor->video.attr->integration_time_limit = vts - 4;
 		sensor->video.attr->max_integration_time = vts - 4;
@@ -1181,6 +1369,22 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		sc301iot_attr.integration_time = 0xdfc;
 		printk("---------->wdr 25@fps is ok!!!\n");
 		break;
+	case 2:
+		sc301iot_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		memcpy((void*)(&(sc301iot_attr.mipi)),(void*)(&sc301iot_mipi_30fps_linear),sizeof(sc301iot_mipi_30fps_linear));
+		wsize = &sc301iot_win_sizes[2];
+		sc301iot_attr.mipi.clk = 540;
+		sc301iot_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sc301iot_attr.integration_time_limit = 1600 - 4;
+		sc301iot_attr.max_integration_time_native = 1600 - 4;
+		sc301iot_attr.total_width = 1125;
+		sc301iot_attr.total_height = 1600;
+		sc301iot_attr.max_integration_time = 1600 - 4;
+		sc301iot_attr.min_integration_time = 1;
+		sc301iot_attr.again = 0;
+		sc301iot_attr.integration_time = 0x638;
+		printk("---------->liner 25@fps is ok!!!\n");
+		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
 		break;
@@ -1218,6 +1422,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
 	case 0:
 	case 1:
+	case 2:
                 if (((rate / 1000) % 24000) != 0) {
                         ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
                         sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
@@ -1376,14 +1581,15 @@ static int sc301iot_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		return -EINVAL;
 	}
 
-	switch(cmd){
+    switch(cmd){
+
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//if(arg)
-		//	ret = sc301iot_set_expo(sd, sensor_val->value);
+		if(arg)
+		//	ret = sc301i0t_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if(arg)
-			ret = sc301iot_set_integration_time(sd, sensor_val->value);
+		    ret = sc301iot_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if(arg)

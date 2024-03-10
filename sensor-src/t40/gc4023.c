@@ -34,6 +34,10 @@
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 
+static int shvflip = 0;
+module_param(shvflip, int, S_IRUGO);
+MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
@@ -161,7 +165,7 @@ struct tx_isp_sensor_attribute gc4023_attr={
 	.cbus_device = 0x29,
 	.max_again = 393216,
 	.max_dgain = 0,
-	.expo_fs = 1,
+	.expo_fs = 0,
 	.min_integration_time = 2,
 	.min_integration_time_short = 2,
 	.min_integration_time_native = 2,
@@ -298,6 +302,129 @@ static struct regval_list gc4023_init_regs_2560_1440_25fps_mipi[] = {
 	{GC4023_REG_END, 0x00},	/* END MARKER */
 };
 
+static struct regval_list gc4023_init_regs_2560_1440_25fps_24Mmipi[] = {
+	{0x03fe, 0xf0},
+	{0x03fe, 0x00},
+	{0x03fe, 0x10},
+	{0x03fe, 0x00},
+	{0x0a38, 0x00},
+	{0x0a38, 0x01},
+	{0x0a20, 0x07},
+	{0x061c, 0x50},
+	{0x061d, 0x22},
+	{0x061e, 0x87},
+	{0x061f, 0x06},
+	{0x0a21, 0x10},
+	{0x0a34, 0x40},
+	{0x0a35, 0x01},
+	{0x0a36, 0x6c},
+	{0x0a37, 0x06},
+	{0x0314, 0x50},
+	{0x0315, 0x00},
+	{0x031c, 0xce},
+	{0x0219, 0x47},
+	{0x0342, 0x04},
+	{0x0343, 0xb0},
+	{0x0259, 0x05},
+	{0x025a, 0xa0},
+	{0x0340, 0x05},
+	{0x0341, 0xdc},
+	{0x0347, 0x02},
+	{0x0348, 0x0a},
+	{0x0349, 0x08},
+	{0x034a, 0x05},
+	{0x034b, 0xa8},
+
+	{0x0094, 0x0a},
+	{0x0095, 0x00},
+	{0x0096, 0x05},
+	{0x0097, 0xa0},
+
+	{0x0099, 0x04},
+	{0x009b, 0x04},
+	{0x060c, 0x01},
+	{0x060e, 0x08},
+	{0x060f, 0x05},
+	{0x070c, 0x01},
+	{0x070e, 0x08},
+	{0x070f, 0x05},
+	{0x0909, 0x03},
+	{0x0902, 0x04},
+	{0x0904, 0x0b},
+	{0x0907, 0x54},
+	{0x0908, 0x06},
+	{0x0903, 0x9d},
+	{0x072a, 0x18},
+	{0x0724, 0x0a},
+	{0x0727, 0x0a},
+	{0x072a, 0x18},
+	{0x072b, 0x08},
+	{0x1466, 0x10},
+	{0x1468, 0x0f},
+	{0x1467, 0x07},
+	{0x1469, 0x80},
+	{0x146a, 0xbc},
+	{0x0707, 0x07},
+	{0x0737, 0x0f},
+	{0x061a, 0x02}, //buffer
+	{0x1430, 0x80},
+	{0x1407, 0x10},
+	{0x1408, 0x16},
+	{0x1409, 0x03},
+	{0x146d, 0x0e},
+	{0x146e, 0x32},
+	{0x146f, 0x33},
+	{0x1470, 0x2c},
+	{0x1471, 0x2d},
+	{0x1472, 0x3a},
+	{0x1473, 0x3a},
+	{0x1474, 0x40},
+	{0x1475, 0x36},
+	{0x1420, 0x14},
+	{0x1464, 0x15},
+	{0x146c, 0x40},
+	{0x146d, 0x40},
+	{0x1423, 0x08},
+	{0x1428, 0x10},
+	{0x1462, 0x08},
+	{0x02ce, 0x04},
+	{0x143a, 0x0b},
+	{0x142b, 0x88},
+	{0x0245, 0xc9},
+	{0x023a, 0x08},
+	{0x02cd, 0x88},
+	{0x0612, 0x02},
+	{0x0613, 0xc7},
+	{0x0243, 0x03},
+	{0x021b, 0x09},
+	{0x0089, 0x03},
+	{0x0040, 0xa3},
+	{0x0075, 0x64},
+	{0x0004, 0x0f},
+	{0x0002, 0xa9},
+	{0x0053, 0x0a},
+	{0x0205, 0x0c},
+	{0x0202, 0x06},
+	{0x0203, 0x27},
+	{0x0614, 0x00},
+	{0x0615, 0x00},
+	{0x0181, 0x0c},
+	{0x0182, 0x05},
+	{0x0185, 0x01},
+	{0x0180, 0x46},
+	{0x0100, 0x08},
+	{0x0106, 0x38},
+	{0x010d, 0x80},
+	{0x010e, 0x0c},
+	{0x0113, 0x02},
+	{0x0114, 0x01},
+	{0x0115, 0x10},
+	{0x0100, 0x09},
+
+	{GC4023_REG_END, 0x00},	/* END MARKER */
+};
+
+
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
  */
@@ -311,6 +438,14 @@ static struct tx_isp_sensor_win_setting gc4023_win_sizes[] = {
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs		= gc4023_init_regs_2560_1440_25fps_mipi,
 	},
+	{
+		.width		= 2560,
+		.height		= 1440,
+		.fps		= 30 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SRGGB10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= gc4023_init_regs_2560_1440_25fps_24Mmipi,
+	}
 };
 
 struct tx_isp_sensor_win_setting *wsize = &gc4023_win_sizes[0];
@@ -389,7 +524,6 @@ static int gc4023_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		pr_debug("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
-
 	return 0;
 }
 #endif
@@ -478,9 +612,8 @@ static int gc4023_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 	ret = gc4023_write(sd, 0x0203, value & 0xff);
 	ret += gc4023_write(sd, 0x0202, value >> 8);
-	if (ret < 0) {
+	if (ret < 0)
 		ISP_ERROR("gc4023_write error  %d\n",__LINE__ );
-	}
 
 	return ret;
 }
@@ -589,6 +722,7 @@ static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch(sensor->info.default_boot){
 		case 0:
+		case 1:
 			wpclk = GC4023_SUPPORT_30FPS_SCLK;
 			sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 			sensor_min_fps = TX_SENSOR_MAX_FPS_5;
@@ -627,6 +761,37 @@ static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
 	return 0;
 }
 
+static int gc4023_set_vflip(struct tx_isp_subdev *sd, int enable)
+{
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	int ret = -1;
+	unsigned char val = 0x0;
+
+	ret += gc4023_read(sd, 0x022c, &val);
+
+    val = (val & (~0x3));
+    /* 2'b01 mirror; 2'b10 flip; 2'b11 mirror &flip */
+	switch(enable){
+        case 0:
+			gc4023_write(sd, 0x022c, val);
+			break;
+		case 1:
+			gc4023_write(sd, 0x022c, (val | 0x1));
+			break;
+		case 2:
+			gc4023_write(sd, 0x022c, (val | 0x2));
+			break;
+		case 3:
+			gc4023_write(sd, 0x022c, (val | 0x3));
+			break;
+	}
+
+	if(!ret)
+		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+
+	return ret;
+}
+
 static int gc4023_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -636,7 +801,6 @@ static int gc4023_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
 	return ret;
 }
 
@@ -660,9 +824,44 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4023_attr.max_integration_time_native = 1500 - 8;
 		gc4023_attr.integration_time_limit = 1500 - 8;
 		gc4023_attr.max_integration_time = 1500 - 8;
+		gc4023_attr.again = 0;
+		gc4023_attr.integration_time = 0x627;
+		rate = private_clk_get_rate(sensor->mclk);
+		if (((rate / 1000) % 27000) != 0) {
+			ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
+			sclka = private_devm_clk_get(&client->dev, "epll");
+			if (IS_ERR(sclka)) {
+				pr_err("get sclka failed\n");
+			} else {
+				rate = private_clk_get_rate(sclka);
+				if (((rate / 1000) % 27000) != 0) {
+					private_clk_set_rate(sclka, 891000000);
+				}
+			}
+		}
+
+		private_clk_set_rate(sensor->mclk, 27000000);
+		private_clk_prepare_enable(sensor->mclk);
 		break;
+
+	case 1:
+		wsize = &gc4023_win_sizes[1];
+		gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		memcpy(&gc4023_attr.mipi, &gc4023_mipi_linear, sizeof(gc4023_mipi_linear));
+		gc4023_attr.one_line_expr_in_us = 22;
+		gc4023_attr.total_width = 3840;
+		gc4023_attr.total_height = 1500;
+		gc4023_attr.max_integration_time_native = 1500 - 8;
+		gc4023_attr.integration_time_limit = 1500 - 8;
+		gc4023_attr.max_integration_time = 1500 - 8;
+		gc4023_attr.again = 0;
+		gc4023_attr.integration_time = 0x627;
+		private_clk_set_rate(sensor->mclk, 24000000);
+		private_clk_prepare_enable(sensor->mclk);
+		break;
+
 	default:
-		ISP_ERROR("Have no this Setting Source!!!\n");
+		ISP_ERROR("Have no this setting!!!\n");
 	}
 
 	switch(info->video_interface){
@@ -678,7 +877,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4023_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
-		ISP_ERROR("Have no this Interface Source!!!\n");
+		ISP_ERROR("Have no this interface!!!\n");
 	}
 
 	switch(info->mclk){
@@ -705,22 +904,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-	rate = private_clk_get_rate(sensor->mclk);
-	if (((rate / 1000) % 27000) != 0) {
-		ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
-		sclka = private_devm_clk_get(&client->dev, "epll");
-		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
-		} else {
-			rate = private_clk_get_rate(sclka);
-			if (((rate / 1000) % 27000) != 0) {
-				private_clk_set_rate(sclka, 891000000);
-			}
-		}
-	}
-
-	private_clk_set_rate(sensor->mclk, 27000000);
-	private_clk_prepare_enable(sensor->mclk);
 
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
@@ -780,7 +963,6 @@ static int gc4023_g_chip_ident(struct tx_isp_subdev *sd,
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -829,6 +1011,10 @@ static int gc4023_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if(arg)
 			ret = gc4023_set_fps(sd, sensor_val->value);
+		break;
+	case TX_ISP_EVENT_SENSOR_VFLIP:
+		if(arg)
+			ret = gc4023_set_vflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -919,11 +1105,11 @@ static int gc4023_probe(struct i2c_client *client, const struct i2c_device_id *i
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
-
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	//gc4023_attr.expo_fs = 1;
+	sensor->video.shvflip = shvflip;
+	//gc4023_attr.expo_fs = 0;
 	sensor->video.attr = &gc4023_attr;
 	tx_isp_subdev_init(&sensor_platform_device, sd, &gc4023_ops);
 	tx_isp_set_subdevdata(sd, client);

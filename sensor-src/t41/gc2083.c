@@ -32,11 +32,11 @@
 #define GC2083_REG_END          0xffff
 #define GC2083_REG_DELAY        0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION  "H20220818a"
+#define SENSOR_VERSION  "H20230914a-roy"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int shvflip = 0;
+static int shvflip = 1;
 
 struct regval_list {
         unsigned int reg_num;
@@ -771,6 +771,31 @@ static int gc2083_g_chip_ident(struct tx_isp_subdev *sd,
         return 0;
 }
 
+static int gc2083_set_vflip(struct tx_isp_subdev *sd, int enable)
+{int ret = -1;
+	unsigned char val = 0x0;
+
+	ret = gc2083_read(sd, 0x0d15, &val);
+        switch(enable){
+            case 0:
+                val &= 0xFC;
+                break;
+            case 1:
+                val = ((val & 0xFD) | 0x01);
+                break;
+            case 2:
+                val = ((val & 0xFE) | 0x02);
+                break;
+            case 3:
+                val |= 0x03;
+                break;
+        }
+	ret += gc2083_write(sd, 0x0d15, val);
+	ret += gc2083_write(sd, 0x0015, val);
+
+	return ret;
+}
+
 static int gc2083_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
         long ret = 0;
@@ -814,6 +839,10 @@ static int gc2083_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
         case TX_ISP_EVENT_SENSOR_FPS:
                 if(arg)
                         ret = gc2083_set_fps(sd, sensor_val->value);
+                break;
+        case TX_ISP_EVENT_SENSOR_VFLIP:
+		        if(arg)
+			            ret = gc2083_set_vflip(sd, sensor_val->value);
                 break;
         default:
                 break;

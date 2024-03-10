@@ -529,6 +529,7 @@ static struct regval_list sc200ai_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3908,0x41},
 	{0x391d,0x14},
 	{0x391f,0x18},
+	{0x3e00,0x00},//
 	{0x3e01,0x8c},
 	{0x3e02,0x20},
 	{0x3e16,0x00},
@@ -942,6 +943,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
 	case 0:
 		wsize = &sc200ai_win_sizes[0];
+		sc200ai_attr.again = 0;
+		sc200ai_attr.integration_time = 0x8c2;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

@@ -473,6 +473,7 @@ static struct regval_list sc3335s1_init_regs_2304_1296_30fps_mipi[] = {
 	{0x36fd, 0x24},
 	{0x3908, 0x82},
 	{0x391f, 0x18},
+	{0x3e00, 0x00},//
 	{0x3e01, 0xa8},
 	{0x3e02, 0x20},
 	{0x3f09, 0x48},
@@ -573,6 +574,7 @@ static struct regval_list sc3335s1_init_regs_2304_1296_20fps_mipi[] = {
 	{0x36fd, 0x24},
 	{0x3908, 0x82},
 	{0x391f, 0x18},
+	{0x3e00, 0x00},//
 	{0x3e01, 0xb3},
 	{0x3e02, 0x60},
 	{0x3f00, 0x4c},
@@ -1021,6 +1023,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		wsize = &sc3335s1_win_sizes[0];
 		memcpy((void*)(&(sc3335s1_attr.mipi)),(void*)(&sc3335s1_mipi),sizeof(sc3335s1_mipi));
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
+	        sc3335s1_attr.again = 0;
+                sc3335s1_attr.integration_time = 0xa82;
 		break;
 	case 1:
 		wsize = &sc3335s1_win_sizes[1];
@@ -1033,14 +1037,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		sc3335s1_attr.max_integration_time = 1440 - 5;
 		sc3335s1_attr.one_line_expr_in_us = 35;
 		sensor_max_fps = TX_SENSOR_MAX_FPS_20;
-		break;
-	case 2:
-		wsize = &sc3335s1_win_sizes[2];
-		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
-		sc3335s1_attr.dvp.gpio = sensor_gpio_func;
-		ret = set_sensor_gpio_function(sensor_gpio_func);
-		if (ret < 0)
-			goto err_set_sensor_gpio;
+	        sc3335s1_attr.again = 0;
+                sc3335s1_attr.integration_time = 0xb36;
 		break;
 	default:
 		ISP_ERROR("this boot setting is not supported yet!!!\n");

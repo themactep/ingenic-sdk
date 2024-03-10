@@ -641,7 +641,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	switch(info->default_boot){
 	case 0:
-
+	        ov9732_attr.again = 0x10;
+                ov9732_attr.integration_time = 0x3100;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

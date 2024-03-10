@@ -449,7 +449,7 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SRGGB12_1X12,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs		= imx327_init_regs_1920_1080_30fps_mipi,
-	}
+	},
 };
 
 static struct tx_isp_sensor_win_setting *wsize = &imx327_win_sizes[0];

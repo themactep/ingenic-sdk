@@ -685,7 +685,7 @@ static int jxf32_get_black_pedestal(struct tx_isp_subdev *sd, int value)
     return 0;
 }
 
-#if 0
+
 static int jxf32_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
@@ -697,7 +697,7 @@ static int jxf32_set_integration_time(struct tx_isp_subdev *sd, int value)
 
     return ret;
 }
-#endif
+
 
 static int jxf32_set_integration_time_short(struct tx_isp_subdev *sd, int value)
 {
@@ -712,7 +712,7 @@ static int jxf32_set_integration_time_short(struct tx_isp_subdev *sd, int value)
     return ret;
 }
 
-#if 0
+
 static int jxf32_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
@@ -734,7 +734,7 @@ static int jxf32_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
     return ret;
 }
-#endif
+
 
 static int jxf32_set_mode(struct tx_isp_subdev *sd, int value)
 {
@@ -1018,23 +1018,27 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->default_boot){
         case 0:
-            wsize = &jxf32_win_sizes[0];
-            jxf32_attr.total_width = 0x500 * 2;//2560
-            jxf32_attr.total_height = 0x546; //1350
-            jxf32_attr.max_integration_time_native = 0x465 - 4;
-            jxf32_attr.integration_time_limit = 0x465 - 4;
-            jxf32_attr.max_integration_time = 0x465 - 4;
-            jxf32_mipi.clk = 430;
-            memcpy((void*)(&(jxf32_attr.mipi)),(void*)(&jxf32_mipi),sizeof(jxf32_mipi));
-            break;
+		wsize = &jxf32_win_sizes[0];
+		jxf32_attr.total_width = 0x500 * 2;//2560
+		jxf32_attr.total_height = 0x546; //1350
+		jxf32_attr.max_integration_time_native = 0x465 - 4;
+		jxf32_attr.integration_time_limit = 0x465 - 4;
+		jxf32_attr.max_integration_time = 0x465 - 4;
+		jxf32_mipi.clk = 430;
+		jxf32_attr.again = 0;
+		jxf32_attr.integration_time = 0xFF;
+		memcpy((void*)(&(jxf32_attr.mipi)),(void*)(&jxf32_mipi),sizeof(jxf32_mipi));
+		break;
         case 1:
-            wsize = &jxf32_win_sizes[1];
-            memcpy((void*)(&(jxf32_attr.dvp)),(void*)(&jxf32_dvp),sizeof(jxf32_dvp));
-            ret = set_sensor_gpio_function(sensor_gpio_func);
+		wsize = &jxf32_win_sizes[1];
+		memcpy((void*)(&(jxf32_attr.dvp)),(void*)(&jxf32_dvp),sizeof(jxf32_dvp));
+		jxf32_attr.again = 0;
+		jxf32_attr.integration_time = 0xFF;
+		ret = set_sensor_gpio_function(sensor_gpio_func);
             if (ret < 0)
                 goto err_set_sensor_gpio;
-            jxf32_attr.dvp.gpio = sensor_gpio_func;
-            break;
+		jxf32_attr.dvp.gpio = sensor_gpio_func;
+		break;
         default:
             ISP_ERROR("Have no this MCLK Source!!!\n");
     }
@@ -1150,18 +1154,18 @@ static int jxf32_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
         return -EINVAL;
     }
     switch(cmd){
-//        case TX_ISP_EVENT_SENSOR_INT_TIME:
-//            if(arg)
-//                ret = jxf32_set_integration_time(sd,  sensor_val->value);
-//            break;
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if(arg)
+		ret = jxf32_set_integration_time(sd,  sensor_val->value);
+	     break;
         case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
             if(arg)
                 ret = jxf32_set_integration_time_short(sd,  sensor_val->value);
             break;
-//        case TX_ISP_EVENT_SENSOR_AGAIN:
-//            if(arg)
-//                ret = jxf32_set_analog_gain(sd,  sensor_val->value);
-//            break;
+        case TX_ISP_EVENT_SENSOR_AGAIN:
+            if(arg)
+                ret = jxf32_set_analog_gain(sd,  sensor_val->value);
+            break;
         case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
             if(arg)
                 ret = jxf32_set_analog_gain_short(sd,  sensor_val->value);

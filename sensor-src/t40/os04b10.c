@@ -1121,6 +1121,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         case 0:
             wsize = &os04b10_win_sizes[0];
             sensor_max_fps = TX_SENSOR_MAX_FPS_25;
+	    os04b10_attr.again = 76672;
+            os04b10_attr.integration_time = 0x1c6;
             break;
         case 1:
             wsize = &os04b10_win_sizes[1];
@@ -1130,6 +1132,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             os04b10_attr.total_height = 0xa5b;
             os04b10_attr.max_integration_time = 0xa5b - 21;
             os04b10_attr.one_line_expr_in_us = 19;
+	    os04b10_attr.again = 76672;
+            os04b10_attr.integration_time = 0x1c6;
             sensor_max_fps = TX_SENSOR_MAX_FPS_20;
             break;
         default:

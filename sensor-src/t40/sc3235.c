@@ -508,6 +508,7 @@ static struct regval_list sc3235_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3940, 0x68},
 	{0x3942, 0x02},
 	{0x3943, 0x33},
+	{0x3e00, 0x00},
 	{0x3e01, 0xa8},
 	{0x3e02, 0x40},
 	{0x3e09, 0x20},
@@ -532,14 +533,14 @@ static struct regval_list sc3235_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 static struct tx_isp_sensor_win_setting sc3235_win_sizes[] = {
-	/* 1920*1080 */
+	/* 2304*1296 */
 	{
 		.width		= 2304,
 		.height		= 1296,
 		.fps		= 25 << 16 | 1,
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc3235_init_regs_1920_1080_25fps_mipi,
+		.regs 		= sc3235_init_regs_2304_1296_25fps_mipi,
 	}
 };
 
@@ -891,6 +892,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd){
         case 0:
             wsize = &sc3235_win_sizes[0];
             memcpy((void*)(&(sc3235_attr.mipi)),(void*)(&sc3235_mipi),sizeof(sc3235_mipi));
+	    sc3235_attr.again = 0;
+            sc3235_attr.integration_time = 0xa84;
             break;
         default:
             ISP_ERROR("Have no this Setting Source!!!\n");

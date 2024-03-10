@@ -509,7 +509,7 @@ static int sc4236_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 
 	value *= 2;
-	ret = sc4236_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	//ret = sc4236_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sc4236_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sc4236_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
@@ -718,7 +718,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->default_boot){
         case 0:
-
+		wsize = &sc4236_win_sizes[0];
+	    sc4236_attr.again = 0;
+            sc4236_attr.integration_time = 0xc7c;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");

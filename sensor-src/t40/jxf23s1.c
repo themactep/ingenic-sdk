@@ -1866,7 +1866,10 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 
 	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)){
-			wsize = &jxf23_win_sizes[0];			memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
+			wsize = &jxf23_win_sizes[0];
+			memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
+			jxf23_attr.again = 0;
+			jxf23_attr.integration_time = 0xFF;
 			ret = set_sensor_gpio_function(sensor_gpio_func);
 			if (ret < 0)
 				goto err_set_sensor_gpio;
@@ -1879,6 +1882,8 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 			jxf23_attr.total_width = 2560;
 			jxf23_attr.total_height = 1125;
 			jxf23_attr.max_integration_time = 1121;
+			jxf23_attr.again = 0;
+			jxf23_attr.integration_time = 0xa;
 			ret = set_sensor_gpio_function(sensor_gpio_func);
 			if (ret < 0)
 				goto err_set_sensor_gpio;
@@ -1886,6 +1891,8 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)){
 			wsize = &jxf23_win_sizes[2];
 			memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi1),sizeof(jxf23_mipi1));
+			jxf23_attr.again = 0;
+			jxf23_attr.integration_time = 0xFF;
 		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
 			wsize = &jxf23_win_sizes[3];
 			memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi2),sizeof(jxf23_mipi2));
@@ -1894,6 +1901,8 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 			jxf23_attr.total_width = 2560;
 			jxf23_attr.total_height = 1125;
 			jxf23_attr.max_integration_time = 1121;
+			jxf23_attr.again = 0;
+			jxf23_attr.integration_time = 0xa;
 		} else {
 			ISP_ERROR("Can not support this data interface and fps!!!\n");
 			goto err_set_sensor_data_interface;
@@ -1906,6 +1915,8 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 		jxf23_attr.total_width = 0x500;
 		jxf23_attr.total_height = 0x1e94;
 		jxf23_attr.max_integration_time = 0x1e94 - 4;
+		jxf23_attr.again = 0;
+		jxf23_attr.integration_time = 0xFF;
 	} else {
 		ISP_ERROR("Can not support this data type!!!\n");
 	}
@@ -1918,7 +1929,8 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 	jxf23_attr.max_dgain = 0;
 	jxf23_attr.again = -1;
 	jxf23_attr.integration_time = -1;
-
+	jxf23_attr.again = 0;
+	jxf23_attr.integration_time = 0x00FF;
 	/* jxf23_attr.expo_fs = 1; */
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1954,7 +1966,6 @@ static int jxf23_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	ISP_DEBUG();
 	if(reset_gpio != -1)
 		private_gpio_free(reset_gpio);
 	if(pwdn_gpio != -1)

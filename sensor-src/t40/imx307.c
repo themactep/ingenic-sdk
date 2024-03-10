@@ -302,6 +302,7 @@ static struct regval_list imx307_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 	{0x3011, 0x02},
 	{0x3018, 0x6E},//Vmax FSC=vmax*2
 	{0x3019, 0x05},//0x486
+	{0x301a, 0x00},
 	{0x301c, 0x58},//Hmax
 	{0x301d, 0x08},
 #if 0
@@ -312,6 +313,7 @@ static struct regval_list imx307_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 #endif
 	{0x3020, 0x02},//SHS1 S
 	{0x3021, 0x00},
+	{0x3022, 0x00},
 	{0x3024, 0x73},//SHS2 L
 	{0x3025, 0x04},
 	{0x3028, 0x00},//SHS3
@@ -401,6 +403,7 @@ static struct regval_list imx307_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3011, 0x0a},
 	{0x3018, 0x65},
 	{0x3019, 0x04},
+	{0x301a, 0x00},
 	{0x301c, 0x98},
 	{0x301d, 0x08},
 	{0x3046, 0x01},
@@ -418,6 +421,7 @@ static struct regval_list imx307_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3164, 0x1a},
 	{0x3020, 0x0f},
 	{0x3021, 0x00},
+	{0x3022, 0x00},
 	{0x3014, 0x0f},
 	{0x317c, 0x00},
 	{0x31ec, 0x0e},
@@ -956,6 +960,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			imx307_attr.max_integration_time = 1123;
 			imx307_attr.integration_time_apply_delay = 2;
 			imx307_attr.again_apply_delay = 2;
+			imx307_attr.again = 0;
+			imx307_attr.integration_time = 0x3fe;
 			memcpy((void*)(&(imx307_attr.mipi)),(void*)(&mipi_linear),sizeof(mipi_linear));
 			break;
 		case 1:
@@ -979,6 +985,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			imx307_attr.again_apply_delay = 2;
 			imx307_attr.dgain_apply_delay = 0;
 			imx307_attr.mipi.clk = 891;
+			imx307_attr.again = 0;
+			imx307_attr.integration_time = 0x2;
 			memcpy((void*)(&(imx307_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
 			break;
 		case 2:
@@ -997,6 +1005,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			imx307_attr.integration_time_apply_delay = 2;
 			imx307_attr.again_apply_delay = 2;
 			imx307_attr.dgain_apply_delay = 0;
+			imx307_attr.again = 0;
+			imx307_attr.integration_time = 0xf;
 			memcpy((void*)(&(imx307_attr.mipi)),(void*)(&mipi_linear_60fps),sizeof(mipi_linear_60fps));
 			break;
 		default:

@@ -969,6 +969,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4653s1_attr.max_integration_time_native = 1920 - 1;
 		gc4653s1_attr.integration_time_limit = 1920 - 1;
 		gc4653s1_attr.max_integration_time = 1920 - 1;
+                gc4653s1_attr.again = 0;
+                gc4653s1_attr.integration_time = 0x5d0;
 		break;
 	case 1:
 		gc4653s1_attr.wdr_cache = wdr_bufsize;
@@ -985,6 +987,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4653s1_attr.integration_time_limit = 1488;
 		gc4653s1_attr.max_integration_time = 1488;
 		gc4653s1_attr.max_integration_time_short = 93;
+                gc4653s1_attr.again = 0;
+                gc4653s1_attr.integration_time = 0x500;
 		gc4653s1_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		break;
 	default:

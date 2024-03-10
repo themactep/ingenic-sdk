@@ -496,6 +496,7 @@ static struct regval_list sc223a_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3943, 0x4d},
 	{0x3946, 0x20},
 	{0x3957, 0x86},
+	{0x3e00, 0x00},
 	{0x3e01, 0x95},
 	{0x3e02, 0x60},
 	{0x3e28, 0xc4},
@@ -870,6 +871,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd){
     switch(info->default_boot){
         case 0:
             wsize = &sc223a_win_sizes[0];
+            sc223a_attr.again = 0;
+            sc223a_attr.integration_time = 0x956;
             memcpy((void*)(&(sc223a_attr.mipi)),(void*)(&sc223a_mipi),sizeof(sc223a_mipi));
             break;
         default:

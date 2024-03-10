@@ -399,6 +399,8 @@ struct tx_isp_sensor_attribute sc2335_attr={
 	.max_integration_time = 0x546 - 5,
 	.one_line_expr_in_us = 29,
 	.integration_time_apply_delay = 2,
+	.again = 0,
+	.integration_time = 0x8c0,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sc2335_alloc_again,
@@ -476,6 +478,7 @@ static struct regval_list sc2335_init_regs_1920_1080_25fps_mipi[] = {
 	{0x36fa,0xdf},
 	{0x3908,0x82},
 	{0x391f,0x18},
+	{0x3e00,0x00},//
 	{0x3e01,0x8c},
 	{0x3e02,0x00},
 	{0x3f00,0x0d},
@@ -866,8 +869,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     struct tx_isp_sensor_register_info *info = &sensor->info;
 
-    if(info->default_boot !=0)
-        ISP_ERROR("Have no this MCLK Source!!!\n");
+	if(info->default_boot !=0)
+	ISP_ERROR("Have no this MCLK Source!!!\n");
 
     switch (info->video_interface) {
         case TISP_SENSOR_VI_MIPI_CSI0:

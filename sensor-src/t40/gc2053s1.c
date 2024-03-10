@@ -203,7 +203,6 @@ struct tx_isp_sensor_attribute gc2053s1_attr={
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list gc2053s1_init_regs_1920_1080_30fps_mipi[] = {
 	/* mclk=24mhz,mipi data rate=390mbps/lane, row_time=28.2us frame length=1418,25fps*/
 	/*system*/

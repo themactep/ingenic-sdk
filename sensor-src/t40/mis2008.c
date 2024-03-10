@@ -932,6 +932,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	case 0:
 		wsize = &mis2008_win_sizes[0];
 		mis2008_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+	        mis2008_attr.again = 0;
+                mis2008_attr.integration_time = 0x464;
 		memcpy((void*)(&(mis2008_attr.mipi)),(void*)(&mis2008_mipi),sizeof(mis2008_mipi));
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 		break;
@@ -942,6 +944,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		if (ret < 0)
 			goto err_set_sensor_gpio;
 		mis2008_attr.dvp.gpio = sensor_gpio_func;
+	        mis2008_attr.again = 0;
+                mis2008_attr.integration_time = 0x464;
 		memcpy((void*)(&(mis2008_attr.dvp)),(void*)(&mis2008_dvp),sizeof(mis2008_dvp));
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 		break;

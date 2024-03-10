@@ -227,6 +227,8 @@ static struct regval_list ps5258_init_regs_2560_1920_15fps_mipi[] = {
         {0x010B, 0x07},//Cmd_Sw_TriState[0]=1
         {0x0114, 0x09},//Cmd_LineTime[12:0]=2400
         {0x0115, 0x60},//Cmd_LineTime[12:0]=2400
+{0x0118,0x02},
+{0x0119,0x32},
         {0x0178, 0xB0},//B06A: Version
         {0x0179, 0x6A},//B06A: Version
         {0x020A, 0x33},//T_ODACMODE=1, B04A - improve streaking
@@ -554,10 +556,11 @@ static int ps5258_set_mode(struct tx_isp_subdev *sd, int value)
 static int sensor_attr_check(struct tx_isp_subdev *sd){
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     struct tx_isp_sensor_register_info *info = &sensor->info;
-
     switch(info->default_boot){
         case 0:
-
+		wsize = &ps5258_win_sizes[0];
+	        ps5258_attr.again = 0;
+                ps5258_attr.integration_time = 0x232;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");

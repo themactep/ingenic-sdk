@@ -11,6 +11,8 @@
  * sboot        resolution      fps        interface              mode
  *   0          2560*1440       30         mipi_2lane             linear
  *   1          2560*1440       15         mipi_2lane             linear
+ *   2          2560*1440       20         mipi_2lane             linear
+ *   3          2560*1408       30         mipi_2lane             linear
  */
 #define DEBUG
 
@@ -33,7 +35,7 @@
 #define SC401AI_REG_END		0xffff
 #define SC401AI_REG_DELAY	0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20221104a"
+#define SENSOR_VERSION	"H20231103a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -430,6 +432,64 @@ struct tx_isp_mipi_bus sc401ai_mipi_15={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
+struct tx_isp_mipi_bus sc401ai_mipi_20={
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 420,
+	.lans = 2,
+	.settle_time_apative_en = 0,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.image_twidth = 2560,
+	.image_theight = 1440,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = RAW10,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
+struct tx_isp_mipi_bus sc401ai_2560_1408_mipi={
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 630,
+	.lans = 2,
+	.settle_time_apative_en = 0,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.image_twidth = 2560,
+	.image_theight = 1408,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = RAW10,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
 struct tx_isp_sensor_attribute sc401ai_attr={
 	.name = "sc401ai",
 	.chip_id = 0xcd2e,
@@ -674,6 +734,246 @@ static struct regval_list sc401ai_init_regs_2560_1440_15fps_mipi[] = {
 	{SC401AI_REG_END, 0x00},/* END MARKER */
 };
 
+static struct regval_list sc401ai_init_regs_2560_1440_20fps_mipi[] = {
+	{0x0103,0x01},
+	{0x0100,0x00},
+	{0x36e9,0x80},
+	{0x36f9,0x80},
+	{0x3018,0x3a},
+	{0x3019,0x0c},
+	{0x301c,0x78},
+	{0x301f,0x1c},
+	{0x3208,0x0a},
+	{0x3209,0x00},
+	{0x320a,0x05},
+	{0x320b,0xa0},
+	{0x320e,0x05},//vts = 0x5dc = 1500
+	{0x320f,0xdc},//
+	{0x3214,0x11},
+	{0x3215,0x11},
+	{0x3223,0x80},
+	{0x3250,0x00},
+	{0x3253,0x08},
+	{0x3274,0x01},
+	{0x3301,0x20},
+	{0x3302,0x18},
+	{0x3303,0x10},
+	{0x3304,0x50},
+	{0x3306,0x38},
+	{0x3308,0x18},
+	{0x3309,0x60},
+	{0x330b,0xc0},
+	{0x330d,0x10},
+	{0x330e,0x18},
+	{0x330f,0x04},
+	{0x3310,0x02},
+	{0x331c,0x04},
+	{0x331e,0x41},
+	{0x331f,0x51},
+	{0x3320,0x09},
+	{0x3333,0x10},
+	{0x334c,0x08},
+	{0x3356,0x09},
+	{0x3364,0x17},
+	{0x338e,0xfd},
+	{0x3390,0x08},
+	{0x3391,0x18},
+	{0x3392,0x38},
+	{0x3393,0x20},
+	{0x3394,0x20},
+	{0x3395,0x20},
+	{0x3396,0x08},
+	{0x3397,0x18},
+	{0x3398,0x38},
+	{0x3399,0x20},
+	{0x339a,0x20},
+	{0x339b,0x20},
+	{0x339c,0x20},
+	{0x33ac,0x10},
+	{0x33ae,0x18},
+	{0x33af,0x19},
+	{0x360f,0x01},
+	{0x3620,0x08},
+	{0x3637,0x25},
+	{0x363a,0x12},
+	{0x3670,0x0a},
+	{0x3671,0x07},
+	{0x3672,0x57},
+	{0x3673,0x5e},
+	{0x3674,0x84},
+	{0x3675,0x88},
+	{0x3676,0x8a},
+	{0x367a,0x58},
+	{0x367b,0x78},
+	{0x367c,0x58},
+	{0x367d,0x78},
+	{0x3690,0x33},
+	{0x3691,0x43},
+	{0x3692,0x34},
+	{0x369c,0x40},
+	{0x369d,0x78},
+	{0x36ea,0x39},
+	{0x36eb,0x0d},
+	{0x36ec,0x1c},
+	{0x36ed,0x24},
+	{0x36fa,0x39},
+	{0x36fb,0x33},
+	{0x36fc,0x10},
+	{0x36fd,0x34},
+	{0x3908,0x41},
+	{0x396c,0x0e},
+	{0x3e00,0x00},
+	{0x3e01,0xb6},
+	{0x3e02,0x00},
+	{0x3e03,0x0b},
+	{0x3e08,0x03},
+	{0x3e09,0x40},
+	{0x3e1b,0x2a},
+	{0x4509,0x30},
+	{0x4819,0x06},
+	{0x481b,0x03},
+	{0x481d,0x0c},
+	{0x481f,0x03},
+	{0x4821,0x08},
+	{0x4823,0x03},
+	{0x4825,0x03},
+	{0x4827,0x03},
+	{0x4829,0x05},
+	{0x5001,0x44},
+	{0x57a8,0xd0},
+	{0x36e9,0x43},
+	{0x36f9,0x44},
+	{0x0100,0x01},
+	{SC401AI_REG_DELAY, 0x01},
+	{SC401AI_REG_END, 0x00},/* END MARKER */
+};
+
+static struct regval_list sc401ai_init_regs_2560_1408_30fps_mipi[] = {
+        {0x0103,0x01},
+        {0x0100,0x00},
+        {0x36e9,0x80},
+        {0x36f9,0x80},
+        {0x3018,0x3a},
+        {0x3019,0x0c},
+        {0x301c,0x78},
+        {0x301f,0x76},
+        {0x3200,0x00},
+        {0x3201,0x00},
+        {0x3202,0x00},
+        {0x3203,0x00},
+        {0x3204,0x0a},
+        {0x3205,0x07},
+        {0x3206,0x05},
+        {0x3207,0x87},
+        {0x3208,0x0a},
+        {0x3209,0x00},
+        {0x320a,0x05},
+        {0x320b,0x80},
+        {0x320e,0x05},//vts = 0x5dc = 1500
+        {0x320f,0xdc},//
+        {0x3210,0x00},
+        {0x3211,0x04},
+        {0x3212,0x00},
+        {0x3213,0x04},
+        {0x3214,0x11},
+        {0x3215,0x11},
+        {0x3223,0x80},
+        {0x3250,0x00},
+        {0x3253,0x08},
+        {0x3274,0x01},
+        {0x3301,0x20},
+        {0x3302,0x18},
+        {0x3303,0x10},
+        {0x3304,0x50},
+        {0x3306,0x38},
+        {0x3308,0x18},
+        {0x3309,0x60},
+        {0x330b,0xc0},
+        {0x330d,0x10},
+        {0x330e,0x18},
+        {0x330f,0x04},
+        {0x3310,0x02},
+        {0x331c,0x04},
+        {0x331e,0x41},
+        {0x331f,0x51},
+        {0x3320,0x09},
+        {0x3333,0x10},
+        {0x334c,0x08},
+        {0x3356,0x09},
+        {0x3364,0x17},
+        {0x338e,0xfd},
+        {0x3390,0x08},
+        {0x3391,0x18},
+        {0x3392,0x38},
+        {0x3393,0x20},
+        {0x3394,0x20},
+        {0x3395,0x20},
+        {0x3396,0x08},
+        {0x3397,0x18},
+        {0x3398,0x38},
+        {0x3399,0x20},
+        {0x339a,0x20},
+        {0x339b,0x20},
+        {0x339c,0x20},
+        {0x33ac,0x10},
+        {0x33ae,0x18},
+        {0x33af,0x19},
+        {0x360f,0x01},
+        {0x3620,0x08},
+        {0x3637,0x25},
+        {0x363a,0x12},
+        {0x3670,0x0a},
+        {0x3671,0x07},
+        {0x3672,0x57},
+        {0x3673,0x5e},
+        {0x3674,0x84},
+        {0x3675,0x88},
+        {0x3676,0x8a},
+        {0x367a,0x58},
+        {0x367b,0x78},
+        {0x367c,0x58},
+        {0x367d,0x78},
+        {0x3690,0x33},
+        {0x3691,0x43},
+        {0x3692,0x34},
+        {0x369c,0x40},
+        {0x369d,0x78},
+        {0x36ea,0x39},
+        {0x36eb,0x0d},
+        {0x36ec,0x1c},
+        {0x36ed,0x24},
+        {0x36fa,0x39},
+        {0x36fb,0x33},
+        {0x36fc,0x10},
+        {0x36fd,0x14},
+        {0x3908,0x41},
+        {0x396c,0x06},
+        {0x3e00,0x00},
+        {0x3e01,0xb6},
+        {0x3e02,0x00},
+        {0x3e03,0x0b},
+        {0x3e08,0x03},
+        {0x3e09,0x40},
+        {0x3e1b,0x2a},
+        {0x4509,0x30},
+        {0x4819,0x08},
+        {0x481b,0x05},
+        {0x481d,0x11},
+        {0x481f,0x04},
+        {0x4821,0x09},
+        {0x4823,0x04},
+        {0x4825,0x04},
+        {0x4827,0x04},
+        {0x4829,0x07},
+        {0x5001,0x44},
+        {0x57a8,0xd0},
+        {0x36e9,0x23},
+        {0x36f9,0x23},
+        {0x0100,0x01},
+	{SC401AI_REG_DELAY, 0x01},
+	{SC401AI_REG_END, 0x00},/* END MARKER */
+};
+
 static struct tx_isp_sensor_win_setting sc401ai_win_sizes[] = {
 	{
 		.width		= 2560,
@@ -690,7 +990,24 @@ static struct tx_isp_sensor_win_setting sc401ai_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs 		= sc401ai_init_regs_2560_1440_15fps_mipi,
-	}
+	},
+	{
+		.width		= 2560,
+		.height		= 1440,
+		.fps		= 20 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= sc401ai_init_regs_2560_1440_20fps_mipi,
+	},
+	{
+		.width		= 2560,
+		.height		= 1408,
+		.fps		= 30 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= sc401ai_init_regs_2560_1408_30fps_mipi,
+	},
+
 };
 struct tx_isp_sensor_win_setting *wsize = &sc401ai_win_sizes[0];
 
@@ -958,12 +1275,20 @@ static int sc401ai_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch(sensor->info.default_boot){
 	case 0:
-		sclk = 2800 * 1500 * 30;
+		sclk = 1400 * 1500 * 30 * 2;
 		max_fps = TX_SENSOR_MAX_FPS_30;
 		break;
 	case 1:
-		sclk = 2800 * 2000 * 15;
+		sclk = 1400 * 2000 * 15 * 2;
 		max_fps = TX_SENSOR_MAX_FPS_15;
+		break;
+	case 2:
+		sclk = 1400 * 1500 * 20 * 2;
+		max_fps = TX_SENSOR_MAX_FPS_30;
+		break;
+	case 3:
+		sclk = 1400 * 1500 * 30 * 2;
+		max_fps = TX_SENSOR_MAX_FPS_30;
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
@@ -1059,11 +1384,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		memcpy(&(sc401ai_attr.mipi), &sc401ai_mipi, sizeof(sc401ai_mipi));
 		sc401ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sc401ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-		sc401ai_attr.max_integration_time_native = 2*1500 -8;
-		sc401ai_attr.integration_time_limit = 2*1500 -8;
-		sc401ai_attr.total_width = 2800;
+		sc401ai_attr.max_integration_time_native = 2992; /* 2 * 1500 - 8 */
+		sc401ai_attr.integration_time_limit = 2992;
+		sc401ai_attr.total_width = 2800; /* 1400 * 2 */
 		sc401ai_attr.total_height = 1500;
-		sc401ai_attr.max_integration_time = 2*1500 -8;
+		sc401ai_attr.max_integration_time = 2992;
 		sc401ai_attr.again =0x340;
 		sc401ai_attr.integration_time = 0xb60;
 		break;
@@ -1072,11 +1397,37 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		memcpy(&(sc401ai_attr.mipi), &sc401ai_mipi_15, sizeof(sc401ai_mipi_15));
 		sc401ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sc401ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-		sc401ai_attr.max_integration_time_native = 2*2000 -8;
-		sc401ai_attr.integration_time_limit = 2*2000 -8;
-		sc401ai_attr.total_width = 2800;
+		sc401ai_attr.max_integration_time_native = 3992; /* 2 * 2000 - 8 */
+		sc401ai_attr.integration_time_limit = 3992;
+		sc401ai_attr.total_width = 2800; /* 1400 * 2 */
 		sc401ai_attr.total_height = 2000;
-		sc401ai_attr.max_integration_time = 2*2000 -8;
+		sc401ai_attr.max_integration_time = 3992;
+		sc401ai_attr.again =0x340;
+		sc401ai_attr.integration_time = 0xb60;
+		break;
+	case 2:
+		wsize = &sc401ai_win_sizes[2];
+		memcpy(&(sc401ai_attr.mipi), &sc401ai_mipi_20, sizeof(sc401ai_mipi_20));
+		sc401ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sc401ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
+		sc401ai_attr.max_integration_time_native = 2992; /* 2 * 1500 - 8 */
+		sc401ai_attr.integration_time_limit = 2992;
+		sc401ai_attr.total_width = 2800; /* 1400 * 2 */
+		sc401ai_attr.total_height = 1500;
+		sc401ai_attr.max_integration_time = 2992;
+		sc401ai_attr.again =0x340;
+		sc401ai_attr.integration_time = 0xb60;
+		break;
+	case 3:
+		wsize = &sc401ai_win_sizes[3];
+		memcpy(&(sc401ai_attr.mipi), &sc401ai_2560_1408_mipi, sizeof(sc401ai_2560_1408_mipi));
+		sc401ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sc401ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
+		sc401ai_attr.max_integration_time_native = 2992; /* 2 * 1500 - 8 */
+		sc401ai_attr.integration_time_limit = 2992;
+		sc401ai_attr.total_width = 2800; /* 1400 * 2 */
+		sc401ai_attr.total_height = 1500;
+		sc401ai_attr.max_integration_time = 2992;
 		sc401ai_attr.again =0x340;
 		sc401ai_attr.integration_time = 0xb60;
 		break;
@@ -1110,8 +1461,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	rate = private_clk_get_rate(sensor->mclk);
 	switch(info->default_boot){
-    case 0:
+        case 0:
 	case 1:
+	case 2:
+	case 3:
                 if (((rate / 1000) % 24000) != 0) {
                         ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
                         sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
@@ -1198,6 +1551,7 @@ static int sc401ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch(cmd){
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if(arg)

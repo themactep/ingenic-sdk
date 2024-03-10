@@ -10,6 +10,7 @@
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1920*1080       30        mipi_2lane            linear
+ *   1          1280*704        30        mipi_2lane            linear
  */
 #define DEBUG
 
@@ -35,7 +36,7 @@
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION  "H20230704a"
+#define SENSOR_VERSION  "H20231103a"
 
 
 static int reset_gpio = -1;
@@ -58,13 +59,24 @@ struct tx_isp_sensor_attribute imx482_attr;
 
 unsigned int imx482_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-        uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
+        uint16_t again=0;
+        uint32_t hcg = 166528;//5.82x
+        uint32_t hcg_thr = 196608;//20x 196608;//8x
+
+        if(isp_gain >= hcg_thr){
+            isp_gain = isp_gain - hcg;
+            *sensor_again = 0;
+            *sensor_again |= 1 << 12;
+        } else {
+            *sensor_again = 0;
+            hcg = 0;
+        }
+        again = (isp_gain*20)>>LOG2_GAIN_SHIFT;
         // Limit Max gain
         if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
-        /* p_ctx->again=again; */
-        *sensor_again=again;
-        isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
+        *sensor_again += again;
+        isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20 + hcg;
 
         return isp_gain;
 }
@@ -103,13 +115,42 @@ struct tx_isp_mipi_bus imx482_mipi={
         .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
+struct tx_isp_mipi_bus imx482_1284_706_mipi={
+        .mode = SENSOR_MIPI_SONY_MODE,
+        .clk = 1440,
+        .lans = 2,
+        .settle_time_apative_en = 0,
+        .mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12,
+        .mipi_sc.hcrop_diff_en = 0,
+        .mipi_sc.mipi_vcomp_en = 0,
+        .mipi_sc.mipi_hcomp_en = 0,
+        .mipi_sc.line_sync_mode = 0,
+        .mipi_sc.work_start_flag = 0,
+        .image_twidth = 1284,
+        .image_theight = 706,
+        .mipi_sc.mipi_crop_start0x = 0,
+        .mipi_sc.mipi_crop_start0y = 0,
+        .mipi_sc.mipi_crop_start1x = 0,
+        .mipi_sc.mipi_crop_start1y = 0,
+        .mipi_sc.mipi_crop_start2x = 0,
+        .mipi_sc.mipi_crop_start2y = 0,
+        .mipi_sc.mipi_crop_start3x = 0,
+        .mipi_sc.mipi_crop_start3y = 0,
+        .mipi_sc.data_type_en = 1,
+        .mipi_sc.data_type_value = RAW12,
+        .mipi_sc.del_start = 0,
+        .mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+        .mipi_sc.sensor_fid_mode = 0,
+        .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
 struct tx_isp_sensor_attribute imx482_attr={
         .name = "imx482",
         .chip_id = 0x4C01,
         .cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
         .cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
         .cbus_device = 0x1a,
-        .max_again = 404346,
+        .max_again = 655360,
         .max_dgain = 0,
         .min_integration_time = 2,
         .min_integration_time_native = 2,
@@ -249,6 +290,143 @@ static struct regval_list imx482_init_regs_1920_1080_30fps_mipi[] = {
     {IMX482_REG_END, 0x00},/* END MARKER */
 };
 
+static struct regval_list imx482_init_regs_1280_704_30fps_mipi[] = {
+	{0x3008,0x7F},  // BCWAIT_TIME[9:0]
+	{0x300A,0x5B},  // CPWAIT_TIME[9:0]
+	{0x300B,0x50},  //
+	{0x301C,0x04},  // WINMODE[3:0]
+	{0x301D,0x05},  // CFMODE[3:0]
+	{0x3020,0x01},  // HADD
+	{0x3021,0x01},  // VADD
+	{0x3022,0x02},  // ADDMODE[1:0]
+	{0x3028,0x4C},  // HMAX[15:0] -> 0x44c = 1100
+	{0x3029,0x04},  //
+	{0x3024,0xCA},	// VMAX[15:0] -> 0x8ca = 2250
+	{0x3025,0x08},  //
+	{0x3031,0x00},  // ADBIT
+	{0x303C,0x88},  // PIX_HST[12:0]
+	{0x303D,0x02},  //
+	{0x303E,0x08},  // PIX_HWIDTH[12:0]
+	{0x303F,0x0A},  //
+	{0x3044,0x80},  // PIX_VST[11:0]
+	{0x3045,0x01},  //
+	{0x3047,0x05},  //
+	{0x30A5,0x00},  // XVS_DRV[1:0]
+	{0x30D5,0x02},  // DIG_CLP_VSTART
+	{0x3114,0x02},  // INCKSEL1[1:0]
+	{0x311C,0x9B},  // INCKSEL3[8:0]
+	{0x3160,0xC4},  // -
+	{0x3260,0x22},  // -
+	{0x3262,0x02},  // -
+	{0x3278,0xA2},  // -
+	{0x3324,0x00},  // -
+	{0x3366,0x31},  // -
+	{0x340C,0x4D},  // -
+	{0x3416,0x10},  // -
+	{0x3417,0x13},  // -
+	{0x3432,0x93},  // -
+	{0x34CE,0x1E},  // -
+	{0x34CF,0x1E},  // -
+	{0x34DC,0x80},  // -
+	{0x351C,0x03},  // -
+	{0x359E,0x70},  // -
+	{0x35A2,0x9C},  // -
+	{0x35AC,0x08},  // -
+	{0x35C0,0xFA},  // -
+	{0x35C2,0x4E},  // -
+	{0x35DC,0x05},  // -
+	{0x35DE,0x05},  // -
+	{0x3608,0x41},  // -
+	{0x360A,0x47},  // -
+	{0x361E,0x4A},  // -
+	{0x3630,0x43},  // -
+	{0x3632,0x47},  // -
+	{0x363C,0x41},  // -
+	{0x363E,0x4A},  // -
+	{0x3648,0x41},  // -
+	{0x364A,0x47},  // -
+	{0x3660,0x04},  // -
+	{0x3676,0x3F},  // -
+	{0x367A,0x3F},  // -
+	{0x36A4,0x41},  // -
+	{0x3798,0x8C},  // -
+	{0x379A,0x8C},  // -
+	{0x379C,0x8C},  // -
+	{0x379E,0x8C},  // -
+	{0x3804,0x22},  // INCKSEL4[1:0]
+	{0x3888,0xA8},  // -
+	{0x388C,0xA6},  // -
+	{0x3914,0x15},  // -
+	{0x3915,0x15},  // -
+	{0x3916,0x15},  // -
+	{0x3917,0x14},  // -
+	{0x3918,0x14},  // -
+	{0x3919,0x14},  // -
+	{0x391A,0x13},  // -
+	{0x391B,0x13},  // -
+	{0x391C,0x13},  // -
+	{0x391E,0x00},  // -
+	{0x391F,0xA5},  // -
+	{0x3920,0xDE},  // -
+	{0x3921,0x0E},  // -
+	{0x39A2,0x0C},  // -
+	{0x39A4,0x16},  // -
+	{0x39A6,0x2B},  // -
+	{0x39A7,0x01},  // -
+	{0x39D2,0x2D},  // -
+	{0x39D3,0x00},  // -
+	{0x39D8,0x37},  // -
+	{0x39D9,0x00},  // -
+	{0x39DA,0x9B},  // -
+	{0x39DB,0x01},  // -
+	{0x39E0,0x28},  // -
+	{0x39E1,0x00},  // -
+	{0x39E2,0x2C},  // -
+	{0x39E3,0x00},  // -
+	{0x39E8,0x96},  // -
+	{0x39EA,0x9A},  // -
+	{0x39EB,0x01},  // -
+	{0x39F2,0x27},  // -
+	{0x39F3,0x00},  // -
+	{0x3A00,0x38},  // -
+	{0x3A01,0x00},  // -
+	{0x3A02,0x95},  // -
+	{0x3A03,0x01},  // -
+	{0x3A18,0x9B},  // -
+	{0x3A2A,0x0C},  // -
+	{0x3A30,0x15},  // -
+	{0x3A32,0x31},  // -
+	{0x3A33,0x01},  // -
+	{0x3A36,0x4D},  // -
+	{0x3A3E,0x11},  // -
+	{0x3A40,0x31},  // -
+	{0x3A42,0x4C},  // -
+	{0x3A43,0x01},  // -
+	{0x3A44,0x47},  // -
+	{0x3A46,0x4B},  // -
+	{0x3A4E,0x11},  // -
+	{0x3A50,0x32},  // -
+	{0x3A52,0x46},  // -
+	{0x3A53,0x01},  // -
+	{0x3D01,0x01},  // LANEMODE[2:0]
+	{0x3D04,0x48},  // TXCLKESC_FREQ[15:0]
+	{0x3D05,0x09},  //
+	{0x3D18,0x9F},  // TCLKPOST[15:0]
+	{0x3D1A,0x57},  // TCLKPREPARE[15:0]
+	{0x3D1C,0x57},  // TCLKTRAIL[15:0]
+	{0x3D1E,0x87},  // TCLKZERO[15:0]
+	{0x3D20,0x5F},  // THSPREPARE[15:0]
+	{0x3D22,0xA7},  // THSZERO[15:0]
+	{0x3D24,0x5F},  // THSTRAIL [15:0]
+	{0x3D26,0x97},  // THSEXIT [15:0]
+	{0x3D28,0x4F},  // TLPX[15:0]
+	{0x3000,0x00},
+	{IMX482_REG_DELAY,0x18},
+	{0x3002,0x00},
+	{0x30A5,0x00},
+    {IMX482_REG_END, 0x00},/* END MARKER */
+};
+
 static struct tx_isp_sensor_win_setting imx482_win_sizes[] = {
         {
                 .width          = 1920,
@@ -257,6 +435,14 @@ static struct tx_isp_sensor_win_setting imx482_win_sizes[] = {
                 .mbus_code      = TISP_VI_FMT_SRGGB12_1X12,
                 .colorspace     = TISP_COLORSPACE_SRGB,
                 .regs           = imx482_init_regs_1920_1080_30fps_mipi,
+        },
+		{
+                .width          = 1280,
+                .height         = 704,
+                .fps            = 30 << 16 | 1,
+                .mbus_code      = TISP_VI_FMT_SRGGB12_1X12,
+                .colorspace     = TISP_COLORSPACE_SRGB,
+                .regs           = imx482_init_regs_1280_704_30fps_mipi,
         },
 };
 struct tx_isp_sensor_win_setting *wsize = &imx482_win_sizes[0];
@@ -405,7 +591,12 @@ static int imx482_set_analog_gain(struct tx_isp_subdev *sd, int value)
         int ret = 0;
 
         ret += imx482_write(sd, 0x3084, (unsigned char)(value & 0xff));
-		ret += imx482_write(sd, 0x3085, (unsigned char)((value >> 8) & 0x0f));
+        ret += imx482_write(sd, 0x3085, (unsigned char)((value >> 8) & 0x0f));
+        if(value & (1 << 12)){
+            ret += imx482_write(sd, 0x3034, 0x1);
+        }else{
+            ret += imx482_write(sd, 0x3034, 0x0);
+        }
         if (ret < 0)
                 return ret;
 
@@ -498,6 +689,10 @@ static int imx482_set_fps(struct tx_isp_subdev *sd, int fps)
                 sclk = 74250000;
                 max_fps = TX_SENSOR_MAX_FPS_30;
                 break;
+		case 1:
+                sclk = 74250000;
+                max_fps = TX_SENSOR_MAX_FPS_30;
+                break;
         default:
                 ISP_ERROR("Now we do not support this framerate!!!\n");
         }
@@ -553,20 +748,47 @@ static int imx482_set_vflip(struct tx_isp_subdev *sd, int enable)
 	int ret = 0;
 	uint8_t val;
 
-	/* 2'b01:mirror,2'b10:filp */
 	val = imx482_read(sd, 0x3030, &val);
 	switch(enable) {
 	case 0://normal
 		val &= 0xfc;
+                ret = imx482_write(sd, 0x3152, 0x1E);
+                ret = imx482_write(sd, 0x3154, 0xC2);
+                ret = imx482_write(sd, 0x3156, 0x1C);
+                ret = imx482_write(sd, 0x3168, 0x3A);
+                ret = imx482_write(sd, 0x3169, 0x00);
+                ret = imx482_write(sd, 0x317A, 0x3B);
+                ret = imx482_write(sd, 0x317B, 0x00);
 		break;
 	case 1://sensor mirror
 		val = ((val & 0xFD) | 0x01);
+                ret = imx482_write(sd, 0x3152, 0x1E);
+                ret = imx482_write(sd, 0x3154, 0xC2);
+                ret = imx482_write(sd, 0x3156, 0x1C);
+                ret = imx482_write(sd, 0x3168, 0x3A);
+                ret = imx482_write(sd, 0x3169, 0x00);
+                ret = imx482_write(sd, 0x317A, 0x3B);
+                ret = imx482_write(sd, 0x317B, 0x00);
 		break;
 	case 2://sensor flip
 		val = ((val & 0xFE) | 0x02);
+                ret = imx482_write(sd, 0x3152, 0x20);
+                ret = imx482_write(sd, 0x3154, 0xC4);
+                ret = imx482_write(sd, 0x3156, 0x1A);
+                ret = imx482_write(sd, 0x3168, 0xC3);
+                ret = imx482_write(sd, 0x3169, 0x08);
+                ret = imx482_write(sd, 0x317A, 0xC2);
+                ret = imx482_write(sd, 0x317B, 0x08);
 		break;
 	case 3://sensor mirror&flip
 		val |= 0x03;
+                ret = imx482_write(sd, 0x3152, 0x20);
+                ret = imx482_write(sd, 0x3154, 0xC4);
+                ret = imx482_write(sd, 0x3156, 0x1A);
+                ret = imx482_write(sd, 0x3168, 0xC3);
+                ret = imx482_write(sd, 0x3169, 0x08);
+                ret = imx482_write(sd, 0x317A, 0xC2);
+                ret = imx482_write(sd, 0x317B, 0x08);
 		break;
 	}
 	ret = imx482_write(sd, 0x3030, val);
@@ -587,6 +809,19 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         case 0:
                 wsize = &imx482_win_sizes[0];
                 memcpy(&(imx482_attr.mipi), &imx482_mipi, sizeof(imx482_mipi));
+                imx482_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+                imx482_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+                imx482_attr.max_integration_time_native = 2244;
+                imx482_attr.integration_time_limit = 2244;
+                imx482_attr.total_width = 1100;
+                imx482_attr.total_height = 2250;
+                imx482_attr.max_integration_time = 2244;
+                imx482_attr.again = 0;
+                imx482_attr.integration_time = 1125;
+                break;
+		case 1:
+                wsize = &imx482_win_sizes[1];
+                memcpy(&(imx482_attr.mipi), &imx482_1284_706_mipi, sizeof(imx482_1284_706_mipi));
                 imx482_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 imx482_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
                 imx482_attr.max_integration_time_native = 2244;
@@ -628,6 +863,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         rate = private_clk_get_rate(sensor->mclk);
         switch(info->default_boot){
         case 0:
+		case 1:
                 if (((rate / 1000) % 37125) != 0) {
                         ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
                         sclka = private_devm_clk_get(&client->dev, SEN_TCLK);

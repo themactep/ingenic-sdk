@@ -30,10 +30,12 @@
 #define OS08A10_REG_DELAY	0xfffe
 #define OS08A10_SUPPORT_SCLK_8M_FPS_15 (98222880)
 #define OS08A10_SUPPORT_SCLK_8M_FPS_30 (71924300)
+#define OS08A10_SUPPORT_SCLK_8M_FPS_30_2lane (2314 * 2072 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION	"H20211019a"
+#define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
@@ -179,6 +181,35 @@ unsigned int os08a10_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 {
 	return 0;
 }
+
+struct tx_isp_mipi_bus os08a10_mipi_2={
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 1440,
+	.lans = 2,
+	.settle_time_apative_en = 0,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.image_twidth = 3840,
+	.image_theight = 2160,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = RAW10,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
 
 struct tx_isp_sensor_attribute os08a10_attr={
 	.name = "os08a10",
@@ -837,6 +868,201 @@ static struct regval_list os08a10_init_regs_3840_2160_15fps_mipi_wdr[] = {
 	{OS08A10_REG_END, 0x00},/* END MARKER */
 };
 
+static struct regval_list os08a10_init_regs_3840_2160_15fps_mipi_2lane[] = {
+	{0x0100,0x00},
+	{0x0103,0x01},
+	{0x0303,0x01},
+	{0x0305,0x5a},
+	{0x0306,0x00},
+	{0x0308,0x03},
+	{0x0309,0x04},
+	{0x032a,0x00},
+	{0x300f,0x11},
+	{0x3010,0x01},
+	{0x3011,0x04},
+	{0x3012,0x21},
+	{0x3016,0xf0},
+	{0x301e,0x98},
+	{0x3031,0xa9},
+	{0x3103,0x92},
+	{0x3104,0x01},
+	{0x3106,0x10},
+	{0x3400,0x04},
+	{0x3025,0x03},
+	{0x3425,0x01},
+	{0x3428,0x01},
+	{0x3406,0x08},
+	{0x3408,0x03},
+	{0x340c,0xff},
+	{0x340d,0xff},
+	{0x031e,0x09},
+	{0x3501,0x08},
+	{0x3502,0xe5},
+	{0x3505,0x83},
+	{0x3508,0x00},
+	{0x3509,0x80},
+	{0x350a,0x04},
+	{0x350b,0x00},
+	{0x350c,0x00},
+	{0x350d,0x80},
+	{0x350e,0x04},
+	{0x350f,0x00},
+	{0x3600,0x00},
+	{0x3603,0x2c},
+	{0x3605,0x50},
+	{0x3609,0xb5},
+	{0x3610,0x39},
+	{0x360c,0x01},
+	{0x3628,0xa4},
+	{0x362d,0x10},
+	{0x3660,0x43},
+	{0x3661,0x06},
+	{0x3662,0x00},
+	{0x3663,0x28},
+	{0x3664,0x0d},
+	{0x366a,0x38},
+	{0x366b,0xa0},
+	{0x366d,0x00},
+	{0x366e,0x00},
+	{0x3680,0x00},
+	{0x36c0,0x00},
+	{0x3701,0x02},
+	{0x373b,0x02},
+	{0x373c,0x02},
+	{0x3736,0x02},
+	{0x3737,0x02},
+	{0x3705,0x00},
+	{0x3706,0x39},
+	{0x370a,0x00},
+	{0x370b,0x98},
+	{0x3709,0x49},
+	{0x3714,0x21},
+	{0x371c,0x00},
+	{0x371d,0x08},
+	{0x3740,0x1b},
+	{0x3741,0x04},
+	{0x375e,0x0b},
+	{0x3760,0x10},
+	{0x3776,0x10},
+	{0x3781,0x02},
+	{0x3782,0x04},
+	{0x3783,0x02},
+	{0x3784,0x08},
+	{0x3785,0x08},
+	{0x3788,0x01},
+	{0x3789,0x01},
+	{0x3797,0x04},
+	{0x3762,0x11},
+	{0x3800,0x00},
+	{0x3801,0x00},
+	{0x3802,0x00},
+	{0x3803,0x0c},
+	{0x3804,0x0e},
+	{0x3805,0xff},
+	{0x3806,0x08},
+	{0x3807,0x6f},
+	{0x3808,0x0f},
+	{0x3809,0x00},
+	{0x380a,0x08},
+	{0x380b,0x70},
+	{0x380c,0x08},//
+	{0x380d,0x18},/*hts = 0x818 = 2072*/
+	{0x380e,0x09},//
+	{0x380f,0x0a},/*vts = 90a = 2314*/
+	{0x3813,0x10},
+	{0x3814,0x01},
+	{0x3815,0x01},
+	{0x3816,0x01},
+	{0x3817,0x01},
+	{0x381c,0x00},
+	{0x3820,0x00},
+	{0x3821,0x04},
+	{0x3823,0x08},
+	{0x3826,0x00},
+	{0x3827,0x08},
+	{0x382d,0x08},
+	{0x3832,0x02},
+	{0x3833,0x00},
+	{0x383c,0x48},
+	{0x383d,0xff},
+	{0x3d85,0x0b},
+	{0x3d84,0x40},
+	{0x3d8c,0x63},
+	{0x3d8d,0xd7},
+	{0x4000,0xf8},
+	{0x4001,0x2b},
+	{0x4004,0x00},
+	{0x4005,0x40},
+	{0x400a,0x01},
+	{0x400f,0xa0},
+	{0x4010,0x12},
+	{0x4018,0x00},
+	{0x4008,0x02},
+	{0x4009,0x0d},
+	{0x401a,0x58},
+	{0x4050,0x00},
+	{0x4051,0x01},
+	{0x4028,0x2f},
+	{0x4052,0x00},
+	{0x4053,0x80},
+	{0x4054,0x00},
+	{0x4055,0x80},
+	{0x4056,0x00},
+	{0x4057,0x80},
+	{0x4058,0x00},
+	{0x4059,0x80},
+	{0x430b,0xff},
+	{0x430c,0xff},
+	{0x430d,0x00},
+	{0x430e,0x00},
+	{0x4501,0x18},
+	{0x4502,0x00},
+	{0x4643,0x00},
+	{0x4640,0x01},
+	{0x4641,0x04},
+	{0x4800,0x64},
+	{0x4809,0x2b},
+	{0x4813,0x90},
+	{0x4817,0x04},
+	{0x4833,0x18},
+	{0x4837,0x0b},
+	{0x483b,0x00},
+	{0x484b,0x03},
+	{0x4850,0x7c},
+	{0x4852,0x06},
+	{0x4856,0x58},
+	{0x4857,0xaa},
+	{0x4862,0x0a},
+	{0x4869,0x18},
+	{0x486a,0xaa},
+	{0x486e,0x03},
+	{0x486f,0x55},
+	{0x4875,0xf0},
+	{0x5000,0x89},
+	{0x5001,0x42},
+	{0x5004,0x40},
+	{0x5005,0x00},
+	{0x5180,0x00},
+	{0x5181,0x10},
+	{0x580b,0x03},
+	{0x4d00,0x03},
+	{0x4d01,0xc9},
+	{0x4d02,0xbc},
+	{0x4d03,0xc6},
+	{0x4d04,0x4a},
+	{0x4d05,0x25},
+	{0x4028,0x4f},
+	{0x4029,0x1f},
+	{0x402a,0x7f},
+	{0x402b,0x01},
+	{0x4700,0x2b},
+	{0x4e00,0x2b},
+	{0x3501,0x09},
+	{0x3502,0x01},
+	{0x0100,0x01},
+	{OS08A10_REG_END, 0x00},/* END MARKER */
+};
+
 static struct tx_isp_sensor_win_setting os08a10_win_sizes[] = {
 	/* 3840*2160@15fps [0] */
 	{
@@ -864,6 +1090,15 @@ static struct tx_isp_sensor_win_setting os08a10_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs 		= os08a10_init_regs_3840_2160_15fps_mipi_wdr,
+	},
+	/* 3840*2160@30fps_2lane [3] */
+	{
+		.width		= 3840,
+		.height		= 2160,
+		.fps		= 30 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= os08a10_init_regs_3840_2160_15fps_mipi_2lane,
 	}
 };
 struct tx_isp_sensor_win_setting *wsize = &os08a10_win_sizes[0];
@@ -1135,6 +1370,7 @@ static int os08a10_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
+	unsigned int max_fps;
 	unsigned char val = 0;
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
@@ -1142,17 +1378,32 @@ static int os08a10_set_fps(struct tx_isp_subdev *sd, int fps)
 	if(os08a10_attr.data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		return 0;
 
+	switch(sensor->info.default_boot){
+	case 0:
+		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_15;
+		max_fps = TX_SENSOR_MAX_FPS_15;
+		break;
+	case 1:
+		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_30;
+		max_fps = TX_SENSOR_MAX_FPS_30;
+		break;
+	case 2:
+		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_15;
+		max_fps = TX_SENSOR_MAX_FPS_15;
+		break;
+	case 3:
+		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_30_2lane;
+		max_fps = TX_SENSOR_MAX_FPS_30;
+		break;
+	default:
+		ISP_ERROR("Now we do not support this framerate!!!\n");
+	}
+
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_ERROR("warn: fps(%d) no in range\n", fps);
+	if(newformat > (max_fps<< 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
-	if(sensor_max_fps == 15)
-		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_15;
-	else if (sensor_max_fps == 30)
-		sclk = OS08A10_SUPPORT_SCLK_8M_FPS_30;
-	else
-		pr_debug("[ %s:%d ] Cant not support this sensor max fps(%d)!!!\n", __func__, __LINE__, sensor_max_fps);
 
 	ret += os08a10_read(sd, 0x380c, &val);
 	hts = val << 8;
@@ -1305,11 +1556,14 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned long rate;
+	struct clk *sclka;
+	struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	int ret;
 
 	pr_debug("boot is %d\n", info->default_boot);
+
 	switch(info->default_boot){
 	case 0:
-		sensor_max_fps = 15;
 		wsize = &os08a10_win_sizes[0];
 		os08a10_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		os08a10_attr.mipi.clk = 640;
@@ -1320,9 +1574,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os08a10_attr.total_width = 0xa10 * 2; //5152
 		os08a10_attr.total_height = 0x9ee; //2542
 		os08a10_attr.max_integration_time = 0x9ee - 8;
+	        os08a10_attr.again = 0x80;
+                os08a10_attr.integration_time = 0x901;
 		break;
 	case 1:
-		sensor_max_fps = 30;
 		wsize = &os08a10_win_sizes[1];
 		os08a10_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		os08a10_attr.mipi.clk = 720;
@@ -1333,9 +1588,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os08a10_attr.total_width = 0x40c * 4; //4144
 		os08a10_attr.total_height = 0xad9; //2777
 		os08a10_attr.max_integration_time = 0xad9 - 8;
+	        os08a10_attr.again = 0x80;
+                os08a10_attr.integration_time = 0xa4e;
 		break;
 	case 2:
-		sensor_max_fps = 15;
 		wsize = &os08a10_win_sizes[2];
 		os08a10_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		os08a10_attr.mipi.clk = 720;
@@ -1349,6 +1605,20 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os08a10_attr.total_height = 0x9e4;
 		os08a10_attr.max_integration_time = 2376;
 		os08a10_attr.wdr_cache = wdr_bufsize;
+	        os08a10_attr.again = 0x80;
+                os08a10_attr.integration_time = 0x8e1;
+		break;
+	case 3:
+		wsize = &os08a10_win_sizes[3];
+		memcpy(&(os08a10_attr.mipi), &os08a10_mipi_2, sizeof(os08a10_mipi_2));
+		os08a10_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		os08a10_attr.max_integration_time_native = 2314 - 8;
+		os08a10_attr.integration_time_limit = 2314 - 8;
+		os08a10_attr.total_width = 4144;
+		os08a10_attr.total_height = 2314;
+		os08a10_attr.max_integration_time = 2314 - 8;
+	        os08a10_attr.again = 0x80;
+                os08a10_attr.integration_time = 0x901;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
@@ -1365,14 +1635,17 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	switch(info->mclk){
 	case TISP_SENSOR_MCLK0:
+		sclka = private_devm_clk_get(&client->dev, "mux_cim0");
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
 		set_sensor_mclk_function(0);
 		break;
 	case TISP_SENSOR_MCLK1:
+		sclka = private_devm_clk_get(&client->dev, "mux_cim1");
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim1");
 		set_sensor_mclk_function(1);
 		break;
 	case TISP_SENSOR_MCLK2:
+		sclka = private_devm_clk_get(&client->dev, "mux_cim2");
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim2");
 		set_sensor_mclk_function(2);
 		break;
@@ -1381,20 +1654,28 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-	if (IS_ERR(sensor->mclk)) {
-		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
-		goto err_get_mclk;
+
+	if (MCLK == 27000000){
+		if (((rate / 1000) % 27000) != 0) {
+			ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
+			sclka = private_devm_clk_get(&client->dev, "epll");
+			if (IS_ERR(sclka)) {
+				pr_err("get sclka failed\n");
+			} else {
+				rate = private_clk_get_rate(sclka);
+				if (((rate / 1000) % 27000) != 0) {
+					private_clk_set_rate(sclka, 891000000);
+				}
+			}
+		}
 	}
-	private_clk_set_rate(sensor->mclk, 24000000);
+	private_clk_set_rate(sensor->mclk, MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
 
 	return 0;
-
-err_get_mclk:
-	return -1;
 }
 
 static int os08a10_g_chip_ident(struct tx_isp_subdev *sd,

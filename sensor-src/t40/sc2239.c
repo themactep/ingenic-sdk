@@ -300,6 +300,7 @@ static struct regval_list sc2239_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3304, 0xa8},
 	{0x331e, 0xa1},
 	{0x33af, 0x20},
+	{0x3e00, 0x00},
 	{0x3e01, 0x8c},
 	{0x3e02, 0x20},
 	{0x36ea, 0x75},
@@ -315,20 +316,8 @@ static struct regval_list sc2239_init_regs_1920_1080_25fps_mipi[] = {
 	{SC2239_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc2239_init_regs_1920_1080_25fps_dvp[] = {
-	{SC2239_REG_END, 0x00},	/* END MARKER */
-};
-
 static struct tx_isp_sensor_win_setting sc2239_win_sizes[] = {
 	/* 1920*1080 */
-	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc2239_init_regs_1920_1080_25fps_dvp,
-	},
 	{
 		.width		= 1920,
 		.height		= 1080,
@@ -338,7 +327,7 @@ static struct tx_isp_sensor_win_setting sc2239_win_sizes[] = {
 		.regs 		= sc2239_init_regs_1920_1080_25fps_mipi,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &sc2239_win_sizes[1];
+struct tx_isp_sensor_win_setting *wsize = &sc2239_win_sizes[0];
 
 /*
  * the part of driver was fixed.
@@ -677,13 +666,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
         case 0:
             wsize = &sc2239_win_sizes[0];
-            ret = set_sensor_gpio_function(sensor_gpio_func);
-            if (ret < 0)
-                goto err_set_sensor_gpio;
-            sc2239_attr.dvp.gpio = sensor_gpio_func;
-            break;
-        case 1:
-            wsize = &sc2239_win_sizes[1];
+	    sc2239_attr.again = 0;
+            sc2239_attr.integration_time = 0x8c2;
             memcpy((void*)(&(sc2239_attr.mipi)),(void*)(&sc2239_mipi),sizeof(sc2239_mipi));
             break;
         default:
