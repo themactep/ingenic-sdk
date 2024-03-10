@@ -32,13 +32,13 @@
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MAX_FPS_DOL 20
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20230505a"
+#define SENSOR_VERSION	"H20230720a"
 #define MCLK 24000000
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
-static int wdr_bufsize = 5760000;//1000*2880*2
+static int wdr_bufsize = 2350080;  /* {0x3e24,0x3e23}/2*fps/SENSOR_OUTPUT_MIN_FPS*2880*2 */
 
 static int shvflip = 1;
 
@@ -736,6 +736,235 @@ static struct regval_list sc500ai_init_regs_2880_1620_20fps_mipi_dol[] = {
 		{SC500AI_REG_END, 0x00},	/* END MARKER */
 };
 
+static struct regval_list sc500ai_init_regs_2880_1620_40fps_mipi_master[] = {
+        {0x0103, 0x01},
+        {0x0100, 0x00},
+        {0x36e9, 0x80},
+        {0x36f9, 0x80},
+        {0x300a, 0x24},
+        {0x3018, 0x32},
+        {0x3019, 0x0c},
+        {0x301f, 0x24},
+        {0x3106, 0x01},
+        {0x320c, 0x09},
+        {0x320d, 0x60},
+        /* {0x320e, 0x06}, */
+        /* {0x320f, 0x98}, */
+        /* {0x320e, 0x0d}, */
+        /* {0x320f, 0x2f}, */
+        {0x320e, 0x11},
+        {0x320f, 0x93},
+        {0x3222, 0x00},
+        {0x3224, 0x82},
+        {0x3225, 0x10},
+        {0x3230, 0x00},
+        {0x3231, 0x04},
+        {0x3253, 0x0a},
+        {0x3301, 0x0b},
+        {0x3302, 0x20},
+        {0x3303, 0x10},
+        {0x3304, 0x70},
+        {0x3306, 0x50},
+        {0x3308, 0x18},
+        {0x3309, 0x80},
+        {0x330a, 0x00},
+        {0x330b, 0xe8},
+        {0x330d, 0x30},
+        {0x330e, 0x30},
+        {0x330f, 0x02},
+        {0x3310, 0x02},
+        {0x331c, 0x08},
+        {0x331e, 0x61},
+        {0x331f, 0x71},
+        {0x3320, 0x11},
+        {0x3333, 0x10},
+        {0x334c, 0x10},
+        {0x3356, 0x11},
+        {0x3364, 0x17},
+        {0x336d, 0x03},
+        {0x3390, 0x08},
+        {0x3391, 0x18},
+        {0x3392, 0x38},
+        {0x3393, 0x0a},
+        {0x3394, 0x0a},
+        {0x3395, 0x12},
+        {0x3396, 0x08},
+        {0x3397, 0x18},
+        {0x3398, 0x38},
+        {0x3399, 0x0a},
+        {0x339a, 0x0a},
+        {0x339b, 0x0a},
+        {0x339c, 0x12},
+        {0x33ac, 0x10},
+        {0x33ae, 0x20},
+        {0x33af, 0x21},
+        {0x360f, 0x01},
+        {0x3621, 0xe8},
+        {0x3622, 0x06},
+        {0x3630, 0x82},
+        {0x3633, 0x33},
+        {0x3634, 0x64},
+        {0x3637, 0x50},
+        {0x363a, 0x1f},
+        {0x363c, 0x40},
+        {0x3651, 0x7d},
+        {0x3670, 0x0a},
+        {0x3671, 0x06},
+        {0x3672, 0x16},
+        {0x3673, 0x17},
+        {0x3674, 0x82},
+        {0x3675, 0x62},
+        {0x3676, 0x44},
+        {0x367a, 0x48},
+        {0x367b, 0x78},
+        {0x367c, 0x48},
+        {0x367d, 0x58},
+        {0x3690, 0x34},
+        {0x3691, 0x34},
+        {0x3692, 0x54},
+        {0x369c, 0x48},
+        {0x369d, 0x78},
+        {0x36ea, 0x37},
+        {0x36eb, 0x04},
+        {0x36ec, 0x0a},
+        {0x3000, 0x01},
+        {0x36ed, 0x24},
+        {0x36fa, 0x37},
+        {0x36fb, 0x04},
+        {0x36fc, 0x00},
+        {0x36fd, 0x26},
+        {0x3904, 0x04},
+        {0x3908, 0x41},
+        {0x3000, 0x01},
+        {0x391f, 0x10},
+        {0x39c2, 0x30},
+        {0x3e01, 0xd2},
+        {0x3e02, 0x60},
+        {0x4500, 0x88},
+        {0x4509, 0x20},
+        {0x4800, 0x24},
+        /* {0x4800, 0x44}, */
+        {0x484c, 0x0a},
+        {0x4837, 0x0e},
+        {0x36e9, 0x24},
+        {0x36f9, 0x21},
+        {0x0100, 0x01},
+        {SC500AI_REG_END, 0x00},	/* END MARKER */
+};
+
+static struct regval_list sc500ai_init_regs_2880_1620_40fps_mipi_slave[] = {
+        {0x0103, 0x01},
+        {0x0100, 0x00},
+        {0x36e9, 0x80},
+        {0x36f9, 0x80},
+        {0x3018, 0x32},
+        {0x3019, 0x0c},
+        {0x301f, 0x25},
+        {0x3106, 0x01},
+        {0x320c, 0x09},
+        {0x320d, 0x60},
+        /* {0x320e, 0x06}, */
+        /* {0x320f, 0x97}, */
+        {0x320e, 0x0d},
+        {0x320f, 0x2e},
+        {0x3222, 0x02},
+        {0x3224, 0x82},
+        {0x3225, 0x10},
+        {0x3230, 0x00},
+        {0x3231, 0x04},
+        {0x3253, 0x0a},
+        {0x3301, 0x0b},
+        {0x3302, 0x20},
+        {0x3303, 0x10},
+        {0x3304, 0x70},
+        {0x3306, 0x50},
+        {0x3308, 0x18},
+        {0x3309, 0x80},
+        {0x330a, 0x00},
+        {0x330b, 0xe8},
+        {0x330d, 0x30},
+        {0x330e, 0x30},
+        {0x330f, 0x02},
+        {0x3310, 0x02},
+        {0x331c, 0x08},
+        {0x331e, 0x61},
+        {0x331f, 0x71},
+        {0x3320, 0x11},
+        {0x3333, 0x10},
+        {0x334c, 0x10},
+        {0x3356, 0x11},
+        {0x3364, 0x17},
+        {0x336d, 0x03},
+        {0x3390, 0x08},
+        {0x3391, 0x18},
+        {0x3392, 0x38},
+        {0x3393, 0x0a},
+        {0x3394, 0x0a},
+        {0x3395, 0x12},
+        {0x3396, 0x08},
+        {0x3397, 0x18},
+        {0x3398, 0x38},
+        {0x3399, 0x0a},
+        {0x339a, 0x0a},
+        {0x339b, 0x0a},
+        {0x339c, 0x12},
+        {0x33ac, 0x10},
+        {0x33ae, 0x20},
+        {0x33af, 0x21},
+        {0x360f, 0x01},
+        {0x3621, 0xe8},
+        {0x3622, 0x06},
+        {0x3630, 0x82},
+        {0x3633, 0x33},
+        {0x3634, 0x64},
+        {0x3637, 0x50},
+        {0x363a, 0x1f},
+        {0x363c, 0x40},
+        {0x3651, 0x7d},
+        {0x3670, 0x0a},
+        {0x3671, 0x06},
+        {0x3672, 0x16},
+        {0x3673, 0x17},
+        {0x3674, 0x82},
+        {0x3675, 0x62},
+        {0x3676, 0x44},
+        {0x367a, 0x48},
+        {0x367b, 0x78},
+        {0x367c, 0x48},
+        {0x367d, 0x58},
+        {0x3690, 0x34},
+        {0x3691, 0x34},
+        {0x3692, 0x54},
+        {0x369c, 0x48},
+        {0x369d, 0x78},
+        {0x36ea, 0x37},
+        {0x3000, 0x01},
+        {0x36eb, 0x04},
+        {0x36ec, 0x0a},
+        {0x36ed, 0x24},
+        {0x36fa, 0x37},
+        {0x36fb, 0x04},
+        {0x36fc, 0x00},
+        {0x36fd, 0x26},
+        {0x3000, 0x01},
+        {0x3904, 0x04},
+        {0x3000, 0x01},
+        {0x3908, 0x41},
+        {0x391f, 0x10},
+        {0x39c2, 0x30},
+        {0x3e01, 0xd2},
+        {0x3e02, 0x60},
+        {0x4500, 0x88},
+        {0x4509, 0x20},
+        /* {0x4800, 0x24}, */
+        {0x4800, 0x44},
+        {0x4837, 0x0e},
+        {0x36e9, 0x24},
+        {0x36f9, 0x21},
+        {0x0100, 0x01},
+        {SC500AI_REG_END, 0x00},	/* END MARKER */
+};
+
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
  */
@@ -755,6 +984,22 @@ static struct tx_isp_sensor_win_setting sc500ai_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs		= sc500ai_init_regs_2880_1620_20fps_mipi_dol,
+	},
+	{
+		.width		= 2880,
+		.height		= 1620,
+		.fps		= 15 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs		= sc500ai_init_regs_2880_1620_40fps_mipi_master,
+	},
+	{
+		.width		= 2880,
+		.height		= 1620,
+		.fps		= 15 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs		= sc500ai_init_regs_2880_1620_40fps_mipi_slave,
 	}
 };
 
@@ -1175,6 +1420,36 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		sc500ai_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		printk("=================> 25fps_hdr is ok");
 		break;
+	case 2:
+		wsize = &sc500ai_win_sizes[2];
+		memcpy(&sc500ai_attr.mipi, &sc500ai_mipi_linear, sizeof(sc500ai_mipi_linear));
+		sc500ai_attr.mipi.clk = 1080,
+		sc500ai_attr.min_integration_time = 3;
+		sc500ai_attr.min_integration_time_native = 3,
+		sc500ai_attr.total_width = 2400;
+		sc500ai_attr.total_height = 1688;
+		sc500ai_attr.max_integration_time_native = 1688 * 2 - 10;   /* 2036*2-10 */
+		sc500ai_attr.integration_time_limit = 1688 * 2 - 10;
+		sc500ai_attr.max_integration_time = 1688 * 2 - 10;
+		sc500ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sc500ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		printk("=================> linear is ok");
+		break;
+	case 3:
+		wsize = &sc500ai_win_sizes[3];
+		memcpy(&sc500ai_attr.mipi, &sc500ai_mipi_linear, sizeof(sc500ai_mipi_linear));
+		sc500ai_attr.mipi.clk = 1080,
+		sc500ai_attr.min_integration_time = 3;
+		sc500ai_attr.min_integration_time_native = 3,
+		sc500ai_attr.total_width = 2400;
+		sc500ai_attr.total_height = 1687;
+		sc500ai_attr.max_integration_time_native = 1687 * 2 - 10;   /* 2036*2-10 */
+		sc500ai_attr.integration_time_limit = 1687 * 2 - 10;
+		sc500ai_attr.max_integration_time = 1687 * 2 - 10;
+		sc500ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sc500ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		printk("=================> linear is ok");
+		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 	}
@@ -1379,6 +1654,7 @@ static int sc500ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+        return 0;
 	switch(cmd){
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if(arg)

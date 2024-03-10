@@ -611,12 +611,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         case 0:
             wsize = &bf20a1_win_sizes[0];
             memcpy((void*)(&(bf20a1_attr.mipi)),(void*)(&bf20a1_mipi),sizeof(bf20a1_mipi));
-            break;
-        case 1:
-            wsize = &bf20a1_win_sizes[1];
-            bf20a1_attr.dvp.gpio = sensor_gpio_func;
-            ret = set_sensor_gpio_function(sensor_gpio_func);
-			memcpy((void*)(&(bf20a1_attr.dvp)),(void*)(&bf20a1_dvp),sizeof(bf20a1_dvp));
+	    bf20a1_attr.again = 0;
+            bf20a1_attr.integration_time = 0x1f4;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");

@@ -1009,6 +1009,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxq03_attr.total_width = 3600;
             jxq03_attr.total_height = 1600;
             jxq03_attr.max_integration_time = 1600 - 4;
+            jxq03_attr.again = 0;
+            jxq03_attr.integration_time = 0x1f;
             break;
         case 1:
             wsize = &jxq03_win_sizes[1];
@@ -1024,6 +1026,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxq03_attr.total_width = 3600;
             jxq03_attr.total_height = 2668;
             jxq03_attr.max_integration_time = 2503;
+            jxq03_attr.again = 0;
+            jxq03_attr.integration_time = 0x1f;
             data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
             break;
         default:

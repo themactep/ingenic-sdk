@@ -32,11 +32,12 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MAX_FPS_DOL 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220407a"
+#define SENSOR_VERSION	"H20220426a"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 3000 * 188;//cache lines corrponding on VPB1
+static int shvflip = 1;
 
 struct regval_list {
 	uint16_t reg_num;
@@ -937,6 +938,34 @@ static int gc4653_set_fps(struct tx_isp_subdev *sd, int fps)
 	return 0;
 }
 
+static int gc4653_set_hvflip(struct tx_isp_subdev *sd, int enable)
+{
+	int ret = 0;
+
+	/* 2'b01: mirror; 2'b10:flip*/
+
+	switch(enable){
+		case 0:
+			ret = gc4653_write(sd, 0x0101, 0x00); /*normal*/
+			break;
+		case 1:
+			ret += gc4653_write(sd, 0x0101, 0x01); /*mirror*/
+			break;
+		case 2:
+			ret += gc4653_write(sd, 0x0101, 0x02); /*filp*/
+			break;
+		case 3:
+			ret += gc4653_write(sd, 0x0101, 0x03); /*mirror & filp*/
+			break;
+		default:
+			break;
+	}
+	if(0 != ret)
+		ISP_ERROR("%s:%d, gc4653_write err!!\n",__func__,__LINE__);
+
+	return ret;
+}
+
 static int gc4653_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -969,6 +998,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4653_attr.max_integration_time_native = 1920 - 1;
 		gc4653_attr.integration_time_limit = 1920 - 1;
 		gc4653_attr.max_integration_time = 1920 - 1;
+                gc4653_attr.again = 0;
+                gc4653_attr.integration_time = 0x5d0;
 		break;
 	case 1:
 		gc4653_attr.wdr_cache = wdr_bufsize;
@@ -985,6 +1016,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4653_attr.integration_time_limit = 1488;
 		gc4653_attr.max_integration_time = 1488;
 		gc4653_attr.max_integration_time_short = 93;
+                gc4653_attr.again = 0;
+                gc4653_attr.integration_time = 0x500;
 		gc4653_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		break;
 	default:
@@ -1230,6 +1263,10 @@ static int gc4653_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if(arg)
 			ret = gc4653_set_wdr_stop(sd, init->enable);
 		break;
+	case TX_ISP_EVENT_SENSOR_VFLIP:
+		if(arg)
+			ret = gc4653_set_hvflip(sd, sensor_val->value);
+		break;
 	default:
 		break;
 	}
@@ -1323,6 +1360,7 @@ static int gc4653_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	gc4653_attr.expo_fs = 1;
+        sensor->video.shvflip = shvflip;
 	sensor->video.attr = &gc4653_attr;
 	tx_isp_subdev_init(&sensor_platform_device, sd, &gc4653_ops);
 	tx_isp_set_subdevdata(sd, client);

@@ -1849,6 +1849,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		if (ret < 0)
 			goto err_set_sensor_gpio;
 		jxf37_attr.dvp.gpio = sensor_gpio_func;
+		jxf37_attr.again = 0;
+                jxf37_attr.integration_time = 0xff02;
 		break;
 	case 1:
 		memcpy((void*)(&(jxf37_attr.mipi)),(void*)(&jxf37_mipi),sizeof(jxf37_mipi));
@@ -1860,6 +1862,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf37_attr.max_integration_time = 1500 - 4;
 		jxf37_attr.mipi.clk = 648;
 		jxf37_attr.mipi.settle_time_apative_en = 0;
+		jxf37_attr.again = 0;
+                jxf37_attr.integration_time = 0xff;
 		break;
 	case 2:
 		wsize = &jxf37_win_sizes[2];
@@ -1873,6 +1877,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf37_attr.total_width = 0x47e * 2;
 		jxf37_attr.total_height = 0x960;
 		jxf37_attr.max_integration_time = 1883;
+		jxf37_attr.again = 0;
+                jxf37_attr.integration_time = 0xff;
 		break;
 	case 3:
 		memcpy((void*)(&(jxf37_attr.mipi)),(void*)(&jxf37_mipi),sizeof(jxf37_mipi));
@@ -1888,6 +1894,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf37_attr.mipi.settle_time_apative_en = 0;
 		jxf37_attr.mipi.image_twidth = 640;
 		jxf37_attr.mipi.image_theight = 480;
+		jxf37_attr.again = 0;
+                jxf37_attr.integration_time = 0xff;
 		break;
 	case 4:
 		memcpy((void*)(&(jxf37_attr.mipi)),(void*)(&jxf37_mipi),sizeof(jxf37_mipi));
@@ -1903,6 +1911,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		jxf37_attr.mipi.settle_time_apative_en = 0;
 		jxf37_attr.mipi.image_twidth = 480;
 		jxf37_attr.mipi.image_theight = 270;
+		jxf37_attr.again = 0;
+                jxf37_attr.integration_time = 0xff;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

@@ -764,6 +764,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ov2740_attr.total_height = 1344,
 		ov2740_attr.max_integration_time = 1340,
 		ov2740_attr.one_line_expr_in_us = 30;
+	        ov2740_attr.again = 0x80;
+                ov2740_attr.integration_time = 0x4440;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

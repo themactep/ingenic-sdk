@@ -1025,7 +1025,7 @@ static int sc2232h_set_expo(struct tx_isp_subdev *sd, int value)
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integration time*/
-	ret = sc2232h_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	//ret = sc2232h_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
 	ret += sc2232h_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sc2232h_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -1217,13 +1217,21 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	switch(info->default_boot){
 	    case 0:
+		wsize = &sc2232h_win_sizes[0];
+	    sc2232h_attr.again = 0;
+            sc2232h_attr.integration_time = 0x9c0;
 	        ISP_WARNING("To use mipi, please modify --vi to 1");
             break;
         case 1:
             wsize = &sc2232h_win_sizes[1];
+	    sc2232h_attr.again = 0;
+            sc2232h_attr.integration_time = 0x9c0;
             memcpy((void*)(&(sc2232h_attr.mipi)),(void*)(&sc2232h_mipi),sizeof(sc2232h_mipi));
             break;
         case 2:
+		wsize = &sc2232h_win_sizes[2];
+	    sc2232h_attr.again = 0;
+            sc2232h_attr.integration_time = 0x9c0;
             ISP_WARNING("To use mipi, please modify --vi to 1");
 //            ret = set_sensor_gpio_function(sensor_gpio_func);
 //            if (ret < 0)

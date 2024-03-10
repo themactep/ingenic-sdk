@@ -2463,6 +2463,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_width = 0xe70;
 		os05a10s1_attr.total_height = 0x921;
 		os05a10s1_attr.max_integration_time = 0x921 - 8;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x919;
 		break;
 	case 1:
 		sensor_max_fps = TX_SENSOR_MAX_FPS_15;
@@ -2474,6 +2476,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_width = 0xb40;
 		os05a10s1_attr.total_height = 0x9c0;
 		os05a10s1_attr.max_integration_time = 0x9c0 - 8;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x9bc;
 		os05a10s1_attr.mipi.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10;
 		break;
 	case 2:
@@ -2486,6 +2490,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_width = 0x7f0 * 2;
 		os05a10s1_attr.total_height = 0x840;
 		os05a10s1_attr.max_integration_time = 0x840 - 8;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x820;
 		os05a10s1_attr.mipi.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12;
 		break;
 	case 3:
@@ -2498,6 +2504,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_width = 0x670 * 2;
 		os05a10s1_attr.total_height = 0x840;
 		os05a10s1_attr.max_integration_time = 0x840 - 8;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x820;
 		os05a10s1_attr.mipi.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12;
 		break;
 	case 4:
@@ -2510,6 +2518,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_width = 0x470 * 2;
 		os05a10s1_attr.total_height = 0x840;
 		os05a10s1_attr.max_integration_time = 0x840 - 8;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x2bc;
 		os05a10s1_attr.mipi.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10;
 		break;
 	case 5:
@@ -2530,6 +2540,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		os05a10s1_attr.total_height = 0x9c4;
 		os05a10s1_attr.max_integration_time = 2345;
 		os05a10s1_attr.wdr_cache = wdr_bufsize;
+	        os05a10s1_attr.again = 0x80;
+                os05a10s1_attr.integration_time = 0x8c4;
 		os05a10s1_attr.mipi.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10;
 		break;
 	default:

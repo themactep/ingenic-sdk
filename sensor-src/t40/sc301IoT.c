@@ -30,15 +30,13 @@
 #define SC301IoT_SUPPORT_30FPS_HDR_SCLK (108000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION	"H20220527a"
+#define SENSOR_VERSION	"H20220705a"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int wdr_bufsize = 2 * 2304 * 200;//cache lines corrponding on VPB1
-
-static int shvflip = 0;
-module_param(shvflip, int, S_IRUGO);
-MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+/*buf size = ((short exp start point / 2) * image wide pixel * 16bit / 2) byte */
+static int wdr_bufsize = 2048 * 400;//cache lines corrponding on VPB1
+static int shvflip = 1;
 
 struct regval_list {
 	uint16_t reg_num;
@@ -233,7 +231,6 @@ struct again_lut sc301IoT_again_lut[] = {
 	{0x4ff4, 365716},
 	{0x4ff8, 367291},
 	{0x4ffc, 368791},
-
 };
 
 struct tx_isp_sensor_attribute sc301IoT_attr;
@@ -446,148 +443,153 @@ struct tx_isp_sensor_attribute sc301IoT_attr={
 	.sensor_ctrl.alloc_integration_time_short = sc301IoT_alloc_integration_time_short,
 };
 
-static struct regval_list sc301IoT_init_regs_2048_1536_25fps_mipi[] = {
-	{0x0103,0x01},
-	{0x0100,0x00},
-	{0x36e9,0x80},
-	{0x37f9,0x80},
-	{0x301c,0x78},
-	{0x301f,0x05},
-	{0x30b8,0x44},
-	{0x3208,0x08},
-	{0x3209,0x00},
-	{0x320a,0x06},
-	{0x320b,0x00},
-	{0x320c,0x04},
-	{0x320d,0x65},/* 0x465 = 1125 = hts */
-	{0x320e,0x07},
-	{0x320f,0x80},/* 0x780 = 1920 = vts */
-	{0x3214,0x11},
-	{0x3215,0x11},
-	{0x3223,0xc0},
-	{0x3253,0x0c},
-	{0x3274,0x09},
-	{0x3301,0x08},
-	{0x3306,0x58},
-	{0x3308,0x08},
-	{0x330a,0x00},
-	{0x330b,0xe0},
-	{0x330e,0x10},
-	{0x331e,0x55},
-	{0x331f,0x7d},
-	{0x3333,0x10},
-	{0x3334,0x40},
-	{0x335e,0x06},
-	{0x335f,0x08},
-	{0x3364,0x5e},
-	{0x337c,0x02},
-	{0x337d,0x0a},
-	{0x3390,0x01},
-	{0x3391,0x03},
-	{0x3392,0x07},
-	{0x3393,0x08},
-	{0x3394,0x08},
-	{0x3395,0x08},
-	{0x3396,0x08},
-	{0x3397,0x09},
-	{0x3398,0x1f},
-	{0x3399,0x08},
-	{0x339a,0x20},
-	{0x339b,0x40},
-	{0x339c,0x78},
-	{0x33a2,0x04},
-	{0x33ad,0x0c},
-	{0x33b1,0x80},
-	{0x33b3,0x30},
-	{0x33f9,0x68},
-	{0x33fb,0x88},
-	{0x33fc,0x48},
-	{0x33fd,0x5f},
-	{0x349f,0x03},
-	{0x34a6,0x48},
-	{0x34a7,0x5f},
-	{0x34a8,0x30},
-	{0x34a9,0x30},
-	{0x34aa,0x00},
-	{0x34ab,0xf0},
-	{0x34ac,0x01},
-	{0x34ad,0x12},
-	{0x34f8,0x5f},
-	{0x34f9,0x10},
-	{0x3630,0xf0},
-	{0x3631,0x85},
-	{0x3632,0x74},
-	{0x3633,0x22},
-	{0x3637,0x4d},
-	{0x3638,0xcb},
-	{0x363a,0x8b},
-	{0x3641,0x00},
-	{0x3670,0x4e},
-	{0x3674,0xf0},
-	{0x3675,0xc0},
-	{0x3676,0xc0},
-	{0x3677,0x85},
-	{0x3678,0x8a},
-	{0x3679,0x8d},
-	{0x367c,0x48},
-	{0x367d,0x49},
-	{0x367e,0x49},
-	{0x367f,0x5f},
-	{0x3690,0x22},
-	{0x3691,0x33},
-	{0x3692,0x44},
-	{0x3699,0x88},
-	{0x369a,0x98},
-	{0x369b,0xc4},
-	{0x369c,0x48},
-	{0x369d,0x5f},
-	{0x36a2,0x49},
-	{0x36a3,0x4f},
-	{0x36ea,0x09},
-	{0x36eb,0x0d},
-	{0x36ec,0x1c},
-	{0x36ed,0x25},
-	{0x370f,0x01},
-	{0x3714,0x80},
-	{0x3722,0x09},
-	{0x3724,0x41},
-	{0x3725,0xc1},
-	{0x3728,0x00},
-	{0x3771,0x09},
-	{0x3772,0x05},
-	{0x3773,0x05},
-	{0x377a,0x48},
-	{0x377b,0x49},
-	{0x37fa,0x06},
-	{0x37fb,0x33},
-	{0x37fc,0x11},
-	{0x37fd,0x38},
-	{0x3905,0x8d},
-	{0x391d,0x08},
-	{0x3922,0x1a},
-	{0x3926,0x21},
-	{0x3933,0x80},
-	{0x3934,0x02},
-	{0x3937,0x72},
-	{0x3939,0x00},
-	{0x393a,0x03},
-	{0x39dc,0x02},
-	{0x3e00,0x00},
-	{0x3e01,0x77},
-	{0x3e02,0xc0},
-	{0x3e03,0x0b},
-	{0x3e1b,0x2a},
-	{0x4407,0x34},
-	{0x440e,0x02},
-	{0x5001,0x40},
-	{0x5007,0x80},
-	{0x36e9,0x24},
-	{0x37f9,0x24},
-	{0x0100,0x01},
+static struct regval_list sc301IoT_init_regs_2048_1536_30fps_mipi[] = {
+	/* cleaned_0x05_SC301IOT_MIPI_24Minput_2lane_10bit_540Mbps_2048x1536_25fps */
+	{0x0103, 0x01},
+	{0x0100, 0x00},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x301c, 0x78},
+	{0x301f, 0x05},
+	{0x30b8, 0x44},
+	{0x3208, 0x08},
+	{0x3209, 0x00},
+	{0x320a, 0x06},
+	{0x320b, 0x00},
+	{0x320c, 0x04},
+	{0x320d, 0x65},
+	{0x320e, 0x07},
+	{0x320f, 0x80},
+	{0x3214, 0x11},
+	{0x3215, 0x11},
+	{0x3223, 0xc0},
+	{0x3253, 0x0c},
+	{0x3274, 0x09},
+	{0x3301, 0x08},
+	{0x3306, 0x58},
+	{0x3308, 0x08},
+	{0x330a, 0x00},
+	{0x330b, 0xe0},
+	{0x330e, 0x10},
+	{0x3314, 0x14},
+	{0x331e, 0x55},
+	{0x331f, 0x7d},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x335e, 0x06},
+	{0x335f, 0x08},
+	{0x3364, 0x5e},
+	{0x337c, 0x02},
+	{0x337d, 0x0a},
+	{0x3390, 0x01},
+	{0x3391, 0x03},
+	{0x3392, 0x07},
+	{0x3393, 0x08},
+	{0x3394, 0x08},
+	{0x3395, 0x08},
+	{0x3396, 0x08},
+	{0x3397, 0x09},
+	{0x3398, 0x1f},
+	{0x3399, 0x08},
+	{0x339a, 0x0a},
+	{0x339b, 0x40},
+	{0x339c, 0x88},
+	{0x33a2, 0x04},
+	{0x33ad, 0x0c},
+	{0x33b1, 0x80},
+	{0x33b3, 0x30},
+	{0x33f9, 0x68},
+	{0x33fb, 0x80},
+	{0x33fc, 0x48},
+	{0x33fd, 0x5f},
+	{0x349f, 0x03},
+	{0x34a6, 0x48},
+	{0x34a7, 0x5f},
+	{0x34a8, 0x30},
+	{0x34a9, 0x30},
+	{0x34aa, 0x00},
+	{0x34ab, 0xf0},
+	{0x34ac, 0x01},
+	{0x34ad, 0x08},
+	{0x34f8, 0x5f},
+	{0x34f9, 0x10},
+	{0x3630, 0xf0},
+	{0x3631, 0x85},
+	{0x3632, 0x74},
+	{0x3633, 0x22},
+	{0x3637, 0x4d},
+	{0x3638, 0xcb},
+	{0x363a, 0x8b},
+	{0x363c, 0x08},
+	{0x3640, 0x00},
+	{0x3641, 0x38},
+	{0x3670, 0x4e},
+	{0x3674, 0xc0},
+	{0x3675, 0xb0},
+	{0x3676, 0xa0},
+	{0x3677, 0x83},
+	{0x3678, 0x87},
+	{0x3679, 0x8a},
+	{0x367c, 0x49},
+	{0x367d, 0x4f},
+	{0x367e, 0x48},
+	{0x367f, 0x4b},
+	{0x3690, 0x33},
+	{0x3691, 0x33},
+	{0x3692, 0x44},
+	{0x3699, 0x8a},
+	{0x369a, 0xa1},
+	{0x369b, 0xc2},
+	{0x369c, 0x48},
+	{0x369d, 0x4f},
+	{0x36a2, 0x4b},
+	{0x36a3, 0x4f},
+	{0x36ea, 0x09},
+	{0x36eb, 0x0d},
+	{0x36ec, 0x1c},
+	{0x36ed, 0x25},
+	{0x370f, 0x01},
+	{0x3714, 0x80},
+	{0x3722, 0x09},
+	{0x3724, 0x41},
+	{0x3725, 0xc1},
+	{0x3728, 0x00},
+	{0x3771, 0x09},
+	{0x3772, 0x05},
+	{0x3773, 0x05},
+	{0x377a, 0x48},
+	{0x377b, 0x49},
+	{0x37fa, 0x06},
+	{0x37fb, 0x33},
+	{0x37fc, 0x11},
+	{0x37fd, 0x38},
+	{0x3905, 0x8d},
+	{0x391d, 0x08},
+	{0x3922, 0x1a},
+	{0x3926, 0x21},
+	{0x3933, 0x80},
+	{0x3934, 0x0d},
+	{0x3937, 0x6a},
+	{0x3939, 0x00},
+	{0x393a, 0x0e},
+	{0x39dc, 0x02},
+	{0x3e00, 0x00},
+	{0x3e01, 0x77},
+	{0x3e02, 0x80},
+	{0x3e03, 0x0b},
+	{0x3e1b, 0x2a},
+	{0x4407, 0x34},
+	{0x440e, 0x02},
+	{0x5001, 0x40},
+	{0x5007, 0x80},
+	{0x36e9, 0x24},
+	{0x37f9, 0x24},
+	{0x0100, 0x01},
 	{SC301IoT_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc301IoT_init_regs_2048_1536_30fps_hdr_mipi[] = {
+	/* cleaned_0x12_SC301IOT_MIPI_24Minput_2lane_10bit_1080Mbps_2048x1536_30fps_SHDR_VC */
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -741,16 +743,16 @@ static struct regval_list sc301IoT_init_regs_2048_1536_30fps_hdr_mipi[] = {
 };
 
 static struct tx_isp_sensor_win_setting sc301IoT_win_sizes[] = {
-	/* [0] resolution 2048*1536 @25fps max*/
+	/* [0] resolution 2048*1536 @max 30fps*/
 	{
 		.width		= 2048,
 		.height		= 1536,
 		.fps		= 25 << 16 | 1,
 		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc301IoT_init_regs_2048_1536_25fps_mipi,
+		.regs 		= sc301IoT_init_regs_2048_1536_30fps_mipi,
 	},
-	/* [1] resolution 2048*1536 @HDR 30fps max*/
+	/* [1] resolution 2048*1536 @HDR max 30fps*/
 	{
 		.width		= 2048,
 		.height		= 1536,
@@ -908,7 +910,6 @@ static int sc301IoT_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	value *= 1;
 	ret += sc301IoT_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
 	ret += sc301IoT_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sc301IoT_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
@@ -922,7 +923,6 @@ static int sc301IoT_set_integration_time_short(struct tx_isp_subdev *sd, int val
 {
 	int ret = 0;
 
-	value *= 1;
 	ret += sc301IoT_write(sd, 0x3e22, (unsigned char)((value >> 12) & 0xf));
 	ret += sc301IoT_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
 	ret += sc301IoT_write(sd, 0x3e05, (unsigned char)((value & 0x0f) << 4));
@@ -1033,19 +1033,24 @@ static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-
+	unsigned int se_start_point = 200;
+	unsigned int min_fps = SENSOR_OUTPUT_MIN_FPS;
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
+	if (sc301IoT_attr.data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
+		sclk = SC301IoT_SUPPORT_30FPS_SCLK;
+		min_fps = SENSOR_OUTPUT_MIN_FPS;
+	} else if (sc301IoT_attr.data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
+		sclk = SC301IoT_SUPPORT_30FPS_HDR_SCLK;
+		/*wdr_bufsize is not enough for lower fps*/
+		min_fps = TX_SENSOR_MAX_FPS_15;
+	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (min_fps << 8)) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	if (sc301IoT_attr.data_type == TX_SENSOR_DATA_TYPE_LINEAR)
-		sclk = SC301IoT_SUPPORT_30FPS_SCLK;
-	if (sc301IoT_attr.data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
-		sclk = SC301IoT_SUPPORT_30FPS_HDR_SCLK;
 
 	ret = sc301IoT_read(sd, 0x320c, &tmp);
 	hts = tmp;
@@ -1073,11 +1078,15 @@ static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
 	 * max long expo = vts - short expo start point -7
 	 * max short expo = short expo start point - 5
 	 */
+	se_start_point =  (vts - 12) / 17 + 5;
+	/*set short exp start point*/
+	ret += sc301IoT_write(sd, 0x3e24, (unsigned char)(se_start_point & 0xff));
+	ret += sc301IoT_write(sd, 0x3e23, (unsigned char)(se_start_point >> 8));
 	if (sc301IoT_attr.data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
-		sensor->video.attr->max_integration_time_short = (vts - 12) / 17;
-		sensor->video.attr->max_integration_time_native = vts - sensor->video.attr->max_integration_time_short * 16;
-		sensor->video.attr->integration_time_limit = vts - sensor->video.attr->max_integration_time_short * 16;
-		sensor->video.attr->max_integration_time = vts - sensor->video.attr->max_integration_time_short * 16;
+		sensor->video.attr->max_integration_time_short = se_start_point - 5;
+		sensor->video.attr->max_integration_time_native =  sensor->video.attr->max_integration_time_short * 16;
+		sensor->video.attr->integration_time_limit =  sensor->video.attr->max_integration_time_short * 16;
+		sensor->video.attr->max_integration_time =  sensor->video.attr->max_integration_time_short * 16;
 	}
 
 	sensor->video.fps = fps;
@@ -1123,6 +1132,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			sc301IoT_attr.max_integration_time_native = 1920 - 4;
 			sc301IoT_attr.max_integration_time = 1920 - 4;
 			sc301IoT_attr.min_integration_time = 1;
+	                sc301IoT_attr.again = 0;
+                        sc301IoT_attr.integration_time = 0x778;
 			break;
 		case 1:
 			sc301IoT_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
@@ -1135,7 +1146,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			sc301IoT_attr.integration_time_limit = 3000;
 			sc301IoT_attr.max_integration_time_native = 3000;
 			sc301IoT_attr.max_integration_time = 3000;
-			sc301IoT_attr.max_integration_time_short = 200;
+			sc301IoT_attr.max_integration_time_short = 186;
+	                sc301IoT_attr.again = 0;
+                        sc301IoT_attr.integration_time = 0xb9c;
 			break;
 		default:
 			ISP_ERROR("this boot setting is not supported yet!!!\n");
@@ -1242,19 +1255,31 @@ static int sc301IoT_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc301IoT_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sc301IoT_set_hvflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret += sc301IoT_read(sd, 0x3221, &val);
-
-	if(enable & 0x2)
-		val |= 0x60;
-	else
-		val &= 0x9f;
-
-	ret += sc301IoT_write(sd, 0x3221, val);
+	enable &= 0x03;
+	switch(enable) {
+	case 0:
+		val = 0x00;
+		break;
+	case 1:
+		val = 0x06;
+		break;
+	case 2:
+		val = 0x60;
+		break;
+	case 3:
+		val = 0x66;
+		break;
+	default:
+		break;
+	}
+	ret = sc301IoT_write(sd, 0x3221, val);
+	if(ret != 0)
+		ISP_ERROR("%s %d: reg write err!!\n",__func__,__LINE__);
 
 	return ret;
 }
@@ -1263,13 +1288,16 @@ static int sc301IoT_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 {
 	int ret = 0;
 
-	return 0;
+	ret += sc301IoT_write(sd, 0x0103, 0x01);
+	private_msleep(1);
+	/*
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
+	*/
 
 	ret += sc301IoT_write_array(sd, wsize->regs);
 	ret += sc301IoT_write_array(sd, sc301IoT_stream_on);
@@ -1282,7 +1310,6 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	int ret = 0;
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	return 0;
 	/* soft reset */
 	ret = sc301IoT_write(sd, 0x0103, 0x01);
 
@@ -1297,7 +1324,7 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc301IoT_attr.integration_time_limit = 3000;
 		sc301IoT_attr.max_integration_time_native = 3000;
 		sc301IoT_attr.max_integration_time = 3000;
-		sc301IoT_attr.max_integration_time_short = 200;
+		sc301IoT_attr.max_integration_time_short = 186;
 		sc301IoT_attr.min_integration_time = 1;
 		sc301IoT_attr.min_integration_time_short = 1;
 		ISP_WARNING("-----------------------------> switch wdr is ok <-----------------------\n");
@@ -1319,6 +1346,7 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 
 	sensor_set_attr(sd, wsize);
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+
 	return ret;
 }
 
@@ -1375,7 +1403,7 @@ static int sc301IoT_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if(arg)
-			ret = sc301IoT_set_vflip(sd, sensor_val->value);
+			ret = sc301IoT_set_hvflip(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
 		if(arg)

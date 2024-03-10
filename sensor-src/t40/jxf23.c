@@ -1590,7 +1590,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 1346;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xFF;
                 memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
                 ret = set_sensor_gpio_function(sensor_gpio_func);
                 if (ret < 0)
@@ -1607,7 +1608,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 1121;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xa;
                 memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
                 ret = set_sensor_gpio_function(sensor_gpio_func);
                 if (ret < 0)
@@ -1624,7 +1626,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 1346;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xFF;
                 memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi1),sizeof(jxf23_mipi1));
                 break;
         case 3:
@@ -1637,7 +1640,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 1121;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xa;
                 memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi2),sizeof(jxf23_mipi2));
                 break;
         case 4:
@@ -1651,7 +1655,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_short = 112;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_FS;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xFF;
                 memcpy((void*)(&(jxf23_attr.mipi)),(void*)(&jxf23_mipi_fs),sizeof(jxf23_mipi_fs));
                 break;
         case 5:
@@ -1664,7 +1669,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 0x258 - 4;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xFF;
                 memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
                 ret = set_sensor_gpio_function(sensor_gpio_func);
                 if (ret < 0)
@@ -1681,7 +1687,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxf23_attr.max_integration_time_native = 0x258 - 4;
                 jxf23_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 jxf23_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-
+		jxf23_attr.again = 0;
+                jxf23_attr.integration_time = 0xFF;
                 memcpy((void*)(&(jxf23_attr.dvp)),(void*)(&jxf23_dvp),sizeof(jxf23_dvp));
                 ret = set_sensor_gpio_function(sensor_gpio_func);
                 if (ret < 0)

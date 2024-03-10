@@ -506,6 +506,7 @@ static struct regval_list sc500ai_init_regs_2880_1620_30fps_mipi_4lane[] = {
 	{0x3908, 0x41},
 	{0x391d, 0x04},
 	{0x39c2, 0x30},
+	{0x3e00, 0x00},//
 	{0x3e01, 0xcd},
 	{0x3e02, 0xc0},
 	{0x3e16, 0x00},
@@ -622,6 +623,7 @@ static struct regval_list sc500ai_init_regs_2880_1620_30fps_mipi_2lane[] = {
 	{0x3908, 0x41},
 	{0x391d, 0x04},
 	{0x39c2, 0x30},
+	{0x3e00, 0x00},//
 	{0x3e01, 0xcd},
 	{0x3e02, 0xc0},
 	{0x3e16, 0x00},
@@ -1051,11 +1053,15 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch(info->default_boot){
 	case 0:
 		wsize = &sc500ai_win_sizes[0];
+	        sc500ai_attr.again = 0;
+                sc500ai_attr.integration_time = 0xcdc;
 		break;
 	case 1:
 		wsize = &sc500ai_win_sizes[1];
 		sc500ai_attr.mipi.clk = 396;
 		sc500ai_attr.mipi.lans = 4;
+	        sc500ai_attr.again = 0;
+                sc500ai_attr.integration_time = 0xcdc;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

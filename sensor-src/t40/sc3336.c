@@ -30,7 +30,7 @@
 #define SC3336_SUPPORT_30FPS_SCLK (51000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION	"H20211201a"
+#define SENSOR_VERSION	"H20220609a"
 #define MCLK 24000000
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -366,8 +366,8 @@ struct tx_isp_sensor_attribute sc3336_attr={
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 432803,
 	.max_dgain = 0,
-	.min_integration_time = 1,
-	.min_integration_time_native = 1,
+	.min_integration_time = 2,
+	.min_integration_time_native = 2,
 	.max_integration_time_native = 1632 - 8,
 	.integration_time_limit = 1632 - 8,
 	.total_width = 2500,
@@ -493,6 +493,7 @@ static struct regval_list sc3336_init_regs_2304_1296_30fps_mipi[] = {
 	{0x3937, 0x77},
 	{0x3938, 0x74},
 	{0x39dc, 0x02},
+	{0x3e00, 0x00},//
 	{0x3e01, 0x65},
 	{0x3e02, 0x80},
 	{0x3e09, 0x00},
@@ -862,6 +863,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		wsize = &sc3336_win_sizes[0];
 		memcpy((void*)(&(sc3336_attr.mipi)),(void*)(&sc3336_mipi),sizeof(sc3336_mipi));
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
+	        sc3336_attr.again = 0;
+                sc3336_attr.integration_time = 0x658;
 		break;
 	default:
 		ISP_ERROR("this boot setting is not supported yet!!!\n");

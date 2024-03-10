@@ -343,7 +343,6 @@ struct again_lut sc401ai_again_lut[] = {
 	{0x3f7d, 296258},
 	{0x3f7e, 297013},
 	{0x3f7f, 297758},
-
 };
 
 struct tx_isp_sensor_attribute sc401ai_attr;
@@ -876,6 +875,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->default_boot){
         case 0:
+		wsize = &sc401ai_win_sizes[0];
+	    sc401ai_attr.again = 0;
+            sc401ai_attr.integration_time = 0xb60;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");

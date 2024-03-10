@@ -22,14 +22,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXK08_CHIP_ID_H			(0x06)
-#define JXK08_CHIP_ID_L			(0x05)
-#define JXK08_REG_END			0xff
-#define JXK08_REG_DELAY			0xfe
-#define JXK08_SUPPORT_30FPS_SCLK	(36000000)
-#define SENSOR_OUTPUT_MAX_FPS		30
-#define SENSOR_OUTPUT_MIN_FPS		5
-#define SENSOR_VERSION			"H20220516a"
+#define JXK08_CHIP_ID_H	(0x06)
+#define JXK08_CHIP_ID_L	(0x05)
+#define JXK08_REG_END		0xff
+#define JXK08_REG_DELAY	0xfe
+#define JXK08_SUPPORT_30FPS_SCLK (36000000)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION	"H20220606a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -38,8 +38,7 @@ static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-struct regval_list
-{
+struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;
 };
@@ -47,21 +46,24 @@ struct regval_list
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
-struct again_lut
-{
+struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
 
 struct again_lut jxk08_again_lut[] = {
-	{0x0,  0 },
-	{0x1,  5731 },
-	{0x2,  11136},
-	{0x3,  16248},
-	{0x4,  21097},
-	{0x5,  25710},
-	{0x6,  30109},
-	{0x7,  34312},
+	/* again start from 1.5x
+	 * to prevent pink highlights
+	 *
+	 * {0x0,  0 },
+	 * {0x1,  5731 },
+	 * {0x2,  11136},
+	 * {0x3,  16248},
+	 * {0x4,  21097},
+	 * {0x5,  25710},
+	 * {0x6,  30109},
+	 * {0x7,  34312},
+	 */
 	{0x8,  38336},
 	{0x9,  42195},
 	{0xa,  45904},
@@ -143,8 +145,8 @@ unsigned int jxk08_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	struct again_lut *lut = jxk08_again_lut;
 	while(lut->gain <= jxk08_attr.max_again) {
 		if(isp_gain == 0) {
-			*sensor_again = 0;
-			return 0;
+			*sensor_again = lut[0].value;
+			return lut[0].gain;
 		} else if(isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
@@ -154,7 +156,6 @@ unsigned int jxk08_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
 
@@ -840,6 +841,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			jxk08_attr.total_width = 4336;
 			jxk08_attr.total_height = 2658;
 			jxk08_attr.max_integration_time = 2658 - 4;
+			jxk08_attr.again = 0;
+			jxk08_attr.integration_time = 0x1;
 			break;
 		default:
 			ISP_ERROR("not supported boot setting!!!\n");
@@ -900,8 +903,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	}
 
 	private_clk_set_rate(sensor->mclk, 27000000);
-#endif
+#else
 	private_clk_set_rate(sensor->mclk, 24000000);
+#endif
 	private_clk_prepare_enable(sensor->mclk);
 
 	reset_gpio = info->rst_gpio;

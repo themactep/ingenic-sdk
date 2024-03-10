@@ -790,6 +790,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	case 0:
 		wsize = &imx334_win_sizes[0];
 		imx334_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		imx334_attr.again = 0;
+		imx334_attr.integration_time = 0x5;
 		break;
 	case 1:
 		wsize = &imx334_win_sizes[1];
@@ -801,6 +803,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx334_attr.total_height = 4503;
 		imx334_attr.max_integration_time = 4503 - 4;
 		*/
+		imx334_attr.again = 0;
+		imx334_attr.integration_time = 0x5;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

@@ -2431,6 +2431,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis8001_attr.mipi.image_theight =2160;
 		sensor->video.vi_max_width = wsize->width;
 		sensor->video.vi_max_height = wsize->height;
+	        mis8001_attr.again = 0;
+                mis8001_attr.integration_time = 0x462;
 		break;
 	case 1:
 		wsize = &mis8001_win_sizes[1];
@@ -2446,6 +2448,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis8001_attr.mipi.image_theight =2160;
 		sensor->video.vi_max_width = wsize->width;
 		sensor->video.vi_max_height = wsize->height;
+	        mis8001_attr.again = 0;
+                mis8001_attr.integration_time = 0x462;
 		break;
 	case 2:
 		wsize = &mis8001_win_sizes[2];
@@ -2462,6 +2466,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis8001_attr.mipi.image_theight =1080;
 		sensor->video.vi_max_width = wsize->width;
 		sensor->video.vi_max_height = wsize->height;
+	        mis8001_attr.again = 0;
+                mis8001_attr.integration_time = 0x465;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

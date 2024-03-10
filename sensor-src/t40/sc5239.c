@@ -827,7 +827,7 @@ static int sc5239_set_expo(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 
 	if (value != expo_val) {
-		ret += sc5239_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+		//ret += sc5239_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
 		ret += sc5239_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 		ret += sc5239_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 		ret = sc5239_write(sd, 0x3e09, (unsigned char)(again & 0xff));
@@ -1081,6 +1081,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd){
 		sc5239_attr.total_width = 3456;
 		sc5239_attr.total_height = 2666 - 4;
 		sc5239_attr.max_integration_time = 2666 - 4;
+	        sc5239_attr.again = 0;
+                sc5239_attr.integration_time = 0xf98;
 		break;
 	case 1:
 		wsize = &sc5239_win_sizes[1];
@@ -1094,6 +1096,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd){
 		sc5239_attr.total_height = 4000;
 		sc5239_attr.max_integration_time = 3760;
 		sc5239_attr.max_integration_time_short = 240;
+	        sc5239_attr.again = 0;
+                sc5239_attr.integration_time = 0xd4e;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

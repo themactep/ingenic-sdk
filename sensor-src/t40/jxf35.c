@@ -1458,6 +1458,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxf35_attr.integration_time_limit = 0x465 - 4;
             jxf35_attr.max_integration_time = 0x465 - 4;
             jxf35_mipi.clk = 430;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0xff;
             memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
             break;
         case 1:
@@ -1467,6 +1469,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             if (ret < 0)
                 goto err_set_sensor_gpio;
             jxf35_attr.dvp.gpio = sensor_gpio_func;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0x00ff;
             break;
         case 2:
             wsize = &jxf35_win_sizes[2];
@@ -1475,6 +1479,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxf35_attr.max_integration_time_native = 0x216 - 4;
             jxf35_attr.integration_time_limit = 0x216 - 4;
             jxf35_attr.max_integration_time = 0x216 - 4;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0xff;
             memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi_vga),sizeof(jxf35_mipi_vga));
             break;
         case 3:
@@ -1485,6 +1491,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxf35_attr.integration_time_limit = 0x455 - 4;
             jxf35_attr.max_integration_time = 0x455 - 4;
             jxf35_mipi.clk = 792;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0xff;
             memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
             break;
         case 4:
@@ -1497,6 +1505,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxf35_mipi.clk = 792;
             jxf35_mipi.image_twidth = 1728;
             jxf35_mipi.image_theight = 972;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0xff;
             memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
             break;
         case 5:
@@ -1509,6 +1519,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             jxf35_mipi.clk = 430;
             jxf35_mipi.image_twidth = 1728;
             jxf35_mipi.image_theight = 972;
+	    jxf35_attr.again = 0;
+            jxf35_attr.integration_time = 0xff;
             memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
             break;
         default:

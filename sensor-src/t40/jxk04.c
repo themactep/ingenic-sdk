@@ -1308,6 +1308,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxk04_attr.total_width = 800;
                 jxk04_attr.total_height = 0x5dc;
                 jxk04_attr.max_integration_time = 0x5dc - 4;
+                jxk04_attr.again = 0;
+                jxk04_attr.integration_time = 0x1f;
                 break;
         case 1:
                 wsize=&jxk04_win_sizes[1];
@@ -1321,6 +1323,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxk04_attr.total_width = 0x480;
                 jxk04_attr.total_height = 0x465;
                 jxk04_attr.max_integration_time = 0x5dc - 4;
+                jxk04_attr.again = 0;
+                jxk04_attr.integration_time = 0x1f;
                 break;
         case 2:
                 wsize=&jxk04_win_sizes[2];
@@ -1334,6 +1338,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxk04_attr.total_width = 400;
                 jxk04_attr.total_height = 0x465;
                 jxk04_attr.max_integration_time = 0x5dc - 4;
+                jxk04_attr.again = 0;
+                jxk04_attr.integration_time = 0x1f;
                 break;
         case 3:
                 wsize = &jxk04_win_sizes[3];
@@ -1348,6 +1354,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 jxk04_attr.total_width = 400;
                 jxk04_attr.total_height = 3200;
                 jxk04_attr.max_integration_time = 2683;
+                jxk04_attr.again = 0;
+                jxk04_attr.integration_time = 0x001f;
                 break;
         default:
                 ISP_ERROR("Have no this setting!!!\n");

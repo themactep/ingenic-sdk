@@ -1054,6 +1054,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		if (ret < 0)
 			goto err_set_sensor_gpio;
 		ps5260_attr.dvp.gpio = sensor_gpio_func;
+	        ps5260_attr.again = 0;
+                ps5260_attr.integration_time = 0x3;
 		break;
 	case 1:
 		wsize = &ps5260_win_sizes[1];
@@ -1063,6 +1065,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ps5260_attr.total_width = 4504;
 		ps5260_attr.total_height = 1350;
 		ps5260_attr.max_integration_time = 1347;
+	        ps5260_attr.again = 0;
+                ps5260_attr.integration_time = 0x45e;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

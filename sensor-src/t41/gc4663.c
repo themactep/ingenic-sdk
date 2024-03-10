@@ -36,7 +36,7 @@
 #define GC4663_SUPPORT_30FPS_SCLK (144 * 1000 * 1000)
 #define GC4663_SUPPORT_30FPS_SCLK_HDR (132000000)
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20221117a"
+#define SENSOR_VERSION	"H20230928a"
 
 static int wdr_bufsize = 2 * 3000 * 188;
 
@@ -218,6 +218,37 @@ struct tx_isp_mipi_bus gc4663_mipi_linear = {
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
+
+
+struct tx_isp_mipi_bus gc4663_mipi_linear_120fps = {
+	.mode = SENSOR_MIPI_OTHER_MODE,
+	.clk = 168,
+	.lans = 2,
+	.settle_time_apative_en = 0,
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.hcrop_diff_en = 0,
+	.mipi_sc.mipi_vcomp_en = 0,
+	.mipi_sc.mipi_hcomp_en = 0,
+	.image_twidth = 1280,
+	.image_theight = 720,
+	.mipi_sc.mipi_crop_start0x = 0,
+	.mipi_sc.mipi_crop_start0y = 0,
+	.mipi_sc.mipi_crop_start1x = 0,
+	.mipi_sc.mipi_crop_start1y = 0,
+	.mipi_sc.mipi_crop_start2x = 0,
+	.mipi_sc.mipi_crop_start2y = 0,
+	.mipi_sc.mipi_crop_start3x = 0,
+	.mipi_sc.mipi_crop_start3y = 0,
+	.mipi_sc.line_sync_mode = 0,
+	.mipi_sc.work_start_flag = 0,
+	.mipi_sc.data_type_en = 0,
+	.mipi_sc.data_type_value = 0,
+	.mipi_sc.del_start = 0,
+	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+	.mipi_sc.sensor_fid_mode = 0,
+	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
 
 struct tx_isp_mipi_bus gc4663_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -577,6 +608,153 @@ static struct regval_list gc4663_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{GC4663_REG_END, 0x00},	/* END MARKER */
 };
 
+
+static struct regval_list gc4663_init_regs_1280_720_120fps_mipi[] = {
+    {0x03fe,0xf0},
+    {0x03fe,0x00},
+    {0x0317,0x00},
+    {0x0320,0x77},
+    {0x0324,0xc4},
+    {0x0326,0x42},
+    {0x0327,0x03},
+    {0x0321,0x10},
+    {0x0314,0x50},
+    {0x0334,0x40},
+    {0x0335,0xd5},
+    {0x0336,0x70},
+    {0x0337,0x82},
+    {0x0315,0x33},
+    {0x031c,0xce},
+    {0x0287,0x18},
+    {0x0084,0x00},
+    {0x0087,0x50},
+    {0x029d,0x08},
+    {0x0290,0x00},
+    {0x0234,0x20},
+    {0x0217,0xc0},
+    {0x0340,0x06},
+    {0x0341,0x40},
+    {0x0345,0x06},
+    {0x034b,0xb0},
+    {0x034c,0x05},
+    {0x034e,0x02},
+    {0x034f,0xd0},
+    {0x0352,0x04},
+    {0x0354,0x04},
+    {0x02d1,0xc0},
+    {0x023c,0x04},
+    {0x0238,0xb4},
+    {0x0223,0xfb},
+    {0x0232,0xc4},
+    {0x0279,0x53},
+    {0x02d3,0x01},
+    {0x0243,0x06},
+    {0x02ce,0xbf},
+    {0x02ee,0x30},
+    {0x026f,0x70},
+    {0x0257,0x09},
+    {0x0211,0x02},
+    {0x0219,0x09},
+    {0x023f,0x2d},
+    {0x0518,0x00},
+    {0x0519,0x14},
+    {0x0515,0x18},
+    {0x02d9,0x50},
+    {0x02da,0x02},
+    {0x02db,0xe8},
+    {0x02e6,0x20},
+    {0x021b,0x10},
+    {0x0252,0x22},
+    {0x024e,0x22},
+    {0x02c4,0x01},
+    {0x021d,0x17},
+    {0x024a,0x01},
+    {0x02ca,0x02},
+    {0x0262,0x10},
+    {0x029a,0x20},
+    {0x021c,0x0e},
+    {0x0298,0x03},
+    {0x029c,0x00},
+    {0x027e,0x14},
+    {0x02c2,0x10},
+    {0x0540,0x20},
+    {0x0546,0x01},
+    {0x0548,0x01},
+    {0x0544,0x01},
+    {0x0242,0x36},
+    {0x02c0,0x36},
+    {0x02c3,0x4d},
+    {0x02e4,0x10},
+    {0x022e,0x00},
+    {0x027b,0x3f},
+    {0x0269,0x0f},
+    {0x02d2,0x40},
+    {0x027c,0x08},
+    {0x023a,0x2e},
+    {0x0245,0xce},
+    {0x0530,0x3f},
+    {0x0531,0x02},
+    {0x0228,0x50},
+    {0x02ab,0x00},
+    {0x0250,0x00},
+    {0x0221,0x50},
+    {0x02ac,0x00},
+    {0x02a5,0x02},
+    {0x0260,0x0b},
+    {0x0216,0x04},
+    {0x0299,0x1C},
+    {0x021a,0x98},
+    {0x0266,0xd0},
+    {0x0020,0x01},
+    {0x0021,0x05},
+    {0x0022,0xc0},
+    {0x0023,0x08},
+    {0x0098,0x10},
+    {0x009a,0xb0},
+    {0x02bb,0x0d},
+    {0x02a3,0x02},
+    {0x02a4,0x02},
+    {0x021e,0x02},
+    {0x024f,0x08},
+    {0x028c,0x08},
+    {0x0532,0x3f},
+    {0x0533,0x02},
+    {0x0277,0x70},
+    {0x0276,0xc0},
+    {0x0239,0xc0},
+    {0x0200,0x00},
+    {0x0201,0x5f},
+    {0x0202,0x05},
+    {0x0203,0xf0},
+    {0x0205,0xc0},
+    {0x02b0,0x68},
+    {0x000f,0x00},
+    {0x0006,0xe0},
+    {0x0002,0xa9},
+    {0x0004,0x01},
+    {0x000f,0x00},
+    {0x0060,0x40},
+    {0x0218,0x02},
+    {0x0342,0x05},
+    {0x0343,0x5f},
+    {0x03fe,0x10},
+    {0x03fe,0x00},
+    {0x0106,0x78},
+    {0x0107,0x09},
+    {0x0108,0x0c},
+    {0x0114,0x01},
+    {0x0115,0x12},
+    {0x0180,0x4f},
+    {0x0181,0x30},
+    {0x0182,0x05},
+    {0x0185,0x01},
+    {0x03fe,0x10},
+    {0x03fe,0x00},
+    {0x0100,0x09},
+	{GC4663_REG_END, 0x00},	/* END MARKER */
+};
+
+
 static struct tx_isp_sensor_win_setting gc4663_win_sizes[] = {
 	{
 		.width		= 2560,
@@ -593,7 +771,15 @@ static struct tx_isp_sensor_win_setting gc4663_win_sizes[] = {
 		.mbus_code	= TISP_VI_FMT_SGRBG10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs 		= gc4663_init_regs_2560_1440_30fps_mipi_dol,
-	}
+	},
+    {
+		.width		= 1280,
+		.height		= 720,
+		.fps		= 120 << 16 | 1,
+		.mbus_code	= TISP_VI_FMT_SGRBG10_1X10,
+		.colorspace	= TISP_COLORSPACE_SRGB,
+		.regs 		= gc4663_init_regs_1280_720_120fps_mipi,
+	},
 };
 struct tx_isp_sensor_win_setting *wsize = &gc4663_win_sizes[0];
 
@@ -877,6 +1063,10 @@ static int gc4663_set_fps(struct tx_isp_subdev *sd, int fps)
 		wpclk = GC4663_SUPPORT_30FPS_SCLK_HDR;
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 		break;
+    case 2:
+		wpclk = 0x640*0x55f*120*2;
+		sensor_max_fps = 120;
+		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
@@ -1004,6 +1194,17 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		gc4663_attr.max_integration_time_short = 94;
 		gc4663_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		break;
+    case 2:
+		wsize = &gc4663_win_sizes[2];
+		gc4663_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		memcpy(&gc4663_attr.mipi, &gc4663_mipi_linear_120fps, sizeof(gc4663_mipi_linear_120fps));
+		gc4663_attr.one_line_expr_in_us = 10;
+		gc4663_attr.total_width = 0x640*2;
+		gc4663_attr.total_height = 0x55f;
+		gc4663_attr.max_integration_time_native =  - 4;
+		gc4663_attr.integration_time_limit = 0x55f - 4;
+		gc4663_attr.max_integration_time = 0x55f - 4;
+		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 	}
@@ -1054,9 +1255,19 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			}
 		}
 	}
+    switch(info->default_boot){
+        case 0:
+        case 1:
 	private_clk_set_rate(sensor->mclk, MCLK);
 	private_clk_prepare_enable(sensor->mclk);
-
+            break;
+        case 2:
+            private_clk_set_rate(sensor->mclk, 24000000);
+	        private_clk_prepare_enable(sensor->mclk);
+            break;
+        default:
+		    ISP_ERROR("Have no this setting!!!\n");
+        }
 	sensor->video.shvflip = 1;
 	sensor->video.fps = wsize->fps;
         sensor->video.max_fps = wsize->fps;

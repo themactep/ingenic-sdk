@@ -1285,12 +1285,16 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		sc8235_attr.mipi.image_twidth = 3840,
 		sc8235_attr.mipi.image_theight = 2160,
 		sc8235_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+	        sc8235_attr.again = 0;
+                sc8235_attr.integration_time = 0x118a;
 		break;
 	case 1:
 		wsize = &sc8235_win_sizes[1];
 		sc8235_attr.mipi.image_twidth = 3840,
 		sc8235_attr.mipi.image_theight = 2160,
 		sc8235_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+	        sc8235_attr.again = 0;
+                sc8235_attr.integration_time = 0x118a;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

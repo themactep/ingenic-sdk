@@ -28,7 +28,7 @@
 #define OV01A1S_REG_END	0xffff
 #define OV01A1S_REG_DELAY	0xfffe
 
-#define OV01A1S_SUPPORT_SCLK_FPS_60 (39997440)
+#define OV01A1S_SUPPORT_SCLK_FPS_60 (127991808)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION	"H20220401a"
@@ -190,7 +190,7 @@ unsigned int ov01a1s_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 
 struct tx_isp_sensor_attribute ov01a1s_attr={
 	.name = "ov01a1s",
-	.chip_id = 0x303030,
+	.chip_id = 0x560141,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x36,
@@ -237,6 +237,8 @@ struct tx_isp_sensor_attribute ov01a1s_attr={
 	.total_height = 0x380,
 	.max_integration_time = 0x380 - 8,
 	.integration_time_apply_delay = 2,
+	.again = 0,//
+        .integration_time = 0x378,//
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again_short = ov01a1s_alloc_again_short,
@@ -263,6 +265,7 @@ static struct regval_list ov01a1s_init_regs_1280_720_60fps[] = {
         {0x3002, 0xa1},
         {0x301e, 0xf0},
         {0x3022, 0x01},
+        {0x3500, 0x00},//
         {0x3501, 0x03},
         {0x3502, 0x78},
         {0x3504, 0x0c},
@@ -397,7 +400,7 @@ static struct tx_isp_sensor_win_setting ov01a1s_win_sizes[] = {
 	{
 		.width		= 1280,
 		.height		= 720,
-		.fps		        = 60 << 16 | 1,
+		.fps		= 60 << 16 | 1,
 		.mbus_code	= TISP_VI_FMT_SBGGI10_1X10,
 		.colorspace	= TISP_COLORSPACE_SRGB,
 		.regs 		= ov01a1s_init_regs_1280_720_60fps,

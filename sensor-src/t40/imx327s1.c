@@ -483,6 +483,7 @@ int imx327_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
+#if 0
 static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
@@ -499,6 +500,8 @@ static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
+#endif
+
 static int imx327_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
@@ -875,6 +878,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx327_attr.integration_time_apply_delay = 2;
 		imx327_attr.again_apply_delay = 2;
 		imx327_attr.dgain_apply_delay = 0;
+		imx327_attr.again = 0;
+		imx327_attr.integration_time = 0x00;
 		memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_linear),sizeof(mipi_linear));
 		break;
 	case 1:
@@ -897,6 +902,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx327_attr.integration_time_apply_delay = 2;
 		imx327_attr.again_apply_delay = 2;
 		imx327_attr.dgain_apply_delay = 0;
+		imx327_attr.again = 0;
+		imx327_attr.integration_time = 0x56e;
 		memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
 		break;
 	default:
@@ -960,6 +967,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
 
+	sensor->video.max_fps = wsize->fps;
+	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 	return 0;
 
 err_get_mclk:

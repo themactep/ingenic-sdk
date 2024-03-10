@@ -32,7 +32,7 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION	"H20211202a"
+#define SENSOR_VERSION	"H20220610a"
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);
@@ -1185,18 +1185,24 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	struct clk *sclka;
 
-	switch(info->default_boot){
-	case 0:
-		wsize = &sc830ai_win_sizes[0];
-		sc830ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		break;
-	case 1:
-		wsize = &sc830ai_win_sizes[1];
-		sc830ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		break;
-	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
-	}
+        switch(info->default_boot){
+        case 0:
+                wsize = &sc830ai_win_sizes[0];
+                sc830ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+                sc830ai_attr.mipi.clk = 360;
+	        sc830ai_attr.again = 0;
+                sc830ai_attr.integration_time = 0x11c6;
+                break;
+        case 1:
+                wsize = &sc830ai_win_sizes[1];
+                sc830ai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+                sc830ai_attr.mipi.clk = 720;
+	        sc830ai_attr.again = 0;
+                sc830ai_attr.integration_time = 0x11c6;
+                break;
+        default:
+                ISP_ERROR("Have no this MCLK Source!!!\n");
+        }
 
 	switch(info->video_interface){
         case TISP_SENSOR_VI_MIPI_CSI0:

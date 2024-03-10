@@ -2013,6 +2013,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	case 0:
 		wsize = &mis2031_win_sizes[0];
 		mis2031_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+	        mis2031_attr.again = 0;
+                mis2031_attr.integration_time = 0x800;
 		memcpy((void*)(&(mis2031_attr.dvp)),(void*)(&mis2031_dvp),sizeof(mis2031_dvp));
 		break;
 	case 1:
@@ -2025,6 +2027,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis2031_attr.total_width = 2200;
 		mis2031_attr.total_height = 1350;
 		mis2031_attr.max_integration_time = 1348;
+	        mis2031_attr.again = 0;
+                mis2031_attr.integration_time = 0x800;
 		break;
 	case 2:
 		wsize = &mis2031_win_sizes[2];
@@ -2041,6 +2045,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis2031_attr.total_width = 2200;
 		mis2031_attr.total_height = 1350;
 		mis2031_attr.max_integration_time = 1348;
+	        mis2031_attr.again = 0;
+                mis2031_attr.integration_time = 0x800;
 		break;
 	case 3:
 		wsize = &mis2031_win_sizes[3];
@@ -2052,6 +2058,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis2031_attr.total_width = 0x86a;
 		mis2031_attr.total_height = 0x47d;
 		mis2031_attr.max_integration_time = 0x47d - 2;
+	        mis2031_attr.again = 0;
+                mis2031_attr.integration_time = 0x800;
 		break;
 	case 4:
 		wsize = &mis2031_win_sizes[4];
@@ -2062,6 +2070,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis2031_attr.total_width = 0x8ca;
 		mis2031_attr.total_height = 0x320;
 		mis2031_attr.max_integration_time = 0x320 - 2;
+	        mis2031_attr.again = 0;
+                mis2031_attr.integration_time = 0x800;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
