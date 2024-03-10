@@ -1802,40 +1802,40 @@ static int jxf23_probe(struct i2c_client *client, const struct i2c_device_id *id
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-    {
-        unsigned int arate = 0,mrate = 0;
-        unsigned int want_rate = 0;
-	    struct clk *clka = NULL;
-	    struct clk *clkm = NULL;
+	{
+		unsigned int arate = 0,mrate = 0;
+		unsigned int want_rate = 0;
+		struct clk *clka = NULL;
+		struct clk *clkm = NULL;
 
-        want_rate=24000000;
-        clka = clk_get(NULL, "sclka");
-        clkm = clk_get(NULL, "mpll");
-        arate = clk_get_rate(clka);
-        mrate = clk_get_rate(clkm);
-        if((arate%want_rate) && (mrate%want_rate)) {
-            if(want_rate == 37125000){
-                if(arate >= 1400000000) {
-                    arate = 1485000000;
-                } else if((arate >= 1100) || (arate < 1400)) {
-                    arate = 1188000000;
-                } else if(arate <= 1100) {
-                    arate = 891000000;
-                }
-            } else {
-                mrate = arate%want_rate;
-                arate = arate-mrate;
-            }
-            clk_set_rate(clka, arate);
-            clk_set_parent(sensor->mclk, clka);
-        } else if(!(arate%want_rate)) {
-            clk_set_parent(sensor->mclk, clka);
-        } else if(!(mrate%want_rate)) {
-            clk_set_parent(sensor->mclk, clkm);
-        }
-        private_clk_set_rate(sensor->mclk, want_rate);
-        private_clk_enable(sensor->mclk);
-    }
+		want_rate=24000000;
+		clka = clk_get(NULL, "sclka");
+		clkm = clk_get(NULL, "mpll");
+		arate = clk_get_rate(clka);
+		mrate = clk_get_rate(clkm);
+		if((arate%want_rate) && (mrate%want_rate)) {
+			if(want_rate == 37125000){
+				if(arate >= 1400000000) {
+					arate = 1485000000;
+				} else if((arate >= 1100) || (arate < 1400)) {
+					arate = 1188000000;
+				} else if(arate <= 1100) {
+					arate = 891000000;
+				}
+			} else {
+				mrate = arate%want_rate;
+				arate = arate-mrate;
+			}
+			clk_set_rate(clka, arate);
+			clk_set_parent(sensor->mclk, clka);
+		} else if(!(arate%want_rate)) {
+			clk_set_parent(sensor->mclk, clka);
+		} else if(!(mrate%want_rate)) {
+			clk_set_parent(sensor->mclk, clkm);
+		}
+		private_clk_set_rate(sensor->mclk, want_rate);
+		private_clk_enable(sensor->mclk);
+	}
 
 	jxf23_attr.dbus_type = data_interface;
 	jxf23_attr.data_type = data_type;
