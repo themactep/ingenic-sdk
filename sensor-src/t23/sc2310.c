@@ -22,14 +22,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC2310_CHIP_ID_H	(0x23)
-#define SC2310_CHIP_ID_L	(0x11)
-#define sc2310_REG_END		0xffff
-#define sc2310_REG_DELAY	0xfffe
-#define sc2310_SUPPORT_30FPS_SCLK (1100 * 1125 * 30 * 2)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20230720a"
+#define SC2310_CHIP_ID_H		(0x23)
+#define SC2310_CHIP_ID_L		(0x11)
+#define SC2310_REG_END			0xffff
+#define SC2310_REG_DELAY		0xfffe
+#define SC2310_SUPPORT_30FPS_SCLK	(1100 * 1125 * 30 * 2) /* 74250000 */
+#define SENSOR_OUTPUT_MAX_FPS		30
+#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_VERSION			"H20230720a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -236,7 +236,6 @@ struct tx_isp_sensor_attribute sc2310_attr;
 unsigned int sc2310_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct again_lut *lut = sc2310_again_lut;
-
 	while(lut->gain <= sc2310_attr.max_again) {
 		if(isp_gain == 0) {
 			*sensor_again = lut[0].value;
@@ -494,7 +493,7 @@ static struct regval_list sc2310_init_regs_1920_1080_30fps_mipi[] = {
 	{0x36e9,0x51},
 	{0x36f9,0x04},
 	{0x0100,0x01},
-	{sc2310_REG_END, 0x00},	/* END MARKER */
+	{SC2310_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc2310_win_sizes[] = {
@@ -512,12 +511,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc2310_win_sizes[0];
 
 static struct regval_list sc2310_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{sc2310_REG_END, 0x00},	/* END MARKER */
+	{SC2310_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc2310_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{sc2310_REG_END, 0x00},	/* END MARKER */
+	{SC2310_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc2310_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -569,8 +568,8 @@ static int sc2310_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != sc2310_REG_END) {
-		if (vals->reg_num == sc2310_REG_DELAY) {
+	while (vals->reg_num != SC2310_REG_END) {
+		if (vals->reg_num == SC2310_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc2310_read(sd, vals->reg_num, &val);
@@ -587,8 +586,8 @@ static int sc2310_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sc2310_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != sc2310_REG_END) {
-		if (vals->reg_num == sc2310_REG_DELAY) {
+	while (vals->reg_num != SC2310_REG_END) {
+		if (vals->reg_num == SC2310_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc2310_write(sd, vals->reg_num, vals->value);

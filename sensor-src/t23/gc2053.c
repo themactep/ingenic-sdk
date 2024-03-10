@@ -119,7 +119,6 @@ struct tx_isp_sensor_attribute gc2053_attr;
 unsigned int gc2053_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct again_lut *lut = gc2053_again_lut;
-
 	while(lut->gain <= gc2053_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].index;
@@ -136,7 +135,6 @@ unsigned int gc2053_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 		lut++;
 	}
-
 	return isp_gain;
 }
 
@@ -1247,7 +1245,6 @@ static int gc2053_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = gc2053_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -1341,7 +1338,6 @@ static int gc2053_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 8;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return 0;
 }
 
@@ -1524,6 +1520,7 @@ static int gc2053_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
@@ -1735,7 +1732,6 @@ err_set_sensor_gpio:
 	private_clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 

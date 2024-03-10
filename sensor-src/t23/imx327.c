@@ -27,13 +27,13 @@
 #define IMX327_CHIP_ID_L	(0x01)
 #define IMX327_REG_END		0xffff
 #define IMX327_REG_DELAY	0xfffe
-#define IMX327_SUPPORT_SCLK (148500000)
-#define SENSOR_OUTPUT_MAX_FPS 60
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20190822"
-#define AGAIN_MAX_DB 0x64
-#define DGAIN_MAX_DB 0x64
-#define LOG2_GAIN_SHIFT 16
+#define IMX327_SUPPORT_SCLK	(148500000)
+#define SENSOR_OUTPUT_MAX_FPS	60
+#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_VERSION		"H20190822"
+#define AGAIN_MAX_DB		0x64
+#define DGAIN_MAX_DB		0x64
+#define LOG2_GAIN_SHIFT		16
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -1085,46 +1085,46 @@ static int imx327_probe(struct i2c_client *client,
 		goto err_get_mclk;
 	}
 
-    {
-        unsigned int arate = 0,mrate = 0;
-        unsigned int want_rate = 0;
-	    struct clk *clka = NULL;
-	    struct clk *clkm = NULL;
+	{
+		unsigned int arate = 0,mrate = 0;
+		unsigned int want_rate = 0;
+		struct clk *clka = NULL;
+		struct clk *clkm = NULL;
 
-        want_rate=37125000;
-        clka = clk_get(NULL, "sclka");
-        clkm = clk_get(NULL, "mpll");
-        arate = clk_get_rate(clka);
-        mrate = clk_get_rate(clkm);
-        if((arate%want_rate) && (mrate%want_rate)) {
-            if(want_rate == 37125000){
-                if(arate >= 1400000000) {
-                    arate = 1485000000;
-                } else if((arate >= 1100) || (arate < 1400)) {
-                    arate = 1188000000;
-                } else if(arate <= 1100) {
-                    arate = 891000000;
-                }
-            } else {
-                mrate = arate%want_rate;
-                arate = arate-mrate;
-            }
-            clk_set_rate(clka, arate);
-            clk_set_parent(sensor->mclk, clka);
-        } else if(!(arate%want_rate)) {
-            clk_set_parent(sensor->mclk, clka);
-        } else if(!(mrate%want_rate)) {
-            clk_set_parent(sensor->mclk, clkm);
-        }
-        private_clk_set_rate(sensor->mclk, want_rate);
-        private_clk_enable(sensor->mclk);
-    }
+		want_rate=37125000;
+		clka = clk_get(NULL, "sclka");
+		clkm = clk_get(NULL, "mpll");
+		arate = clk_get_rate(clka);
+		mrate = clk_get_rate(clkm);
+		if((arate%want_rate) && (mrate%want_rate)) {
+			if(want_rate == 37125000){
+				if(arate >= 1400000000) {
+					arate = 1485000000;
+				} else if((arate >= 1100) || (arate < 1400)) {
+					arate = 1188000000;
+				} else if(arate <= 1100) {
+				arate = 891000000;
+				}
+			} else {
+				mrate = arate%want_rate;
+				arate = arate-mrate;
+			}
+			clk_set_rate(clka, arate);
+			clk_set_parent(sensor->mclk, clka);
+		} else if(!(arate%want_rate)) {
+			clk_set_parent(sensor->mclk, clka);
+		} else if(!(mrate%want_rate)) {
+			clk_set_parent(sensor->mclk, clkm);
+		}
+		private_clk_set_rate(sensor->mclk, want_rate);
+		private_clk_enable(sensor->mclk);
+	}
 
 	sd = &sensor->sd;
 	video = &sensor->video;
 
-	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
-                if (sensor_max_fps == TX_SENSOR_MAX_FPS_60) {
+	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
+		if (sensor_max_fps == TX_SENSOR_MAX_FPS_60) {
 			wsize = &imx327_win_sizes[2];
 			data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 			imx327_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -1143,26 +1143,26 @@ static int imx327_probe(struct i2c_client *client,
 			imx327_attr.again = 0;
 			imx327_attr.integration_time = 0xf;
 			memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_linear_60fps),sizeof(mipi_linear_60fps));
-                } else {
-                        imx327_attr.data_type = data_type;
-                        wsize = &imx327_win_sizes[0];
+		} else {
+			imx327_attr.data_type = data_type;
+			wsize = &imx327_win_sizes[0];
 
-                        imx327_attr.max_again = 589824;
-                        imx327_attr.max_again_short = 589824;
-                        imx327_attr.max_dgain = 0;
-                        imx327_attr.min_integration_time = 1;
-                        imx327_attr.min_integration_time_native = 1;
-                        imx327_attr.max_integration_time_native = 1123;
-                        imx327_attr.min_integration_time_short = 1;
-                        imx327_attr.max_integration_time_short = 98;
-                        imx327_attr.integration_time_limit = 1123;
-                        imx327_attr.total_width = 5280;
-                        imx327_attr.total_height = 1125;
-                        imx327_attr.max_integration_time = 1123;
-                        imx327_attr.integration_time_apply_delay = 2;
-                        imx327_attr.again_apply_delay = 2;
-                        imx327_attr.dgain_apply_delay = 0;
-                }
+			imx327_attr.max_again = 589824;
+			imx327_attr.max_again_short = 589824;
+			imx327_attr.max_dgain = 0;
+			imx327_attr.min_integration_time = 1;
+			imx327_attr.min_integration_time_native = 1;
+			imx327_attr.max_integration_time_native = 1123;
+			imx327_attr.min_integration_time_short = 1;
+			imx327_attr.max_integration_time_short = 98;
+			imx327_attr.integration_time_limit = 1123;
+			imx327_attr.total_width = 5280;
+			imx327_attr.total_height = 1125;
+			imx327_attr.max_integration_time = 1123;
+			imx327_attr.integration_time_apply_delay = 2;
+			imx327_attr.again_apply_delay = 2;
+			imx327_attr.dgain_apply_delay = 0;
+		}
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
 		wsize = &imx327_win_sizes[1];
 		imx327_attr.data_type = data_type;
