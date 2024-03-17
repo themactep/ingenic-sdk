@@ -13,7 +13,7 @@
  *   1          2880*1620       15        mipi_2lane             wdr
 
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

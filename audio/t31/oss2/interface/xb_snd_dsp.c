@@ -4,7 +4,7 @@
  * xhshen <xianghui.shen@ingenic.cn>
  *
  */
-#define DEBUG
+/* #define DEBUG */
 #include <linux/module.h>
 #include <linux/soundcard.h>
 #include <linux/seq_file.h>
@@ -2471,7 +2471,7 @@ static void dsp_workqueue_handle(struct work_struct *work)
 							loop_cnt1++;
 							if(loop_cnt1 > dpo->fragment_cnt){
 								printk(KERN_ERR"#### Warnning ####\n");
-								printk(KERN_ERR"LOOPS are too much: copy %d, sync %d; [%d, %d][%d, %d, %d]\n", ao_copy_loop, ao_sync_loop, 
+								printk(KERN_ERR"LOOPS are too much: copy %d, sync %d; [%d, %d][%d, %d, %d]\n", ao_copy_loop, ao_sync_loop,
 											aec_sfrag->index, ai_current_index, dpo->dma_tracer, ao_current_index, dpo->io_tracer);
 								break;
 							}

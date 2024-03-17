@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -354,15 +354,15 @@ static struct regval_list hi556_init_regs_2592_1944_25fps[] = {
         {0x0c14, 0x0040},
         {0x0c16, 0x0040},
         {0x0a10, 0x4000},
-        {0x3068, 0xf800}, 
-        {0x306a, 0xf876}, 
+        {0x3068, 0xf800},
+        {0x306a, 0xf876},
         {0x006c, 0x0000},
         {0x005e, 0x0200},
         {0x000e, 0x0100},
         {0x0e0a, 0x0001},
         {0x004a, 0x0100},
         {0x004c, 0x0000},
-        {0x004e, 0x0100}, 
+        {0x004e, 0x0100},
         {0x000c, 0x0022},
         {0x0008, 0x0b00},
         {0x005a, 0x0202},

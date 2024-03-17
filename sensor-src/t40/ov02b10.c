@@ -10,7 +10,7 @@
  * sboot        resolution      fps       interface              mode
  *   0          1600*1200       15        mipi_1lane           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

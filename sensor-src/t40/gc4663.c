@@ -12,7 +12,7 @@
  *   0          2560*1440       25        mipi_2lane           linear
  *   1          2560*1440       30        mipi_2lane           hdr
  */
-#define DEBUG
+/* #define DEBUG */
 #define __WDR__
 
 #include <linux/init.h>
@@ -509,7 +509,7 @@ static struct regval_list gc4663_init_regs_2560_1440_30fps_mipi_dol[] = {
 {0x0021,0x05},
 {0x0022,0xc0},
 {0x0023,0x08},
-//tony_add 
+//tony_add
 {0x0098,0x10},
 {0x009a,0xb0},
 {0x02bb,0x0d},

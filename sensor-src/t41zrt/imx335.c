@@ -11,7 +11,7 @@
  * sboot        resolution      fps       interface              mode
  *   0          2592*1944       25        mipi_2lane            linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -1177,7 +1177,7 @@ static int imx335_remove(struct i2c_client *client)
 #ifndef SENSOR_WITHOUT_INIT
 	private_clk_disable_unprepare(sensor->mclk);
 	private_devm_clk_put(&client->dev, sensor->mclk);
-#endif 
+#endif
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

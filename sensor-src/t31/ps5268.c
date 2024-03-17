@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -616,7 +616,7 @@ static int ps5268_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("err: ps5268_write err\n");
 		return ret;
 	}
-	
+
 	ret = ps5268_read(sd, 0x0118, &val);
 	Cur_OffNy = val << 8;
 	ret += ps5268_read(sd, 0x0119, &val);

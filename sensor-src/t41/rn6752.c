@@ -14,7 +14,7 @@
  *   2          1280*720        25        mipi           YUV422
  *   3          1920*1080       25        mipi           YUV422
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

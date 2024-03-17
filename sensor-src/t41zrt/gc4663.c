@@ -1,5 +1,5 @@
 /*
- * 
+ *
  * gc4663.c
  *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
@@ -13,7 +13,7 @@
  *   0          2560*1440       25        mipi_2lane           linear
  *   1          2560*1440       30        mipi_2lane           hdr
  */
-#define DEBUG
+/* #define DEBUG */
 #define __WDR__
 
 #include <linux/init.h>

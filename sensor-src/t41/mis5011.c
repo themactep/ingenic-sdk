@@ -11,7 +11,7 @@
  * sboot        resolution      fps     interface              mode
  *   0          2690*1632       30       mipi_2lane           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -1214,7 +1214,7 @@ struct tx_isp_sensor_attribute mis5011_attr={
 
 static struct regval_list mis5011_init_regs_2960_1632_30fps_mipi[] = {
 	//raw10
-	
+
 	{0x300b,   0x01},
 	{0x3c70,   0xee},
 	{0x3006,   0x02},
@@ -1425,30 +1425,30 @@ static struct regval_list mis5011_init_regs_2960_1632_30fps_mipi[] = {
 	{0x3a31,   0x06},
 	{0x2101,   0x01},
 	{0x3a03,   0x0b},
-	{0x3a04,   0x00}, 
-	{0x3a05,   0xb8}, 
-	{0x3a06,   0x03}, 
-	{0x3a07,   0x56}, 
-	{0x3a08,   0x32}, 
-	{0x3a09,   0x10}, 
-	{0x3a0b,   0x3a}, 
-	{0x3a2d,   0x45}, 
-	{0x3a31,   0x00}, 
-	{0x3a33,   0x00}, 
-	{0x3a34,   0x34}, 
-	
+	{0x3a04,   0x00},
+	{0x3a05,   0xb8},
+	{0x3a06,   0x03},
+	{0x3a07,   0x56},
+	{0x3a08,   0x32},
+	{0x3a09,   0x10},
+	{0x3a0b,   0x3a},
+	{0x3a2d,   0x45},
+	{0x3a31,   0x00},
+	{0x3a33,   0x00},
+	{0x3a34,   0x34},
+
 	{0x3c00,   0x00},
 	{0x3c01,   0x04},
-	
+
 	{0x3c0c,   0x28},//prepare 0x428
 	{0x3c0d,   0x14},//
 	{0x3c0e,   0x69},//zero 0x669
 	{0x3c0f,   0x16},//
 	{0x3c14,   0x62},//lxp 0x0032
 	{0x3c15,   0x00},//
-	
+
 	{0x3c18,   0x01},//
-	
+
 	{0x3300,   0x78},
 	{0x3301,   0x02},
 	{0x3302,   0x00},
@@ -1458,8 +1458,8 @@ static struct regval_list mis5011_init_regs_2960_1632_30fps_mipi[] = {
 	{0x3201,   0x84},//
 	{0x3200,   0x07},//VTS
 	{0x3203,   0xb4},//
-	{0x3202,   0x0e},//HTS  
-	
+	{0x3202,   0x0e},//HTS
+
 	{0x3205,   0x02},//
 	{0x3204,   0x00},//H_ST
 	{0x3207,   0x61},//
@@ -1640,7 +1640,7 @@ static int mis5011_set_integration_time(struct tx_isp_subdev *sd, int value)
 //	ret += mis5011_write(sd, 0x3109, (unsigned char)((again >> 8)& 0x03));
 //	ret += mis5011_write(sd, 0x310a, (unsigned char)(again & 0xff));
 	ret += mis5011_write(sd, 0x300c, 0x01);
-	
+
 
 
 	if (ret < 0)
@@ -1861,7 +1861,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		mis5011_attr.max_integration_time = 0x784-3;
 		//pr_debug("mis5011 init set.../n");//add
 		break;
-	
+
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 		break;
@@ -1888,7 +1888,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	case TISP_SENSOR_MCLK1:
 	case TISP_SENSOR_MCLK2:
         sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
-        sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);		
+        sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
 		set_sensor_mclk_function(0);
 		break;
 	default:
@@ -1899,14 +1899,14 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-	
+
 	rate = private_clk_get_rate(sensor->mclk);
 	ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
     sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
     private_clk_set_rate(sclka, 1188000000);
     private_clk_set_rate(sensor->mclk, 27000000);
     private_clk_prepare_enable(sensor->mclk);
-		
+
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
 
@@ -2003,7 +2003,7 @@ static int mis5011_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 			if (arg)
 				ret = mis5011_write_array(sd, mis5011_stream_on_mipi);
-			break;		
+			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
 			if(arg)
 				ret = mis5011_set_fps(sd, sensor_val->value);
@@ -2110,7 +2110,7 @@ static int mis5011_probe(struct i2c_client *client, const struct i2c_device_id *
     sensor->video.mbus.code = wsize->mbus_code;
     sensor->video.mbus.field = TISP_FIELD_NONE;
     sensor->video.mbus.colorspace = wsize->colorspace;
-    sensor->video.fps = wsize->fps;	
+    sensor->video.fps = wsize->fps;
 	tx_isp_subdev_init(&sensor_platform_device, sd, &mis5011_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);

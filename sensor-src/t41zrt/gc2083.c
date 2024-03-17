@@ -11,7 +11,7 @@
  * sboot        resolution       fps     interface              mode
  *   0          1920*1080        25     mipi_2lane             linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -242,7 +242,7 @@ static struct regval_list gc2083_init_regs_1920_1080_25fps_mipi[] = {
 	{0x008d, 0xff},
 	{0x007a, 0x50}, //global gain
 	{0x00d0, 0x00},
-	{0x0dc1, 0x00},	
+	{0x0dc1, 0x00},
 	{0x0102, 0xa9}, //89
 	{0x0158, 0x00},
 	{0x0107, 0xa6},
@@ -940,7 +940,7 @@ static int gc2083_remove(struct i2c_client *client)
                 private_gpio_free(reset_gpio);
         if(pwdn_gpio != -1)
                 private_gpio_free(pwdn_gpio);
-			
+
 #ifndef SENSOR_WITHOUT_INIT
         private_clk_disable_unprepare(sensor->mclk);
 #endif

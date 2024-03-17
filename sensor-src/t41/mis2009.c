@@ -12,7 +12,7 @@
  *   0          1920*1080       30        mipi        2  	  linear
  *   ...
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

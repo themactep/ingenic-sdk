@@ -32,7 +32,7 @@
 #endif
 #include "jz-dtrng.h"
 #define SBUFF_SIZE		128
-#define DEBUG
+/* #define DEBUG */
 #ifdef DEBUG
 #define dtrng_debug(format, ...) {printk(format, ## __VA_ARGS__);}
 #else

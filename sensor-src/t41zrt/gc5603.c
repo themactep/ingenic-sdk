@@ -12,7 +12,7 @@
  *   0          2880*1620        25     mipi_2lane             linear
  *   1          2880*1620        15     mipi_2lane             wdr
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -1342,7 +1342,7 @@ static int gc5603_remove(struct i2c_client *client)
 
 #ifndef SENSOR_WITHOUT_INIT
 	private_clk_disable_unprepare(sensor->mclk);
-#endif	
+#endif
 	tx_isp_subdev_deinit(sd);
 
 	kfree(sensor);

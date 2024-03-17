@@ -14,7 +14,7 @@
  *   2          2304*1296       40        mipi_2lane     linear        master      1.5V
  *   3          2304*1296       40        mipi_2lane     linear         slave      1.5V
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

@@ -10,7 +10,7 @@
  * Settings:
 
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -55,7 +55,7 @@ struct again_lut
 	unsigned int gain;
 };
 
-struct again_lut sc5239_again_lut[] = {	
+struct again_lut sc5239_again_lut[] = {
 	{0x320, 0},
 	{0x321, 2886},
 	{0x322, 5776},

@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -33,7 +33,7 @@
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION	"H20210915a"
 
-#define SENSOR_WITHOUT_INIT 
+#define SENSOR_WITHOUT_INIT
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 

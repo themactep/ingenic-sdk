@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -88,7 +88,7 @@ unsigned int bg0806_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	mask = mask << (TX_ISP_GAIN_FIXED_POINT-4);
 	gain_one1 = gain_one&mask;
 	isp_gain1 = private_log2_fixed_to_fixed(gain_one1, TX_ISP_GAIN_FIXED_POINT, shift);
-	
+
 	return isp_gain1;
 }
 
@@ -461,9 +461,9 @@ static int bg0806_set_integration_time(struct tx_isp_subdev *sd, int value)
 		ret += bg0806_write(sd, 0x00fb, 0x01);
 	}
 #endif
-	
+
 	ret = bg0806_write(sd, 0x001d, 0x02);
-	
+
 	return 0;
 }
 
@@ -519,7 +519,7 @@ static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	}
 
 	g_vrefh = vrefh ;
-	
+
 	ret += bg0806_write(sd, 0x00B1, vrefh);
 	ret += bg0806_write(sd, 0x00BC, 0xFF&(dgain>>8));
 	ret += bg0806_write(sd, 0x00BD, 0xFF&(dgain>>0));
