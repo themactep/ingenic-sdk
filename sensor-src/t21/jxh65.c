@@ -844,7 +844,7 @@ static __init int init_jxh65(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init jxh65 dirver.\n");
+		printk("Failed to init jxh65 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&jxh65_driver);

@@ -1055,7 +1055,7 @@ static __init int init_jxk06(void)
 {
 	/* ret = private_driver_get_interface(); */
 	/* if(ret){ */
-	/* 	ISP_ERROR("Failed to init jxk06 dirver.\n"); */
+	/* 	ISP_ERROR("Failed to init jxk06 driver.\n"); */
 	/* 	return -1; */
 	/* } */
 	return private_i2c_add_driver(&jxk06_driver);

@@ -1589,7 +1589,7 @@ static __init int init_os05a20(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init os05a20 dirver.\n");
+		ISP_ERROR("Failed to init os05a20 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&os05a20_driver);

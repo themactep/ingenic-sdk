@@ -1935,7 +1935,7 @@ static __init int init_jxf23(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init jxf23 dirver.\n");
+		ISP_ERROR("Failed to init jxf23 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&jxf23_driver);

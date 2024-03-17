@@ -1268,7 +1268,7 @@ static __init int init_os05a10(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init os05a10 dirver.\n");
+		printk("Failed to init os05a10 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&os05a10_driver);

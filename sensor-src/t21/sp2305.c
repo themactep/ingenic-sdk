@@ -1082,7 +1082,7 @@ static __init int init_sp2305(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sp2305 dirver.\n");
+		printk("Failed to init sp2305 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sp2305_driver);

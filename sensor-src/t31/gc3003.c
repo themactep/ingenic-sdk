@@ -957,7 +957,7 @@ static __init int init_gc3003(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init gc3003 dirver.\n");
+		ISP_ERROR("Failed to init gc3003 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&gc3003_driver);

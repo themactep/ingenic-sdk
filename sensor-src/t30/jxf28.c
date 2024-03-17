@@ -1075,7 +1075,7 @@ static __init int init_jxf28(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init jxf28 dirver.\n");
+		printk("Failed to init jxf28 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&jxf28_driver);

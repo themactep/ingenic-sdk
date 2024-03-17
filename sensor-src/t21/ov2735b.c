@@ -1094,7 +1094,7 @@ static __init int init_ov2735b(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init ov2735b dirver.\n");
+		printk("Failed to init ov2735b driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&ov2735b_driver);

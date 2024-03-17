@@ -1490,7 +1490,7 @@ static __init int init_sc2310(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sc2310 dirver.\n");
+		printk("Failed to init sc2310 driver.\n");
 		return -1;
 	}
 

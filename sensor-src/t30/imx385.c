@@ -1387,7 +1387,7 @@ static __init int init_imx385(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init imx385 dirver.\n");
+		printk("Failed to init imx385 driver.\n");
 		return -1;
 	}
 

@@ -1253,7 +1253,7 @@ static __init int init_imx327(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init imx327 dirver.\n");
+		ISP_ERROR("Failed to init imx327 driver.\n");
 		return -1;
 	}
 

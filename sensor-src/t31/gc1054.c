@@ -1295,7 +1295,7 @@ static __init int init_gc1054(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init gc1054 dirver.\n");
+		ISP_ERROR("Failed to init gc1054 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&gc1054_driver);
