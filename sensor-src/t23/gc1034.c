@@ -1003,7 +1003,7 @@ static int gc1034_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("@@@@@@@ probe ok ------->gc1034\n");
+	pr_debug("probe ok ------->gc1034\n");
 
 	return 0;
 

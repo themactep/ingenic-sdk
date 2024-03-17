@@ -436,13 +436,13 @@ struct tx_isp_sensor_attribute sc2035_attr={
 static struct regval_list sc2035_init_regs_1920_1080_30fps[] = {
 	{0x3105,0x02},  //start up timing begin
 	{0x0103,0x01},  // reset all registers
-	{0x3105,0x02},  
+	{0x3105,0x02},
 	{0x0100,0x00},  //start up timing end
 
 	{0x301E,0xB0},  // mode select
-	 
+
 	{0x320c,0x03},  // hts=2000
-	{0x320d,0xe8}, 
+	{0x320d,0xe8},
 	{0x3231,0x24},  // half hts  to 2000
 	{0x320E,0x04},
 	{0x320F,0x65},
@@ -454,7 +454,7 @@ static struct regval_list sc2035_init_regs_1920_1080_30fps[] = {
 	{0x3e08,0x00},  //gain 1x
 	{0x3e09,0x10},  //10-1f,16step->1/16
 	{0x3518,0x03},
-	{0x5025,0x09},  
+	{0x5025,0x09},
 
 	{0x3908,0xc0},  //BLC RNCincrease blc target for rnc
 	{0x3907,0x01},  //12.14
@@ -515,10 +515,10 @@ static struct regval_list sc2035_init_regs_1920_1080_30fps[] = {
 	{0x5786,0x18},  //12.11 ; 20160112 20160307
 	{0x5787,0x18},  //12.11 20160307 20160317
 	{0x5788,0x18},  // 20160307  20160317
-	{0x5789,0x01},  //12.11 
-	{0x578a,0x0f},  //12.11 
+	{0x5789,0x01},  //12.11
+	{0x578a,0x0f},  //12.11
 	{0x5000,0x06},
-	             
+
 	{0x3632,0x44},  //bypass NVDD analog config  20160113
 	{0x3622,0x0e},  //enable sa1/ecl blksun
 	{0x3627,0x08},  //0921 20160307
@@ -562,7 +562,7 @@ static struct regval_list sc2035_init_regs_1920_1080_30fps[] = {
 
 	 /*{0x0100,0x01},*/
 	 /*{0x303a,0x07}, PLL  67.5M pclk */
-	 /*{0x3039,0x8e),*/ 
+	 /*{0x3039,0x8e),*/
 	 {0x303f,0x82},
 	 {0x3636,0x88},  //lpDVDD
 	 {0x3631,0x80},  //0820  20160113  20160120
@@ -760,7 +760,7 @@ static int sc2035_set_analog_gain(struct v4l2_subdev *sd, int value)
 		ret += sc2035_write(sd, 0x3315, 0x02);
 		if (ret < 0)
 			return ret;
-	} 
+	}
 	else if (value <= 0x100){
 		ret += sc2035_write(sd, 0x3630, 0x84);
 		ret += sc2035_write(sd, 0x3635, 0x54);
@@ -1134,7 +1134,7 @@ static int sc2035_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sc2035_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	printk("@@@@@@@sssssssssssssssssprobe ok ------->sc2035\n");
+	printk("probe ok ------->sc2035\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);

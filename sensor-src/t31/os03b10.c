@@ -448,7 +448,7 @@ static int os03b10_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 		ret = os03b10_write(sd, vals->reg_num, vals->value);
 			printk("	0x%x,0x%x\n", vals->reg_num, vals->value);
 			if (ret < 0){
-				printk("@@@@@@@@ %d @@@@@@@\n",ret);
+				printk(" %d \n",ret);
 				return ret;
 			}
 		vals++;

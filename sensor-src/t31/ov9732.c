@@ -839,7 +839,7 @@ static int ov9732_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("@@@@@@@probe ok ------->ov9732\n");
+	pr_debug("probe ok ------->ov9732\n");
 
 	return 0;
 err_set_sensor_data_interface:

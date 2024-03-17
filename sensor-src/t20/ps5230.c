@@ -1370,7 +1370,7 @@ static int ps5230_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &ps5230_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("@@@@@@@probe ok ------->ps5230\n");
+	pr_debug("probe ok ------->ps5230\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);

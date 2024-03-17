@@ -4207,7 +4207,7 @@ static int ov64b40_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("@@@@@@@probe ok ------->ov64b40\n");
+	ISP_WARNING("probe ok ------->ov64b40\n");
 
 	return 0;
 }

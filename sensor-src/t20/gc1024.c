@@ -51,15 +51,15 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-const unsigned int  ANALOG_GAIN_1 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_2 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.65*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_3 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.87*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_4 =		(3<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.08*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_5 =		(3<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.5*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_6 =		(5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.82*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_7 =		(6<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.7*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_8 =		(10<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.7*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_9 =		(15<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.8*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.65*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_3 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.87*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_4 = (3<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.08*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_5 = (3<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.5*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_6 = (5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.82*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_7 = (6<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.7*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_8 = (10<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.7*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_9 = (15<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.8*(1<<TX_ISP_GAIN_FIXED_POINT)));
 
 struct tx_isp_sensor_attribute gc1024_attr;
 
@@ -943,7 +943,7 @@ static int gc1024_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &gc1024_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("@@@@@@@ probe ok ------->gc1024\n");
+	pr_debug("probe ok ------->gc1024\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);

@@ -978,7 +978,7 @@ static int jxh63p_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("@@@@@@@probe ok ------->jxh63p\n");
+	pr_debug("probe ok ------->jxh63p\n");
 
 	return 0;
 }
