@@ -2079,7 +2079,7 @@ static __init int init_ps5270(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		pr_debug("Failed to init ps5270 dirver.\n");
+		pr_debug("Failed to init ps5270 driver.\n");
 		return -1;
 	}
 

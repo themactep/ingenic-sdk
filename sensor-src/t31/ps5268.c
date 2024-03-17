@@ -923,7 +923,7 @@ static __init int init_ps5268(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init ps5268 dirver.\n");
+		ISP_ERROR("Failed to init ps5268 driver.\n");
 		return -1;
 	}
 

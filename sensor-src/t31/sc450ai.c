@@ -1468,7 +1468,7 @@ static __init int init_sc450ai(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init sc450ai dirver.\n");
+		ISP_ERROR("Failed to init sc450ai driver.\n");
 		return -1;
 	}
 

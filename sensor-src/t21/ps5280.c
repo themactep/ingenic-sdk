@@ -1253,7 +1253,7 @@ static __init int init_ps5280(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init ps5280 dirver.\n");
+		printk("Failed to init ps5280 driver.\n");
 		return -1;
 	}
 

@@ -503,7 +503,7 @@ static __init int init_fuxsc1020(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init fuxsc1020 dirver.\n");
+		printk("Failed to init fuxsc1020 driver.\n");
 		return -1;
 	}
 

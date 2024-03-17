@@ -1226,7 +1226,7 @@ static __init int init_sc2232h(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sc2232h dirver.\n");
+		printk("Failed to init sc2232h driver.\n");
 		return -1;
 	}
 

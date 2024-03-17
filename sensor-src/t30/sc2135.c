@@ -1348,7 +1348,7 @@ static __init int init_sc2135(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sc2135 dirver.\n");
+		printk("Failed to init sc2135 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sc2135_driver);

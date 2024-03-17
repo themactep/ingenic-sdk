@@ -1237,7 +1237,7 @@ static __init int init_ps5520(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init ps5520 dirver.\n");
+		printk("Failed to init ps5520 driver.\n");
 		return -1;
 	}
 

@@ -1011,7 +1011,7 @@ static __init int init_sc1245a(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sc1245a dirver.\n");
+		printk("Failed to init sc1245a driver.\n");
 		return -1;
 	}
 

@@ -802,7 +802,7 @@ static __init int init_ps5258(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init ps5258 dirver.\n");
+		ISP_ERROR("Failed to init ps5258 driver.\n");
 		return -1;
 	}
 

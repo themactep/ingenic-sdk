@@ -974,7 +974,7 @@ static __init int init_jxf37p(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init jxf37p dirver.\n");
+		ISP_ERROR("Failed to init jxf37p driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&jxf37p_driver);

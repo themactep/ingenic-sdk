@@ -935,7 +935,7 @@ static __init int init_sc2230(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init sc2230 dirver.\n");
+		printk("Failed to init sc2230 driver.\n");
 		return -1;
 	}
 

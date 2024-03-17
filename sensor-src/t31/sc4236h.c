@@ -1338,7 +1338,7 @@ static __init int init_sc4236h(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init sc4236h dirver.\n");
+		ISP_ERROR("Failed to init sc4236h driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sc4236h_driver);

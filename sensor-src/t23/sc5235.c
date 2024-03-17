@@ -988,7 +988,7 @@ static __init int init_sc5235(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init sc5235 dirver.\n");
+		ISP_ERROR("Failed to init sc5235 driver.\n");
 		return -1;
 	}
 

@@ -1482,7 +1482,7 @@ static __init int init_mis5001(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init mis5001 dirver.\n");
+		ISP_ERROR("Failed to init mis5001 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&mis5001_driver);

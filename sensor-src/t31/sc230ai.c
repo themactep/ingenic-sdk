@@ -1159,7 +1159,7 @@ static __init int init_sc230ai(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		ISP_ERROR("Failed to init sc230ai dirver.\n");
+		ISP_ERROR("Failed to init sc230ai driver.\n");
 		return -1;
 	}
 

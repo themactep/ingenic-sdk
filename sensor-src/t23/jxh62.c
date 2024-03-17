@@ -856,7 +856,7 @@ static __init int init_jxh62(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if(ret){
-		printk("Failed to init jxh62 dirver.\n");
+		printk("Failed to init jxh62 driver.\n");
 		return -1;
 	}
 
