@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -482,7 +482,7 @@ int sc4336p_read(struct tx_isp_subdev *sd, uint16_t reg,
         };
         int ret;
         ret = private_i2c_transfer(client->adapter, msg, 2);
-        
+
         if (ret > 0)
                 ret = 0;
         return ret;
@@ -534,7 +534,7 @@ static int sc4336p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
                         private_msleep(vals->value);
                 } else {
                         ret = sc4336p_write(sd, vals->reg_num, vals->value);
-                        
+
                         if (ret < 0)
                                 return ret;
                 }
@@ -553,8 +553,8 @@ static int sc4336p_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 static int sc4336p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
         int ret;
-        unsigned char v;   
-        ret = sc4336p_read(sd, 0x3107, &v);      
+        unsigned char v;
+        ret = sc4336p_read(sd, 0x3107, &v);
         ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
         if (ret < 0)
                 return ret;
@@ -701,13 +701,13 @@ static int sc4336p_set_fps(struct tx_isp_subdev *sd, int fps)
         if (0 != ret) {
                 ISP_ERROR("err: sc4336p read err\n");
                 return ret;
-        } 
+        }
 
         vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
         ret += sc4336p_write(sd, 0x320f, (unsigned char)(vts & 0xff));
         ret += sc4336p_write(sd, 0x320e, (unsigned char)(vts >> 8));
-        
+
         if (0 != ret) {
                 ISP_ERROR("err: sc4336p_write err\n");
                 return ret;
@@ -766,7 +766,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         unsigned long rate;
         int ret = 0;
 
-       
+
         switch(info->default_boot){
         case 0:
                 wsize = &sc4336p_win_sizes[0];
@@ -897,11 +897,11 @@ static int sc4336p_g_chip_ident(struct tx_isp_subdev *sd,
 
 static int sc4336p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
-       
+
         long ret = 0;
         struct tx_isp_sensor_value *sensor_val = arg;
 
-       
+
         if(IS_ERR_OR_NULL(sd)){
                 ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
                 return -EINVAL;
@@ -937,7 +937,7 @@ static int sc4336p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
                 if(arg)
                         ret = sc4336p_set_fps(sd, sensor_val->value);
                 break;
-              
+
         case TX_ISP_EVENT_SENSOR_VFLIP:
                 if(arg)
                         ret = sc4336p_set_vflip(sd, sensor_val->value);

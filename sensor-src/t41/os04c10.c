@@ -13,7 +13,7 @@
  *   1          2688*1520       30        mipi_2lane             hdr
  *   2          2688*1520       30        mipi_2lane            linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

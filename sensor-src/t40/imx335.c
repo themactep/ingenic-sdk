@@ -13,7 +13,7 @@
  *   2          2592*1944       20        mipi_2lane           dol
  */
 
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 #define __WDR__
 
 #include <linux/init.h>
@@ -1314,7 +1314,6 @@ static int gc4653_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.fps = wsize->fps;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
 	return ret;
 }
 
@@ -1324,29 +1323,29 @@ static int gc4653_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"gc4653_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"gc4653_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -1362,7 +1361,6 @@ static int gc4653_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -1394,7 +1392,7 @@ static int gc4653_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
 
-	if(wdr_en == 1){
+	if (wdr_en == 1) {
 		wsize = &gc4653_win_sizes[1];
 		sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
@@ -1408,11 +1406,9 @@ static int gc4653_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		gc4653_attr.integration_time_limit = 1800 - 310 - 4;
 		gc4653_attr.max_integration_time = 1800 - 310 - 4;
 		gc4653_attr.max_integration_time_short = 310;
-	}
-	else if (wdr_en == 0){
+	} else if (wdr_en == 0) {
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		switch(sensor_resolution)
-		{
+		switch(sensor_resolution) {
 			case TX_SENSOR_RES_400:
 				wsize = &gc4653_win_sizes[0];
 				sensor_max_fps = TX_SENSOR_MAX_FPS_30;
@@ -1461,9 +1457,7 @@ static int gc4653_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 			default:
 				break;
 		}
-	}
-	else
-	{
+	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
 	}
@@ -1487,36 +1481,36 @@ static int gc4653_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 static int gc4653_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch (cmd) {
 #if 0
 		case TX_ISP_EVENT_SENSOR_EXPO:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_expo(sd, *(int*)arg);
 			break;
 #else
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_analog_gain(sd, *(int*)arg);
 			break;
 #endif
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc4653_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -1526,24 +1520,24 @@ static int gc4653_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = gc4653_write_array(sd, gc4653_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_fps(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_vflip(sd, *(int*)arg);
 			break;
 #ifdef __WDR__
 		case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_integration_time_short(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_WDR:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_wdr(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_WDR_STOP:
-			if(arg)
+			if (arg)
 				ret = gc4653_set_wdr_stop(sd, *(int*)arg);
 			break;
 #endif
@@ -1758,16 +1752,13 @@ static int gc4653_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	pr_debug("probe ok ------->gc4653\n");
-
 	return 0;
 
 err_get_mclk:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	kfree(sensor);
-
 	return -1;
 }
 
@@ -1785,7 +1776,6 @@ static int gc4653_remove(struct i2c_client *client)
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
-
 	return 0;
 }
 

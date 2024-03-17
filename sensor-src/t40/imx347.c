@@ -12,7 +12,7 @@
  *   0          2688*1520       30        mipi_2lane           linear
  *   1          2688*1520       15        mipi_2lane            dol
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -855,7 +855,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		imx347_attr.min_integration_time_native = 1;
 		imx347_attr.max_integration_time_native = 1545;
 		imx347_attr.min_integration_time_short = 1;
-		imx347_attr.max_integration_time_short = 96; 
+		imx347_attr.max_integration_time_short = 96;
 		imx347_attr.integration_time_limit = 1545;
 		imx347_attr.total_width = 1500;
 		imx347_attr.total_height = 1650;

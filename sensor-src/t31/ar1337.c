@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -487,7 +487,7 @@ static struct regval_list AR1337_init_regs_1920_1080_25fps_mipi[] ={
 	{0x030A, 0x0001}, // OP_SYS_CLK_DIV
 	{0x0112, 0x0A0A}, // CCP_DATA_FORMAT
 	{0x3016, 0x0101}, // ROW_SPEED
-	{0x31AE, 0x0202}, // 
+	{0x31AE, 0x0202}, //
 	{0x0344, 0x00C0}, // X_ADDR_START
 	{0x0348, 0x0FBF}, // X_ADDR_END
 	{0x0346, 0x01E8}, // Y_ADDR_START
@@ -2988,7 +2988,7 @@ static int AR1337_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 	char v[2] = {0};
 
-#if 0 
+#if 0
 	struct regval_list id_array = {
 		.reg_num = 0x3000,
 		.value = 0

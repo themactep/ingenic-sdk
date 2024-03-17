@@ -11,7 +11,7 @@
  * sboot      resolution      fps      interface        mode
  *   0         1920*720       30       mipi_1lane      linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -448,7 +448,7 @@ static int gc1084_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += gc1084_write(sd, 0x00b8, val_lut[again].reg0b8);
 	ret += gc1084_write(sd, 0x00b9, val_lut[again].reg0b9);
 	ret += gc1084_write(sd, 0x0155, val_lut[again].reg155);
-	
+
 	/*integration time*/
 	ret += gc1084_write(sd, 0x0d03, (unsigned char)((it >> 8) & 0xff));
 	ret += gc1084_write(sd, 0x0d04, (unsigned char)(it & 0xff));
@@ -469,7 +469,7 @@ static int gc1084_set_integration_time(struct tx_isp_subdev *sd, int value)
 static int gc1084_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	struct again_lut *val_lut = gc1084_again_lut;
-	
+
 	ret  = gc1084_write(sd, 0x00d1, val_lut[value].reg0d1);
 	ret += gc1084_write(sd, 0x00d0, val_lut[value].reg0d0);
 	ret += gc1084_write(sd, 0x031d, 0x2d);

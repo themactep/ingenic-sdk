@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -701,7 +701,7 @@ static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
     {0x0706, 0x02},
     {0x0716, 0x02},
     {0x0708,0xc8},
-    {0x0718,0xc8}, 
+    {0x0718,0xc8},
     {0x061a,0x00},
     {0x1430,0x80},
     {0x1407,0x10},
@@ -725,13 +725,13 @@ static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
     {0x1462,0x18},
     {0x02ce,0x04},
     {0x143a,0x0f},
-    {0x142b,0x88}, 
-    {0x0245,0xc9},  
-    {0x023a,0x08},  
+    {0x142b,0x88},
+    {0x0245,0xc9},
+    {0x023a,0x08},
     {0x02cd,0x92},
-    {0x0612,0x02},  
+    {0x0612,0x02},
     {0x0613,0xc7},
-    {0x0243,0x03},  
+    {0x0243,0x03},
     {0x021b,0x09},
     {0x0089,0x03},
     {0x0040,0xa3},
@@ -739,22 +739,22 @@ static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
     {0x0004,0x0f},
     {0x0002,0xab},
     {0x0053,0x0a},
-    {0x0205,0x0c},  
+    {0x0205,0x0c},
     {0x0202,0x06},
     {0x0203,0x27},
     {0x0614,0x00},
     {0x0615,0x00},
-    {0x0181,0x0c},  
-    {0x0182,0x05},  
-    {0x0185,0x01},  
-    {0x0180,0x46},  
-    {0x0100,0x08},  
-    {0x0106,0x38},  
+    {0x0181,0x0c},
+    {0x0182,0x05},
+    {0x0185,0x01},
+    {0x0180,0x46},
+    {0x0100,0x08},
+    {0x0106,0x38},
     {0x010d,0x80},
-    {0x010e,0x0c},  
-    {0x0113,0x02},  
-    {0x0114,0x01},  
-    {0x0115,0x10},  
+    {0x010e,0x0c},
+    {0x0113,0x02},
+    {0x0114,0x01},
+    {0x0115,0x10},
     {0x0052,0x02},
     {0x0076,0x01},
     {0x021a,0x10},
@@ -765,11 +765,11 @@ static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
     {0x0430,0x0a},
     {0x0431,0x0a},
     {0x0432,0x0a},
-    {0x0433,0x0a}, 
+    {0x0433,0x0a},
     {0x0458,0x00},
     {0x0459,0x00},
     {0x045a,0x00},
-    {0x045b,0x00}, 
+    {0x045b,0x00},
     {0x0a67,0x80},
     {0x0a54,0x0e},
     {0x0a65,0x10},
@@ -1441,9 +1441,9 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
     unsigned char reg_410=0;
     struct again_lut *val_lut = gc4023_again_lut;
 
-    ret = gc4023_read(sd, 0x0410, &reg_410);	 
+    ret = gc4023_read(sd, 0x0410, &reg_410);
 
-    if (ret < 0)		
+    if (ret < 0)
         return ret;
 
     if(reg_410>0x1a) gain_flag=1; //0x1d
@@ -1459,7 +1459,7 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
         if(reg_410<0x10)
         {
             ht_gain=ht_gain+1;
-            if(ht_gain>24) 
+            if(ht_gain>24)
             {
                 ht_gain=24;
                 gain_flag=0;
@@ -1470,7 +1470,7 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
     if(ag_last<8)
     {
         ht_gain=24;
-        gain_flag=0;	
+        gain_flag=0;
     }
 
     if(ag_last>ht_gain)
@@ -1482,7 +1482,7 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
         ret += gc4023_write(sd, 0x1467, val_lut[ag_last].reg1467);
         ret += gc4023_write(sd, 0x1468, val_lut[ag_last].reg1468);
         ret += gc4023_write(sd, 0x00b8, val_lut[ag_last].regb8);
-        ret += gc4023_write(sd, 0x00b9, val_lut[ag_last].regb9); 
+        ret += gc4023_write(sd, 0x00b9, val_lut[ag_last].regb9);
     }
 
     //  pr_debug("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
@@ -1835,8 +1835,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 private_clk_set_rate(sensor->mclk, 27000000);
                 private_clk_prepare_enable(sensor->mclk);
                 break;
-                
-		case 1:          
+
+		case 1:
 		case 4:
                 private_clk_set_rate(sensor->mclk, 24000000);
                 private_clk_prepare_enable(sensor->mclk);

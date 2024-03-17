@@ -14,7 +14,7 @@
  *   2          2560*1440       30        mipi_2lane     RAW12      linear
  *   3          1280*720        30        mipi_2lane     RAW12      linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

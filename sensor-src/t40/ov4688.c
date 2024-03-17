@@ -11,7 +11,7 @@
  *   0          2688*1520       30        mipi_4lane           linear
  *   1          1920*1080       30        mipi_4lane           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

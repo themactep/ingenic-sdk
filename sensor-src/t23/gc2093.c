@@ -8,7 +8,7 @@
  * published by the Free Software Foundation.
  */
 /* 1920*1080  carrier-server  --st=gc2093  data_interface=1  i2c=0x37  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

@@ -12,7 +12,7 @@
  *   0          3840*2160       30        mipi_2lane            linear
  *   1          3840*2160       20        mipi_2lane            linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -625,7 +625,7 @@ static int imx415_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
         if (init->enable) {
                 if(sensor->video.state == TX_ISP_MODULE_INIT){
-#ifndef SENSOR_WITHOUT_INIT                        
+#ifndef SENSOR_WITHOUT_INIT
 			ret = imx415_write_array(sd, wsize->regs);
                         if (ret)
                                 return ret;
@@ -1068,7 +1068,7 @@ static int imx415_remove(struct i2c_client *client)
 #ifndef SENSOR_WITHOUT_INIT
         private_clk_disable_unprepare(sensor->mclk);
         private_devm_clk_put(&client->dev, sensor->mclk);
-#endif 
+#endif
         tx_isp_subdev_deinit(sd);
         kfree(sensor);
 

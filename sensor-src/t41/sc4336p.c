@@ -11,7 +11,7 @@
  * sboot        resolution      fps       interface              mode
  *   0          2560*1440       30        mipi_2lane            linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -886,7 +886,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_prepare_enable(sensor->mclk);
-	
+
 	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n", info->default_boot, wsize->width, wsize->height, info->video_interface, info->mclk);
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;

@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include "linux/init.h"
 #include "linux/module.h"
@@ -1122,7 +1122,7 @@ static int jxk04_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 }
 
 static int jxk04_set_fps(struct tx_isp_subdev *sd, int fps)
-{ 
+{
         struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
         int ret = 0;
         unsigned int sclk = JXK04_SUPPORT_SCLK_25FPS;
@@ -1132,7 +1132,7 @@ static int jxk04_set_fps(struct tx_isp_subdev *sd, int fps)
         unsigned int newformat = 0;
         switch(sensor_max_fps){
         case TX_SENSOR_MAX_FPS_15:
-                sclk = JXK04_SUPPORT_SCLK_25FPS;    
+                sclk = JXK04_SUPPORT_SCLK_25FPS;
                 break;
         case TX_SENSOR_MAX_FPS_25:
                 sclk = JXK04_SUPPORT_SCLK_25FPS;
@@ -1490,7 +1490,7 @@ static int jxk04_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
                 if(arg)
                         ret = jxk04_set_expo(sd, sensor_val->value);
                 break;
-#if 0	
+#if 0
         case TX_ISP_EVENT_SENSOR_INT_TIME:
                 if(arg)
                         ret = jxk04_set_integration_time(sd, sensor_val->value);

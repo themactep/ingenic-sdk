@@ -17,7 +17,7 @@
  *   5           640x480        30        dvp           linear
  *   5           640x480        15        dvp           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

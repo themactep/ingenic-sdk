@@ -12,7 +12,7 @@
  *   0           2048*1536      25        mipi_2lane             linear
  *   1           2048*1536      25        mipi_2lane             hdr
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -38,7 +38,7 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION	"H20221118a"
 
-#define SENSOR_WITHOUT_INIT 
+#define SENSOR_WITHOUT_INIT
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 /*buf size = ((short exp start point / 2) * image wide pixel * 16bit / 2) byte */

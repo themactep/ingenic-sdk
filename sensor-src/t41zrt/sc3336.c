@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -25,7 +25,7 @@
 
 /* 定义SENSOR_WITHOUT_INIT时表示boot阶段已进行sensor初始化，下sensor初始化配置，可节省初始化sensor时间。*/
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
- #define SENSOR_WITHOUT_INIT 
+ #define SENSOR_WITHOUT_INIT
 
 #define SC3336_CHIP_ID_H	(0xcc)
 #define SC3336_CHIP_ID_L	(0x41)

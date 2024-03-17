@@ -11,7 +11,7 @@
  * sboot        resolution      fps       interface              mode
  *   0          2560*1440        30       mipi_2lane           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -692,7 +692,7 @@ static int jxk06_set_vflip(struct tx_isp_subdev *sd, int enable)
 
         /* 2'b01:mirror,2'b10:filp */
         switch(enable) {
-        case 0:	
+        case 0:
                 jxk06_read(sd, 0x12, &val);
                 val &= ~0x30;
                 jxk06_write(sd, 0x12, val | 0x30);

@@ -12,7 +12,7 @@
  *   0          2880*1620       20        mipi_2lane            linear
 
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -35,7 +35,7 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION	"H20220817a"
 
- #define SENSOR_WITHOUT_INIT 
+ #define SENSOR_WITHOUT_INIT
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 

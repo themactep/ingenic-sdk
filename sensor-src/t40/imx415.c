@@ -11,7 +11,7 @@
  *   1          3840*2160       15        mipi_4lane           linear
  *   2          1920*1080       60        mipi_4lane           linear
  */
-#define DEBUG
+/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -299,7 +299,7 @@ static struct regval_list imx415_init_regs_3840_2160_15fps_mipi[] = {
     {0x35A1, 0x02}, // -
     {0x36BC, 0x0C}, // -
     {0x36CC, 0x53}, // -
-    {0x36CD, 0x00}, // -                                              
+    {0x36CD, 0x00}, // -
     {0x36CE, 0x3C}, // -
     {0x36D0, 0x8C}, // -
     {0x36D1, 0x00}, // -
@@ -307,7 +307,7 @@ static struct regval_list imx415_init_regs_3840_2160_15fps_mipi[] = {
     {0x36D4, 0x3C}, // -
     {0x36D6, 0x53}, // -
     {0x36D7, 0x00}, // -
-    {0x36D8, 0x71}, // -          
+    {0x36D8, 0x71}, // -
     {0x36DA, 0x8C}, // -
     {0x36DB, 0x00}, // -
     {0x3701, 0x00}, // ADBIT1[7:0]
@@ -347,7 +347,7 @@ static struct regval_list imx415_init_regs_3840_2160_15fps_mipi[] = {
     {0x3BAE, 0xF6}, // -
     {0x3BAF, 0x02}, // -
     {0x3BB0, 0xA2}, // -
-    {0x3BB1, 0x03}, // -                  
+    {0x3BB1, 0x03}, // -
     {0x3BB2, 0xE0}, // -
     {0x3BB3, 0x03}, // -
     {0x3BB4, 0xE0}, // -
@@ -390,9 +390,9 @@ static struct regval_list imx415_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3021,0x01},  // VADD
 	{0x3022,0x01},  // ADDMODE[1:0]
 	{0x3024,0x4C},  // VMAX[19:0] 0xD3E -> 3382 -> 50fps             0xB02 -> 2818 -> 60fps
-	{0x3025,0x0B},  // 
+	{0x3025,0x0B},  //
 	{0x3028,0x6D},  // HMAX[15:0] 0x16D -> 365
-	{0x3029,0x01},  // 
+	{0x3029,0x01},  //
 	{0x3031,0x00},  // ADBIT[1:0]
 	{0x3033,0x08},  // SYS_MODE[3:0]
 	{0x3050,0x08},  // SHR0[19:0]
@@ -503,7 +503,7 @@ static struct regval_list imx415_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3BC8,0xBD},  // -
 	{0x3BCA,0xBD},  // -
 	{0x4004,0x48},  // TXCLKESC_FREQ[15:0]
-	{0x4005,0x09},  // 
+	{0x4005,0x09},  //
 	{0x4018,0xA7},  // TCLKPOST[15:0]
 	{0x401A,0x57},  // TCLKPREPARE[15:0]
 	{0x401C,0x5F},  // TCLKTRAIL[15:0]
