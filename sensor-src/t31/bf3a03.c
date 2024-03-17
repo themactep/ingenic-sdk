@@ -739,7 +739,7 @@ static int bf3a03_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("@@@@@@@ probe ok ------->bf3a03\n");
+	pr_debug("probe ok ------->bf3a03\n");
 
 	return 0;
 

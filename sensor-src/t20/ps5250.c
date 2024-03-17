@@ -1541,7 +1541,7 @@ static int ps5250_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &ps5250_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("@@@@@@@probe ok ------->ps5250\n");
+	pr_debug("probe ok ------->ps5250\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);

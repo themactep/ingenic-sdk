@@ -448,7 +448,7 @@ static int bg0806_set_analog_gain(struct v4l2_subdev *sd, int value)
 	total_gain = bg0806_clip(total_gain, 0x0040, 0x0f00);
 	vrefh = (128<<6)/total_gain - 1;
 	vrefh = bg0806_clip(vrefh, vrefh_min_tlb, 0x7F);
-	again = (128<<6)/(vrefh+1); //recaculate real again
+	again = (128<<6)/(vrefh+1); //recalculate real again
 	dgain = total_gain*512/again; // dgain
 	dgain = bg0806_clip(dgain, 512, 512); //min=1x,max=8x
 //	temp = (128<<6)%(total_gain+1);

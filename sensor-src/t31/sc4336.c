@@ -771,7 +771,7 @@ static int sc4336_g_chip_ident(struct tx_isp_subdev *sd,
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-			printk("@@@@@@@@@@@@@@@@@@ ok @@@@@@@@@@@@@@@@@@\n");
+			printk(" ok \n");
 		}else{
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
@@ -783,12 +783,12 @@ static int sc4336_g_chip_ident(struct tx_isp_subdev *sd,
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-			printk("@@@@@@@@@@@@@@@@@@ ok1 @@@@@@@@@@@@@@@@@@\n");
+			printk(" ok1 \n");
 		}else{
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	printk("@@@@@@@@@@@@@@@@@@ ok2 @@@@@@@@@@@@@@@@@@\n");
+	printk(" ok2 \n");
 	ret = sc4336_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc4336 chip.\n",

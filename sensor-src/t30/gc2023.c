@@ -1198,7 +1198,7 @@ static int gc2023_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("@@@@@@@probe ok ------->gc2023\n");
+	pr_debug("probe ok ------->gc2023\n");
 	return 0;
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);

@@ -782,7 +782,7 @@ static int imx225_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &imx225_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	printk("@@@@@@@sssssssssssssssssprobe ok ------->imx225\n");
+	printk("probe ok ------->imx225\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);

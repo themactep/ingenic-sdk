@@ -1539,7 +1539,7 @@ static int ov4688_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("@@@@@@@probe ok ------->ov4688\n");
+	ISP_WARNING("probe ok ------->ov4688\n");
 
 	return 0;
 }

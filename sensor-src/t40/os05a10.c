@@ -551,7 +551,7 @@ static struct regval_list os05a10_init_regs_2592_1944_12fps[] = {
         {0x3502, 0x19},
         /* {0x5081, 0x80},//color bar */
         {0x0100, 0x00},
-        {OS05A10_REG_END, 0x00},        /* END MARKER */
+        {OS05A10_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os05a10_init_regs_2592_1944_15fps[] = {
@@ -776,7 +776,7 @@ static struct regval_list os05a10_init_regs_2592_1944_15fps[] = {
         {0x3501, 0x09},
         {0x3502, 0xbc},
         {0x0100, 0x00},
-        {OS05A10_REG_END, 0x00},        /* END MARKER */
+        {OS05A10_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os05a10_init_regs_2592_1944_25fps[] = {
@@ -2270,12 +2270,12 @@ static struct tx_isp_sensor_win_setting *wsize = &os05a10_win_sizes[0];
 
 static struct regval_list os05a10_stream_on[] = {
         {0x0100, 0x01},
-        {OS05A10_REG_END, 0x00},        /* END MARKER */
+        {OS05A10_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os05a10_stream_off[] = {
         {0x0100, 0x00},
-        {OS05A10_REG_END, 0x00},        /* END MARKER */
+        {OS05A10_REG_END, 0x00}, /* END MARKER */
 };
 
 int os05a10_read(struct tx_isp_subdev *sd, uint16_t reg,

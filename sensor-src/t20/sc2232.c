@@ -915,7 +915,7 @@ static int sc2232_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sc2232_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("@@@@@@@probe ok ------->sc2232\n");
+	pr_debug("probe ok ------->sc2232\n");
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);
