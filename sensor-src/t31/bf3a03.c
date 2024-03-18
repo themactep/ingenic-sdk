@@ -25,6 +25,7 @@
 #include <txx-funcs.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x6e
 #define SENSOR_CHIP_ID_H (0x3a)
 #define SENSOR_CHIP_ID_L (0x03)
 #define SENSOR_FLAG_END 0xff
@@ -177,7 +178,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.chip_id = 0x3a03,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x6e,
+	.cbus_device = SENSOR_I2C_ADDRESS;
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
