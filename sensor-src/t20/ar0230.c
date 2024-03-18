@@ -175,6 +175,7 @@ struct again_lut sensor_again_lut[] = {
 	{HCG, 0x40, 356054},
 #endif
 };
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
@@ -236,11 +237,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x301A, 0x0001}, // SENSOR_REGISTER
@@ -516,10 +515,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG12_1X12,
 };
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x301A, 0x10DC}, //SENSOR_REGISTER
 	{SENSOR_REG_END, 0x00},
@@ -622,7 +617,6 @@ static int sensor_reset(struct v4l2_subdev *sd, u32 val) {
 static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	unsigned char v[2];
 	int ret;
-
 	ret = sensor_read(sd, 0x3000, v);
 	if (ret < 0)
 		return ret;
@@ -635,17 +629,15 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret;
-
 	ret = sensor_write(sd, 0x3012, value);
 	if (ret < 0)
 		return ret;
-	return 0;
 
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret;
-
 #if 0
 	if (again_mode == LCG) {
 		ret = sensor_write(sd,0x3202, 0x0080);
@@ -661,7 +653,6 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	} else {
 		printk("Do not support this Again mode!\n");
 	}
-
 #endif
 	ret = sensor_write(sd, 0x3060, value);
 	if (ret < 0)
@@ -686,6 +677,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	int ret = 0;
 	if (!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -695,6 +687,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	arg.value = (int) &sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
@@ -703,13 +696,11 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 
 static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 	int ret = 0;
-
 	if (enable) {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
@@ -719,7 +710,6 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
-
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
@@ -753,11 +743,13 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hts = tmp[0];
 	if (ret < 0)
 		return -1;
+
 	hts = (hts << 8) + tmp[1];
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = sensor_write(sd, 0x300A, vts);
 	if (ret < 0)
 		return -1;
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -773,13 +765,11 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
 	}
-
 	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
@@ -793,8 +783,7 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 	return ret;
 }
 
-static int sensor_g_chip_ident(struct v4l2_subdev *sd,
-			       struct v4l2_dbg_chip_ident *chip) {
+static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_ident *chip) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
@@ -829,6 +818,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
+
 	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
              SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
@@ -903,16 +893,16 @@ static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 }
 
 #ifdef CONFIG_VIDEO_ADV_DEBUG
-static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
-{
+static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char val[2];
 	int ret;
-
 	if (!v4l2_chip_match_i2c_client(client, &reg->match))
 		return -EINVAL;
+
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, val);
 	reg->val = val[0];
 	reg->val = (reg->val<<8)+val[1];
@@ -920,14 +910,15 @@ static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 	return ret;
 }
 
-static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
-{
+static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
 	if (!v4l2_chip_match_i2c_client(client, &reg->match))
 		return -EINVAL;
+
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xffff);
 	return 0;
 }
@@ -994,8 +985,7 @@ static int sensor_probe(struct i2c_client *client,
 	}
 #if 0
 	sensor_attr.dvp.gpio = sensor_gpio_func;
-
-	switch(sensor_gpio_func) {
+	switch (sensor_gpio_func) {
 		case DVP_PA_LOW_10BIT:
 		case DVP_PA_HIGH_10BIT:
 			mbus = sensor_mbus_code[0];
@@ -1006,10 +996,8 @@ static int sensor_probe(struct i2c_client *client,
 		default:
 			goto err_set_sensor_gpio;
 	}
-
-	for(i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
+	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
-
 #endif
 	/*
 	       convert sensor-gain into isp-gain,
@@ -1023,16 +1011,15 @@ static int sensor_probe(struct i2c_client *client,
 	sensor->video.vi_max_height = wsize->height;
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
-
 	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
+
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);
 	clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 
@@ -1082,5 +1069,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision "SENSOR_NAME" sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

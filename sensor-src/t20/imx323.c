@@ -30,10 +30,8 @@
 #define SENSOR_MAX_HEIGHT 1350
 #define SENSOR_CHIP_ID_H (0x50)
 #define SENSOR_CHIP_ID_L (0x0)
-
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-
 #define SENSOR_SUPPORT_SCLK (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -41,6 +39,7 @@
 #define AGAIN_MAX_DB 0x50
 #define DGAIN_MAX_DB 0x3c
 #define DRIVER_VERSION "IMX32320170309"
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -118,7 +117,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 

@@ -421,17 +421,17 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x40},
 
-	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 
-	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
-	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 /*
@@ -456,12 +456,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	//{ 0xf2, 0x8f},
-	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	//{ 0xf2, 0x80},
-	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -1039,5 +1039,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Galaxycore "SENSOR_NAME" sensors");
+MODULE_DESCRIPTION("A low-level driver for Galaxycore "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

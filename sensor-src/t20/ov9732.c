@@ -18,7 +18,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "ov9732"
@@ -29,16 +28,13 @@
 #define SENSOR_MAX_HEIGHT 0
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
-
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-
 #define SENSOR_SUPPORT_MCLK  (24*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "20180320"
 #define DRIVE_CAPABILITY_1
-
 #define OV9732_USE_AGAIN_ONLY
 
 static struct sensor_info sensor_info = {
@@ -207,7 +203,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "ov9732",
+	.name = SENSOR_NAME,
 	.chip_id = 0x9732,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
@@ -234,7 +230,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
@@ -1025,7 +1021,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "ov9732", 0 },
+	{ SENSOR_NAME, 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -1033,7 +1029,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "ov9732",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,

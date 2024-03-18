@@ -267,7 +267,7 @@ struct tx_isp_sensor_attribute sensor_attr={
         .sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
         .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
         .sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
-        //	void priv; /* point to struct tx_isp_sensor_board_info */
+        // void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 struct tx_isp_mipi_bus sensor_mipi_linear={

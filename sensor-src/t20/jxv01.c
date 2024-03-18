@@ -18,7 +18,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "jxv01"
@@ -29,10 +28,8 @@
 #define SENSOR_MAX_HEIGHT 0
 #define SENSOR_CHIP_ID_H (0x0e)
 #define SENSOR_CHIP_ID_L (0x04)
-
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_PCLK (26975520)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -137,7 +134,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "jxv01",
+	.name = SENSOR_NAME,
 	.chip_id = 0x0e04,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
@@ -923,7 +920,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "jxv01", 0 },
+	{ SENSOR_NAME, 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -931,7 +928,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "jxv01",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,

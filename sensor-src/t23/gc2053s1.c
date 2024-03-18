@@ -223,7 +223,7 @@ struct tx_isp_sensor_attribute sensor_attr={
                 .call_times = 1,
                 .sdelay = 1000,
         }
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 

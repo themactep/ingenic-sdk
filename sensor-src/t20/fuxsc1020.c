@@ -18,7 +18,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "fuxsc1020"
