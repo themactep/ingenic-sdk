@@ -16,6 +16,7 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <soc/gpio.h>
 
@@ -821,11 +822,13 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void)
 {
+	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
+	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
 
