@@ -28,6 +28,7 @@
 #define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
+#define SENSOR_CHIP_ID 0xda4d
 #define SENSOR_CHIP_ID_H (0xda)
 #define SENSOR_CHIP_ID_L (0x4d)
 #define SENSOR_REG_END 0xffff
