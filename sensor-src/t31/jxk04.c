@@ -337,7 +337,7 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi_5m[] = {
 	{0x19, 0x20},
 	{0x12, 0x00},
 	{SENSOR_REG_DELAY, 0x50},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2560_1440_25fps_mipi_5m[] = {
@@ -457,7 +457,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi_5m[] = {
         {0x12, 0x00},
         {0x00, 0x10},
 	{SENSOR_REG_DELAY, 0x15},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_5m[] = {
@@ -573,7 +573,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_5m[] = {
 	{0x19, 0x20},
 	{0x12, 0x00},
 	{SENSOR_REG_DELAY, 0x50},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
@@ -619,13 +619,13 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 static struct regval_list sensor_stream_on_mipi[] = {
 
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 
 	{0x12, 0x40},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -1107,7 +1107,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

@@ -425,11 +425,11 @@ static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &imx415_win_sizes[0];
 
 static struct regval_list imx415_stream_on_mipi[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx415_stream_off_mipi[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 int imx415_read(struct tx_isp_subdev *sd, uint16_t reg,

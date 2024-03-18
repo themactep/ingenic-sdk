@@ -478,7 +478,7 @@ static struct regval_list gc1034_init_regs_1280_720[] = {
 	{0xfe,0x00},
 	{0xf2,0x0f},
 
-  	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+  	{SENSOR_FLAG_END, 0x00},
 };
 
 /*
@@ -504,14 +504,14 @@ static struct regval_list gc1034_stream_on[] = {
 	{0xfe, 0x03},
 	{0x10, 0x91},
 	{0xfe, 0x00},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list gc1034_stream_off[] = {
 	{0xfe, 0x03},
 	{0x10 ,0x81},
 	{0xfe ,0x00},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 int gc1034_read(struct v4l2_subdev *sd, unsigned char reg,

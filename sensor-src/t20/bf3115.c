@@ -254,7 +254,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 
 	{0xfe,0x01},
 	{0xf1,0x80},/*disable all the isp function inside the sensor*/
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 /*
@@ -279,13 +279,13 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct regval_list sensor_stream_on[] = {
 	{ 0xfe, 0x00},
 	{ 0xe8, 0x00},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{ 0xfe, 0x00},
 	{ 0xe8, 0x01},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 int sensor_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value)

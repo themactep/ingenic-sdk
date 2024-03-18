@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -18,10 +17,10 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+#define SENSOR_NAME "sc1245a"
 #define SENSOR_CHIP_ID_H (0x12)
 #define SENSOR_CHIP_ID_M (0x45)
 #define SENSOR_CHIP_ID_L (0x02)
@@ -163,7 +162,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 }
 
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "sc1245a",
+	.name = SENSOR_NAME,
 	.chip_id = 0x1245a,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
@@ -332,12 +331,12 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3633, 0x42},
 	{0x3301, 0x04},
 	{0x3622, 0xd6},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1280_720_15fps[] = {
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
@@ -364,12 +363,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -611,11 +610,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("sc1245a stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("sc1245a stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -749,13 +748,13 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		printk("chip found @ 0x%x (%s) is not an sc1245a chip.\n",
-				client->addr, client->adapter->name);
+		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
+				client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-	printk("sc1245a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
-		memcpy(chip->name, "sc1245a", sizeof("sc1245a"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -856,7 +855,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 
@@ -869,7 +868,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "sc1245a",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -960,7 +959,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc1245a\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
@@ -990,7 +989,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "sc1245a", 0 },
+	{ SENSOR_NAME, 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -998,7 +997,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "sc1245a",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
@@ -1010,7 +1009,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init sc1245a driver.\n");
+		printk("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -1025,5 +1024,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision sc1245a sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

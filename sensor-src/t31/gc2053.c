@@ -361,7 +361,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x13, 0x07},
 	{0xfe, 0x00},
 	{0x3e, 0x40},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -524,7 +524,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
@@ -679,7 +679,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -840,7 +840,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
@@ -993,7 +993,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x40},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
@@ -1137,7 +1137,7 @@ static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -1200,19 +1200,19 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {

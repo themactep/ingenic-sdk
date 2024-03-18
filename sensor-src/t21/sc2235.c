@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -18,20 +17,19 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME                 "sc2235"
-#define SENSOR_CHIP_ID              0x2235
+#define SENSOR_NAME "sc2235"
+#define SENSOR_CHIP_ID 0x2235
 #define SENSOR_CHIP_ID_H (0x22)
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_PCLK_FPS_30  (74250*1000)
-#define SENSOR_SUPPORT_PCLK_FPS_15  (45000*1000)
-#define SENSOR_OUTPUT_MAX_FPS       30
-#define SENSOR_OUTPUT_MIN_FPS       5
+#define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
+#define SENSOR_SUPPORT_PCLK_FPS_15 (45000*1000)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20200331a"
 
@@ -373,7 +371,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3039, 0x31},
 #endif
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
@@ -482,7 +480,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0x3237, 0x09},
 	{0x3238, 0x94},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -511,12 +509,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -951,7 +949,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

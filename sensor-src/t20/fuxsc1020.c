@@ -88,7 +88,7 @@ struct tx_isp_sensor_attribute fuxsc1020_attr={
 };
 
 static struct regval_list fuxsc1020_init_regs_1280_720_25fps[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -111,11 +111,11 @@ static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
  */
 
 static struct regval_list fuxsc1020_stream_on[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list fuxsc1020_stream_off[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int fuxsc1020_read(struct v4l2_subdev *sd, unsigned char reg,

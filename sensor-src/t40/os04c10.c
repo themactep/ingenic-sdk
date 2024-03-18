@@ -603,7 +603,7 @@ static struct regval_list sensor_init_regs_2688_1520_20fps_mipi_dol[] = {
 #endif
 	{0x0100,0x01},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2688_1520_30fps_mipi_dol[] = {
@@ -896,7 +896,7 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi_dol[] = {
 	{0x5000,0xf9},
 	{0x3624,0x00},
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2688_1520_30fps_mipi_linear[] = {
@@ -1190,7 +1190,7 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi_linear[] = {
 	{0x5000,0xf9},
 	{0x3624,0x00},
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
@@ -1229,11 +1229,11 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
  */
 
 static struct regval_list sensor_stream_on[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd,  uint16_t reg,
@@ -1968,7 +1968,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

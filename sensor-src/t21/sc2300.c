@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -18,22 +17,20 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-
 //#include <linux/delay.h>
 //#include <apical-isp/apical_math.h>
 
-#define SENSOR_NAME                 "sc2300"
-#define SENSOR_CHIP_ID              0x2300
+#define SENSOR_NAME "sc2300"
+#define SENSOR_CHIP_ID 0x2300
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_L (0x00)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_SCLK         (72000000)
-#define SENSOR_OUTPUT_MAX_FPS       30
-#define SENSOR_OUTPUT_MIN_FPS       5
+#define SENSOR_SUPPORT_SCLK (72000000)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "Howwouldiknow"
 
@@ -407,7 +404,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x330b, 0x78},
 	{0x0100, 0x01},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -436,12 +433,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

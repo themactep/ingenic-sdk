@@ -207,7 +207,7 @@ static struct regval_list jxh65_init_regs_1280_960_25fps[] = {
 	{SENSOR_REG_DELAY,500},
 	{0x45,0x19},
 	{0x1F,0x11},
-	{SENSOR_REG_END, 0x00}	/* END MARKER */
+	{SENSOR_REG_END, 0x00}
 };
 
 /*
@@ -235,13 +235,13 @@ static enum v4l2_mbus_pixelcode jxh65_mbus_code[] = {
 
 static struct regval_list jxh65_stream_on[] = {
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxh65_stream_off[] = {
 	/* Sensor enter LP11*/
 	{0x12, 0x40},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int jxh65_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value)

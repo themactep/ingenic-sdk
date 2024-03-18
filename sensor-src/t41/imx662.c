@@ -458,7 +458,7 @@ static struct regval_list imx662_init_regs_960_540_30fps_mipi[] = {
         {0x4548, 0x03},  // -
         {0x4549, 0x03},  // -
         {0x3000, 0x00},
-        {SENSOR_REG_DELAY, 0x18}, /* END MARKER */
+        {SENSOR_REG_DELAY, 0x18},
         {0x3002, 0x00},
         {SENSOR_REG_END, 0x00},/* END MARKER */
 };
@@ -633,7 +633,7 @@ static struct regval_list imx662_init_regs_1920_1080_30fps_mipi[] = {
         /* {0x30e2, 0x1}, */
 
         {0x3000,0x00 },
-        {SENSOR_REG_DELAY, 0x18}, /* END MARKER */
+        {SENSOR_REG_DELAY, 0x18},
         {0x3002,0x00 },
 
         {SENSOR_REG_END, 0x00},/* END MARKER */
@@ -680,12 +680,12 @@ static struct tx_isp_sensor_win_setting *wsize = &imx662_win_sizes[0];
 
 static struct regval_list imx662_stream_on_mipi[] = {
         {0x3000, 0x00},
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx662_stream_off_mipi[] = {
         {0x3000, 0x01},
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 int imx662_read(struct tx_isp_subdev *sd, uint16_t reg,

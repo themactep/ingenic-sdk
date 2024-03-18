@@ -347,7 +347,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x48, 0x0A},
 
 #endif
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_fs[] = {
@@ -694,7 +694,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_fs[] = {
 	{0x48, 0x0A},
 
 #endif
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
@@ -817,7 +817,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0x01,0x0a},
 	{0x02,0x00},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
@@ -917,7 +917,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x1F,0x01},
 	//	{0x99,0x0F},
 	//	{0x9b,0x0F},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
@@ -1019,7 +1019,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x00,0x00},
 	{0x01,0x0a},
 	{0x02,0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_640_480_30fps_dvp[] = {
@@ -1116,7 +1116,7 @@ static struct regval_list sensor_init_regs_640_480_30fps_dvp[] = {
         {0x12, 0x07},
         {0x48, 0x85},
         {0x48, 0x05},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_640_480_15fps_dvp[] = {
@@ -1214,7 +1214,7 @@ static struct regval_list sensor_init_regs_640_480_15fps_dvp[] = {
         {0x12, 0x07},
         {0x48, 0x85},
         {0x48, 0x05},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -1465,20 +1465,20 @@ struct tx_isp_sensor_attribute sensor_attr={
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x12, 0x40},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -2239,7 +2239,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

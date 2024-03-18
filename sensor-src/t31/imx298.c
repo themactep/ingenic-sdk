@@ -698,7 +698,7 @@ static struct regval_list sensor_init_regs_2320_1440_30fps_mipi[] = {
 	{0x3058, 0x00},
 	{0x3103, 0x01},
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -717,12 +717,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x3000, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x3000, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
