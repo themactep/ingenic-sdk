@@ -867,7 +867,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = sensor_set_fps(sensor, ctrl->value);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return 0;
 }

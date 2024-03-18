@@ -158,7 +158,7 @@ err_div:
 
 	printk("err: %s,%s,%d err_div loop = %d\n", __FILE__, __func__, __LINE__, loop);
 	gain_one1 = 0x10000;
-	*regs = 0x1000;;
+	*regs = 0x1000;
 	return gain_one1;
 }
 unsigned int ov9732_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
@@ -875,7 +875,7 @@ static long ov9732_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = ov9732_set_fps(sensor, ctrl->value);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return 0;
 }

@@ -335,7 +335,7 @@ static long fuxsc1020_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp
 			break;
 		default:
 			printk("do not support ctrl->cmd ====%d\n",ctrl->cmd);
-			break;;
+			break;
 	}
 	return 0;
 }
