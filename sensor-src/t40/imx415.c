@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0+
 /* imx415.c
  *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
