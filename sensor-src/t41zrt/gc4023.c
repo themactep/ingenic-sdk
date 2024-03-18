@@ -22,15 +22,15 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define GC4023_CHIP_ID_H        (0x40)
-#define GC4023_CHIP_ID_L        (0x23)
-#define GC4023_REG_END          0xffff
-#define GC4023_REG_DELAY        0x0000
-#define GC4023_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
-#define GC4023_SUPPORT_20FPS_SCLK 108*1000*1000
+#define SENSOR_CHIP_ID_H (0x40)
+#define SENSOR_CHIP_ID_L (0x23)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0x0000
+#define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
+#define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
 
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION  "H20230719"
+#define SENSOR_VERSION "H20230719"
 
 /* CONFIG_SENSOR_SUSPEND:支持Sensor suspend功能
  * SENSOR_POWER_OFF :选择Sensor断电
@@ -75,7 +75,7 @@ struct again_lut {
     unsigned int gain;
 };
 
-struct again_lut gc4023_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
         {0x00,0x00 ,0x00 ,0x00 ,0x18 ,0x18 ,0x01 ,0x00,     0},
         {0x01,0x80 ,0x02 ,0x00 ,0x19 ,0x19 ,0x01 ,0x0B, 16208},
         {0x02,0x01 ,0x00 ,0x00 ,0x19 ,0x19 ,0x01 ,0x19, 32217},
@@ -103,9 +103,9 @@ struct again_lut gc4023_again_lut[] = {
         {0x18,0x55 ,0x0a ,0x20 ,0x2e ,0x2e ,0x40 ,0x00,393216},
 };
 
-struct tx_isp_sensor_attribute gc4023_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int gc4023_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
 {
     unsigned int expo = it >> shift;
     unsigned int isp_it = it;
@@ -115,18 +115,18 @@ unsigned int gc4023_alloc_integration_time(unsigned int it, unsigned char shift,
     return isp_it;
 }
 
-unsigned int gc4023_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-    struct again_lut *lut = gc4023_again_lut;
-    while(lut->gain <= gc4023_attr.max_again) {
-        if(isp_gain == 0) {
+    struct again_lut *lut = sensor_again_lut;
+    while (lut->gain <= sensor_attr.max_again) {
+        if (isp_gain == 0) {
             *sensor_again = 0;
             return lut[0].gain;
         } else if (isp_gain < lut->gain) {
             *sensor_again = (lut - 1)->index;
             return (lut - 1)->gain;
         } else {
-            if((lut->gain == gc4023_attr.max_again) && (isp_gain >= lut->gain)) {
+            if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
                 *sensor_again = lut->index;
                 return lut->gain;
             }
@@ -138,12 +138,12 @@ unsigned int gc4023_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
     return isp_gain;
 }
 
-unsigned int gc4023_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
     return 0;
 }
 
-struct tx_isp_mipi_bus gc4023_mipi_linear = {
+struct tx_isp_mipi_bus sensor_mipi_linear = {
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 702,
     .lans = 2,
@@ -173,7 +173,7 @@ struct tx_isp_mipi_bus gc4023_mipi_linear = {
 };
 
 
-struct tx_isp_mipi_bus gc4023_mipi_20fps_linear = {
+struct tx_isp_mipi_bus sensor_mipi_20fps_linear = {
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 464,
     .lans = 2,
@@ -202,7 +202,7 @@ struct tx_isp_mipi_bus gc4023_mipi_20fps_linear = {
     .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus gc4023_mipi_15fps_linear = {
+struct tx_isp_mipi_bus sensor_mipi_15fps_linear = {
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 352,
     .lans = 2,
@@ -231,7 +231,7 @@ struct tx_isp_mipi_bus gc4023_mipi_15fps_linear = {
     .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus gc4023_mipi_120fps_linear = {
+struct tx_isp_mipi_bus sensor_mipi_120fps_linear = {
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 351,
     .lans = 2,
@@ -260,7 +260,7 @@ struct tx_isp_mipi_bus gc4023_mipi_120fps_linear = {
     .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute gc4023_attr={
+struct tx_isp_sensor_attribute sensor_attr={
     .name = "gc4023",
     .chip_id = 0x4023,
     .cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -277,13 +277,13 @@ struct tx_isp_sensor_attribute gc4023_attr={
     .integration_time_apply_delay = 2,
     .again_apply_delay = 2,
     .dgain_apply_delay = 2,
-    .sensor_ctrl.alloc_again = gc4023_alloc_again,
-    .sensor_ctrl.alloc_dgain = gc4023_alloc_dgain,
+    .sensor_ctrl.alloc_again = sensor_alloc_again,
+    .sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
     //      void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 
-static struct regval_list gc4023_init_regs_2560_1440_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
     /*version 1.2*/
     /*mclk 27Mhz*/
     /*mipi 702Mbps/lane*/
@@ -444,16 +444,16 @@ static struct regval_list gc4023_init_regs_2560_1440_25fps_mipi[] = {
     {0x0a75, 0x41},
     {0x0a70, 0x03},
     {0x0a5a, 0x80},
-    {GC4023_REG_DELAY, 0x14}, //delay 20ms
+    {SENSOR_REG_DELAY, 0x14}, //delay 20ms
     {0x05be, 0x01},
     {0x0a70, 0x00},
     {0x0080, 0x02},
     {0x0a67, 0x00},
     {0x0100, 0x09},
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc4023_init_regs_2560_1440_25fps_24Mmipi[] = {
+static struct regval_list sensor_init_regs_2560_1440_25fps_24Mmipi[] = {
 
     /*version 1.2*/
     /*mclk 24Mhz*/
@@ -614,16 +614,16 @@ static struct regval_list gc4023_init_regs_2560_1440_25fps_24Mmipi[] = {
     {0x0a75, 0x41},
     {0x0a70, 0x03},
     {0x0a5a, 0x80},
-    {GC4023_REG_DELAY, 0x14}, //delay 20ms
+    {SENSOR_REG_DELAY, 0x14}, //delay 20ms
     {0x05be, 0x01},
     {0x0a70, 0x00},
     {0x0080, 0x02},
     {0x0a67, 0x00},
     {0x0100, 0x09},
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
+static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
     /*version 1.2*/
     /*mclk 27Mhz*/
     /*mipi 702Mbps/lane*/
@@ -784,18 +784,18 @@ static struct regval_list gc4023_init_regs_2560_1440_20fps_mipi[] = {
     {0x0a75,0x41},
     {0x0a70,0x03},
     {0x0a5a,0x80},
-    {GC4023_REG_DELAY, 0x14}, //delay 20ms
+    {SENSOR_REG_DELAY, 0x14}, //delay 20ms
     {0x05be, 0x01},
     {0x0a70, 0x00},
     {0x0080, 0x02},
     {0x0a67, 0x00},
     {0x0100, 0x09},
 
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 
-static struct regval_list gc4023_init_regs_2560_1440_15fps_mipi[] = {
+static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
     /*version 1.2*/
     /*mclk 27Mhz*/
     /*mipi 702Mbps/lane*/
@@ -956,17 +956,17 @@ static struct regval_list gc4023_init_regs_2560_1440_15fps_mipi[] = {
     {0x0a75,0x41},
     {0x0a70,0x03},
     {0x0a5a,0x80},
-    {GC4023_REG_DELAY, 0x14}, //delay 20ms
+    {SENSOR_REG_DELAY, 0x14}, //delay 20ms
     {0x05be, 0x01},
     {0x0a70, 0x00},
     {0x0080, 0x02},
     {0x0a67, 0x00},
     {0x0100, 0x09},
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 
-static struct regval_list gc4023_init_regs_1280_360_120fps_24M_mipi[] = {
+static struct regval_list sensor_init_regs_1280_360_120fps_24M_mipi[] = {
 	//version 0.5
 	//mclk 24Mhz
 	//mipi 2 lane 351Mbps/lane
@@ -1132,93 +1132,93 @@ static struct regval_list gc4023_init_regs_1280_360_120fps_24M_mipi[] = {
 	{0x0a75,0x41},
 	{0x0a70,0x03},
 	{0x0a5a,0x80},
-	{GC4023_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
 	{0x05be,0x01},
 	{0x0a70,0x00},
 	{0x0080,0x02},
 	{0x0a67,0x00},
-	{GC4023_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting gc4023_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
     /* [0] 2560*1440 @max 30fps*/
     {
-        .width          = 2560,
-        .height         = 1440,
-        .fps            = 30 << 16 | 1,
-        .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-        .colorspace     = TISP_COLORSPACE_SRGB,
-        .regs           = gc4023_init_regs_2560_1440_25fps_mipi,
+        .width = 2560,
+        .height = 1440,
+        .fps = 30 << 16 | 1,
+        .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+        .colorspace = TISP_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_2560_1440_25fps_mipi,
     },
     {
-        .width          = 2560,
-        .height         = 1440,
-        .fps            = 25 << 16 | 1,
-        .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-        .colorspace     = TISP_COLORSPACE_SRGB,
-        .regs           = gc4023_init_regs_2560_1440_25fps_24Mmipi,
+        .width = 2560,
+        .height = 1440,
+        .fps = 25 << 16 | 1,
+        .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+        .colorspace = TISP_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_2560_1440_25fps_24Mmipi,
     },
     {
-        .width          = 2560,
-        .height         = 1440,
-        .fps            = 20 << 16 | 1,
-        .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-        .colorspace     = TISP_COLORSPACE_SRGB,
-        .regs           = gc4023_init_regs_2560_1440_20fps_mipi,
+        .width = 2560,
+        .height = 1440,
+        .fps = 20 << 16 | 1,
+        .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+        .colorspace = TISP_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_2560_1440_20fps_mipi,
     },
     {
-        .width          = 2560,
-        .height         = 1440,
-        .fps            = 15 << 16 | 1,
-        .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-        .colorspace     = TISP_COLORSPACE_SRGB,
-        .regs           = gc4023_init_regs_2560_1440_15fps_mipi,
+        .width = 2560,
+        .height = 1440,
+        .fps = 15 << 16 | 1,
+        .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+        .colorspace = TISP_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_2560_1440_15fps_mipi,
     },
     {
-        .width          = 1280,
-        .height         = 360,
-        .fps            = 120 << 16 | 1,
-        .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-        .colorspace     = TISP_COLORSPACE_SRGB,
-        .regs           = gc4023_init_regs_1280_360_120fps_24M_mipi,
+        .width = 1280,
+        .height = 360,
+        .fps = 120 << 16 | 1,
+        .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+        .colorspace = TISP_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_1280_360_120fps_24M_mipi,
     },
 };
 
-struct tx_isp_sensor_win_setting *wsize = &gc4023_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 /*
  * the part of driver was fixed.
  */
 
-static struct regval_list gc4023_stream_on[] = {
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+static struct regval_list sensor_stream_on[] = {
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc4023_stream_off[] = {
-    {GC4023_REG_END, 0x00}, /* END MARKER */
+static struct regval_list sensor_stream_off[] = {
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int gc4023_read(struct tx_isp_subdev *sd,  uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd,  uint16_t reg,
                 unsigned char *value)
 {
     struct i2c_client *client = tx_isp_get_subdevdata(sd);
     uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
     struct i2c_msg msg[2] = {
         [0] = {
-            .addr   = client->addr,
-            .flags  = 0,
-            .len    = 2,
-            .buf    = buf,
+            .addr = client->addr,
+            .flags = 0,
+            .len = 2,
+            .buf = buf,
         },
         [1] = {
-            .addr   = client->addr,
-            .flags  = I2C_M_RD,
-            .len    = 1,
-            .buf    = value,
+            .addr = client->addr,
+            .flags = I2C_M_RD,
+            .len = 1,
+            .buf = value,
         }
     };
     int ret;
@@ -1229,16 +1229,16 @@ int gc4023_read(struct tx_isp_subdev *sd,  uint16_t reg,
     return ret;
 }
 
-int gc4023_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
                  unsigned char value)
 {
     struct i2c_client *client = tx_isp_get_subdevdata(sd);
     uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
     struct i2c_msg msg = {
-        .addr   = client->addr,
-        .flags  = 0,
-        .len    = 3,
-        .buf    = buf,
+        .addr = client->addr,
+        .flags = 0,
+        .len = 3,
+        .buf = buf,
     };
     int ret;
     ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -1249,15 +1249,15 @@ int gc4023_write(struct tx_isp_subdev *sd, uint16_t reg,
 }
 
 #if 1
-static int gc4023_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
     int ret;
     unsigned char val;
-    while (vals->reg_num != GC4023_REG_END) {
-        if (vals->reg_num == GC4023_REG_DELAY) {
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
             private_msleep(vals->value);
         } else {
-            ret = gc4023_read(sd, vals->reg_num, &val);
+            ret = sensor_read(sd, vals->reg_num, &val);
             if (ret < 0)
                 return ret;
         }
@@ -1269,14 +1269,14 @@ static int gc4023_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int gc4023_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
     int ret;
-    while (vals->reg_num != GC4023_REG_END) {
-        if (vals->reg_num == GC4023_REG_DELAY) {
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
             private_msleep(vals->value);
         } else {
-            ret = gc4023_write(sd, vals->reg_num, vals->value);
+            ret = sensor_write(sd, vals->reg_num, vals->value);
             if (ret < 0)
                 return ret;
         }
@@ -1286,26 +1286,26 @@ static int gc4023_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
     return 0;
 }
 
-static int gc4023_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
     return 0;
 }
 
-static int gc4023_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
     unsigned char v;
     int ret;
-    ret = gc4023_read(sd, 0x03f0, &v);
+    ret = sensor_read(sd, 0x03f0, &v);
     pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
     if (ret < 0)
         return ret;
-    if (v != GC4023_CHIP_ID_H)
+    if (v != SENSOR_CHIP_ID_H)
         return -ENODEV;
-    ret = gc4023_read(sd, 0x03f1, &v);
+    ret = sensor_read(sd, 0x03f1, &v);
     pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
     if (ret < 0)
         return ret;
-    if (v != GC4023_CHIP_ID_L)
+    if (v != SENSOR_CHIP_ID_L)
         return -ENODEV;
     *ident = (*ident << 8) | v;
 
@@ -1313,37 +1313,37 @@ static int gc4023_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 }
 
 #if 1
-static int gc4023_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
     int expo = (value & 0xffff);
     int again = (value & 0xffff0000) >> 16;
-    struct again_lut *val_lut = gc4023_again_lut;
+    struct again_lut *val_lut = sensor_again_lut;
 
     /* printk("it is %d, again is %d\n",expo,again); */
     /*expo*/
-    ret = gc4023_write(sd, 0x0203,  expo & 0xff);
-    ret += gc4023_write(sd, 0x0202, expo >> 8);
+    ret = sensor_write(sd, 0x0203,  expo & 0xff);
+    ret += sensor_write(sd, 0x0202, expo >> 8);
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d\n" ,__LINE__ );
+        ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
         return ret;
     }
 
     /*gain*/
-    if(again>ht_gain) again=ht_gain;
+    if (again>ht_gain) again=ht_gain;
 
-    ret = gc4023_write(sd, 0x0614, val_lut[again].reg614);
-    ret = gc4023_write(sd, 0x0615, val_lut[again].reg615);
+    ret = sensor_write(sd, 0x0614, val_lut[again].reg614);
+    ret = sensor_write(sd, 0x0615, val_lut[again].reg615);
 
-    ret = gc4023_write(sd, 0x0218, val_lut[again].reg218);
-    ret = gc4023_write(sd, 0x1467, val_lut[again].reg1467);
-    ret = gc4023_write(sd, 0x1468, val_lut[again].reg1468);
-    ret = gc4023_write(sd, 0x00b8, val_lut[again].regb8);
-    ret = gc4023_write(sd, 0x00b9, val_lut[again].regb9);
+    ret = sensor_write(sd, 0x0218, val_lut[again].reg218);
+    ret = sensor_write(sd, 0x1467, val_lut[again].reg1467);
+    ret = sensor_write(sd, 0x1468, val_lut[again].reg1468);
+    ret = sensor_write(sd, 0x00b8, val_lut[again].regb8);
+    ret = sensor_write(sd, 0x00b9, val_lut[again].regb9);
     ag_last=again;
 
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d\n" ,__LINE__ );
+        ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
         return ret;
     }
 
@@ -1353,42 +1353,42 @@ static int gc4023_set_expo(struct tx_isp_subdev *sd, int value)
 
 static int resume_expo = 0;
 static unsigned int resume_vts = 0;
-static int gc4023_resume(struct tx_isp_subdev *sd)
+static int sensor_resume(struct tx_isp_subdev *sd)
 {
     int ret = 0;
     int expo = (resume_expo & 0xffff);
     int again = (resume_expo & 0xffff0000) >> 16;
-    struct again_lut *val_lut = gc4023_again_lut;
+    struct again_lut *val_lut = sensor_again_lut;
 
     /* printk("it is %d, again is %d\n",expo,again); */
     /*expo*/
-    ret = gc4023_write(sd, 0x0203,  expo & 0xff);
-    ret += gc4023_write(sd, 0x0202, expo >> 8);
+    ret = sensor_write(sd, 0x0203,  expo & 0xff);
+    ret += sensor_write(sd, 0x0202, expo >> 8);
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d\n" ,__LINE__ );
+        ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
         return ret;
     }
 
     /*gain*/
 
-    ret = gc4023_write(sd, 0x0614, val_lut[again].reg614);
-    ret = gc4023_write(sd, 0x0615, val_lut[again].reg615);
+    ret = sensor_write(sd, 0x0614, val_lut[again].reg614);
+    ret = sensor_write(sd, 0x0615, val_lut[again].reg615);
 
-    ret = gc4023_write(sd, 0x0218, val_lut[again].reg218);
-    ret = gc4023_write(sd, 0x1467, val_lut[again].reg1467);
-    ret = gc4023_write(sd, 0x1468, val_lut[again].reg1468);
-    ret = gc4023_write(sd, 0x00b8, val_lut[again].regb8);
-    ret = gc4023_write(sd, 0x00b9, val_lut[again].regb9);
+    ret = sensor_write(sd, 0x0218, val_lut[again].reg218);
+    ret = sensor_write(sd, 0x1467, val_lut[again].reg1467);
+    ret = sensor_write(sd, 0x1468, val_lut[again].reg1468);
+    ret = sensor_write(sd, 0x00b8, val_lut[again].regb8);
+    ret = sensor_write(sd, 0x00b9, val_lut[again].regb9);
 
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d" ,__LINE__ );
+        ISP_ERROR("sensor_write error  %d" ,__LINE__ );
         return ret;
     }
     //set fps
-    if(resume_vts){
-        ret = gc4023_write(sd, 0x0340, (unsigned char)((resume_vts & 0x3f00) >> 8));
-        ret += gc4023_write(sd, 0x0341, (unsigned char)(resume_vts & 0xff));
-        if(ret < 0)
+    if (resume_vts) {
+        ret = sensor_write(sd, 0x0340, (unsigned char)((resume_vts & 0x3f00) >> 8));
+        ret += sensor_write(sd, 0x0341, (unsigned char)(resume_vts & 0xff));
+        if (ret < 0)
             return -1;
     }
 
@@ -1396,38 +1396,38 @@ static int gc4023_resume(struct tx_isp_subdev *sd)
 }
 
 #if 0
-static int gc4023_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
 
-    ret = gc4023_write(sd, 0x0203, value & 0xff);
-    ret += gc4023_write(sd, 0x0202, value >> 8);
+    ret = sensor_write(sd, 0x0203, value & 0xff);
+    ret += sensor_write(sd, 0x0202, value >> 8);
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d\n",__LINE__ );
+        ISP_ERROR("sensor_write error  %d\n",__LINE__ );
         return ret;
     }
 
     return 0;
 }
 
-static int gc4023_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
-    struct again_lut *val_lut = gc4023_again_lut;
+    struct again_lut *val_lut = sensor_again_lut;
 
 
-    ret = gc4023_write(sd, 0x0614, val_lut[value].reg614);
-    ret = gc4023_write(sd, 0x0615, val_lut[value].reg615);
+    ret = sensor_write(sd, 0x0614, val_lut[value].reg614);
+    ret = sensor_write(sd, 0x0615, val_lut[value].reg615);
 
-    ret = gc4023_write(sd, 0x0218, val_lut[value].reg218);
-    ret = gc4023_write(sd, 0x1467, val_lut[value].reg1467);
-    ret = gc4023_write(sd, 0x1468, val_lut[value].reg1468);
-    ret = gc4023_write(sd, 0x00b8, val_lut[value].regb8);
-    ret = gc4023_write(sd, 0x00b9, val_lut[value].regb9);
+    ret = sensor_write(sd, 0x0218, val_lut[value].reg218);
+    ret = sensor_write(sd, 0x1467, val_lut[value].reg1467);
+    ret = sensor_write(sd, 0x1468, val_lut[value].reg1468);
+    ret = sensor_write(sd, 0x00b8, val_lut[value].regb8);
+    ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
 
 
     if (ret < 0) {
-        ISP_ERROR("gc4023_write error  %d" ,__LINE__ );
+        ISP_ERROR("sensor_write error  %d" ,__LINE__ );
         return ret;
     }
 
@@ -1435,31 +1435,31 @@ static int gc4023_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 {
     int ret = 0;
     unsigned char reg_410=0;
-    struct again_lut *val_lut = gc4023_again_lut;
+    struct again_lut *val_lut = sensor_again_lut;
 
-    ret = gc4023_read(sd, 0x0410, &reg_410);
+    ret = sensor_read(sd, 0x0410, &reg_410);
 
     if (ret < 0)
         return ret;
 
-    if(reg_410>0x1a) gain_flag=1; //0x1d
+    if (reg_410>0x1a) gain_flag=1; //0x1d
 
-    if(gain_flag==1)
+    if (gain_flag==1)
     {
-        if(reg_410>0x16)//0x14
+        if (reg_410>0x16)//0x14
         {
             ht_gain=ht_gain-1;
-            if(ht_gain<21) ht_gain=21;
+            if (ht_gain<21) ht_gain=21;
         }
 
-        if(reg_410<0x10)
+        if (reg_410<0x10)
         {
             ht_gain=ht_gain+1;
-            if(ht_gain>24)
+            if (ht_gain>24)
             {
                 ht_gain=24;
                 gain_flag=0;
@@ -1467,22 +1467,22 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
         }
     }
 
-    if(ag_last<8)
+    if (ag_last<8)
     {
         ht_gain=24;
         gain_flag=0;
     }
 
-    if(ag_last>ht_gain)
+    if (ag_last>ht_gain)
     {
         ag_last=ht_gain;
-        ret  = gc4023_write(sd, 0x0614, val_lut[ag_last].reg614);
-        ret += gc4023_write(sd, 0x0615, val_lut[ag_last].reg615);
-        ret += gc4023_write(sd, 0x0218, val_lut[ag_last].reg218);
-        ret += gc4023_write(sd, 0x1467, val_lut[ag_last].reg1467);
-        ret += gc4023_write(sd, 0x1468, val_lut[ag_last].reg1468);
-        ret += gc4023_write(sd, 0x00b8, val_lut[ag_last].regb8);
-        ret += gc4023_write(sd, 0x00b9, val_lut[ag_last].regb9);
+        ret = sensor_write(sd, 0x0614, val_lut[ag_last].reg614);
+        ret += sensor_write(sd, 0x0615, val_lut[ag_last].reg615);
+        ret += sensor_write(sd, 0x0218, val_lut[ag_last].reg218);
+        ret += sensor_write(sd, 0x1467, val_lut[ag_last].reg1467);
+        ret += sensor_write(sd, 0x1468, val_lut[ag_last].reg1468);
+        ret += sensor_write(sd, 0x00b8, val_lut[ag_last].regb8);
+        ret += sensor_write(sd, 0x00b9, val_lut[ag_last].regb9);
     }
 
     //  pr_debug("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
@@ -1490,12 +1490,12 @@ static int gc4023_set_logic(struct tx_isp_subdev *sd, int value)
     //  pr_debug("gc4653_set_logic:reg_410=%d,gain_flag=%d,ag_last=%d,ht_gain=%d\n",reg_410,gain_flag,ag_last,ht_gain);
     return 0;
 }
-static int gc4023_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
     return 0;
 }
 
-static int gc4023_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
     return 0;
 }
@@ -1516,14 +1516,14 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
     return 0;
 }
 
-static int gc4023_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     int ret = 0;
 
-    if(!init->enable)
+    if (!init->enable)
         return ISP_SUCCESS;
-    /* gc4023_read_array(sd, wsize->regs); */
+    /* sensor_read_array(sd, wsize->regs); */
     sensor_set_attr(sd, wsize);
     sensor->video.state = TX_ISP_MODULE_INIT;
     ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1532,27 +1532,27 @@ static int gc4023_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
     return 0;
 }
 
-static int gc4023_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     int ret = 0;
 
     if (init->enable) {
-        if(sensor->video.state == TX_ISP_MODULE_INIT){
+        if (sensor->video.state == TX_ISP_MODULE_INIT) {
 #ifndef SENSOR_WITHOUT_INIT
             //When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
-            ret = gc4023_write_array(sd, wsize->regs);
+            ret = sensor_write_array(sd, wsize->regs);
             if (ret)
                 return ret;
 #endif
 #ifdef SENSOR_POWER_OFF
             // If enable=2, it represents a PM operation.
             // It is necessary to restore the relevant registers of the sensor to the state before sleep.
-            if(2 == init->enable){
-                ret = gc4023_write_array(sd, wsize->regs);
+            if (2 == init->enable) {
+                ret = sensor_write_array(sd, wsize->regs);
                 if (ret < 0)
                     return ret;
-                ret = gc4023_resume(sd);
+                ret = sensor_resume(sd);
                 if (ret < 0)
                     return ret;
             }
@@ -1560,13 +1560,13 @@ static int gc4023_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
             sensor->video.state = TX_ISP_MODULE_RUNNING;
         }
-        if(sensor->video.state == TX_ISP_MODULE_RUNNING){
-            ret = gc4023_write_array(sd, gc4023_stream_on);
+        if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
+            ret = sensor_write_array(sd, sensor_stream_on);
             ISP_WARNING("gc4023 stream on\n");
         }
     }
     else {
-        ret = gc4023_write_array(sd, gc4023_stream_off);
+        ret = sensor_write_array(sd, sensor_stream_off);
         ISP_WARNING("gc4023 stream off\n");
 #ifdef SENSOR_POWER_OFF
         //Prepare for the next sleep.
@@ -1577,7 +1577,7 @@ static int gc4023_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
     return ret;
 }
 
-static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     unsigned int wpclk = 0;
@@ -1589,18 +1589,18 @@ static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
     int ret = 0;
 
     /* return 0; */
-    switch(sensor->info.default_boot){
+    switch(sensor->info.default_boot) {
     case 0:
     case 1:
-        wpclk = GC4023_SUPPORT_30FPS_SCLK;
+        wpclk = SENSOR_SUPPORT_30FPS_SCLK;
         sensor_max_fps = TX_SENSOR_MAX_FPS_30;
         break;
     case 2:
-        wpclk = GC4023_SUPPORT_20FPS_SCLK;
+        wpclk = SENSOR_SUPPORT_20FPS_SCLK;
         sensor_max_fps = TX_SENSOR_MAX_FPS_20;
         break;
     case 3:
-        wpclk = GC4023_SUPPORT_30FPS_SCLK;
+        wpclk = SENSOR_SUPPORT_30FPS_SCLK;
         sensor_max_fps = TX_SENSOR_MAX_FPS_15;
         break;
     case 4:
@@ -1613,22 +1613,22 @@ static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
 
     /* the format of fps is 16/16. for example 30 << 16 | 2, the value is 30/2 fps. */
     newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-    if(newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+    if (newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
         ISP_ERROR("warn: fps(%x) no in range\n", fps);
         return -1;
     }
 
-    ret += gc4023_read(sd, 0x0342, &tmp);
+    ret += sensor_read(sd, 0x0342, &tmp);
     hts = tmp & 0x0f;
-    ret += gc4023_read(sd, 0x0343, &tmp);
-    if(ret < 0)
+    ret += sensor_read(sd, 0x0343, &tmp);
+    if (ret < 0)
         return -1;
     hts = ((hts << 8) + tmp) << 1;
 
     vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16) ;
-    ret = gc4023_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
-    ret += gc4023_write(sd, 0x0341, (unsigned char)(vts & 0xff));
-    if(ret < 0)
+    ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+    ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
+    if (ret < 0)
         return -1;
 
     resume_vts = vts;
@@ -1642,12 +1642,12 @@ static int gc4023_set_fps(struct tx_isp_subdev *sd, int fps)
     return 0;
 }
 
-static int gc4023_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     int ret = ISP_SUCCESS;
 
-    if(wsize){
+    if (wsize) {
         sensor_set_attr(sd, wsize);
         ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
     }
@@ -1655,52 +1655,52 @@ static int gc4023_set_mode(struct tx_isp_subdev *sd, int value)
     return ret;
 }
 
-static int gc4023_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     int ret = -1;
     unsigned char val = 0x0;
     unsigned char otp_val = 0x0;
-    ret += gc4023_read(sd, 0x022c, &val);
+    ret += sensor_read(sd, 0x022c, &val);
 
     val = (val & (~0x3));
     /* 2'b01 mirror; 2'b10 flip; 2'b11 mirror &flip */
-    switch(enable){
+    switch(enable) {
     case 0:
-        gc4023_write(sd, 0x022c, val);
+        sensor_write(sd, 0x022c, val);
         break;
     case 1:
-        gc4023_write(sd, 0x022c, (val | 0x1));
+        sensor_write(sd, 0x022c, (val | 0x1));
         break;
     case 2:
-        gc4023_write(sd, 0x022c, (val | 0x2));
+        sensor_write(sd, 0x022c, (val | 0x2));
         break;
     case 3:
-        gc4023_write(sd, 0x022c, (val | 0x3));
+        sensor_write(sd, 0x022c, (val | 0x3));
         break;
     }
     otp_val=0x60|val;
-    ret += gc4023_write(sd,0x0a67, 0x80 );
-    ret += gc4023_write(sd,0x0a54, 0x0e );
-    ret += gc4023_write(sd,0x0a65, 0x10 );
-    ret += gc4023_write(sd,0x0a98, 0x10 );
-    ret += gc4023_write(sd,0x05be, 0x00 );
-    ret += gc4023_write(sd,0x05a9, 0x01 );
-    ret += gc4023_write(sd,0x0029, 0x08 );
-    ret += gc4023_write(sd,0x002b, 0xa8 );
-    ret += gc4023_write(sd,0x0a83, 0xe0 );
-    ret += gc4023_write(sd,0x0a72, 0x02 );
-    ret += gc4023_write(sd,0x0a73, otp_val );
-    ret += gc4023_write(sd,0x0a75, 0x41 );
-    ret += gc4023_write(sd,0x0a70, 0x03 );
-    ret += gc4023_write(sd,0x0a5a, 0x80 );
+    ret += sensor_write(sd,0x0a67, 0x80 );
+    ret += sensor_write(sd,0x0a54, 0x0e );
+    ret += sensor_write(sd,0x0a65, 0x10 );
+    ret += sensor_write(sd,0x0a98, 0x10 );
+    ret += sensor_write(sd,0x05be, 0x00 );
+    ret += sensor_write(sd,0x05a9, 0x01 );
+    ret += sensor_write(sd,0x0029, 0x08 );
+    ret += sensor_write(sd,0x002b, 0xa8 );
+    ret += sensor_write(sd,0x0a83, 0xe0 );
+    ret += sensor_write(sd,0x0a72, 0x02 );
+    ret += sensor_write(sd,0x0a73, otp_val );
+    ret += sensor_write(sd,0x0a75, 0x41 );
+    ret += sensor_write(sd,0x0a70, 0x03 );
+    ret += sensor_write(sd,0x0a5a, 0x80 );
     private_msleep(20);
-    ret += gc4023_write(sd,0x05be, 0x01 );
-    ret += gc4023_write(sd,0x0a70, 0x00 );
-    ret += gc4023_write(sd,0x0080, 0x02 );
-    ret += gc4023_write(sd,0x0a67, 0x00 );
+    ret += sensor_write(sd,0x05be, 0x01 );
+    ret += sensor_write(sd,0x0a70, 0x00 );
+    ret += sensor_write(sd,0x0080, 0x02 );
+    ret += sensor_write(sd,0x0a67, 0x00 );
 
-    if(!ret)
+    if (!ret)
         ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
     return ret;
@@ -1715,83 +1715,83 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     unsigned long rate;
     int ret = 0;
 
-    switch(info->default_boot){
+    switch(info->default_boot) {
     case 0:
-        wsize = &gc4023_win_sizes[0];
-        gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-        memcpy(&gc4023_attr.mipi, &gc4023_mipi_linear, sizeof(gc4023_mipi_linear));
-        gc4023_attr.one_line_expr_in_us = 22;
-        gc4023_attr.total_width = 3840;
-        gc4023_attr.total_height = 1500;
-        gc4023_attr.max_integration_time_native = 1500 - 8;
-        gc4023_attr.integration_time_limit = 1500 - 8;
-        gc4023_attr.max_integration_time = 1500 - 8;
-        gc4023_attr.again = 0;
-        gc4023_attr.integration_time = 0x627;
+        wsize = &sensor_win_sizes[0];
+        sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+        memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+        sensor_attr.one_line_expr_in_us = 22;
+        sensor_attr.total_width = 3840;
+        sensor_attr.total_height = 1500;
+        sensor_attr.max_integration_time_native = 1500 - 8;
+        sensor_attr.integration_time_limit = 1500 - 8;
+        sensor_attr.max_integration_time = 1500 - 8;
+        sensor_attr.again = 0;
+        sensor_attr.integration_time = 0x627;
         break;
     case 1:
-        wsize = &gc4023_win_sizes[1];
-        gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-        memcpy(&gc4023_attr.mipi, &gc4023_mipi_linear, sizeof(gc4023_mipi_linear));
-        gc4023_attr.one_line_expr_in_us = 22;
-        gc4023_attr.total_width = 3840;
-        gc4023_attr.total_height = 1500;
-        gc4023_attr.max_integration_time_native = 1500 - 8;
-        gc4023_attr.integration_time_limit = 1500 - 8;
-        gc4023_attr.max_integration_time = 1500 - 8;
-        gc4023_attr.again = 0;
-        gc4023_attr.integration_time = 0x627;
+        wsize = &sensor_win_sizes[1];
+        sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+        memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+        sensor_attr.one_line_expr_in_us = 22;
+        sensor_attr.total_width = 3840;
+        sensor_attr.total_height = 1500;
+        sensor_attr.max_integration_time_native = 1500 - 8;
+        sensor_attr.integration_time_limit = 1500 - 8;
+        sensor_attr.max_integration_time = 1500 - 8;
+        sensor_attr.again = 0;
+        sensor_attr.integration_time = 0x627;
         break;
     case 2:
-        wsize = &gc4023_win_sizes[2];
-        gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-        memcpy(&gc4023_attr.mipi, &gc4023_mipi_20fps_linear, sizeof(gc4023_mipi_20fps_linear));
-        gc4023_attr.one_line_expr_in_us = 33;
-        gc4023_attr.total_width = 2400;
-        gc4023_attr.total_height = 1500;
-        gc4023_attr.max_integration_time_native = 1500 - 8;
-        gc4023_attr.integration_time_limit = 1500 - 8;
-        gc4023_attr.max_integration_time = 1500 - 8;
-        gc4023_attr.again = 0;
-        gc4023_attr.integration_time = 0x627;
+        wsize = &sensor_win_sizes[2];
+        sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+        memcpy(&sensor_attr.mipi, &sensor_mipi_20fps_linear, sizeof(sensor_mipi_20fps_linear));
+        sensor_attr.one_line_expr_in_us = 33;
+        sensor_attr.total_width = 2400;
+        sensor_attr.total_height = 1500;
+        sensor_attr.max_integration_time_native = 1500 - 8;
+        sensor_attr.integration_time_limit = 1500 - 8;
+        sensor_attr.max_integration_time = 1500 - 8;
+        sensor_attr.again = 0;
+        sensor_attr.integration_time = 0x627;
         break;
     case 3:
-        wsize = &gc4023_win_sizes[3];
-        gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-        memcpy(&gc4023_attr.mipi, &gc4023_mipi_15fps_linear, sizeof(gc4023_mipi_15fps_linear));
-        gc4023_attr.one_line_expr_in_us = 44;
-        gc4023_attr.total_width = 2400;
-        gc4023_attr.total_height = 1500;
-        gc4023_attr.max_integration_time_native = 1500 - 8;
-        gc4023_attr.integration_time_limit = 1500 - 8;
-        gc4023_attr.max_integration_time = 1500 - 8;
-        gc4023_attr.again = 0;
-        gc4023_attr.integration_time = 0x627;
+        wsize = &sensor_win_sizes[3];
+        sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+        memcpy(&sensor_attr.mipi, &sensor_mipi_15fps_linear, sizeof(sensor_mipi_15fps_linear));
+        sensor_attr.one_line_expr_in_us = 44;
+        sensor_attr.total_width = 2400;
+        sensor_attr.total_height = 1500;
+        sensor_attr.max_integration_time_native = 1500 - 8;
+        sensor_attr.integration_time_limit = 1500 - 8;
+        sensor_attr.max_integration_time = 1500 - 8;
+        sensor_attr.again = 0;
+        sensor_attr.integration_time = 0x627;
         break;
     case 4:
-        wsize = &gc4023_win_sizes[4];
-        gc4023_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-        memcpy(&gc4023_attr.mipi, &gc4023_mipi_120fps_linear, sizeof(gc4023_mipi_120fps_linear));
-        gc4023_attr.one_line_expr_in_us = 44;
-        gc4023_attr.total_width = 2250;
-        gc4023_attr.total_height = 400;
-        gc4023_attr.max_integration_time_native = 400 - 8;
-        gc4023_attr.integration_time_limit = 400 - 8;
-        gc4023_attr.max_integration_time = 400 - 8;
-        gc4023_attr.again = 0;
-        gc4023_attr.integration_time = 0x627;
+        wsize = &sensor_win_sizes[4];
+        sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+        memcpy(&sensor_attr.mipi, &sensor_mipi_120fps_linear, sizeof(sensor_mipi_120fps_linear));
+        sensor_attr.one_line_expr_in_us = 44;
+        sensor_attr.total_width = 2250;
+        sensor_attr.total_height = 400;
+        sensor_attr.max_integration_time_native = 400 - 8;
+        sensor_attr.integration_time_limit = 400 - 8;
+        sensor_attr.max_integration_time = 400 - 8;
+        sensor_attr.again = 0;
+        sensor_attr.integration_time = 0x627;
         break;
     default:
         ISP_ERROR("Have no this Setting Source!!!\n");
     }
 
-    switch(info->video_interface){
+    switch(info->video_interface) {
     case TISP_SENSOR_VI_MIPI_CSI0:
-        gc4023_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-        gc4023_attr.mipi.index = 0;
+        sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+        sensor_attr.mipi.index = 0;
         break;
     case TISP_SENSOR_VI_DVP:
-        gc4023_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+        sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
         break;
     default:
         ISP_ERROR("Have no this Interface Source!!!\n");
@@ -1800,7 +1800,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     //struct clk *tclk;
     //struct clk *sclka;
     //unsigned long rate;
-    switch(info->mclk){
+    switch(info->mclk) {
     case TISP_SENSOR_MCLK0:
     case TISP_SENSOR_MCLK1:
     case TISP_SENSOR_MCLK2:
@@ -1814,7 +1814,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
         rate = private_clk_get_rate(sensor->mclk);
         printk("\n====>[private_clk_get_rate(sensor->mclk)=%ld]\n", rate);
-        switch(info->default_boot){
+        switch(info->default_boot) {
         case 0:
 		case 2:
 		case 3:
@@ -1857,7 +1857,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     return 0;
 }
 
-static int gc4023_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
                                struct tx_isp_chip_ident *chip)
 {
     struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -1866,33 +1866,33 @@ static int gc4023_g_chip_ident(struct tx_isp_subdev *sd,
 
     sensor_attr_check(sd);
 #ifndef SENSOR_WITHOUT_INIT
-    if(reset_gpio != -1){
-        ret = private_gpio_request(reset_gpio,"gc4023_reset");
-        if(!ret){
+    if (reset_gpio != -1) {
+        ret = private_gpio_request(reset_gpio,"sensor_reset");
+        if (!ret) {
             private_gpio_direction_output(reset_gpio, 1);
             private_msleep(10);
             private_gpio_direction_output(reset_gpio, 0);
             private_msleep(20);
             private_gpio_direction_output(reset_gpio, 1);
             private_msleep(10);
-        }else{
+        } else {
             ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
         }
     }
-    if(pwdn_gpio != -1){
-        ret = private_gpio_request(pwdn_gpio,"gc4023_pwdn");
-        if(!ret){
+    if (pwdn_gpio != -1) {
+        ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+        if (!ret) {
             private_gpio_direction_output(pwdn_gpio, 1);
             private_msleep(10);
             private_gpio_direction_output(pwdn_gpio, 0);
             private_msleep(10);
             private_gpio_direction_output(pwdn_gpio, 1);
             private_msleep(10);
-        }else{
+        } else {
             ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
         }
     }
-    ret = gc4023_detect(sd, &ident);
+    ret = sensor_detect(sd, &ident);
     if (ret) {
         ISP_ERROR("chip found @ 0x%x (%s) is not an gc4023 chip.\n",
                   client->addr, client->adapter->name);
@@ -1902,7 +1902,7 @@ static int gc4023_g_chip_ident(struct tx_isp_subdev *sd,
     ident = 0x4653;
 #endif
         ISP_WARNING("gc4023 chip found @ 0x%02x (%s)\n sensor drv version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
-    if(chip){
+    if (chip) {
         memcpy(chip->name, "gc4023", sizeof("gc4023"));
         chip->ident = ident;
         chip->revision = SENSOR_VERSION;
@@ -1911,60 +1911,60 @@ static int gc4023_g_chip_ident(struct tx_isp_subdev *sd,
     return 0;
 }
 
-static int gc4023_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
     long ret = 0;
     struct tx_isp_sensor_value *sensor_val = arg;
 
-    if(IS_ERR_OR_NULL(sd)){
+    if (IS_ERR_OR_NULL(sd)) {
         ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
         return -EINVAL;
     }
-    switch(cmd){
+    switch(cmd) {
 #if 1
         case TX_ISP_EVENT_SENSOR_EXPO:
-                if(arg)
-                        ret = gc4023_set_expo(sd,sensor_val->value);
+                if (arg)
+                        ret = sensor_set_expo(sd,sensor_val->value);
                 break;
 #else
         case TX_ISP_EVENT_SENSOR_INT_TIME:
-                      if(arg)
-                              ret = gc4023_set_integration_time(sd, sensor_val->value);
+                      if (arg)
+                              ret = sensor_set_integration_time(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_AGAIN:
-                      if(arg)
-                              ret = gc4023_set_analog_gain(sd, sensor_val->value);
+                      if (arg)
+                              ret = sensor_set_analog_gain(sd, sensor_val->value);
                 break;
 #endif
         case TX_ISP_EVENT_SENSOR_DGAIN:
-                if(arg)
-                        ret = gc4023_set_digital_gain(sd, sensor_val->value);
+                if (arg)
+                        ret = sensor_set_digital_gain(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-                if(arg)
-                        ret = gc4023_get_black_pedestal(sd, sensor_val->value);
+                if (arg)
+                        ret = sensor_get_black_pedestal(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_RESIZE:
-                if(arg)
-                        ret = gc4023_set_mode(sd, sensor_val->value);
+                if (arg)
+                        ret = sensor_set_mode(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-                ret = gc4023_write_array(sd, gc4023_stream_off);
+                ret = sensor_write_array(sd, sensor_stream_off);
                 break;
         case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-                ret = gc4023_write_array(sd, gc4023_stream_on);
+                ret = sensor_write_array(sd, sensor_stream_on);
                 break;
         case TX_ISP_EVENT_SENSOR_FPS:
-                if(arg)
-                        ret = gc4023_set_fps(sd, sensor_val->value);
+                if (arg)
+                        ret = sensor_set_fps(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_VFLIP:
-                if(arg)
-                        ret = gc4023_set_vflip(sd, sensor_val->value);
+                if (arg)
+                        ret = sensor_set_vflip(sd, sensor_val->value);
                 break;
 		case TX_ISP_EVENT_SENSOR_LOGIC:
-		    if(arg)
-			      ret = gc4023_set_logic(sd, *(int*)arg);
+		    if (arg)
+			      ret = sensor_set_logic(sd, *(int*)arg);
         default:
                 break;
         }
@@ -1972,60 +1972,60 @@ static int gc4023_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
     return ret;
 }
 
-static int gc4023_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
     unsigned char val = 0;
     int len = 0;
     int ret = 0;
 
     len = strlen(sd->chip.name);
-    if(len && strncmp(sd->chip.name, reg->name, len)){
+    if (len && strncmp(sd->chip.name, reg->name, len)) {
         return -EINVAL;
     }
     if (!private_capable(CAP_SYS_ADMIN))
         return -EPERM;
-    ret = gc4023_read(sd, reg->reg & 0xffff, &val);
+    ret = sensor_read(sd, reg->reg & 0xffff, &val);
     reg->val = val;
     reg->size = 2;
 
     return ret;
 }
 
-static int gc4023_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
     int len = 0;
 
     len = strlen(sd->chip.name);
-    if(len && strncmp(sd->chip.name, reg->name, len)){
+    if (len && strncmp(sd->chip.name, reg->name, len)) {
         return -EINVAL;
     }
     if (!private_capable(CAP_SYS_ADMIN))
         return -EPERM;
-    gc4023_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+    sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
     return 0;
 }
 
-static struct tx_isp_subdev_core_ops gc4023_core_ops = {
-    .g_chip_ident = gc4023_g_chip_ident,
-    .reset = gc4023_reset,
-    .init = gc4023_init,
-    .g_register = gc4023_g_register,
-    .s_register = gc4023_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+    .g_chip_ident = sensor_g_chip_ident,
+    .reset = sensor_reset,
+    .init = sensor_init,
+    .g_register = sensor_g_register,
+    .s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops gc4023_video_ops = {
-    .s_stream = gc4023_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+    .s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops  gc4023_sensor_ops = {
-    .ioctl  = gc4023_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops  sensor_sensor_ops = {
+    .ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops gc4023_ops = {
-    .core = &gc4023_core_ops,
-    .video = &gc4023_video_ops,
-    .sensor = &gc4023_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+    .core = &sensor_core_ops,
+    .video = &sensor_video_ops,
+    .sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -2041,14 +2041,14 @@ struct platform_device sensor_platform_device = {
     .num_resources = 0,
 };
 
-static int gc4023_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
     struct tx_isp_subdev *sd;
     struct tx_isp_video_in *video;
     struct tx_isp_sensor *sensor;
 
     sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-    if(!sensor){
+    if (!sensor) {
         ISP_ERROR("Failed to allocate sensor subdev.\n");
         return -ENOMEM;
     }
@@ -2058,9 +2058,9 @@ static int gc4023_probe(struct i2c_client *client, const struct i2c_device_id *i
     sd = &sensor->sd;
     video = &sensor->video;
     sensor->video.shvflip = shvflip;
-    gc4023_attr.expo_fs = 1;
-    sensor->video.attr = &gc4023_attr;
-    tx_isp_subdev_init(&sensor_platform_device, sd, &gc4023_ops);
+    sensor_attr.expo_fs = 1;
+    sensor->video.attr = &sensor_attr;
+    tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
     tx_isp_set_subdevdata(sd, client);
     tx_isp_set_subdev_hostdata(sd, sensor);
     private_i2c_set_clientdata(client, sd);
@@ -2070,14 +2070,14 @@ static int gc4023_probe(struct i2c_client *client, const struct i2c_device_id *i
     return 0;
 }
 
-static int gc4023_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
     struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
     struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-    if(reset_gpio != -1)
+    if (reset_gpio != -1)
         private_gpio_free(reset_gpio);
-    if(pwdn_gpio != -1)
+    if (pwdn_gpio != -1)
         private_gpio_free(pwdn_gpio);
 
     private_clk_disable_unprepare(sensor->mclk);
@@ -2088,20 +2088,20 @@ static int gc4023_remove(struct i2c_client *client)
     return 0;
 }
 
-static const struct i2c_device_id gc4023_id[] = {
+static const struct i2c_device_id sensor_id[] = {
     { "gc4023", 0 },
     { }
 };
-//MODULE_DEVICE_TABLE(i2c, gc4023_id);
+//MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver gc4023_driver = {
+static struct i2c_driver sensor_driver = {
     .driver = {
-        .owner  = NULL,
-        .name   = "gc4023",
+        .owner = NULL,
+        .name = "gc4023",
     },
-    .probe          = gc4023_probe,
-    .remove         = gc4023_remove,
-    .id_table       = gc4023_id,
+    .probe = sensor_probe,
+    .remove = sensor_remove,
+    .id_table = sensor_id,
 };
 
 char * get_sensor_name(void)
@@ -2116,12 +2116,12 @@ int get_sensor_i2c_addr(void)
 
 int get_sensor_width(void)
 {
-    return gc4023_win_sizes->width;
+    return sensor_win_sizes->width;
 }
 
 int get_sensor_height(void)
 {
-    return gc4023_win_sizes->height;
+    return sensor_win_sizes->height;
 }
 
 int get_sensor_wdr_mode(void)
@@ -2131,10 +2131,10 @@ int get_sensor_wdr_mode(void)
 
 int init_sensor(void)
 {
-    return private_i2c_add_driver(&gc4023_driver);
+    return private_i2c_add_driver(&sensor_driver);
 }
 
 void exit_sensor(void)
 {
-    i2c_del_driver(&gc4023_driver);
+    i2c_del_driver(&sensor_driver);
 }

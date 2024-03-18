@@ -14,13 +14,13 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define CV5001_CHIP_ID_L	0x01
-#define CV5001_CHIP_ID_H	0x50
-#define CV5001_REG_END		0xffff
-#define CV5001_REG_DELAY	0xfffe
-#define CV5001_MCLK			24000000  //24M
-#define CV5001_AGAIN_MAX	0xB4
-#define SENSOR_VERSION		"H20230505a"
+#define SENSOR_CHIP_ID_L 0x01
+#define SENSOR_CHIP_ID_H 0x50
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_MCLK			24000000  //24M
+#define SENSOR_AGAIN_MAX	0xB4
+#define SENSOR_VERSION "H20230505a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -35,7 +35,7 @@ struct tx_isp_sensor_attribute cv5001_attr;
 unsigned int cv5001_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	uint16_t again=(isp_gain*20)>>shift;
-	if(again>CV5001_AGAIN_MAX) again=CV5001_AGAIN_MAX;
+	if (again>SENSOR_AGAIN_MAX) again=SENSOR_AGAIN_MAX;
 	*sensor_again = again;
 	isp_gain= (((int32_t)again)<<shift)/20;
 
@@ -144,29 +144,29 @@ static struct regval_list cv5001_init_regs_mipi[] = {
 	{0x3045, 0x00},
 	{0x3046, 0x54},
 	{0x3047, 0x06},
-	{CV5001_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting cv5001_win_sizes[] = {
 	{
-		.width		= 2880,
-		.height		= 1620,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SRGGB10_1X10,//RAW
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= cv5001_init_regs_mipi,
+		.width = 2880,
+		.height = 1620,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,//RAW
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = cv5001_init_regs_mipi,
 	}
 };
 struct tx_isp_sensor_win_setting *wsize = &cv5001_win_sizes[0];
 
 static struct regval_list cv5001_stream_on_mipi[] = {
 	{0x3000, 0x00},
-	{CV5001_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list cv5001_stream_off_mipi[] = {
 	{0x3000, 0x01},
-	{CV5001_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int cv5001_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -175,16 +175,16 @@ int cv5001_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -200,10 +200,10 @@ int cv5001_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0 | I2C_M_IGNORE_NAK,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0 | I2C_M_IGNORE_NAK,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -218,8 +218,8 @@ static int cv5001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != CV5001_REG_END) {
-		if (vals->reg_num == CV5001_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv5001_read(sd, vals->reg_num, &val);
@@ -236,8 +236,8 @@ static int cv5001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int cv5001_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != CV5001_REG_END) {
-		if (vals->reg_num == CV5001_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv5001_write(sd, vals->reg_num, vals->value);
@@ -264,14 +264,14 @@ static int cv5001_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV5001_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 	ret += cv5001_read(sd, 0x3003, &v);
 	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV5001_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 
 	*ident = v;
@@ -364,7 +364,7 @@ static int cv5001_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor_set_attr(sd, wsize);
@@ -381,13 +381,13 @@ static int cv5001_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	int ret = 0;
 
 	if (init->enable) {
-		if(sensor->video.state == TX_ISP_MODULE_INIT){
+		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = cv5001_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
-		if(sensor->video.state == TX_ISP_MODULE_RUNNING){
+		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = cv5001_write_array(sd, cv5001_stream_on_mipi);
 			ISP_WARNING("cv5001 stream on\n");
@@ -413,7 +413,7 @@ static int cv5001_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	switch(sensor->info.default_boot){
+	switch(sensor->info.default_boot) {
 	case 0:
 		sclk = 82593000; /* 805 * 3420 * 30 */
 		max_fps = TX_SENSOR_MAX_FPS_30;
@@ -423,7 +423,7 @@ static int cv5001_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps<< 8) || newformat < (TX_SENSOR_MAX_FPS_5 << 8)) {
+	if (newformat > (max_fps<< 8) || newformat < (TX_SENSOR_MAX_FPS_5 << 8)) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
@@ -433,7 +433,7 @@ static int cv5001_set_fps(struct tx_isp_subdev *sd, int fps)
 	val = 0;
 	ret += cv5001_read(sd, 0x302c, &val);
 	hts <<= 8;
-	hts |= val;
+	hts = val;
 	if (0 != ret) {
 		ISP_ERROR("err: cv5001 read err\n");
 		return -1;
@@ -473,19 +473,19 @@ static int cv5001_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	case 1:
 		val &= 0xFD;
-		val |= 0x01;
+		val = 0x01;
 		break;
 	case 2:
 		val &= 0xFE;
-		val |= 0x02;
+		val = 0x02;
 		break;
 	case 3:
-		val |= 0x03;
+		val = 0x03;
 		break;
 	}
 	cv5001_write(sd, 0x3034, val);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
@@ -497,7 +497,7 @@ static int cv5001_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
@@ -524,7 +524,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this Setting Source!!!\n");
 	}
 
-	switch(info->video_interface){
+	switch(info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 		cv5001_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		cv5001_attr.mipi.index = 0;
@@ -536,7 +536,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this Interface Source!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 	case TISP_SENSOR_MCLK1:
 	case TISP_SENSOR_MCLK2:
@@ -547,7 +547,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
-	private_clk_set_rate(sensor->mclk, CV5001_MCLK);
+	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
 	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n", info->default_boot, wsize->width, wsize->height, info->video_interface, info->mclk);
@@ -568,27 +568,27 @@ static int cv5001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"cv5001_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"cv5001_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(5);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -600,7 +600,7 @@ static int cv5001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ISP_WARNING("cv5001 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "cv5001", sizeof("cv5001"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -614,32 +614,32 @@ static int cv5001_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		//ret = cv5001_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
+		if (arg)
 			ret = cv5001_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
+		if (arg)
 			ret = cv5001_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = cv5001_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = cv5001_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = cv5001_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -668,7 +668,7 @@ static int cv5001_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -685,7 +685,7 @@ static int cv5001_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -708,7 +708,7 @@ static struct tx_isp_subdev_video_ops cv5001_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	cv5001_sensor_ops = {
-	.ioctl	= cv5001_sensor_ops_ioctl,
+	.ioctl = cv5001_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops cv5001_ops = {
@@ -738,7 +738,7 @@ static int cv5001_probe(struct i2c_client *client,
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -765,9 +765,9 @@ static int cv5001_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -786,26 +786,26 @@ MODULE_DEVICE_TABLE(i2c, cv5001_id);
 
 static struct i2c_driver cv5001_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "cv5001",
+		.owner = THIS_MODULE,
+		.name = "cv5001",
 	},
-	.probe		= cv5001_probe,
-	.remove		= cv5001_remove,
-	.id_table	= cv5001_id,
+	.probe = cv5001_probe,
+	.remove = cv5001_remove,
+	.id_table = cv5001_id,
 };
 
-static __init int init_cv5001(void)
+static __init int init_sensor(void)
 {
 	return private_i2c_add_driver(&cv5001_driver);
 }
 
-static __exit void exit_cv5001(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&cv5001_driver);
 }
 
-module_init(init_cv5001);
-module_exit(exit_cv5001);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for cv5001 sensors");
 MODULE_LICENSE("GPL");

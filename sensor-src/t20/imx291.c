@@ -23,13 +23,13 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define IMX291_CHIP_ID_H	(0xA0)
-#define IMX291_CHIP_ID_L	(0xB2)
+#define SENSOR_CHIP_ID_H (0xA0)
+#define SENSOR_CHIP_ID_L (0xB2)
 
-#define IMX291_REG_END		0xffff
-#define IMX291_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define IMX291_SUPPORT_PCLK (74250*1000)
+#define SENSOR_SUPPORT_PCLK (74250*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 15
 #define AGAIN_MAX_DB 0x50
@@ -60,7 +60,7 @@ unsigned int imx291_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
-	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+	if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
 	/* p_ctx->again=again; */
 	*sensor_again=again;
@@ -177,8 +177,8 @@ static struct regval_list imx291_init_regs_1920_1080_25fps[] = {
 	{0x32ca,0x00},
 	{0x32cb,0x04},
 	{0x3480,0x49},
-	{IMX291_REG_DELAY, 0x14},	/* END MARKER */
-	{IMX291_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 0x14},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -187,12 +187,12 @@ static struct regval_list imx291_init_regs_1920_1080_25fps[] = {
 static struct tx_isp_sensor_win_setting imx291_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= imx291_init_regs_1920_1080_25fps,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = imx291_init_regs_1920_1080_25fps,
 	}
 };
 
@@ -207,12 +207,12 @@ static enum v4l2_mbus_pixelcode imx291_mbus_code[] = {
 
 static struct regval_list imx291_stream_on[] = {
 	{0x3000,0x00},
-	{IMX291_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list imx291_stream_off[] = {
 	{0x3000,0x01},
-	{IMX291_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int imx291_read(struct v4l2_subdev *sd, uint16_t reg,
@@ -222,16 +222,16 @@ int imx291_read(struct v4l2_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -248,10 +248,10 @@ int imx291_write(struct v4l2_subdev *sd, uint16_t reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -265,8 +265,8 @@ static int imx291_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != IMX291_REG_END) {
-		if (vals->reg_num == IMX291_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx291_read(sd, vals->reg_num, &val);
@@ -281,8 +281,8 @@ static int imx291_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int imx291_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != IMX291_REG_END) {
-		if (vals->reg_num == IMX291_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx291_write(sd, vals->reg_num, vals->value);
@@ -307,7 +307,7 @@ static int imx291_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX291_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -315,7 +315,7 @@ static int imx291_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX291_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -367,7 +367,7 @@ static int imx291_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &imx291_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -420,18 +420,18 @@ static int imx291_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	pclk = IMX291_SUPPORT_PCLK;
+	pclk = SENSOR_SUPPORT_PCLK;
 
 	ret = imx291_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += imx291_read(sd, 0x3019, &value);
-	vmax |= value << 8;
+	vmax = value << 8;
 	ret += imx291_read(sd, 0x301a, &value);
-	vmax |= (value|0x3) << 16;
+	vmax = (value|0x3) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += imx291_write(sd, 0x301c, hmax&0xff);
@@ -453,13 +453,13 @@ static int imx291_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &imx291_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &imx291_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -477,25 +477,25 @@ static int imx291_g_chip_ident(struct v4l2_subdev *sd,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"imx291_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 0);
 			msleep(5);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(5);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"imx291_pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(150);
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -519,7 +519,7 @@ static long imx291_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = imx291_set_integration_time(sd, ctrl->value);
 		break;
@@ -553,7 +553,7 @@ static long imx291_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 	case VIDIOC_ISP_PRIVATE_IOCTL:
 		ret = imx291_ops_private_ioctl(sensor, arg);
 		break;
@@ -630,7 +630,7 @@ static int imx291_probe(struct i2c_client *client,
 	unsigned long rate = 0;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -671,7 +671,7 @@ static int imx291_probe(struct i2c_client *client,
 
 	imx291_attr.dvp.gpio = sensor_gpio_func;
 
-	switch(sensor_gpio_func){
+	switch(sensor_gpio_func) {
 	case DVP_PA_LOW_10BIT:
 	case DVP_PA_HIGH_10BIT:
 		mbus = imx291_mbus_code[0];
@@ -707,9 +707,9 @@ static int imx291_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -728,26 +728,26 @@ MODULE_DEVICE_TABLE(i2c, imx291_id);
 
 static struct i2c_driver imx291_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "imx291",
+		.owner = THIS_MODULE,
+		.name = "imx291",
 	},
-	.probe		= imx291_probe,
-	.remove		= imx291_remove,
-	.id_table	= imx291_id,
+	.probe = imx291_probe,
+	.remove = imx291_remove,
+	.id_table = imx291_id,
 };
 
-static __init int init_imx291(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&imx291_driver);
 }
 
-static __exit void exit_imx291(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&imx291_driver);
 }
 
-module_init(init_imx291);
-module_exit(exit_imx291);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sony imx291 sensors");
 MODULE_LICENSE("GPL");

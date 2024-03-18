@@ -25,18 +25,18 @@
 #include <apical-isp/apical_math.h>
 
 
-#define GC2033_CHIP_ID_H	(0x20)
-#define GC2033_CHIP_ID_L	(0x33)
+#define SENSOR_CHIP_ID_H (0x20)
+#define SENSOR_CHIP_ID_L (0x33)
 
-#define GC2033_FLAG_END		0xff
-#define GC2033_FLAG_DELAY	0x00
-#define GC2033_PAGE_REG		0xfe
+#define SENSOR_FLAG_END 0xff
+#define SENSOR_FLAG_DELAY 0x00
+#define SENSOR_PAGE_REG 0xfe
 
-#define gc2033_SUPPORT_WPCLK_FPS_25 (84*1000*1000)
-#define gc2033_SUPPORT_WPCLK_FPS_15 (48*1000*1000)
+#define SENSOR_SUPPORT_WPCLK_FPS_25 (84*1000*1000)
+#define SENSOR_SUPPORT_WPCLK_FPS_15 (48*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20180921a"
+#define SENSOR_VERSION "H20180921a"
 
 struct regval_list {
 	unsigned char reg_num;
@@ -58,16 +58,16 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-const unsigned int  ANALOG_GAIN_1 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_2 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_3 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_4 =		(2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.86*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_5 =		(4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.05*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_6 =		(5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.78*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_7 =		(8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.23*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_8 =		(11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.72*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_9 =		(16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.55*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_10 =		(22<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.68*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_3 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_4 = (2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.86*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_5 = (4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.05*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_6 = (5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.78*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_7 = (8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.23*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_8 = (11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.72*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_9 = (16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.55*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_10 = (22<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.68*(1<<TX_ISP_GAIN_FIXED_POINT)));
 
 struct tx_isp_sensor_attribute gc2033_attr;
 
@@ -460,7 +460,7 @@ static struct regval_list gc2033_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfa,0x86},
 	{0xf2,0x0f},
 
-  	{GC2033_FLAG_END, 0x00},	/* END MARKER */
+  	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 
 };
 
@@ -599,7 +599,7 @@ static struct regval_list gc2033_init_regs_1920_1080_15fps_dvp[] = {
 	{0xfa,0x83},
 	{0xf2,0x0f},
 
-	{GC2033_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -608,12 +608,12 @@ static struct regval_list gc2033_init_regs_1920_1080_15fps_dvp[] = {
 static struct tx_isp_sensor_win_setting gc2033_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25<<16|1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= gc2033_init_regs_1920_1080_25fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25<<16|1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = gc2033_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
@@ -628,12 +628,12 @@ static enum v4l2_mbus_pixelcode gc2033_mbus_code[] = {
 
 static struct regval_list gc2033_stream_on[] = {
 	{ 0xf2, 0x8f},
-	{GC2033_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2033_stream_off[] = {
 	{ 0xf2, 0x80},
-	{GC2033_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 int gc2033_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -642,16 +642,16 @@ int gc2033_read(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -668,10 +668,10 @@ static int gc2033_write(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -685,16 +685,16 @@ static int gc2033_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC2033_FLAG_END) {
-		if (vals->reg_num == GC2033_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc2033_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			if (vals->reg_num == GC2033_PAGE_REG){
+			if (vals->reg_num == SENSOR_PAGE_REG) {
 				val &= 0xf8;
-				val |= (vals->value & 0x07);
+				val = (vals->value & 0x07);
 				ret = gc2033_write(sd, vals->reg_num, val);
 				ret = gc2033_read(sd, vals->reg_num, &val);
 			}
@@ -706,8 +706,8 @@ static int gc2033_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int gc2033_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC2033_FLAG_END) {
-		if (vals->reg_num == GC2033_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc2033_write(sd, vals->reg_num, vals->value);
@@ -732,13 +732,13 @@ static int gc2033_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2033_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2033_read(sd, 0xf1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2033_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -774,12 +774,12 @@ static int gc2033_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	if (ret < 0) {
 		return ret;
 	}
-	if(tmp >= 0x08){
+	if (tmp >= 0x08) {
 		ret = gc2033_write(sd, 0x21, 0x2c);
 		if (ret < 0)
 			return ret;
 	}
-	else{
+	else {
 		ret = gc2033_write(sd, 0x21, 0x28);
 		if (ret < 0)
 			return ret;
@@ -803,7 +803,7 @@ static int gc2033_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor_win_setting *wsize = &gc2033_win_sizes[0];
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	switch (sensor_max_fps) {
@@ -864,11 +864,11 @@ static int gc2033_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
-		wpclk = gc2033_SUPPORT_WPCLK_FPS_25;
+		wpclk = SENSOR_SUPPORT_WPCLK_FPS_25;
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 		break;
 	case TX_SENSOR_MAX_FPS_15:
-		wpclk = gc2033_SUPPORT_WPCLK_FPS_15;
+		wpclk = SENSOR_SUPPORT_WPCLK_FPS_15;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
@@ -877,14 +877,14 @@ static int gc2033_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
 	ret = gc2033_read(sd, 0x05, &tmp);
 	hb = tmp;
 	ret += gc2033_read(sd, 0x06, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	hb = (hb << 8) + tmp;
 	hts = hb << 2;
@@ -892,14 +892,14 @@ static int gc2033_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = gc2033_read(sd, 0x0d, &tmp);
 	win_high = tmp;
 	ret += gc2033_read(sd, 0x0e, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	win_high = (win_high << 8) + tmp;
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
 	ret = gc2033_write(sd, 0x08, (unsigned char)(vb & 0xff));
 	ret += gc2033_write(sd, 0x07, (unsigned char)(vb >> 8));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
@@ -916,21 +916,21 @@ static int gc2033_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &gc2033_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &gc2033_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
-		if(sensor->priv != wsize){
+		if (sensor->priv != wsize) {
 			ret = gc2033_write_array(sd, wsize->regs);
-			if(!ret){
+			if (!ret) {
 				sensor->priv = wsize;
 			}
 		}
@@ -948,7 +948,7 @@ static int gc2033_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret = gc2033_write(sd, 0xfe, 0x00);
 	ret += gc2033_read(sd, 0x17, &val);
-	if (enable){
+	if (enable) {
 		val = val | 0x02;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 	} else {
@@ -958,7 +958,7 @@ static int gc2033_set_vflip(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus_change = 1;
 	ret += gc2033_write(sd, 0x17, val);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
@@ -970,27 +970,27 @@ static int gc2033_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"gc2033_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"gc2033_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -1001,7 +1001,7 @@ static int gc2033_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	printk("gc2033 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "gc2033", sizeof("gc2033"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1011,29 +1011,29 @@ static int gc2033_g_chip_ident(struct tx_isp_subdev *sd,
 static int gc2033_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc2033_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -1043,11 +1043,11 @@ static int gc2033_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = gc2033_write_array(sd, gc2033_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_fps(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
+			if (arg)
 				ret = gc2033_set_vflip(sd, *(int*)arg);
 			break;
 		default:
@@ -1063,7 +1063,7 @@ static int gc2033_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1079,7 +1079,7 @@ static int gc2033_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1101,7 +1101,7 @@ static struct tx_isp_subdev_video_ops gc2033_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	gc2033_sensor_ops = {
-	.ioctl	= gc2033_sensor_ops_ioctl,
+	.ioctl = gc2033_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops gc2033_ops = {
@@ -1136,7 +1136,7 @@ static int gc2033_probe(struct i2c_client *client,
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1156,7 +1156,7 @@ static int gc2033_probe(struct i2c_client *client,
 
 	gc2033_attr.dvp.gpio = sensor_gpio_func;
 
-	switch(sensor_gpio_func){
+	switch(sensor_gpio_func) {
 		case DVP_PA_LOW_10BIT:
 		case DVP_PA_HIGH_10BIT:
 			mbus = gc2033_mbus_code[0];
@@ -1222,9 +1222,9 @@ static int gc2033_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1242,32 +1242,32 @@ MODULE_DEVICE_TABLE(i2c, gc2033_id);
 
 static struct i2c_driver gc2033_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "gc2033",
+		.owner = THIS_MODULE,
+		.name = "gc2033",
 	},
-	.probe		= gc2033_probe,
-	.remove		= gc2033_remove,
-	.id_table	= gc2033_id,
+	.probe = gc2033_probe,
+	.remove = gc2033_remove,
+	.id_table = gc2033_id,
 };
 
-static __init int init_gc2033(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init gc2033 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&gc2033_driver);
 }
 
-static __exit void exit_gc2033(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&gc2033_driver);
 }
 
-module_init(init_gc2033);
-module_exit(exit_gc2033);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Gcoreinc gc2033 sensors");
 MODULE_LICENSE("GPL");

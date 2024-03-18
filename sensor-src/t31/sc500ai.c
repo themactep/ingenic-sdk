@@ -22,15 +22,15 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC500AI_CHIP_ID_H	(0xce)
-#define SC500AI_CHIP_ID_L	(0x1f)
-#define SC500AI_REG_END		0xffff
-#define SC500AI_REG_DELAY	0xfffe
-#define SC500AI_SUPPORT_SCLK_3M_FPS_30 (126000000)
-#define SC500AI_SUPPORT_SCLK_4M_FPS_30 (158400000)
+#define SENSOR_CHIP_ID_H (0xce)
+#define SENSOR_CHIP_ID_L (0x1f)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_SCLK_3M_FPS_30 (126000000)
+#define SENSOR_SUPPORT_SCLK_4M_FPS_30 (158400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20210615a"
+#define SENSOR_VERSION "H20210615a"
 
 typedef enum {
     SENSOR_RES_370 = 370,
@@ -67,7 +67,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc500ai_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x340, 0},
 	{0x341, 1500},
 	{0x342, 2886},
@@ -359,20 +359,20 @@ struct again_lut sc500ai_again_lut[] = {
 	{0x3f7f, 300739}
 };
 
-struct tx_isp_sensor_attribute sc500ai_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc500ai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = sc500ai_again_lut;
-	while(lut->gain <= sc500ai_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc500ai_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -384,12 +384,12 @@ unsigned int sc500ai_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 	return isp_gain;
 }
 
-unsigned int sc500ai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute sc500ai_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "sc500ai",
 	.chip_id = 0xce1f,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -438,11 +438,11 @@ struct tx_isp_sensor_attribute sc500ai_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = sc500ai_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc500ai_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list sc500ai_init_regs_2592_1620_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2592_1620_30fps_mipi[] = {
     {0x0103,0x01},
     {0x0100,0x00},
     {0x36e9,0x80},
@@ -576,11 +576,11 @@ static struct regval_list sc500ai_init_regs_2592_1620_30fps_mipi[] = {
     {0x36f9,0x57},
     {0x0100,0x01},
 
-    {SC500AI_REG_DELAY, 0x10},
-    {SC500AI_REG_END, 0x00},/* END MARKER */
+    {SENSOR_REG_DELAY, 0x10},
+    {SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
-static struct regval_list sc500ai_init_regs_2560_1440_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2560_1440_30fps_mipi[] = {
     {0x0103,0x01},
     {0x0100,0x00},
     {0x36e9,0x80},
@@ -714,58 +714,58 @@ static struct regval_list sc500ai_init_regs_2560_1440_30fps_mipi[] = {
     {0x36e9,0x53},
     {0x36f9,0x53},
     {0x0100,0x01},
-    {SC500AI_REG_END, 0x00},/* END MARKER */
+    {SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting sc500ai_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 2592*1620@ Max30fps*/
 	{
-		.width		= 2592,
-		.height		= 1620,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc500ai_init_regs_2592_1620_30fps_mipi,
+		.width = 2592,
+		.height = 1620,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_2592_1620_30fps_mipi,
 	},
 	/* 2560*1440@ Max25fps */
 	{
-		.width		= 2560,
-		.height		= 1440,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc500ai_init_regs_2560_1440_30fps_mipi,
+		.width = 2560,
+		.height = 1440,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_2560_1440_30fps_mipi,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &sc500ai_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list sc500ai_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SC500AI_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc500ai_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SC500AI_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int sc500ai_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 		unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -776,16 +776,16 @@ int sc500ai_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int sc500ai_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 		 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -795,15 +795,15 @@ int sc500ai_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-static int sc500ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC500AI_REG_END) {
-		if (vals->reg_num == SC500AI_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc500ai_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -813,14 +813,14 @@ static int sc500ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sc500ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC500AI_REG_END) {
-		if (vals->reg_num == SC500AI_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc500ai_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -830,54 +830,54 @@ static int sc500ai_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 	return 0;
 }
 
-static int sc500ai_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int sc500ai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
 	unsigned char v;
 
-	ret = sc500ai_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC500AI_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc500ai_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC500AI_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int sc500ai_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = (value & 0xffff) * 2;
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integration time*/
-	ret = sc500ai_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
-	ret += sc500ai_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	ret += sc500ai_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	/*set analog gain*/
-	ret += sc500ai_write(sd, 0x3e09, (unsigned char)(again & 0xff));
-	ret += sc500ai_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 
 	if ((again >= 0x3f7f) && dpc_flag) {//24x
-		ret += sc500ai_write(sd, 0x5799, 0x07);
+		ret += sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
 	} else if ((again <= 0x3f69) && (!dpc_flag)) {//20x
-		ret += sc500ai_write(sd, 0x5799, 0x00);
+		ret += sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
 	if (ret != 0) {
@@ -888,32 +888,32 @@ static int sc500ai_set_expo(struct tx_isp_subdev *sd, int value)
 }
 
 #if 0
-static int sc500ai_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
 	value *= 2;
-	ret = sc500ai_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-	ret += sc500ai_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc500ai_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int sc500ai_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int again = value;
 
-	ret = sc500ai_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc500ai_write(sd, 0x3e08, (unsigned char)((value >> 8 & 0xff)));
+	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 & 0xff)));
 	if ((again >= 0x3f7f) && dpc_flag) {//24x
-		ret += sc500ai_write(sd, 0x5799, 0x07);
+		ret += sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
 	} else if ((again <= 0x3f69) && (!dpc_flag)) {//20x
-		ret += sc500ai_write(sd, 0x5799, 0x00);
+		ret += sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
 	if (ret != 0)
@@ -923,23 +923,23 @@ static int sc500ai_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc500ai_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc500ai_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc500ai_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -947,21 +947,21 @@ static int sc500ai_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = sc500ai_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret != 0)
 		return ret;
 	/*verion diff*/
-	ret = sc500ai_read(sd, 0x3109, &val);
-	if(1 == val) {
-		ret += sc500ai_write(sd, 0x336d, 0x23);
+	ret = sensor_read(sd, 0x3109, &val);
+	if (1 == val) {
+		ret += sensor_write(sd, 0x336d, 0x23);
 	} else {
-		ret += sc500ai_write(sd, 0x336d, 0x03);
+		ret += sensor_write(sd, 0x336d, 0x03);
 	}
-	ret += sc500ai_read(sd, 0x3004, &val);
-	if(1 == val) {
-		ret += sc500ai_write(sd, 0x363c, 0x42);
+	ret += sensor_read(sd, 0x3004, &val);
+	if (1 == val) {
+		ret += sensor_write(sd, 0x363c, 0x42);
 	} else {
-		ret += sc500ai_write(sd, 0x363c, 0x40);
+		ret += sensor_write(sd, 0x363c, 0x40);
 	}
 	if (ret != 0)
 		return ret;
@@ -971,20 +971,20 @@ static int sc500ai_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int sc500ai_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		ret = sc500ai_write_array(sd, sc500ai_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 	} else {
-		ret = sc500ai_write_array(sd, sc500ai_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 	}
 
 	return ret;
 }
 
-static int sc500ai_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -995,31 +995,31 @@ static int sc500ai_set_fps(struct tx_isp_subdev *sd, int fps)
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	switch(sensor_resolution){
+	switch(sensor_resolution) {
 	case SENSOR_RES_400:
-		sclk = SC500AI_SUPPORT_SCLK_4M_FPS_30;
+		sclk = SENSOR_SUPPORT_SCLK_4M_FPS_30;
 		break;
 	case SENSOR_RES_370:
-		sclk = SC500AI_SUPPORT_SCLK_3M_FPS_30;
+		sclk = SENSOR_SUPPORT_SCLK_3M_FPS_30;
 		break;
 	}
-	ret = sc500ai_read(sd, 0x320c, &tmp);
+	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
-	ret += sc500ai_read(sd, 0x320d, &tmp);
+	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: sc500ai read err\n");
 		return ret;
 	}
 	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret += sc500ai_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sc500ai_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sc500ai_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1032,31 +1032,31 @@ static int sc500ai_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int sc500ai_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret = sc500ai_read(sd, 0x3221, &val);
-	if(enable & 0x2)
-		val |= 0x60;
+	ret = sensor_read(sd, 0x3221, &val);
+	if (enable & 0x2)
+		val = 0x60;
 	else
 		val &= 0x9f;
-	ret += sc500ai_write(sd, 0x3221, val);
+	ret += sensor_write(sd, 0x3221, val);
 	if (0 != ret) {
-		ISP_ERROR("err: sc500ai_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
 	return ret;
 }
 
-static int sc500ai_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1069,37 +1069,37 @@ static int sc500ai_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc500ai_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc500ai_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc500ai_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(5);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = sc500ai_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc500ai chip.\n",
 		       client->addr, client->adapter->name);
@@ -1107,7 +1107,7 @@ static int sc500ai_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("sc500ai chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "sc500ai", sizeof("sc500ai"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1116,53 +1116,53 @@ static int sc500ai_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc500ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-			ret = sc500ai_set_expo(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 	/*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = sc500ai_set_integration_time(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = sc500ai_set_analog_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = sc500ai_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = sc500ai_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = sc500ai_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = sc500ai_write_array(sd, sc500ai_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = sc500ai_write_array(sd, sc500ai_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = sc500ai_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = sc500ai_set_vflip(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_vflip(sd, *(int*)arg);
 		break;
 	default:
 		break;
@@ -1171,60 +1171,60 @@ static int sc500ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 	return ret;
 }
 
-static int sc500ai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc500ai_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc500ai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	sc500ai_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops sc500ai_core_ops = {
-	.g_chip_ident = sc500ai_g_chip_ident,
-	.reset = sc500ai_reset,
-	.init = sc500ai_init,
-	.g_register = sc500ai_g_register,
-	.s_register = sc500ai_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc500ai_video_ops = {
-	.s_stream = sc500ai_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc500ai_sensor_ops = {
-	.ioctl	= sc500ai_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops sc500ai_ops = {
-	.core = &sc500ai_core_ops,
-	.video = &sc500ai_video_ops,
-	.sensor = &sc500ai_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1241,7 +1241,7 @@ struct platform_device sensor_platform_device = {
 };
 
 
-static int sc500ai_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
@@ -1249,7 +1249,7 @@ static int sc500ai_probe(struct i2c_client *client,
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1263,19 +1263,19 @@ static int sc500ai_probe(struct i2c_client *client,
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	switch(sensor_resolution){
+	switch(sensor_resolution) {
 	case SENSOR_RES_400:
-		wsize = &sc500ai_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 		break;
 	case SENSOR_RES_370:
-		wsize = &sc500ai_win_sizes[1];
-		sc500ai_attr.mipi.image_twidth = 2560;
-		sc500ai_attr.mipi.image_theight = 1440;
-		sc500ai_attr.max_integration_time_native = 1800-4;
-		sc500ai_attr.integration_time_limit = 1800-4;
-		sc500ai_attr.total_width = 2800;
-		sc500ai_attr.total_height = 1800;
-		sc500ai_attr.max_integration_time = 1800-4;
+		wsize = &sensor_win_sizes[1];
+		sensor_attr.mipi.image_twidth = 2560;
+		sensor_attr.mipi.image_theight = 1440;
+		sensor_attr.max_integration_time_native = 1800-4;
+		sensor_attr.integration_time_limit = 1800-4;
+		sensor_attr.total_width = 2800;
+		sensor_attr.total_height = 1800;
+		sensor_attr.max_integration_time = 1800-4;
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate !!!\n");
@@ -1283,12 +1283,12 @@ static int sc500ai_probe(struct i2c_client *client,
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
-	sc500ai_attr.max_again = 300739;
+	sensor_attr.max_again = 300739;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	sc500ai_attr.expo_fs = 1;
-	sensor->video.attr = &sc500ai_attr;
+	sensor_attr.expo_fs = 1;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1297,7 +1297,7 @@ static int sc500ai_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc500ai_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1314,14 +1314,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc500ai_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1332,41 +1332,41 @@ static int sc500ai_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc500ai_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "sc500ai", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, sc500ai_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc500ai_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc500ai",
+		.owner = THIS_MODULE,
+		.name = "sc500ai",
 	},
-	.probe		= sc500ai_probe,
-	.remove		= sc500ai_remove,
-	.id_table	= sc500ai_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_sc500ai(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init sc500ai driver.\n");
 		return -1;
 	}
 
-	return private_i2c_add_driver(&sc500ai_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sc500ai(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&sc500ai_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_sc500ai);
-module_exit(exit_sc500ai);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Smartsens sc500ai sensors");
 MODULE_LICENSE("GPL");

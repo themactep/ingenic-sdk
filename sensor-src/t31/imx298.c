@@ -23,12 +23,12 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define IMX298_CHIP_ID_H (0x00)
-#define IMX298_CHIP_ID_L (0x00)
-#define IMX298_REG_END 0xffff
-#define IMX298_REG_DELAY 0xfffe
+#define SENSOR_CHIP_ID_H (0x00)
+#define SENSOR_CHIP_ID_L (0x00)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define IMX298_SUPPORT_PCLK (1802 * 5536 * 30)
+#define SENSOR_SUPPORT_PCLK (1802 * 5536 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 10
 #define SENSOR_VERSION "H20211103a"
@@ -67,7 +67,7 @@ struct regval_list
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
-struct again_lut imx298_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x0002, 0},
 	{0x0007, 940},
 	{0x000d, 1872},
@@ -357,12 +357,12 @@ struct again_lut imx298_again_lut[] = {
 	{0x01bf, 195179},
 	{0x01c0, 196608},
 };
-struct tx_isp_sensor_attribute imx298_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int imx298_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = imx298_again_lut;
-	while (lut->gain <= imx298_attr.max_again)
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again)
 	{
 		if (isp_gain == 0)
 		{
@@ -376,7 +376,7 @@ unsigned int imx298_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 		}
 		else
 		{
-			if ((lut->gain == imx298_attr.max_again) && (isp_gain >= lut->gain))
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain))
 			{
 				*sensor_again = lut->value;
 				return lut->gain;
@@ -389,14 +389,14 @@ unsigned int imx298_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int imx298_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	*sensor_dgain = 0;
 
 	return 0;
 }
 
-struct tx_isp_sensor_attribute imx298_attr = {
+struct tx_isp_sensor_attribute sensor_attr = {
 	.name = "imx298",
 	.chip_id = 0x0000,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -443,11 +443,11 @@ struct tx_isp_sensor_attribute imx298_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = imx298_alloc_again,
-	.sensor_ctrl.alloc_dgain = imx298_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list imx298_init_regs_2320_1440_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2320_1440_30fps_mipi[] = {
 	{0x0136, 0x18},
 	{0x0137, 0x00},
 	{0x30F4, 0x01},
@@ -699,13 +699,13 @@ static struct regval_list imx298_init_regs_2320_1440_30fps_mipi[] = {
 	{0x3058, 0x00},
 	{0x3103, 0x01},
 	{0x0100, 0x01},
-	{IMX298_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
- * the order of the imx298_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting imx298_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
 		.width = 2320,
@@ -713,20 +713,20 @@ static struct tx_isp_sensor_win_setting imx298_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = imx298_init_regs_2320_1440_30fps_mipi,
+		.regs = sensor_init_regs_2320_1440_30fps_mipi,
 	}};
 
-static struct regval_list imx298_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x3000, 0x00},
-	{IMX298_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list imx298_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x3000, 0x01},
-	{IMX298_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int imx298_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 				unsigned char *value)
 {
 	int ret;
@@ -753,7 +753,7 @@ int imx298_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int imx298_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 				 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -772,19 +772,19 @@ int imx298_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 /*
-static int imx298_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != IMX298_REG_END)
+	while (vals->reg_num != SENSOR_REG_END)
 	{
-		if (vals->reg_num == IMX298_REG_DELAY)
+		if (vals->reg_num == SENSOR_REG_DELAY)
 		{
 			msleep(vals->value);
 		}
 		else
 		{
-			ret = imx298_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 			ISP_WARNING("{0x%0x, 0x%02x}\n", vals->reg_num, val);
@@ -795,18 +795,18 @@ static int imx298_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 */
-static int imx298_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != IMX298_REG_END)
+	while (vals->reg_num != SENSOR_REG_END)
 	{
-		if (vals->reg_num == IMX298_REG_DELAY)
+		if (vals->reg_num == SENSOR_REG_DELAY)
 		{
 			msleep(vals->value);
 		}
 		else
 		{
-			ret = imx298_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -816,82 +816,82 @@ static int imx298_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int imx298_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int imx298_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = imx298_read(sd, 0x3008, &v);
+	ret = sensor_read(sd, 0x3008, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX298_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = imx298_read(sd, 0x301e, &v);
+	ret = sensor_read(sd, 0x301e, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX298_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 /**
-static int imx298_set_integration_time_short(struct tx_isp_subdev *sd, int int_time)
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int int_time)
 {
 	return 0;
 }
 */
-static int imx298_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
-	ret += imx298_write(sd, 0x0202, (unsigned char)((it >> 8) & 0xff));
-	ret += imx298_write(sd, 0x0203, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x0202, (unsigned char)((it >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0203, (unsigned char)(it & 0xff));
 
-	ret = imx298_write(sd, 0x0205, (unsigned char)(again & 0xff));
-	ret += imx298_write(sd, 0x0204, (unsigned char)(((again >> 8) & 0xff)));
+	ret = sensor_write(sd, 0x0205, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x0204, (unsigned char)(((again >> 8) & 0xff)));
 	return 0;
 }
 /*
-static int imx298_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	ret = imx298_write(sd, 0x3014, (unsigned char)(value & 0xff));
+	ret = sensor_write(sd, 0x3014, (unsigned char)(value & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int imx298_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 */
-static int imx298_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx298_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx298_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	struct tx_isp_sensor_win_setting *wsize = &imx298_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 	if (!enable)
 		return ISP_SUCCESS;
@@ -901,7 +901,7 @@ static int imx298_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = imx298_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -910,25 +910,25 @@ static int imx298_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int imx298_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable)
 	{
-		ret = imx298_write_array(sd, imx298_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		pr_debug("imx298 stream on\n");
 	}
 	else
 	{
-		ret = imx298_write_array(sd, imx298_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("imx298 stream off\n");
 	}
 
 	return ret;
 }
 
-static int imx298_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -947,14 +947,14 @@ static int imx298_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 	sclk = 5536 * 1802 * 30;
 
-	ret = imx298_read(sd, 0x0342, &tmp);
+	ret = sensor_read(sd, 0x0342, &tmp);
 	hts = tmp;
-	ret += imx298_read(sd, 0x0343, &tmp);
+	ret += sensor_read(sd, 0x0343, &tmp);
 	hts = ((hts << 8) + tmp);
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret += imx298_write(sd, 0x0341, (unsigned char)(vts & 0xff));
-	ret += imx298_write(sd, 0x0340, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x0340, (unsigned char)(vts >> 8));
 
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 10;
@@ -969,7 +969,7 @@ static int imx298_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int imx298_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
@@ -977,11 +977,11 @@ static int imx298_set_mode(struct tx_isp_subdev *sd, int value)
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS)
 	{
-		wsize = &imx298_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	}
 	else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS)
 	{
-		wsize = &imx298_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	}
 
 	if (wsize)
@@ -997,7 +997,7 @@ static int imx298_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int imx298_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 							   struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -1005,7 +1005,7 @@ static int imx298_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1)
 	{
-		ret = private_gpio_request(reset_gpio, "imx298_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret)
 		{
 			private_gpio_direction_output(reset_gpio, 1);
@@ -1022,7 +1022,7 @@ static int imx298_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	if (pwdn_gpio != -1)
 	{
-		ret = private_gpio_request(pwdn_gpio, "imx298_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret)
 		{
 			private_gpio_direction_output(pwdn_gpio, 0);
@@ -1037,19 +1037,19 @@ static int imx298_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 
 
-	if(pwr_gpio != -1){
+	if (pwr_gpio != -1) {
 		ret = private_gpio_request(pwr_gpio,"ov4688_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwr_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwr_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwr_gpio);
 		}
 	}
 
-	ret = imx298_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret)
 	{
 		ISP_ERROR("chip found @ 0x%x (%s) is not an imx298 chip.\n",
@@ -1068,24 +1068,24 @@ static int imx298_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int imx298_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret = imx298_read(sd, 0x3007, &val);
+	ret = sensor_read(sd, 0x3007, &val);
 	if (enable & 0x2)
-		val |= 0x01;
+		val = 0x01;
 	else
 		val &= 0xfe;
-	ret += imx298_write(sd, 0x3007, val);
+	ret += sensor_write(sd, 0x3007, val);
 	if (0 != ret)
 		return ret;
 
 	return 0;
 }
 
-static int imx298_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd))
@@ -1096,51 +1096,51 @@ static int imx298_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	{
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = imx298_set_expo(sd, *(int *)arg);
+			ret = sensor_set_expo(sd, *(int *)arg);
 		break;/*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = imx298_set_integration_time(sd, *(int *)arg);
+			ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
-			ret = imx298_set_integration_time_short(sd, *(int *)arg);
+			ret = sensor_set_integration_time_short(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = imx298_set_analog_gain(sd, *(int *)arg);
+			ret = sensor_set_analog_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)
-			ret = imx298_set_analog_gain_short(sd, *(int *)arg);
+			ret = sensor_set_analog_gain_short(sd, *(int *)arg);
 		break;*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = imx298_set_digital_gain(sd, *(int *)arg);
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = imx298_get_black_pedestal(sd, *(int *)arg);
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = imx298_set_mode(sd, *(int *)arg);
+			ret = sensor_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (arg)
-			ret = imx298_write_array(sd, imx298_stream_off);
+			ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (arg)
-			ret = imx298_write_array(sd, imx298_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = imx298_set_fps(sd, *(int *)arg);
+			ret = sensor_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = imx298_set_vflip(sd, *(int *)arg);
+			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -1149,7 +1149,7 @@ static int imx298_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int imx298_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -1162,14 +1162,14 @@ static int imx298_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = imx298_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int imx298_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
@@ -1180,31 +1180,31 @@ static int imx298_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	imx298_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops imx298_core_ops = {
-	.g_chip_ident = imx298_g_chip_ident,
-	.reset = imx298_reset,
-	.init = imx298_init,
-	.g_register = imx298_g_register,
-	.s_register = imx298_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops imx298_video_ops = {
-	.s_stream = imx298_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops imx298_sensor_ops = {
-	.ioctl = imx298_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops imx298_ops = {
-	.core = &imx298_core_ops,
-	.video = &imx298_video_ops,
-	.sensor = &imx298_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1220,13 +1220,13 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int imx298_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 						const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &imx298_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret;
 	unsigned long rate = 0;
 
@@ -1270,7 +1270,7 @@ static int imx298_probe(struct i2c_client *client,
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &imx298_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1279,7 +1279,7 @@ static int imx298_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &imx298_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1296,7 +1296,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int imx298_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
@@ -1314,22 +1314,22 @@ static int imx298_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id imx298_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{"imx298", 0},
 	{}};
-MODULE_DEVICE_TABLE(i2c, imx298_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver imx298_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
 		.name = "imx298",
 	},
-	.probe = imx298_probe,
-	.remove = imx298_remove,
-	.id_table = imx298_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_imx298(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1338,16 +1338,16 @@ static __init int init_imx298(void)
 		return -1;
 	}
 
-	return private_i2c_add_driver(&imx298_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_imx298(void)
+static __exit void exit_sensor(void)
 {
-	i2c_del_driver(&imx298_driver);
+	i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_imx298);
-module_exit(exit_imx298);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sony imx298 sensors");
 MODULE_LICENSE("GPL");

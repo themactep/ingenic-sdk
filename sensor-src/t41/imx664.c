@@ -28,14 +28,14 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define IMX664_CHIP_ID_H        (0x02)
-#define IMX664_CHIP_ID_L        (0x98)
-#define IMX664_REG_END          0xffff
-#define IMX664_REG_DELAY        0xfffe
-#define IMX664_SUPPORT_SCLK (148500000)
+#define SENSOR_CHIP_ID_H (0x02)
+#define SENSOR_CHIP_ID_L (0x98)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_SCLK (148500000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION  "H20231103a"
+#define SENSOR_VERSION "H20231103a"
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
@@ -64,17 +64,17 @@ unsigned int imx664_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
         uint32_t hcg = 166528;//5.82x
         uint32_t hcg_thr = 196608;//20x 196608;//8x
 
-        if(isp_gain >= hcg_thr){
+        if (isp_gain >= hcg_thr) {
                 isp_gain = isp_gain - hcg;
                 *sensor_again = 0;
-                *sensor_again |= 1 << 12;
+                *sensor_again = 1 << 12;
         } else {
                 *sensor_again = 0;
                 hcg = 0;
         }
         again = (isp_gain*20)>>LOG2_GAIN_SHIFT;
         // Limit Max gain
-        if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+        if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
         *sensor_again += again;
         isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20 + hcg;
@@ -88,17 +88,17 @@ unsigned int imx664_alloc_again_short(unsigned int isp_gain, unsigned char shift
         uint32_t hcg = 166528;//5.82x
         uint32_t hcg_thr = 196608;//20x 196608;//8x
 
-        if(isp_gain >= hcg_thr){
+        if (isp_gain >= hcg_thr) {
                 isp_gain = isp_gain - hcg;
                 *sensor_again = 0;
-                *sensor_again |= 1 << 12;
+                *sensor_again = 1 << 12;
         } else {
                 *sensor_again = 0;
                 hcg = 0;
         }
         again = (isp_gain*20)>>LOG2_GAIN_SHIFT;
         // Limit Max gain
-        if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+        if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
         *sensor_again += again;
         isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20 + hcg;
@@ -394,10 +394,10 @@ static struct regval_list imx664_init_regs_2688_1520_30fps_mipi[] = {
 	{0x4E32,0x03},
 	{0x4E33,0x02},
 	{0x3000,0x00},
-	{IMX664_REG_DELAY,0x18},
+	{SENSOR_REG_DELAY,0x18},
 	{0x3002,0x00},
 	{0x30A5,0x00},
-	{IMX664_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
@@ -608,10 +608,10 @@ static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
 	{0x4E32,0x03},
 	{0x4E33,0x02},
 	{0x3000,0x00},
-	{IMX664_REG_DELAY,0x18},
+	{SENSOR_REG_DELAY,0x18},
 	{0x3002,0x00},
 	{0x30A5,0x00},
-	{IMX664_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 /*
@@ -619,20 +619,20 @@ static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
  */
 static struct tx_isp_sensor_win_setting imx664_win_sizes[] = {
         {
-                .width          = 2688,
-                .height         = 1520,
-                .fps            = 30 << 16 | 1,
-                .mbus_code      = TISP_VI_FMT_SRGGB12_1X12,
-                .colorspace     = TISP_COLORSPACE_SRGB,
-                .regs           = imx664_init_regs_2688_1520_30fps_mipi,
+                .width = 2688,
+                .height = 1520,
+                .fps = 30 << 16 | 1,
+                .mbus_code = TISP_VI_FMT_SRGGB12_1X12,
+                .colorspace = TISP_COLORSPACE_SRGB,
+                .regs = imx664_init_regs_2688_1520_30fps_mipi,
         },
         {
-                .width          = 2688,
-                .height         = 1520,
-                .fps            = 20 << 16 | 1,
-                .mbus_code      = TISP_VI_FMT_SRGGB10_1X10,
-                .colorspace     = TISP_COLORSPACE_SRGB,
-                .regs           = imx664_init_regs_2688_1520_20fps_mipi_dol,
+                .width = 2688,
+                .height = 1520,
+                .fps = 20 << 16 | 1,
+                .mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+                .colorspace = TISP_COLORSPACE_SRGB,
+                .regs = imx664_init_regs_2688_1520_20fps_mipi_dol,
         },
 };
 
@@ -644,12 +644,12 @@ static struct tx_isp_sensor_win_setting *wsize = &imx664_win_sizes[0];
 
 static struct regval_list imx664_stream_on_mipi[] = {
         {0x3000, 0x00},
-        {IMX664_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list imx664_stream_off_mipi[] = {
         {0x3000, 0x01},
-        {IMX664_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int imx664_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -660,16 +660,16 @@ int imx664_read(struct tx_isp_subdev *sd, uint16_t reg,
         uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
         struct i2c_msg msg[2] = {
                 [0] = {
-                        .addr   = client->addr,
-                        .flags  = 0,
-                        .len    = 2,
-                        .buf    = buf,
+                        .addr = client->addr,
+                        .flags = 0,
+                        .len = 2,
+                        .buf = buf,
                 },
                 [1] = {
-                        .addr   = client->addr,
-                        .flags  = I2C_M_RD,
-                        .len    = 1,
-                        .buf    = value,
+                        .addr = client->addr,
+                        .flags = I2C_M_RD,
+                        .len = 1,
+                        .buf = value,
                 }
         };
 
@@ -686,10 +686,10 @@ int imx664_write(struct tx_isp_subdev *sd, uint16_t reg,
         struct i2c_client *client = tx_isp_get_subdevdata(sd);
         uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
         struct i2c_msg msg = {
-                .addr   = client->addr,
-                .flags  = 0,
-                .len    = 3,
-                .buf    = buf,
+                .addr = client->addr,
+                .flags = 0,
+                .len = 3,
+                .buf = buf,
         };
         int ret;
         ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -704,8 +704,8 @@ static int imx664_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
         int ret;
         unsigned char val;
-        while (vals->reg_num != IMX664_REG_END) {
-                if (vals->reg_num == IMX664_REG_DELAY) {
+        while (vals->reg_num != SENSOR_REG_END) {
+                if (vals->reg_num == SENSOR_REG_DELAY) {
                         private_msleep(vals->value);
                 } else {
                         ret = imx664_read(sd, vals->reg_num, &val);
@@ -721,8 +721,8 @@ static int imx664_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int imx664_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
         int ret;
-        while (vals->reg_num != IMX664_REG_END) {
-                if (vals->reg_num == IMX664_REG_DELAY) {
+        while (vals->reg_num != SENSOR_REG_END) {
+                if (vals->reg_num == SENSOR_REG_DELAY) {
                         private_msleep(vals->value);
                 } else {
                         ret = imx664_write(sd, vals->reg_num, vals->value);
@@ -754,7 +754,7 @@ static int imx664_detect(struct tx_isp_subdev *sd, unsigned int *ident)
        printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
        if (ret < 0)
                return ret;
-       if (v != IMX664_CHIP_ID_H)
+       if (v != SENSOR_CHIP_ID_H)
                return -ENODEV;
        *ident = v;
 
@@ -763,7 +763,7 @@ static int imx664_detect(struct tx_isp_subdev *sd, unsigned int *ident)
        printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
        if (ret < 0)
                return ret;
-       if (v != IMX664_CHIP_ID_L)
+       if (v != SENSOR_CHIP_ID_L)
                return -ENODEV;
        *ident = (*ident << 8) | v;
        ret = imx664_write(sd, 0x3000, 0x01);
@@ -821,9 +821,9 @@ static int imx664_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
         ret += imx664_write(sd, 0x3072, (unsigned char)(value & 0xff));
         ret += imx664_write(sd, 0x3073, (unsigned char)((value >> 8) & 0xff));
 
-        if(value & (1 << 12)){
+        if (value & (1 << 12)) {
                 ret += imx664_write(sd, 0x3031, 0x1);
-        }else{
+        } else {
                 ret += imx664_write(sd, 0x3031, 0x0);
         }
         if (ret < 0)
@@ -839,9 +839,9 @@ static int imx664_set_analog_gain(struct tx_isp_subdev *sd, int value)
         ret += imx664_write(sd, 0x3070, (unsigned char)(value & 0xff));
         ret += imx664_write(sd, 0x3071, (unsigned char)((value >> 8) & 0xff));
 
-        if(value & (1 << 12)){
+        if (value & (1 << 12)) {
                 ret += imx664_write(sd, 0x3030, 0x1);
-        }else{
+        } else {
                 ret += imx664_write(sd, 0x3030, 0x0);
         }
         if (ret < 0)
@@ -865,7 +865,7 @@ static int imx664_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
         struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
         int ret = 0;
 
-        if(!init->enable){
+        if (!init->enable) {
                 sensor->video.state = TX_ISP_MODULE_DEINIT;
                 return ISP_SUCCESS;
         } else {
@@ -890,13 +890,13 @@ static int imx664_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
         int ret = 0;
 
         if (init->enable) {
-                if(sensor->video.state == TX_ISP_MODULE_DEINIT){
+                if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
                         ret = imx664_write_array(sd, wsize->regs);
                         if (ret)
                                 return ret;
                         sensor->video.state = TX_ISP_MODULE_INIT;
                 }
-                if(sensor->video.state == TX_ISP_MODULE_INIT){
+                if (sensor->video.state == TX_ISP_MODULE_INIT) {
                         ret = imx664_write_array(sd, imx664_stream_on_mipi);
                         sensor->video.state = TX_ISP_MODULE_RUNNING;
                         pr_debug("imx664 stream on\n");
@@ -924,7 +924,7 @@ static int imx664_set_fps(struct tx_isp_subdev *sd, int fps)
         unsigned int newformat = 0; //the format is 24.8
         int ret = 0;
 
-        switch(sensor->info.default_boot){
+        switch(sensor->info.default_boot) {
         case 0:
                 sclk = 1500 * 1620 * 30;
                 max_fps = TX_SENSOR_MAX_FPS_30;
@@ -939,7 +939,7 @@ static int imx664_set_fps(struct tx_isp_subdev *sd, int fps)
         }
 
         newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-        if(newformat > (max_fps<< 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+        if (newformat > (max_fps<< 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
                 ISP_ERROR("warn: fps(%x) no in range\n", fps);
                 return -1;
         }
@@ -964,13 +964,13 @@ static int imx664_set_fps(struct tx_isp_subdev *sd, int fps)
                 return ret;
         }
 
-        if((sensor->info.default_boot) == 0){
+        if ((sensor->info.default_boot) == 0) {
             sensor->video.fps = fps;
             sensor->video.attr->max_integration_time_native = vts -8;
             sensor->video.attr->integration_time_limit = vts -8;
             sensor->video.attr->total_height = vts;
             sensor->video.attr->max_integration_time = vts -8;
-        }else if((sensor->info.default_boot) == 1){
+        } else if ((sensor->info.default_boot) == 1) {
             rhs1 = aclk * (fps & 0xffff) / ((fps & 0xffff0000) >> 16);
             rhs1 = ((rhs1 >> 2) << 2) + 2;
             ret += imx664_write(sd, 0x3061, ((rhs1 >> 8) & 0xff));
@@ -1002,16 +1002,16 @@ static int imx664_set_vflip(struct tx_isp_subdev *sd, int enable)
 		v_val &= 0xFE;
 		break;
 	case 1:
-		h_val |= 0x01;
+		h_val = 0x01;
 		v_val &= 0xFE;
 		break;
 	case 2:
 		h_val &= 0xFE;
-		v_val |= 0x01;
+		v_val = 0x01;
 		break;
 	case 3:
-		h_val |= 0x01;
-		v_val |= 0x01;
+		h_val = 0x01;
+		v_val = 0x01;
 		break;
 	}
 	ret = imx664_write(sd, 0x3020, h_val);
@@ -1027,7 +1027,7 @@ static int imx664_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
         int ret = 0;
 
         ret = imx664_write(sd, 0x3000, 0x1);
-        if(wdr_en == 1){
+        if (wdr_en == 1) {
                 memcpy((void*)(&(imx664_attr.mipi)),(void*)(&imx664_mipi_dol),sizeof(imx664_mipi_dol));
                 data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
                 wsize = &imx664_win_sizes[1];
@@ -1052,7 +1052,7 @@ static int imx664_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
                 sensor->video.attr = &imx664_attr;
                 info->default_boot = 1;
                 ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-        } else if (wdr_en == 0){
+        } else if (wdr_en == 0) {
                 memcpy((void*)(&(imx664_attr.mipi)),(void*)(&imx664_mipi_linear),sizeof(imx664_mipi_linear));
                 data_type = TX_SENSOR_DATA_TYPE_LINEAR;
                 wsize = &imx664_win_sizes[0];
@@ -1103,7 +1103,7 @@ static int imx664_set_mode(struct tx_isp_subdev *sd, int value)
         struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
         int ret = ISP_SUCCESS;
 
-        if(wsize){
+        if (wsize) {
                 sensor->video.mbus.width = wsize->width;
                 sensor->video.mbus.height = wsize->height;
                 sensor->video.mbus.code = wsize->mbus_code;
@@ -1125,7 +1125,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
         unsigned long rate;
         int ret = 0;
 
-        switch(info->default_boot){
+        switch(info->default_boot) {
         case 0:
                 wsize = &imx664_win_sizes[0];
                 data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -1172,7 +1172,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this Setting Source!!!\n");
         }
 
-        switch(info->video_interface){
+        switch(info->video_interface) {
         case TISP_SENSOR_VI_MIPI_CSI0:
         case TISP_SENSOR_VI_MIPI_CSI1:
                 imx664_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
@@ -1182,7 +1182,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
                 ISP_ERROR("Have no this interface!!!\n");
         }
 
-        switch(info->mclk){
+        switch(info->mclk) {
         case TISP_SENSOR_MCLK0:
         case TISP_SENSOR_MCLK1:
         case TISP_SENSOR_MCLK2:
@@ -1243,25 +1243,25 @@ static int imx664_g_chip_ident(struct tx_isp_subdev *sd,
         int ret = ISP_SUCCESS;
 
         sensor_attr_check(sd);
-        if(reset_gpio != -1){
+        if (reset_gpio != -1) {
                 ret = private_gpio_request(reset_gpio,"imx664_reset");
-                if(!ret){
+                if (!ret) {
                         private_gpio_direction_output(reset_gpio, 0);
                         private_msleep(10);
                         private_gpio_direction_output(reset_gpio, 1);
                         private_msleep(10);
-                }else{
+                } else {
                         ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
                 }
         }
-        if(pwdn_gpio != -1){
+        if (pwdn_gpio != -1) {
                 ret = private_gpio_request(pwdn_gpio,"imx664_pwdn");
-                if(!ret){
+                if (!ret) {
                         private_gpio_direction_output(pwdn_gpio, 1);
                         private_msleep(10);
                         private_gpio_direction_output(pwdn_gpio, 0);
                         private_msleep(10);
-                }else{
+                } else {
                         ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
                 }
         }
@@ -1273,7 +1273,7 @@ static int imx664_g_chip_ident(struct tx_isp_subdev *sd,
                 return ret;
         }
         ISP_WARNING("imx664 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-        if(chip){
+        if (chip) {
                 memcpy(chip->name, "imx664", sizeof("imx664"));
                 chip->ident = ident;
                 chip->revision = SENSOR_VERSION;
@@ -1288,61 +1288,61 @@ static int imx664_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
         struct tx_isp_sensor_value *sensor_val = arg;
         struct tx_isp_initarg *init = arg;
 
-        if(IS_ERR_OR_NULL(sd)){
+        if (IS_ERR_OR_NULL(sd)) {
                 ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
                 return -EINVAL;
         }
-        switch(cmd){
+        switch(cmd) {
         case TX_ISP_EVENT_SENSOR_INT_TIME:
-                if(arg)
+                if (arg)
                         ret = imx664_set_integration_time(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-                if(arg)
+                if (arg)
                         ret = imx664_set_integration_time_short(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_AGAIN:
-                if(arg)
+                if (arg)
                         ret = imx664_set_analog_gain(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-                if(arg)
+                if (arg)
                         ret = imx664_set_analog_gain_short(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_DGAIN:
-                if(arg)
+                if (arg)
                         ret = imx664_set_digital_gain(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-                if(arg)
+                if (arg)
                         ret = imx664_get_black_pedestal(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_RESIZE:
-                if(arg)
+                if (arg)
                         ret = imx664_set_mode(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-                if(arg)
+                if (arg)
                         ret = imx664_write_array(sd, imx664_stream_off_mipi);
                 break;
         case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-                if(arg)
+                if (arg)
                         ret = imx664_write_array(sd, imx664_stream_on_mipi);
                 break;
         case TX_ISP_EVENT_SENSOR_FPS:
-                if(arg)
+                if (arg)
                         ret = imx664_set_fps(sd, sensor_val->value);
                 break;
         case TX_ISP_EVENT_SENSOR_WDR:
-                if(arg)
+                if (arg)
                         ret = imx664_set_wdr(sd, init->enable);
                 break;
         case TX_ISP_EVENT_SENSOR_WDR_STOP:
-                if(arg)
+                if (arg)
                         ret = imx664_set_wdr_stop(sd, init->enable);
                 break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
-              if(arg)
+              if (arg)
                       ret = imx664_set_vflip(sd, sensor_val->value);
                 break;
         default:
@@ -1359,7 +1359,7 @@ static int imx664_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
         int ret = 0;
 
         len = strlen(sd->chip.name);
-        if(len && strncmp(sd->chip.name, reg->name, len)){
+        if (len && strncmp(sd->chip.name, reg->name, len)) {
                 return -EINVAL;
         }
         if (!private_capable(CAP_SYS_ADMIN))
@@ -1376,7 +1376,7 @@ static int imx664_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
         int len = 0;
 
         len = strlen(sd->chip.name);
-        if(len && strncmp(sd->chip.name, reg->name, len)){
+        if (len && strncmp(sd->chip.name, reg->name, len)) {
                 return -EINVAL;
         }
         if (!private_capable(CAP_SYS_ADMIN))
@@ -1399,7 +1399,7 @@ static struct tx_isp_subdev_video_ops imx664_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops  imx664_sensor_ops = {
-        .ioctl  = imx664_sensor_ops_ioctl,
+        .ioctl = imx664_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops imx664_ops = {
@@ -1430,7 +1430,7 @@ static int imx664_probe(struct i2c_client *client,
         struct tx_isp_sensor *sensor;
 
         sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-        if(!sensor){
+        if (!sensor) {
                 ISP_ERROR("Failed to allocate sensor subdev.\n");
                 return -ENOMEM;
         }
@@ -1465,9 +1465,9 @@ static int imx664_remove(struct i2c_client *client)
         struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
         struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-        if(reset_gpio != -1)
+        if (reset_gpio != -1)
                 private_gpio_free(reset_gpio);
-        if(pwdn_gpio != -1)
+        if (pwdn_gpio != -1)
                 private_gpio_free(pwdn_gpio);
 
         private_clk_disable_unprepare(sensor->mclk);
@@ -1486,26 +1486,26 @@ MODULE_DEVICE_TABLE(i2c, imx664_id);
 
 static struct i2c_driver imx664_driver = {
         .driver = {
-                .owner  = THIS_MODULE,
-                .name   = "imx664",
+                .owner = THIS_MODULE,
+                .name = "imx664",
         },
-        .probe          = imx664_probe,
-        .remove         = imx664_remove,
-        .id_table       = imx664_id,
+        .probe = imx664_probe,
+        .remove = imx664_remove,
+        .id_table = imx664_id,
 };
 
-static __init int init_imx664(void)
+static __init int init_sensor(void)
 {
         return private_i2c_add_driver(&imx664_driver);
 }
 
-static __exit void exit_imx664(void)
+static __exit void exit_sensor(void)
 {
         private_i2c_del_driver(&imx664_driver);
 }
 
-module_init(init_imx664);
-module_exit(exit_imx664);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sony imx664 sensor");
 MODULE_LICENSE("GPL");

@@ -28,15 +28,15 @@
 
 #define SENSOR_NAME                 "sc2300"
 #define SENSOR_CHIP_ID              0x2300
-#define SENSOR_CHIP_ID_H            (0x23)
-#define SENSOR_CHIP_ID_L            (0x00)
-#define SENSOR_REG_END              0xffff
-#define SENSOR_REG_DELAY            0xfffe
+#define SENSOR_CHIP_ID_H (0x23)
+#define SENSOR_CHIP_ID_L (0x00)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK         (72000000)
 #define SENSOR_OUTPUT_MAX_FPS       30
 #define SENSOR_OUTPUT_MIN_FPS       5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION              "Howwouldiknow"
+#define SENSOR_VERSION "Howwouldiknow"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -417,12 +417,12 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width      = 1920,
-		.height     = 1080,
-		.fps        = 25 << 16 | 1,
-		.mbus_code  = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs       = sensor_init_regs_1920_1080_25fps_dvp,
+		.regs = sensor_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
@@ -450,16 +450,16 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr  = client->addr,
+			.addr = client->addr,
 			.flags = 0,
-			.len   = 2,
-			.buf   = buf,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr  = client->addr,
+			.addr = client->addr,
 			.flags = I2C_M_RD,
-			.len   = 1,
-			.buf   = value,
+			.len = 1,
+			.buf = value,
 		}
 	};
 
@@ -475,10 +475,10 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr  = client->addr,
+		.addr = client->addr,
 		.flags = 0,
-		.len   = 3,
-		.buf   = buf,
+		.len = 3,
+		.buf = buf,
 	};
 
 	int ret;
@@ -963,9 +963,9 @@ static struct i2c_driver sensor_driver = {
 		.owner = THIS_MODULE,
 		.name = SENSOR_NAME,
 	},
-	.probe     = sensor_probe,
-	.remove    = sensor_remove,
-	.id_table  = sensor_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sensor(void) {

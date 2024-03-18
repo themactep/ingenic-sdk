@@ -23,16 +23,16 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC2235_CHIP_ID_H	(0x22)
-#define SC2235_CHIP_ID_L	(0x35)
-#define SC2235_REG_END		0xffff
-#define SC2235_REG_DELAY	0xfffe
-#define SC2235_SUPPORT_PCLK_FPS_30 (74250*1000)
-#define SC2235_SUPPORT_PCLK_FPS_15 (45000*1000)
+#define SENSOR_CHIP_ID_H (0x22)
+#define SENSOR_CHIP_ID_L (0x35)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
+#define SENSOR_SUPPORT_PCLK_FPS_15 (45000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION	"H20200331a"
+#define SENSOR_VERSION "H20200331a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -63,7 +63,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc2235_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x10, 0},
 	{0x11, 5731},
 	{0x12, 11136},
@@ -130,22 +130,22 @@ struct again_lut sc2235_again_lut[] = {
 	/* {0x71f, 259142}, */
 };
 
-struct tx_isp_sensor_attribute sc2235_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc2235_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = sc2235_again_lut;
-	while(lut->gain <= sc2235_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return lut[0].gain;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == sc2235_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -157,12 +157,12 @@ unsigned int sc2235_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sc2235_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute sc2235_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "sc2235",
 	.chip_id = 0x2235,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -189,12 +189,12 @@ struct tx_isp_sensor_attribute sc2235_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = sc2235_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc2235_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
 
-static struct regval_list sc2235_init_regs_1920_1080_25fps[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 #if 0
 	/*mclk 24M 2M@30fps pclk 81M*/
 	{0x0103,0x01},
@@ -377,10 +377,10 @@ static struct regval_list sc2235_init_regs_1920_1080_25fps[] = {
 	{0x3039, 0x31},
 #endif
 
-	{SC2235_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc2235_init_regs_1920_1080_15fps[] = {
+static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x3039, 0x80},
@@ -486,24 +486,24 @@ static struct regval_list sc2235_init_regs_1920_1080_15fps[] = {
 	{0x3237, 0x09},
 	{0x3238, 0x94},
 
-	{SC2235_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 /*
- * the order of the sc2235_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting sc2235_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc2235_init_regs_1920_1080_25fps,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_25fps,
 	}
 };
 
-static enum v4l2_mbus_pixelcode sc2235_mbus_code[] = {
+static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
@@ -512,32 +512,32 @@ static enum v4l2_mbus_pixelcode sc2235_mbus_code[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list sc2235_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SC2235_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc2235_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SC2235_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int sc2235_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -548,15 +548,15 @@ int sc2235_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sc2235_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -566,15 +566,15 @@ int sc2235_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	return ret;
 }
 
-static int sc2235_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC2235_REG_END) {
-		if (vals->reg_num == SC2235_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = sc2235_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -583,14 +583,14 @@ static int sc2235_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int sc2235_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC2235_REG_END) {
-		if (vals->reg_num == SC2235_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = sc2235_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -599,51 +599,51 @@ static int sc2235_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sc2235_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int sc2235_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
 	unsigned char v;
 
-	ret = sc2235_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC2235_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc2235_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC2235_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int sc2235_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sc2235_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-	ret += sc2235_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc2235_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	/* EXP logic */
 	if (value < 0x50) {
-		ret = sc2235_write(sd, 0x3314,0x12);
+		ret = sensor_write(sd, 0x3314,0x12);
 		if (ret < 0)
 			return ret;
 	}
 	else if (value > 0xa0) {
-		ret += sc2235_write(sd, 0x3314,0x02);
+		ret += sensor_write(sd, 0x3314,0x02);
 		if (ret < 0)
 			return ret;
 	}
@@ -653,77 +653,77 @@ static int sc2235_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sc2235_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	ret = sc2235_write(sd,0x3903,0x84);
-	ret += sc2235_write(sd,0x3903,0x04);
-	ret += sc2235_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc2235_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
+	ret = sensor_write(sd,0x3903,0x84);
+	ret += sensor_write(sd,0x3903,0x04);
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
 	if (ret < 0)
 		return ret;
 
 	if (value < 0x110) {
-		sc2235_write(sd,0x3812,0x00);
-		sc2235_write(sd,0x3301,0x12);
-		sc2235_write(sd,0x3631,0x84);
-		sc2235_write(sd,0x366f,0x2f);
-		sc2235_write(sd,0x3622,0xc6);
-		sc2235_write(sd,0x5781,0x04);
-		sc2235_write(sd,0x5785,0x18);
-		sc2235_write(sd,0x3812,0x30);
+		sensor_write(sd,0x3812,0x00);
+		sensor_write(sd,0x3301,0x12);
+		sensor_write(sd,0x3631,0x84);
+		sensor_write(sd,0x366f,0x2f);
+		sensor_write(sd,0x3622,0xc6);
+		sensor_write(sd,0x5781,0x04);
+		sensor_write(sd,0x5785,0x18);
+		sensor_write(sd,0x3812,0x30);
 	}
-	else if (value>=0x110&&value<0x710){
-		sc2235_write(sd,0x3812,0x00);
-		sc2235_write(sd,0x3301,0x15);
-		sc2235_write(sd,0x3631,0x88);
-		sc2235_write(sd,0x366f,0x2f);
-		sc2235_write(sd,0x3622,0xc6);
-		sc2235_write(sd,0x5781,0x04);
-		sc2235_write(sd,0x5785,0x18);
-		sc2235_write(sd,0x3812,0x30);
+	else if (value>=0x110&&value<0x710) {
+		sensor_write(sd,0x3812,0x00);
+		sensor_write(sd,0x3301,0x15);
+		sensor_write(sd,0x3631,0x88);
+		sensor_write(sd,0x366f,0x2f);
+		sensor_write(sd,0x3622,0xc6);
+		sensor_write(sd,0x5781,0x04);
+		sensor_write(sd,0x5785,0x18);
+		sensor_write(sd,0x3812,0x30);
 	}
-	else if(value>=0x710&&value<=0x71e){
-		sc2235_write(sd,0x3812,0x00);
-		sc2235_write(sd,0x3301,0x1e);
-		sc2235_write(sd,0x3631,0x88);
-		sc2235_write(sd,0x366f,0x2f);
-		sc2235_write(sd,0x3622,0xc6);
-		sc2235_write(sd,0x5781,0x02);
-		sc2235_write(sd,0x5785,0x04);
-		sc2235_write(sd,0x3812,0x30);
+	else if (value>=0x710&&value<=0x71e) {
+		sensor_write(sd,0x3812,0x00);
+		sensor_write(sd,0x3301,0x1e);
+		sensor_write(sd,0x3631,0x88);
+		sensor_write(sd,0x366f,0x2f);
+		sensor_write(sd,0x3622,0xc6);
+		sensor_write(sd,0x5781,0x02);
+		sensor_write(sd,0x5785,0x04);
+		sensor_write(sd,0x3812,0x30);
 	}
-	else{ //may be flick
-		sc2235_write(sd,0x3812,0x00);
-		sc2235_write(sd,0x3301,0xff);
-		sc2235_write(sd,0x3631,0x88);
-		sc2235_write(sd,0x366f,0x3a);
-		sc2235_write(sd,0x3622,0x06);
-		sc2235_write(sd,0x5781,0x01);
-		sc2235_write(sd,0x5785,0x02);
-		sc2235_write(sd,0x3812,0x30);
+	else { //may be flick
+		sensor_write(sd,0x3812,0x00);
+		sensor_write(sd,0x3301,0xff);
+		sensor_write(sd,0x3631,0x88);
+		sensor_write(sd,0x366f,0x3a);
+		sensor_write(sd,0x3622,0x06);
+		sensor_write(sd,0x5781,0x01);
+		sensor_write(sd,0x5785,0x02);
+		sensor_write(sd,0x3812,0x30);
 	}
 
 	return 0;
 }
 
-static int sc2235_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc2235_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc2235_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	struct tx_isp_sensor_win_setting *wsize = &sc2235_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -733,7 +733,7 @@ static int sc2235_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-	ret = sc2235_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -742,21 +742,21 @@ static int sc2235_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int sc2235_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		ret = sc2235_write_array(sd, sc2235_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		pr_debug("sc2235 stream on\n");
 	} else {
-		ret = sc2235_write_array(sd, sc2235_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("sc2235 stream off\n");
 	}
 	return ret;
 }
 
-static int sc2235_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int pclk = 0;
@@ -769,11 +769,11 @@ static int sc2235_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
-		pclk = SC2235_SUPPORT_PCLK_FPS_30;
+		pclk = SENSOR_SUPPORT_PCLK_FPS_30;
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 		break;
 	case TX_SENSOR_MAX_FPS_15:
-		pclk = SC2235_SUPPORT_PCLK_FPS_15;
+		pclk = SENSOR_SUPPORT_PCLK_FPS_15;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
@@ -786,19 +786,19 @@ static int sc2235_set_fps(struct tx_isp_subdev *sd, int fps)
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	ret = sc2235_read(sd, 0x320c, &tmp);
+	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
-	ret += sc2235_read(sd, 0x320d, &tmp);
+	ret += sensor_read(sd, 0x320d, &tmp);
 	if (ret < 0)
 		return -1;
 	hts = ((hts << 8) + tmp);
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sc2235_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sc2235_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret = sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (ret < 0) {
-		printk("err: sc2235_write err\n");
+		printk("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -811,16 +811,16 @@ static int sc2235_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int sc2235_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
-		wsize = &sc2235_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		wsize = &sc2235_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	}
 
 	if (wsize) {
@@ -835,7 +835,7 @@ static int sc2235_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc2235_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -843,8 +843,8 @@ static int sc2235_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio,"sc2235_reset");
-		if(!ret){
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
@@ -856,17 +856,17 @@ static int sc2235_g_chip_ident(struct tx_isp_subdev *sd,
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "sc2235_pwdn");
-		if(!ret){
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = sc2235_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an sc2235 chip.\n",
 		       client->addr, client->adapter->name);
@@ -882,7 +882,7 @@ static int sc2235_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc2235_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 
@@ -890,36 +890,36 @@ static int sc2235_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
-				ret = sc2235_set_integration_time(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
-				ret = sc2235_set_analog_gain(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
-				ret = sc2235_set_digital_gain(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
-				ret = sc2235_get_black_pedestal(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
-				ret = sc2235_set_mode(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			ret = sc2235_write_array(sd, sc2235_stream_off);
+			ret = sensor_write_array(sd, sensor_stream_off);
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			ret = sc2235_write_array(sd, sc2235_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
-				ret = sc2235_set_fps(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_fps(sd, *(int*)arg);
 			break;
 		default:
 			break;;
@@ -928,59 +928,59 @@ static int sc2235_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int sc2235_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc2235_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc2235_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	sc2235_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops sc2235_core_ops = {
-	.g_chip_ident = sc2235_g_chip_ident,
-	.reset = sc2235_reset,
-	.init = sc2235_init,
-	.g_register = sc2235_g_register,
-	.s_register = sc2235_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc2235_video_ops = {
-	.s_stream = sc2235_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc2235_sensor_ops = {
-	.ioctl	= sc2235_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops sc2235_ops = {
-	.core = &sc2235_core_ops,
-	.video = &sc2235_video_ops,
-	.sensor = &sc2235_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -996,20 +996,20 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int sc2235_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &sc2235_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	enum v4l2_mbus_pixelcode mbus;
 	int i = 0;
 	int ret;
 	unsigned int rate = 0;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1054,22 +1054,22 @@ static int sc2235_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	sc2235_attr.dvp.gpio = sensor_gpio_func;
+	sensor_attr.dvp.gpio = sensor_gpio_func;
 
-	switch(sensor_gpio_func){
+	switch(sensor_gpio_func) {
 		case DVP_PA_LOW_10BIT:
 		case DVP_PA_HIGH_10BIT:
-			mbus = sc2235_mbus_code[0];
+			mbus = sensor_mbus_code[0];
 			break;
 		case DVP_PA_12BIT:
-			mbus = sc2235_mbus_code[1];
+			mbus = sensor_mbus_code[1];
 			break;
 		default:
 			goto err_set_sensor_gpio;
 	}
 
-	for(i = 0; i < ARRAY_SIZE(sc2235_win_sizes); i++)
-		sc2235_win_sizes[i].mbus_code = mbus;
+	for(i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
+		sensor_win_sizes[i].mbus_code = mbus;
 
 	/*
 	  convert sensor-gain into isp-gain,
@@ -1077,25 +1077,25 @@ static int sc2235_probe(struct i2c_client *client,
 	switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_25:
 			wsize->fps = 25 << 16 | 1;
-			wsize->regs = sc2235_init_regs_1920_1080_25fps;
+			wsize->regs = sensor_init_regs_1920_1080_25fps;
 			break;
 		case TX_SENSOR_MAX_FPS_15:
 			wsize->fps = 15 << 16 | 1;
-			wsize->regs = sc2235_init_regs_1920_1080_15fps;
-			sc2235_attr.max_integration_time_native = 1196;
-			sc2235_attr.integration_time_limit = 1196;
-			sc2235_attr.total_width = 2500;
-			sc2235_attr.total_height = 1200;
-			sc2235_attr.max_integration_time = 1196;
+			wsize->regs = sensor_init_regs_1920_1080_15fps;
+			sensor_attr.max_integration_time_native = 1196;
+			sensor_attr.integration_time_limit = 1196;
+			sensor_attr.total_width = 2500;
+			sensor_attr.total_height = 1200;
+			sensor_attr.max_integration_time = 1196;
 			break;
 		default:
 			printk("Now we do not support this framerate!!!\n");
 	}
-	sc2235_attr.max_again = 256041;
-	sc2235_attr.max_dgain = 0; //sc2235_attr.max_dgain;
+	sensor_attr.max_again = 256041;
+	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &sc2235_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1104,7 +1104,7 @@ static int sc2235_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc2235_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1122,14 +1122,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc2235_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1140,40 +1140,40 @@ static int sc2235_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc2235_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "sc2235", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, sc2235_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc2235_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc2235",
+		.owner = THIS_MODULE,
+		.name = "sc2235",
 	},
-	.probe		= sc2235_probe,
-	.remove		= sc2235_remove,
-	.id_table	= sc2235_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_sc2235(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init sc2235 driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&sc2235_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sc2235(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&sc2235_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_sc2235);
-module_exit(exit_sc2235);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Smartsenstech sc2235 sensors");
 MODULE_LICENSE("GPL");

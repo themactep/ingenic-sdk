@@ -22,15 +22,15 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXF37_CHIP_ID_H	(0x0f)
-#define JXF37_CHIP_ID_L	(0x37)
-#define JXF37_REG_END		0xff
-#define JXF37_REG_DELAY		0xfe
-#define JXF37_SUPPORT_30FPS_SCLK (86400000)
-#define JXF37_SUPPORT_25FPS_SCLK (72000000)
+#define SENSOR_CHIP_ID_H (0x0f)
+#define SENSOR_CHIP_ID_L (0x37)
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_SUPPORT_30FPS_SCLK (86400000)
+#define SENSOR_SUPPORT_25FPS_SCLK (72000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20200416a"
+#define SENSOR_VERSION "H20200416a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -69,7 +69,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut jxf37_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x0,  0 },
 	{0x1,  5731 },
 	{0x2,  11136},
@@ -136,22 +136,22 @@ struct again_lut jxf37_again_lut[] = {
 	{0x3f,	259142},
 };
 
-struct tx_isp_sensor_attribute jxf37_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int jxf37_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = jxf37_again_lut;
-	while(lut->gain <= jxf37_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == jxf37_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -163,12 +163,12 @@ unsigned int jxf37_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	return isp_gain;
 }
 
-unsigned int jxf37_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute jxf37_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "jxf37",
 	.chip_id = 0xf37,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -195,12 +195,12 @@ struct tx_isp_sensor_attribute jxf37_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = jxf37_alloc_again,
-	.sensor_ctrl.alloc_dgain = jxf37_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-static struct regval_list jxf37_init_regs_1920_1080_30fps_dvp[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 #if 1
 	{0x12, 0x60},
 	{0x48, 0x85},
@@ -392,11 +392,11 @@ static struct regval_list jxf37_init_regs_1920_1080_30fps_dvp[] = {
 	{0x48, 0x85},
 	{0x48, 0x05},
 #endif
-	{JXF37_REG_DELAY, 50},
-	{JXF37_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 50},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf37_init_regs_1920_1080_25fps_dvp[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	/*version F37AF_067_20190827*/
 	{0x12, 0x60},
 	{0x48, 0x85},
@@ -496,25 +496,25 @@ static struct regval_list jxf37_init_regs_1920_1080_25fps_dvp[] = {
 	{0x12, 0x20},
 	{0x48, 0x85},
 	{0x48, 0x05},
-	{JXF37_REG_DELAY, 50},
-	{JXF37_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 50},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 /*
- * the order of the jxf37_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting jxf37_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf37_init_regs_1920_1080_30fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_dvp,
 	}
 };
 
-static enum v4l2_mbus_pixelcode jxf37_mbus_code[] = {
+static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
@@ -522,32 +522,32 @@ static enum v4l2_mbus_pixelcode jxf37_mbus_code[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list jxf37_stream_on_dvp[] = {
+static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x20},
-	{JXF37_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf37_stream_off_dvp[] = {
+static struct regval_list sensor_stream_off_dvp[] = {
 	{0x12, 0x40},
-	{JXF37_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 	       unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -558,16 +558,16 @@ int jxf37_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -577,15 +577,15 @@ int jxf37_write(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-static int jxf37_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXF37_REG_END) {
-		if (vals->reg_num == JXF37_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxf37_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -593,14 +593,14 @@ static int jxf37_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
-static int jxf37_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXF37_REG_END) {
-		if (vals->reg_num == JXF37_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxf37_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -609,71 +609,71 @@ static int jxf37_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int jxf37_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int jxf37_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = jxf37_read(sd, 0x0a, &v);
+	ret = sensor_read(sd, 0x0a, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXF37_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = jxf37_read(sd, 0x0b, &v);
+	ret = sensor_read(sd, 0x0b, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
-	if (v != JXF37_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
 }
 
-static int jxf37_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int expo = value;
 
-	ret = jxf37_write(sd,  0x01, (unsigned char)(expo & 0xff));
-	ret += jxf37_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
+	ret = sensor_write(sd,  0x01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 	return 0;
 
 }
 
-static int jxf37_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	unsigned char tmp1;
 	unsigned char tmp2;
 	unsigned char tmp3;
 	int ret = 0;
 
-	if(value<0x10){
+	if (value<0x10) {
 		tmp1 = reg_2f | 0x20;
 		tmp2 = reg_0c | 0x40;
 		tmp3 = reg_82 | 0x02;
-	}else{
+	} else {
 		tmp1 = reg_2f & 0xdf;
 		tmp2 = reg_0c & 0xbf;
 		tmp3 = reg_82 & 0xfd;
 	}
 
-	ret += jxf37_write(sd, 0x00, (unsigned char)(value & 0x7f));
+	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
 	/*black sun cancellation strategy*/
-	ret = jxf37_write(sd, 0x2f, tmp1);
-	ret += jxf37_write(sd, 0x0c, tmp2);
-	ret += jxf37_write(sd, 0x82, tmp3);
+	ret = sensor_write(sd, 0x2f, tmp1);
+	ret += sensor_write(sd, 0x0c, tmp2);
+	ret += sensor_write(sd, 0x82, tmp3);
 
 	if (ret < 0)
 		return ret;
@@ -681,31 +681,31 @@ static int jxf37_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int jxf37_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxf37_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxf37_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	struct tx_isp_sensor_win_setting *wsize = &jxf37_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_30:
-		wsize->regs = jxf37_init_regs_1920_1080_30fps_dvp;
+		wsize->regs = sensor_init_regs_1920_1080_30fps_dvp;
 		break;
 	case TX_SENSOR_MAX_FPS_25:
-		wsize->regs = jxf37_init_regs_1920_1080_25fps_dvp;
+		wsize->regs = sensor_init_regs_1920_1080_25fps_dvp;
 		break;
 	default:
 		printk("Now we do not support this framerate!!!\n");
@@ -716,11 +716,11 @@ static int jxf37_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = jxf37_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 
-	ret += jxf37_read(sd, 0x2f, &reg_2f);
-	ret += jxf37_read(sd, 0x0c, &reg_0c);
-	ret += jxf37_read(sd, 0x82, &reg_82);
+	ret += sensor_read(sd, 0x2f, &reg_2f);
+	ret += sensor_read(sd, 0x0c, &reg_0c);
+	ret += sensor_read(sd, 0x82, &reg_82);
 
 	if (ret)
 		return ret;
@@ -730,26 +730,26 @@ static int jxf37_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int jxf37_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		ret = jxf37_write_array(sd, jxf37_stream_on_dvp);
+		ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		pr_debug("jxf37 stream on\n");
 	} else {
-		ret = jxf37_write_array(sd, jxf37_stream_off_dvp);
+		ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		pr_debug("jxf37 stream off\n");
 	}
 
 	return ret;
 }
 
-static int jxf37_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = JXF37_SUPPORT_30FPS_SCLK;
+	unsigned int sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
@@ -759,27 +759,27 @@ static int jxf37_set_fps(struct tx_isp_subdev *sd, int fps)
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_30:
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
-		sclk = JXF37_SUPPORT_30FPS_SCLK;
+		sclk = SENSOR_SUPPORT_30FPS_SCLK;
 		break;
 	case TX_SENSOR_MAX_FPS_25:
 		max_fps = TX_SENSOR_MAX_FPS_25;
-		sclk = JXF37_SUPPORT_25FPS_SCLK;
+		sclk = SENSOR_SUPPORT_25FPS_SCLK;
 		break;
 	default:
 		printk("Now we do not support this framerate!!!\n");
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 	val = 0;
-	ret += jxf37_read(sd, 0x21, &val);
+	ret += sensor_read(sd, 0x21, &val);
 	hts = val<<8;
 	val = 0;
-	ret += jxf37_read(sd, 0x20, &val);
-	hts |= val;
+	ret += sensor_read(sd, 0x20, &val);
+	hts = val;
 	hts *= 2;
 	if (0 != ret) {
 		printk("err: jxf37 read err\n");
@@ -788,20 +788,20 @@ static int jxf37_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	jxf37_write(sd, 0xc0, 0x22);
-	jxf37_write(sd, 0xc1, (unsigned char)(vts & 0xff));
-	jxf37_write(sd, 0xc2, 0x23);
-	jxf37_write(sd, 0xc3, (unsigned char)(vts >> 8));
-	ret = jxf37_read(sd, 0x1f, &val);
+	sensor_write(sd, 0xc0, 0x22);
+	sensor_write(sd, 0xc1, (unsigned char)(vts & 0xff));
+	sensor_write(sd, 0xc2, 0x23);
+	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
+	ret = sensor_read(sd, 0x1f, &val);
 	pr_debug("before register 0x1f value : 0x%02x\n", val);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
-	jxf37_write(sd, 0x1f, val);
+	val = (1 << 7); //set bit[7],  register group write function,  auto clean
+	sensor_write(sd, 0x1f, val);
 	pr_debug("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
-		printk("err: jxf37_write err\n");
+		printk("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -814,15 +814,15 @@ static int jxf37_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int jxf37_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	wsize = &jxf37_win_sizes[0];
+	wsize = &sensor_win_sizes[0];
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -835,39 +835,39 @@ static int jxf37_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxf37_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			      struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"jxf37_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(35);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(35);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"jxf37_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
 
-	ret = jxf37_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an jxf37 chip.\n",
 		       client->addr, client->adapter->name);
@@ -875,7 +875,7 @@ static int jxf37_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	printk("jxf37 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	printk("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "jxf37", sizeof("jxf37"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -884,43 +884,43 @@ static int jxf37_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int jxf37_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = jxf37_set_integration_time(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = jxf37_set_analog_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = jxf37_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = jxf37_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = jxf37_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = jxf37_write_array(sd, jxf37_stream_off_dvp);
+		ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = jxf37_write_array(sd, jxf37_stream_on_dvp);
+		ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = jxf37_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	default:
 		break;
@@ -929,59 +929,59 @@ static int jxf37_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	return ret;
 }
 
-static int jxf37_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = jxf37_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int jxf37_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	jxf37_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops jxf37_core_ops = {
-	.g_chip_ident = jxf37_g_chip_ident,
-	.reset = jxf37_reset,
-	.init = jxf37_init,
-	/*.ioctl = jxf37_ops_ioctl,*/
-	.g_register = jxf37_g_register,
-	.s_register = jxf37_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops jxf37_video_ops = {
-	.s_stream = jxf37_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	jxf37_sensor_ops = {
-	.ioctl	= jxf37_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops jxf37_ops = {
-	.core = &jxf37_core_ops,
-	.video = &jxf37_video_ops,
-	.sensor = &jxf37_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -997,16 +997,16 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int jxf37_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &jxf37_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1023,7 +1023,7 @@ static int jxf37_probe(struct i2c_client *client, const struct i2c_device_id *id
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	jxf37_attr.dvp.gpio = sensor_gpio_func;
+	sensor_attr.dvp.gpio = sensor_gpio_func;
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
@@ -1031,20 +1031,20 @@ static int jxf37_probe(struct i2c_client *client, const struct i2c_device_id *id
 	case TX_SENSOR_MAX_FPS_30:
 		break;
 	case TX_SENSOR_MAX_FPS_25:
-		jxf37_attr.max_integration_time_native = 1121;
-		jxf37_attr.integration_time_limit = 1121;
-		jxf37_attr.total_width = 2560;
-		jxf37_attr.total_height = 1125;
-		jxf37_attr.max_integration_time = 1121;
+		sensor_attr.max_integration_time_native = 1121;
+		sensor_attr.integration_time_limit = 1121;
+		sensor_attr.total_width = 2560;
+		sensor_attr.total_height = 1125;
+		sensor_attr.max_integration_time = 1121;
 		break;
 	default:
 		printk("Now we do not support this framerate!!!\n");
 	}
-	jxf37_attr.max_again = 259142;
-	jxf37_attr.max_dgain = 0;
+	sensor_attr.max_again = 259142;
+	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &jxf37_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1053,7 +1053,7 @@ static int jxf37_probe(struct i2c_client *client, const struct i2c_device_id *id
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &jxf37_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1070,14 +1070,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int jxf37_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1088,40 +1088,40 @@ static int jxf37_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id jxf37_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "jxf37", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, jxf37_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver jxf37_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "jxf37",
+		.owner = THIS_MODULE,
+		.name = "jxf37",
 	},
-	.probe		= jxf37_probe,
-	.remove		= jxf37_remove,
-	.id_table	= jxf37_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_jxf37(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init jxf37 driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&jxf37_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_jxf37(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&jxf37_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_jxf37);
-module_exit(exit_jxf37);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sonic jxf37 sensors");
 MODULE_LICENSE("GPL");

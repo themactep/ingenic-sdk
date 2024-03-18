@@ -30,10 +30,10 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC8613_CHIP_ID_H (0x86)
-#define GC8613_CHIP_ID_L (0x13)
-#define GC8613_REG_END 0xffff
-#define GC8613_REG_DELAY 0x0000
+#define SENSOR_CHIP_ID_H (0x86)
+#define SENSOR_CHIP_ID_L (0x13)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0x0000
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20230427a"
 
@@ -63,7 +63,7 @@ struct again_lut
     unsigned int gain;
 };
 
-struct again_lut gc8613_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 { 0x0, 0x0,   0x0, 0x0, 0xd,  0xd, 0x77,  0},           // 1.000000
 { 0x1, 0x90,  0x2, 0x0, 0xe,  0xe, 0x77,  13726},      //      1.156250
 { 0x2, 0x1,   0x0, 0x0, 0xe,  0xe, 0x77,  32233},       //     1.406250
@@ -107,7 +107,7 @@ struct again_lut_20
 };
 
 
-struct again_lut_20 gc8613_again_lut_20fps[] = {
+struct again_lut_20 sensor_again_lut_20fps[] = {
 { 0x0, 0x0, 0x0, 0x0, 0x46, 0x46, 0x74, 0x2, 0x77, 0},            //1.000000
 { 0x1, 0x90, 0x2, 0x0, 0x47, 0x47, 0x74, 0x2, 0x77, 13726},       //     1.156250
 { 0x2, 0x1, 0x0, 0x0, 0x47, 0x47, 0x77, 0x2, 0x77, 32233},        //    1.406250
@@ -138,9 +138,9 @@ struct again_lut_20 gc8613_again_lut_20fps[] = {
 
 };
 
-struct tx_isp_sensor_attribute gc8613_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int gc8613_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
 {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
@@ -150,10 +150,10 @@ unsigned int gc8613_alloc_integration_time(unsigned int it, unsigned char shift,
 	return isp_it;
 }
 
-unsigned int gc8613_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = gc8613_again_lut;
-	while (lut->gain <= gc8613_attr.max_again)
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again)
 	{
 		if (isp_gain == 0)
 		{
@@ -167,7 +167,7 @@ unsigned int gc8613_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 		}
 		else
 		{
-			if ((lut->gain == gc8613_attr.max_again) && (isp_gain >= lut->gain))
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain))
 			{
 				*sensor_again = lut->index;
 				return lut->gain;
@@ -180,10 +180,10 @@ unsigned int gc8613_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
-unsigned int gc8613_alloc_again_20(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again_20(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut_20 *lut = gc8613_again_lut_20fps;
-	while (lut->gain <= gc8613_attr.max_again)
+	struct again_lut_20 *lut = sensor_again_lut_20fps;
+	while (lut->gain <= sensor_attr.max_again)
 	{
 		if (isp_gain == 0)
 		{
@@ -197,7 +197,7 @@ unsigned int gc8613_alloc_again_20(unsigned int isp_gain, unsigned char shift, u
 		}
 		else
 		{
-			if ((lut->gain == gc8613_attr.max_again) && (isp_gain >= lut->gain))
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain))
 			{
 				*sensor_again = lut->index;
 				return lut->gain;
@@ -210,12 +210,12 @@ unsigned int gc8613_alloc_again_20(unsigned int isp_gain, unsigned char shift, u
 	return 0;
 }
 
-unsigned int gc8613_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_mipi_bus gc8613_mipi_linear_20fps = {
+struct tx_isp_mipi_bus sensor_mipi_linear_20fps = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1152,
 	.lans = 2,
@@ -244,7 +244,7 @@ struct tx_isp_mipi_bus gc8613_mipi_linear_20fps = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus gc8613_mipi = {
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1107,
 	.lans = 2,
@@ -273,7 +273,7 @@ struct tx_isp_mipi_bus gc8613_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute gc8613_attr = {
+struct tx_isp_sensor_attribute sensor_attr = {
 	.name = "gc8613",
 	.chip_id = 0x8613,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -290,11 +290,11 @@ struct tx_isp_sensor_attribute gc8613_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = gc8613_alloc_again,
-	.sensor_ctrl.alloc_dgain = gc8613_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list gc8613_init_regs_3840_2160_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_3840_2160_25fps_mipi[] = {
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
 	{0x03fe, 0x10},
@@ -409,11 +409,10 @@ static struct regval_list gc8613_init_regs_3840_2160_25fps_mipi[] = {
 	{0x0114, 0x01},
 	{0x0115, 0x12},
 	{0x0100, 0x09},
-    {GC8613_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc8613_init_regs_3840_2160_30fps_mipi[] =
-	{
+static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 		{0x03fe, 0xf0},
 		{0x03fe, 0x00},
 		{0x03fe, 0x10},
@@ -533,11 +532,10 @@ static struct regval_list gc8613_init_regs_3840_2160_30fps_mipi[] =
 		{0x012a, 0x1a},
 		{0x012b, 0x0f},
 		{0x0100, 0x09},
-		{GC8613_REG_END, 0x00}, /* END MARKER */
+		{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc8613_init_regs_3840_2160_15fps_mipi[] =
-{
+static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
     {0x03fe,0xf0},
     {0x03fe,0x00},
     {0x03fe,0x10},
@@ -701,16 +699,16 @@ static struct regval_list gc8613_init_regs_3840_2160_15fps_mipi[] =
     {0x0a70,0x03},
     {0x0a5a,0x80},
     //sleep 20
-    {GC8613_REG_DELAY, 0x20},
+    {SENSOR_REG_DELAY, 0x20},
     {0x0089,0x02},
     {0x05be,0x01},
     {0x0a70,0x00},
     {0x0080,0x02},
     {0x0a67,0x00},
-		{GC8613_REG_END, 0x00}, /* END MARKER */
+		{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc8613_init_regs_3840_2160_20fps_mipi[] = {
+static struct regval_list sensor_init_regs_3840_2160_20fps_mipi[] = {
     {0x03fe,0xf0},
     {0x03fe,0x00},
     {0x03fe,0x10},
@@ -888,14 +886,14 @@ static struct regval_list gc8613_init_regs_3840_2160_20fps_mipi[] = {
     {0x0080,0x02},
     {0x0a67,0x00},
     {0x79cf,0x01},
-    {GC8613_REG_DELAY,20},
+    {SENSOR_REG_DELAY,20},
     {0x0089,0x00},
     {0x05be,0x01},
     {0x0a70,0x00},
     {0x0080,0x02},
     {0x0a67,0x00},
     {0x0100,0x09},
-{GC8613_REG_END, 0x00}, /* END MARKER */
+{SENSOR_REG_END, 0x00}, /* END MARKER */
 
 };
 
@@ -903,7 +901,7 @@ static struct regval_list gc8613_init_regs_3840_2160_20fps_mipi[] = {
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting gc8613_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 3840*2160 @ max 25fps*/
 	{
 		.width = 3840,
@@ -911,7 +909,7 @@ static struct tx_isp_sensor_win_setting gc8613_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = gc8613_init_regs_3840_2160_25fps_mipi,
+		.regs = sensor_init_regs_3840_2160_25fps_mipi,
 	},
 	{
 		.width = 3840,
@@ -919,7 +917,7 @@ static struct tx_isp_sensor_win_setting gc8613_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = gc8613_init_regs_3840_2160_30fps_mipi,
+		.regs = sensor_init_regs_3840_2160_30fps_mipi,
 	},
     {
 		.width = 3840,
@@ -927,29 +925,29 @@ static struct tx_isp_sensor_win_setting gc8613_win_sizes[] = {
 		.fps = 15 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs    = gc8613_init_regs_3840_2160_15fps_mipi,
+		.regs = sensor_init_regs_3840_2160_15fps_mipi,
 	},
     {
-		.width		= 3840,
-		.height		= 2160,
-		.fps		= 20 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SRGGB12_1X12,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= gc8613_init_regs_3840_2160_20fps_mipi,
+		.width = 3840,
+		.height = 2160,
+		.fps = 20 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SRGGB12_1X12,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_3840_2160_20fps_mipi,
 	}
 };
 
-struct tx_isp_sensor_win_setting *wsize = &gc8613_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list gc8613_stream_on[] = {
-	{GC8613_REG_END, 0x00}, /* END MARKER */
+static struct regval_list sensor_stream_on[] = {
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc8613_stream_off[] = {
-	{GC8613_REG_END, 0x00}, /* END MARKER */
+static struct regval_list sensor_stream_off[] = {
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int gc8613_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 				unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -975,7 +973,7 @@ int gc8613_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int gc8613_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 				 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -995,15 +993,15 @@ int gc8613_write(struct tx_isp_subdev *sd, uint16_t reg,
 }
 
 #if 0
-static int gc8613_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC8613_REG_END) {
-		if (vals->reg_num == GC8613_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = gc8613_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1013,18 +1011,18 @@ static int gc8613_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int gc8613_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC8613_REG_END)
+	while (vals->reg_num != SENSOR_REG_END)
 	{
-		if (vals->reg_num == GC8613_REG_DELAY)
+		if (vals->reg_num == SENSOR_REG_DELAY)
 		{
 			private_msleep(vals->value);
 		}
 		else
 		{
-			ret = gc8613_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1034,123 +1032,123 @@ static int gc8613_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int gc8613_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int gc8613_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v = 0;
 	int ret;
 
-	ret = gc8613_read(sd, 0x03f0, &v);
+	ret = sensor_read(sd, 0x03f0, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != GC8613_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	ret = gc8613_read(sd, 0x03f1, &v);
+	ret = sensor_read(sd, 0x03f1, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != GC8613_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int gc8613_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int expo = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
-	struct again_lut *val_lut = gc8613_again_lut;
-    //struct again_lut_15fps *val_lut_15 = gc8613_again_lut_15fps;
-    struct again_lut_20 *val_lut_20 = gc8613_again_lut_20fps;
+	struct again_lut *val_lut = sensor_again_lut;
+    //struct again_lut_15fps *val_lut_15 = sensor_again_lut_15fps;
+    struct again_lut_20 *val_lut_20 = sensor_again_lut_20fps;
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-    switch(sensor->info.default_boot){
+    switch(sensor->info.default_boot) {
 	case 0:
     case 1:
     case 2:
 	    /*set integration time*/
-        ret = gc8613_write(sd, 0x0203, expo & 0xff);
-	    ret += gc8613_write(sd, 0x0202, expo >> 8);
+        ret = sensor_write(sd, 0x0203, expo & 0xff);
+	    ret += sensor_write(sd, 0x0202, expo >> 8);
 	    /*set sensor analog gain*/
-	    ret += gc8613_write(sd, 0x031d, 0x2d);
-	    ret += gc8613_write(sd, 0x0614, val_lut[again].reg614);
-	    ret += gc8613_write(sd, 0x0615, val_lut[again].reg615);
-	    ret += gc8613_write(sd, 0x031d, 0x28);
-	    ret += gc8613_write(sd, 0x0225, val_lut[again].reg225);
-	    ret += gc8613_write(sd, 0x1467, val_lut[again].reg1467);
-	    ret += gc8613_write(sd, 0x1468, val_lut[again].reg1468);
-	    ret += gc8613_write(sd, 0x1447, val_lut[again].reg1447);
+	    ret += sensor_write(sd, 0x031d, 0x2d);
+	    ret += sensor_write(sd, 0x0614, val_lut[again].reg614);
+	    ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
+	    ret += sensor_write(sd, 0x031d, 0x28);
+	    ret += sensor_write(sd, 0x0225, val_lut[again].reg225);
+	    ret += sensor_write(sd, 0x1467, val_lut[again].reg1467);
+	    ret += sensor_write(sd, 0x1468, val_lut[again].reg1468);
+	    ret += sensor_write(sd, 0x1447, val_lut[again].reg1447);
         break;
 
     case 3:
-        ret = gc8613_write(sd, 0x0203, expo & 0xff);
-	    ret += gc8613_write(sd, 0x0202, expo >> 8);
+        ret = sensor_write(sd, 0x0203, expo & 0xff);
+	    ret += sensor_write(sd, 0x0202, expo >> 8);
         /*set sensor analog gain*/
-        ret += gc8613_write(sd, 0x031d, 0x2d);
-	    ret += gc8613_write(sd, 0x0614, val_lut_20[again].reg614);
-	    ret += gc8613_write(sd, 0x0615, val_lut[again].reg615);
-	    ret += gc8613_write(sd, 0x031d, 0x28);
-	    ret += gc8613_write(sd, 0x0225, val_lut_20[again].reg225);
-	    ret += gc8613_write(sd, 0x1467, val_lut_20[again].reg1467);
-	    ret += gc8613_write(sd, 0x1468, val_lut_20[again].reg1468);
-        ret += gc8613_write(sd, 0x026e, val_lut_20[again].reg026e);
-	    ret += gc8613_write(sd, 0x0270, val_lut_20[again].reg0270);
-	    ret += gc8613_write(sd, 0x1447, val_lut_20[again].reg1447);
+        ret += sensor_write(sd, 0x031d, 0x2d);
+	    ret += sensor_write(sd, 0x0614, val_lut_20[again].reg614);
+	    ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
+	    ret += sensor_write(sd, 0x031d, 0x28);
+	    ret += sensor_write(sd, 0x0225, val_lut_20[again].reg225);
+	    ret += sensor_write(sd, 0x1467, val_lut_20[again].reg1467);
+	    ret += sensor_write(sd, 0x1468, val_lut_20[again].reg1468);
+        ret += sensor_write(sd, 0x026e, val_lut_20[again].reg026e);
+	    ret += sensor_write(sd, 0x0270, val_lut_20[again].reg0270);
+	    ret += sensor_write(sd, 0x1447, val_lut_20[again].reg1447);
 		break;
     }
 	//
 	if (ret < 0)
-		ISP_ERROR("gc8613_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error  %d\n", __LINE__);
 
 	return ret;
 }
 
 #if 0
-static int gc8613_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = gc8613_write(sd, 0x0203, value & 0xff);
-	ret += gc8613_write(sd, 0x0202, value >> 8);
+	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0)
-		ISP_ERROR("gc8613_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 
 	return ret;
 }
 
-static int gc8613_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	struct again_lut *val_lut = gc8613_again_lut;
+	struct again_lut *val_lut = sensor_again_lut;
 
-	ret += gc8613_write(sd, 0x031d ,0x2d);
-	ret += gc8613_write(sd, 0x0614, val_lut[value].reg614);
-	ret += gc8613_write(sd, 0x0615, val_lut[value].reg615);
-	ret += gc8613_write(sd, 0x031d, 0x28);
-	ret += gc8613_write(sd, 0x0225, val_lut[value].reg225);
-	ret += gc8613_write(sd, 0x1467, val_lut[value].reg1467);
-	ret += gc8613_write(sd, 0x1468, val_lut[value].reg1468);
-	ret += gc8613_write(sd, 0x00b8, val_lut[value].regb8);
-	ret += gc8613_write(sd, 0x00b9, val_lut[value].regb9);
+	ret += sensor_write(sd, 0x031d ,0x2d);
+	ret += sensor_write(sd, 0x0614, val_lut[value].reg614);
+	ret += sensor_write(sd, 0x0615, val_lut[value].reg615);
+	ret += sensor_write(sd, 0x031d, 0x28);
+	ret += sensor_write(sd, 0x0225, val_lut[value].reg225);
+	ret += sensor_write(sd, 0x1467, val_lut[value].reg1467);
+	ret += sensor_write(sd, 0x1468, val_lut[value].reg1468);
+	ret += sensor_write(sd, 0x00b8, val_lut[value].regb8);
+	ret += sensor_write(sd, 0x00b9, val_lut[value].regb9);
 	if (ret < 0)
-		ISP_ERROR("gc8613_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 
 	return ret;
 }
 #endif
 
-static int gc8613_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int gc8613_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
@@ -1171,7 +1169,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int gc8613_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -1187,7 +1185,7 @@ static int gc8613_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int gc8613_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -1196,27 +1194,27 @@ static int gc8613_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	{
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT)
 		{
-			ret = gc8613_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING)
 		{
-			ret = gc8613_write_array(sd, gc8613_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			ISP_WARNING("gc8613 stream on\n");
 		}
 	}
 	else
 	{
-		ret = gc8613_write_array(sd, gc8613_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("gc8613 stream off\n");
 	}
 
 	return ret;
 }
 
-static int gc8613_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -1252,15 +1250,15 @@ static int gc8613_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
-	ret += gc8613_read(sd, 0x0342, &tmp);
+	ret += sensor_read(sd, 0x0342, &tmp);
 	hts = tmp & 0x0f;
-	ret += gc8613_read(sd, 0x0343, &tmp);
+	ret += sensor_read(sd, 0x0343, &tmp);
 	if (ret < 0)
 		return -1;
 	hts = ((hts << 8) | tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = gc8613_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
-	ret += gc8613_write(sd, 0x0341, (unsigned char)(vts & 0xff));
+	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
 printk("vts=%x hts=%x fps%d\n",vts,hts,fps);
@@ -1274,55 +1272,55 @@ printk("vts=%x hts=%x fps%d\n",vts,hts,fps);
 	return 0;
 }
 
-static int gc8613_set_hvflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 	uint8_t otp_val=0x60;
 
 	/* 2'b01: mirror; 2'b10:flip*/
-	// val = gc8613_read(sd, 0x022c, &val);
-	//val1 = gc8613_read(sd, 0x0063, &val1);
+	// val = sensor_read(sd, 0x022c, &val);
+	//val1 = sensor_read(sd, 0x0063, &val1);
 
 	/* 2'b01 mirror; 2'b10 flip; 2'b11 mirror &flip */
 	switch (enable)
 	{
 	case 0:
-		gc8613_write(sd, 0x022c, 0x00); /*normal*/
-		gc8613_write(sd, 0x0063, 0x00);
+		sensor_write(sd, 0x022c, 0x00); /*normal*/
+		sensor_write(sd, 0x0063, 0x00);
 		otp_val=0x60;
 		break;
 	case 1:
-		gc8613_write(sd, 0x022c, 0x00); /*mirror*/
-		gc8613_write(sd, 0x0063, 0x05);
+		sensor_write(sd, 0x022c, 0x00); /*mirror*/
+		sensor_write(sd, 0x0063, 0x05);
 		otp_val=0x61;
 		break;
 	case 2:
-		gc8613_write(sd, 0x022c, 0x01); /*filp*/
-		gc8613_write(sd, 0x0063, 0x02);
+		sensor_write(sd, 0x022c, 0x01); /*filp*/
+		sensor_write(sd, 0x0063, 0x02);
 		otp_val=0x62;
 		break;
 	case 3:
-		gc8613_write(sd, 0x022c, 0x01); /*mirror & filp*/
-		gc8613_write(sd, 0x0063, 0x07);
+		sensor_write(sd, 0x022c, 0x01); /*mirror & filp*/
+		sensor_write(sd, 0x0063, 0x07);
 		otp_val=0x63;
 		break;
 	}
-		ret+=gc8613_write(sd,0x0a67,0x80);//otp autoload normal
-		ret+=gc8613_write(sd,0x0a98,0x04);
-		ret+=gc8613_write(sd,0x05be,0x00);
-		ret+=gc8613_write(sd,0x05a9,0x01);
-		ret+=gc8613_write(sd,0x0a70,0x03);
-		ret+=gc8613_write(sd,0x0a73,otp_val);
-		ret+=gc8613_write(sd,0x0a5a,0x80);
+		ret+=sensor_write(sd,0x0a67,0x80);//otp autoload normal
+		ret+=sensor_write(sd,0x0a98,0x04);
+		ret+=sensor_write(sd,0x05be,0x00);
+		ret+=sensor_write(sd,0x05a9,0x01);
+		ret+=sensor_write(sd,0x0a70,0x03);
+		ret+=sensor_write(sd,0x0a73,otp_val);
+		ret+=sensor_write(sd,0x0a5a,0x80);
 		private_msleep(20);
-		ret+=gc8613_write(sd,0x05be,0x01);
-		ret+=gc8613_write(sd,0x0a70,0x00);
-		ret+=gc8613_write(sd,0x0080,0x02);
-		ret+=gc8613_write(sd,0x0a67,0x00);
+		ret+=sensor_write(sd,0x05be,0x01);
+		ret+=sensor_write(sd,0x0a70,0x00);
+		ret+=sensor_write(sd,0x0080,0x02);
+		ret+=sensor_write(sd,0x0a67,0x00);
 		return ret;
 	return ret;
 }
-static int gc8613_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
@@ -1347,67 +1345,67 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	switch (info->default_boot)
 	{
 	case 0:
-		wsize = &gc8613_win_sizes[0];
-		memcpy(&gc8613_attr.mipi, &gc8613_mipi, sizeof(gc8613_mipi));
-		gc8613_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		gc8613_attr.mipi.clk = 1107;
+		wsize = &sensor_win_sizes[0];
+		memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.mipi.clk = 1107;
 
-		gc8613_attr.one_line_expr_in_us = 19;
-		gc8613_attr.total_width = 3934;
-		gc8613_attr.total_height = 2250;
-		gc8613_attr.max_integration_time_native = 2250 - 8;
-		gc8613_attr.integration_time_limit = 2250 - 8;
-		gc8613_attr.max_integration_time = 2250 - 8;
-		gc8613_attr.again = 0;
-		gc8613_attr.integration_time = 0x10;
-        gc8613_attr.max_again = 393216,
-        gc8613_attr.sensor_ctrl.alloc_again = gc8613_alloc_again;
+		sensor_attr.one_line_expr_in_us = 19;
+		sensor_attr.total_width = 3934;
+		sensor_attr.total_height = 2250;
+		sensor_attr.max_integration_time_native = 2250 - 8;
+		sensor_attr.integration_time_limit = 2250 - 8;
+		sensor_attr.max_integration_time = 2250 - 8;
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x10;
+        sensor_attr.max_again = 393216,
+        sensor_attr.sensor_ctrl.alloc_again = sensor_alloc_again;
 		break;
 	case 1:
-		wsize = &gc8613_win_sizes[1];
-		memcpy(&gc8613_attr.mipi, &gc8613_mipi, sizeof(gc8613_mipi));
-		gc8613_attr.mipi.clk = 1584;
-		gc8613_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		gc8613_attr.one_line_expr_in_us = 14;
-		gc8613_attr.total_width = 4693;
-		gc8613_attr.total_height = 2250;
-		gc8613_attr.max_integration_time_native = 2250 - 8;
-		gc8613_attr.integration_time_limit = 2250 - 8;
-		gc8613_attr.max_integration_time = 2250 - 8;
-		gc8613_attr.again = 0;
-		gc8613_attr.integration_time = 0x10;
-        gc8613_attr.max_again = 393216,
-        gc8613_attr.sensor_ctrl.alloc_again = gc8613_alloc_again;
+		wsize = &sensor_win_sizes[1];
+		memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.mipi.clk = 1584;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.one_line_expr_in_us = 14;
+		sensor_attr.total_width = 4693;
+		sensor_attr.total_height = 2250;
+		sensor_attr.max_integration_time_native = 2250 - 8;
+		sensor_attr.integration_time_limit = 2250 - 8;
+		sensor_attr.max_integration_time = 2250 - 8;
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x10;
+        sensor_attr.max_again = 393216,
+        sensor_attr.sensor_ctrl.alloc_again = sensor_alloc_again;
 		break;
     case 2:
-		wsize = &gc8613_win_sizes[2];
-		memcpy(&gc8613_attr.mipi, &gc8613_mipi, sizeof(gc8613_mipi));
-		gc8613_attr.mipi.clk = 1100;
-		gc8613_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		gc8613_attr.one_line_expr_in_us = 29;
-		gc8613_attr.total_width = 4693;
-		gc8613_attr.total_height = 0x640;
-		gc8613_attr.max_integration_time_native = 0x640 - 8;
-		gc8613_attr.integration_time_limit = 0x640 - 8;
-		gc8613_attr.max_integration_time = 0x640 - 8;
-		gc8613_attr.again = 0;
-		gc8613_attr.integration_time = 0x10;
-        gc8613_attr.max_again = 399272,
-        gc8613_attr.sensor_ctrl.alloc_again = gc8613_alloc_again;
+		wsize = &sensor_win_sizes[2];
+		memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.mipi.clk = 1100;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.one_line_expr_in_us = 29;
+		sensor_attr.total_width = 4693;
+		sensor_attr.total_height = 0x640;
+		sensor_attr.max_integration_time_native = 0x640 - 8;
+		sensor_attr.integration_time_limit = 0x640 - 8;
+		sensor_attr.max_integration_time = 0x640 - 8;
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x10;
+        sensor_attr.max_again = 399272,
+        sensor_attr.sensor_ctrl.alloc_again = sensor_alloc_again;
 		break;
     case 3:
-		wsize = &gc8613_win_sizes[3];
-		gc8613_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		memcpy(&gc8613_attr.mipi, &gc8613_mipi_linear_20fps, sizeof(gc8613_mipi_linear_20fps));
-		gc8613_attr.one_line_expr_in_us = 18;
-		gc8613_attr.total_width = 0x499;
-		gc8613_attr.total_height = 0x8ca;
-		gc8613_attr.max_integration_time_native = 0x8ca - 8;
-		gc8613_attr.integration_time_limit = 0x8ca - 8;
-		gc8613_attr.max_integration_time = 0x8ca - 8;
-		gc8613_attr.again = 0;
-		gc8613_attr.integration_time = 0x10;
-        gc8613_attr.sensor_ctrl.alloc_again = gc8613_alloc_again_20;
+		wsize = &sensor_win_sizes[3];
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		memcpy(&sensor_attr.mipi, &sensor_mipi_linear_20fps, sizeof(sensor_mipi_linear_20fps));
+		sensor_attr.one_line_expr_in_us = 18;
+		sensor_attr.total_width = 0x499;
+		sensor_attr.total_height = 0x8ca;
+		sensor_attr.max_integration_time_native = 0x8ca - 8;
+		sensor_attr.integration_time_limit = 0x8ca - 8;
+		sensor_attr.max_integration_time = 0x8ca - 8;
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x10;
+        sensor_attr.sensor_ctrl.alloc_again = sensor_alloc_again_20;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
@@ -1463,7 +1461,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int gc8613_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 							   struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -1473,7 +1471,7 @@ static int gc8613_g_chip_ident(struct tx_isp_subdev *sd,
 	sensor_attr_check(sd);
 	if (reset_gpio != -1)
 	{
-		ret = private_gpio_request(reset_gpio, "gc8613_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret)
 		{
 			private_gpio_direction_output(reset_gpio, 1);
@@ -1490,7 +1488,7 @@ static int gc8613_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	if (pwdn_gpio != -1)
 	{
-		ret = private_gpio_request(pwdn_gpio, "gc8613_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret)
 		{
 			private_gpio_direction_output(pwdn_gpio, 1);
@@ -1505,7 +1503,7 @@ static int gc8613_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = gc8613_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret)
 	{
 		ISP_ERROR("chip found @ 0x%x (%s) is not an gc8613 chip.\n",
@@ -1522,7 +1520,7 @@ static int gc8613_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int gc8613_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
@@ -1537,44 +1535,44 @@ static int gc8613_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	{
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = gc8613_set_expo(sd, sensor_val->value);
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 		/*
 			case TX_ISP_EVENT_SENSOR_INT_TIME:
-				if(arg)
-					ret = gc8613_set_integration_time(sd, sensor_val->value);
+				if (arg)
+					ret = sensor_set_integration_time(sd, sensor_val->value);
 				break;
 			case TX_ISP_EVENT_SENSOR_AGAIN:
-				if(arg)
-					ret = gc8613_set_analog_gain(sd, sensor_val->value);
+				if (arg)
+					ret = sensor_set_analog_gain(sd, sensor_val->value);
 				break;
 		*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = gc8613_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = gc8613_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = gc8613_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = gc8613_write_array(sd, gc8613_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = gc8613_write_array(sd, gc8613_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = gc8613_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = gc8613_set_hvflip(sd, sensor_val->value);
+			ret = sensor_set_hvflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1583,7 +1581,7 @@ static int gc8613_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int gc8613_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -1596,14 +1594,14 @@ static int gc8613_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = gc8613_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int gc8613_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
@@ -1614,32 +1612,32 @@ static int gc8613_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	gc8613_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops gc8613_core_ops = {
-	.g_chip_ident = gc8613_g_chip_ident,
-	.reset = gc8613_reset,
-	.init = gc8613_init,
-	/*.ioctl = gc8613_ops_ioctl,*/
-	.g_register = gc8613_g_register,
-	.s_register = gc8613_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops gc8613_video_ops = {
-	.s_stream = gc8613_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops gc8613_sensor_ops = {
-	.ioctl = gc8613_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops gc8613_ops = {
-	.core = &gc8613_core_ops,
-	.video = &gc8613_video_ops,
-	.sensor = &gc8613_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1655,7 +1653,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int gc8613_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -1672,9 +1670,9 @@ static int gc8613_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	gc8613_attr.expo_fs = 1;
-	sensor->video.attr = &gc8613_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &gc8613_ops);
+	sensor_attr.expo_fs = 1;
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1684,7 +1682,7 @@ static int gc8613_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 }
 
-static int gc8613_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
@@ -1701,33 +1699,33 @@ static int gc8613_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id gc8613_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{"gc8613", 0},
 	{}};
-MODULE_DEVICE_TABLE(i2c, gc8613_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver gc8613_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
 		.name = "gc8613",
 	},
-	.probe = gc8613_probe,
-	.remove = gc8613_remove,
-	.id_table = gc8613_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_gc8613(void)
+static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&gc8613_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_gc8613(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&gc8613_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_gc8613);
-module_exit(exit_gc8613);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for gc8613 sensors");
 MODULE_LICENSE("GPL");

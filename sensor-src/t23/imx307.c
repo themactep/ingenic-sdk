@@ -23,18 +23,18 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define IMX307_CHIP_ID_H	(0xA0)
-#define IMX307_CHIP_ID_L	(0xB2)
-#define IMX307_REG_END		0xffff
-#define IMX307_REG_DELAY	0xfffe
+#define SENSOR_CHIP_ID_H (0xA0)
+#define SENSOR_CHIP_ID_L (0xB2)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define IMX307_SUPPORT_PCLK (74250*1000)
+#define SENSOR_SUPPORT_PCLK (74250*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 10
 #define AGAIN_MAX_DB 0x50
 #define DGAIN_MAX_DB 0x3c
 #define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION	"H20180402a"
+#define SENSOR_VERSION "H20180402a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -60,7 +60,7 @@ unsigned int imx307_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
-	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+	if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
 	/* p_ctx->again=again; */
 	*sensor_again=again;
@@ -133,7 +133,7 @@ static struct regval_list imx307_init_regs_1920_1080_25fps[] = {
 	{0x3000, 0x01},
 	{0x3001, 0x01},
 	{0x3002, 0x01},
-	{IMX307_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3005, 0x01},
 	{0x3007, 0x00},
 	{0x3009, 0x12},
@@ -199,11 +199,11 @@ static struct regval_list imx307_init_regs_1920_1080_25fps[] = {
 	{0x346a, 0x9c},//EBD
 	{0x346b, 0x07},
 	{0x3480, 0x49},
-	{IMX307_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3001, 0x00},
 	{0x3002, 0x00},
 //	{0x3000, 0x01},
-	{IMX307_REG_DELAY, 0xfe},
+	{SENSOR_REG_DELAY, 0xfe},
 	{0x3000, 0x00},
 
 //1080p@30fps Ryan
@@ -211,7 +211,7 @@ static struct regval_list imx307_init_regs_1920_1080_25fps[] = {
 	{0x3000, 0x01},
 	{0x3001, 0x01},
 	{0x3002, 0x01},
-	{IMX307_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3005, 0x01},
 	{0x3405, 0x10},
 	{0x3007, 0x00},
@@ -266,13 +266,13 @@ static struct regval_list imx307_init_regs_1920_1080_25fps[] = {
 	{0x309e, 0x4a},
 	{0x309f, 0x4a},
 	{0x31ec, 0x0e},
-	{IMX307_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3001, 0x00},
 	{0x3002, 0x00},
 	{0x3000, 0x01},
 #endif
 
-	{IMX307_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -281,12 +281,12 @@ static struct regval_list imx307_init_regs_1920_1080_25fps[] = {
 static struct tx_isp_sensor_win_setting imx307_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= imx307_init_regs_1920_1080_25fps,
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = imx307_init_regs_1920_1080_25fps,
 	}
 };
 
@@ -300,12 +300,12 @@ static enum v4l2_mbus_pixelcode imx307_mbus_code[] = {
 
 static struct regval_list imx307_stream_on[] = {
 	{0x3000, 0x00},
-	{IMX307_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list imx307_stream_off[] = {
 	{0x3000, 0x01},
-	{IMX307_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int imx307_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -316,16 +316,16 @@ int imx307_read(struct tx_isp_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 
@@ -342,10 +342,10 @@ int imx307_write(struct tx_isp_subdev *sd, uint16_t reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -359,8 +359,8 @@ static int imx307_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != IMX307_REG_END) {
-		if (vals->reg_num == IMX307_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx307_read(sd, vals->reg_num, &val);
@@ -377,8 +377,8 @@ static int imx307_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int imx307_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != IMX307_REG_END) {
-		if (vals->reg_num == IMX307_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx307_write(sd, vals->reg_num, vals->value);
@@ -405,7 +405,7 @@ static int imx307_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX307_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -413,7 +413,7 @@ static int imx307_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX307_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -473,7 +473,7 @@ static int imx307_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &imx307_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -519,20 +519,20 @@ static int imx307_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	pclk = IMX307_SUPPORT_PCLK;
+	pclk = SENSOR_SUPPORT_PCLK;
 
 #if 0
 	/*method 1 change hts*/
 	ret = imx307_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += imx307_read(sd, 0x3019, &value);
-	vmax |= value << 8;
+	vmax = value << 8;
 	ret += imx307_read(sd, 0x301a, &value);
-	vmax |= (value|0x3) << 16;
+	vmax = (value|0x3) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += imx307_write(sd, 0x301c, hmax & 0xff);
@@ -572,7 +572,7 @@ static int imx307_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	ret = imx307_set_integration_time(sd,cur_int);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 
 	return ret;
@@ -584,13 +584,13 @@ static int imx307_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &imx307_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &imx307_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -608,25 +608,25 @@ static int imx307_g_chip_ident(struct tx_isp_subdev *sd,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"imx307_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(50);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"imx307_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(15);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -637,7 +637,7 @@ static int imx307_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	printk("imx307 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "imx307", sizeof("imx307"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -648,49 +648,49 @@ static int imx307_g_chip_ident(struct tx_isp_subdev *sd,
 static int imx307_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
+		if (arg)
 			ret = imx307_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		if(arg)
+		if (arg)
 			ret = imx307_set_integration_time_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
+		if (arg)
 			ret = imx307_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-		if(arg)
+		if (arg)
 			ret = imx307_set_analog_gain_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = imx307_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = imx307_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = imx307_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if(arg)
+		if (arg)
 			ret = imx307_write_array(sd, imx307_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if(arg)
+		if (arg)
 			ret = imx307_write_array(sd, imx307_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
+		if (arg)
 			ret = imx307_set_fps(sd, *(int*)arg);
 		break;
 	default:
@@ -707,7 +707,7 @@ static int imx307_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -724,7 +724,7 @@ static int imx307_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -747,7 +747,7 @@ static struct tx_isp_subdev_video_ops imx307_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	imx307_sensor_ops = {
-	.ioctl	= imx307_sensor_ops_ioctl,
+	.ioctl = imx307_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops imx307_ops = {
@@ -780,7 +780,7 @@ static int imx307_probe(struct i2c_client *client,
 	unsigned long rate = 0;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -844,9 +844,9 @@ static int imx307_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -865,19 +865,19 @@ MODULE_DEVICE_TABLE(i2c, imx307_id);
 
 static struct i2c_driver imx307_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "imx307",
+		.owner = THIS_MODULE,
+		.name = "imx307",
 	},
-	.probe		= imx307_probe,
-	.remove		= imx307_remove,
-	.id_table	= imx307_id,
+	.probe = imx307_probe,
+	.remove = imx307_remove,
+	.id_table = imx307_id,
 };
 
-static __init int init_imx307(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init imx307 driver.\n");
 		return -1;
 	}
@@ -885,13 +885,13 @@ static __init int init_imx307(void)
 	return private_i2c_add_driver(&imx307_driver);
 }
 
-static __exit void exit_imx307(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&imx307_driver);
 }
 
-module_init(init_imx307);
-module_exit(exit_imx307);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sony imx307 sensors");
 MODULE_LICENSE("GPL");

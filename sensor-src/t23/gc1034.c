@@ -24,18 +24,18 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC1034_CHIP_ID_H	(0x10)
-#define GC1034_CHIP_ID_L	(0x34)
+#define SENSOR_CHIP_ID_H (0x10)
+#define SENSOR_CHIP_ID_L (0x34)
 
-#define GC1034_FLAG_END		0x00
-#define GC1034_FLAG_DELAY	0xff
-#define GC1034_PAGE_REG		0xfe
+#define SENSOR_FLAG_END 0x00
+#define SENSOR_FLAG_DELAY 0xff
+#define SENSOR_PAGE_REG 0xfe
 
-#define GC1034_SUPPORT_PCLK (39*1000*1000)
+#define SENSOR_SUPPORT_PCLK (39*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION	"H20200116a"
+#define SENSOR_VERSION "H20200116a"
 
 struct regval_list {
 	unsigned char reg_num;
@@ -50,15 +50,15 @@ module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
 
-const unsigned int  ANALOG_GAIN_1 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_2 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_3 =		(1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_4 =		(2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.85*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_5 =		(4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.03*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_6 =		(5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.77*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_7 =		(8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.06*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_8 =		(11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.53*(1<<TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int  ANALOG_GAIN_9 =		(16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.12*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_3 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.99*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_4 = (2<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.85*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_5 = (4<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.03*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_6 = (5<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.77*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_7 = (8<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.06*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_8 = (11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.53*(1<<TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int  ANALOG_GAIN_9 = (16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.12*(1<<TX_ISP_GAIN_FIXED_POINT)));
 
 struct tx_isp_sensor_attribute gc1034_attr;
 
@@ -495,7 +495,7 @@ static struct regval_list gc1034_init_regs_1280_720[] = {
 	{0x2b,0x04},
 	{0xfe,0x00},
 
-	{GC1034_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -504,12 +504,12 @@ static struct regval_list gc1034_init_regs_1280_720[] = {
 static struct tx_isp_sensor_win_setting gc1034_win_sizes[] = {
 	/* 1280*720 */
 	{
-		.width		= 512,
-		.height		= 512,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= gc1034_init_regs_1280_720,
+		.width = 512,
+		.height = 512,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = gc1034_init_regs_1280_720,
 	}
 };
 
@@ -521,14 +521,14 @@ static struct regval_list gc1034_stream_on[] = {
 	//{0xfe, 0x03},
 	//{0x10, 0x90},
 	//{0xfe, 0x00},
-	{GC1034_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc1034_stream_off[] = {
 	//{0xfe, 0x03},
 	//{0x10 ,0x80},
 	//{0xfe ,0x00},
-	{GC1034_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 int gc1034_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -537,16 +537,16 @@ int gc1034_read(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -563,10 +563,10 @@ static int gc1034_write(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -580,16 +580,16 @@ static int gc1034_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC1034_FLAG_END) {
-		if(vals->reg_num == GC1034_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc1034_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			if (vals->reg_num == GC1034_PAGE_REG){
+			if (vals->reg_num == SENSOR_PAGE_REG) {
 				val &= 0xf8;
-				val |= (vals->value & 0x07);
+				val = (vals->value & 0x07);
 				ret = gc1034_write(sd, vals->reg_num, val);
 				ret = gc1034_read(sd, vals->reg_num, &val);
 			}
@@ -601,8 +601,8 @@ static int gc1034_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int gc1034_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC1034_FLAG_END) {
-		if (vals->reg_num == GC1034_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc1034_write(sd, vals->reg_num, vals->value);
@@ -629,13 +629,13 @@ static int gc1034_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1034_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc1034_read(sd, 0xf1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1034_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -693,7 +693,7 @@ static int gc1034_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor_win_setting *wsize = &gc1034_win_sizes[0];
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -729,7 +729,7 @@ static int gc1034_s_stream(struct tx_isp_subdev *sd, int enable)
 static int gc1034_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	unsigned int pclk = GC1034_SUPPORT_PCLK;
+	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned short win_width=0;
 	unsigned short win_high=0;
 	unsigned short vts = 0;
@@ -743,7 +743,7 @@ static int gc1034_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_WARNING("set_fps error ,should be %d  ~ %d \n",SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
 		return -1;
 	}
@@ -757,21 +757,21 @@ static int gc1034_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += gc1034_read(sd, 0x10, &tmp);
 	win_width = (win_width << 8) + tmp;
 	ret += gc1034_read(sd, 0x2c, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sh_delay = tmp;
 	hts=2*(hb+16)+((win_width+sh_delay)/2);
 	ret = gc1034_read(sd, 0xd, &tmp);
 	win_high = tmp;
 	ret += gc1034_read(sd, 0xe, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
 	ret = gc1034_write(sd, 0x8, (unsigned char)(vb & 0xff));
 	ret += gc1034_write(sd, 0x7, (unsigned char)(vb >> 8));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
@@ -789,7 +789,7 @@ static int gc1034_set_mode(struct tx_isp_subdev *sd, int value)
 	int ret = ISP_SUCCESS;
 	wsize = &gc1034_win_sizes[0];
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -808,27 +808,27 @@ static int gc1034_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"gc1034_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"gc1034_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -839,7 +839,7 @@ static int gc1034_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	ISP_WARNING("gc1034 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "gc1034", sizeof("gc1034"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -849,29 +849,29 @@ static int gc1034_g_chip_ident(struct tx_isp_subdev *sd,
 static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-                if(arg)
+                if (arg)
 		ret = gc1034_set_analog_gain(sd, *(int*)arg);
 		break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = gc1034_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -881,7 +881,7 @@ static int gc1034_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = gc1034_write_array(sd, gc1034_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = gc1034_set_fps(sd, *(int*)arg);
 			break;
 	        default:
@@ -898,7 +898,7 @@ static int gc1034_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -915,7 +915,7 @@ static int gc1034_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -937,7 +937,7 @@ static struct tx_isp_subdev_video_ops gc1034_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	gc1034_sensor_ops = {
-	.ioctl	= gc1034_sensor_ops_ioctl,
+	.ioctl = gc1034_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops gc1034_ops = {
@@ -968,7 +968,7 @@ static int gc1034_probe(struct i2c_client *client,
 	struct tx_isp_sensor_win_setting *wsize = &gc1034_win_sizes[0];
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1018,9 +1018,9 @@ static int gc1034_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1038,32 +1038,32 @@ MODULE_DEVICE_TABLE(i2c, gc1034_id);
 
 static struct i2c_driver gc1034_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "gc1034",
+		.owner = THIS_MODULE,
+		.name = "gc1034",
 	},
-	.probe		= gc1034_probe,
-	.remove		= gc1034_remove,
-	.id_table	= gc1034_id,
+	.probe = gc1034_probe,
+	.remove = gc1034_remove,
+	.id_table = gc1034_id,
 };
 
-static __init int init_gc1034(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init gc1034 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&gc1034_driver);
 }
 
-static __exit void exit_gc1034(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&gc1034_driver);
 }
 
-module_init(init_gc1034);
-module_exit(exit_gc1034);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Gcoreinc gc1034 sensors");
 MODULE_LICENSE("GPL");

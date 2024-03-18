@@ -22,13 +22,13 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define IMX322_CHIP_ID_H	(0x50)
-#define IMX322_CHIP_ID_L	(0x0)
+#define SENSOR_CHIP_ID_H (0x50)
+#define SENSOR_CHIP_ID_L (0x0)
 
-#define IMX322_REG_END		0xffff
-#define IMX322_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define IMX322_SUPPORT_PCLK (37125*1000)
+#define SENSOR_SUPPORT_PCLK (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define AGAIN_MAX_DB 0x50
@@ -59,7 +59,7 @@ unsigned int imx322_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
-	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+	if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 	*sensor_again=again;
 	isp_gain= (((int32_t)again)<<LOG2_GAIN_SHIFT)/20;
 	return isp_gain;
@@ -140,8 +140,8 @@ static struct regval_list imx322_init_regs_1920_1080_30fps[] = {
 	{0x3008,0x00},
 	{0x3009,0x00},
 	{0x0100,0x00},
-	{IMX322_REG_DELAY, 0x14},	/* END MARKER */
-	{IMX322_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 0x14},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -150,12 +150,12 @@ static struct regval_list imx322_init_regs_1920_1080_30fps[] = {
 static struct tx_isp_sensor_win_setting imx322_win_sizes[] = {
 	/* 1280*960 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= imx322_init_regs_1920_1080_30fps,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = imx322_init_regs_1920_1080_30fps,
 	}
 };
 
@@ -170,12 +170,12 @@ static enum v4l2_mbus_pixelcode imx322_mbus_code[] = {
 
 static struct regval_list imx322_stream_on[] = {
 	{0x0100,0x01},
-	{IMX322_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list imx322_stream_off[] = {
 	{0x0100,0x00},
-	{IMX322_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int imx322_read(struct v4l2_subdev *sd, uint16_t reg,
@@ -185,16 +185,16 @@ int imx322_read(struct v4l2_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -211,10 +211,10 @@ int imx322_write(struct v4l2_subdev *sd, uint16_t reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -228,8 +228,8 @@ static int imx322_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != IMX322_REG_END) {
-		if (vals->reg_num == IMX322_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx322_read(sd, vals->reg_num, &val);
@@ -244,8 +244,8 @@ static int imx322_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int imx322_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != IMX322_REG_END) {
-		if (vals->reg_num == IMX322_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx322_write(sd, vals->reg_num, vals->value);
@@ -271,7 +271,7 @@ static int imx322_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX322_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -279,7 +279,7 @@ static int imx322_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX322_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -294,7 +294,7 @@ static int imx322_set_integration_time(struct v4l2_subdev *sd, int int_time)
 	ret = imx322_read(sd, 0x0341, &value);
 	vmax = value;
 	ret = imx322_read(sd, 0x0340, &value);
-	vmax |= value << 8;
+	vmax = value << 8;
 	shs = vmax - int_time - 1;
 
 	ret = imx322_write(sd, 0x0203, (unsigned char)(shs & 0xff));
@@ -333,7 +333,7 @@ static int imx322_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &imx322_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -383,7 +383,7 @@ static int imx322_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned int vts = 0;
 	struct tx_isp_notify_argument arg;
 
-	if(fps==983041){  //15fps
+	if (fps==983041) {  //15fps
 		ret += imx322_write(sd, 0x0340, 0x07);
 		ret += imx322_write(sd, 0x0341, 0x30);
 		/* ret += imx322_write(sd, 0x309a, 0x4c); */
@@ -394,7 +394,7 @@ static int imx322_set_fps(struct tx_isp_sensor *sensor, int fps)
 		}
 		vts=0x730;
 	}
-	else{
+	else {
 		ret += imx322_write(sd, 0x0340, 0x04);
 		ret += imx322_write(sd, 0x0341, 0x65);
 		/* ret += imx322_write(sd, 0x309a, 0x94); */
@@ -426,18 +426,18 @@ static int imx322_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	pclk = IMX322_SUPPORT_PCLK;
+	pclk = SENSOR_SUPPORT_PCLK;
 
 	val = 0;
 	ret += imx322_read(sd, 0x380c, &val);
 	hts = val<<8;
 	val = 0;
 	ret += imx322_read(sd, 0x380d, &val);
-	hts |= val;
+	hts = val;
 	if (0 != ret) {
 		printk("err: imx322 read err\n");
 		return ret;
@@ -466,13 +466,13 @@ static int imx322_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &imx322_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &imx322_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -490,25 +490,25 @@ static int imx322_g_chip_ident(struct v4l2_subdev *sd,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"imx322_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 0);
 			msleep(5);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(5);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"imx322_pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(150);
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -532,7 +532,7 @@ static long imx322_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = imx322_set_integration_time(sd, ctrl->value);
 		break;
@@ -566,7 +566,7 @@ static long imx322_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 	case VIDIOC_ISP_PRIVATE_IOCTL:
 		ret = imx322_ops_private_ioctl(sensor, arg);
 		break;
@@ -643,7 +643,7 @@ static int imx322_probe(struct i2c_client *client,
 	unsigned long rate = 0;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -684,7 +684,7 @@ static int imx322_probe(struct i2c_client *client,
 
 	imx322_attr.dvp.gpio = sensor_gpio_func;
 
-	switch(sensor_gpio_func){
+	switch(sensor_gpio_func) {
 	case DVP_PA_LOW_10BIT:
 	case DVP_PA_HIGH_10BIT:
 		mbus = imx322_mbus_code[0];
@@ -720,9 +720,9 @@ static int imx322_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -741,26 +741,26 @@ MODULE_DEVICE_TABLE(i2c, imx322_id);
 
 static struct i2c_driver imx322_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "imx322",
+		.owner = THIS_MODULE,
+		.name = "imx322",
 	},
-	.probe		= imx322_probe,
-	.remove		= imx322_remove,
-	.id_table	= imx322_id,
+	.probe = imx322_probe,
+	.remove = imx322_remove,
+	.id_table = imx322_id,
 };
 
-static __init int init_imx322(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&imx322_driver);
 }
 
-static __exit void exit_imx322(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&imx322_driver);
 }
 
-module_init(init_imx322);
-module_exit(exit_imx322);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision imx322 sensors");
 MODULE_LICENSE("GPL");

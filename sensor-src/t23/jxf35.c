@@ -23,19 +23,19 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define JXF35_CHIP_ID_H	(0x0f)
-#define JXF35_CHIP_ID_L	(0x35)
-#define JXF35_REG_END	0xff
-#define JXF35_REG_DELAY	0xfe
-#define JXF35_SUPPORT_30FPS_SCLK (86400000)
-#define JXF35_SUPPORT_15FPS_SCLK (43200000)
-#define JXF35_SUPPORT_30FPS_MIPI_SCLK (43200000)
-#define JXF35_SUPPORT_60FPS_MIPI_SCLK (39591300)
-#define JXF35_SUPPORT_180_60FPS_MIPI_SCLK (51840000)
-#define JXF35_SUPPORT_VGA_SCLK (43189920)
+#define SENSOR_CHIP_ID_H (0x0f)
+#define SENSOR_CHIP_ID_L (0x35)
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_SUPPORT_30FPS_SCLK (86400000)
+#define SENSOR_SUPPORT_15FPS_SCLK (43200000)
+#define SENSOR_SUPPORT_30FPS_MIPI_SCLK (43200000)
+#define SENSOR_SUPPORT_60FPS_MIPI_SCLK (39591300)
+#define SENSOR_SUPPORT_180_60FPS_MIPI_SCLK (51840000)
+#define SENSOR_SUPPORT_VGA_SCLK (43189920)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20200714a"
+#define SENSOR_VERSION "H20200714a"
 typedef enum {
 	SENSOR_RES_30 = 30,
 	SENSOR_RES_180 = 180,
@@ -43,11 +43,11 @@ typedef enum {
 } Sensor_RES;
 
 
-/* VGA@120fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
-/* 1080p@25fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
-/* 1080p@60fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
-/* 1712x1080@30fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=180 */
-/* 1712x1080@60fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=180 */
+/* VGA@120fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
+/* 1080p@25fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
+/* 1080p@60fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
+/* 1712x1080@30fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=180 */
+/* 1712x1080@60fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=180 */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -95,7 +95,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut jxf35_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x0, 0 },
 	{0x1, 5731 },
 	{0x2, 11136},
@@ -162,7 +162,7 @@ struct again_lut jxf35_again_lut[] = {
 	{0x3f, 259142},
 };
 
-static struct regval_list jxf35_init_regs_vga_120fps_mipi[] = {
+static struct regval_list sensor_init_regs_vga_120fps_mipi[] = {
 	{0x12, 0x43},
 	{0x48, 0x96},
 	{0x48, 0x16},
@@ -262,10 +262,10 @@ static struct regval_list jxf35_init_regs_vga_120fps_mipi[] = {
 	{0x19, 0x20},
 	{0x12, 0x03},
 
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_init_regs_1920_1080_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x12, 0x40},
 	{0x48, 0x8A},
 	{0x48, 0x0A},
@@ -360,10 +360,10 @@ static struct regval_list jxf35_init_regs_1920_1080_30fps_mipi[] = {
 	{0x80, 0x02},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_init_regs_1712_1080_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_1712_1080_30fps_mipi[] = {
 	{0x12, 0x40},
 	{0x48, 0x8A},
 	{0x48, 0x0A},
@@ -459,10 +459,10 @@ static struct regval_list jxf35_init_regs_1712_1080_30fps_mipi[] = {
 	{0x81, 0x74},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_init_regs_1712_1080_60fps_mipi[] = {
+static struct regval_list sensor_init_regs_1712_1080_60fps_mipi[] = {
 	{0x12, 0x40},
 	{0x48, 0x96},
 	{0x48, 0x16},
@@ -561,10 +561,10 @@ static struct regval_list jxf35_init_regs_1712_1080_60fps_mipi[] = {
 	{0x81, 0x74},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_init_regs_1920_1080_30fps_dvp[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x12, 0x40},
 	{0x48, 0x8A},
 	{0x48, 0x0A},
@@ -659,10 +659,10 @@ static struct regval_list jxf35_init_regs_1920_1080_30fps_dvp[] = {
 	{0x80, 0x02},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_init_regs_1920_1080_60fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x12, 0x40},
 	{0x48, 0x96},
 	{0x48, 0x16},
@@ -762,24 +762,24 @@ static struct regval_list jxf35_init_regs_1920_1080_60fps_mipi[] = {
 	{0x19, 0x20},
 	{0x12, 0x00},
 
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-struct tx_isp_sensor_attribute jxf35_attr;
-unsigned int jxf35_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+struct tx_isp_sensor_attribute sensor_attr;
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = jxf35_again_lut;
-	while(lut->gain <= jxf35_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == jxf35_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -791,20 +791,20 @@ unsigned int jxf35_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	return isp_gain;
 }
 
-unsigned int jxf35_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = jxf35_again_lut;
-	while(lut->gain <= jxf35_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == jxf35_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -816,12 +816,12 @@ unsigned int jxf35_alloc_again_short(unsigned int isp_gain, unsigned char shift,
 	return isp_gain;
 }
 
-unsigned int jxf35_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute jxf35_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "jxf35",
 	.chip_id = 0xf35,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -852,13 +852,13 @@ struct tx_isp_sensor_attribute jxf35_attr={
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.one_line_expr_in_us = 30,
-	.sensor_ctrl.alloc_again = jxf35_alloc_again,
-	.sensor_ctrl.alloc_again_short = jxf35_alloc_again_short,
-	.sensor_ctrl.alloc_dgain = jxf35_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-struct tx_isp_mipi_bus jxf35_mipi={
+struct tx_isp_mipi_bus sensor_mipi={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 430,
 	.lans = 2,
@@ -887,7 +887,7 @@ struct tx_isp_mipi_bus jxf35_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus jxf35_mipi_vga={
+struct tx_isp_mipi_bus sensor_mipi_vga={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 430,
 	.lans = 2,
@@ -916,7 +916,7 @@ struct tx_isp_mipi_bus jxf35_mipi_vga={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_dvp_bus jxf35_dvp={
+struct tx_isp_dvp_bus sensor_dvp={
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking = {
 		.vblanking = 0,
@@ -924,95 +924,95 @@ struct tx_isp_dvp_bus jxf35_dvp={
 	},
 };
 /*
- * the order of the jxf35_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting jxf35_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_1920_1080_30fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_1920_1080_30fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_dvp,
 	},
 	{
-		.width		= 640,
-		.height		= 480,
-		.fps		= 120 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_vga_120fps_mipi,
+		.width = 640,
+		.height = 480,
+		.fps = 120 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_vga_120fps_mipi,
 	},
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 60 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_1920_1080_60fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 60 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_60fps_mipi,
 	},
 	{
-		.width		= 1712,
-		.height		= 1080,
-		.fps		= 60 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_1712_1080_60fps_mipi,
+		.width = 1712,
+		.height = 1080,
+		.fps = 60 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1712_1080_60fps_mipi,
 	},
 	{
-		.width		= 1712,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxf35_init_regs_1712_1080_30fps_mipi,
+		.width = 1712,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1712_1080_30fps_mipi,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &jxf35_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list jxf35_stream_on_dvp[] = {
+static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x00},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_stream_off_dvp[] = {
+static struct regval_list sensor_stream_off_dvp[] = {
 	{0x12, 0x40},
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxf35_stream_off_mipi[] = {
-	{JXF35_REG_END, 0x00},	/* END MARKER */
+static struct regval_list sensor_stream_off_mipi[] = {
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxf35_read(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 	       unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= 0x40,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = 0x40,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -1023,16 +1023,16 @@ int jxf35_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxf35_write(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -1042,15 +1042,15 @@ int jxf35_write(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-static int jxf35_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXF35_REG_END) {
-		if (vals->reg_num == JXF35_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxf35_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1061,14 +1061,14 @@ static int jxf35_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int jxf35_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXF35_REG_END) {
-		if (vals->reg_num == JXF35_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxf35_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1077,90 +1077,90 @@ static int jxf35_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int jxf35_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = jxf35_read(sd, 0x0a, &v);
+	ret = sensor_read(sd, 0x0a, &v);
 	ISP_WARNING("-----%s : %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXF35_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = jxf35_read(sd, 0x0b, &v);
+	ret = sensor_read(sd, 0x0b, &v);
 	ISP_WARNING("-----%s : %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
-	if (v != JXF35_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int jxf35_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int jxf35_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxf35_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxf35_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxf35_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = jxf35_write(sd,  0x01, (unsigned char)(value & 0xff));
-	ret += jxf35_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
+	ret = sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		pr_debug("set integration time failure!!!\n");
 
 	return ret;
 }
 
-static int jxf35_set_integration_time_short(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int expo = value;
 
 	expo = expo / 2;
-	ret = jxf35_write(sd,  0x05, (unsigned char)(expo & 0xfe));
+	ret = sensor_write(sd,  0x05, (unsigned char)(expo & 0xfe));
 	if (ret < 0)
 		pr_debug("set integration time failure!!!\n");
 
 	return ret;
 }
 
-static int jxf35_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += jxf35_write(sd, 0x00, (unsigned char)(value & 0x7f));
+	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
-	if(value < 0x20) {
-		ret += jxf35_write(sd, 0x2f, r2f_val | 0x20);
-		ret += jxf35_write(sd, 0x0c, r0c_val | 0x40);
-		ret += jxf35_write(sd, 0x80, r80_val | 0x01);
+	if (value < 0x20) {
+		ret += sensor_write(sd, 0x2f, r2f_val | 0x20);
+		ret += sensor_write(sd, 0x0c, r0c_val | 0x40);
+		ret += sensor_write(sd, 0x80, r80_val | 0x01);
 	} else {
-		ret += jxf35_write(sd, 0x2f, r2f_val & 0xdf);
-		ret += jxf35_write(sd, 0x0c, r0c_val & 0xbf);
-		ret += jxf35_write(sd, 0x80, r80_val & 0xfe);
+		ret += sensor_write(sd, 0x2f, r2f_val & 0xdf);
+		ret += sensor_write(sd, 0x0c, r0c_val & 0xbf);
+		ret += sensor_write(sd, 0x80, r80_val & 0xfe);
 	}
 
 	if (ret < 0)
@@ -1169,12 +1169,12 @@ static int jxf35_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxf35_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1187,7 +1187,7 @@ static int jxf35_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -1198,14 +1198,14 @@ static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
-	if(data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_30:
-			sclk = JXF35_SUPPORT_30FPS_SCLK;
+			sclk = SENSOR_SUPPORT_30FPS_SCLK;
 			max_fps = SENSOR_OUTPUT_MAX_FPS;
 			break;
 		case TX_SENSOR_MAX_FPS_15:
-			sclk = JXF35_SUPPORT_15FPS_SCLK;
+			sclk = SENSOR_SUPPORT_15FPS_SCLK;
 			max_fps = TX_SENSOR_MAX_FPS_15;
 			break;
 		default:
@@ -1213,21 +1213,21 @@ static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
 			ISP_ERROR("Now we do not support this framerate!!!\n");
 		}
 
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_30:
-			sclk = JXF35_SUPPORT_30FPS_MIPI_SCLK;
+			sclk = SENSOR_SUPPORT_30FPS_MIPI_SCLK;
 			max_fps = TX_SENSOR_MAX_FPS_30;
 			break;
 		case TX_SENSOR_MAX_FPS_60:
-			if(sensor_resolution == SENSOR_RES_200)
-				sclk = JXF35_SUPPORT_60FPS_MIPI_SCLK;
-			else if(sensor_resolution == SENSOR_RES_180)
-				sclk = JXF35_SUPPORT_180_60FPS_MIPI_SCLK;
+			if (sensor_resolution == SENSOR_RES_200)
+				sclk = SENSOR_SUPPORT_60FPS_MIPI_SCLK;
+			else if (sensor_resolution == SENSOR_RES_180)
+				sclk = SENSOR_SUPPORT_180_60FPS_MIPI_SCLK;
 			max_fps = TX_SENSOR_MAX_FPS_60;
 			break;
 		case TX_SENSOR_MAX_FPS_120:
-			sclk = JXF35_SUPPORT_VGA_SCLK;
+			sclk = SENSOR_SUPPORT_VGA_SCLK;
 			max_fps = TX_SENSOR_MAX_FPS_120;
 			break;
 		default:
@@ -1240,17 +1240,17 @@ static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 
 	val = 0;
-	ret += jxf35_read(sd, 0x21, &val);
+	ret += sensor_read(sd, 0x21, &val);
 	hts = val<<8;
 	val = 0;
-	ret += jxf35_read(sd, 0x20, &val);
-	hts |= val;
+	ret += sensor_read(sd, 0x20, &val);
+	hts = val;
 	if (0 != ret) {
 		ISP_ERROR("err: jxf35 read err\n");
 		return ret;
@@ -1258,20 +1258,20 @@ static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	jxf35_write(sd, 0xc0, 0x22);
-	jxf35_write(sd, 0xc1, (unsigned char)(vts & 0xff));
-	jxf35_write(sd, 0xc2, 0x23);
-	jxf35_write(sd, 0xc3, (unsigned char)(vts >> 8));
-	ret = jxf35_read(sd, 0x1f, &val);
+	sensor_write(sd, 0xc0, 0x22);
+	sensor_write(sd, 0xc1, (unsigned char)(vts & 0xff));
+	sensor_write(sd, 0xc2, 0x23);
+	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
+	ret = sensor_read(sd, 0x1f, &val);
 //	pr_debug("before register 0x1f value : 0x%02x\n", val);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group writefunction,  auto clean
-	jxf35_write(sd, 0x1f, val);
+	val = (1 << 7); //set bit[7],  register group writefunction,  auto clean
+	sensor_write(sd, 0x1f, val);
 //	pr_debug("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
-		ISP_ERROR("err: jxf35_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1284,12 +1284,12 @@ static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int jxf35_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -1299,10 +1299,10 @@ static int jxf35_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-	ret = jxf35_write_array(sd, wsize->regs);
-	ret += jxf35_read(sd, 0x2f, &r2f_val);
-	ret += jxf35_read(sd, 0x0c, &r0c_val);
-	ret += jxf35_read(sd, 0x80, &r80_val);
+	ret = sensor_write_array(sd, wsize->regs);
+	ret += sensor_read(sd, 0x2f, &r2f_val);
+	ret += sensor_read(sd, 0x0c, &r0c_val);
+	ret += sensor_read(sd, 0x80, &r80_val);
 
 	if (ret)
 		return ret;
@@ -1313,28 +1313,28 @@ static int jxf35_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int jxf35_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf35_write_array(sd, jxf35_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf35_write_array(sd, jxf35_stream_on_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_on_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("jxf35 stream on\n");
 	}
 	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf35_write_array(sd, jxf35_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf35_write_array(sd, jxf35_stream_off_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("jxf35 stream off\n");
@@ -1343,60 +1343,60 @@ static int jxf35_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int jxf35_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = jxf35_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	ret = sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return ret;
 }
 
-static int jxf35_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = jxf35_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int jxf35_g_register_list(struct tx_isp_subdev *sd, struct tx_isp_dbg_register_list *reg)
+static int sensor_g_register_list(struct tx_isp_subdev *sd, struct tx_isp_dbg_register_list *reg)
 {
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
 	pr_debug("sensor init setting:\n");
-	jxf35_read_array(sd, wsize->regs);
+	sensor_read_array(sd, wsize->regs);
 
 	return ret;
 }
 
-static int jxf35_g_register_all(struct tx_isp_subdev *sd, struct tx_isp_dbg_register_list *reg)
+static int sensor_g_register_all(struct tx_isp_subdev *sd, struct tx_isp_dbg_register_list *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -1404,54 +1404,54 @@ static int jxf35_g_register_all(struct tx_isp_subdev *sd, struct tx_isp_dbg_regi
 	int i = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
 	pr_debug("sensor all setting:\n");
-	for(i = 0; i <= 0xff; i++){
-		ret = jxf35_read(sd, i, &val);
+	for(i = 0; i <= 0xff; i++) {
+		ret = sensor_read(sd, i, &val);
 		pr_debug("{0x%x, 0x%x},\n", i, val);
 	}
 
 	return ret;
 }
 
-static int jxf35_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			      struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"jxf35_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(15);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"jxf35_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
 
-	ret = jxf35_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an jxf35 chip.\n",
 			  client->addr, client->adapter->name);
@@ -1459,7 +1459,7 @@ static int jxf35_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("jxf35 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "jxf35", sizeof("jxf35"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1468,64 +1468,64 @@ static int jxf35_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int jxf35_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = jxf35_set_integration_time(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		if(arg)
-			ret = jxf35_set_integration_time_short(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = jxf35_set_analog_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-		if(arg)
-			ret = jxf35_set_analog_gain_short(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = jxf35_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = jxf35_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = jxf35_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf35_write_array(sd, jxf35_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf35_write_array(sd, jxf35_stream_off_mipi);
-		}else{
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = jxf35_write_array(sd, jxf35_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = jxf35_write_array(sd, jxf35_stream_on_mipi);
-		}else{
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_on_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = jxf35_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	default:
 		break;
@@ -1534,29 +1534,29 @@ static int jxf35_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	return ret;
 }
 
-static struct tx_isp_subdev_core_ops jxf35_core_ops = {
-	.g_chip_ident = jxf35_g_chip_ident,
-	.reset = jxf35_reset,
-	.init = jxf35_init,
-	/*.ioctl = jxf35_ops_ioctl,*/
-	.g_register_list = jxf35_g_register_list,
-	.g_register_all = jxf35_g_register_all,
-	.g_register = jxf35_g_register,
-	.s_register = jxf35_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register_list = sensor_g_register_list,
+	.g_register_all = sensor_g_register_all,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops jxf35_video_ops = {
-	.s_stream = jxf35_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	jxf35_sensor_ops = {
-	.ioctl	= jxf35_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops jxf35_ops = {
-	.core = &jxf35_core_ops,
-	.video = &jxf35_video_ops,
-	.sensor = &jxf35_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1572,7 +1572,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -1580,7 +1580,7 @@ static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1594,60 +1594,60 @@ static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
-		if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30) && (sensor_resolution == SENSOR_RES_200)){
-			wsize = &jxf35_win_sizes[0];
-			jxf35_attr.total_width = 0x500 * 2;//2560
-			jxf35_attr.total_height = 0x546; //1350
-			jxf35_attr.max_integration_time_native = 0x465 - 4;
-			jxf35_attr.integration_time_limit = 0x465 - 4;
-			jxf35_attr.max_integration_time = 0x465 - 4;
-			jxf35_mipi.clk = 430;
-			memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
-		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)){
-			wsize = &jxf35_win_sizes[3];
-			jxf35_attr.total_width = 0x253 * 4;//2380
-			jxf35_attr.total_height = 0x455; //1109
-			jxf35_attr.max_integration_time_native = 0x455 - 4;
-			jxf35_attr.integration_time_limit = 0x455 - 4;
-			jxf35_attr.max_integration_time = 0x455 - 4;
-			jxf35_mipi.clk = 792;
-			memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
-		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30 && sensor_resolution == SENSOR_RES_180)){
-			wsize = &jxf35_win_sizes[5];
-			jxf35_attr.total_width = 0x500 * 2;//2560
-			jxf35_attr.total_height = 0x546; //1350
-			jxf35_attr.max_integration_time_native = 0x465 - 4;
-			jxf35_attr.integration_time_limit = 0x465 - 4;
-			jxf35_attr.max_integration_time = 0x465 - 4;
-			jxf35_mipi.clk = 430;
-			jxf35_mipi.image_twidth = 1712;
-			jxf35_mipi.image_theight = 1080;	memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
-		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_60 && sensor_resolution == SENSOR_RES_180)){
-			wsize = &jxf35_win_sizes[4];
-			jxf35_attr.total_width = 0x280 * 4;//2560
-			jxf35_attr.total_height = 0x465; //1125
-			jxf35_attr.max_integration_time_native = 0x465 - 4;
-			jxf35_attr.integration_time_limit = 0x465 - 4;
-			jxf35_attr.max_integration_time = 0x465 - 4;
-			jxf35_mipi.clk = 792;
-			jxf35_mipi.image_twidth = 1712;
-			jxf35_mipi.image_theight = 1080;				memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi),sizeof(jxf35_mipi));
-		}else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_30)){
-			wsize = &jxf35_win_sizes[2];
-			jxf35_attr.total_width = 0x2a2;//674
-			jxf35_attr.total_height = 0x216;//534
-			jxf35_attr.max_integration_time_native = 0x216 - 4;
-			jxf35_attr.integration_time_limit = 0x216 - 4;
-			jxf35_attr.max_integration_time = 0x216 - 4;
-			memcpy((void*)(&(jxf35_attr.mipi)),(void*)(&jxf35_mipi_vga),sizeof(jxf35_mipi_vga));
-		} else if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
-			wsize = &jxf35_win_sizes[1];
-			memcpy((void*)(&(jxf35_attr.dvp)),(void*)(&jxf35_dvp),sizeof(jxf35_dvp));
+	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
+		if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30) && (sensor_resolution == SENSOR_RES_200)) {
+			wsize = &sensor_win_sizes[0];
+			sensor_attr.total_width = 0x500 * 2;//2560
+			sensor_attr.total_height = 0x546; //1350
+			sensor_attr.max_integration_time_native = 0x465 - 4;
+			sensor_attr.integration_time_limit = 0x465 - 4;
+			sensor_attr.max_integration_time = 0x465 - 4;
+			sensor_mipi.clk = 430;
+			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)) {
+			wsize = &sensor_win_sizes[3];
+			sensor_attr.total_width = 0x253 * 4;//2380
+			sensor_attr.total_height = 0x455; //1109
+			sensor_attr.max_integration_time_native = 0x455 - 4;
+			sensor_attr.integration_time_limit = 0x455 - 4;
+			sensor_attr.max_integration_time = 0x455 - 4;
+			sensor_mipi.clk = 792;
+			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30 && sensor_resolution == SENSOR_RES_180)) {
+			wsize = &sensor_win_sizes[5];
+			sensor_attr.total_width = 0x500 * 2;//2560
+			sensor_attr.total_height = 0x546; //1350
+			sensor_attr.max_integration_time_native = 0x465 - 4;
+			sensor_attr.integration_time_limit = 0x465 - 4;
+			sensor_attr.max_integration_time = 0x465 - 4;
+			sensor_mipi.clk = 430;
+			sensor_mipi.image_twidth = 1712;
+			sensor_mipi.image_theight = 1080;	memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_60 && sensor_resolution == SENSOR_RES_180)) {
+			wsize = &sensor_win_sizes[4];
+			sensor_attr.total_width = 0x280 * 4;//2560
+			sensor_attr.total_height = 0x465; //1125
+			sensor_attr.max_integration_time_native = 0x465 - 4;
+			sensor_attr.integration_time_limit = 0x465 - 4;
+			sensor_attr.max_integration_time = 0x465 - 4;
+			sensor_mipi.clk = 792;
+			sensor_mipi.image_twidth = 1712;
+			sensor_mipi.image_theight = 1080;				memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_30)) {
+			wsize = &sensor_win_sizes[2];
+			sensor_attr.total_width = 0x2a2;//674
+			sensor_attr.total_height = 0x216;//534
+			sensor_attr.max_integration_time_native = 0x216 - 4;
+			sensor_attr.integration_time_limit = 0x216 - 4;
+			sensor_attr.max_integration_time = 0x216 - 4;
+			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_vga),sizeof(sensor_mipi_vga));
+		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
+			wsize = &sensor_win_sizes[1];
+			memcpy((void*)(&(sensor_attr.dvp)),(void*)(&sensor_dvp),sizeof(sensor_dvp));
 			ret = set_sensor_gpio_function(sensor_gpio_func);
 			if (ret < 0)
 				goto err_set_sensor_gpio;
-			jxf35_attr.dvp.gpio = sensor_gpio_func;
+			sensor_attr.dvp.gpio = sensor_gpio_func;
 		} else {
 			ISP_ERROR("Can not support this data interface and fps!!!\n");
 			goto err_set_sensor_data_interface;
@@ -1658,11 +1658,11 @@ static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
-	jxf35_attr.dbus_type = data_interface;
-	jxf35_attr.data_type = data_type;
+	sensor_attr.dbus_type = data_interface;
+	sensor_attr.data_type = data_type;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &jxf35_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1671,7 +1671,7 @@ static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &jxf35_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1689,14 +1689,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int jxf35_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1707,40 +1707,40 @@ static int jxf35_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id jxf35_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "jxf35", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, jxf35_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver jxf35_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "jxf35",
+		.owner = THIS_MODULE,
+		.name = "jxf35",
 	},
-	.probe		= jxf35_probe,
-	.remove		= jxf35_remove,
-	.id_table	= jxf35_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_jxf35(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init jxf35 driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&jxf35_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_jxf35(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&jxf35_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_jxf35);
-module_exit(exit_jxf35);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Sonic jxf35 sensors");
 MODULE_LICENSE("GPL");

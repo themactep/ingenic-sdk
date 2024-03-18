@@ -22,14 +22,14 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#define BG0806_CHIP_ID_H	(0x08)
-#define BG0806_CHIP_ID_L	(0x06)
-#define BG0806_REG_END		0xffff
-#define BG0806_REG_DELAY	0xfffe
-#define BG0806_SUPPORT_SCLK (75*1000*1000)
+#define SENSOR_CHIP_ID_H (0x08)
+#define SENSOR_CHIP_ID_L (0x06)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_SCLK (75*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20170911a"
+#define SENSOR_VERSION "H20170911a"
 #define DRIVE_CAPABILITY_1
 
 #define Vrefh_min_tlb 0x0c
@@ -150,7 +150,7 @@ struct tx_isp_sensor_attribute bg0806_attr={
 
 
 static struct regval_list bg0806_init_regs_1920_1080_30fps_mipi[] = {
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 
@@ -239,7 +239,7 @@ static struct regval_list bg0806_init_regs_1920_1080_30fps_dvp[] = {
 	{0x0398, 0x0008},//28(25M),14(50M),0a(100M),08(111.375)
 	{0x0390, 0x0000},//mipi_ctrl0,bit[1],mipi enable
 	{0x001d, 0x0001},
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 const unsigned char Tab_sensor_dsc[768] = {
@@ -289,12 +289,12 @@ const unsigned char Tab_sensor_dsc[768] = {
 static struct tx_isp_sensor_win_setting bg0806_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= bg0806_init_regs_1920_1080_30fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = bg0806_init_regs_1920_1080_30fps_dvp,
 	}
 };
 
@@ -303,19 +303,19 @@ static enum v4l2_mbus_pixelcode bg0806_mbus_code[] = {
 };
 
 static struct regval_list bg0806_stream_on_dvp[] = {
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list bg0806_stream_off_dvp[] = {
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list bg0806_stream_on_mipi[] = {
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list bg0806_stream_off_mipi[] = {
-	{BG0806_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int bg0806_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -325,16 +325,16 @@ int bg0806_read(struct tx_isp_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -351,10 +351,10 @@ int bg0806_write(struct tx_isp_subdev *sd, uint16_t reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -368,8 +368,8 @@ static int bg0806_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != BG0806_REG_END) {
-		if (vals->reg_num == BG0806_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = bg0806_read(sd, vals->reg_num, &val);
@@ -383,8 +383,8 @@ static int bg0806_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int bg0806_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != BG0806_REG_END) {
-		if (vals->reg_num == BG0806_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = bg0806_write(sd, vals->reg_num, vals->value);
@@ -409,7 +409,7 @@ static int bg0806_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != BG0806_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -417,7 +417,7 @@ static int bg0806_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != BG0806_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -439,22 +439,22 @@ static int bg0806_set_integration_time(struct tx_isp_subdev *sd, int value)
 		printk("bg0806_set_integration_time:expo = %d\n",expo);
 		if (expo > 2400 ) {
 			// low fps
-			ret  = bg0806_write(sd, 0x0082, 0x04);
+			ret = bg0806_write(sd, 0x0082, 0x04);
 			// ret += bg0806_write(sd, 0x007f, 0x01);
 			ret += bg0806_write(sd, 0x0052, 0x07);
 			ret += bg0806_write(sd, 0x00f2, 0x07);
 			ret += bg0806_write(sd, 0x00fb, 0x02);
 		} else {
-			ret  = bg0806_write(sd, 0x0082, 0x08);
+			ret = bg0806_write(sd, 0x0082, 0x08);
 			// ret += bg0806_write(sd, 0x007f, 0x01);
 			ret += bg0806_write(sd, 0x0052, 0x06);
 			ret += bg0806_write(sd, 0x00f2, 0x06);
 			ret += bg0806_write(sd, 0x00fb, 0x01);
 		}
 	}
-	else{
+	else {
 			//normal
-		ret  = bg0806_write(sd, 0x0082, 0x0b);
+		ret = bg0806_write(sd, 0x0082, 0x0b);
 		// ret += bg0806_write(sd, 0x007f, 0x01);
 		ret += bg0806_write(sd, 0x0052, 0x06);
 		ret += bg0806_write(sd, 0x00f2, 0x06);
@@ -469,9 +469,9 @@ static int bg0806_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 static unsigned int bg0806_clip(unsigned int value, unsigned int limit_l, unsigned int limit_h)
 {
-	if(value < limit_l)
+	if (value < limit_l)
 		return limit_l;
-	else if(value > limit_h)
+	else if (value > limit_h)
 		return limit_h;
 	else
 		return value;
@@ -492,8 +492,8 @@ static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	dgain = bg0806_clip(dgain, 512, 512); //min=1x,max=8x
 //	temp = (128<<6)%(total_gain+1);
 
-	if((vrefh>Vrefh_min_tlb)&&(vrefh<=0x7f)) {
-		ret  = bg0806_write(sd, 0x0030, 0x00);
+	if ((vrefh>Vrefh_min_tlb)&&(vrefh<=0x7f)) {
+		ret = bg0806_write(sd, 0x0030, 0x00);
 		ret += bg0806_write(sd, 0x0031, 0xc0);
 		ret += bg0806_write(sd, 0x0034, 0x00);
 		ret += bg0806_write(sd, 0x0035, 0xc0);
@@ -504,8 +504,8 @@ static int bg0806_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		ret += bg0806_write(sd, 0x0068, 0x90);
 		if (ret < 0)
 			return ret;
-	} else if(vrefh==Vrefh_min_tlb)	{
-		ret  = bg0806_write(sd, 0x0030, 0x01);
+	} else if (vrefh==Vrefh_min_tlb)	{
+		ret = bg0806_write(sd, 0x0030, 0x01);
 		ret += bg0806_write(sd, 0x0031, 0xb0);
 		ret += bg0806_write(sd, 0x0034, 0x01);
 		ret += bg0806_write(sd, 0x0035, 0xb0);
@@ -549,7 +549,7 @@ static int bg0806_init(struct tx_isp_subdev *sd, int enable)
 	int i;
 	unsigned char pid;
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -570,7 +570,7 @@ static int bg0806_init(struct tx_isp_subdev *sd, int enable)
 
 	bg0806_read(sd,0x45,&pid);
 	pid &= 0x3f;
-	switch(pid){
+	switch(pid) {
 	case BG0806A:
 		bg0806_write(sd,0x0207, 0xc8);
 		bg0806_write(sd,0x0133, 0x38);
@@ -605,24 +605,24 @@ static int bg0806_s_stream(struct tx_isp_subdev *sd, int enable)
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = bg0806_write_array(sd, bg0806_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bg0806_write_array(sd, bg0806_stream_on_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("bg0806 stream on\n");
 
 	}
 	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = bg0806_write_array(sd, bg0806_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bg0806_write_array(sd, bg0806_stream_off_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("bg0806 stream off\n");
@@ -642,18 +642,18 @@ static int bg0806_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	sclk = BG0806_SUPPORT_SCLK;
+	sclk = SENSOR_SUPPORT_SCLK;
 
 	val = 0;
 	ret += bg0806_read(sd, 0x000e, &val);
 	hts = val<<8;
 	val = 0;
 	ret += bg0806_read(sd, 0x000f, &val);
-	hts |= val;
+	hts = val;
 	if (0 != ret) {
 		printk("err: bg0806 read err\n");
 		return ret;
@@ -665,7 +665,7 @@ static int bg0806_set_fps(struct tx_isp_subdev *sd, int fps)
 	height = val<<8;
 	val = 0;
 	ret += bg0806_read(sd, 0x0009, &val);
-	height |= val;
+	height = val;
 	if (0 != ret) {
 		printk("err: bg0806 read err\n");
 		return ret;
@@ -692,13 +692,13 @@ static int bg0806_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &bg0806_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &bg0806_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -717,7 +717,7 @@ static int bg0806_set_vflip(struct tx_isp_subdev *sd, int enable)
 	unsigned char val = 0;
 
 	ret += bg0806_read(sd, 0x0020, &val);
-	if (enable){
+	if (enable) {
 		val = val | 0x01;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG12_1X12;
 	} else {
@@ -727,7 +727,7 @@ static int bg0806_set_vflip(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus_change = 1;
 	ret += bg0806_write(sd, 0x0020, val);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
@@ -738,27 +738,27 @@ static int bg0806_g_chip_ident(struct tx_isp_subdev *sd,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"bg0806_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(30);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"bg0806_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -769,7 +769,7 @@ static int bg0806_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	printk("bg0806 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "bg0806", sizeof("bg0806"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -779,57 +779,57 @@ static int bg0806_g_chip_ident(struct tx_isp_subdev *sd,
 static int bg0806_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
+			if (arg)
 				ret = bg0806_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = bg0806_write_array(sd, bg0806_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = bg0806_write_array(sd, bg0806_stream_off_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = bg0806_write_array(sd, bg0806_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = bg0806_write_array(sd, bg0806_stream_on_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_fps(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if(arg)
+			if (arg)
 				ret = bg0806_set_vflip(sd, *(int*)arg);
 			break;
 		default:
@@ -845,7 +845,7 @@ static int bg0806_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -861,7 +861,7 @@ static int bg0806_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -883,7 +883,7 @@ static struct tx_isp_subdev_video_ops bg0806_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	bg0806_sensor_ops = {
-	.ioctl	= bg0806_sensor_ops_ioctl,
+	.ioctl = bg0806_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops bg0806_ops = {
@@ -916,7 +916,7 @@ static int bg0806_probe(struct i2c_client *client,
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -938,13 +938,13 @@ static int bg0806_probe(struct i2c_client *client,
 	bg0806_attr.dvp.gpio = sensor_gpio_func;
 
 	bg0806_attr.dbus_type = data_interface;
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		wsize->regs = bg0806_init_regs_1920_1080_30fps_dvp;
 		memcpy((void*)(&(bg0806_attr.dvp)),(void*)(&bg0806_dvp),sizeof(bg0806_dvp));
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->regs = bg0806_init_regs_1920_1080_30fps_mipi;
 		memcpy((void*)(&(bg0806_attr.mipi)),(void*)(&bg0806_mipi),sizeof(bg0806_mipi));
-	} else{
+	} else {
 		printk("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
@@ -985,9 +985,9 @@ static int bg0806_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1005,32 +1005,32 @@ MODULE_DEVICE_TABLE(i2c, bg0806_id);
 
 static struct i2c_driver bg0806_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "bg0806",
+		.owner = THIS_MODULE,
+		.name = "bg0806",
 	},
-	.probe		= bg0806_probe,
-	.remove		= bg0806_remove,
-	.id_table	= bg0806_id,
+	.probe = bg0806_probe,
+	.remove = bg0806_remove,
+	.id_table = bg0806_id,
 };
 
-static __init int init_bg0806(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init bg0806 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&bg0806_driver);
 }
 
-static __exit void exit_bg0806(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&bg0806_driver);
 }
 
-module_init(init_bg0806);
-module_exit(exit_bg0806);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision bg0806 sensors");
 MODULE_LICENSE("GPL");
