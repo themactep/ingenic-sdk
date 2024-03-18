@@ -1,11 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * ps5270.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -17,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -27,7 +22,6 @@
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_BANK_REG 0xef
-
 #define SENSOR_SUPPORT_30FPS_MIPI_SCLK (86016000)
 #define SENSOR_SUPPORT_VGA_SCLK (85932000)
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -38,7 +32,6 @@
 #define NEPLS_UB 255
 #define NEPLS_SCALE 32
 #define NE_NEP_CONST (0x1F4+0x64)
-
 #define SENSOR_VERSION "H20200703a"
 
 /* VGA@110fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=110  */

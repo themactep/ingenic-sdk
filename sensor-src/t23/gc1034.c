@@ -1,13 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * gc1034.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
-
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -17,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
@@ -25,11 +19,9 @@
 
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x34)
-
 #define SENSOR_FLAG_END 0x00
 #define SENSOR_FLAG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe
-
 #define SENSOR_SUPPORT_PCLK (39*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -40,6 +32,7 @@ struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;
 };
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -47,7 +40,6 @@ MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 static int pwdn_gpio = GPIO_PA(19);
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
-
 
 const unsigned int  ANALOG_GAIN_1 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.0*(1<<TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int  ANALOG_GAIN_2 = (1<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.42*(1<<TX_ISP_GAIN_FIXED_POINT)));
