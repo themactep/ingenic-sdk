@@ -23,7 +23,7 @@
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "jxf22"
-#define SENSOR_CHIP_ID 0x22
+#define SENSOR_CHIP_ID 0xf22
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1920
