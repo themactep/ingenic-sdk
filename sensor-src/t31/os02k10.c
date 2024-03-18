@@ -30,6 +30,7 @@
 /* 1080p@55fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=55 */
 /* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
 
+#define SENSOR_NAME "os02k10"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 1920

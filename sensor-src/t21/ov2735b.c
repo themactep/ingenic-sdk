@@ -23,8 +23,11 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "ov2735b"
-#define SENSOR_CHIP_ID 0x2735
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0x2735
 #define SENSOR_CHIP_ID_H (0x27)
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xff
@@ -64,16 +67,16 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -174,7 +177,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x3c,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,

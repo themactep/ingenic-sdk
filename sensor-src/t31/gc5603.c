@@ -22,6 +22,7 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+#define SENSOR_NAME "gc5603"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x31
 #define SENSOR_MAX_WIDTH 2560

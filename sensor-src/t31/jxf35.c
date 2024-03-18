@@ -23,6 +23,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define SENSOR_NAME "jxf35"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1920
