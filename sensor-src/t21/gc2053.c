@@ -19,8 +19,14 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
-#define SENSOR_NAME "gc2053"
+#define SENSOR_NAME           "gc2053"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0x2053
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
 #define SENSOR_FLAG_END 0xff
@@ -31,6 +37,17 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20190708a"
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
     unsigned char reg_num;
@@ -232,7 +249,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.chip_id = 0x2053,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x37,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -404,17 +421,17 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x40},
 
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -439,12 +456,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	//{ 0xf2, 0x8f},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sensor_stream_off[] = {
 	//{ 0xf2, 0x80},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_FLAG_END, 0x00}, /* END MARKER */
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -1004,6 +1021,8 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void) {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
@@ -1014,6 +1033,7 @@ static __init int init_sensor(void) {
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

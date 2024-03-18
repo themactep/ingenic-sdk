@@ -3,7 +3,9 @@ OUT := $(MODULE_NAME)
 
 DIR=sensor-src/$(SOC_FAMILY)
 
-SRCS := $(DIR)/$(SENSOR_MODEL).c
+SRCS := $(DIR)/$(SENSOR_MODEL).c sensor-src/common/sensor-info.c
+
+ccflags-y += -I$(src)/sensor-src/include
 
 OBJS := $(SRCS:%.c=%.o) \
 	$(ASM_SRCS:%.S=%.o)

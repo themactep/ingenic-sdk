@@ -1532,7 +1532,7 @@ static int imx415_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
                       ret = imx415_set_vflip(sd, sensor_val->value);
                 break;
         default:
-                break;;
+                break;
         }
 
         return ret;
