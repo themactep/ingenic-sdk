@@ -20,7 +20,9 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x51)
 #define SENSOR_REG_END 0xff
@@ -63,6 +65,17 @@ MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 static unsigned char reg_2f = 0x44;
 static unsigned char reg_0c = 0x00;
 static unsigned char reg_82 = 0x21;
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	unsigned char reg_num;
@@ -291,7 +304,7 @@ struct tx_isp_dvp_bus sensor_dvp = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = "jxf51",
 	.chip_id = 0xf51,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = 0x40,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
@@ -1322,6 +1335,8 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void)
 {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init jxf51 driver.\n");
@@ -1333,6 +1348,7 @@ static __init int init_sensor(void)
 static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
