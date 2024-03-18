@@ -23,7 +23,7 @@
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "imx323"
-#define SENSOR_CHIP_ID 0x323
+#define SENSOR_CHIP_ID 0x140d
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x1a
 #define SENSOR_MAX_WIDTH 2200

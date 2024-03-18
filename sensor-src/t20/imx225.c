@@ -22,7 +22,7 @@
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "imx225"
-#define SENSOR_CHIP_ID 0x225
+#define SENSOR_CHIP_ID 0x1001
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x1a
 #define SENSOR_MAX_WIDTH 0
