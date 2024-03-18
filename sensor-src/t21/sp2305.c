@@ -19,13 +19,19 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-
+#include <sensor-info.h>
 #define SENSOR_NAME "sp2305"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0x2735
 #define SENSOR_CHIP_ID_H (0x27)
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x0
 #define SENSOR_PAGE_REG 0xfd
+
 #define SENSOR_SUPPORT_SCLK (84000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -46,6 +52,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	unsigned char reg_num;
@@ -160,11 +177,11 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 }
 
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = SENSOR_NAME,
+	.name = "sp2305",
 	.chip_id = 0x2735,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x3c,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -320,7 +337,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x0f, 0x3b},
 	{0x01, 0x01},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
@@ -460,7 +477,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x0e, 0x0a},
 	{0x0f, 0x63},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -491,7 +508,7 @@ static struct regval_list sensor_stream_on[] = {
 	{0x36, 0x00},
 	{0x37, 0x00},//fake stream on
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_stream_off[] = {
@@ -499,7 +516,7 @@ static struct regval_list sensor_stream_off[] = {
 	{0x36, 0x01},
 	{0x37, 0x01},//fake stream off
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
@@ -701,11 +718,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		pr_debug("sp2305 stream on\n");
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		pr_debug("sp2305 stream off\n");
 	}
 	return ret;
 }
@@ -827,13 +844,13 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
-		       client->addr, client->adapter->name, SENSOR_NAME);
+		printk("chip found @ 0x%x (%s) is not an sp2305 chip.\n",
+		       client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	printk("sp2305 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	if (chip) {
-		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
+		memcpy(chip->name, "sp2305", sizeof("sp2305"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -879,7 +896,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return 0;
 }
@@ -942,7 +959,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = SENSOR_NAME,
+	.name = "sp2305",
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -1032,7 +1049,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	pr_debug("probe ok ------->sp2305\n");
 
 	return 0;
 err_set_sensor_gpio:
@@ -1062,7 +1079,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ SENSOR_NAME, 0 },
+	{ "sp2305", 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -1070,7 +1087,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
+		.name = "sp2305",
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
@@ -1080,9 +1097,11 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void)
 {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init %s driver.\n", SENSOR_NAME);
+		printk("Failed to init sp2305 driver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -1091,10 +1110,11 @@ static __init int init_sensor(void)
 static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for Smartsenstech sp2305 sensors");
 MODULE_LICENSE("GPL");

@@ -8,6 +8,7 @@
  * published by the Free Software Foundation.
  */
 
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -17,19 +18,25 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
+
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
-#define SENSOR_NAME "sc2235"
-#define SENSOR_CHIP_ID 0x2235
+#define SENSOR_NAME                 "sc2235"
+#define SENSOR_CHIP_ID              0x2235
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x22)
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
-#define SENSOR_SUPPORT_PCLK_FPS_15 (45000*1000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_SUPPORT_PCLK_FPS_30  (74250*1000)
+#define SENSOR_SUPPORT_PCLK_FPS_15  (45000*1000)
+#define SENSOR_OUTPUT_MAX_FPS       30
+#define SENSOR_OUTPUT_MIN_FPS       5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20200331a"
 
@@ -48,6 +55,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -162,7 +180,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -371,7 +389,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3039, 0x31},
 #endif
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
@@ -480,7 +498,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0x3237, 0x09},
 	{0x3238, 0x94},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -509,12 +527,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -1126,6 +1144,8 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void) {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		printk("Failed to init %s driver.\n", SENSOR_NAME);
@@ -1136,6 +1156,7 @@ static __init int init_sensor(void) {
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

@@ -17,11 +17,18 @@
 #include <linux/clk.h>
 #include <linux/delay.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
 
+#define SENSOR_NAME "sc1245"
+#define SENSOR_CHIP_ID 0x1245
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID_H (0x12)
 #define SENSOR_CHIP_ID_L (0x45)
 #define SENSOR_REG_END 0xffff
@@ -30,6 +37,7 @@
 #define SENSOR_SUPPORT_PCLK_FPS_15 (18000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "20180320"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -46,6 +54,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -164,7 +183,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.chip_id = 0x1245,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -848,7 +867,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = sensor_set_fps(sensor, ctrl->value);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return 0;
 }
@@ -1041,11 +1060,13 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void)
 {
+	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
+	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
 

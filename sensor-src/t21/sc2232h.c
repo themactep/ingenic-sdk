@@ -8,6 +8,7 @@
  * published by the Free Software Foundation.
  */
 
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -17,12 +18,19 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
+
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_NAME "sc2232h"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0xcb0701
 #define SENSOR_CHIP_ID_H (0xcb)
-#define SENSOR_CHIP_ID_M (0x07)
+#define  SENSOR_CHIP_ID_M (0x07)
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
@@ -46,6 +54,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -172,11 +191,11 @@ struct tx_isp_dvp_bus sensor_dvp={
 };
 
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = SENSOR_NAME,
+	.name = "sc2232h",
 	.chip_id = 0xcb0701,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -381,7 +400,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3039, 0x24},
 	{SENSOR_REG_DELAY, 0x0a},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
@@ -557,7 +576,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3039, 0x24},
 	{SENSOR_REG_DELAY, 0x0a},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -586,22 +605,22 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,	unsigned char *value)
@@ -830,7 +849,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		pr_debug("sc2232h stream on\n");
 
 	}
 	else {
@@ -842,7 +861,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		pr_debug("sc2232h stream off\n");
 	}
 
 	return ret;
@@ -870,7 +889,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		printk("err: %s read err\n", SENSOR_NAME);
+		printk("err: sc2232h read err\n");
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
@@ -952,13 +971,13 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
-				client->addr, client->adapter->name, SENSOR_NAME);
+		printk("chip found @ 0x%x (%s) is not an sc2232h chip.\n",
+				client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	printk("sc2232h chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	if (chip) {
-		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
+		memcpy(chip->name, "sc2232h", sizeof("sc2232h"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1020,7 +1039,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 				ret = sensor_set_fps(sd, *(int*)arg);
 			break;
 		default:
-			break;;
+			break;
 	}
 
 	return 0;
@@ -1086,7 +1105,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = SENSOR_NAME,
+	.name = "sc2232h",
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -1172,7 +1191,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	pr_debug("probe ok ------->sc2232h\n");
 
 	return 0;
 err_set_sensor_data_interface:
@@ -1204,7 +1223,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ SENSOR_NAME, 0 },
+	{ "sc2232h", 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -1212,7 +1231,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
+		.name = "sc2232h",
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
@@ -1222,9 +1241,11 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void)
 {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init %s driver.\n", SENSOR_NAME);
+		printk("Failed to init sc2232h driver.\n");
 		return -1;
 	}
 
@@ -1234,10 +1255,11 @@ static __init int init_sensor(void)
 static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for OmniVision sc2232h sensors");
 MODULE_LICENSE("GPL");

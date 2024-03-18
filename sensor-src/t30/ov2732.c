@@ -713,7 +713,7 @@ static int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 		.buf = buf,
 	};
 
-	int ret;;
+	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;

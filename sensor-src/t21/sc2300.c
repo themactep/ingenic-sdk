@@ -17,13 +17,20 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
+
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
+
 //#include <linux/delay.h>
 //#include <apical-isp/apical_math.h>
 
 #define SENSOR_NAME "sc2300"
 #define SENSOR_CHIP_ID 0x2300
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_L (0x00)
 #define SENSOR_REG_END 0xffff
@@ -45,6 +52,17 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_12BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
     uint16_t reg_num;
@@ -278,10 +296,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
-
 	return isp_gain;
 }
 
@@ -294,7 +310,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -404,7 +420,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x330b, 0x78},
 	{0x0100, 0x01},
 
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -433,12 +449,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -601,7 +617,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
-
 	if (!enable)
 		return ISP_SUCCESS;
 
@@ -611,14 +626,12 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
-
 	return 0;
 }
 
@@ -656,7 +669,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
-
 	hts = ((hts << 8) + tmp);
 	if (0 != ret) {
 		printk("err: %s read err\n", SENSOR_NAME);
@@ -737,19 +749,18 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		       client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
+
 	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
-
 	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
@@ -966,6 +977,8 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void) {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		printk("Failed to init %s driver.\n", SENSOR_NAME);
@@ -976,6 +989,7 @@ static __init int init_sensor(void) {
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

@@ -17,10 +17,17 @@
 #include <linux/clk.h>
 #include <linux/delay.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
+#define SENSOR_NAME "ar0230"
+#define SENSOR_CHIP_ID 0x0056
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x10
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x56)
 #define SENSOR_REG_END 0xffff
@@ -28,6 +35,7 @@
 #define SENSOR_SUPPORT_SCLK (37125000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "20180320"
 #define LCG 0x0
 #define HCG 0x1
 
@@ -46,6 +54,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
     unsigned short reg_num;
@@ -177,12 +196,9 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
-
 	return isp_gain;
-
 }
 
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
@@ -190,11 +206,11 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 }
 
 struct tx_isp_sensor_attribute sensor_attr = {
-	.name = "ar0230",
-	.chip_id = 0x0056,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_16BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x10,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -697,8 +713,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("ar0230 stream on\n");
-
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = sensor_write_array(sd, sensor_stream_off_dvp);
@@ -708,7 +723,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("ar0230 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -810,17 +825,16 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		v4l_err(client,
-			"chip found @ 0x%x (%s) is not an ar0230 chip.\n",
-			client->addr, client->adapter->name);
+			"chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-	v4l_info(client, "ar0230 chip found @ 0x%02x (%s)\n",
-		 client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
+             SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
 static int sensor_s_power(struct v4l2_subdev *sd, int on) {
-
 	return 0;
 }
 
@@ -868,7 +882,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			break;
 		default:
 			pr_debug("do not support ctrl->cmd ====%d\n", ctrl->cmd);
-			break;;
+			break;
 	}
 	return 0;
 }
@@ -1010,7 +1024,7 @@ static int sensor_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("probe ok ------->ar0230\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -1040,7 +1054,7 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{"ar0230", 0},
+	{SENSOR_NAME, 0},
 	{}
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -1048,7 +1062,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "ar0230",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
@@ -1056,15 +1070,17 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision ar0230 sensors");
+MODULE_DESCRIPTION("A low-level driver for OmniVision "SENSOR_NAME" sensors");
 MODULE_LICENSE("GPL");
