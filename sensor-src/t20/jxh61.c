@@ -20,13 +20,13 @@
 
 #include <soc/gpio.h>
 
-#define JXH61_CHIP_ID_H	(0xa0)
-#define JXH61_CHIP_ID_L	(0x42)
+#define SENSOR_CHIP_ID_H (0xa0)
+#define SENSOR_CHIP_ID_L (0x42)
 
-#define JXH61_REG_END		0xff
-#define JXH61_REG_DELAY		0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
 
-#define JXH61_SUPPORT_PCLK (36*1000*1000)
+#define SENSOR_SUPPORT_PCLK (36*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
@@ -55,7 +55,7 @@ static inline unsigned char cale_again_register(unsigned int gain)
 	int index = 0;
 	int i = 0, p = 0;
 	for(index = 3; index >= 0; index--)
-		if(gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
+		if (gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
 			break;
 	i = index;
 	p = (gain >> (TX_ISP_GAIN_FIXED_POINT - 4)) & ((1 << (4 + i)) - 1);
@@ -67,9 +67,9 @@ unsigned int jxh61_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	unsigned int again = 0;
 	unsigned int gain_one = math_exp2(isp_gain, shift, TX_ISP_GAIN_FIXED_POINT);
 
-	if(gain_one < jxh61_attr.max_again){
+	if (gain_one < jxh61_attr.max_again) {
 		again = (gain_one  >> (TX_ISP_GAIN_FIXED_POINT - 4) << (TX_ISP_GAIN_FIXED_POINT - 4));
-	}else{
+	} else {
 		again = jxh61_attr.max_again;
 	}
 	isp_gain = log2_fixed_to_fixed(again, TX_ISP_GAIN_FIXED_POINT, shift);
@@ -82,7 +82,7 @@ static inline unsigned char cale_again_register(unsigned int gain)
 	int index = 0;
 	int i = 0, p = 0;
 	for(index = 3; index >= 0; index--)
-		if(gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
+		if (gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
 			break;
 	i = index;
 	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0xf;
@@ -101,7 +101,7 @@ unsigned int jxh61_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	unsigned int gain_one = 0;
 	unsigned int gain_one1 = 0;
 
-	if(isp_gain > jxh61_attr.max_again){
+	if (isp_gain > jxh61_attr.max_again) {
 		isp_gain = jxh61_attr.max_again;
 	}
 	again = isp_gain;
@@ -230,7 +230,7 @@ static struct regval_list jxh61_init_regs_1280_720_25fps[] = {
 	{0x4a,0x03},
 	{0x49,0x10},
 	/* {0x12,0x00}, */
-	{JXH61_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /* static struct regval_list jxh61_init_version_80[] = { */
@@ -238,7 +238,7 @@ static struct regval_list jxh61_init_regs_1280_720_25fps[] = {
 /* 	{0x27,0x46}, */
 /* 	{0x2C,0x00}, */
 /* 	{0x63,0x19}, */
-/* 	{JXH61_REG_END, 0x00},	/\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x00},	/\* END MARKER *\/ */
 /* }; */
 
 /* static struct regval_list jxh61_init_version_81[] = { */
@@ -246,7 +246,7 @@ static struct regval_list jxh61_init_regs_1280_720_25fps[] = {
 /* 	{0x27,0x3c}, */
 /* 	{0x2C,0x04}, */
 /* 	{0x63,0x51}, */
-/* 	{JXH61_REG_END, 0x00},	/\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x00},	/\* END MARKER *\/ */
 /* }; */
 
 /*
@@ -255,12 +255,12 @@ static struct regval_list jxh61_init_regs_1280_720_25fps[] = {
 static struct tx_isp_sensor_win_setting jxh61_win_sizes[] = {
 	/* 1280*800 */
 	{
-		.width		= 1280,
-		.height		= 720,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxh61_init_regs_1280_720_25fps,
+		.width = 1280,
+		.height = 720,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = jxh61_init_regs_1280_720_25fps,
 	}
 };
 
@@ -271,14 +271,14 @@ static struct tx_isp_sensor_win_setting jxh61_win_sizes[] = {
 static struct regval_list jxh61_stream_on[] = {
 	{0x12, 0x00},
 
-	{JXH61_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh61_stream_off[] = {
 	/* Sensor enter LP11*/
 	{0x12, 0x40},
 
-	{JXH61_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxh61_read(struct v4l2_subdev *sd, unsigned char reg,
@@ -287,16 +287,16 @@ int jxh61_read(struct v4l2_subdev *sd, unsigned char reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -313,10 +313,10 @@ int jxh61_write(struct v4l2_subdev *sd, unsigned char reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -330,8 +330,8 @@ static int jxh61_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXH61_REG_END) {
-		if (vals->reg_num == JXH61_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			if (vals->value >= (1000 / HZ))
 				msleep(vals->value);
 			else
@@ -349,8 +349,8 @@ static int jxh61_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int jxh61_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXH61_REG_END) {
-		if (vals->reg_num == JXH61_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			if (vals->value >= (1000 / HZ))
 				msleep(vals->value);
 			else
@@ -379,7 +379,7 @@ static int jxh61_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
-	if (v != JXH61_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -387,7 +387,7 @@ static int jxh61_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
-	if (v != JXH61_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -427,7 +427,7 @@ static int jxh61_get_black_pedestal(struct v4l2_subdev *sd, int value)
 	ret = jxh61_read(sd, 0x48, &h);
 	if (ret < 0)
 		return ret;
-	switch(*v){
+	switch(*v) {
 		case SENSOR_R_BLACK_LEVEL:
 			black = (h & 0x3) << 8;
 			reg = 0x44;
@@ -463,7 +463,7 @@ static int jxh61_init(struct v4l2_subdev *sd, u32 enable)
 	int ret = 0;
 	unsigned char val;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -476,7 +476,7 @@ static int jxh61_init(struct v4l2_subdev *sd, u32 enable)
 	ret = jxh61_read(sd, 0x09, &val);
 	/* if (val == 0x00 || val == 0x80) */
 	/* 	jxh61_write_array(sd, jxh61_init_version_80); */
-	/* else if(val == 0x81) */
+	/* else if (val == 0x81) */
 	/* 	jxh61_write_array(sd, jxh61_init_version_81); */
 	/* if (ret) */
 	/* 	return ret; */
@@ -516,7 +516,7 @@ static int jxh61_set_fps(struct tx_isp_sensor *sensor, int fps)
 {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
-	unsigned int pclk = JXH61_SUPPORT_PCLK;
+	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
@@ -524,19 +524,19 @@ static int jxh61_set_fps(struct tx_isp_sensor *sensor, int fps)
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
 		return -1;
 	ret += jxh61_read(sd, 0x21, &tmp);
 	hts = tmp;
 	ret += jxh61_read(sd, 0x20, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	hts = (hts << 8) + tmp;
 	/*vts = (pclk << 4) / (hts * (newformat >> 4));*/
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = jxh61_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += jxh61_write(sd, 0x23, (unsigned char)(vts >> 8));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
@@ -554,20 +554,20 @@ static int jxh61_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &jxh61_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &jxh61_win_sizes[0];
 	}
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
-		if(sensor->priv != wsize){
+		if (sensor->priv != wsize) {
 			ret = jxh61_write_array(sd, wsize->regs);
-			if(!ret)
+			if (!ret)
 				sensor->priv = wsize;
 		}
 		sensor->video.fps = wsize->fps;
@@ -583,16 +583,16 @@ static int jxh61_g_chip_ident(struct v4l2_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"jxh61_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(1);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
@@ -627,7 +627,7 @@ static long jxh61_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pri
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 			ret = jxh61_set_integration_time(sd, ctrl->value);
 			break;
@@ -661,7 +661,7 @@ static long jxh61_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
 			ret = jxh61_ops_private_ioctl(sensor, arg);
 			break;
@@ -735,7 +735,7 @@ static int jxh61_probe(struct i2c_client *client,
 	int ret = -1;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -757,7 +757,7 @@ static int jxh61_probe(struct i2c_client *client,
 	 /*
 		convert sensor-gain into isp-gain,
 	 */
-	jxh61_attr.max_again = 	log2_fixed_to_fixed(jxh61_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	jxh61_attr.max_again = log2_fixed_to_fixed(jxh61_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	jxh61_attr.max_dgain = jxh61_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -782,9 +782,9 @@ static int jxh61_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -803,26 +803,26 @@ MODULE_DEVICE_TABLE(i2c, jxh61_id);
 
 static struct i2c_driver jxh61_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "jxh61",
+		.owner = THIS_MODULE,
+		.name = "jxh61",
 	},
-	.probe		= jxh61_probe,
-	.remove		= jxh61_remove,
-	.id_table	= jxh61_id,
+	.probe = jxh61_probe,
+	.remove = jxh61_remove,
+	.id_table = jxh61_id,
 };
 
-static __init int init_jxh61(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&jxh61_driver);
 }
 
-static __exit void exit_jxh61(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&jxh61_driver);
 }
 
-module_init(init_jxh61);
-module_exit(exit_jxh61);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision jxh61 sensors");
 MODULE_LICENSE("GPL");

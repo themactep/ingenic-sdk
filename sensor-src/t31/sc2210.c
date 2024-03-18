@@ -23,15 +23,15 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SC2210_CHIP_ID_H	(0x22)
-#define SC2210_CHIP_ID_L	(0x10)
-#define SC2210_REG_END		0xffff
-#define SC2210_REG_DELAY	0xfffe
-#define SC2210_SUPPORT_30FPS_1lane_SCLK (37125000)
-#define SC2210_SUPPORT_30FPS_2lane_SCLK (37125000)
+#define SENSOR_CHIP_ID_H (0x22)
+#define SENSOR_CHIP_ID_L (0x10)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_30FPS_1lane_SCLK (37125000)
+#define SENSOR_SUPPORT_30FPS_2lane_SCLK (37125000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220719a"
+#define SENSOR_VERSION "H20220719a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -68,7 +68,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc2210_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x340, 0},
 	{0x341, 1500},
 	{0x342, 2886},
@@ -437,20 +437,20 @@ struct again_lut sc2210_again_lut[] = {
 
 };
 
-struct tx_isp_sensor_attribute sc2210_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc2210_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = sc2210_again_lut;
-	while(lut->gain <= sc2210_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc2210_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -462,11 +462,11 @@ unsigned int sc2210_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sc2210_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
-struct tx_isp_mipi_bus sc2210_mipi1={
+struct tx_isp_mipi_bus sensor_mipi ={
 .mode = SENSOR_MIPI_OTHER_MODE,
 		.clk = 720,
 		.lans = 1,
@@ -495,7 +495,7 @@ struct tx_isp_mipi_bus sc2210_mipi1={
 		.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sc2210_mipi2={
+struct tx_isp_mipi_bus sensor_mipi ={
 .mode = SENSOR_MIPI_OTHER_MODE,
 		.clk = 371,
 		.lans = 2,
@@ -524,7 +524,7 @@ struct tx_isp_mipi_bus sc2210_mipi2={
 		.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute sc2210_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "sc2210",
 	.chip_id = 0x2210,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -545,11 +545,11 @@ struct tx_isp_sensor_attribute sc2210_attr={
 	.integration_time_apply_delay = 6,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = sc2210_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc2210_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list sc2210_init_regs_1920_1080_30fps_mipi_1lane[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_1lane[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -963,10 +963,10 @@ static struct regval_list sc2210_init_regs_1920_1080_30fps_mipi_1lane[] = {
 	{0x36e9, 0x20},
 	{0x36f9, 0x59},
 	{0x0100, 0x01},
-	{SC2210_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc2210_init_regs_1920_1080_30fps_mipi_2lane[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2lane[] = {
 	{0x0103,0x01},
 	{0x0100,0x00},
 	{0x36e9,0x80},
@@ -1223,55 +1223,55 @@ static struct regval_list sc2210_init_regs_1920_1080_30fps_mipi_2lane[] = {
 	{0x36f9,0x53},
 	{0x0100,0x01},
 
-	{SC2210_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting sc2210_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc2210_init_regs_1920_1080_30fps_mipi_1lane,
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi_1lane,
 	},
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc2210_init_regs_1920_1080_30fps_mipi_2lane,
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi_2lane,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &sc2210_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list sc2210_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SC2210_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc2210_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SC2210_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int sc2210_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -1282,15 +1282,15 @@ int sc2210_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sc2210_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -1300,15 +1300,15 @@ int sc2210_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	return ret;
 }
 
-static int sc2210_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC2210_REG_END) {
-		if (vals->reg_num == SC2210_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc2210_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1318,14 +1318,14 @@ static int sc2210_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int sc2210_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC2210_REG_END) {
-		if (vals->reg_num == SC2210_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc2210_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1335,45 +1335,45 @@ static int sc2210_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sc2210_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int sc2210_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
 	unsigned char v;
 
-	ret = sc2210_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC2210_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc2210_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC2210_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int sc2210_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = (value & 0xffff) * 1;
 	int again = (value & 0xffff0000) >> 16;
-	ret += sc2210_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-	ret += sc2210_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	ret += sc2210_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-	ret = sc2210_write(sd, 0x3e09, (unsigned char)(again & 0xff));
-	ret += sc2210_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 
 	if (ret < 0)
 		return ret;
@@ -1382,14 +1382,14 @@ static int sc2210_set_expo(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 #if 0
-static int sc2210_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
 	value *= 2;
-	ret += sc2210_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
-	ret += sc2210_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc2210_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	if (ret < 0)
 		return ret;
@@ -1397,12 +1397,12 @@ static int sc2210_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sc2210_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += sc2210_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc2210_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
 //	gain_val = value;
@@ -1410,35 +1410,35 @@ static int sc2210_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sc2210_set_logic(struct tx_isp_subdev *sd, int value)
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 	unsigned char reg0;
 	unsigned int ret = 0;
 
 	/* analog gain setting logic */
-	ret = sc2210_read(sd, 0x3040, &reg0);
+	ret = sensor_read(sd, 0x3040, &reg0);
 	if (0x40 == reg0) {
 		if (gain_val < 0x740) {
-			ret += sc2210_write(sd, 0x363c, 0x0e);
+			ret += sensor_write(sd, 0x363c, 0x0e);
 		} else if (gain_val >= 0x740) {
-			ret += sc2210_write(sd, 0x363c, 0x07);
+			ret += sensor_write(sd, 0x363c, 0x07);
 		}
 	} else if (0x41 == reg0) {
 		if (gain_val < 0x740) {
-			ret += sc2210_write(sd, 0x363c, 0x0f);
+			ret += sensor_write(sd, 0x363c, 0x0f);
 		} else if (gain_val >= 0x740) {
-			ret += sc2210_write(sd, 0x363c, 0x07);
+			ret += sensor_write(sd, 0x363c, 0x07);
 		}
 	} else {
-		ret += sc2210_write(sd, 0x363c, 0x07);
+		ret += sensor_write(sd, 0x363c, 0x07);
 	}
 	if (gain_val >= 0xf60) { //6x
-		ret += sc2210_write(sd, 0x5799, 0x7);
+		ret += sensor_write(sd, 0x5799, 0x7);
 		dpc_flag = 2;
 	}
 	else if (gain_val <= 0xf40) {//4x
-		ret += sc2210_write(sd, 0x5799, 0x00);
+		ret += sensor_write(sd, 0x5799, 0x00);
 	}
 	if (ret < 0)
 		return ret;
@@ -1447,22 +1447,22 @@ static int sc2210_set_logic(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc2210_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc2210_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc2210_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -1472,7 +1472,7 @@ static int sc2210_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-	ret = sc2210_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1481,22 +1481,22 @@ static int sc2210_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int sc2210_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc2210_write_array(sd, sc2210_stream_on_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("sc2210 stream on\n");
 	}
 	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc2210_write_array(sd, sc2210_stream_off_mipi);
-		}else{
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("sc2210 stream off\n");
@@ -1505,7 +1505,7 @@ static int sc2210_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int sc2210_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -1516,31 +1516,31 @@ static int sc2210_set_fps(struct tx_isp_subdev *sd, int fps)
 	int ret = 0;
 
 	if (lans == 1) {
-		sclk = SC2210_SUPPORT_30FPS_1lane_SCLK;
+		sclk = SENSOR_SUPPORT_30FPS_1lane_SCLK;
 	} else if (lans == 2) {
-		sclk = SC2210_SUPPORT_30FPS_2lane_SCLK;
+		sclk = SENSOR_SUPPORT_30FPS_2lane_SCLK;
 	} else {
 		ISP_ERROR("do not support max framerate %d in mipi mode\n",lans);
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	ret = sc2210_read(sd, 0x320c, &tmp);
+	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
-	ret += sc2210_read(sd, 0x320d, &tmp);
+	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: sc2210 read err\n");
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sc2210_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sc2210_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret = sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sc2210_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1553,12 +1553,12 @@ static int sc2210_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int sc2210_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1571,37 +1571,37 @@ static int sc2210_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc2210_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc2210_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc2210_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = sc2210_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc2210 chip.\n",
 			  client->addr, client->adapter->name);
@@ -1609,7 +1609,7 @@ static int sc2210_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("sc2210 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "sc2210", sizeof("sc2210"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1619,90 +1619,90 @@ static int sc2210_g_chip_ident(struct tx_isp_subdev *sd,
 }
 
 #if 1
-static int sc2210_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret += sc2210_read(sd, 0x3221, &val);
+	ret += sensor_read(sd, 0x3221, &val);
 
-	if(enable & 0x2)
-		val |= 0x60;
+	if (enable & 0x2)
+		val = 0x60;
 	else
 		val &= 0x9f;
 
-	ret += sc2210_write(sd, 0x3221, val);
+	ret += sensor_write(sd, 0x3221, val);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
 #endif
 
-static int sc2210_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-	     	ret = sc2210_set_expo(sd, *(int*)arg);
+		if (arg)
+	     	ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 /*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = sc2210_set_integration_time(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = sc2210_set_analog_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = sc2210_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = sc2210_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = sc2210_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc2210_write_array(sd, sc2210_stream_off_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc2210_write_array(sd, sc2210_stream_on_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = sc2210_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = sc2210_set_vflip(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_vflip(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-//		if(arg)
-//			ret = sc2210_set_logic(sd, *(int*)arg);
+//		if (arg)
+//			ret = sensor_set_logic(sd, *(int*)arg);
 		break;
 	default:
 		break;
@@ -1711,62 +1711,62 @@ static int sc2210_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int sc2210_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc2210_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc2210_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
-	sc2210_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops sc2210_core_ops = {
-	.g_chip_ident = sc2210_g_chip_ident,
-	.reset = sc2210_reset,
-	.init = sc2210_init,
-	/*.ioctl = sc2210_ops_ioctl,*/
-	.g_register = sc2210_g_register,
-	.s_register = sc2210_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc2210_video_ops = {
-	.s_stream = sc2210_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc2210_sensor_ops = {
-	.ioctl	= sc2210_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops sc2210_ops = {
-	.core = &sc2210_core_ops,
-	.video = &sc2210_video_ops,
-	.sensor = &sc2210_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1782,14 +1782,14 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int sc2210_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1807,31 +1807,31 @@ static int sc2210_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	if (lans == 1) {
-		wsize = &sc2210_win_sizes[0];
-		memcpy((void*)(&(sc2210_attr.mipi)),(void*)(&sc2210_mipi1),sizeof(sc2210_mipi1));
-		sc2210_attr.max_integration_time_native = 0x465 - 4;
-		sc2210_attr.integration_time_limit = 0x465 - 4;
-		sc2210_attr.total_width = 0x44c;
-		sc2210_attr.total_height = 0x465;
-		sc2210_attr.max_integration_time = 0x465 - 4;
+		wsize = &sensor_win_sizes[0];
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi1),sizeof(sensor_mipi1));
+		sensor_attr.max_integration_time_native = 0x465 - 4;
+		sensor_attr.integration_time_limit = 0x465 - 4;
+		sensor_attr.total_width = 0x44c;
+		sensor_attr.total_height = 0x465;
+		sensor_attr.max_integration_time = 0x465 - 4;
 	} else if (lans == 2) {
-		wsize = &sc2210_win_sizes[1];
-		memcpy((void*)(&(sc2210_attr.mipi)),(void*)(&sc2210_mipi2),sizeof(sc2210_mipi2));
-		sc2210_attr.max_integration_time_native = 0x465 - 4;
-		sc2210_attr.integration_time_limit = 0x465 - 4;
-		sc2210_attr.total_width = 0x44c;
-		sc2210_attr.total_height = 0x465;
-		sc2210_attr.max_integration_time = 0x465 - 4;
+		wsize = &sensor_win_sizes[1];
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi2),sizeof(sensor_mipi2));
+		sensor_attr.max_integration_time_native = 0x465 - 4;
+		sensor_attr.integration_time_limit = 0x465 - 4;
+		sensor_attr.total_width = 0x44c;
+		sensor_attr.total_height = 0x465;
+		sensor_attr.max_integration_time = 0x465 - 4;
 	} else {
 		ISP_ERROR("Can not support this data type!!!\n");
 	}
-	sc2210_attr.dbus_type = data_interface;//
-	sc2210_attr.max_again = 377274;//
-	sc2210_attr.max_dgain = 0;//
+	sensor_attr.dbus_type = data_interface;//
+	sensor_attr.max_again = 377274;//
+	sensor_attr.max_dgain = 0;//
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &sc2210_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1840,7 +1840,7 @@ static int sc2210_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc2210_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1857,14 +1857,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc2210_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1875,40 +1875,40 @@ static int sc2210_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc2210_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "sc2210", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, sc2210_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc2210_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc2210",
+		.owner = THIS_MODULE,
+		.name = "sc2210",
 	},
-	.probe		= sc2210_probe,
-	.remove		= sc2210_remove,
-	.id_table	= sc2210_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_sc2210(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init sc2210 driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&sc2210_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sc2210(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&sc2210_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_sc2210);
-module_exit(exit_sc2210);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for SmartSens sc2210 sensors");
 MODULE_LICENSE("GPL");

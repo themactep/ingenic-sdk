@@ -24,15 +24,15 @@
 #include <txx-funcs.h>
 #include <fix-point-calc.h>
 
-#define HI556_CHIP_ID_H	(0x05)
-#define HI556_CHIP_ID_L	(0x56)
-#define HI556_REG_END	0xffff
-#define HI556_REG_DELAY	0xfffe
+#define SENSOR_CHIP_ID_H (0x05)
+#define SENSOR_CHIP_ID_L (0x56)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define HI556_SUPPORT_SCLK_FPS_30 (175887360)
+#define SENSOR_SUPPORT_SCLK_FPS_30 (175887360)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220526a"
+#define SENSOR_VERSION "H20220526a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -49,12 +49,12 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
-struct again_lut hi556_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 };
 
-struct tx_isp_sensor_attribute hi556_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int hi556_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
 {
 	unsigned int expo = it >> shift;
 
@@ -63,7 +63,7 @@ unsigned int hi556_alloc_integration_time(unsigned int it, unsigned char shift, 
 	return it;
 }
 
-unsigned int hi556_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it)
+unsigned int sensor_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it)
 {
 	unsigned int expo = it >> shift;
 
@@ -72,23 +72,23 @@ unsigned int hi556_alloc_integration_time_short(unsigned int it, unsigned char s
 	return it;
 }
 
-unsigned int hi556_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
         *sensor_again = (tisp_math_exp2(isp_gain, 16, 16) - (1 << 16)) >> 12;
 	return tisp_log2_fixed_to_fixed(fix_point_div_32(16, *sensor_again, 16) + (1 << 16), 16, 16);
 }
 
-unsigned int hi556_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	return isp_gain;
 }
 
-unsigned int hi556_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute hi556_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "hi556",
 	.chip_id = 0x0556,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -142,12 +142,12 @@ struct tx_isp_sensor_attribute hi556_attr={
 	.integration_time = 0x8200000,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again_short = hi556_alloc_again_short,
-	.sensor_ctrl.alloc_again = hi556_alloc_again,
-	.sensor_ctrl.alloc_dgain = hi556_alloc_dgain,
+	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list hi556_init_regs_2592_1944_25fps[] = {
+static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 /* [SENSOR_INITIALIZATION] */
 /* DISP_DATE = "2016-05-03 10:00:00" */
 /* DISP_FORMAT = BAYER10_MIPI */
@@ -158,12 +158,12 @@ static struct regval_list hi556_init_regs_2592_1944_25fps[] = {
 /* V05_20161020 */
 
 /* [SENSOR_RES_MOD] */
-/* DISP_WIDTH =        2592 */
-/* DISP_HEIGHT =        1944 */
-/* DISP_NOTE =  "2592x1944_30fps" */
+/* DISP_WIDTH = 2592 */
+/* DISP_HEIGHT = 1944 */
+/* DISP_NOTE = "2592x1944_30fps" */
 /* MIPI_SPEED = 880.0 */
 /* BEGIN */
-/* I2C_BYTE  = 0x22 */
+/* I2C_BYTE = 0x22 */
 
 /* Sensor Information//////////////////////////// */
 /* Sensor	  : Hi-556 */
@@ -441,57 +441,57 @@ static struct regval_list hi556_init_regs_2592_1944_25fps[] = {
         {0x091e, 0x0a00},
         {0x0958, 0xbb80},
 
-	{HI556_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
- * the order of the hi556_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting hi556_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 2592*1944 @30fps*/
 	{
-		.width		= 2592,
-		.height		= 1944,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SGBRG10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= hi556_init_regs_2592_1944_25fps,
+		.width = 2592,
+		.height = 1944,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_2592_1944_25fps,
 	},
 };
 
-static struct tx_isp_sensor_win_setting *wsize = &hi556_win_sizes[0];
+static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 /*
  * the part of driver was fixed.
  */
 
-static struct regval_list hi556_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x0a00, 0x0100},
-	{HI556_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list hi556_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x0a00, 0x0000},
-	{HI556_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int hi556_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
                uint8_t *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -503,16 +503,16 @@ int hi556_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int hi556_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
                 uint16_t value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[4] = {(char)((reg >> 8) & 0xff), (char)(reg & 0xff), (char)((value >> 8) & 0xff), (char)(value & 0xff)};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 4,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 4,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -522,16 +522,16 @@ int hi556_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int hi556_write_8(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write_8(struct tx_isp_subdev *sd, uint16_t reg,
 		  uint8_t value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(char)((reg >> 8) & 0xff), (char)(reg & 0xff), value & 0xff};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -542,15 +542,15 @@ int hi556_write_8(struct tx_isp_subdev *sd, uint16_t reg,
 }
 
 #if 0
-static int hi556_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != HI556_REG_END) {
-		if (vals->reg_num == HI556_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = hi556_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -561,14 +561,14 @@ static int hi556_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int hi556_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != HI556_REG_END) {
-		if (vals->reg_num == HI556_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = hi556_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -577,76 +577,76 @@ static int hi556_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int hi556_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int hi556_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	uint8_t v;
 	int ret;
 
-	ret = hi556_read(sd, 0xf16, &v);
+	ret = sensor_read(sd, 0xf16, &v);
 	pr_debug("-----%s: %d ret = %d,  v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != HI556_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = hi556_read(sd, 0xf17, &v);
+	ret = sensor_read(sd, 0xf17, &v);
 	pr_debug("-----%s: %d ret = %d,  v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != HI556_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int hi556_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int expo = value;
 
-	ret += hi556_write_8(sd, 0x0075, (unsigned char)(expo & 0xff));
-	ret += hi556_write_8(sd, 0x0074, (unsigned char)((expo >> 8) & 0xff));
-	ret += hi556_write_8(sd, 0x0073, (unsigned char)((expo >> 16) & 0xff));
+	ret += sensor_write_8(sd, 0x0075, (unsigned char)(expo & 0xff));
+	ret += sensor_write_8(sd, 0x0074, (unsigned char)((expo >> 8) & 0xff));
+	ret += sensor_write_8(sd, 0x0073, (unsigned char)((expo >> 16) & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int hi556_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += hi556_write_8(sd, 0x0077, (unsigned char)((value & 0xff)));
+	ret += sensor_write_8(sd, 0x0077, (unsigned char)((value & 0xff)));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int hi556_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int hi556_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int hi556_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -662,37 +662,37 @@ static int hi556_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int hi556_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
-			ret = hi556_write_array(sd, wsize->regs);
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			ret = hi556_write_array(sd, hi556_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 			pr_debug("hi556 stream on\n");
 		}
 	}
 	else {
-		ret = hi556_write_array(sd, hi556_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("hi556 stream off\n");
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 	return ret;
 }
 
-static int hi556_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = HI556_SUPPORT_SCLK_FPS_30;
+	unsigned int sclk = SENSOR_SUPPORT_SCLK_FPS_30;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
@@ -700,16 +700,16 @@ static int hi556_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 
-	ret += hi556_read(sd, 0x0008, &val);
+	ret += sensor_read(sd, 0x0008, &val);
 	hts = val<<8;
 	val = 0;
-	ret += hi556_read(sd, 0x0009, &val);
-	hts |= val;
+	ret += sensor_read(sd, 0x0009, &val);
+	hts = val;
 	if (0 != ret) {
 		ISP_ERROR("err: hi556 read err\n");
 		return ret;
@@ -717,14 +717,14 @@ static int hi556_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	/* ret = hi556_write(sd, 0x3208, 0x02); */
-	ret += hi556_write(sd, 0x0007, vts & 0xff);
-	ret += hi556_write(sd, 0x0006, (vts >> 8) & 0xff);
-	/* ret += hi556_write(sd, 0x3208, 0x12); */
-	/* ret += hi556_write(sd, 0x320d, 0x00); */
-	/* ret += hi556_write(sd, 0x3208, 0xe2); */
+	/* ret = sensor_write(sd, 0x3208, 0x02); */
+	ret += sensor_write(sd, 0x0007, vts & 0xff);
+	ret += sensor_write(sd, 0x0006, (vts >> 8) & 0xff);
+	/* ret += sensor_write(sd, 0x3208, 0x12); */
+	/* ret += sensor_write(sd, 0x320d, 0x00); */
+	/* ret += sensor_write(sd, 0x3208, 0xe2); */
 	if (0 != ret) {
-		ISP_ERROR("err: hi556_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -737,12 +737,12 @@ static int hi556_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int hi556_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -760,23 +760,23 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned long rate;
 
-	switch(info->video_interface){
+	switch(info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
-		hi556_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		hi556_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_MIPI_CSI1:
-		hi556_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		hi556_attr.mipi.index = 1;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 1;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		hi556_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
 		set_sensor_mclk_function(0);
@@ -810,45 +810,45 @@ err_get_mclk:
 	return -1;
 }
 
-static int hi556_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
                               struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"hi556_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(15);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"hi556_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = hi556_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an hi556 chip.\n",
 			  client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_WARNING("hi556 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "hi556", sizeof("hi556"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -856,47 +856,47 @@ static int hi556_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int hi556_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = hi556_set_integration_time(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = hi556_set_analog_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = hi556_set_digital_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = hi556_get_black_pedestal(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = hi556_set_mode(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if(arg)
-			ret = hi556_write_array(sd, hi556_stream_off);
+		if (arg)
+			ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if(arg)
-			ret = hi556_write_array(sd, hi556_stream_on);
+		if (arg)
+			ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = hi556_set_fps(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	default:
 		break;;
@@ -905,59 +905,59 @@ static int hi556_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	return ret;
 }
 
-static int hi556_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = hi556_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int hi556_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	hi556_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops hi556_core_ops = {
-	.g_chip_ident = hi556_g_chip_ident,
-	.reset = hi556_reset,
-	.init = hi556_init,
-	/*.ioctl = hi556_ops_ioctl,*/
-	.g_register = hi556_g_register,
-	.s_register = hi556_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops hi556_video_ops = {
-	.s_stream = hi556_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	hi556_sensor_ops = {
-	.ioctl	= hi556_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops hi556_ops = {
-	.core = &hi556_core_ops,
-	.video = &hi556_video_ops,
-	.sensor = &hi556_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -973,7 +973,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int hi556_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
                        const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
@@ -981,7 +981,7 @@ static int hi556_probe(struct i2c_client *client,
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -989,7 +989,7 @@ static int hi556_probe(struct i2c_client *client,
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &hi556_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -998,7 +998,7 @@ static int hi556_probe(struct i2c_client *client,
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &hi556_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1007,14 +1007,14 @@ static int hi556_probe(struct i2c_client *client,
 	return 0;
 }
 
-static int hi556_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1025,34 +1025,34 @@ static int hi556_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id hi556_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "hi556", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, hi556_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver hi556_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "hi556",
+		.owner = THIS_MODULE,
+		.name = "hi556",
 	},
-	.probe		= hi556_probe,
-	.remove		= hi556_remove,
-	.id_table	= hi556_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_hi556(void)
+static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&hi556_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_hi556(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&hi556_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_hi556);
-module_exit(exit_hi556);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision hi556 sensors");
 MODULE_LICENSE("GPL");

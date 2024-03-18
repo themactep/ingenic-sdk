@@ -22,17 +22,17 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define OV2740_CHIP_ID_H	(0x27)
-#define OV2740_CHIP_ID_L	(0x40)
+#define SENSOR_CHIP_ID_H (0x27)
+#define SENSOR_CHIP_ID_L (0x40)
 
-#define OV2740_REG_END		0xffff
-#define OV2740_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define OV2740_SUPPORT_SCLK_MIPI (0x870 * 0x460 * 30)
+#define SENSOR_SUPPORT_SCLK_MIPI (0x870 * 0x460 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
-#define SENSOR_VERSION	"H20220517a"
+#define SENSOR_VERSION "H20220517a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -49,7 +49,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
-struct again_lut ov2740_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x84, 3344},
 	{0x89, 6485},
@@ -200,23 +200,23 @@ struct again_lut ov2740_again_lut[] = {
 	{0x7c0, 259142},
 };
 
-struct tx_isp_sensor_attribute ov2740_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int ov2740_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = ov2740_again_lut;
+	struct again_lut *lut = sensor_again_lut;
 
-	while(lut->gain <= ov2740_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut->value;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == ov2740_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -228,12 +228,12 @@ unsigned int ov2740_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int ov2740_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_mipi_bus ov2740_mipi_linear = {
+struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.clk = 370,
 	.lans = 2,
 	.settle_time_apative_en = 0,
@@ -261,7 +261,7 @@ struct tx_isp_mipi_bus ov2740_mipi_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute ov2740_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "ov2740",
 	.chip_id = 0x2740,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -275,11 +275,11 @@ struct tx_isp_sensor_attribute ov2740_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = ov2740_alloc_again,
-	.sensor_ctrl.alloc_dgain = ov2740_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list ov2740_init_regs_1920_1080_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0103,0x01},
 	{0x0302,0x1e},
 	{0x0303,0x01},
@@ -422,34 +422,34 @@ static struct regval_list ov2740_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5901,0x00},
 	{0x0100,0x01},
 
-	{OV2740_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
- * the order of the ov2740_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting ov2740_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080_mipi*/
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= ov2740_init_regs_1920_1080_30fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &ov2740_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list ov2740_stream_on_mipi[] = {
-	{OV2740_REG_END, 0x00},	/* END MARKER */
+static struct regval_list sensor_stream_on_mipi[] = {
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list ov2740_stream_off_mipi[] = {
-	{OV2740_REG_END, 0x00},	/* END MARKER */
+static struct regval_list sensor_stream_off_mipi[] = {
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int ov2740_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 	unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -457,16 +457,16 @@ int ov2740_read(struct tx_isp_subdev *sd, uint16_t reg,
 	int ret;
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 
@@ -477,15 +477,15 @@ int ov2740_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-static int ov2740_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
+static int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 
 	int ret;
@@ -497,15 +497,15 @@ static int ov2740_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char va
 }
 
 #if 0
-static int ov2740_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OV2740_REG_END) {
-		if (vals->reg_num == OV2740_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = ov2740_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -516,14 +516,14 @@ static int ov2740_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int ov2740_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != OV2740_REG_END) {
-		if (vals->reg_num == OV2740_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = ov2740_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -532,66 +532,66 @@ static int ov2740_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int ov2740_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int ov2740_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
-	ret = ov2740_read(sd, 0x300b, &v);
+	ret = sensor_read(sd, 0x300b, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2740_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = ov2740_read(sd, 0x300c, &v);
+	ret = sensor_read(sd, 0x300c, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2740_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int ov2740_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 
 	int ret = 0;
 	unsigned int expo = value << 4;
 
-	ret = ov2740_write(sd, 0x3502, (unsigned char)(expo & 0xff));
-	ret += ov2740_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
-	ret += ov2740_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xf));
+	ret = sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xf));
 	if (ret < 0)
 		return ret;
 	return 0;
 }
 
-static int ov2740_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = -1;
 
-	ret = ov2740_write(sd, 0x3509, (unsigned char)(value & 0xff));
-	ret += ov2740_write(sd, 0x3508, (unsigned char)((value >> 8) & 0xff));
+	ret = sensor_write(sd, 0x3509, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3508, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int ov2740_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int ov2740_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
@@ -612,12 +612,12 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int ov2740_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor_set_attr(sd, wsize);
@@ -628,26 +628,26 @@ static int ov2740_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int ov2740_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
-			ret = ov2740_write_array(sd, wsize->regs);
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
-		if(sensor->video.state == TX_ISP_MODULE_INIT){
+		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 
-			ret = ov2740_write_array(sd, ov2740_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 			ISP_WARNING("ov2740 stream on\n");
 		}
 	} else {
-		ret = ov2740_write_array(sd, ov2740_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_WARNING("ov2740 stream off\n");
 	}
@@ -655,7 +655,7 @@ static int ov2740_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	return ret;
 }
 
-static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -668,22 +668,22 @@ static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 
-	switch(info->default_boot){
+	switch(info->default_boot) {
 		case 0:
-			sclk = OV2740_SUPPORT_SCLK_MIPI;
+			sclk = SENSOR_SUPPORT_SCLK_MIPI;
 			break;
 		default:
 			ISP_ERROR("Have no this setting!!!\n");
 	}
 
-	ret += ov2740_read(sd, 0x380c, &val);
+	ret += sensor_read(sd, 0x380c, &val);
 	hts = val;
-	ret += ov2740_read(sd, 0x380d, &val);
+	ret += sensor_read(sd, 0x380d, &val);
 	if (0 != ret) {
 		ISP_ERROR("err: ov2740 read err\n");
 		return ret;
@@ -691,10 +691,10 @@ static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = ((hts << 8) + val);
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret += ov2740_write(sd, 0x380f, vts & 0xff);
-	ret += ov2740_write(sd, 0x380e, (vts >> 8) & 0xff);
+	ret += sensor_write(sd, 0x380f, vts & 0xff);
+	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	if (0 != ret) {
-		ISP_ERROR("err: ov2740_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -708,12 +708,12 @@ static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int ov2740_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
@@ -722,21 +722,21 @@ static int ov2740_set_mode(struct tx_isp_subdev *sd, int value)
 }
 
 #if 0
-static int ov2740_frame_sync(struct tx_isp_subdev *sd, struct tx_isp_frame_sync *sync)
+static int sensor_frame_sync(struct tx_isp_subdev *sd, struct tx_isp_frame_sync *sync)
 {
-	ov2740_write(sd, 0x381d, 0x00);
+	sensor_write(sd, 0x381d, 0x00);
 	private_msleep(1);
-	ov2740_write(sd, 0x3816, 0x00);
+	sensor_write(sd, 0x3816, 0x00);
 	private_msleep(1);
-	ov2740_write(sd, 0x3817, 0x00);
+	sensor_write(sd, 0x3817, 0x00);
 	private_msleep(1);
-	ov2740_write(sd, 0x3818, 0x00);
+	sensor_write(sd, 0x3818, 0x00);
 	private_msleep(1);
-	ov2740_write(sd, 0x3819, 0x01);
+	sensor_write(sd, 0x3819, 0x01);
 	private_msleep(1);
-	ov2740_write(sd, 0x3001, 0x04);
+	sensor_write(sd, 0x3001, 0x04);
 	private_msleep(1);
-	ov2740_write(sd, 0x3007, 0x44);
+	sensor_write(sd, 0x3007, 0x44);
 	private_msleep(1);
 
 	return 0;
@@ -752,42 +752,42 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	int ret = 0;
 
-	switch(info->default_boot){
+	switch(info->default_boot) {
 	case 0:
-		wsize = &ov2740_win_sizes[0];
-		memcpy(&ov2740_attr.mipi, &ov2740_mipi_linear, sizeof(ov2740_mipi_linear));
-		ov2740_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		ov2740_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-		ov2740_attr.max_integration_time_native = 1340,
-		ov2740_attr.integration_time_limit = 1340,
-		ov2740_attr.total_width = 2160,
-		ov2740_attr.total_height = 1344,
-		ov2740_attr.max_integration_time = 1340,
-		ov2740_attr.one_line_expr_in_us = 30;
-	        ov2740_attr.again = 0x80;
-                ov2740_attr.integration_time = 0x4440;
+		wsize = &sensor_win_sizes[0];
+		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
+		sensor_attr.max_integration_time_native = 1340,
+		sensor_attr.integration_time_limit = 1340,
+		sensor_attr.total_width = 2160,
+		sensor_attr.total_height = 1344,
+		sensor_attr.max_integration_time = 1340,
+		sensor_attr.one_line_expr_in_us = 30;
+	        sensor_attr.again = 0x80;
+                sensor_attr.integration_time = 0x4440;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 	}
 
-	switch(info->video_interface){
+	switch(info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
-		ov2740_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		ov2740_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_MIPI_CSI1:
-		ov2740_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		ov2740_attr.mipi.index = 1;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 1;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		ov2740_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 		sclka = private_devm_clk_get(&client->dev, "mux_cim0");
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
@@ -827,7 +827,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int ov2740_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -835,32 +835,32 @@ static int ov2740_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"ov2740_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"ov2740_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
 
-		ret = ov2740_detect(sd, &ident);
+		ret = sensor_detect(sd, &ident);
 
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an ov2740 chip.\n",
@@ -868,52 +868,52 @@ static int ov2740_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	ISP_WARNING("ov2740 chip found @ 0x%02x (%s) version %s \n", client->addr, client->adapter->name, SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "ov2740", sizeof("ov2740"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
 	return 0;
 }
-static int ov2740_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = ov2740_set_integration_time(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = ov2740_set_analog_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = ov2740_set_digital_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = ov2740_get_black_pedestal(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = ov2740_set_mode(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = ov2740_write_array(sd, ov2740_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = ov2740_write_array(sd, ov2740_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = ov2740_set_fps(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -922,61 +922,61 @@ static int ov2740_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int ov2740_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = ov2740_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int ov2740_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ov2740_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops ov2740_core_ops = {
-	.g_chip_ident = ov2740_g_chip_ident,
-	.reset = ov2740_reset,
-	.init = ov2740_init,
-//	.fsync = ov2740_frame_sync,
-	.g_register = ov2740_g_register,
-	.s_register = ov2740_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+//	.fsync = sensor_frame_sync,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops ov2740_video_ops = {
-	.s_stream = ov2740_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	ov2740_sensor_ops = {
-	.ioctl	= ov2740_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops ov2740_ops = {
-	.core = &ov2740_core_ops,
-	.video = &ov2740_video_ops,
-	.sensor = &ov2740_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -992,7 +992,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int ov2740_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
@@ -1000,7 +1000,7 @@ static int ov2740_probe(struct i2c_client *client,
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1008,8 +1008,8 @@ static int ov2740_probe(struct i2c_client *client,
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &ov2740_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &ov2740_ops);
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1019,14 +1019,14 @@ static int ov2740_probe(struct i2c_client *client,
 	return 0;
 }
 
-static int ov2740_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1037,34 +1037,34 @@ static int ov2740_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id ov2740_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "ov2740", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, ov2740_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver ov2740_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "ov2740",
+		.owner = THIS_MODULE,
+		.name = "ov2740",
 	},
-	.probe		= ov2740_probe,
-	.remove		= ov2740_remove,
-	.id_table	= ov2740_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_ov2740(void)
+static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&ov2740_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_ov2740(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&ov2740_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_ov2740);
-module_exit(exit_ov2740);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision ov2740 sensors");
 MODULE_LICENSE("GPL");

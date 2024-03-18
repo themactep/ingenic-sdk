@@ -24,17 +24,17 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC032A_CHIP_ID_H	(0x23)
-#define GC032A_CHIP_ID_L	(0x2a)
+#define SENSOR_CHIP_ID_H (0x23)
+#define SENSOR_CHIP_ID_L (0x2a)
 
-#define GC032A_FLAG_END		0x00
-#define GC032A_FLAG_DELAY	0xff
+#define SENSOR_FLAG_END 0x00
+#define SENSOR_FLAG_DELAY 0xff
 
-#define GC032A_SUPPORT_PCLK (16970760)
+#define SENSOR_SUPPORT_PCLK (16970760)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION	"H20200116a"
+#define SENSOR_VERSION "H20200116a"
 
 struct regval_list {
 	unsigned char reg_num;
@@ -57,7 +57,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut gc032a_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x20, 0},
 	{0x21, 2909},
 	{0x22, 5731},
@@ -285,23 +285,23 @@ struct again_lut gc032a_again_lut[] = {
 
 };
 
-struct tx_isp_sensor_attribute gc032a_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int gc032a_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = gc032a_again_lut;
+	struct again_lut *lut = sensor_again_lut;
 
-	while(lut->gain <= gc032a_attr.max_again) {
-		if(isp_gain == gc032a_attr.max_again) {
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == sensor_attr.max_again) {
 			*sensor_again = lut->value;
 			return lut->gain;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if(lut->gain == gc032a_attr.max_again) {
+		else {
+			if (lut->gain == sensor_attr.max_again) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -313,7 +313,7 @@ unsigned int gc032a_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int gc032a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
@@ -321,7 +321,7 @@ unsigned int gc032a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
  * the part of driver maybe modify about different sensor and different board.
  */
 
-struct tx_isp_sensor_attribute gc032a_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "gc032a",
 	.chip_id = 0x9b,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -348,11 +348,11 @@ struct tx_isp_sensor_attribute gc032a_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = gc032a_alloc_again,
-	.sensor_ctrl.alloc_dgain = gc032a_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list gc032a_init_regs_640_480[] = {
+static struct regval_list sensor_init_regs_640_480[] = {
 	{0xfe, 0xf0},
 	{0xf3, 0xff},
 	{0xf5, 0x06},
@@ -428,20 +428,20 @@ static struct regval_list gc032a_init_regs_640_480[] = {
 	/*AEC*/
 	{0xfe, 0x00},
 	{0x4f, 0x00},
-	{GC032A_FLAG_END,  0x00},/* END MARKER */
+	{SENSOR_FLAG_END,  0x00},/* END MARKER */
 };
 
 /*
- * the order of the gc032a_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting gc032a_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
-		.width		= 640,
-		.height		= 480,
-		.fps		= 25 << 16|1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB8_1X8,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= gc032a_init_regs_640_480,
+		.width = 640,
+		.height = 480,
+		.fps = 25 << 16|1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB8_1X8,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_640_480,
 	}
 };
 
@@ -449,33 +449,33 @@ static struct tx_isp_sensor_win_setting gc032a_win_sizes[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list gc032a_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x00},
 	{0x44, 0xb8},
-	{GC032A_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list gc032a_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0xfe, 0x00},
-	{GC032A_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
-int gc032a_read(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -487,16 +487,16 @@ int gc032a_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-static int gc032a_write(struct tx_isp_subdev *sd, unsigned char reg,
+static int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -507,36 +507,36 @@ static int gc032a_write(struct tx_isp_subdev *sd, unsigned char reg,
 }
 
 
-static int gc032a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC032A_FLAG_END) {
-		if(vals->reg_num == GC032A_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = gc032a_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			//			if (vals->reg_num == GC032A_PAGE_REG){
+			//			if (vals->reg_num == SENSOR_PAGE_REG) {
 			//				val &= 0xf8;
-			//				val |= (vals->value & 0x07);
-			//				ret = gc032a_write(sd, vals->reg_num, val);
-			//				ret = gc032a_read(sd, vals->reg_num, &val);
+			//				val = (vals->value & 0x07);
+			//				ret = sensor_write(sd, vals->reg_num, val);
+			//				ret = sensor_read(sd, vals->reg_num, &val);
 			//			}
 		}
 		vals++;
 	}
 	return 0;
 }
-static int gc032a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC032A_FLAG_END) {
-		if (vals->reg_num == GC032A_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = gc032a_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -545,29 +545,29 @@ static int gc032a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int gc032a_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int gc032a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	ret = gc032a_read(sd, 0xf0, &v);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret = sensor_read(sd, 0xf0, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC032A_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 
-	ret = gc032a_read(sd, 0xf1, &v);
+	ret = sensor_read(sd, 0xf1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC032A_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 
@@ -577,74 +577,74 @@ static int gc032a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 
 static int ag_last = -1;
 static int it_last = -1;
-static int gc032a_set_expo(struct tx_isp_subdev* sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev* sd, int value)
 {
 	int ret = 0;
 	int expo = (value & 0x0000ffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	if(it_last != expo)
+	ret = sensor_write(sd, 0xfe, 0x00);
+	if (it_last != expo)
 	{
-		ret = gc032a_write(sd, 0x4, expo & 0xff);
-		ret = gc032a_write(sd, 0x3, (expo & 0x1f00)>>8);
+		ret = sensor_write(sd, 0x4, expo & 0xff);
+		ret = sensor_write(sd, 0x3, (expo & 0x1f00)>>8);
 	}
-	if(ag_last != again)
+	if (ag_last != again)
 	{
-		ret = gc032a_write(sd, 0x71, (unsigned short)again);
+		ret = sensor_write(sd, 0x71, (unsigned short)again);
 	}
 
 	return ret;
 }
 
-static int gc032a_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	ret = gc032a_write(sd, 0x4, value & 0xff);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret = sensor_write(sd, 0x4, value & 0xff);
 	if (ret < 0) {
-		ISP_ERROR("gc032a_write error  %d\n" ,__LINE__);
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__);
 		return ret;
 	}
-	ret = gc032a_write(sd, 0x3, (value & 0x1f00)>>8);
+	ret = sensor_write(sd, 0x3, (value & 0x1f00)>>8);
 	if (ret < 0) {
-		ISP_ERROR("gc032a_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 		return ret;
 	}
 
 	return 0;
 }
 
-static int gc032a_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	ret = gc032a_write(sd, 0x71, (unsigned short)value);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret = sensor_write(sd, 0x71, (unsigned short)value);
 	if (ret < 0) {
-		ISP_ERROR("gc032a_write error  %d" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d" ,__LINE__ );
 		return ret;
 	}
 	return 0;
 }
 
-static int gc032a_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int gc032a_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int gc032a_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	struct tx_isp_sensor_win_setting *wsize = &gc032a_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -652,7 +652,7 @@ static int gc032a_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = gc032a_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 
@@ -661,24 +661,24 @@ static int gc032a_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int gc032a_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 	if (enable) {
-		ret = gc032a_write_array(sd, gc032a_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		pr_debug("gc032a stream on\n");
 	}
 	else {
-		ret = gc032a_write_array(sd, gc032a_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("gc032a stream off\n");
 	}
 	return ret;
 }
 
-static int gc032a_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	unsigned int pclk = GC032A_SUPPORT_PCLK;
+	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned int newformat = 0; //the format is 24.8
 	unsigned short vts = 0;
 	unsigned short hts = 0;
@@ -688,17 +688,17 @@ static int gc032a_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned char tmp;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_WARNING("set_fps error ,should be %d  ~ %d \n",SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
 		return -1;
 	}
 
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	ret = gc032a_read(sd, 0x05, &tmp);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret = sensor_read(sd, 0x05, &tmp);
 	hb = tmp & 0x0f;
-	ret += gc032a_read(sd, 0x06, &tmp);
+	ret += sensor_read(sd, 0x06, &tmp);
 	hb = (hb << 8) | tmp;
-	ret += gc032a_read(sd, 0x11, &tmp);
+	ret += sensor_read(sd, 0x11, &tmp);
 	hb += tmp;
 
 	//	vts = vb + 488;
@@ -707,12 +707,12 @@ static int gc032a_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - 488;
 
-	ret = gc032a_write(sd, 0x08, (unsigned char)(vb & 0x00ff));
-	ret += gc032a_read(sd, 0x07, &tmp);
+	ret = sensor_write(sd, 0x08, (unsigned char)(vb & 0x00ff));
+	ret += sensor_read(sd, 0x07, &tmp);
 	tmp = ((unsigned char)((vb & 0x0f00) >> 8)) | (tmp & 0x0f);
-	ret += gc032a_write(sd, 0x07, tmp);
+	ret += sensor_write(sd, 0x07, tmp);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 
 	sensor->video.fps = fps;
@@ -724,14 +724,14 @@ static int gc032a_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int gc032a_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	wsize = &gc032a_win_sizes[0];
+	wsize = &sensor_win_sizes[0];
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -742,97 +742,97 @@ static int gc032a_set_mode(struct tx_isp_subdev *sd, int value)
 	}
 	return ret;
 }
-static int gc032a_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"gc032a_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
 
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"gc032a_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = gc032a_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an gc032a chip.\n",
 				client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_WARNING("gc032a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "gc032a", sizeof("gc032a"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
 	return 0;
 }
-static int gc032a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 #if 1
 		case TX_ISP_EVENT_SENSOR_EXPO:
-			if(arg)
-				ret = gc032a_set_expo(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_expo(sd, *(int*)arg);
 			break;
 #else
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if(arg)
-				ret = gc032a_set_integration_time(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if(arg)
-				ret = gc032a_set_analog_gain(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_analog_gain(sd, *(int*)arg);
 			break;
 #endif
 		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if(arg)
-				ret = gc032a_set_digital_gain(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if(arg)
-				ret = gc032a_get_black_pedestal(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
-				ret = gc032a_set_mode(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			ret = gc032a_write_array(sd, gc032a_stream_off);
+			ret = sensor_write_array(sd, sensor_stream_off);
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			ret = gc032a_write_array(sd, gc032a_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
-			if(arg)
-				ret = gc032a_set_fps(sd, *(int*)arg);
+			if (arg)
+				ret = sensor_set_fps(sd, *(int*)arg);
 			break;
 		default:
 			break;
@@ -840,59 +840,59 @@ static int gc032a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int gc032a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = gc032a_write(sd, 0xfe, 0x00);
-	ret = gc032a_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int gc032a_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	gc032a_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops gc032a_core_ops = {
-	.g_chip_ident = gc032a_g_chip_ident,
-	.reset = gc032a_reset,
-	.init = gc032a_init,
-	.g_register = gc032a_g_register,
-	.s_register = gc032a_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops gc032a_video_ops = {
-	.s_stream = gc032a_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	gc032a_sensor_ops = {
-	.ioctl	= gc032a_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops gc032a_ops = {
-	.core = &gc032a_core_ops,
-	.video = &gc032a_video_ops,
-	.sensor = &gc032a_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -908,19 +908,19 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int gc032a_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	int ret;
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &gc032a_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 	it_last = -1;
 	ag_last = -1;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -938,13 +938,13 @@ static int gc032a_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	gc032a_attr.dvp.gpio = sensor_gpio_func;
-	gc032a_attr.max_again = 195866;
-	gc032a_attr.max_dgain = 0;
-	gc032a_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+	sensor_attr.dvp.gpio = sensor_gpio_func;
+	sensor_attr.max_again = 195866;
+	sensor_attr.max_dgain = 0;
+	sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &gc032a_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -953,7 +953,7 @@ static int gc032a_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &gc032a_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -971,14 +971,14 @@ err_set_sensor_gpio:
 	return -1;
 }
 
-static int gc032a_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -988,40 +988,40 @@ static int gc032a_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id gc032a_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "gc032a", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, gc032a_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver gc032a_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "gc032a",
+		.owner = THIS_MODULE,
+		.name = "gc032a",
 	},
-	.probe		= gc032a_probe,
-	.remove		= gc032a_remove,
-	.id_table	= gc032a_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_gc032a(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init gc032a driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&gc032a_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_gc032a(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&gc032a_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_gc032a);
-module_exit(exit_gc032a);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Gcoreinc gc032a sensors");
 MODULE_LICENSE("GPL");

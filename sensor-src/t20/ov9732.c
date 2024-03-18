@@ -20,13 +20,13 @@
 
 #include <soc/gpio.h>
 
-#define OV9732_CHIP_ID_H	(0x97)
-#define OV9732_CHIP_ID_L	(0x32)
+#define SENSOR_CHIP_ID_H (0x97)
+#define SENSOR_CHIP_ID_L (0x32)
 
-#define OV9732_REG_END		0xffff
-#define OV9732_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define OV9732_SUPPORT_MCLK  (24*1000*1000)
+#define SENSOR_SUPPORT_MCLK  (24*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
@@ -390,7 +390,7 @@ static struct regval_list ov9732_init_regs_1280_720_25fps[] = {
 	{0x5781, 0x00},
 	{0x5782, 0x77},//decrease dpc strength
 	{0x5783, 0x0f},
-	{OV9732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 /*
  * the order of the ov9732_win_sizes is [full_resolution, preview_resolution].
@@ -398,12 +398,12 @@ static struct regval_list ov9732_init_regs_1280_720_25fps[] = {
 static struct tx_isp_sensor_win_setting ov9732_win_sizes[] = {
 	/* 1280*720 */
 	{
-		.width		= 1280,
-		.height		= 720,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= ov9732_init_regs_1280_720_25fps,
+		.width = 1280,
+		.height = 720,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = ov9732_init_regs_1280_720_25fps,
 	}
 };
 
@@ -413,13 +413,13 @@ static struct tx_isp_sensor_win_setting ov9732_win_sizes[] = {
 
 static struct regval_list ov9732_stream_on[] = {
 	{0x0100, 0x01},
-	{OV9732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 
 static struct regval_list ov9732_stream_off[] = {
 	{0x0100, 0x00},
-	{OV9732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static int ov9732_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value)
@@ -428,16 +428,16 @@ static int ov9732_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -453,10 +453,10 @@ static int ov9732_write(struct v4l2_subdev *sd, unsigned short reg, unsigned cha
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[3] = {reg >> 8, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -470,8 +470,8 @@ static int ov9732_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OV9732_REG_END) {
-		if (vals->reg_num == OV9732_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = ov9732_read(sd, vals->reg_num, &val);
@@ -486,8 +486,8 @@ static int ov9732_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int ov9732_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != OV9732_REG_END) {
-		if (vals->reg_num == OV9732_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = ov9732_write(sd, vals->reg_num, vals->value);
@@ -513,7 +513,7 @@ static int ov9732_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
-	if (v != OV9732_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -521,7 +521,7 @@ static int ov9732_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
-	if (v != OV9732_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -577,7 +577,7 @@ static int ov9732_get_black_pedestal(struct v4l2_subdev *sd, int value)
 	ret = ov9732_read(sd, 0x48, &h);
 	if (ret < 0)
 		return ret;
-	switch(*v){
+	switch(*v) {
 	case SENSOR_R_BLACK_LEVEL:
 		black = (h & 0x3) << 8;
 		reg = 0x44;
@@ -611,7 +611,7 @@ static int ov9732_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &ov9732_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -668,12 +668,12 @@ static int ov9732_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		/*printk("warn: fps(%d) no in range\n", fps);*/
 		return -1;
 	}
 
-	mclk = OV9732_SUPPORT_MCLK;
+	mclk = SENSOR_SUPPORT_MCLK;
 	/* prediv */
 	val = 0;
 	ret += ov9732_read(sd, 0x3080, &val);
@@ -730,7 +730,7 @@ static int ov9732_set_fps(struct tx_isp_sensor *sensor, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += ov9732_read(sd, 0x380d, &val);
-	hts |= val;
+	hts = val;
 	/*printk("info: hts = %d\n", hts);*/
 	if (0 != ret) {
 		printk("err: ov9732 read err\n");
@@ -762,13 +762,13 @@ static int ov9732_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &ov9732_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &ov9732_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -786,27 +786,27 @@ static int ov9732_g_chip_ident(struct v4l2_subdev *sd,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"ov9732_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(1);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"ov9732_pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(150);
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
@@ -830,7 +830,7 @@ static long ov9732_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = ov9732_set_integration_time(sd, ctrl->value);
 		break;
@@ -864,7 +864,7 @@ static long ov9732_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 	case VIDIOC_ISP_PRIVATE_IOCTL:
 		ret = ov9732_ops_private_ioctl(sensor, arg);
 		break;
@@ -938,7 +938,7 @@ static int ov9732_probe(struct i2c_client *client,
 	int ret = -1;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -957,7 +957,7 @@ static int ov9732_probe(struct i2c_client *client,
 	ov9732_attr.dvp.gpio = sensor_gpio_func;
 	/*
 	 *(volatile unsigned int*)(0xb000007c) = 0x20000020;
-	 while(*(volatile unsigned int*)(0xb000007c) & (1 << 28));
+	 while (*(volatile unsigned int*)(0xb000007c) & (1 << 28));
 	*/
 
 	/*
@@ -992,9 +992,9 @@ static int ov9732_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -1013,26 +1013,26 @@ MODULE_DEVICE_TABLE(i2c, ov9732_id);
 
 static struct i2c_driver ov9732_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "ov9732",
+		.owner = THIS_MODULE,
+		.name = "ov9732",
 	},
-	.probe		= ov9732_probe,
-	.remove		= ov9732_remove,
-	.id_table	= ov9732_id,
+	.probe = ov9732_probe,
+	.remove = ov9732_remove,
+	.id_table = ov9732_id,
 };
 
-static __init int init_ov9732(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&ov9732_driver);
 }
 
-static __exit void exit_ov9732(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&ov9732_driver);
 }
 
-module_init(init_ov9732);
-module_exit(exit_ov9732);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision ov9732 sensors");
 MODULE_LICENSE("GPL");

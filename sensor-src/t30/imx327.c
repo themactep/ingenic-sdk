@@ -22,14 +22,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define IMX327_CHIP_ID_H	(0xb2)
-#define IMX327_CHIP_ID_L	(0x01)
-#define IMX327_REG_END		0xffff
-#define IMX327_REG_DELAY	0xfffe
-#define IMX327_SUPPORT_SCLK (82662500)
+#define SENSOR_CHIP_ID_H (0xb2)
+#define SENSOR_CHIP_ID_L (0x01)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_SCLK (82662500)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20170911a"
+#define SENSOR_VERSION "H20170911a"
 #define AGAIN_MAX_DB 0x50
 #define DGAIN_MAX_DB 0x3c
 #define LOG2_GAIN_SHIFT 16
@@ -56,7 +56,7 @@ unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
-	if(again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
+	if (again>AGAIN_MAX_DB+DGAIN_MAX_DB) again=AGAIN_MAX_DB+DGAIN_MAX_DB;
 
 	/* p_ctx->again=again; */
 	*sensor_again=again;
@@ -103,7 +103,7 @@ static struct regval_list imx327_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3000, 0x01},//standy
 	{0x3001, 0x01},//standy
 	{0x3002, 0x01},//Master stop
-	{IMX327_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3005, 0x01},
 	{0x3007, 0x00},
 	{0x3009, 0x02},
@@ -167,11 +167,11 @@ static struct regval_list imx327_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3472, 0x9C},
 	{0x3473, 0x07},
 	{0x3480, 0x49},
-	{IMX327_REG_DELAY, 0x18},
+	{SENSOR_REG_DELAY, 0x18},
 	{0x3001, 0x00},//standy cancel
 	{0x3002, 0x00},//Master start
 	{0x3000, 0x01},//standy cancel
-	{IMX327_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 /*
@@ -180,12 +180,12 @@ static struct regval_list imx327_init_regs_1920_1080_30fps_mipi[] = {
 static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 	/* 1948*1109 */
 	{
-		.width		= 1948,
-		.height		= 1109,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= imx327_init_regs_1920_1080_30fps_mipi,
+		.width = 1948,
+		.height = 1109,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = imx327_init_regs_1920_1080_30fps_mipi,
 	},
 };
 
@@ -199,12 +199,12 @@ static enum v4l2_mbus_pixelcode imx327_mbus_code[] = {
 
 static struct regval_list imx327_stream_on_mipi[] = {
 	{0x3000, 0x00},
-	{IMX327_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list imx327_stream_off_mipi[] = {
 	{0x3000, 0x01},
-	{IMX327_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int imx327_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -215,16 +215,16 @@ int imx327_read(struct tx_isp_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	ret = private_i2c_transfer(client->adapter, msg, 2);
@@ -240,10 +240,10 @@ int imx327_write(struct tx_isp_subdev *sd, uint16_t reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -257,8 +257,8 @@ static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != IMX327_REG_END) {
-		if (vals->reg_num == IMX327_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx327_read(sd, vals->reg_num, &val);
@@ -272,8 +272,8 @@ static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int imx327_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != IMX327_REG_END) {
-		if (vals->reg_num == IMX327_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = imx327_write(sd, vals->reg_num, vals->value);
@@ -300,7 +300,7 @@ static int imx327_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX327_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -308,7 +308,7 @@ static int imx327_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != IMX327_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -359,7 +359,7 @@ static int imx327_init(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &imx327_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -406,7 +406,7 @@ static int imx327_set_mode(struct tx_isp_subdev *sd, int value)
 	int ret = ISP_SUCCESS;
 
 	wsize = &imx327_win_sizes[0];
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -431,25 +431,25 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"imx327_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(100);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(100);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"imx327_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -460,7 +460,7 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	printk("imx327 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "imx327", sizeof("imx327"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -472,45 +472,45 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 static int imx327_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		printk("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
+		if (arg)
 			ret = imx327_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
+		if (arg)
 			ret = imx327_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = imx327_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = imx327_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = imx327_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if(arg)
+		if (arg)
 			ret = imx327_write_array(sd, imx327_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if(arg)
+		if (arg)
 			ret = imx327_write_array(sd, imx327_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
+		if (arg)
 			ret = imx327_set_fps(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = imx327_set_vflip(sd, *(int*)arg);
 		break;
 	default:
@@ -527,7 +527,7 @@ static int imx327_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -544,7 +544,7 @@ static int imx327_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -567,7 +567,7 @@ static struct tx_isp_subdev_video_ops imx327_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	imx327_sensor_ops = {
-	.ioctl	= imx327_sensor_ops_ioctl,
+	.ioctl = imx327_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops imx327_ops = {
@@ -601,7 +601,7 @@ static int imx327_probe(struct i2c_client *client,
 	unsigned long rate = 0;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -666,9 +666,9 @@ static int imx327_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -687,19 +687,19 @@ MODULE_DEVICE_TABLE(i2c, imx327_id);
 
 static struct i2c_driver imx327_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "imx327",
+		.owner = THIS_MODULE,
+		.name = "imx327",
 	},
-	.probe		= imx327_probe,
-	.remove		= imx327_remove,
-	.id_table	= imx327_id,
+	.probe = imx327_probe,
+	.remove = imx327_remove,
+	.id_table = imx327_id,
 };
 
-static __init int init_imx327(void)
+static __init int init_sensor(void)
 {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		printk("Failed to init imx327 driver.\n");
 		return -1;
 	}
@@ -707,13 +707,13 @@ static __init int init_imx327(void)
 	return private_i2c_add_driver(&imx327_driver);
 }
 
-static __exit void exit_imx327(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&imx327_driver);
 }
 
-module_init(init_imx327);
-module_exit(exit_imx327);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision imx327 sensors");
 MODULE_LICENSE("GPL");

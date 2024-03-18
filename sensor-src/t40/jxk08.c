@@ -22,14 +22,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXK08_CHIP_ID_H	(0x06)
-#define JXK08_CHIP_ID_L	(0x05)
-#define JXK08_REG_END		0xff
-#define JXK08_REG_DELAY	0xfe
-#define JXK08_SUPPORT_30FPS_SCLK (36000000)
+#define SENSOR_CHIP_ID_H (0x06)
+#define SENSOR_CHIP_ID_L (0x05)
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_SUPPORT_30FPS_SCLK (36000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20220606a"
+#define SENSOR_VERSION "H20220606a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -51,7 +51,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut jxk08_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	/* again start from 1.5x
 	 * to prevent pink highlights
 	 *
@@ -138,20 +138,20 @@ struct again_lut jxk08_again_lut[] = {
 	{0x4f,	324678},
 };
 
-struct tx_isp_sensor_attribute jxk08_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int jxk08_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = jxk08_again_lut;
-	while(lut->gain <= jxk08_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return lut[0].gain;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
-		} else{
-			if((lut->gain == jxk08_attr.max_again) && (isp_gain >= lut->gain)) {
+		} else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -162,13 +162,13 @@ unsigned int jxk08_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	return isp_gain;
 }
 
-unsigned int jxk08_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
 static unsigned int long_it = 0;
-unsigned int jxk08_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
 {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
@@ -180,7 +180,7 @@ unsigned int jxk08_alloc_integration_time(unsigned int it, unsigned char shift, 
 	return isp_it;
 }
 
-struct tx_isp_mipi_bus jxk08_mipi_linear={
+struct tx_isp_mipi_bus sensor_mipi_linear={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 720,
 	.lans = 4,
@@ -209,7 +209,7 @@ struct tx_isp_mipi_bus jxk08_mipi_linear={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute jxk08_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "jxk08",
 	.chip_id = 0x605,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -258,15 +258,15 @@ struct tx_isp_sensor_attribute jxk08_attr={
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.one_line_expr_in_us = 15,
-	.sensor_ctrl.alloc_again = jxk08_alloc_again,
-	.sensor_ctrl.alloc_dgain = jxk08_alloc_dgain,
-	.sensor_ctrl.alloc_integration_time = jxk08_alloc_integration_time,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
+	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 
 /* 58# */
-static struct regval_list jxk08_init_regs_3840_2160_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 #if 0
 	/*
 	 * K08AB_023_20220113_MIPI10_4L_3840x2160x30_M27_P297_F4400x2250_H8_GBRG
@@ -476,54 +476,54 @@ static struct regval_list jxk08_init_regs_3840_2160_30fps_mipi[] = {
 	{0x12, 0x20},
 #endif
 
-	{JXK08_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
- * the order of the jxk08_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting jxk08_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 3840*2160@max30fps mipi 4lane */
 	{
-		.width		= 3840,
-		.height		= 2160,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SGBRG10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= jxk08_init_regs_3840_2160_30fps_mipi,
+		.width = 3840,
+		.height = 2160,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_3840_2160_30fps_mipi,
 	}
 };
-struct tx_isp_sensor_win_setting *wsize = &jxk08_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 /*
  * the part of driver was fixed.
  */
 
-static struct regval_list jxk08_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 
-	{JXK08_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list jxk08_stream_off_mipi[] = {
-	{JXK08_REG_END, 0x00},	/* END MARKER */
+static struct regval_list sensor_stream_off_mipi[] = {
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int jxk08_read(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 		   unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -534,16 +534,16 @@ int jxk08_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxk08_write(struct tx_isp_subdev *sd, unsigned char reg,
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -554,15 +554,15 @@ int jxk08_write(struct tx_isp_subdev *sd, unsigned char reg,
 }
 
 #if 0
-static int jxk08_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXK08_REG_END) {
-		if (vals->reg_num == JXK08_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxk08_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -573,14 +573,14 @@ static int jxk08_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int jxk08_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXK08_REG_END) {
-		if (vals->reg_num == JXK08_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxk08_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -590,70 +590,70 @@ static int jxk08_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int jxk08_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int jxk08_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = jxk08_read(sd, 0x0a, &v);
+	ret = sensor_read(sd, 0x0a, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXK08_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = jxk08_read(sd, 0x0b, &v);
+	ret = sensor_read(sd, 0x0b, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
-	if (v != JXK08_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int jxk08_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = jxk08_write(sd,  0x01, (unsigned char)(value & 0xff));
-	ret += jxk08_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
+	ret = sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		ISP_ERROR("%s %d, sensor reg write err!!\n",__func__,__LINE__);
 
 	return ret;
 }
 
-static int jxk08_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += jxk08_write(sd, 0x00, (unsigned char)(value & 0x7f));
+	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 	if (ret < 0)
 		ISP_ERROR("%s %d, sensor reg write err!!\n",__func__,__LINE__);
 
 	return ret;
 }
 
-static int jxk08_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxk08_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int jxk08_set_hvflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -661,7 +661,7 @@ static int jxk08_set_hvflip(struct tx_isp_subdev *sd, int enable)
 
 	/* 2'b01: mirror; 2'b10:flip*/
 	enable &= 0x03;
-	switch(enable){
+	switch(enable) {
 		case 0:/*normal*/
 			val = 0x20;
 			break;
@@ -678,13 +678,13 @@ static int jxk08_set_hvflip(struct tx_isp_subdev *sd, int enable)
 			break;
 	}
 
-	ret = jxk08_write(sd, 0x12, val);
-	if(0 != ret) {
-		ISP_ERROR("%s:%d, jxk08_write err!!\n",__func__,__LINE__);
+	ret = sensor_write(sd, 0x12, val);
+	if (0 != ret) {
+		ISP_ERROR("%s:%d, sensor_write err!!\n",__func__,__LINE__);
 		return ret;
 	}
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
@@ -706,12 +706,12 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int jxk08_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor_set_attr(sd, wsize);
@@ -722,28 +722,28 @@ static int jxk08_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return ret;
 }
 
-static int jxk08_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-	    if (sensor->video.state == TX_ISP_MODULE_DEINIT){
-            ret = jxk08_write_array(sd, wsize->regs);
+	    if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
+            ret = sensor_write_array(sd, wsize->regs);
 
-            //ret += jxk08_read(sd, 0x2f, &reg_0c);
-            //ret += jxk08_read(sd, 0x82, &reg_82);
+            //ret += sensor_read(sd, 0x2f, &reg_0c);
+            //ret += sensor_read(sd, 0x82, &reg_82);
             if (ret)
                 return ret;
             sensor->video.state = TX_ISP_MODULE_INIT;
 	    }
-	    if (sensor->video.state == TX_ISP_MODULE_INIT){
-            ret = jxk08_write_array(sd, jxk08_stream_on_mipi);
+	    if (sensor->video.state == TX_ISP_MODULE_INIT) {
+            ret = sensor_write_array(sd, sensor_stream_on_mipi);
             sensor->video.state = TX_ISP_MODULE_RUNNING;
             ISP_WARNING("jxk08 stream on\n");
 	    }
 	} else {
-		ret = jxk08_write_array(sd, jxk08_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
         sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_WARNING("jxk08 stream off\n");
 	}
@@ -751,7 +751,7 @@ static int jxk08_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return ret;
 }
 
-static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -762,18 +762,18 @@ static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	unsigned int max_fps = 0;
 
-	sclk = JXK08_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 
-	ret += jxk08_read(sd, 0x21, &val);
+	ret += sensor_read(sd, 0x21, &val);
 	hts = val;
-	ret += jxk08_read(sd, 0x20, &val);
+	ret += sensor_read(sd, 0x20, &val);
 	hts = (hts << 8) + val; /* frame width = hts*8 */
 	if (0 != ret) {
 		ISP_ERROR("err: jxk08 read err\n");
@@ -782,20 +782,20 @@ static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
 #if 0
-	ret += jxk08_write(sd, 0xc0, 0x22);
-	ret += jxk08_write(sd, 0xc1, (unsigned char)(vts & 0xff));
-	ret += jxk08_write(sd, 0xc2, 0x23);
-	ret += jxk08_write(sd, 0xc3, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0xc0, 0x22);
+	ret += sensor_write(sd, 0xc1, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0xc2, 0x23);
+	ret += sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	/*quick launch*/
-	ret = jxk08_read(sd, 0x1f, &val);
-	val |= 0xc0; /*set bit[7],  register group write function,  auto clean*/
-	ret += jxk08_write(sd, 0x1f, val);
+	ret = sensor_read(sd, 0x1f, &val);
+	val = 0xc0; /*set bit[7],  register group write function,  auto clean*/
+	ret += sensor_write(sd, 0x1f, val);
 #else
-	ret += jxk08_write(sd, 0x22, (unsigned char)(vts & 0xff));
-	ret += jxk08_write(sd, 0x23, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif
 	if (0 != ret) {
-		ISP_ERROR("err: jxk08_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -808,12 +808,12 @@ static int jxk08_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int jxk08_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
@@ -830,19 +830,19 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	ISP_WARNING("***************>> %s[%d] <<***************\n", "default_boot", info->default_boot);
 	switch (info->default_boot) {
 		case 0:
-			wsize = &jxk08_win_sizes[0];
-			memcpy((void*)(&(jxk08_attr.mipi)),(void*)(&jxk08_mipi_linear),sizeof(jxk08_mipi_linear));
-			jxk08_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-			jxk08_attr.one_line_expr_in_us = 15;
-			jxk08_attr.min_integration_time = 2;
-			jxk08_attr.min_integration_time_native = 2;
-			jxk08_attr.max_integration_time_native = 2658 - 4;
-			jxk08_attr.integration_time_limit = 2658 - 4;
-			jxk08_attr.total_width = 4336;
-			jxk08_attr.total_height = 2658;
-			jxk08_attr.max_integration_time = 2658 - 4;
-			jxk08_attr.again = 0;
-			jxk08_attr.integration_time = 0x1;
+			wsize = &sensor_win_sizes[0];
+			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
+			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+			sensor_attr.one_line_expr_in_us = 15;
+			sensor_attr.min_integration_time = 2;
+			sensor_attr.min_integration_time_native = 2;
+			sensor_attr.max_integration_time_native = 2658 - 4;
+			sensor_attr.integration_time_limit = 2658 - 4;
+			sensor_attr.total_width = 4336;
+			sensor_attr.total_height = 2658;
+			sensor_attr.max_integration_time = 2658 - 4;
+			sensor_attr.again = 0;
+			sensor_attr.integration_time = 0x1;
 			break;
 		default:
 			ISP_ERROR("not supported boot setting!!!\n");
@@ -851,21 +851,21 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
 	switch (info->video_interface) {
 		case TISP_SENSOR_VI_MIPI_CSI0:
-			jxk08_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-			jxk08_attr.mipi.index = 0;
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+			sensor_attr.mipi.index = 0;
 			break;
 		case TISP_SENSOR_VI_MIPI_CSI1:
-			jxk08_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-			jxk08_attr.mipi.index = 1;
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+			sensor_attr.mipi.index = 1;
 			break;
 		case TISP_SENSOR_VI_DVP:
-			jxk08_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 			break;
 		default:
 			ISP_ERROR("not this video interface!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
 		set_sensor_mclk_function(0);
@@ -921,7 +921,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int jxk08_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 				  struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -929,31 +929,31 @@ static int jxk08_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"jxk08_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"jxk08_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = jxk08_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk08 chip.\n",
 			  client->addr, client->adapter->name);
@@ -961,7 +961,7 @@ static int jxk08_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("jxk08 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "jxk08", sizeof("jxk08"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -969,50 +969,50 @@ static int jxk08_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int jxk08_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
     struct tx_isp_sensor_value *sensor_val = arg;
     //struct tx_isp_initarg *init = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		if(arg)
-			ret = jxk08_set_integration_time(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		if(arg)
-			ret = jxk08_set_analog_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = jxk08_set_digital_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = jxk08_get_black_pedestal(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = jxk08_set_mode(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = jxk08_write_array(sd, jxk08_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = jxk08_write_array(sd, jxk08_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = jxk08_set_fps(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = jxk08_set_hvflip(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_hvflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1021,60 +1021,60 @@ static int jxk08_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	return ret;
 }
 
-static int jxk08_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = jxk08_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int jxk08_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	jxk08_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops jxk08_core_ops = {
-	.g_chip_ident = jxk08_g_chip_ident,
-	.reset = jxk08_reset,
-	.init = jxk08_init,
-	.g_register = jxk08_g_register,
-	.s_register = jxk08_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops jxk08_video_ops = {
-	.s_stream = jxk08_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	jxk08_sensor_ops = {
-	.ioctl	= jxk08_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops jxk08_ops = {
-	.core = &jxk08_core_ops,
-	.video = &jxk08_video_ops,
-	.sensor = &jxk08_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1090,14 +1090,14 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int jxk08_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1106,10 +1106,10 @@ static int jxk08_probe(struct i2c_client *client, const struct i2c_device_id *id
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;
-	jxk08_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &jxk08_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &jxk08_ops);
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1119,14 +1119,14 @@ static int jxk08_probe(struct i2c_client *client, const struct i2c_device_id *id
 	return 0;
 }
 
-static int jxk08_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1137,34 +1137,34 @@ static int jxk08_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id jxk08_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "jxk08", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, jxk08_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver jxk08_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "jxk08",
+		.owner = THIS_MODULE,
+		.name = "jxk08",
 	},
-	.probe		= jxk08_probe,
-	.remove		= jxk08_remove,
-	.id_table	= jxk08_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_jxk08(void)
+static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&jxk08_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_jxk08(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&jxk08_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_jxk08);
-module_exit(exit_jxk08);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for SOI jxk08 sensors");
 MODULE_LICENSE("GPL");

@@ -23,14 +23,14 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SC3336_CHIP_ID_H	(0xcc)
-#define SC3336_CHIP_ID_L	(0x41)
-#define SC3336_REG_END		0xffff
-#define SC3336_REG_DELAY	0xfffe
-#define SC3336_SUPPORT_30FPS_SCLK (51000000)
+#define SENSOR_CHIP_ID_H (0xcc)
+#define SENSOR_CHIP_ID_L (0x41)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_30FPS_SCLK (51000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION	"H20220609a"
+#define SENSOR_VERSION "H20220609a"
 #define MCLK 24000000
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -274,15 +274,15 @@ struct tx_isp_sensor_attribute sc3336_attr;
 unsigned int sc3336_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct sensor_gain_lut *lut = sc3336_gain_lut;
-	while(lut->gain <= sc3336_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sc3336_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].index;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->index;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc3336_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sc3336_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->index;
 				return lut->gain;
 			}
@@ -515,18 +515,18 @@ static struct regval_list sc3336_init_regs_2304_1296_30fps_mipi[] = {
 	{0x36e9, 0x54},
 	{0x37f9, 0x47},
 	{0x0100, 0x01},
-	{SC3336_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc3336_win_sizes[] = {
 	/* resolution 2304*1296 */
 	{
-		.width		= 2304,
-		.height		= 1296,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc3336_init_regs_2304_1296_30fps_mipi,
+		.width = 2304,
+		.height = 1296,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sc3336_init_regs_2304_1296_30fps_mipi,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &sc3336_win_sizes[0];
@@ -536,12 +536,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc3336_win_sizes[0];
  */
 static struct regval_list sc3336_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SC3336_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc3336_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SC3336_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc3336_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -550,16 +550,16 @@ int sc3336_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -575,10 +575,10 @@ int sc3336_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -593,8 +593,8 @@ static int sc3336_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC3336_REG_END) {
-		if (vals->reg_num == SC3336_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc3336_read(sd, vals->reg_num, &val);
@@ -611,8 +611,8 @@ static int sc3336_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sc3336_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC3336_REG_END) {
-		if (vals->reg_num == SC3336_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc3336_write(sd, vals->reg_num, vals->value);
@@ -639,7 +639,7 @@ static int sc3336_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC3336_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -647,7 +647,7 @@ static int sc3336_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC3336_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -730,7 +730,7 @@ static int sc3336_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -753,17 +753,17 @@ static int sc3336_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
 			ret = sc3336_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
-		if (sensor->video.state == TX_ISP_MODULE_INIT){
-		     if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		if (sensor->video.state == TX_ISP_MODULE_INIT) {
+		     if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = sc3336_write_array(sd, sc3336_stream_on_mipi);
 
-			}else{
+			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
 			ISP_WARNING("sc3336 stream on\n");
@@ -771,10 +771,10 @@ static int sc3336_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 	}
 	else {
-		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sc3336_write_array(sd, sc3336_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("sc3336 stream off\n");
@@ -796,11 +796,11 @@ static int sc3336_set_fps(struct tx_isp_subdev *sd, int fps)
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	sclk = SC3336_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
 	ret = sc3336_read(sd, 0x320c, &tmp);
 	hts = tmp;
@@ -834,7 +834,7 @@ static int sc3336_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -946,27 +946,27 @@ static int sc3336_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"sc3336_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio,"sc3336_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -978,7 +978,7 @@ static int sc3336_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("sc3336 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "sc3336", sizeof("sc3336"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -994,14 +994,14 @@ static int sc3336_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret += sc3336_read(sd, 0x3221, &val);
 
-	if(enable & 0x2)
-		val |= 0x60;
+	if (enable & 0x2)
+		val = 0x60;
 	else
 		val &= 0x9f;
 
 	ret += sc3336_write(sd, 0x3221, val);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
@@ -1012,62 +1012,62 @@ static int sc3336_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if(arg)
+		//		if (arg)
 		//			ret = sc3336_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if(arg)
+		//		if (arg)
 		//			ret = sc3336_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = sc3336_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sc3336_write_array(sd, sc3336_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		 if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sc3336_write_array(sd, sc3336_stream_on_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_vflip(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if(arg)
+		if (arg)
 			ret = sc3336_set_logic(sd, sensor_val->value);
 		break;
 	default:
@@ -1084,7 +1084,7 @@ static int sc3336_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1101,7 +1101,7 @@ static int sc3336_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1125,7 +1125,7 @@ static struct tx_isp_subdev_video_ops sc3336_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	sc3336_sensor_ops = {
-	.ioctl	= sc3336_sensor_ops_ioctl,
+	.ioctl = sc3336_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops sc3336_ops = {
@@ -1154,7 +1154,7 @@ static int sc3336_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1189,9 +1189,9 @@ static int sc3336_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1210,26 +1210,26 @@ MODULE_DEVICE_TABLE(i2c, sc3336_id);
 
 static struct i2c_driver sc3336_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc3336",
+		.owner = THIS_MODULE,
+		.name = "sc3336",
 	},
-	.probe		= sc3336_probe,
-	.remove		= sc3336_remove,
-	.id_table	= sc3336_id,
+	.probe = sc3336_probe,
+	.remove = sc3336_remove,
+	.id_table = sc3336_id,
 };
 
-static __init int init_sc3336(void)
+static __init int init_sensor(void)
 {
 	return private_i2c_add_driver(&sc3336_driver);
 }
 
-static __exit void exit_sc3336(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sc3336_driver);
 }
 
-module_init(init_sc3336);
-module_exit(exit_sc3336);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for SmartSens sc3336 sensors");
 MODULE_LICENSE("GPL");

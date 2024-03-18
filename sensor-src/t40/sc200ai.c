@@ -21,14 +21,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC200AI_CHIP_ID_H	(0xcb)
-#define SC200AI_CHIP_ID_L	(0x1c)
-#define SC200AI_REG_END		0xffff
-#define SC200AI_REG_DELAY	0xfffe
-#define SC200AI_SUPPORT_PCLK_FPS_30 (74250*1000)
+#define SENSOR_CHIP_ID_H (0xcb)
+#define SENSOR_CHIP_ID_L (0x1c)
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20210222a"
+#define SENSOR_VERSION "H20210222a"
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
@@ -64,7 +64,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc200ai_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x340, 0},
 	{0x341, 1500},
 	{0x342, 2886},
@@ -405,20 +405,20 @@ struct again_lut sc200ai_again_lut[] = {
 	{0x3f64, 354504},
 };
 
-struct tx_isp_sensor_attribute sc200ai_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc200ai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = sc200ai_again_lut;
-	while(lut->gain <= sc200ai_attr.max_again) {
-		if(isp_gain == 0) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc200ai_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -430,12 +430,12 @@ unsigned int sc200ai_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 	return isp_gain;
 }
 
-unsigned int sc200ai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute sc200ai_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "sc200ai",
 	.chip_id = 0xcb1c,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -485,11 +485,11 @@ struct tx_isp_sensor_attribute sc200ai_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = sc200ai_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc200ai_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list sc200ai_init_regs_1920_1080_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x0103,0x01},
 	{0x0100,0x00},
 	{0x36e9,0x80},
@@ -589,48 +589,48 @@ static struct regval_list sc200ai_init_regs_1920_1080_25fps_mipi[] = {
 	{0x36e9,0x20},
 	{0x36f9,0x27},
 	{0x0100,0x01},
- 	{SC200AI_REG_DELAY,0x10},
-	{SC200AI_REG_END, 0x00},	/* END MARKER */
+ 	{SENSOR_REG_DELAY,0x10},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting sc200ai_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc200ai_init_regs_1920_1080_25fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_25fps_mipi,
 	},
 };
-struct tx_isp_sensor_win_setting *wsize = &sc200ai_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list sc200ai_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SC200AI_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list sc200ai_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SC200AI_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int sc200ai_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -641,15 +641,15 @@ int sc200ai_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sc200ai_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -660,15 +660,15 @@ int sc200ai_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 }
 
 #if 0
-static int sc200ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC200AI_REG_END) {
-		if (vals->reg_num == SC200AI_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc200ai_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -680,14 +680,14 @@ static int sc200ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int sc200ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC200AI_REG_END) {
-		if (vals->reg_num == SC200AI_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc200ai_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -697,69 +697,69 @@ static int sc200ai_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 	return 0;
 }
 
-static int sc200ai_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int sc200ai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
 	unsigned char v;
 
-	ret = sc200ai_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC200AI_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc200ai_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC200AI_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
 	return 0;
 }
 
-static int sc200ai_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = (value & 0xffff) * 2;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sc200ai_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
-	ret += sc200ai_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	ret += sc200ai_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-	ret += sc200ai_write(sd, 0x3e09, (unsigned char)(again & 0xff));
-	ret += sc200ai_write(sd, 0x3e08, (unsigned char)((again >> 8 & 0xff)));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((again >> 8 & 0xff)));
 	if (ret != 0) {
 		ISP_ERROR("err: sc200ai write err %d\n",__LINE__);
 		return ret;
 	}
 
 	if ((again >= 0x3f47) && dpc_flag) {
-		sc200ai_write(sd, 0x5799, 0x07);
+		sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
 	} else if ((again <= 0x2f5f) && (!dpc_flag)) {
-		sc200ai_write(sd, 0x5799, 0x00);
+		sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
 
 	return 0;
 }
 
-static int sc200ai_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sc200ai_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-	ret += sc200ai_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc200ai_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	if (ret < 0)
 		return ret;
@@ -767,42 +767,42 @@ static int sc200ai_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sc200ai_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int again = value;
-	ret = sc200ai_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc200ai_write(sd, 0x3e08, (unsigned char)((value >> 8 & 0xff)));
+	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 & 0xff)));
 	if (ret < 0)
 		return ret;
 
 	if ((again >= 0x3f47) && dpc_flag) {
-		sc200ai_write(sd, 0x5799, 0x07);
+		sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
 	} else if ((again <= 0x2f5f) && (!dpc_flag)) {
-		sc200ai_write(sd, 0x5799, 0x00);
+		sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
 
 	return 0;
 }
 
-static int sc200ai_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc200ai_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int sc200ai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -819,21 +819,21 @@ static int sc200ai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int sc200ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
-			ret = sc200ai_write_array(sd, wsize->regs);
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-				ret = sc200ai_write_array(sd, sc200ai_stream_on);
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+				ret = sensor_write_array(sd, sensor_stream_on);
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
@@ -841,9 +841,9 @@ static int sc200ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		ISP_WARNING("sc3335 stream on\n");
 		sensor->video.state = TX_ISP_MODULE_RUNNING;
 	} else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc200ai_write_array(sd, sc200ai_stream_off);
-		}else{
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off);
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("sc200ai stream off\n");
@@ -853,7 +853,7 @@ static int sc200ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 	return ret;
 }
 
-static int sc200ai_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -863,25 +863,25 @@ static int sc200ai_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	sclk = SC200AI_SUPPORT_PCLK_FPS_30;
+	sclk = SENSOR_SUPPORT_PCLK_FPS_30;
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	ret = sc200ai_read(sd, 0x320c, &tmp);
+	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
-	ret += sc200ai_read(sd, 0x320d, &tmp);
+	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: sc200ai read err\n");
 		return ret;
 	}
 	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret += sc200ai_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sc200ai_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sc200ai_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -894,31 +894,31 @@ static int sc200ai_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int sc200ai_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret += sc200ai_read(sd, 0x3221, &val);
-	if(enable & 0x2)
-		val |= 0x60;
+	ret += sensor_read(sd, 0x3221, &val);
+	if (enable & 0x2)
+		val = 0x60;
 	else
 		val &= 0x9f;
 
-	ret += sc200ai_write(sd, 0x3221, val);
-	if(!ret)
+	ret += sensor_write(sd, 0x3221, val);
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
 
-static int sc200ai_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -940,30 +940,30 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	int ret = 0;
 
-	switch(info->default_boot){
+	switch(info->default_boot) {
 	case 0:
-		wsize = &sc200ai_win_sizes[0];
-		sc200ai_attr.again = 0;
-		sc200ai_attr.integration_time = 0x8c2;
+		wsize = &sensor_win_sizes[0];
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x8c2;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 	}
 
-	switch(info->video_interface){
+	switch(info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
-		sc200ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sc200ai_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_MIPI_CSI1:
-		sc200ai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sc200ai_attr.mipi.index = 1;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 1;
 		break;
 	default:
 		ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 		sclka = private_devm_clk_get(&client->dev, "mux_cim0");
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
@@ -1013,38 +1013,38 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc200ai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc200ai_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc200ai_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = sc200ai_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc200ai chip.\n",
 			  client->addr, client->adapter->name);
@@ -1052,7 +1052,7 @@ static int sc200ai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	}
 	ISP_WARNING("sc200ai chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "sc200ai", sizeof("sc200ai"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1061,66 +1061,66 @@ static int sc200ai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	return 0;
 }
 
-static int sc200ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-			ret = sc200ai_set_expo(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 		/*
 		  case TX_ISP_EVENT_SENSOR_INT_TIME:
-		  if(arg)
-		  ret = sc200ai_set_integration_time(sd, sensor_val->value);
+		  if (arg)
+		  ret = sensor_set_integration_time(sd, sensor_val->value);
 		  break;
 		  case TX_ISP_EVENT_SENSOR_AGAIN:
-		  if(arg)
-		  ret = sc200ai_set_analog_gain(sd, sensor_val->value);
+		  if (arg)
+		  ret = sensor_set_analog_gain(sd, sensor_val->value);
 		  break;
 		*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = sc200ai_set_digital_gain(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = sc200ai_get_black_pedestal(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = sc200ai_set_mode(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc200ai_write_array(sd, sc200ai_stream_off);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = sc200ai_write_array(sd, sc200ai_stream_on);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = sc200ai_set_fps(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = sc200ai_set_vflip(sd, sensor_val->value);
+		if (arg)
+			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1129,62 +1129,62 @@ static int sc200ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 	return ret;
 }
 
-static int sc200ai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc200ai_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc200ai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
-	sc200ai_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops sc200ai_core_ops = {
-	.g_chip_ident = sc200ai_g_chip_ident,
-	.reset = sc200ai_reset,
-	.init = sc200ai_init,
-	/*.ioctl = sc200ai_ops_ioctl,*/
-	.g_register = sc200ai_g_register,
-	.s_register = sc200ai_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc200ai_video_ops = {
-	.s_stream = sc200ai_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc200ai_sensor_ops = {
-	.ioctl	= sc200ai_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops sc200ai_ops = {
-	.core = &sc200ai_core_ops,
-	.video = &sc200ai_video_ops,
-	.sensor = &sc200ai_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1200,7 +1200,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int sc200ai_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -1208,19 +1208,19 @@ static int sc200ai_probe(struct i2c_client *client, const struct i2c_device_id *
 
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 
-	sc200ai_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;
 	sensor->video.shvflip = shvflip;
-	sc200ai_attr.expo_fs = 1;
-	sensor->video.attr = &sc200ai_attr;
+	sensor_attr.expo_fs = 1;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1229,7 +1229,7 @@ static int sc200ai_probe(struct i2c_client *client, const struct i2c_device_id *
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc200ai_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1239,14 +1239,14 @@ static int sc200ai_probe(struct i2c_client *client, const struct i2c_device_id *
 	return 0;
 }
 
-static int sc200ai_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1256,34 +1256,34 @@ static int sc200ai_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc200ai_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "sc200ai", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, sc200ai_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc200ai_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc200ai",
+		.owner = THIS_MODULE,
+		.name = "sc200ai",
 	},
-	.probe		= sc200ai_probe,
-	.remove		= sc200ai_remove,
-	.id_table	= sc200ai_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_sc200ai(void)
+static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&sc200ai_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sc200ai(void)
+static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&sc200ai_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_sc200ai);
-module_exit(exit_sc200ai);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for SmartSens sc200ai sensors");
 MODULE_LICENSE("GPL");

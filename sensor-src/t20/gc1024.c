@@ -23,14 +23,14 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define GC1024_CHIP_ID_H	(0x10)
-#define GC1024_CHIP_ID_L	(0x04)
+#define SENSOR_CHIP_ID_H (0x10)
+#define SENSOR_CHIP_ID_L (0x04)
 
-#define GC1024_FLAG_END		0x00
-#define GC1024_FLAG_DELAY	0xff
-#define GC1024_PAGE_REG		0xfe
+#define SENSOR_FLAG_END 0x00
+#define SENSOR_FLAG_DELAY 0xff
+#define SENSOR_PAGE_REG 0xfe
 
-#define GC1024_SUPPORT_PCLK (48*1000*1000)
+#define SENSOR_SUPPORT_PCLK (48*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_2
@@ -426,7 +426,7 @@ static struct regval_list gc1024_init_regs_1280_720[] = {
 	/*pad enable*/
 	{0xf2,0x0f},
 	{0xfe,0x00},
-  	{GC1024_FLAG_END, 0x00},	/* END MARKER */
+  	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 
 };
 
@@ -436,12 +436,12 @@ static struct regval_list gc1024_init_regs_1280_720[] = {
 static struct tx_isp_sensor_win_setting gc1024_win_sizes[] = {
 	/* 1280*720 */
 	{
-		.width		= 1280,
-		.height		= 720,
-		.fps		= 25<<16|1,
-		.mbus_code	= V4L2_MBUS_FMT_SRGGB10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= gc1024_init_regs_1280_720,
+		.width = 1280,
+		.height = 720,
+		.fps = 25<<16|1,
+		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = gc1024_init_regs_1280_720,
 	}
 };
 
@@ -453,14 +453,14 @@ static struct regval_list gc1024_stream_on[] = {
 	{ 0xfe, 0x03},
 	{ 0x10, 0x91},
 	{ 0xfe, 0x00},
-	{GC1024_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc1024_stream_off[] = {
 	{ 0xfe, 0x03},
 	{ 0x10 ,0x81},
 	{ 0xfe ,0x00},
-	{GC1024_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
 };
 
 int gc1024_read(struct v4l2_subdev *sd, unsigned char reg,
@@ -469,16 +469,16 @@ int gc1024_read(struct v4l2_subdev *sd, unsigned char reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -497,10 +497,10 @@ static int gc1024_write(struct v4l2_subdev *sd, unsigned char reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -515,16 +515,16 @@ static int gc1024_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC1024_FLAG_END) {
-		if(vals->reg_num == GC1024_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc1024_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			if (vals->reg_num == GC1024_PAGE_REG){
+			if (vals->reg_num == SENSOR_PAGE_REG) {
 				val &= 0xf8;
-				val |= (vals->value & 0x07);
+				val = (vals->value & 0x07);
 				ret = gc1024_write(sd, vals->reg_num, val);
 				ret = gc1024_read(sd, vals->reg_num, &val);
 			}
@@ -536,8 +536,8 @@ static int gc1024_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int gc1024_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC1024_FLAG_END) {
-		if (vals->reg_num == GC1024_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_FLAG_END) {
+		if (vals->reg_num == SENSOR_FLAG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = gc1024_write(sd, vals->reg_num, vals->value);
@@ -562,13 +562,13 @@ static int gc1024_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1024_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc1024_read(sd, 0xf1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1024_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -625,7 +625,7 @@ static int gc1024_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &gc1024_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -670,7 +670,7 @@ static int gc1024_set_fps(struct tx_isp_sensor *sensor, int fps)
 {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
-	unsigned int pclk = GC1024_SUPPORT_PCLK;
+	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned short win_width=0;
 	unsigned short win_high=0;
 	unsigned short vts = 0;
@@ -683,7 +683,7 @@ static int gc1024_set_fps(struct tx_isp_sensor *sensor, int fps)
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("set_fps error ,should be %d  ~ %d \n",SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
 		return -1;
 	}
@@ -696,7 +696,7 @@ static int gc1024_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret += gc1024_read(sd, 0x10, &tmp);
 	win_width = (win_width << 8) + tmp;
 	ret += gc1024_read(sd, 0x12, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sh_delay = tmp;
 	hts=win_width+2*(hb+sh_delay+4);
@@ -704,14 +704,14 @@ static int gc1024_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret = gc1024_read(sd, 0xd, &tmp);
 	win_high = tmp;
 	ret += gc1024_read(sd, 0xe, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
 	ret = gc1024_write(sd, 0x8, (unsigned char)(vb & 0xff));
 	ret += gc1024_write(sd, 0x7, (unsigned char)(vb >> 8));
-	if(ret < 0)
+	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
@@ -729,21 +729,21 @@ static int gc1024_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &gc1024_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &gc1024_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
-		if(sensor->priv != wsize){
+		if (sensor->priv != wsize) {
 			ret = gc1024_write_array(sd, wsize->regs);
-			if(!ret){
+			if (!ret) {
 				sensor->priv = wsize;
 			}
 		}
@@ -760,27 +760,27 @@ static int gc1024_g_chip_ident(struct v4l2_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"gc1024_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(20);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"gc1024_pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(150);
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -804,7 +804,7 @@ static long gc1024_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = gc1024_set_integration_time(sd, ctrl->value);
 		break;
@@ -838,7 +838,7 @@ static long gc1024_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 	case VIDIOC_ISP_PRIVATE_IOCTL:
 		ret = gc1024_ops_private_ioctl(sensor, arg);
 		break;
@@ -911,7 +911,7 @@ static int gc1024_probe(struct i2c_client *client,
 	struct tx_isp_sensor_win_setting *wsize = &gc1024_win_sizes[0];
 	int ret =0;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -959,9 +959,9 @@ static int gc1024_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -980,26 +980,26 @@ MODULE_DEVICE_TABLE(i2c, gc1024_id);
 
 static struct i2c_driver gc1024_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "gc1024",
+		.owner = THIS_MODULE,
+		.name = "gc1024",
 	},
-	.probe		= gc1024_probe,
-	.remove		= gc1024_remove,
-	.id_table	= gc1024_id,
+	.probe = gc1024_probe,
+	.remove = gc1024_remove,
+	.id_table = gc1024_id,
 };
 
-static __init int init_gc1024(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&gc1024_driver);
 }
 
-static __exit void exit_gc1024(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&gc1024_driver);
 }
 
-module_init(init_gc1024);
-module_exit(exit_gc1024);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for Gcoreinc gc1024 sensors");
 MODULE_LICENSE("GPL");

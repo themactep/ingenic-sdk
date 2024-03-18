@@ -23,13 +23,13 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define N5_CHIP_ID_H	(0x00)
-#define N5_CHIP_ID_L	(0x00)
-#define N5_REG_END		0xfe
-#define N5_REG_DELAY	0x00
+#define SENSOR_CHIP_ID_H (0x00)
+#define SENSOR_CHIP_ID_L (0x00)
+#define SENSOR_REG_END 0xfe
+#define SENSOR_REG_DELAY 0x00
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20221025a"
+#define SENSOR_VERSION "H20221025a"
 
 static int reset_gpio = GPIO_PB(6);
 static int pwr_gpio = GPIO_PA(24);
@@ -268,7 +268,7 @@ void n5_set_chnmode_1080p_25(struct tx_isp_subdev *sd, unsigned char chn)
 	n5_write(sd, 0x98+chn*0x20, 0x00);
 }
 
-static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, unsigned char regCC){
+static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, unsigned char regCC) {
     unsigned char reg_0x54;
     unsigned char reg_1xC8;
     unsigned char reg_1xCA;
@@ -282,7 +282,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
     n5_write(sd, 0xA0, 0x00);
     n5_write(sd, 0xC0, 0x00);
     n5_write(sd, 0xC1, 0x00);
-    reg_1xC8 &= (1==port?0x0F:0xF0);
+    reg_1xC8 &= ( ==port?0x0F:0xF0);
     n5_write(sd, 0xC8, reg_1xC8); //
     n5_write(sd, 0xCC, regCC);
 
@@ -293,7 +293,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
     n5_write(sd, 0xE5, 0x00);
 
     n5_read(sd, 0xCA, &reg_1xCA);
-    reg_1xCA |= (0x11<<port);
+    reg_1xCA = (0x11<<port);
     n5_write(sd, 0xCA, reg_1xCA);
 }
 
@@ -303,12 +303,12 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 static struct tx_isp_sensor_win_setting n5_win_sizes[] = {
 	/* [0] 1920*1080 @ max 25fps dvp*/
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_YUYV8_2X8,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= n5_init_regs_1920_1080_25fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_YUYV8_2X8,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = n5_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
@@ -320,16 +320,16 @@ int n5_read(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -349,10 +349,10 @@ int n5_write(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
@@ -367,8 +367,8 @@ static int n5_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != N5_REG_END) {
-		if (vals->reg_num == N5_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = n5_read(sd, vals->reg_num, &val);
@@ -410,13 +410,13 @@ static int n5_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != N5_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = n5_read(sd, 0x09, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != N5_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -444,7 +444,7 @@ static int n5_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor_set_attr(sd, wsize);
@@ -461,7 +461,7 @@ static int n5_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
 			ret = n5_write_array(sd, wsize->regs, sizeof(n5_init_regs_1920_1080_25fps_dvp) / sizeof(n5_init_regs_1920_1080_25fps_dvp[0]));
 			n5_set_chnmode_1080p_25(sd, 0);
 			my_set_port_mode_1mux(sd, 0 , 0x43);
@@ -486,7 +486,7 @@ static int n5_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
@@ -501,7 +501,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	int ret = 0;
 
-	switch(info->default_boot){
+	switch(info->default_boot) {
 	case 0:
 		wsize = &n5_win_sizes[0];
 		n5_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -525,7 +525,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("this init boot is not supported yet!!!\n");
 	}
 
-	switch(info->video_interface){
+	switch(info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 		n5_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
@@ -544,7 +544,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("this data interface is not supported yet!!!\n");
 	}
 
-	switch(info->mclk){
+	switch(info->mclk) {
 	case TISP_SENSOR_MCLK0:
 		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
 		set_sensor_mclk_function(0);
@@ -592,31 +592,31 @@ static int n5_g_chip_ident(struct tx_isp_subdev *sd,
 	sensor_attr_check(sd);
 //	private_jzgpio_set_func(GPIO_PORT_A, GPIO_OUTPUT1, 0x01000000);
 #if 1
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio,"n5_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
 #endif
 #if 0
-	if(pwr_gpio != -1){
+	if (pwr_gpio != -1) {
 		ret = private_gpio_request(pwr_gpio,"n5_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(pwr_gpio, 1);
 			private_msleep(20);
 			private_gpio_direction_output(pwr_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(pwr_gpio, 1);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwr_gpio);
 		}
 	}
@@ -628,7 +628,7 @@ static int n5_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 	ISP_WARNING("n5 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "n5", sizeof("n5"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -642,13 +642,13 @@ static int n5_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void 
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if(arg)
+			if (arg)
 				ret = n5_set_mode(sd, sensor_val->value);
 		break;
 	default:
@@ -665,7 +665,7 @@ static int n5_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *r
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -682,7 +682,7 @@ static int n5_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_regis
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -705,7 +705,7 @@ static struct tx_isp_subdev_video_ops n5_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops	n5_sensor_ops = {
-	.ioctl	= n5_sensor_ops_ioctl,
+	.ioctl = n5_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops n5_ops = {
@@ -734,7 +734,7 @@ static int n5_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -763,9 +763,9 @@ static int n5_remove(struct i2c_client *client)
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwr_gpio != -1)
+	if (pwr_gpio != -1)
 		private_gpio_free(pwr_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -784,26 +784,26 @@ MODULE_DEVICE_TABLE(i2c, n5_id);
 
 static struct i2c_driver n5_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "n5",
+		.owner = THIS_MODULE,
+		.name = "n5",
 	},
-	.probe		= n5_probe,
-	.remove		= n5_remove,
-	.id_table	= n5_id,
+	.probe = n5_probe,
+	.remove = n5_remove,
+	.id_table = n5_id,
 };
 
-static __init int init_n5(void)
+static __init int init_sensor(void)
 {
 	return private_i2c_add_driver(&n5_driver);
 }
 
-static __exit void exit_n5(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&n5_driver);
 }
 
-module_init(init_n5);
-module_exit(exit_n5);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for GC n5 sensors");
 MODULE_LICENSE("GPL");

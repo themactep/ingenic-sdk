@@ -22,13 +22,13 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define HM2140_CHIP_ID_H	(0x21)
-#define HM2140_CHIP_ID_L	(0x40)
+#define SENSOR_CHIP_ID_H (0x21)
+#define SENSOR_CHIP_ID_L (0x40)
 
-#define HM2140_REG_END		0xffff
-#define HM2140_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define HM2140_SUPPORT_SCLK (76789800)
+#define SENSOR_SUPPORT_SCLK (76789800)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 
@@ -60,7 +60,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
-struct again_lut hm2140_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x0, 0	     },
 	{0x1, 5731   },
 	{0x2, 11136  },
@@ -126,23 +126,23 @@ struct again_lut hm2140_again_lut[] = {
 	{0x3e, 256041},
 	{0x3f, 259142},
 };
-struct tx_isp_sensor_attribute hm2140_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int hm2140_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
-	struct again_lut *lut = hm2140_again_lut;
+	struct again_lut *lut = sensor_again_lut;
 
-	while(lut->gain <= hm2140_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sensor_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut->value;
 			return 0;
 		}
-		else if(isp_gain < lut->gain) {
+		else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		else{
-			if((lut->gain == hm2140_attr.max_again) && (isp_gain >= lut->gain)) {
+		else {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -154,16 +154,16 @@ unsigned int hm2140_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int hm2140_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_mipi_bus hm2140_mipi={
+struct tx_isp_mipi_bus sensor_mipi={
 	.clk = 800,
 	.lans = 2,
 };
-struct tx_isp_dvp_bus hm2140_dvp={
+struct tx_isp_dvp_bus sensor_dvp={
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking = {
 		.vblanking = 0,
@@ -171,7 +171,7 @@ struct tx_isp_dvp_bus hm2140_dvp={
 	},
 };
 
-struct tx_isp_sensor_attribute hm2140_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "hm2140",
 	.chip_id = 0x2140,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -198,16 +198,16 @@ struct tx_isp_sensor_attribute hm2140_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = hm2140_alloc_again,
-	.sensor_ctrl.alloc_dgain = hm2140_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list hm2140_init_regs_1920_1080_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list hm2140_init_regs_1920_1080_25fps_dvp[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 //1080p@25fps
 	{0x0103, 0x00},
 	{0x5227, 0x74},
@@ -519,25 +519,25 @@ static struct regval_list hm2140_init_regs_1920_1080_25fps_dvp[] = {
 	/* {0x4026, 0xBA},//color bar */
 	/* {0x0601, 0x02},//color bar */
 	/* {0x0100, 0x01},  */
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
- * the order of the hm2140_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting hm2140_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= hm2140_init_regs_1920_1080_25fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
-static enum v4l2_mbus_pixelcode hm2140_mbus_code[] = {
+static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
@@ -545,43 +545,43 @@ static enum v4l2_mbus_pixelcode hm2140_mbus_code[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list hm2140_stream_on_dvp[] = {
+static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list hm2140_stream_off_dvp[] = {
+static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list hm2140_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list hm2140_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 
-	{HM2140_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int hm2140_read(struct v4l2_subdev *sd, uint16_t reg,
+int sensor_read(struct v4l2_subdev *sd, uint16_t reg,
 		unsigned char *value)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -592,16 +592,16 @@ int hm2140_read(struct v4l2_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int hm2140_write(struct v4l2_subdev *sd, uint16_t reg,
+int sensor_write(struct v4l2_subdev *sd, uint16_t reg,
 		unsigned char value)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -611,15 +611,15 @@ int hm2140_write(struct v4l2_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-static int hm2140_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != HM2140_REG_END) {
-		if (vals->reg_num == HM2140_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
-			ret = hm2140_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -628,14 +628,14 @@ static int hm2140_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
-static int hm2140_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != HM2140_REG_END) {
-		if (vals->reg_num == HM2140_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
-			ret = hm2140_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -644,40 +644,40 @@ static int hm2140_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int hm2140_reset(struct v4l2_subdev *sd, u32 val)
+static int sensor_reset(struct v4l2_subdev *sd, u32 val)
 {
 	return 0;
 }
 
-static int hm2140_detect(struct v4l2_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = hm2140_read(sd, 0x0000, &v);
+	ret = sensor_read(sd, 0x0000, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != HM2140_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
-	ret = hm2140_read(sd, 0x0001, &v);
+	ret = sensor_read(sd, 0x0001, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != HM2140_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
 }
 
-static int hm2140_set_integration_time(struct v4l2_subdev *sd, int value)
+static int sensor_set_integration_time(struct v4l2_subdev *sd, int value)
 {
 	int ret = 0;
-	ret = hm2140_write(sd, 0x0203, (unsigned char)(value & 0xff));
-	ret += hm2140_write(sd, 0x0202, (unsigned char)((value >> 8) & 0xff));
-	ret += hm2140_write(sd, 0x0104, 0x01);
+	ret = sensor_write(sd, 0x0203, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x0202, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0104, 0x01);
 
 	if (ret < 0)
 		return ret;
@@ -685,35 +685,35 @@ static int hm2140_set_integration_time(struct v4l2_subdev *sd, int value)
 	return 0;
 }
 
-static int hm2140_set_analog_gain(struct v4l2_subdev *sd, int value)
+static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = hm2140_write(sd, 0x0205, (unsigned char)(value & 0xff));
-	ret += hm2140_write(sd, 0x0104, 0x01);
+	ret = sensor_write(sd, 0x0205, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x0104, 0x01);
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int hm2140_set_digital_gain(struct v4l2_subdev *sd, int value)
+static int sensor_set_digital_gain(struct v4l2_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int hm2140_get_black_pedestal(struct v4l2_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int hm2140_init(struct v4l2_subdev *sd, u32 enable)
+static int sensor_init(struct v4l2_subdev *sd, u32 enable)
 {
 	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
-	struct tx_isp_sensor_win_setting *wsize = &hm2140_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -721,7 +721,7 @@ static int hm2140_init(struct v4l2_subdev *sd, u32 enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = hm2140_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	arg.value = (int)&sensor->video;
@@ -730,44 +730,44 @@ static int hm2140_init(struct v4l2_subdev *sd, u32 enable)
 	return 0;
 }
 
-static int hm2140_s_stream(struct v4l2_subdev *sd, int enable)
+static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 {
 	int ret = 0;
 	unsigned char val;
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = hm2140_write_array(sd, hm2140_stream_on_dvp);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_on_dvp);
 			msleep(100);
-			while(0){
-				hm2140_read(sd, 0x0005, &val);
+			while (0) {
+				sensor_read(sd, 0x0005, &val);
 				printk("0005 is 0x%x\n",val);
-				hm2140_read(sd, 0x0100, &val);
+				sensor_read(sd, 0x0100, &val);
 				printk("0x0100 is 0x%x\n",val);
-				hm2140_read(sd, 0x34c, &val);
+				sensor_read(sd, 0x34c, &val);
 				printk("0x34c is 0x%x\n",val);
-				hm2140_read(sd, 0x34d, &val);
+				sensor_read(sd, 0x34d, &val);
 				printk("0x34d is 0x%x\n",val);
-				hm2140_read(sd, 0x34e, &val);
+				sensor_read(sd, 0x34e, &val);
 				printk("0x34e is 0x%x\n",val);
-				hm2140_read(sd, 0x34f, &val);
+				sensor_read(sd, 0x34f, &val);
 				printk("0x34f is 0x%x\n",val);
 			}
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = hm2140_write_array(sd, hm2140_stream_on_mipi);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("hm2140 stream on\n");
 
 	}
 	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-			ret = hm2140_write_array(sd, hm2140_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-			ret = hm2140_write_array(sd, hm2140_stream_off_mipi);
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("hm2140 stream off\n");
@@ -775,17 +775,17 @@ static int hm2140_s_stream(struct v4l2_subdev *sd, int enable)
 	return ret;
 }
 
-static int hm2140_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
+static int sensor_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
 {
 	return 0;
 }
 
-static int hm2140_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
+static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
 {
 	return 0;
 }
 
-static int hm2140_set_fps(struct tx_isp_sensor *sensor, int fps)
+static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_notify_argument arg;
@@ -796,28 +796,28 @@ static int hm2140_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned char val = 0;
 	unsigned int newformat = 0; //the format is 24.8
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		return -1;
 	}
-	sclk = HM2140_SUPPORT_SCLK;
+	sclk = SENSOR_SUPPORT_SCLK;
 
 	val = 0;
-	ret += hm2140_read(sd, 0x342, &val);
+	ret += sensor_read(sd, 0x342, &val);
 	hts = val<<8;
 	val = 0;
-	ret += hm2140_read(sd, 0x343, &val);
-	hts |= val;
+	ret += sensor_read(sd, 0x343, &val);
+	hts = val;
 	if (0 != ret) {
 		printk("err: hm2140 read err\n");
 		return ret;
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret += hm2140_write(sd, 0x341, vts & 0xff);
-	ret += hm2140_write(sd, 0x340, (vts >> 8) & 0xff);
-	ret += hm2140_write(sd, 0x0104, 0x01);
+	ret += sensor_write(sd, 0x341, vts & 0xff);
+	ret += sensor_write(sd, 0x340, (vts >> 8) & 0xff);
+	ret += sensor_write(sd, 0x0104, 0x01);
 	if (0 != ret) {
-		printk("err: hm2140_write err\n");
+		printk("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -831,20 +831,20 @@ static int hm2140_set_fps(struct tx_isp_sensor *sensor, int fps)
 	return ret;
 }
 
-static int hm2140_set_mode(struct tx_isp_sensor *sensor, int value)
+static int sensor_set_mode(struct tx_isp_sensor *sensor, int value)
 {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
-		wsize = &hm2140_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
-		wsize = &hm2140_win_sizes[0];
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
+		wsize = &sensor_win_sizes[0];
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
+		wsize = &sensor_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -856,35 +856,35 @@ static int hm2140_set_mode(struct tx_isp_sensor *sensor, int value)
 	}
 	return ret;
 }
-static int hm2140_g_chip_ident(struct v4l2_subdev *sd,
+static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 		struct v4l2_dbg_chip_ident *chip)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = gpio_request(reset_gpio,"hm2140_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = gpio_request(reset_gpio,"sensor_reset");
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 0);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = gpio_request(pwdn_gpio,"hm2140_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = gpio_request(pwdn_gpio,"sensor_pwdn");
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = hm2140_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		v4l_err(client,
 				"chip found @ 0x%x (%s) is not an hm2140 chip.\n",
@@ -896,52 +896,52 @@ static int hm2140_g_chip_ident(struct v4l2_subdev *sd,
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
-static int hm2140_s_power(struct v4l2_subdev *sd, int on)
+static int sensor_s_power(struct v4l2_subdev *sd, int on)
 {
 	return 0;
 }
-static long hm2140_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl)
+static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl)
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
-			ret = hm2140_set_integration_time(sd, ctrl->value);
+			ret = sensor_set_integration_time(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
-			ret = hm2140_set_analog_gain(sd, ctrl->value);
+			ret = sensor_set_analog_gain(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
-			ret = hm2140_set_digital_gain(sd, ctrl->value);
+			ret = sensor_set_digital_gain(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
-			ret = hm2140_get_black_pedestal(sd, ctrl->value);
+			ret = sensor_get_black_pedestal(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = hm2140_set_mode(sensor,ctrl->value);
+			ret = sensor_set_mode(sensor,ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-				ret = hm2140_write_array(sd, hm2140_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-				ret = hm2140_write_array(sd, hm2140_stream_off_mipi);
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+				ret = sensor_write_array(sd, sensor_stream_off_dvp);
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+				ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-				ret = hm2140_write_array(sd, hm2140_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-				ret = hm2140_write_array(sd, hm2140_stream_on_mipi);
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+				ret = sensor_write_array(sd, sensor_stream_on_dvp);
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+				ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
-			ret = hm2140_set_fps(sensor, ctrl->value);
+			ret = sensor_set_fps(sensor, ctrl->value);
 			break;
 		default:
 			pr_debug("do not support ctrl->cmd ====%d\n",ctrl->cmd);
@@ -949,13 +949,13 @@ static long hm2140_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 	}
 	return 0;
 }
-static long hm2140_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
+static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
-			ret = hm2140_ops_private_ioctl(sensor, arg);
+			ret = sensor_ops_private_ioctl(sensor, arg);
 			break;
 		default:
 			return -1;
@@ -965,7 +965,7 @@ static long hm2140_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 }
 
 #ifdef CONFIG_VIDEO_ADV_DEBUG
-static int hm2140_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
+static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char val = 0;
@@ -975,13 +975,13 @@ static int hm2140_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 		return -EINVAL;
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = hm2140_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int hm2140_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
+static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
@@ -989,45 +989,45 @@ static int hm2140_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_regis
 		return -EINVAL;
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	hm2140_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 #endif
 
-static const struct v4l2_subdev_core_ops hm2140_core_ops = {
-	.g_chip_ident = hm2140_g_chip_ident,
-	.reset = hm2140_reset,
-	.init = hm2140_init,
-	.s_power = hm2140_s_power,
-	.ioctl = hm2140_ops_ioctl,
+static const struct v4l2_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.s_power = sensor_s_power,
+	.ioctl = sensor_ops_ioctl,
 #ifdef CONFIG_VIDEO_ADV_DEBUG
-	.g_register = hm2140_g_register,
-	.s_register = hm2140_s_register,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 #endif
 };
 
-static const struct v4l2_subdev_video_ops hm2140_video_ops = {
-	.s_stream = hm2140_s_stream,
-	.s_parm = hm2140_s_parm,
-	.g_parm = hm2140_g_parm,
+static const struct v4l2_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
+	.s_parm = sensor_s_parm,
+	.g_parm = sensor_g_parm,
 };
 
-static const struct v4l2_subdev_ops hm2140_ops = {
-	.core = &hm2140_core_ops,
-	.video = &hm2140_video_ops,
+static const struct v4l2_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
 };
 
-static int hm2140_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	struct v4l2_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &hm2140_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1045,26 +1045,26 @@ static int hm2140_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	hm2140_attr.dbus_type = data_interface;
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
-		wsize->regs = hm2140_init_regs_1920_1080_25fps_dvp;
-		memcpy((void*)(&(hm2140_attr.dvp)),(void*)(&hm2140_dvp),sizeof(hm2140_dvp));
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
-		wsize->regs = hm2140_init_regs_1920_1080_25fps_mipi;
-		memcpy((void*)(&(hm2140_attr.mipi)),(void*)(&hm2140_mipi),sizeof(hm2140_mipi));
-	} else{
+	sensor_attr.dbus_type = data_interface;
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+		wsize->regs = sensor_init_regs_1920_1080_25fps_dvp;
+		memcpy((void*)(&(sensor_attr.dvp)),(void*)(&sensor_dvp),sizeof(sensor_dvp));
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+		wsize->regs = sensor_init_regs_1920_1080_25fps_mipi;
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+	} else {
 		printk("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
 
-	hm2140_attr.max_again = 259142;
-	hm2140_attr.max_dgain = 0;
+	sensor_attr.max_again = 259142;
+	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &hm2140_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
-	v4l2_i2c_subdev_init(sd, client, &hm2140_ops);
+	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 	pr_debug("probe ok ------->hm2140\n");
 	return 0;
@@ -1078,14 +1078,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int hm2140_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -1096,34 +1096,34 @@ static int hm2140_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id hm2140_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "hm2140", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, hm2140_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver hm2140_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "hm2140",
+		.owner = THIS_MODULE,
+		.name = "hm2140",
 	},
-	.probe		= hm2140_probe,
-	.remove		= hm2140_remove,
-	.id_table	= hm2140_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
-static __init int init_hm2140(void)
+static __init int init_sensor(void)
 {
-	return i2c_add_driver(&hm2140_driver);
+	return i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_hm2140(void)
+static __exit void exit_sensor(void)
 {
-	i2c_del_driver(&hm2140_driver);
+	i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_hm2140);
-module_exit(exit_hm2140);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision hm2140 sensors");
 MODULE_LICENSE("GPL");

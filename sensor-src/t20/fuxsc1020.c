@@ -20,10 +20,10 @@
 
 #include <soc/gpio.h>
 
-#define FUXSC1020_REG_END		0xff
-#define FUXSC1020_REG_DELAY		0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
 
-#define FUXSC1020_SUPPORT_PCLK (74*1000*1000)
+#define SENSOR_SUPPORT_PCLK (74*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
 
@@ -88,7 +88,7 @@ struct tx_isp_sensor_attribute fuxsc1020_attr={
 };
 
 static struct regval_list fuxsc1020_init_regs_1280_720_25fps[] = {
-	{FUXSC1020_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -97,12 +97,12 @@ static struct regval_list fuxsc1020_init_regs_1280_720_25fps[] = {
 static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
 	/* 1280*800 */
 	{
-		.width		= 1280,
-		.height		= 720,
-		.fps		= 25 << 16 | 1, /* 12.5 fps */
-		.mbus_code	= V4L2_MBUS_FMT_YUYV8_1X16,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= fuxsc1020_init_regs_1280_720_25fps,
+		.width = 1280,
+		.height = 720,
+		.fps = 25 << 16 | 1, /* 12.5 fps */
+		.mbus_code = V4L2_MBUS_FMT_YUYV8_1X16,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = fuxsc1020_init_regs_1280_720_25fps,
 	}
 };
 
@@ -111,11 +111,11 @@ static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
  */
 
 static struct regval_list fuxsc1020_stream_on[] = {
-	{FUXSC1020_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list fuxsc1020_stream_off[] = {
-	{FUXSC1020_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int fuxsc1020_read(struct v4l2_subdev *sd, unsigned char reg,
@@ -169,7 +169,7 @@ static int fuxsc1020_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &fuxsc1020_win_sizes[0];
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -222,20 +222,20 @@ static int fuxsc1020_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 	printk("functiong:%s, line:%d\n", __func__, __LINE__);
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &fuxsc1020_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &fuxsc1020_win_sizes[0];
 	}
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
-		if(sensor->priv != wsize){
+		if (sensor->priv != wsize) {
 			ret = fuxsc1020_write_array(sd, wsize->regs);
-			if(!ret)
+			if (!ret)
 				sensor->priv = wsize;
 		}
 		sensor->video.fps = wsize->fps;
@@ -251,16 +251,16 @@ static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"fuxsc1020_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
@@ -295,7 +295,7 @@ static long fuxsc1020_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 			ret = fuxsc1020_set_integration_time(sd, ctrl->value);
 			break;
@@ -330,7 +330,7 @@ static long fuxsc1020_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
 			ret = fuxsc1020_ops_private_ioctl(sensor, arg);
 			break;
@@ -404,7 +404,7 @@ static int fuxsc1020_probe(struct i2c_client *client,
 	int ret = -1;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -426,7 +426,7 @@ static int fuxsc1020_probe(struct i2c_client *client,
 	 /*
 		convert sensor-gain into isp-gain,
 	 */
-	fuxsc1020_attr.max_again = 	log2_fixed_to_fixed(fuxsc1020_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	fuxsc1020_attr.max_again = log2_fixed_to_fixed(fuxsc1020_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	fuxsc1020_attr.max_dgain = fuxsc1020_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -451,9 +451,9 @@ static int fuxsc1020_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -472,26 +472,26 @@ MODULE_DEVICE_TABLE(i2c, fuxsc1020_id);
 
 static struct i2c_driver fuxsc1020_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "fuxsc1020",
+		.owner = THIS_MODULE,
+		.name = "fuxsc1020",
 	},
-	.probe		= fuxsc1020_probe,
-	.remove		= fuxsc1020_remove,
-	.id_table	= fuxsc1020_id,
+	.probe = fuxsc1020_probe,
+	.remove = fuxsc1020_remove,
+	.id_table = fuxsc1020_id,
 };
 
-static __init int init_fuxsc1020(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&fuxsc1020_driver);
 }
 
-static __exit void exit_fuxsc1020(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&fuxsc1020_driver);
 }
 
-module_init(init_fuxsc1020);
-module_exit(exit_fuxsc1020);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision fuxsc1020 sensors");
 MODULE_LICENSE("GPL");

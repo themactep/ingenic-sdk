@@ -22,14 +22,14 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define OV2732_CHIP_ID_H	(0x00)
-#define OV2732_CHIP_ID_M	(0x27)
-#define OV2732_CHIP_ID_L	(0x32)
+#define SENSOR_CHIP_ID_H (0x00)
+#define SENSOR_CHIP_ID_M	(0x27)
+#define SENSOR_CHIP_ID_L (0x32)
 
-#define OV2732_REG_END		0xffff
-#define OV2732_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define OV2732_SUPPORT_SCLK (44897280)
+#define SENSOR_SUPPORT_SCLK (44897280)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 
@@ -129,7 +129,7 @@ struct tx_isp_sensor_attribute ov2732_attr={
 
 static struct regval_list ov2732_init_regs_1920_1080_25fps_mipi[] = {
 
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list ov2732_init_regs_1920_1080_25fps_dvp[] = {
@@ -385,7 +385,7 @@ static struct regval_list ov2732_init_regs_1920_1080_25fps_dvp[] = {
 	{0x374e, 0x00},
 	{0x374f, 0xfa},
 	{0x0100, 0x00},
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -394,12 +394,12 @@ static struct regval_list ov2732_init_regs_1920_1080_25fps_dvp[] = {
 static struct tx_isp_sensor_win_setting ov2732_win_sizes[] = {
 	/* 1920*1080 */
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR12_1X12,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= ov2732_init_regs_1920_1080_25fps_dvp,
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR12_1X12,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = ov2732_init_regs_1920_1080_25fps_dvp,
 	}
 };
 
@@ -414,22 +414,22 @@ static enum v4l2_mbus_pixelcode ov2732_mbus_code[] = {
 
 static struct regval_list ov2732_stream_on_dvp[] = {
 	{0x0100, 0x01},
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list ov2732_stream_off_dvp[] = {
 	{0x0100, 0x00},
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list ov2732_stream_on_mipi[] = {
 
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list ov2732_stream_off_mipi[] = {
 
-	{OV2732_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int ov2732_read(struct v4l2_subdev *sd, uint16_t reg,
@@ -439,16 +439,16 @@ int ov2732_read(struct v4l2_subdev *sd, uint16_t reg,
 	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -465,10 +465,10 @@ int ov2732_write(struct v4l2_subdev *sd, uint16_t reg,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -482,8 +482,8 @@ static int ov2732_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OV2732_REG_END) {
-		if (vals->reg_num == OV2732_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = ov2732_read(sd, vals->reg_num, &val);
@@ -498,8 +498,8 @@ static int ov2732_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int ov2732_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != OV2732_REG_END) {
-		if (vals->reg_num == OV2732_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = ov2732_write(sd, vals->reg_num, vals->value);
@@ -525,7 +525,7 @@ static int ov2732_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2732_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -533,7 +533,7 @@ static int ov2732_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2732_CHIP_ID_M)
+	if (v != SENSOR_CHIP_ID_M)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -541,7 +541,7 @@ static int ov2732_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2732_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -596,7 +596,7 @@ static int ov2732_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &ov2732_win_sizes[0];
 	int ret = 0;
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -618,24 +618,24 @@ static int ov2732_s_stream(struct v4l2_subdev *sd, int enable)
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = ov2732_write_array(sd, ov2732_stream_on_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = ov2732_write_array(sd, ov2732_stream_on_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("ov2732 stream on\n");
 
 	}
 	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = ov2732_write_array(sd, ov2732_stream_off_dvp);
-		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = ov2732_write_array(sd, ov2732_stream_off_mipi);
 
-		}else{
+		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
 		pr_debug("ov2732 stream off\n");
@@ -664,17 +664,17 @@ static int ov2732_set_fps(struct tx_isp_sensor *sensor, int fps)
 	unsigned char val = 0;
 	unsigned int newformat = 0; //the format is 24.8
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		return -1;
 	}
-	sclk = OV2732_SUPPORT_SCLK;
+	sclk = SENSOR_SUPPORT_SCLK;
 
 	val = 0;
 	ret += ov2732_read(sd, 0x380c, &val);
 	hts = val<<8;
 	val = 0;
 	ret += ov2732_read(sd, 0x380d, &val);
-	hts |= val;
+	hts = val;
 	if (0 != ret) {
 		printk("err: ov2732 read err\n");
 		return ret;
@@ -708,13 +708,13 @@ static int ov2732_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &ov2732_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &ov2732_win_sizes[0];
 	}
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -732,27 +732,27 @@ static int ov2732_g_chip_ident(struct v4l2_subdev *sd,
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"ov2732_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
+	if (pwdn_gpio != -1) {
 		ret = gpio_request(pwdn_gpio,"ov2732_pwdn");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(10);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
@@ -776,7 +776,7 @@ static long ov2732_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 			ret = ov2732_set_integration_time(sd, ctrl->value);
 			break;
@@ -793,22 +793,22 @@ static long ov2732_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = ov2732_set_mode(sensor,ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = ov2732_write_array(sd, ov2732_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = ov2732_write_array(sd, ov2732_stream_off_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = ov2732_write_array(sd, ov2732_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = ov2732_write_array(sd, ov2732_stream_on_mipi);
 
-			}else{
+			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
 			break;
@@ -825,7 +825,7 @@ static long ov2732_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
 			ret = ov2732_ops_private_ioctl(sensor, arg);
 			break;
@@ -899,7 +899,7 @@ static int ov2732_probe(struct i2c_client *client,
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -918,13 +918,13 @@ static int ov2732_probe(struct i2c_client *client,
 		goto err_set_sensor_gpio;
 
 	ov2732_attr.dbus_type = data_interface;
-	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
+	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		wsize->regs = ov2732_init_regs_1920_1080_25fps_dvp;
 		memcpy((void*)(&(ov2732_attr.dvp)),(void*)(&ov2732_dvp),sizeof(ov2732_dvp));
-	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->regs = ov2732_init_regs_1920_1080_25fps_mipi;
 		memcpy((void*)(&(ov2732_attr.mipi)),(void*)(&ov2732_mipi),sizeof(ov2732_mipi));
-	} else{
+	} else {
 		printk("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
@@ -955,9 +955,9 @@ static int ov2732_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -976,26 +976,26 @@ MODULE_DEVICE_TABLE(i2c, ov2732_id);
 
 static struct i2c_driver ov2732_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "ov2732",
+		.owner = THIS_MODULE,
+		.name = "ov2732",
 	},
-	.probe		= ov2732_probe,
-	.remove		= ov2732_remove,
-	.id_table	= ov2732_id,
+	.probe = ov2732_probe,
+	.remove = ov2732_remove,
+	.id_table = ov2732_id,
 };
 
-static __init int init_ov2732(void)
+static __init int init_sensor(void)
 {
 	return i2c_add_driver(&ov2732_driver);
 }
 
-static __exit void exit_ov2732(void)
+static __exit void exit_sensor(void)
 {
 	i2c_del_driver(&ov2732_driver);
 }
 
-module_init(init_ov2732);
-module_exit(exit_ov2732);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for OmniVision ov2732 sensors");
 MODULE_LICENSE("GPL");

@@ -23,13 +23,13 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
-#define JXH65_CHIP_ID_H	(0x0a)
-#define JXH65_CHIP_ID_L	(0x65)
+#define SENSOR_CHIP_ID_H (0x0a)
+#define SENSOR_CHIP_ID_L (0x65)
 
-#define JXH65_REG_END		0xff
-#define JXH65_REG_DELAY		0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
 
-#define JXH65_SUPPORT_PCLK (43200*1000)
+#define SENSOR_SUPPORT_PCLK (43200*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
@@ -58,7 +58,7 @@ static inline unsigned char cale_again_register(unsigned int gain)
 	int index = 0;
 	int i = 0, p = 0;
 	for(index = 3; index >= 0; index--)
-		if(gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
+		if (gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
 			break;
 	i = index;
 	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0xf;
@@ -79,7 +79,7 @@ unsigned int jxh65_alloc_again(unsigned int isp_gain, unsigned char shift, unsig
 	unsigned int gain_one = 0;
 	unsigned int gain_one1 = 0;
 
-	if(isp_gain > jxh65_attr.max_again){
+	if (isp_gain > jxh65_attr.max_again) {
 		isp_gain = jxh65_attr.max_again;
 	}
 	again = isp_gain;
@@ -206,10 +206,10 @@ static struct regval_list jxh65_init_regs_1280_960_25fps[] = {
 	{0x12,0x00},
 	{0x45,0x89},
 	{0x93,0x68},
-	{JXH65_REG_DELAY,500},
+	{SENSOR_REG_DELAY,500},
 	{0x45,0x19},
 	{0x1F,0x11},
-	{JXH65_REG_END, 0x00}	/* END MARKER */
+	{SENSOR_REG_END, 0x00}	/* END MARKER */
 };
 
 /*
@@ -218,12 +218,12 @@ static struct regval_list jxh65_init_regs_1280_960_25fps[] = {
 static struct tx_isp_sensor_win_setting jxh65_win_sizes[] = {
 	/* 1280*800 */
 	{
-		.width		= 1280,
-		.height		= 960,
-		.fps		= 25 << 16 | 1, /* 12.5 fps */
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= jxh65_init_regs_1280_960_25fps,
+		.width = 1280,
+		.height = 960,
+		.fps = 25 << 16 | 1, /* 12.5 fps */
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = jxh65_init_regs_1280_960_25fps,
 	}
 };
 
@@ -237,13 +237,13 @@ static enum v4l2_mbus_pixelcode jxh65_mbus_code[] = {
 
 static struct regval_list jxh65_stream_on[] = {
 	{0x12, 0x00},
-	{JXH65_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh65_stream_off[] = {
 	/* Sensor enter LP11*/
 	{0x12, 0x40},
-	{JXH65_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxh65_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value)
@@ -252,16 +252,16 @@ int jxh65_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value)
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 
@@ -278,10 +278,10 @@ int jxh65_write(struct v4l2_subdev *sd, unsigned char reg, unsigned char value)
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 
 	ret = i2c_transfer(client->adapter, &msg, 1);
@@ -295,8 +295,8 @@ static int jxh65_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXH65_REG_END) {
-		if (vals->reg_num == JXH65_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = jxh65_read(sd, vals->reg_num, &val);
@@ -311,8 +311,8 @@ static int jxh65_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 static int jxh65_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXH65_REG_END) {
-		if (vals->reg_num == JXH65_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = jxh65_write(sd, vals->reg_num, vals->value);
@@ -337,7 +337,7 @@ static int jxh65_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXH65_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -345,7 +345,7 @@ static int jxh65_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXH65_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -357,7 +357,7 @@ static int jxh65_set_integration_time(struct v4l2_subdev *sd, int value)
 	int ret = 0;
 	ret += jxh65_write(sd, 0x01, (unsigned char)(expo & 0xff));
 	ret += jxh65_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
-	if (ret < 0){
+	if (ret < 0) {
 		printk("err:jxh65_write error\n");
 		return ret;
 	}
@@ -392,7 +392,7 @@ static int jxh65_init(struct v4l2_subdev *sd, u32 enable)
 	struct tx_isp_sensor_win_setting *wsize = &jxh65_win_sizes[0];
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -439,7 +439,7 @@ static int jxh65_set_fps(struct tx_isp_sensor *sensor, int fps)
 {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
-	unsigned int pclk = JXH65_SUPPORT_PCLK;
+	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
@@ -448,14 +448,14 @@ static int jxh65_set_fps(struct tx_isp_sensor *sensor, int fps)
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
 	ret += jxh65_read(sd, 0x21, &tmp);
 	hts = tmp;
 	ret += jxh65_read(sd, 0x20, &tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 	hts = ((hts << 8) + tmp) << 1;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
@@ -465,12 +465,12 @@ static int jxh65_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret += jxh65_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += jxh65_read(sd, 0x1f, &tmp);
 	pr_debug("before register 0x1f value : 0x%02x\n", tmp);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	tmp |= (1 << 7); /*set bit[7],  register group write function,  auto clean*/
+	tmp = (1 << 7); /*set bit[7],  register group write function,  auto clean*/
 	ret = jxh65_write(sd, 0x1f, tmp);
 	pr_debug("after register 0x1f value : 0x%02x\n", tmp);
-	if(ret < 0){
+	if (ret < 0) {
 		printk("err:sc2135_write err\n");
 		return ret;
 	}
@@ -490,20 +490,20 @@ static int jxh65_set_mode(struct tx_isp_sensor *sensor, int value)
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-	if(value == TX_ISP_SENSOR_FULL_RES_MAX_FPS){
+	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &jxh65_win_sizes[0];
-	}else if(value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS){
+	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &jxh65_win_sizes[0];
 	}
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
-		if(sensor->priv != wsize){
+		if (sensor->priv != wsize) {
 			ret = jxh65_write_array(sd, wsize->regs);
-			if(!ret)
+			if (!ret)
 				sensor->priv = wsize;
 		}
 		sensor->video.fps = wsize->fps;
@@ -520,16 +520,16 @@ static int jxh65_g_chip_ident(struct v4l2_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	if(reset_gpio != -1){
+	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio,"jxh65_reset");
-		if(!ret){
+		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 0);
 			msleep(10);
 			gpio_direction_output(reset_gpio, 1);
 			msleep(1);
-		}else{
+		} else {
 			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
@@ -565,7 +565,7 @@ static long jxh65_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pri
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd){
+	switch(ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = jxh65_set_integration_time(sd, ctrl->value);
 		break;
@@ -601,7 +601,7 @@ static long jxh65_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd){
+	switch(cmd) {
 	case VIDIOC_ISP_PRIVATE_IOCTL:
 		ret = jxh65_ops_private_ioctl(sensor, arg);
 		break;
@@ -677,7 +677,7 @@ static int jxh65_probe(struct i2c_client *client,
 	int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -696,7 +696,7 @@ static int jxh65_probe(struct i2c_client *client,
 		goto err_set_sensor_gpio;
 
 	jxh65_attr.dvp.gpio = sensor_gpio_func;
-	switch(sensor_gpio_func){
+	switch(sensor_gpio_func) {
 	case DVP_PA_LOW_8BIT:
 	case DVP_PA_HIGH_8BIT:
 		mbus = jxh65_mbus_code[0];
@@ -714,7 +714,7 @@ static int jxh65_probe(struct i2c_client *client,
 	/*
 	convert sensor-gain into isp-gain,
 	*/
-	jxh65_attr.max_again = 	log2_fixed_to_fixed(jxh65_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	jxh65_attr.max_again = log2_fixed_to_fixed(jxh65_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	jxh65_attr.max_dgain = jxh65_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -740,9 +740,9 @@ static int jxh65_remove(struct i2c_client *client)
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
 
 	clk_disable(sensor->mclk);
@@ -761,26 +761,26 @@ MODULE_DEVICE_TABLE(i2c, jxh65_id);
 
 static struct i2c_driver jxh65_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "jxh65",
+		.owner = THIS_MODULE,
+		.name = "jxh65",
 	},
-	.probe		= jxh65_probe,
-	.remove		= jxh65_remove,
-	.id_table	= jxh65_id,
+	.probe = jxh65_probe,
+	.remove = jxh65_remove,
+	.id_table = jxh65_id,
 };
 
-static __init int init_jxh65(void)
+static __init int ini_sensor(void)
 {
 	return i2c_add_driver(&jxh65_driver);
 }
 
-static __exit void exit_jxh65(void)
+static __exit void exi_sensor(void)
 {
 	i2c_del_driver(&jxh65_driver);
 }
 
-module_init(init_jxh65);
-module_exit(exit_jxh65);
+module_init(ini_sensor);
+module_exit(exi_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for SOI jxh65 sensors");
 MODULE_LICENSE("GPL");

@@ -29,14 +29,14 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define RN6752v1_CHIP_ID_H	(0x26)
-#define RN6752v1_CHIP_ID_L	(0x01)
+#define SENSOR_CHIP_ID_H (0x26)
+#define SENSOR_CHIP_ID_L (0x01)
 
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 				27000000
-#define SENSOR_VERSION 		"H20221205a"
-#define RN6752_REG_DELAY	0xfd
-#define RN6752_REG_END		0xfa
+#define SENSOR_VERSION "H20221205a"
+#define SENSOR_REG_DELAY 0xfd
+#define SENSOR_REG_END 0xfa
 
 #define USE_BLUE_SCREEN 	1
 #define USE_CVBS_ONE_FIELD	1
@@ -49,8 +49,7 @@ struct regval_list {
 	unsigned char value;
 };
 
-static struct regval_list cvbs_ntsc_video[] =
-{
+static struct regval_list cvbs_ntsc_video[] = {
     {0xff, 0x08},
     {0x6c, 0x00},
 	{0x81, 0x01}, // turn on video decoder
@@ -185,12 +184,11 @@ static struct regval_list cvbs_ntsc_video[] =
 	{0xFF, 0x0A},
 	{0x6C, 0x10},
 #endif
-	{RN6752_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 
-static struct regval_list cvbs_pal_video[] =
-{
+static struct regval_list cvbs_pal_video[] = {
     {0xff, 0x08},
     {0x6c, 0x00},
 	{0x81, 0x01}, // turn on video decoder
@@ -326,11 +324,10 @@ static struct regval_list cvbs_pal_video[] =
 	{0x6C, 0x10},
 #endif
 
-	{RN6752_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
-static struct regval_list rn6752_init_regs_1280_720_25fps_mipi[] =
-{
+static struct regval_list rn6752_init_regs_1280_720_25fps_mipi[] = {
     {0x81,0x01},
     {0xa3,0x04},
     {0xdf,0xfe},
@@ -443,11 +440,10 @@ static struct regval_list rn6752_init_regs_1280_720_25fps_mipi[] =
     {0xff,0x0a},
     {0x6c,0x10},
 #endif
-	{RN6752_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
-static struct regval_list FHD_1080P25_video[] =
-{
+static struct regval_list FHD_1080P25_video[] = {
 	{0x81, 0x01}, // turn on video decoder
 	{0xA3, 0x04}, //
 	{0xDF, 0xFE}, // enable HD format
@@ -547,7 +543,7 @@ static struct regval_list FHD_1080P25_video[] =
 	{0xFF, 0x0A},
 	{0x6C, 0x10},
 #endif
-	{RN6752_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -556,36 +552,36 @@ static struct regval_list FHD_1080P25_video[] =
 
 static struct tx_isp_sensor_win_setting rn6752_win_sizes[] = {
 	{
-		.width		= 720,
-		.height		= 240,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_UYVY8_2X8,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= cvbs_ntsc_video,
-	},
-	{
-		.width		= 720,
-		.height		= 288,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_UYVY8_2X8,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= cvbs_pal_video,
-	},
-	{
-		.width		= 1280,
-		.height 	= 720,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_YUYV8_2X8,
+		.width = 720,
+		.height = 240,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_UYVY8_2X8,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs		= rn6752_init_regs_1280_720_25fps_mipi,
+		.regs = cvbs_ntsc_video,
 	},
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_UYVY8_2X8,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= FHD_1080P25_video,
+		.width = 720,
+		.height = 288,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_UYVY8_2X8,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = cvbs_pal_video,
+	},
+	{
+		.width = 1280,
+		.height = 720,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_YUYV8_2X8,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = rn6752_init_regs_1280_720_25fps_mipi,
+	},
+	{
+		.width = 1920,
+		.height = 1080,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_UYVY8_2X8,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = FHD_1080P25_video,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &rn6752_win_sizes[0];
@@ -647,16 +643,16 @@ int rn6752_read(struct tx_isp_subdev *sd, unsigned char reg,
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {
 		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
 		},
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
 		}
 	};
 	int ret;
@@ -676,10 +672,10 @@ int rn6752_write(struct tx_isp_subdev *sd, unsigned char reg,
 //	printk("wangtg______>%s addr:0x%x reg:0x%x value:%d", __func__, client->addr, reg, value);
 
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -694,8 +690,8 @@ static int rn6752_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != RN6752_REG_END) {
-		if (vals->reg_num == RN6752_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = rn6752_read(sd, vals->reg_num, &val);
@@ -715,8 +711,8 @@ static int rn6752_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	int ret;
 //	unsigned char val;
 
-	while (vals->reg_num != RN6752_REG_END) {
-		if (vals->reg_num == RN6752_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = rn6752_write(sd, vals->reg_num, vals->value);
@@ -740,7 +736,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	int ret;
 
-	switch(info->default_boot){
+	switch(info->default_boot) {
 		case 0:
             wsize = &rn6752_win_sizes[0];
 			memcpy((void*)(&(rn6752_attr.mipi)),(void*)(&rn6752_mipi),sizeof(rn6752_mipi));
@@ -801,7 +797,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
             break;
     }
 
-	switch (info->video_interface){
+	switch (info->video_interface) {
 		case TISP_SENSOR_VI_MIPI_CSI0:
 			rn6752_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 			rn6752_attr.mipi.index = 0;
@@ -813,7 +809,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 			ISP_ERROR("Have no this Interface Source!!!\n");
 	}
 
-	switch (info->mclk){
+	switch (info->mclk) {
 		case TISP_SENSOR_MCLK0:
 		case TISP_SENSOR_MCLK1:
 		case TISP_SENSOR_MCLK2:
@@ -865,12 +861,12 @@ static int rn6752_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	msleep(10);
 	ret = rn6752_read(sd, 0xFE, &v);
 //	printk("ret = %d, v = 0x%02x\n", ret, v);
-	if (ret < 0 || v != RN6752v1_CHIP_ID_H)
+	if (ret < 0 || v != SENSOR_CHIP_ID_H)
 		return ret;
 	*ident = v;
 	ret = rn6752_read(sd, 0xFD, &v);
 //	printk("ret = %d, v = 0x%02x\n", ret, v);
-	if (ret < 0 || v != RN6752v1_CHIP_ID_L)
+	if (ret < 0 || v != SENSOR_CHIP_ID_L)
 		return ret;
 	*ident = (*ident << 8) | v;
 #if 0 /*读取sensor的制式*/
@@ -894,28 +890,28 @@ static int rn6752_g_chip_ident(struct tx_isp_subdev *sd,
 
 	sensor_attr_check(sd);
 	info->rst_gpio = reset_gpio;
-	if(info->rst_gpio != -1){
+	if (info->rst_gpio != -1) {
 		ret = private_gpio_request(info->rst_gpio,"rn6752_reset");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(info->rst_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(info->rst_gpio, 0);
 			private_msleep(35);
 			private_gpio_direction_output(info->rst_gpio, 1);
 			private_msleep(35);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",info->rst_gpio);
 		}
 	}
 #if 0
-	if(info->pwdn_gpio != -1){
+	if (info->pwdn_gpio != -1) {
 		ret = private_gpio_request(info->pwdn_gpio,"rn6752_pwdn");
-		if(!ret){
+		if (!ret) {
 			private_gpio_direction_output(info->pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(info->pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n",info->pwdn_gpio);
 		}
 	}
@@ -927,7 +923,7 @@ static int rn6752_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ISP_WARNING("rn6752 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 //	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	if (chip) {
 		memcpy(chip->name, "rn6752", sizeof("rn6752"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -945,7 +941,7 @@ static int rn6752_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if (!init->enable){
+	if (!init->enable) {
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		return ISP_SUCCESS;
 	}
@@ -974,10 +970,10 @@ static int rn6752_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
-	if (!private_capable(CAP_SYS_ADMIN)){
+	if (!private_capable(CAP_SYS_ADMIN)) {
 		return -EPERM;
 	}
 	ret = rn6752_read(sd, reg->reg & 0xffff, &val);
@@ -992,7 +988,7 @@ static int rn6752_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1016,16 +1012,16 @@ static int rn6752_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
-	if(init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
+	if (init->enable) {
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
 			sensor->video.state = TX_ISP_MODULE_INIT;
-		}else{
+		} else {
 			ISP_WARNING("init failed, state error!\n");
 		}
 
-/**		if(sensor->video.state == TX_ISP_MODULE_INIT){
+/**		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = rn6752_write_array(sd, wsize->regs);
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 	*/
@@ -1065,7 +1061,7 @@ static int rn6752_set_mode(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1084,13 +1080,13 @@ static int rn6752_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = rn6752_set_mode(sd, sensor_val->value);
 		break;
 	default:
@@ -1102,7 +1098,7 @@ static int rn6752_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 
 
 static struct tx_isp_subdev_sensor_ops	rn6752_sensor_ops = {
-	.ioctl	= rn6752_sensor_ops_ioctl,
+	.ioctl = rn6752_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops rn6752_ops = {
@@ -1169,9 +1165,9 @@ static int rn6752_remove(struct i2c_client *client)
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 
-	if(info->rst_gpio != -1)
+	if (info->rst_gpio != -1)
 		private_gpio_free(info->rst_gpio);
-	if(info->pwdn_gpio != -1)
+	if (info->pwdn_gpio != -1)
 		private_gpio_free(info->pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1190,32 +1186,32 @@ MODULE_DEVICE_TABLE(i2c, rn6752_id);
 
 static struct i2c_driver rn6752_driver = {
 	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "rn6752",
+		.owner = THIS_MODULE,
+		.name = "rn6752",
 	},
-	.probe		= rn6752_probe,
-	.remove		= rn6752_remove,
-	.id_table	= rn6752_id,
+	.probe = rn6752_probe,
+	.remove = rn6752_remove,
+	.id_table = rn6752_id,
 };
 
 
-static __init int init_rn6752(void)
+static __init int init_sensor(void)
 {
 	/* ret = private_driver_get_interface(); */
-	/* if(ret){ */
+	/* if (ret) { */
 	/* 	ISP_ERROR("Failed to init rn6752 driver.\n"); */
 	/* 	return -1; */
 	/* } */
 	return private_i2c_add_driver(&rn6752_driver);
 }
 
-static __exit void exit_rn6752(void)
+static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&rn6752_driver);
 }
 
-module_init(init_rn6752);
-module_exit(exit_rn6752);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for rn6752 sensors");
 MODULE_LICENSE("GPL");
