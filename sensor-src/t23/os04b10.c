@@ -1,11 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * os04b10.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -17,17 +13,15 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
 #define SENSOR_CHIP_ID_H (0x43)
-#define  SENSOR_CHIP_ID_M (0x08)
+#define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_SCLK_FPS_25 (72000000)
 #define SENSOR_SUPPORT_SCLK_FPS_20 (84000000)
 #define SENSOR_VTS_25_FPS 0x71a
