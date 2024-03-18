@@ -21,9 +21,10 @@
 
 #include <soc/gpio.h>
 
+#define SENSOR_NAME "fuxsc1020"
+#define SENSOR_CHIP_ID 0xa042
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_PCLK (74*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -57,20 +58,20 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-struct tx_isp_sensor_attribute fuxsc1020_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int fuxsc1020_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	return 0;
 }
 
-unsigned int fuxsc1020_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
-struct tx_isp_sensor_attribute fuxsc1020_attr={
-	.name = "fuxsc1020",
-	.chip_id = 0xa042,
+struct tx_isp_sensor_attribute sensor_attr={
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -94,20 +95,20 @@ struct tx_isp_sensor_attribute fuxsc1020_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 1,
 	.dgain_apply_delay = 1,
-	.sensor_ctrl.alloc_again = fuxsc1020_alloc_again,
-	.sensor_ctrl.alloc_dgain = fuxsc1020_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 44,
 	//void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-static struct regval_list fuxsc1020_init_regs_1280_720_25fps[] = {
+static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
- * the order of the fuxsc1020_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*800 */
 	{
 		.width = 1280,
@@ -115,7 +116,7 @@ static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
 		.fps = 25 << 16 | 1, /* 12.5 fps */
 		.mbus_code = V4L2_MBUS_FMT_YUYV8_1X16,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = fuxsc1020_init_regs_1280_720_25fps,
+		.regs = sensor_init_regs_1280_720_25fps,
 	}
 };
 
@@ -123,64 +124,64 @@ static struct tx_isp_sensor_win_setting fuxsc1020_win_sizes[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list fuxsc1020_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list fuxsc1020_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int fuxsc1020_read(struct v4l2_subdev *sd, unsigned char reg,
+int sensor_read(struct v4l2_subdev *sd, unsigned char reg,
 		unsigned char *value)
 {
 	return 0;
 }
 
-int fuxsc1020_write(struct v4l2_subdev *sd, unsigned char reg,
+int sensor_write(struct v4l2_subdev *sd, unsigned char reg,
 		unsigned char value)
 {
 	return 0;
 }
 
-static int fuxsc1020_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 {
 	return 0;
 }
 
-static int fuxsc1020_reset(struct v4l2_subdev *sd, u32 val)
+static int sensor_reset(struct v4l2_subdev *sd, u32 val)
 {
 	return 0;
 }
 
-static int fuxsc1020_detect(struct v4l2_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 {
 	return 0;
 }
 
-static int fuxsc1020_set_integration_time(struct v4l2_subdev *sd, int value)
+static int sensor_set_integration_time(struct v4l2_subdev *sd, int value)
 {
 	return 0;
 }
-static int fuxsc1020_set_analog_gain(struct v4l2_subdev *sd, int value)
+static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value)
 {
 	return 0;
 }
-static int fuxsc1020_set_digital_gain(struct v4l2_subdev *sd, int value)
-{
-	return 0;
-}
-
-static int fuxsc1020_get_black_pedestal(struct v4l2_subdev *sd, int value)
+static int sensor_set_digital_gain(struct v4l2_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int fuxsc1020_init(struct v4l2_subdev *sd, u32 enable)
+static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value)
+{
+	return 0;
+}
+
+static int sensor_init(struct v4l2_subdev *sd, u32 enable)
 {
 	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
-	struct tx_isp_sensor_win_setting *wsize = &fuxsc1020_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 	if (!enable)
 		return ISP_SUCCESS;
@@ -197,38 +198,38 @@ static int fuxsc1020_init(struct v4l2_subdev *sd, u32 enable)
 	return 0;
 }
 
-static int fuxsc1020_s_stream(struct v4l2_subdev *sd, int enable)
+static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		ret = fuxsc1020_write_array(sd, fuxsc1020_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		printk("fuxsc1020 stream on\n");
 	}
 	else {
-		ret = fuxsc1020_write_array(sd, fuxsc1020_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		printk("fuxsc1020 stream off\n");
 	}
 	return ret;
 }
 
-static int fuxsc1020_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
+static int sensor_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
 {
 	return 0;
 }
 
-static int fuxsc1020_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
+static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
 {
 	return 0;
 }
 
 
-static int fuxsc1020_set_fps(struct tx_isp_sensor *sensor, int fps)
+static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 {
 	return 0;
 }
 
-static int fuxsc1020_set_mode(struct tx_isp_sensor *sensor, int value)
+static int sensor_set_mode(struct tx_isp_sensor *sensor, int value)
 {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
@@ -236,9 +237,9 @@ static int fuxsc1020_set_mode(struct tx_isp_sensor *sensor, int value)
 	int ret = ISP_SUCCESS;
 	printk("functiong:%s, line:%d\n", __func__, __LINE__);
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
-		wsize = &fuxsc1020_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		wsize = &fuxsc1020_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	}
 	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
@@ -247,7 +248,7 @@ static int fuxsc1020_set_mode(struct tx_isp_sensor *sensor, int value)
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		if (sensor->priv != wsize) {
-			ret = fuxsc1020_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (!ret)
 				sensor->priv = wsize;
 		}
@@ -257,7 +258,7 @@ static int fuxsc1020_set_mode(struct tx_isp_sensor *sensor, int value)
 	}
 	return ret;
 }
-static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
+static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 		struct v4l2_dbg_chip_ident *chip)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -265,7 +266,7 @@ static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	if (reset_gpio != -1) {
-		ret = gpio_request(reset_gpio,"fuxsc1020_reset");
+		ret = gpio_request(reset_gpio,"sensor_reset");
 		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
@@ -278,7 +279,7 @@ static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = gpio_request(pwdn_gpio, "fuxsc1020_pwdn");
+		ret = gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			gpio_direction_output(pwdn_gpio, 1);
 			msleep(50);
@@ -288,7 +289,7 @@ static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
 			printk("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = fuxsc1020_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		v4l_err(client,
 				"chip found @ 0x%x (%s) is not an fuxsc1020 chip.\n",
@@ -300,38 +301,38 @@ static int fuxsc1020_g_chip_ident(struct v4l2_subdev *sd,
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
-static int fuxsc1020_s_power(struct v4l2_subdev *sd, int on)
+static int sensor_s_power(struct v4l2_subdev *sd, int on)
 {
 	return 0;
 }
-static long fuxsc1020_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl)
+static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl)
 {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
 	switch(ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
-			ret = fuxsc1020_set_integration_time(sd, ctrl->value);
+			ret = sensor_set_integration_time(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
-			ret = fuxsc1020_set_analog_gain(sd, ctrl->value);
+			ret = sensor_set_analog_gain(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
-			ret = fuxsc1020_set_digital_gain(sd, ctrl->value);
+			ret = sensor_set_digital_gain(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
-			ret = fuxsc1020_get_black_pedestal(sd, ctrl->value);
+			ret = sensor_get_black_pedestal(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = fuxsc1020_set_mode(sensor,ctrl->value);
+			ret = sensor_set_mode(sensor,ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-		//	ret = fuxsc1020_write_array(sd, fuxsc1020_stream_off);
+		//	ret = sensor_write_array(sd, sensor_stream_off);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-		//	ret = fuxsc1020_write_array(sd, fuxsc1020_stream_on);
+		//	ret = sensor_write_array(sd, sensor_stream_on);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
-			ret = fuxsc1020_set_fps(sensor, ctrl->value);
+			ret = sensor_set_fps(sensor, ctrl->value);
 			break;
 		default:
 			printk("do not support ctrl->cmd ====%d\n",ctrl->cmd);
@@ -339,13 +340,13 @@ static long fuxsc1020_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp
 	}
 	return 0;
 }
-static long fuxsc1020_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
+static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
 {
 	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch(cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
-			ret = fuxsc1020_ops_private_ioctl(sensor, arg);
+			ret = sensor_ops_private_ioctl(sensor, arg);
 			break;
 		default:
 			return -1;
@@ -355,7 +356,7 @@ static long fuxsc1020_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *
 }
 
 #ifdef CONFIG_VIDEO_ADV_DEBUG
-static int fuxsc1020_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
+static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *reg)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char val = 0;
@@ -365,13 +366,13 @@ static int fuxsc1020_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register
 		return -EINVAL;
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = fuxsc1020_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int fuxsc1020_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
+static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
@@ -379,41 +380,41 @@ static int fuxsc1020_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_re
 		return -EINVAL;
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	fuxsc1020_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 #endif
 
-static const struct v4l2_subdev_core_ops fuxsc1020_core_ops = {
-	.g_chip_ident = fuxsc1020_g_chip_ident,
-	.reset = fuxsc1020_reset,
-	.init = fuxsc1020_init,
-	.s_power = fuxsc1020_s_power,
-	.ioctl = fuxsc1020_ops_ioctl,
+static const struct v4l2_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.s_power = sensor_s_power,
+	.ioctl = sensor_ops_ioctl,
 #ifdef CONFIG_VIDEO_ADV_DEBUG
-	.g_register = fuxsc1020_g_register,
-	.s_register = fuxsc1020_s_register,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 #endif
 };
 
-static const struct v4l2_subdev_video_ops fuxsc1020_video_ops = {
-	.s_stream = fuxsc1020_s_stream,
-	.s_parm = fuxsc1020_s_parm,
-	.g_parm = fuxsc1020_g_parm,
+static const struct v4l2_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
+	.s_parm = sensor_s_parm,
+	.g_parm = sensor_g_parm,
 };
 
-static const struct v4l2_subdev_ops fuxsc1020_ops = {
-	.core = &fuxsc1020_core_ops,
-	.video = &fuxsc1020_video_ops,
+static const struct v4l2_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
 };
 
-static int fuxsc1020_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	struct v4l2_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &fuxsc1020_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = -1;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
@@ -435,18 +436,18 @@ static int fuxsc1020_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	fuxsc1020_attr.dvp.gpio = sensor_gpio_func;
+	sensor_attr.dvp.gpio = sensor_gpio_func;
 	 /*
 		convert sensor-gain into isp-gain,
 	 */
-	fuxsc1020_attr.max_again = log2_fixed_to_fixed(fuxsc1020_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
-	fuxsc1020_attr.max_dgain = fuxsc1020_attr.max_dgain;
+	sensor_attr.max_again = log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &fuxsc1020_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
-	v4l2_i2c_subdev_init(sd, client, &fuxsc1020_ops);
+	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
 	return 0;
@@ -459,7 +460,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int fuxsc1020_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
@@ -477,30 +478,30 @@ static int fuxsc1020_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id fuxsc1020_id[] = {
-	{ "fuxsc1020", 0 },
-	{ }
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0},
+	{}
 };
-MODULE_DEVICE_TABLE(i2c, fuxsc1020_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver fuxsc1020_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "fuxsc1020",
+		.name = SENSOR_NAME,
 	},
-	.probe = fuxsc1020_probe,
-	.remove = fuxsc1020_remove,
-	.id_table = fuxsc1020_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sensor(void)
 {
-	return i2c_add_driver(&fuxsc1020_driver);
+	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
-	i2c_del_driver(&fuxsc1020_driver);
+	i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);
