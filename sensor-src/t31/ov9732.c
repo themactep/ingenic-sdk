@@ -20,8 +20,11 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <tx-isp-debug.h>
 
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
 
@@ -51,6 +54,17 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
 struct tx_isp_sensor_attribute sensor_attr;
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -203,9 +217,9 @@ struct tx_isp_dvp_bus sensor_dvp={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = "ov9732",
 	.chip_id = 0x9732,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS;
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -888,6 +902,8 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void)
 {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init ov9732 driver.\n");
@@ -899,6 +915,7 @@ static __init int init_sensor(void)
 static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
