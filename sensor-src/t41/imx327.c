@@ -8,12 +8,11 @@
  * published by the Free Software Foundation.
  *
  * Settings:
- * sboot	resolution      fps       interface	      mode
- *   0	  1920*1080       25	mipi_2lane	   linear
- *   1	  1920*1080       25	mipi_2lane	   dol
- *   2	  1280*720	25	mipi_2lane	   linear
+ * sboot  resolution  fps   interface    mode
+ *   0  1920*1080      25   mipi_2lane   linear
+ *   1  1920*1080      25   mipi_2lane   dol
+ *   2  1280*720       25   mipi_2lane   linear
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -33,13 +32,13 @@
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_SCLK	(148500000)
-#define SENSOR_OUTPUT_MAX_FPS	25
-#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_SUPPORT_SCLK (148500000)
+#define SENSOR_OUTPUT_MAX_FPS 25
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20190822"
-#define AGAIN_MAX_DB		0x64
-#define DGAIN_MAX_DB		0x64
-#define LOG2_GAIN_SHIFT		16
+#define AGAIN_MAX_DB 0x64
+#define DGAIN_MAX_DB 0x64
+#define LOG2_GAIN_SHIFT 16
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);

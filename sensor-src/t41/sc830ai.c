@@ -32,18 +32,16 @@
 #define SENSOR_CHIP_ID_L (0x43)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_LINEAR_30FPS_SCLK     141750000   /*  2100 * 2250 * 30  */
-#define SENSOR_SUPPORT_LINEAR_60FPS_SCLK     182250000   /*  2025 * 1500 * 60  */
-#define SENSOR_SUPPORT_LINEAR_1080P_60FPS_SCLK    141750000	/* 2100 * 1125 *60 */
-#define SENSOR_SUPPORT_WDR_30FPS_SCLK   	   141750000   /*  2100 * 2250 * 30  */
-#define SENSOR_SUPPORT_WDR_60FPS_SCLK        182250000   /*  2025 * 1500 * 60  */
+#define SENSOR_SUPPORT_LINEAR_30FPS_SCLK 141750000   /*  2100 * 2250 * 30  */
+#define SENSOR_SUPPORT_LINEAR_60FPS_SCLK 182250000   /*  2025 * 1500 * 60  */
+#define SENSOR_SUPPORT_LINEAR_1080P_60FPS_SCLK 141750000 /* 2100 * 1125 *60 */
+#define SENSOR_SUPPORT_WDR_30FPS_SCLK 141750000 /*  2100 * 2250 * 30  */
+#define SENSOR_SUPPORT_WDR_60FPS_SCLK 182250000 /*  2025 * 1500 * 60  */
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H202300505a"
 #define MCLK 27000000
-
 #define LINEAR_TO_WDR 3
 #define WDR_TO_LINEAR 0
-
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -2417,7 +2415,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

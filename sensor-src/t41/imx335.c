@@ -12,7 +12,6 @@
  *   0          2592*1944       25        mipi_2lane           linear
  *   1          2592*1944       15        mipi_2lane           dol
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

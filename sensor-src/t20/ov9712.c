@@ -251,7 +251,7 @@ static struct regval_list sensor_init_regs_1280_800_25fps[] = {
 	{0x25, 0x40},
 	{0x26, 0xa1},
 	{0x5c, 0x52},
-#ifdef	DRIVE_CAPABILITY_1
+#ifdef DRIVE_CAPABILITY_1
 	{0x5d, 0x00},
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x5d, 0x10},

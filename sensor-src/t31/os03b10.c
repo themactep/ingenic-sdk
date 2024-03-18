@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -23,7 +22,7 @@
 #include <sensor-common.h>
 
 #define SENSOR_CHIP_ID_H (0x53)
-#define SENSOR_CHIP_ID_M	(0x03)
+#define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x42)
 #define SENSOR_SUPPORT_SCLK_FPS_25 (1358 * 1590 * 25 *2)
 #define SENSOR_REG_END 0x99
@@ -429,7 +428,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
-		printk("	0x%x,0x%x\n", vals->reg_num, vals->value);
+		printk(" 0x%x,0x%x\n", vals->reg_num, vals->value);
 		if (ret < 0)
 			return ret;
 
@@ -446,7 +445,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	vals = sensor_init_regs_2304_1296_25fps;
 	for(i=0 ; i < sizeof(sensor_init_regs_2304_1296_25fps)/sizeof(struct regval_list); i++) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
-			printk("	0x%x,0x%x\n", vals->reg_num, vals->value);
+			printk(" 0x%x,0x%x\n", vals->reg_num, vals->value);
 			if (ret < 0) {
 				printk(" %d \n",ret);
 				return ret;
@@ -866,7 +865,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

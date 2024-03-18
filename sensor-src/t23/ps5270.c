@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -33,12 +32,12 @@
 #define SENSOR_SUPPORT_VGA_SCLK (85932000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define AG_HS_MODE	83	// 6.0x
-#define AG_LS_MODE	75	// 5.0x
-#define NEPLS_LB	20
-#define NEPLS_UB	255
-#define NEPLS_SCALE	32
-#define NE_NEP_CONST	(0x1F4+0x64)
+#define AG_HS_MODE 83 // 6.0x
+#define AG_LS_MODE 75 // 5.0x
+#define NEPLS_LB 20
+#define NEPLS_UB 255
+#define NEPLS_SCALE 32
+#define NE_NEP_CONST (0x1F4+0x64)
 
 #define SENSOR_VERSION "H20200703a"
 
@@ -1926,7 +1925,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 static struct tx_isp_subdev_ops sensor_ops = {

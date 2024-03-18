@@ -227,7 +227,7 @@ static struct regval_list ov9732_init_regs_1280_720_25fps[] = {
 	{0x3001, 0x3f},
 	{0x3002, 0xff},
 	{0x3007, 0x00},
-#ifdef	DRIVE_CAPABILITY_1
+#ifdef DRIVE_CAPABILITY_1
 	{0x3009, 0x03},//pad driver
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x3009,0x23},

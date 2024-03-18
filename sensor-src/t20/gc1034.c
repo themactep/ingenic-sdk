@@ -8,8 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-/* #define DEBUG */
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -464,7 +462,7 @@ static struct regval_list gc1034_init_regs_1280_720[] = {
 	{0xfe,0x04},
 	{0x81,0x8a},
 ///////////////////////////////////////////////////
-////////////////////	 MIPI	/////////////////////
+////////////////////	 MIPI /////////////////////
 ///////////////////////////////////////////////////
 	{0xfe,0x03},
 	{0x01,0x00},

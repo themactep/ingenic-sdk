@@ -8,8 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-/* #define DEBUG */
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -19,16 +17,13 @@
 #include <linux/clk.h>
 #include <sensor-common.h>
 #include <apical-isp/apical_math.h>
-
 #include <soc/gpio.h>
 
 #define SENSOR_CHIP_ID_H (0x31)
 #define SENSOR_CHIP_ID_L (0x16)
-
 #define SENSOR_FLAG_END 0x6e
 #define SENSOR_FLAG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe
-
 #define SENSOR_SUPPORT_PCLK (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5

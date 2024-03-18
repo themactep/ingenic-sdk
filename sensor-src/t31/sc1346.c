@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -943,7 +942,7 @@ static struct tx_isp_subdev_video_ops SENSOR_video_ops = {
 	.s_stream = SENSOR_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	SENSOR_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops SENSOR_sensor_ops = {
 	.ioctl = SENSOR_sensor_ops_ioctl,
 };
 

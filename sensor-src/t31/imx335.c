@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -27,9 +26,9 @@
 #define SENSOR_CHIP_ID_L (0x0a)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_SCLK	(74250000)
-#define SENSOR_OUTPUT_MAX_FPS	30
-#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_SUPPORT_SCLK (74250000)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20220622a"
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
@@ -913,7 +912,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

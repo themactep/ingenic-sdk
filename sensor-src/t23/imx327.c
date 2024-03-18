@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -27,13 +26,13 @@
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_SCLK	(148500000)
-#define SENSOR_OUTPUT_MAX_FPS	60
-#define SENSOR_OUTPUT_MIN_FPS	5
+#define SENSOR_SUPPORT_SCLK (148500000)
+#define SENSOR_OUTPUT_MAX_FPS 60
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20190822"
-#define AGAIN_MAX_DB		0x64
-#define DGAIN_MAX_DB		0x64
-#define LOG2_GAIN_SHIFT		16
+#define AGAIN_MAX_DB 0x64
+#define DGAIN_MAX_DB 0x64
+#define LOG2_GAIN_SHIFT 16
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -65,9 +64,9 @@ struct regval_list {
 /*
  * the part of driver maybe modify about different sensor and different board.
  */
-struct tx_isp_sensor_attribute imx327_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
@@ -80,7 +79,7 @@ unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int imx327_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain
@@ -93,7 +92,7 @@ unsigned int imx327_alloc_again_short(unsigned int isp_gain, unsigned char shift
 	return isp_gain;
 }
 
-unsigned int imx327_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
@@ -185,7 +184,7 @@ struct tx_isp_mipi_bus mipi_linear_60fps = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute imx327_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "imx327",
 	.chip_id = 0xb201,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -237,14 +236,14 @@ struct tx_isp_sensor_attribute imx327_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = imx327_alloc_again,
-	.sensor_ctrl.alloc_again_short = imx327_alloc_again_short,
-	.sensor_ctrl.alloc_dgain = imx327_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.wdr_cache = 0,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-static struct regval_list imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 //add
 	{0x3000, 0x01},//standy
 	{0x3001, 0x01},
@@ -354,7 +353,7 @@ static struct regval_list imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 
 };
 
-static struct regval_list imx327_init_regs_1920_1080_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3000, 0x01},//standy
 	{0x3001, 0x01},
 	{0x3002, 0x01},//Master stop
@@ -429,7 +428,7 @@ static struct regval_list imx327_init_regs_1920_1080_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
-static struct regval_list imx327_init_regs_1920_1080_60fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	/* imx307_cropping_1080_12bit_2lane_mipi_master_i2c_normal_60fps_mode1_37p125mhz_211013 */
 	{0x3000, 0x01},
 	{0x3002, 0x01},
@@ -509,9 +508,9 @@ static struct regval_list imx327_init_regs_1920_1080_60fps_mipi[] = {
 };
 
 /*
- * the order of the imx327_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1948*1109 */
 	{
 		.width = 1920,
@@ -519,7 +518,7 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = imx327_init_regs_1920_1080_30fps_mipi,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 	/* 1948*1109 */
 	{
@@ -528,7 +527,7 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg,
 	},
 	{
 		.width = 1920,
@@ -536,27 +535,27 @@ static struct tx_isp_sensor_win_setting imx327_win_sizes[] = {
 		.fps = 60 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = imx327_init_regs_1920_1080_60fps_mipi,
+		.regs = sensor_init_regs_1920_1080_60fps_mipi,
 	}
 };
 
-static struct tx_isp_sensor_win_setting *wsize = &imx327_win_sizes[0];
+static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 /*
  * the part of driver was fixed.
  */
 
-static struct regval_list imx327_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list imx327_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x3000, 0x01},
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int imx327_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 		unsigned char *value)
 {
 	int ret;
@@ -584,7 +583,7 @@ int imx327_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int imx327_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 		 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -603,7 +602,7 @@ int imx327_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -611,7 +610,7 @@ static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = imx327_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -619,14 +618,14 @@ static int imx327_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
-static int imx327_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = imx327_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -636,17 +635,17 @@ static int imx327_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int imx327_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int imx327_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = imx327_read(sd, 0x301e, &v);
+	ret = sensor_read(sd, 0x301e, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -654,7 +653,7 @@ static int imx327_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 		return -ENODEV;
 	*ident = v;
 
-	ret = imx327_read(sd, 0x301f, &v);
+	ret = sensor_read(sd, 0x301f, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -665,82 +664,82 @@ static int imx327_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int imx327_set_integration_time_short(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned short shs1 = 0;
 
 	//short frame use shs1
 	shs1 = rhs1 - value - 1;
-	ret = imx327_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
-	ret += imx327_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
-	ret += imx327_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x3));
+	ret = sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x3));
 
 	return 0;
 }
 
-static int imx327_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned short shs = 0;
 	unsigned short vmax = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
-		vmax = imx327_attr.total_height;
+		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
-		ret = imx327_write(sd, 0x3020, (unsigned char)(shs & 0xff));
-		ret += imx327_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
-		ret += imx327_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
+		ret = sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
+		ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
 	} else {
 		//long frame use shs2
-		vmax = imx327_attr.total_height;
+		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
-		ret = imx327_write(sd, 0x3024, (unsigned char)(shs & 0xff));
-		ret += imx327_write(sd, 0x3025, (unsigned char)((shs >> 8) & 0xff));
-		ret += imx327_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x3));
+		ret = sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3025, (unsigned char)((shs >> 8) & 0xff));
+		ret += sensor_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x3));
 	}
 
 	if (0 != ret) {
-		ISP_ERROR("err: imx327_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
 	return 0;
 }
 
-static int imx327_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = imx327_write(sd, 0x30f2, (unsigned char)(value & 0xff));
+	ret = sensor_write(sd, 0x30f2, (unsigned char)(value & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int imx327_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = imx327_write(sd, 0x3014, (unsigned char)(value & 0xff));
+	ret = sensor_write(sd, 0x3014, (unsigned char)(value & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int imx327_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx327_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx327_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
@@ -754,7 +753,7 @@ static int imx327_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = imx327_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -763,29 +762,29 @@ static int imx327_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int imx327_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 
 	if (enable) {
-		ret = imx327_write_array(sd, imx327_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		pr_debug("imx327 stream on\n");
 
 	}
 	else {
-		ret = imx327_write_array(sd, imx327_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		pr_debug("imx327 stream off\n");
 	}
 
 	return ret;
 }
 
-static int imx327_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	return 0;
 }
 
-static int imx327_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
+static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
@@ -793,57 +792,57 @@ static int imx327_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 
 	/* do_gettimeofday(&tv); */
 	/* printk("%d:before:time is %d.%d\n", __LINE__,tv.tv_sec,tv.tv_usec); */
-	ret = imx327_write(sd, 0x3000, 0x1);
+	ret = sensor_write(sd, 0x3000, 0x1);
 	if (wdr_en == 1) {
-		memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		wsize = &imx327_win_sizes[1];
-		imx327_attr.data_type = data_type;
-		imx327_attr.wdr_cache = wdr_bufsize;
+		wsize = &sensor_win_sizes[1];
+		sensor_attr.data_type = data_type;
+		sensor_attr.wdr_cache = wdr_bufsize;
 
-		imx327_attr.max_again = 589824;
-		imx327_attr.max_again_short = 589824;
-		imx327_attr.max_dgain = 0;
-		imx327_attr.min_integration_time = 1;
-		imx327_attr.min_integration_time_native = 1;
-		imx327_attr.max_integration_time_native = 1176;
-		imx327_attr.min_integration_time_short = 1;
-		imx327_attr.max_integration_time_short = 98;
-		imx327_attr.integration_time_limit = 1176;
-		imx327_attr.total_width = 2136;
-		imx327_attr.total_height = 2781;
-		imx327_attr.max_integration_time = 1176;
-		imx327_attr.integration_time_apply_delay = 2;
-		imx327_attr.again_apply_delay = 2;
-		imx327_attr.dgain_apply_delay = 0;
+		sensor_attr.max_again = 589824;
+		sensor_attr.max_again_short = 589824;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.min_integration_time_native = 1;
+		sensor_attr.max_integration_time_native = 1176;
+		sensor_attr.min_integration_time_short = 1;
+		sensor_attr.max_integration_time_short = 98;
+		sensor_attr.integration_time_limit = 1176;
+		sensor_attr.total_width = 2136;
+		sensor_attr.total_height = 2781;
+		sensor_attr.max_integration_time = 1176;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
 
-		sensor->video.attr = &imx327_attr;
+		sensor->video.attr = &sensor_attr;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	} else if (wdr_en == 0) {
-		memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_linear),sizeof(mipi_linear));
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&mipi_linear),sizeof(mipi_linear));
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		imx327_attr.data_type = data_type;
-		wsize = &imx327_win_sizes[0];
+		sensor_attr.data_type = data_type;
+		wsize = &sensor_win_sizes[0];
 
-		imx327_attr.data_type = data_type;
-		imx327_attr.wdr_cache = wdr_bufsize;
-		imx327_attr.max_again = 589824;
-		imx327_attr.max_again_short = 589824;
-		imx327_attr.max_dgain = 0;
-		imx327_attr.min_integration_time = 1;
-		imx327_attr.min_integration_time_native = 1;
-		imx327_attr.max_integration_time_native = 1123;
-		imx327_attr.min_integration_time_short = 1;
-		imx327_attr.max_integration_time_short = 98;
-		imx327_attr.integration_time_limit = 1123;
-		imx327_attr.total_width = 5280;
-		imx327_attr.total_height = 1125;
-		imx327_attr.max_integration_time = 1123;
-		imx327_attr.integration_time_apply_delay = 2;
-		imx327_attr.again_apply_delay = 2;
-		imx327_attr.dgain_apply_delay = 0;
+		sensor_attr.data_type = data_type;
+		sensor_attr.wdr_cache = wdr_bufsize;
+		sensor_attr.max_again = 589824;
+		sensor_attr.max_again_short = 589824;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.min_integration_time_native = 1;
+		sensor_attr.max_integration_time_native = 1123;
+		sensor_attr.min_integration_time_short = 1;
+		sensor_attr.max_integration_time_short = 98;
+		sensor_attr.integration_time_limit = 1123;
+		sensor_attr.total_width = 5280;
+		sensor_attr.total_height = 1125;
+		sensor_attr.max_integration_time = 1123;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
 
-		sensor->video.attr = &imx327_attr;
+		sensor->video.attr = &sensor_attr;
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
@@ -853,7 +852,7 @@ static int imx327_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	return 0;
 }
 
-static int imx327_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
+static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 {
 	int ret = 0;
 
@@ -862,13 +861,13 @@ static int imx327_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 
-	ret = imx327_write_array(sd, wsize->regs);
-	ret = imx327_write_array(sd, imx327_stream_on_mipi);
+	ret = sensor_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 	return 0;
 }
 
-static int imx327_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
@@ -886,7 +885,7 @@ static int imx327_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -894,7 +893,7 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio,"imx327_reset");
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(100);
@@ -905,7 +904,7 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio,"imx327_pwdn");
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
@@ -915,7 +914,7 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = imx327_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an imx327 chip.\n",
 			  client->addr, client->adapter->name);
@@ -931,7 +930,7 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int imx327_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
@@ -941,51 +940,51 @@ static int imx327_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = imx327_set_integration_time(sd, *(int*)arg);
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
-			ret = imx327_set_integration_time_short(sd, *(int*)arg);
+			ret = sensor_set_integration_time_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = imx327_set_analog_gain(sd, *(int*)arg);
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)
-			ret = imx327_set_analog_gain_short(sd, *(int*)arg);
+			ret = sensor_set_analog_gain_short(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = imx327_set_digital_gain(sd, *(int*)arg);
+			ret = sensor_set_digital_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = imx327_get_black_pedestal(sd, *(int*)arg);
+			ret = sensor_get_black_pedestal(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = imx327_set_mode(sd, *(int*)arg);
+			ret = sensor_set_mode(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (arg)
-			ret = imx327_write_array(sd, imx327_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (arg)
-			ret = imx327_write_array(sd, imx327_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = imx327_set_fps(sd, *(int*)arg);
+			ret = sensor_set_fps(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR:
 		if (arg)
-			ret = imx327_set_wdr(sd, *(int*)arg);
+			ret = sensor_set_wdr(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
 		if (arg)
-			ret = imx327_set_wdr_stop(sd, *(int*)arg);
+			ret = sensor_set_wdr_stop(sd, *(int*)arg);
 		break;
 	default:
 		break;;
@@ -994,7 +993,7 @@ static int imx327_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int imx327_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -1006,14 +1005,14 @@ static int imx327_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = imx327_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int imx327_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
@@ -1023,31 +1022,31 @@ static int imx327_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	imx327_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops imx327_core_ops = {
-	.g_chip_ident = imx327_g_chip_ident,
-	.reset = imx327_reset,
-	.init = imx327_init,
-	.g_register = imx327_g_register,
-	.s_register = imx327_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops imx327_video_ops = {
-	.s_stream = imx327_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	imx327_sensor_ops = {
-	.ioctl = imx327_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops imx327_ops = {
-	.core = &imx327_core_ops,
-	.video = &imx327_video_ops,
-	.sensor = &imx327_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -1064,7 +1063,7 @@ struct platform_device sensor_platform_device = {
 };
 
 
-static int imx327_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
@@ -1125,70 +1124,70 @@ static int imx327_probe(struct i2c_client *client,
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_60) {
-			wsize = &imx327_win_sizes[2];
+			wsize = &sensor_win_sizes[2];
 			data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-			imx327_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-			imx327_attr.max_again = 589824;
-			imx327_attr.max_dgain = 0;
-			imx327_attr.min_integration_time = 1;
-			imx327_attr.min_integration_time_native = 1;
-			imx327_attr.max_integration_time_native = 1123;
-			imx327_attr.integration_time_limit = 1123;
-			imx327_attr.total_width = 2200;
-			imx327_attr.total_height = 1125;
-			imx327_attr.max_integration_time = 1123;
-			imx327_attr.integration_time_apply_delay = 2;
-			imx327_attr.again_apply_delay = 2;
-			imx327_attr.dgain_apply_delay = 0;
-			imx327_attr.again = 0;
-			imx327_attr.integration_time = 0xf;
-			memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_linear_60fps),sizeof(mipi_linear_60fps));
+			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+			sensor_attr.max_again = 589824;
+			sensor_attr.max_dgain = 0;
+			sensor_attr.min_integration_time = 1;
+			sensor_attr.min_integration_time_native = 1;
+			sensor_attr.max_integration_time_native = 1123;
+			sensor_attr.integration_time_limit = 1123;
+			sensor_attr.total_width = 2200;
+			sensor_attr.total_height = 1125;
+			sensor_attr.max_integration_time = 1123;
+			sensor_attr.integration_time_apply_delay = 2;
+			sensor_attr.again_apply_delay = 2;
+			sensor_attr.dgain_apply_delay = 0;
+			sensor_attr.again = 0;
+			sensor_attr.integration_time = 0xf;
+			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&mipi_linear_60fps),sizeof(mipi_linear_60fps));
 		} else {
-			imx327_attr.data_type = data_type;
-			wsize = &imx327_win_sizes[0];
+			sensor_attr.data_type = data_type;
+			wsize = &sensor_win_sizes[0];
 
-			imx327_attr.max_again = 589824;
-			imx327_attr.max_again_short = 589824;
-			imx327_attr.max_dgain = 0;
-			imx327_attr.min_integration_time = 1;
-			imx327_attr.min_integration_time_native = 1;
-			imx327_attr.max_integration_time_native = 1123;
-			imx327_attr.min_integration_time_short = 1;
-			imx327_attr.max_integration_time_short = 98;
-			imx327_attr.integration_time_limit = 1123;
-			imx327_attr.total_width = 5280;
-			imx327_attr.total_height = 1125;
-			imx327_attr.max_integration_time = 1123;
-			imx327_attr.integration_time_apply_delay = 2;
-			imx327_attr.again_apply_delay = 2;
-			imx327_attr.dgain_apply_delay = 0;
+			sensor_attr.max_again = 589824;
+			sensor_attr.max_again_short = 589824;
+			sensor_attr.max_dgain = 0;
+			sensor_attr.min_integration_time = 1;
+			sensor_attr.min_integration_time_native = 1;
+			sensor_attr.max_integration_time_native = 1123;
+			sensor_attr.min_integration_time_short = 1;
+			sensor_attr.max_integration_time_short = 98;
+			sensor_attr.integration_time_limit = 1123;
+			sensor_attr.total_width = 5280;
+			sensor_attr.total_height = 1125;
+			sensor_attr.max_integration_time = 1123;
+			sensor_attr.integration_time_apply_delay = 2;
+			sensor_attr.again_apply_delay = 2;
+			sensor_attr.dgain_apply_delay = 0;
 		}
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
-		wsize = &imx327_win_sizes[1];
-		imx327_attr.data_type = data_type;
-		imx327_attr.wdr_cache = wdr_bufsize;
+		wsize = &sensor_win_sizes[1];
+		sensor_attr.data_type = data_type;
+		sensor_attr.wdr_cache = wdr_bufsize;
 
-		imx327_attr.max_again = 589824;
-		imx327_attr.max_again_short = 589824;
-		imx327_attr.max_dgain = 0;
-		imx327_attr.min_integration_time = 1;
-		imx327_attr.min_integration_time_native = 1;
-		imx327_attr.max_integration_time_native = 1176;
-		imx327_attr.min_integration_time_short = 1;
-		imx327_attr.max_integration_time_short = 98;
-		imx327_attr.integration_time_limit = 1176;
-		imx327_attr.total_width = 2136;
-		imx327_attr.total_height = 2781;
-		imx327_attr.max_integration_time = 1176;
-		imx327_attr.integration_time_apply_delay = 2;
-		imx327_attr.again_apply_delay = 2;
-		imx327_attr.dgain_apply_delay = 0;
-		memcpy((void*)(&(imx327_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
+		sensor_attr.max_again = 589824;
+		sensor_attr.max_again_short = 589824;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.min_integration_time_native = 1;
+		sensor_attr.max_integration_time_native = 1176;
+		sensor_attr.min_integration_time_short = 1;
+		sensor_attr.max_integration_time_short = 98;
+		sensor_attr.integration_time_limit = 1176;
+		sensor_attr.total_width = 2136;
+		sensor_attr.total_height = 2781;
+		sensor_attr.max_integration_time = 1176;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&mipi_2dol_lcg),sizeof(mipi_2dol_lcg));
 	} else {
 		ISP_ERROR("Can not support this data mode!!!\n");
 	}
 
-	sensor->video.attr = &imx327_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1197,7 +1196,7 @@ static int imx327_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &imx327_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1214,7 +1213,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int imx327_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
@@ -1232,20 +1231,20 @@ static int imx327_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id imx327_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "imx327", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, imx327_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver imx327_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
 		.name = "imx327",
 	},
-	.probe = imx327_probe,
-	.remove = imx327_remove,
-	.id_table = imx327_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sensor(void)
@@ -1257,12 +1256,12 @@ static __init int init_sensor(void)
 		return -1;
 	}
 
-	return private_i2c_add_driver(&imx327_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&imx327_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);
