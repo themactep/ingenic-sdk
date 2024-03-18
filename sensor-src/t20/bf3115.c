@@ -34,6 +34,7 @@
 #define SENSOR_SUPPORT_PCLK (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

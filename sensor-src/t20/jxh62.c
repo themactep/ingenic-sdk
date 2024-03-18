@@ -37,6 +37,7 @@
 #define SENSOR_SUPPORT_PCLK (36*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION
 #define DRIVE_CAPABILITY_1
 
 static struct sensor_info sensor_info = {

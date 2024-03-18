@@ -36,6 +36,7 @@
 #define SENSOR_SUPPORT_PCLK_FPS_15 (33750*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION
 #define DRIVE_CAPABILITY_1
 
 static int reset_gpio = GPIO_PA(18);
