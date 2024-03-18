@@ -23,6 +23,7 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 
+#define SENSOR_NAME "bg0806"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x32
 #define SENSOR_MAX_WIDTH 0

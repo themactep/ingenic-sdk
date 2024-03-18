@@ -20,6 +20,7 @@
 #include <apical-isp/apical_math.h>
 #include <soc/gpio.h>
 
+#define SENSOR_NAME "bf3115"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x6e
 #define SENSOR_MAX_WIDTH 1980
