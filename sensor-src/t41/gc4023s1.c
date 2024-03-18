@@ -508,7 +508,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0080, 0x02},
 	{0x0a67, 0x00},
 	{0x0100, 0x09},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 	};
 
 static struct regval_list sensor_init_regs_2560_1440_25fps_24Mmipi[] = {
@@ -680,7 +680,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_24Mmipi[] = {
 	{0x0080, 0x02},
 	{0x0a67, 0x00},
 	{0x0100, 0x09},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
@@ -850,7 +850,7 @@ static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
 	{0x0080,0x02},
 	{0x0a67,0x00},
 	{0x0100,0x09},
-    {SENSOR_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00},
 };
 
 
@@ -1021,7 +1021,7 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0080, 0x02},
 	{0x0a67, 0x00},
 	{0x0100, 0x09},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
@@ -1191,7 +1191,7 @@ static struct regval_list sensor_init_regs_1280_360_120fps_mipi[] = {
 	{0x0a70,0x00},
 	{0x0080,0x02},
 	{0x0a67,0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
@@ -1358,7 +1358,7 @@ static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
         {0x02cd, 0x92},
         {0x0202, 0x04},
         {0x0203, 0x08},
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
@@ -1422,11 +1422,11 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
  */
 
 static struct regval_list sensor_stream_on[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd,  uint16_t reg,

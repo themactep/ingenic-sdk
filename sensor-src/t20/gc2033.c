@@ -446,7 +446,7 @@ static struct regval_list gc2033_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfe, 0x00},
 	{0xf2, 0x0f},
 
-  	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+  	{SENSOR_FLAG_END, 0x00},
 
 };
 
@@ -585,7 +585,7 @@ static struct regval_list gc2033_init_regs_1920_1080_15fps_dvp[] = {
 	{0xfe, 0x00},
 	{0xf2, 0x0f},
 
-  	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+  	{SENSOR_FLAG_END, 0x00},
 };
 #endif
 
@@ -615,12 +615,12 @@ static enum v4l2_mbus_pixelcode gc2033_mbus_code[] = {
 
 static struct regval_list gc2033_stream_on[] = {
 	{ 0xf2, 0x8f},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list gc2033_stream_off[] = {
 	{ 0xf2, 0x80},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 int gc2033_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value)

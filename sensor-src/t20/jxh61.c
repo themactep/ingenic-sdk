@@ -230,7 +230,7 @@ static struct regval_list jxh61_init_regs_1280_720_25fps[] = {
 	{0x4a,0x03},
 	{0x49,0x10},
 	/* {0x12,0x00}, */
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /* static struct regval_list jxh61_init_version_80[] = { */
@@ -271,14 +271,14 @@ static struct tx_isp_sensor_win_setting jxh61_win_sizes[] = {
 static struct regval_list jxh61_stream_on[] = {
 	{0x12, 0x00},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxh61_stream_off[] = {
 	/* Sensor enter LP11*/
 	{0x12, 0x40},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int jxh61_read(struct v4l2_subdev *sd, unsigned char reg,

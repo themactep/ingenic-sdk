@@ -494,7 +494,7 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x2b,0x04},
 	{0xfe,0x00},
 
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 /*
@@ -520,14 +520,14 @@ static struct regval_list sensor_stream_on[] = {
 	//{0xfe, 0x03},
 	//{0x10, 0x90},
 	//{0xfe, 0x00},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	//{0xfe, 0x03},
 	//{0x10 ,0x80},
 	//{0xfe ,0x00},
-	{SENSOR_FLAG_END, 0x00},	/* END MARKER */
+	{SENSOR_FLAG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,

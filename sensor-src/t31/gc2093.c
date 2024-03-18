@@ -449,7 +449,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0213 , 0x07},
 	{0x0215 , 0x12},
 	{0x003e , 0x91},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 #endif
 
@@ -591,7 +591,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_lin[] = {
 	{0x0215, 0x12},//jz
 	{0x024d, 0x00},//jz
 	{0x003e, 0x91},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_wdr[] = {
@@ -732,7 +732,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_wdr[] = {
 	{0x0215, 0x92},
 	{0x024d, 0x01},
 	{0x003e, 0x91},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 #ifdef FAST_AE
@@ -873,7 +873,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_ae[] = {
 	//The isp is based on the y_avg information, under the aec and awb related parameters
 
 	//{0x01e0, 0x07}, flag set, sensor out of map.
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 #endif
 /*
@@ -915,11 +915,11 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

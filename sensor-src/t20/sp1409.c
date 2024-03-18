@@ -322,7 +322,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0xfe, 0x01},
 	{0xfe, 0x01},
 	{0xfd, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -348,7 +348,7 @@ static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x01},
 	{0x1e, 0x00},
 	{0xfe, 0x02},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
@@ -356,7 +356,7 @@ static struct regval_list sensor_stream_off[] = {
 	{0x1e, 0xff},
 	{0xfd, 0x00},
 	{0xfe, 0x02},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value)

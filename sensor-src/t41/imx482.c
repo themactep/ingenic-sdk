@@ -447,11 +447,11 @@ static struct tx_isp_sensor_win_setting imx482_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &imx482_win_sizes[0];
 
 static struct regval_list imx482_stream_on_mipi[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx482_stream_off_mipi[] = {
-        {SENSOR_REG_END, 0x00}, /* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 int imx482_read(struct tx_isp_subdev *sd, uint16_t reg,

@@ -390,7 +390,7 @@ static struct regval_list ov9732_init_regs_1280_720_25fps[] = {
 	{0x5781, 0x00},
 	{0x5782, 0x77},//decrease dpc strength
 	{0x5783, 0x0f},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the ov9732_win_sizes is [full_resolution, preview_resolution].
@@ -413,13 +413,13 @@ static struct tx_isp_sensor_win_setting ov9732_win_sizes[] = {
 
 static struct regval_list ov9732_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
 static struct regval_list ov9732_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static int ov9732_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value)

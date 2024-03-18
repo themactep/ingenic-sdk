@@ -139,8 +139,8 @@ static struct regval_list imx322_init_regs_1920_1080_30fps[] = {
 	{0x3008,0x00},
 	{0x3009,0x00},
 	{0x0100,0x00},
-	{SENSOR_REG_DELAY, 0x14},	/* END MARKER */
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 0x14},
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -169,12 +169,12 @@ static enum v4l2_mbus_pixelcode imx322_mbus_code[] = {
 
 static struct regval_list imx322_stream_on[] = {
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx322_stream_off[] = {
 	{0x0100,0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int imx322_read(struct v4l2_subdev *sd, uint16_t reg,

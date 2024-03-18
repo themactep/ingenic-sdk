@@ -604,7 +604,7 @@ static struct regval_list ov9750_init_regs_1280_960_25fps[] = {
 	{0x3614,0x9d},
 #endif
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -633,12 +633,12 @@ static enum v4l2_mbus_pixelcode ov9750_mbus_code[] = {
 
 static struct regval_list ov9750_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list ov9750_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int ov9750_read(struct v4l2_subdev *sd, uint16_t reg,

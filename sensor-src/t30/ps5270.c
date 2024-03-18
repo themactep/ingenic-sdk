@@ -609,7 +609,7 @@ static struct regval_list sensor_init_regs_1536_1536_linear_20fps[] = {
 	{0x02, 0xFB},
 	{0x09, 0x01},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1536_1376_wdr_20fps[] = {
@@ -754,7 +754,7 @@ static struct regval_list sensor_init_regs_1536_1376_wdr_20fps[] = {
 	{0xBF, 0xC8},
 	{0xED, 0x01},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1536_1536_linear_30fps[] = {
@@ -988,7 +988,7 @@ static struct regval_list sensor_stream_on[] = {
 	{0xEF, 0x00},
 	{0x11, 0x00},	/*clk not gated*/
 #endif
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
@@ -1000,7 +1000,7 @@ static struct regval_list sensor_stream_off[] = {
 	{0xF5, 0x00},	/*spll disable*/
 	{0x09, 0x01},
 #endif
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
@@ -1515,7 +1515,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 static struct tx_isp_subdev_ops sensor_ops = {

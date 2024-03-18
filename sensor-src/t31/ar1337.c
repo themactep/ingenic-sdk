@@ -2845,7 +2845,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x32C8, 0x030C}, // PDAF_SEQ_START
 	{0x301A, 0x021C}, // SENSOR_REGISTER
 	{0x31D6, 0x332B}, // MIPI_JPEG_PN9_DATA_TYPE
-	{SENSOR_REG_END, 0x00},        /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -2863,12 +2863,12 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 //	{0x301A, 0x021c},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 //	{0x301A, 0x0218},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

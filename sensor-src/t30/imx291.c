@@ -178,8 +178,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x32ca,0x00},
 	{0x32cb,0x04},
 	{0x3480,0x49},
-	{SENSOR_REG_DELAY, 0x14},	/* END MARKER */
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_DELAY, 0x14},
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -208,12 +208,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x3000,0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x3000,0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,

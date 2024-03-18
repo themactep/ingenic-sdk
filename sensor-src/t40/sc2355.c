@@ -370,7 +370,7 @@ static struct regval_list sensor_init_regs_640_360_60fps_mipi[] = {
 
     //{0x0100, 0x01},
     {SENSOR_REG_DELAY,10},
-    {SENSOR_REG_END, 0x00}, /* END MARKER */
+    {SENSOR_REG_END, 0x00},
 };
 
 
@@ -393,12 +393,12 @@ static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -938,7 +938,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

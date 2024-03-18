@@ -685,7 +685,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3343,0xe0},
 	{0x334b,0xe0},	//{0x5040,0x80}, //color bar
 #endif
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
@@ -834,7 +834,7 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{0x303a,0x01},
 	{0x303b,0x02},
 	{0x3035,0xba},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
@@ -874,13 +874,13 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 static struct regval_list sensor_stream_on[] = {
 
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value)

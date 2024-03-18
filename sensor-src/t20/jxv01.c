@@ -341,7 +341,7 @@ static struct regval_list jxv01_init_regs_640_480_60fps[] = {
 	{0x49,0x10},
 #endif
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -369,13 +369,13 @@ static enum v4l2_mbus_pixelcode jxv01_mbus_code[] = {
 static struct regval_list jxv01_stream_on[] = {
 	{0x12, 0x00},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxv01_stream_off[] = {
 	{0x12, 0x40},
 
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int jxv01_read(struct v4l2_subdev *sd, unsigned char reg,

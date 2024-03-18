@@ -246,7 +246,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3d04, 0x04}, //0806    vsync gen mode
 	{0x3d08, 0x03},
 	/* {0x3000, 0x01}, //recover   */
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -271,13 +271,13 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct regval_list sensor_stream_on[] = {
 
 	{0x3000, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 
 	{0x3000, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value)

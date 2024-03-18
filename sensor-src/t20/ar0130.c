@@ -511,7 +511,7 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x30B0, 0x1300}, // DIGITAL_TEST
 	{SENSOR_REG_DELAY, 100}, //ms
 	/* {0x3070, 0x2}, */ //color bar
-	{SENSOR_REG_END, 0x0000}, /* END MARKER */
+	{SENSOR_REG_END, 0x0000},
 };
 /* static struct regval_list sensor_init_regs_25_fps[] = { */
 /* 	{0x300A, 0x04BC}, //FRAME_LENGTH_LINES = 1010 */
@@ -549,13 +549,13 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x301A, 0x10DC},
-	{SENSOR_REG_END, 0x0000}, /* END MARKER */
+	{SENSOR_REG_END, 0x0000},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	/* Sensor enter LP11*/
 	{0x301A, 0x10D8},
-	{SENSOR_REG_END, 0x0000}, /* END MARKER */
+	{SENSOR_REG_END, 0x0000},
 };
 
 int sensor_read(struct v4l2_subdev *sd, unsigned short reg,
