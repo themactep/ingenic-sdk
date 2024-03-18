@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc830ai.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps     interface              mode
@@ -16,6 +11,7 @@
  *   3          1920*1080       30       mipi_2lane           hdr
  *   4          1280*720        60       mipi_2lane           hdr
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -25,7 +21,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -33,11 +28,11 @@
 #define SENSOR_CHIP_ID_L (0x43)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_LINEAR_30FPS_SCLK 141750000   /*  2100 * 2250 * 30  */
-#define SENSOR_SUPPORT_LINEAR_60FPS_SCLK 182250000   /*  2025 * 1500 * 60  */
+#define SENSOR_SUPPORT_LINEAR_30FPS_SCLK 141750000   /*  2100 * 2250 * 30 */
+#define SENSOR_SUPPORT_LINEAR_60FPS_SCLK 182250000   /*  2025 * 1500 * 60 */
 #define SENSOR_SUPPORT_LINEAR_1080P_60FPS_SCLK 141750000 /* 2100 * 1125 *60 */
-#define SENSOR_SUPPORT_WDR_30FPS_SCLK 141750000 /*  2100 * 2250 * 30  */
-#define SENSOR_SUPPORT_WDR_60FPS_SCLK 182250000 /*  2025 * 1500 * 60  */
+#define SENSOR_SUPPORT_WDR_30FPS_SCLK 141750000 /*  2100 * 2250 * 30 */
+#define SENSOR_SUPPORT_WDR_60FPS_SCLK 182250000 /*  2025 * 1500 * 60 */
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H202300505a"
 #define MCLK 27000000
@@ -46,19 +41,15 @@
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
-static int wdr_bufsize = 3840000;  /*  1000*1920*2  */
+static int wdr_bufsize = 3840000;  /*  1000*1920*2 */
 static int shvflip = 1;
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-
 
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
         unsigned int value;
         unsigned int gain;
@@ -1503,8 +1494,7 @@ static struct regval_list sensor_init_regs_1280_720_60fps_mipi_dol[] = {
 
 
 /*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
 		.width = 3840,
@@ -1549,10 +1539,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
@@ -2011,8 +1997,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		break;
 	case 3:
 		/*  vts = 2250     hts = 2100  short = 144 */
-		/*  long_MAX:  2*vts-2*short-3             */
-		/*  short_MAX: 2*short-29                  */
+		/*  long_MAX:  2*vts-2*short-3            */
+		/*  short_MAX: 2*short-29                 */
 		sensor_attr.wdr_cache = wdr_bufsize;
 		wsize = &sensor_win_sizes[3];
 		memcpy(&sensor_attr.mipi, &sensor_mipi_30fps_dol, sizeof(sensor_mipi_30fps_dol));

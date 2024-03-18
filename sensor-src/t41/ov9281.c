@@ -1,12 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * ov9281.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1280*800         120       mipi_2lane           linear
@@ -22,17 +18,14 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
 #define SENSOR_CHIP_ID_H (0x92)
 #define SENSOR_CHIP_ID_L (0x81)
-
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-
 #define SENSOR_SUPPORT_SCLK  (0x2d8*0x38e*120)
 #define SENSOR_OUTPUT_MAX_FPS 210
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -50,9 +43,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -484,8 +474,7 @@ static struct regval_list sensor_init_regs_640_400_210fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*720 */
 	{

@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxf51.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -18,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -43,9 +37,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -342,8 +333,7 @@ static struct regval_list sensor_init_regs_1536_1536_25fps_mipi[] = {
 };
 
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] */
 	{
@@ -356,10 +346,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	},
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	//{0x12, 0x20},

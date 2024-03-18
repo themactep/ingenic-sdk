@@ -1,19 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * os08a10.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
- * * Settings:
+ * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1200*800        120       mipi_2lane           linear
  *   1          1920*1080       100       mipi_2lane           linear
  *   2          3840*2160       30        mipi_2lane           linear
  *   3          3840*2160       20        mipi_2lane           linear
- *
  */
 
 #include <linux/init.h>
@@ -25,7 +20,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -54,14 +48,12 @@ struct regval_list
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut
 {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x88, 5731},
@@ -1061,10 +1053,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},

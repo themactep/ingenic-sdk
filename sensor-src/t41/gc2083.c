@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc2083.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution       fps     interface              mode
@@ -22,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -43,9 +37,6 @@ struct regval_list {
         unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	int index;
 	unsigned int again_pga;
@@ -63,8 +54,6 @@ struct again_lut {
 	unsigned int again_shift;
 	unsigned int gain;
 };
-
-
 
 struct again_lut sensor_again_lut[] = {
  	 //0x00d0 0x0155 0x0410 0x0411 0x0412 0x0413 0x0414 0x0415 0x0416 0x0417 0x00b8 0x00b9 0x0dc1
@@ -118,10 +107,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
                                 return lut->gain;
                         }
                 }
-
                 lut++;
         }
-
         return isp_gain;
 }
 
@@ -317,8 +304,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 /*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
         {
                 .width = 1920,
@@ -332,9 +318,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 static struct regval_list sensor_stream_on_mipi[] = {
         {SENSOR_REG_END, 0x00},
 };

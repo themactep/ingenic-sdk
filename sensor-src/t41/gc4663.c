@@ -1,18 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc4663.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps     interface              mode
  *   0          2560*1440       25        mipi_2lane           linear
  *   1          2560*1440       30        mipi_2lane           hdr
  */
+
 #define __WDR__
 
 #include <linux/init.h>
@@ -45,9 +41,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int index;
 	unsigned char reg2b3;
