@@ -340,7 +340,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_3m_25fps_mipi_wdr[] = {

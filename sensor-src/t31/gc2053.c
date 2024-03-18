@@ -227,7 +227,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 28,
-//	void priv; /* point to struct tx_isp_sensor_board_info */
+// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
@@ -1925,5 +1925,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

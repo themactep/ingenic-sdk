@@ -496,7 +496,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0x3237, 0x09},
 	{0x3238, 0x94},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -525,12 +525,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -1160,5 +1160,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Smartsens " SENSOR_NAME " sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

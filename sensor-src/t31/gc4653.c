@@ -284,7 +284,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 /*
@@ -1763,5 +1763,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

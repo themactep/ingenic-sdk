@@ -185,7 +185,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {

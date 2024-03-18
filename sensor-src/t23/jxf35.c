@@ -854,7 +854,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 struct tx_isp_mipi_bus sensor_mipi={

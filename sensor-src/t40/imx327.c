@@ -207,7 +207,7 @@ struct tx_isp_sensor_attribute imx327_attr={
 	.sensor_ctrl.alloc_again_short = imx327_alloc_again_short,
 	.sensor_ctrl.alloc_dgain = imx327_alloc_dgain,
 	.wdr_cache = 0,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list imx327_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
