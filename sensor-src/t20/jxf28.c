@@ -537,7 +537,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("jxf28 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
@@ -549,7 +549,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("jxf28 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -589,7 +589,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	hts = val;
 	hts *= 2;
 	if (0 != ret) {
-		printk("err: jxf28 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -879,7 +879,7 @@ static int sensor_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("probe ok ------->jxf28\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -940,5 +940,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sonic jxf28 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

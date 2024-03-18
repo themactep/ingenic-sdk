@@ -895,17 +895,17 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				return ret;
 #endif
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("gc2063 stream on\n");
+			pr_debug("%s stream on\n", SENSOR_NAME);
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			ISP_WARNING("gc2063 stream on\n");
+			ISP_WARNING("%s stream on\n", SENSOR_NAME));
 		}
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("gc2063 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1175,7 +1175,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 #else
 	ident = 0x2063;
 #endif
-	ISP_WARNING("gc2063 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "gc2063", sizeof("gc2063"));
@@ -1335,7 +1335,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc2063\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

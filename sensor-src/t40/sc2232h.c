@@ -1121,7 +1121,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		}
-		ISP_WARNING("sc2232h stream on\n");
+		ISP_WARNING("%s stream on\n", SENSOR_NAME));
 
 	}
 	else {
@@ -1135,7 +1135,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		}
-		ISP_WARNING("sc2232h stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1167,7 +1167,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: sc2232h read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
@@ -1176,7 +1176,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1342,7 +1342,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc2232h chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "sc2232h", sizeof("sc2232h"));
 		chip->ident = ident;
@@ -1517,7 +1517,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->sc2232h\n");
+	ISP_WARNING("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -1569,5 +1569,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc2232h sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

@@ -586,12 +586,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		ISP_WARNING("ps5268 stream on\n");
+		ISP_WARNING("%s stream on\n", SENSOR_NAME));
 
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("ps5268 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -630,7 +630,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x0116, (unsigned char)((vts-1) >> 8));
 	ret += sensor_write(sd, 0x0111, 0x01);
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -712,7 +712,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		       client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("ps5268 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "ps5268", sizeof("ps5268"));
@@ -889,7 +889,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->ps5268\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
@@ -942,7 +942,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init ps5268 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -958,5 +958,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Smartsens ps5268 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

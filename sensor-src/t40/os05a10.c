@@ -2492,13 +2492,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                 if (sensor->video.state == TX_ISP_MODULE_INIT) {
                         ret = sensor_write_array(sd, sensor_stream_on);
                         sensor->video.state = TX_ISP_MODULE_RUNNING;
-                        pr_debug("os05a10 stream on\n");
+                        pr_debug("%s stream on\n", SENSOR_NAME);
                         sensor->video.state = TX_ISP_MODULE_RUNNING;
                 }
         }
         else {
                 ret = sensor_write_array(sd, sensor_stream_off);
-                pr_debug("os05a10 stream off\n");
+                pr_debug("%s stream off\n", SENSOR_NAME);
                 sensor->video.state = TX_ISP_MODULE_DEINIT;
         }
         return ret;
@@ -2553,7 +2553,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
         ret += sensor_read(sd, 0x380d, &val);
         hts = val;
         if (0 != ret) {
-                ISP_ERROR("err: os05a10 read err\n");
+                ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
                 return ret;
         }
 
@@ -2566,7 +2566,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
         ret += sensor_write(sd, 0x320d, 0x00);
         ret += sensor_write(sd, 0x3208, 0xe2);
         if (0 != ret) {
-                ISP_ERROR("err: sensor_write err\n");
+                ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
                 return ret;
         }
         sensor->video.fps = fps;
@@ -2905,7 +2905,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
                           client->addr, client->adapter->name);
                 return ret;
         }
-        ISP_WARNING("os05a10 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+        ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
         if (chip) {
                 memcpy(chip->name, "os05a10", sizeof("os05a10"));
                 chip->ident = ident;
@@ -3077,7 +3077,7 @@ static int sensor_probe(struct i2c_client *client,
         tx_isp_set_subdev_hostdata(sd, sensor);
         private_i2c_set_clientdata(client, sd);
 
-        pr_debug("probe ok ------->os05a10\n");
+        pr_debug("probe ok ------->%s\n", SENSOR_NAME);
         return 0;
 }
 
@@ -3128,5 +3128,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision os05a10 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

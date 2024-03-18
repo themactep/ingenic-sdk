@@ -479,13 +479,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	    }
 	    if (sensor->video.state == TX_ISP_MODULE_INIT) {
             ret = sensor_write_array(sd, sensor_stream_on_mipi);
-            ISP_WARNING("ps5258 stream on\n");
+            ISP_WARNING("%s stream on\n", SENSOR_NAME));
             sensor->video.state = TX_ISP_MODULE_RUNNING;
 	    }
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("ps5258 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 
@@ -512,7 +512,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x0115, &val);
 	hts = (hts | val) - 1;
 	if (0 != ret) {
-		ISP_ERROR("err: ps5258 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -521,7 +521,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x0116, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x0111, 0x01);
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -652,7 +652,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		       client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("ps5258 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "ps5258", sizeof("ps5258"));
@@ -819,7 +819,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->ps5258\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -871,5 +871,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Smartsens ps5258 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

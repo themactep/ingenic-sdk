@@ -643,12 +643,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_WARNING("ov2740 stream on\n");
+			ISP_WARNING("%s stream on\n", SENSOR_NAME));
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_WARNING("ov2740 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -684,7 +684,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val;
 	ret += sensor_read(sd, 0x380d, &val);
 	if (0 != ret) {
-		ISP_ERROR("err: ov2740 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + val);
@@ -693,7 +693,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1013,7 +1013,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->ov2740\n");
+	ISP_WARNING("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -1065,5 +1065,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision ov2740 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

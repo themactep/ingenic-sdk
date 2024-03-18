@@ -1531,7 +1531,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("jxf23s1 stream on\n");
+		ISP_WARNING("%s stream on\n", SENSOR_NAME));
 
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -1542,7 +1542,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("jxf23s1 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1590,7 +1590,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val;
 	hts *= 2;
 	if (0 != ret) {
-		ISP_ERROR("err: jxf23 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1609,7 +1609,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 //	pr_debug("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1678,7 +1678,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sensor_write_array(sd, wsize->regs);
 
-	ISP_WARNING("jxf23 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "jxf23s1", sizeof("jxf23s1"));
@@ -1947,8 +1947,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	/* pr_debug("probe ok ------->jxf23\n"); */
-	printk("probe ok ------->jxf23s1\n");
+	/* pr_debug("probe ok ------->%s\n", SENSOR_NAME); */
+	printk("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -1999,7 +1999,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	/* ret = private_driver_get_interface(); */
 	/* if (ret) { */
-	/* 	ISP_ERROR("Failed to init jxf23 driver.\n"); */
+	/* 	ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME); */
 	/* 	return -1; */
 	/* } */
 	return private_i2c_add_driver(&jxf23s1_driver);
@@ -2013,5 +2013,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision jxf23 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

@@ -599,11 +599,11 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("jxv01 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("jxv01 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -951,5 +951,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision jxv01 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

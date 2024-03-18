@@ -1279,7 +1279,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("gc2053 stream on\n");
+			pr_debug("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -1290,7 +1290,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("gc2053 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1572,7 +1572,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc2053 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "gc2053", sizeof("gc2053"));
@@ -1752,7 +1752,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc2053\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -1804,5 +1804,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Galaxycore gc2053 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

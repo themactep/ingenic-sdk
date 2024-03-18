@@ -1012,7 +1012,7 @@ static int sensor_resume(struct tx_isp_subdev *sd)
         ret = sensor_write(sd, 0x320f, (unsigned char)(resume_vts & 0xff));
         ret += sensor_write(sd, 0x320e, (unsigned char)(resume_vts >> 8));
         if (0 != ret) {
-            ISP_ERROR("err: sensor_write err\n");
+            ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
             return ret;
         }
     }
@@ -1149,11 +1149,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			ISP_WARNING("sc401ai stream on\n");
+			ISP_WARNING("%s stream on\n", SENSOR_NAME));
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("sc401ai stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 #ifdef SENSOR_POWER_OFF
         //Prepare for the next sleep.
 		sensor->video.state = TX_ISP_MODULE_INIT;
@@ -1202,7 +1202,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x320d, &val);
 	hts = (hts | val) << 1;
 	if (0 != ret) {
-		ISP_ERROR("err: sc401ai read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -1211,7 +1211,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1434,7 +1434,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 #else
 	ident = 0x401;
 #endif
-	ISP_WARNING("sc401ai chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "sc401ai", sizeof("sc401ai"));

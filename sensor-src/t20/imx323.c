@@ -371,12 +371,12 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 	int ret = 0;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("imx323 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 		/* sensor_read_array(sd,sensor_init_regs_1920_1080_30fps); */
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("imx323 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 //	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
@@ -418,7 +418,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret += sensor_read(sd, 0x0343, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: imx323 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	val = 0;
@@ -756,5 +756,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision imx323 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

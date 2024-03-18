@@ -623,13 +623,13 @@ static int imx335_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                 if (sensor->video.state == TX_ISP_MODULE_INIT) {
                         ret = imx335_write_array(sd, imx335_stream_on_mipi);
                         sensor->video.state = TX_ISP_MODULE_RUNNING;
-                        pr_debug("imx335 stream on\n");
+                        pr_debug("%s stream on\n", SENSOR_NAME);
                 }
 
         } else {
                 ret = imx335_write_array(sd, imx335_stream_off_mipi);
                 sensor->video.state = TX_ISP_MODULE_INIT;
-                pr_debug("imx335 stream off\n");
+                pr_debug("%s stream off\n", SENSOR_NAME);
         }
 
         return ret;
@@ -670,7 +670,7 @@ static int imx335_set_fps(struct tx_isp_subdev *sd, int fps)
         ret += imx335_read(sd, 0x3034, &val);
         hts = (hts << 8) + val;
         if (0 != ret) {
-                ISP_ERROR("err: imx335 read err\n");
+                ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
                 return -1;
         }
 
@@ -1004,7 +1004,7 @@ static int imx335_g_chip_ident(struct tx_isp_subdev *sd,
                           client->addr, client->adapter->name);
                 return ret;
         }
-        ISP_WARNING("imx335 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+        ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
         if (chip) {
                 memcpy(chip->name, "imx335", sizeof("imx335"));
                 chip->ident = ident;
@@ -1187,7 +1187,7 @@ static int imx335_probe(struct i2c_client *client,
         tx_isp_set_subdev_hostdata(sd, sensor);
         private_i2c_set_clientdata(client, sd);
 
-        pr_debug("probe ok ------->imx335\n");
+        pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
         return 0;
 }

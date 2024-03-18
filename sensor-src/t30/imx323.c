@@ -352,12 +352,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 	int ret = 0;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("imx323 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 		/* sensor_read_array(sd,sensor_init_regs_1920_1080_30fps); */
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("imx323 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 //	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
@@ -388,7 +388,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x0343, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: imx323 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	val = 0;
@@ -501,7 +501,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 				client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("imx323 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "imx323", sizeof("imx323"));
 		chip->ident = ident;
@@ -709,7 +709,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->imx323\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
@@ -758,7 +758,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init imx323 driver.\n");
+		printk("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -772,5 +772,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision imx323 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

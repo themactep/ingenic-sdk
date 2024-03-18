@@ -654,11 +654,11 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 	unsigned char val_l;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("ov9732 stream on\n");
+		printk("%s stream on\n", SENSOR_NAME));
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("ov9732 stream off\n");
+		printk("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -752,7 +752,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	hts = val;
 	/*printk("info: hts = %d\n", hts);*/
 	if (0 != ret) {
-		printk("err: ov9732 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1053,5 +1053,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision ov9732 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");
