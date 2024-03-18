@@ -931,7 +931,7 @@ int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value)
 
 int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value)
 {
-	int ret;;
+	int ret;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {

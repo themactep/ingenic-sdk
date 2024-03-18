@@ -1228,7 +1228,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return ret;
 }

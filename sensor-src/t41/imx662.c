@@ -1367,7 +1367,7 @@ static int imx662_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
                         ret = imx662_set_wdr_stop(sd, init->enable);
                 break;
         default:
-                break;;
+                break;
         }
 
         return 0;

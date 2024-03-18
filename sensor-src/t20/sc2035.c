@@ -657,7 +657,7 @@ int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value)
 
 int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value)
 {
-	int ret;;
+	int ret;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
 	struct i2c_msg msg = {
@@ -1021,7 +1021,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			break;
 		default:
 			printk("do not support ctrl->cmd ====%d\n",ctrl->cmd);
-			break;;
+			break;
 	}
 	return 0;
 }

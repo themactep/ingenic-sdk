@@ -2057,7 +2057,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			break;
 		default:
 			pr_debug("do not support ctrl->cmd ====%d\n",ctrl->cmd);
-			break;;
+			break;
 	}
 	return 0;
 }

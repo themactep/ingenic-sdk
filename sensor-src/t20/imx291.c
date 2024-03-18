@@ -561,7 +561,7 @@ static long imx291_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = imx291_set_fps(sensor, ctrl->value);
 		break;
 	default:
-		break;;
+		break;
 	}
 	return 0;
 }

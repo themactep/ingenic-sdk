@@ -672,7 +672,7 @@ static long jxh61_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pri
 			ret = jxh61_set_fps(sensor, ctrl->value);
 			break;
 		default:
-			break;;
+			break;
 	}
 	return 0;
 }
