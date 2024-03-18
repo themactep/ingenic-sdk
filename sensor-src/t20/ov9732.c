@@ -21,6 +21,7 @@
 
 #include <soc/gpio.h>
 
+#define SENSOR_NAME "ov9732"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 0
