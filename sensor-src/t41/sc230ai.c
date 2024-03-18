@@ -1,18 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc230ai.c
- *
  * Copyright (C) 2023 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps     interface              mode
  *   0          1920*1080       60        mipi_2lane           linear
  *   1          1920*1080       30        mipi_2lane           hdr
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -22,7 +18,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -45,15 +40,11 @@ static int shvflip = 1;
 
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 
-
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
         unsigned int value;
         unsigned int gain;
@@ -942,8 +933,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_dol[] = {
 };
 
 /*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
 		.width = 1920,
@@ -964,10 +954,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100,0x01},

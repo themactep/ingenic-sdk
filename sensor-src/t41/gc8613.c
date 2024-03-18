@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc8613.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution       fps     interface              mode
@@ -46,10 +41,6 @@ struct regval_list
 	uint16_t reg_num;
 	unsigned char value;
 };
-
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 
 struct again_lut
 {
@@ -899,8 +890,7 @@ static struct regval_list sensor_init_regs_3840_2160_20fps_mipi[] = {
 
 
 /*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 3840*2160 @ max 25fps*/
 	{

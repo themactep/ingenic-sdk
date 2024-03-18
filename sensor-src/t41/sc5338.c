@@ -1,18 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc5338.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2880*1620       30        mipi_2lane            linear
  *   1          2880*1620       15        mipi_2lane             wdr
-
  */
 
 #include <linux/init.h>
@@ -24,7 +18,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -48,9 +41,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * rn6752.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps      interface        mode
@@ -25,7 +20,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -545,8 +539,7 @@ static struct regval_list FHD_1080P25_video[] = {
 };
 
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{

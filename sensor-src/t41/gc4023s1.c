@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc4023s1.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -19,7 +14,6 @@
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
 #include <linux/proc_fs.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -30,7 +24,6 @@
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
-
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20230912a"
 #define SENSOR_HIGH_TEMP    "highTemp"
@@ -82,10 +75,6 @@ static int sinfo_proc_open(struct inode *inode, struct file *file)
 	return single_open(file, sinfo_proc_show, NULL);
 }
 
-
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
         unsigned int index;
         unsigned char reg2cd;
@@ -1362,8 +1351,7 @@ static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
         {SENSOR_REG_END, 0x00},
 };
 /*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
         /* [0] 2560*1440 @max 30fps*/
         {
@@ -1418,11 +1406,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
-static struct regval_list sensor_stream_on[] = {
+ static struct regval_list sensor_stream_on[] = {
         {SENSOR_REG_END, 0x00},
 };
 

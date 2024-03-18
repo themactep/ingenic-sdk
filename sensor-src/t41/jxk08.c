@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxk08.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2560*1440        30       mipi_2lane           linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -21,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -48,9 +43,6 @@ struct regval_list
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut
 {
 	unsigned int value;
@@ -438,8 +430,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 };
 
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 2560*1440@30fps linear */
 	{
@@ -461,9 +452,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-/*
- * the part of driver was fixed.
- */
+
 static struct regval_list sensor_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };

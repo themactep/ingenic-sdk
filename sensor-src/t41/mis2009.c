@@ -1,17 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * mis2009.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps     interface     lane   mode
  *   0          1920*1080       30        mipi        2      linear
- *   ...
  */
 
 #include <linux/init.h>
@@ -23,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -32,7 +25,6 @@
 #define SENSOR_CHIP_ID_L (0x08)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-
 #define SENSOR_SUPPORT_RES_400_PCLK (72000000)
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20230704a"
@@ -49,9 +41,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -440,8 +429,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 };
 
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080*/
 	{
@@ -455,10 +443,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

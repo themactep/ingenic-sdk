@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxf37.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -18,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -38,8 +32,8 @@
 
 /* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200  */
-/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2  */
+/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200 */
+/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2 */
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
@@ -82,9 +76,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -1247,8 +1238,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 };
 
 /*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] */
 	{
@@ -1297,10 +1287,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x20},

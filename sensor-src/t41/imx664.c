@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * imx664.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps       interface             mode
@@ -23,7 +18,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -53,9 +47,6 @@ struct regval_list {
         unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct tx_isp_sensor_attribute imx664_attr;
 
 unsigned int imx664_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
@@ -615,8 +606,7 @@ static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
 };
 
 /*
- * the order of the imx664_win_sizes is [full_resolution, preview_resolution].
- */
+ * the order of the imx664_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting imx664_win_sizes[] = {
         {
                 .width = 2688,
@@ -637,10 +627,6 @@ static struct tx_isp_sensor_win_setting imx664_win_sizes[] = {
 };
 
 static struct tx_isp_sensor_win_setting *wsize = &imx664_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list imx664_stream_on_mipi[] = {
         {0x3000, 0x00},
