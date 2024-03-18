@@ -27,6 +27,17 @@
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;
