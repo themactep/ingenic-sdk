@@ -23,6 +23,7 @@
 #include <sensor-info.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x04)
 #define SENSOR_CHIP_ID_L (0x43)
@@ -302,7 +303,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.chip_id = 0x530541,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS;
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.mipi = {
