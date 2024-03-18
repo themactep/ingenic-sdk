@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -442,7 +441,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x23, 0x14},//	;enhance normal and dummy BPC
 	{0xfd, 0x01},
 	{0x05, 0x06},
-	{0x06, 0x11}, //;e0	;insert dummy line , the frame rate is 30.01.
+	{0x06, 0x11}, //;e0 ;insert dummy line , the frame rate is 30.01.
 	{0x01, 0x01},//	;
 	{0xfd, 0x00},
 	{0x1b, 0x00},//	;enable output
@@ -929,7 +928,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

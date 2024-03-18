@@ -211,7 +211,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	/* INI Start*/
 	{0x0C,0x00}, //0x41 test mode, 0x40 DVP output
 	/* DVP Setting */
-#ifdef	DRIVE_CAPABILITY_1
+#ifdef DRIVE_CAPABILITY_1
 	{0x0D,0x40},
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x0D,0x44},

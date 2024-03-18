@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -61,7 +60,7 @@ struct again_lut {
 	unsigned int gain;
 };
 struct again_lut sensor_again_lut[] = {
-	{0x0, 0	     },
+	{0x0, 0     },
 	{0x1, 5731   },
 	{0x2, 11136  },
 	{0x3, 16248  },

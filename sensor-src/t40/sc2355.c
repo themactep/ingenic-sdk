@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -36,7 +35,7 @@
 #define DUAL_CAMERA_MODE 1
 #define MAIN_SENSOR 1
 #define SECOND_SENSOR 0
-#define	SENSOR_WITHOUT_INIT 1
+#define SENSOR_WITHOUT_INIT 1
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
@@ -939,7 +938,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

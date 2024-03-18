@@ -9,7 +9,6 @@
  */
 /* 1920*1080  carrier-server  --st=gc2093  data_interface=1  i2c=0x37  */
 
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -28,13 +27,13 @@
 #define SENSOR_CHIP_ID_L (0x93)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
-#define SENSOR_SUPPORT_30FPS_SCLK	(0xb1c * 0x465 * 30)
-#define SENSOR_SUPPORT_30FPS_SCLK_HDR	(0x294 * 0x4e2 * 60)
-#define SENSOR_SUPPORT_30FPS_SCLK_60FPS	(0x294 * 2 * 0x4e2 * 60)
-#define SENSOR_OUTPUT_MAX_FPS		60
-#define SENSOR_OUTPUT_MIN_FPS		5
+#define SENSOR_SUPPORT_30FPS_SCLK (0xb1c * 0x465 * 30)
+#define SENSOR_SUPPORT_30FPS_SCLK_HDR (0x294 * 0x4e2 * 60)
+#define SENSOR_SUPPORT_30FPS_SCLK_60FPS (0x294 * 2 * 0x4e2 * 60)
+#define SENSOR_OUTPUT_MAX_FPS 60
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20220325a"
-#define MCLK				24000000
+#define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
@@ -1407,7 +1406,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

@@ -213,7 +213,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3634, 0x00}, // reduce power
 	{0x3620, 0x84},
 	{0x3631, 0x85}, // txvdd 0910
-#ifdef	DRIVE_CAPABILITY_1
+#ifdef DRIVE_CAPABILITY_1
 	{0x3640, 0x01},
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x3640, 0x02},

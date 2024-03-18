@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -26,18 +25,16 @@
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_BANK_REG 0xef
-
 #define SENSOR_SUPPORT_PCLK (81000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define AG_HS_NODE	(40)	// 6.0x
-#define AG_LS_NODE	(36)	// 5.0x
-#define NEPLS_LB	(50)
-#define NEPLS_UB	(250)
-#define NEPLS_SCALE	(38)
-#define NE_NEP_CONST_LINEAR	(0x708+0x32)
-#define NE_NEP_CONST_WDR	(0xfa0+0x32)
-
+#define AG_HS_NODE (40)	// 6.0x
+#define AG_LS_NODE (36)	// 5.0x
+#define NEPLS_LB (50)
+#define NEPLS_UB (250)
+#define NEPLS_SCALE (38)
+#define NE_NEP_CONST_LINEAR (0x708+0x32)
+#define NE_NEP_CONST_WDR (0xfa0+0x32)
 #define SENSOR_VERSION "H20190530a"
 
 typedef enum {
@@ -1078,7 +1075,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 static struct tx_isp_subdev_ops sensor_ops = {

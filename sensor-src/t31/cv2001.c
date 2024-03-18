@@ -1,4 +1,3 @@
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -9,15 +8,14 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_MIN_FPS      5
-#define SENSOR_CHIP_ID		0x01
+#define SENSOR_MIN_FPS 5
+#define SENSOR_CHIP_ID 0x01
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_AGAIN_MAX	0xB4
+#define SENSOR_AGAIN_MAX 0xB4
 #define SENSOR_VERSION "H20230512a"
 
 static int reset_gpio = GPIO_PA(18);
@@ -642,7 +640,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

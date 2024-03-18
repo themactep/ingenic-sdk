@@ -4,7 +4,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -458,7 +457,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x58, 0x00},
 	{0x5a, 0x05},
 	//////////////////////////////////////
-	///////	 MIPI	/////////////////////
+	///////	 MIPI /////////////////////
 	//////////////////////////////////////
 	{0xfe, 0x03},
 	{0x01, 0x5f},
@@ -936,7 +935,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

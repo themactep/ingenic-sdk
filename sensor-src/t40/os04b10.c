@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -23,18 +22,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_CHIP_ID_H (0x43)
-#define SENSOR_CHIP_ID_M	(0x08)
+#define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE	0xfd
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_SCLK_FPS_25 (72000000)
 #define SENSOR_SUPPORT_SCLK_FPS_20 (84000000)
-#define SENSOR_VTS_25_FPS	0x71a
-#define SENSOR_VTS_20_FPS	0xa5b
-#define SENSOR_VB_25_FPS	0x149
-#define SENSOR_VB_20_FPS	0x48a
+#define SENSOR_VTS_25_FPS 0x71a
+#define SENSOR_VTS_20_FPS 0xa5b
+#define SENSOR_VB_25_FPS 0x149
+#define SENSOR_VB_20_FPS 0x48a
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20200103a"
@@ -1410,7 +1408,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

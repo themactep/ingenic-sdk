@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -18,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -60,9 +58,9 @@ struct regval_list {
  * the part of driver maybe modify about different sensor and different board.
  */
 
-struct tx_isp_sensor_attribute bf2253s1_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int bf2253s1_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	int setvalue=0;
 	if (isp_gain<1024) {
@@ -77,12 +75,12 @@ unsigned int bf2253s1_alloc_again(unsigned int isp_gain, unsigned char shift, un
 	return isp_gain;
 }
 
-unsigned int bf2253s1_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
 
-struct tx_isp_mipi_bus bf2253s1_mipi={
+struct tx_isp_mipi_bus sensor_mipi={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	/* .clk = 510, */
 	/* .lans = 2, */
@@ -113,7 +111,7 @@ struct tx_isp_mipi_bus bf2253s1_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute bf2253s1_attr={
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = "bf2253s1",
 	.chip_id = 0x2253,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -142,12 +140,12 @@ struct tx_isp_sensor_attribute bf2253s1_attr={
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = bf2253s1_alloc_again,
-	.sensor_ctrl.alloc_dgain = bf2253s1_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
 
-static struct regval_list bf2253s1_init_regs_2304_1296_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
 	/*Version: V01P10_20200409B*/
     {0xf2,0x01},// add lanh
     {0xe1,0x06},
@@ -210,7 +208,7 @@ static struct regval_list bf2253s1_init_regs_2304_1296_25fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting bf2253s1_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* resolution 2304*1296 */
 	{
 		.width = 1600,
@@ -218,32 +216,32 @@ static struct tx_isp_sensor_win_setting bf2253s1_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = bf2253s1_init_regs_2304_1296_25fps_mipi,
+		.regs = sensor_init_regs_2304_1296_25fps_mipi,
 	},
 };
-struct tx_isp_sensor_win_setting *wsize = &bf2253s1_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 /*
  * the part of driver was fixed.
  */
 
-static struct regval_list bf2253s1_stream_on_dvp[] = {
+static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list bf2253s1_stream_off_dvp[] = {
+static struct regval_list sensor_stream_off_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list bf2253s1_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list bf2253s1_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int bf2253s1_read(struct tx_isp_subdev *sd, uint8_t reg, unsigned char *value)
+int sensor_read(struct tx_isp_subdev *sd, uint8_t reg, unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	/* unsigned char buf[2] = {reg >> 8, reg & 0xff}; */
@@ -269,7 +267,7 @@ int bf2253s1_read(struct tx_isp_subdev *sd, uint8_t reg, unsigned char *value)
 	return ret;
 }
 
-int bf2253s1_write(struct tx_isp_subdev *sd, uint8_t reg, unsigned char value)
+int sensor_write(struct tx_isp_subdev *sd, uint8_t reg, unsigned char value)
 {
 	/* struct i2c_client *client = tx_isp_get_subdevdata(sd); */
 	/* uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value}; */
@@ -307,15 +305,15 @@ int ret =0 ;
 }
 
 #if 0
-static int bf2253s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != bf2253s1_REG_END) {
-		if (vals->reg_num == bf2253s1_REG_DELAY) {
+	while (vals->reg_num != sensor_REG_END) {
+		if (vals->reg_num == sensor_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = bf2253s1_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -326,14 +324,14 @@ static int bf2253s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 }
 #endif
 
-static int bf2253s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = bf2253s1_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -343,17 +341,17 @@ static int bf2253s1_write_array(struct tx_isp_subdev *sd, struct regval_list *va
 	return 0;
 }
 
-static int bf2253s1_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	return 0;
 }
 
-static int bf2253s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	int ret;
 	unsigned char v;
 
-	ret = bf2253s1_read(sd, 0xfc, &v);
+	ret = sensor_read(sd, 0xfc, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -361,7 +359,7 @@ static int bf2253s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 		return -ENODEV;
 	*ident = v;
 
-	ret = bf2253s1_read(sd, 0xfd, &v);
+	ret = sensor_read(sd, 0xfd, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -372,7 +370,7 @@ static int bf2253s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int bf2253s1_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int expo = (value & 0xffff);
@@ -389,41 +387,41 @@ static int bf2253s1_set_expo(struct tx_isp_subdev *sd, int value)
 	}
 
 	//printk("bf2253s1--%s:%d- Not_implemented  value =%d \n", __func__, __LINE__ , expo);
-	ret = bf2253s1_write(sd, 0x6c, expo&0xff);
-	ret += bf2253s1_write(sd, 0x6b, (expo&0x3f00)>>8);
+	ret = sensor_write(sd, 0x6c, expo&0xff);
+	ret += sensor_write(sd, 0x6b, (expo&0x3f00)>>8);
 	if (ret < 0) {
-		ISP_ERROR("bf2253s1_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 		return ret;
 	}
 
 	printk("bf2253s1--%s:%d-   again = %d  ,should be (15, 79) \n", __func__, __LINE__ , again);
-	ret = bf2253s1_write(sd, 0x6a, again);
+	ret = sensor_write(sd, 0x6a, again);
 
 	return 0;
 }
 
 #if 0
-static int bf2253s1_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
 	value *= 2;
-	ret += bf2253s1_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
-	ret += bf2253s1_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += bf2253s1_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int bf2253s1_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	gain_val = value;
 
-	ret += bf2253s1_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += bf2253s1_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
 
@@ -431,22 +429,22 @@ static int bf2253s1_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int bf2253s1_set_logic(struct tx_isp_subdev *sd, int value)
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int bf2253s1_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int bf2253s1_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int bf2253s1_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -468,23 +466,23 @@ static int bf2253s1_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int bf2253s1_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
 	    if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-            ret = bf2253s1_write_array(sd, wsize->regs);
+            ret = sensor_write_array(sd, wsize->regs);
             if (ret)
                 return ret;
             sensor->video.state = TX_ISP_MODULE_INIT;
 	    }
 	    if (sensor->video.state == TX_ISP_MODULE_INIT) {
             if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-                ret = bf2253s1_write_array(sd, bf2253s1_stream_on_dvp);
+                ret = sensor_write_array(sd, sensor_stream_on_dvp);
             } else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-                ret = bf2253s1_write_array(sd, bf2253s1_stream_on_mipi);
+                ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
             } else {
                 ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -495,9 +493,9 @@ static int bf2253s1_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *in
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_off_dvp);
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -509,7 +507,7 @@ static int bf2253s1_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *in
 	return ret;
 }
 
-static int bf2253s1_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -528,9 +526,9 @@ static int bf2253s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
-	ret = bf2253s1_read(sd, 0x26, &tmp);
+	ret = sensor_read(sd, 0x26, &tmp);
 	hts = tmp;
-	ret += bf2253s1_read(sd, 0x25, &tmp);
+	ret += sensor_read(sd, 0x25, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: bf2253s1 read err\n");
 		return ret;
@@ -538,9 +536,9 @@ static int bf2253s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = bf2253s1_read(sd, 0x23, &tmp);
+	ret = sensor_read(sd, 0x23, &tmp);
 	vts_diff = tmp;
-	ret += bf2253s1_read(sd, 0x22, &tmp);
+	ret += sensor_read(sd, 0x22, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: bf2253s1 read err\n");
 		return ret;
@@ -548,11 +546,11 @@ static int bf2253s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts_diff = (vts_diff << 8) + tmp;
 
 	vts -= vts_diff;
-	ret += bf2253s1_write(sd, 0x07, (unsigned char)(vts & 0xff));
-	ret += bf2253s1_write(sd, 0x08, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x07, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x08, (unsigned char)(vts >> 8));
 
 	if (0 != ret) {
-		ISP_ERROR("err: bf2253s1_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -567,7 +565,7 @@ static int bf2253s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int bf2253s1_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
@@ -594,10 +592,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->default_boot) {
         case 0:
-            wsize = &bf2253s1_win_sizes[0];
-            memcpy((void*)(&(bf2253s1_attr.mipi)),(void*)(&bf2253s1_mipi),sizeof(bf2253s1_mipi));
-	    bf2253s1_attr.again = 0;
-            bf2253s1_attr.integration_time = 0xe7e;
+            wsize = &sensor_win_sizes[0];
+            memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+	    sensor_attr.again = 0;
+            sensor_attr.integration_time = 0xe7e;
             break;
         default:
             ISP_ERROR("Have no this setting!!!\n");
@@ -605,15 +603,15 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 
     switch(info->video_interface) {
         case TISP_SENSOR_VI_MIPI_CSI0:
-            bf2253s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-            bf2253s1_attr.mipi.index = 0;
+            sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+            sensor_attr.mipi.index = 0;
             break;
         case TISP_SENSOR_VI_MIPI_CSI1:
-            bf2253s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-            bf2253s1_attr.mipi.index = 1;
+            sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+            sensor_attr.mipi.index = 1;
             break;
         case TISP_SENSOR_VI_DVP:
-            bf2253s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+            sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
             break;
         default:
             ISP_ERROR("Have no this interface!!!\n");
@@ -674,7 +672,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
     return -1;
 }
 
-static int bf2253s1_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -683,7 +681,7 @@ static int bf2253s1_g_chip_ident(struct tx_isp_subdev *sd,
 
 	sensor_attr_check(sd);
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio,"bf2253s1_reset");
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
@@ -696,7 +694,7 @@ static int bf2253s1_g_chip_ident(struct tx_isp_subdev *sd,
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio,"bf2253s1_pwdn");
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
@@ -706,7 +704,7 @@ static int bf2253s1_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = bf2253s1_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an bf2253s1 chip.\n",
 			  client->addr, client->adapter->name);
@@ -722,12 +720,12 @@ static int bf2253s1_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int bf2253s1_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	return 0;
 }
 
-static int bf2253s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
@@ -739,35 +737,35 @@ static int bf2253s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 	switch(cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = bf2253s1_set_expo(sd, sensor_val->value);
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		//printk("\n\n into TX_ISP_EVENT_SENSOR_INT_TIME %d\n\n", __LINE__);
 		//if (arg)
-		//    ret = bf2253s1_set_integration_time(sd, sensor_val->value);
+		//    ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		//printk("\n\n into TX_ISP_EVENT_SENSOR_AGAIN %d\n\n", __LINE__);
 		//if (arg)
-		//    ret = bf2253s1_set_analog_gain(sd, sensor_val->value);
+		//    ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = bf2253s1_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = bf2253s1_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = bf2253s1_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_off_dvp);
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -775,9 +773,9 @@ static int bf2253s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_on_dvp);
+			ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = bf2253s1_write_array(sd, bf2253s1_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -786,15 +784,15 @@ static int bf2253s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = bf2253s1_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = bf2253s1_set_vflip(sd, sensor_val->value);
+			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
 		if (arg)
-			ret = bf2253s1_set_logic(sd, sensor_val->value);
+			ret = sensor_set_logic(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -803,7 +801,7 @@ static int bf2253s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 	return ret;
 }
 
-static int bf2253s1_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -815,14 +813,14 @@ static int bf2253s1_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regis
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = bf2253s1_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int bf2253s1_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
@@ -832,32 +830,32 @@ static int bf2253s1_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	bf2253s1_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops bf2253s1_core_ops = {
-	.g_chip_ident = bf2253s1_g_chip_ident,
-	.reset = bf2253s1_reset,
-	.init = bf2253s1_init,
-	/*.ioctl = bf2253s1_ops_ioctl,*/
-	.g_register = bf2253s1_g_register,
-	.s_register = bf2253s1_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops bf2253s1_video_ops = {
-	.s_stream = bf2253s1_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	bf2253s1_sensor_ops = {
-	.ioctl = bf2253s1_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops bf2253s1_ops = {
-	.core = &bf2253s1_core_ops,
-	.video = &bf2253s1_video_ops,
-	.sensor = &bf2253s1_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -873,7 +871,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int bf2253s1_probe(struct i2c_client *client, const struct i2c_device_id *id)
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
@@ -886,12 +884,12 @@ static int bf2253s1_probe(struct i2c_client *client, const struct i2c_device_id 
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 
-	bf2253s1_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &bf2253s1_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -900,7 +898,7 @@ static int bf2253s1_probe(struct i2c_client *client, const struct i2c_device_id 
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &bf2253s1_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -910,7 +908,7 @@ static int bf2253s1_probe(struct i2c_client *client, const struct i2c_device_id 
 	return 0;
 }
 
-static int bf2253s1_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
@@ -928,30 +926,30 @@ static int bf2253s1_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id bf2253s1_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "bf2253s1", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, bf2253s1_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver bf2253s1_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
 		.name = "bf2253s1",
 	},
-	.probe = bf2253s1_probe,
-	.remove = bf2253s1_remove,
-	.id_table = bf2253s1_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sensor(void)
 {
-	return private_i2c_add_driver(&bf2253s1_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&bf2253s1_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);

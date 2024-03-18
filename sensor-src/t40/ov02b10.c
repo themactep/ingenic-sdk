@@ -10,7 +10,6 @@
  * sboot        resolution      fps       interface              mode
  *   0          1600*1200       15        mipi_1lane           linear
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -28,7 +27,7 @@
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x2b)
 #define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE	0xfd
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
 
 #define SENSOR_SUPPORT_SCLK_FPS_15 (16490880)
@@ -1001,7 +1000,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

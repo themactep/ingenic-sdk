@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -57,7 +56,7 @@ struct regval_list {
  * the part of driver maybe modify about different sensor and different board.
  */
 
-unsigned int imx323_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
@@ -68,13 +67,13 @@ unsigned int imx323_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int imx323_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	*sensor_dgain = 0;
 	return 0;
 }
 
-struct tx_isp_sensor_attribute imx323_attr = {
+struct tx_isp_sensor_attribute sensor_attr = {
 	.name = "imx323",
 	.chip_id = 0x140d,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -100,13 +99,13 @@ struct tx_isp_sensor_attribute imx323_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = imx323_alloc_again,
-	.sensor_ctrl.alloc_dgain = imx323_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 
-static struct regval_list imx323_init_regs_1920_1080_30fps[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 /* inclk 37.135M clk*/
 	{0x3000,0x31},
 	{0x0008,0x00},
@@ -150,9 +149,9 @@ static struct regval_list imx323_init_regs_1920_1080_30fps[] = {
 };
 
 /*
- * the order of the imx323_win_sizes is [full_resolution, preview_resolution].
+ * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
-static struct tx_isp_sensor_win_setting imx323_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*960 */
 	{
 		.width = 1920,
@@ -160,11 +159,11 @@ static struct tx_isp_sensor_win_setting imx323_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = imx323_init_regs_1920_1080_30fps,
+		.regs = sensor_init_regs_1920_1080_30fps,
 	}
 };
 
-static enum v4l2_mbus_pixelcode imx323_mbus_code[] = {
+static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG10_1X10,
 	V4L2_MBUS_FMT_SGRBG12_1X12,
 };
@@ -173,17 +172,17 @@ static enum v4l2_mbus_pixelcode imx323_mbus_code[] = {
  * the part of driver was fixed.
  */
 
-static struct regval_list imx323_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	{0x0100,0x01},
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-static struct regval_list imx323_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	{0x0100,0x00},
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-int imx323_read(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 		unsigned char *value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -210,7 +209,7 @@ int imx323_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int imx323_write(struct tx_isp_subdev *sd, uint16_t reg,
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
 		 unsigned char value)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -229,7 +228,7 @@ int imx323_write(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-static int imx323_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -237,7 +236,7 @@ static int imx323_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = imx323_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 			printk("{0x%0x, 0x%02x}\n",vals->reg_num, val);
@@ -246,14 +245,14 @@ static int imx323_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
-static int imx323_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = imx323_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -262,17 +261,17 @@ static int imx323_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int imx323_reset(struct tx_isp_subdev *sd, int val)
+static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {
 	return 0;
 }
 
-static int imx323_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
 
-	ret = imx323_read(sd, 0x301c, &v);
+	ret = sensor_read(sd, 0x301c, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -280,7 +279,7 @@ static int imx323_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 		return -ENODEV;
 	*ident = v;
 
-	ret = imx323_read(sd, 0x301d, &v);
+	ret = sensor_read(sd, 0x301d, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
@@ -290,47 +289,47 @@ static int imx323_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int imx323_set_integration_time(struct tx_isp_subdev *sd, int int_time)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int int_time)
 {
 	int ret = 0;
 	unsigned short shs = 0;
 	unsigned short vmax = 0;
 
-	vmax = imx323_attr.total_height;
+	vmax = sensor_attr.total_height;
 	shs = vmax-int_time;
-	ret = imx323_write(sd, 0x0203, (unsigned char)(shs & 0xff));
+	ret = sensor_write(sd, 0x0203, (unsigned char)(shs & 0xff));
 	if (ret < 0)
 		return ret;
-	ret = imx323_write(sd, 0x0202, (unsigned char)((shs >> 8) & 0xff));
+	ret = sensor_write(sd, 0x0202, (unsigned char)((shs >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 	return 0;
 }
 
-static int imx323_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	/* printk("sensor again write value 0x%x\n",value); */
-	ret = imx323_write(sd, 0x301e, (unsigned char)(value & 0xff));
+	ret = sensor_write(sd, 0x301e, (unsigned char)(value & 0xff));
 	if (ret < 0)
 		return ret;
 	return 0;
 }
 
-static int imx323_set_digital_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx323_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
 
-static int imx323_init(struct tx_isp_subdev *sd, int enable)
+static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	struct tx_isp_sensor_win_setting *wsize = &imx323_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 	if (!enable)
 		return ISP_SUCCESS;
@@ -340,7 +339,7 @@ static int imx323_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = imx323_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -348,23 +347,23 @@ static int imx323_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int imx323_s_stream(struct tx_isp_subdev *sd, int enable)
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 	if (enable) {
-		ret = imx323_write_array(sd, imx323_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		pr_debug("imx323 stream on\n");
-		/* imx323_read_array(sd,imx323_init_regs_1920_1080_30fps); */
+		/* sensor_read_array(sd,sensor_init_regs_1920_1080_30fps); */
 	}
 	else {
-		ret = imx323_write_array(sd, imx323_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("imx323 stream off\n");
 	}
-//	imx323_read_array(sd, imx323_init_regs_1280_960_25fps);
+//	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
 }
 
-static int imx323_set_fps(struct tx_isp_subdev *sd, int fps)
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
@@ -383,27 +382,27 @@ static int imx323_set_fps(struct tx_isp_subdev *sd, int fps)
 	pclk = SENSOR_SUPPORT_SCLK;
 
 	val = 0;
-	ret += imx323_read(sd, 0x0342, &val);
+	ret += sensor_read(sd, 0x0342, &val);
 	hts = val<<8;
 	val = 0;
-	ret += imx323_read(sd, 0x0343, &val);
+	ret += sensor_read(sd, 0x0343, &val);
 	hts = val;
 	if (0 != ret) {
 		printk("err: imx323 read err\n");
 		return ret;
 	}
 	val = 0;
-	ret += imx323_read(sd, 0x0340, &val);
+	ret += sensor_read(sd, 0x0340, &val);
 	vts_old = val<<8;
 	val = 0;
-	ret += imx323_read(sd, 0x0341, &val);
+	ret += sensor_read(sd, 0x0341, &val);
 	vts_old = val;
 
 	vts = (pclk << 4) / (hts * (newformat >> 4));
-	ret += imx323_write(sd, 0x0341, vts&0xff);
-	ret += imx323_write(sd, 0x0340, (vts>>8)&0xff);
+	ret += sensor_write(sd, 0x0341, vts&0xff);
+	ret += sensor_write(sd, 0x0340, (vts>>8)&0xff);
 	if (0 != ret) {
-		printk("err: imx323_write err\n");
+		printk("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -414,24 +413,24 @@ static int imx323_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	val = 0;
-	ret += imx323_read(sd, 0x0202, &val);
+	ret += sensor_read(sd, 0x0202, &val);
 	shs = val<<8;
 	val = 0;
-	ret += imx323_read(sd, 0x0203, &val);
+	ret += sensor_read(sd, 0x0203, &val);
 	shs = val;
-	imx323_set_integration_time(sd,vts_old-shs);
+	sensor_set_integration_time(sd,vts_old-shs);
 	return ret;
 }
 
-static int imx323_set_mode(struct tx_isp_subdev *sd, int value)
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
-		wsize = &imx323_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		wsize = &imx323_win_sizes[0];
+		wsize = &sensor_win_sizes[0];
 	}
 
 	if (wsize) {
@@ -446,13 +445,13 @@ static int imx323_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int imx323_set_vflip(struct tx_isp_subdev *sd, int enable)
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val = 0;
 
-	ret += imx323_read(sd, 0x0101, &val);
+	ret += sensor_read(sd, 0x0101, &val);
 	if (enable) {
 		val = val | 0x02;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG12_1X12;
@@ -461,21 +460,21 @@ static int imx323_set_vflip(struct tx_isp_subdev *sd, int enable)
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG12_1X12;
 	}
 	sensor->video.mbus_change = 0;
-	ret += imx323_write(sd, 0x0101, val);
+	ret += sensor_write(sd, 0x0101, val);
 
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
 
-static int imx323_g_chip_ident(struct tx_isp_subdev *sd,
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		struct tx_isp_chip_ident *chip)
 {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio,"imx323_reset");
+		ret = private_gpio_request(reset_gpio,"sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
@@ -486,7 +485,7 @@ static int imx323_g_chip_ident(struct tx_isp_subdev *sd,
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio,"imx323_pwdn");
+		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
@@ -496,7 +495,7 @@ static int imx323_g_chip_ident(struct tx_isp_subdev *sd,
 			printk("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	ret = imx323_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an imx323 chip.\n",
 				client->addr, client->adapter->name);
@@ -510,7 +509,7 @@ static int imx323_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	return 0;
 }
-static int imx323_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
@@ -520,37 +519,37 @@ static int imx323_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch(cmd) {
 		case TX_ISP_EVENT_SENSOR_INT_TIME:
 			if (arg)
-				ret = imx323_set_integration_time(sd, *(int*)arg);
+				ret = sensor_set_integration_time(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_AGAIN:
 			if (arg)
-				ret = imx323_set_analog_gain(sd, *(int*)arg);
+				ret = sensor_set_analog_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_DGAIN:
 			if (arg)
-				ret = imx323_set_digital_gain(sd, *(int*)arg);
+				ret = sensor_set_digital_gain(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 			if (arg)
-				ret = imx323_get_black_pedestal(sd, *(int*)arg);
+				ret = sensor_get_black_pedestal(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_RESIZE:
 			if (arg)
-				ret = imx323_set_mode(sd, *(int*)arg);
+				ret = sensor_set_mode(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			ret = imx323_write_array(sd, imx323_stream_off);
+			ret = sensor_write_array(sd, sensor_stream_off);
 			break;
 		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			ret = imx323_write_array(sd, imx323_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			break;
 		case TX_ISP_EVENT_SENSOR_FPS:
 			if (arg)
-				ret = imx323_set_fps(sd, *(int*)arg);
+				ret = sensor_set_fps(sd, *(int*)arg);
 			break;
 		case TX_ISP_EVENT_SENSOR_VFLIP:
 			if (arg)
-				ret = imx323_set_vflip(sd, *(int*)arg);
+				ret = sensor_set_vflip(sd, *(int*)arg);
 			break;
 		default:
 			break;;
@@ -558,7 +557,7 @@ static int imx323_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return 0;
 }
 
-static int imx323_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
 	int len = 0;
@@ -570,13 +569,13 @@ static int imx323_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = imx323_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 	return ret;
 }
 
-static int imx323_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
 {
 	int len = 0;
 
@@ -586,30 +585,30 @@ static int imx323_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	imx323_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops imx323_core_ops = {
-	.g_chip_ident = imx323_g_chip_ident,
-	.reset = imx323_reset,
-	.init = imx323_init,
-	.g_register = imx323_g_register,
-	.s_register = imx323_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops imx323_video_ops = {
-	.s_stream = imx323_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	imx323_sensor_ops = {
-	.ioctl = imx323_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops imx323_ops = {
-	.core = &imx323_core_ops,
-	.video = &imx323_video_ops,
-	.sensor = &imx323_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
@@ -626,13 +625,13 @@ struct platform_device sensor_platform_device = {
 };
 
 
-static int imx323_probe(struct i2c_client *client,
+static int sensor_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = &imx323_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	enum v4l2_mbus_pixelcode mbus;
 	int i = 0;
 	int ret;
@@ -677,25 +676,25 @@ static int imx323_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	imx323_attr.dvp.gpio = sensor_gpio_func;
+	sensor_attr.dvp.gpio = sensor_gpio_func;
 
 	switch(sensor_gpio_func) {
 	case DVP_PA_LOW_10BIT:
 	case DVP_PA_HIGH_10BIT:
-		mbus = imx323_mbus_code[0];
+		mbus = sensor_mbus_code[0];
 		break;
 	case DVP_PA_12BIT:
-		mbus = imx323_mbus_code[1];
+		mbus = sensor_mbus_code[1];
 		break;
 	default:
 		goto err_set_sensor_gpio;
 	}
 
-	for(i = 0; i < ARRAY_SIZE(imx323_win_sizes); i++)
-		imx323_win_sizes[i].mbus_code = mbus;
+	for(i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
+		sensor_win_sizes[i].mbus_code = mbus;
 	sd = &sensor->sd;
 	video = &sensor->video;
-	sensor->video.attr = &imx323_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.mbus_change = 0;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
@@ -705,7 +704,7 @@ static int imx323_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &imx323_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -721,7 +720,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int imx323_remove(struct i2c_client *client)
+static int sensor_remove(struct i2c_client *client)
 {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
@@ -738,20 +737,20 @@ static int imx323_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id imx323_id[] = {
+static const struct i2c_device_id sensor_id[] = {
 	{ "imx323", 0 },
 	{ }
 };
-MODULE_DEVICE_TABLE(i2c, imx323_id);
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver imx323_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
 		.name = "imx323",
 	},
-	.probe = imx323_probe,
-	.remove = imx323_remove,
-	.id_table = imx323_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sensor(void)
@@ -762,12 +761,12 @@ static __init int init_sensor(void)
 		printk("Failed to init imx323 driver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&imx323_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
-	private_i2c_del_driver(&imx323_driver);
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);

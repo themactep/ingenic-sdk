@@ -11,7 +11,6 @@
 
 #define __WDR__
 //#define FAST_AE
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>

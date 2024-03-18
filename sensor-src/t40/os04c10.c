@@ -568,7 +568,7 @@ static struct regval_list sensor_init_regs_2688_1520_20fps_mipi_dol[] = {
 	{0x5000,0xf9},
 	{0x3624,0x00},
 
-#if 0	//HCG
+#if 0 //HCG
 	{0x320d,0x00},
 	{0x3208,0x00},
 	{0x3698,0x42},
@@ -1355,7 +1355,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	int expo = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	if	(info->default_boot == 1) {
+	if (info->default_boot == 1) {
 		if (expo > 1405) expo = 1405;
 	} else if (info->default_boot == 0) {
 		if (expo > 2247) expo = 2247;
@@ -1968,7 +1968,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 

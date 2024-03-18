@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-/* #define DEBUG */
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -27,21 +26,21 @@
 /* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
 
 #define SENSOR_CHIP_ID_H (0x23)
-#define SENSOR_CHIP_ID_M	(0x29)
+#define SENSOR_CHIP_ID_M (0x29)
 #define SENSOR_CHIP_ID_L (0x02)
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_REG_PAGE	0xfd
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_SUPPORT_SCLK (88800000)
 #define SENSOR_SUPPORT_SCLK_HDR (88800000)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VTS_60_FPS  0x44f
-#define SENSOR_VTS_30_FPS  0x89f
-#define SENSOR_VTS_30_FPS_HDR  0x44f
-#define SENSOR_VB_60_FPS  0x0
-#define SENSOR_VB_30_FPS  0x450
-#define SENSOR_VB_30_FPS_HDR  0x0
+#define SENSOR_VTS_60_FPS 0x44f
+#define SENSOR_VTS_30_FPS 0x89f
+#define SENSOR_VTS_30_FPS_HDR 0x44f
+#define SENSOR_VB_60_FPS 0x0
+#define SENSOR_VB_30_FPS 0x450
+#define SENSOR_VB_30_FPS_HDR 0x0
 #define SENSOR_VERSION "H20210617a"
 
 static int reset_gpio = GPIO_PA(18);
@@ -1356,7 +1355,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sensor_sensor_ops = {
+static struct tx_isp_subdev_sensor _ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 
