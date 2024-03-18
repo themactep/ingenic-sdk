@@ -37,7 +37,7 @@
 #define SENSOR_SUPPORT_SCLK (76789800)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION
+#define SENSOR_VERSION "20180320"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
