@@ -21,6 +21,7 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+#define SENSOR_NAME "ps5260"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x48
 #define SENSOR_MAX_WIDTH 1920
