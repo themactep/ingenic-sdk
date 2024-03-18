@@ -1,18 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * os05a20.c
- *
  * Copyright (C) 2023 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  * Settings:
- * sensor_max_fps        resolution      fps       interface              mode
- *      25               2592*1944       25        mipi_2lane            linear
- *		30               1920*1080       30        mipi_2lane            linear
- *		60               1920*1080       60        mipi_2lane            linear
+ * sensor_max_fps   resolution      fps       interface              mode
+ *  25               2592*1944       25        mipi_2lane            linear
+ *  30               1920*1080       30        mipi_2lane            linear
+ *  60               1920*1080       60        mipi_2lane            linear
  */
-
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -26,6 +22,7 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
+
 #define SENSOR_NAME "os05a20"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
