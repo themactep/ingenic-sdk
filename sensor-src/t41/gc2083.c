@@ -576,12 +576,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                 if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
                         ret = sensor_write_array(sd, sensor_stream_on_mipi);
-                        ISP_WARNING("gc2083 stream on\n");
+                        ISP_WARNING("%s stream on\n", SENSOR_NAME));
                 }
         }
         else {
                 ret = sensor_write_array(sd, sensor_stream_off_mipi);
-                ISP_WARNING("gc2083 stream off\n");
+                ISP_WARNING("%s stream off\n", SENSOR_NAME);
         }
 
         return ret;
@@ -943,7 +943,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
         tx_isp_set_subdev_hostdata(sd, sensor);
         private_i2c_set_clientdata(client, sd);
 
-        pr_debug("probe ok ------->gc2083\n");
+        pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
         return 0;
 }
@@ -994,5 +994,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for gc2083 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

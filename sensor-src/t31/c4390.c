@@ -532,10 +532,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("c4390 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("c4390 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -843,7 +843,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->c4390\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
@@ -893,7 +893,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init c4390 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -908,5 +908,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for c4390 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

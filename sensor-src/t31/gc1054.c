@@ -921,7 +921,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		}
-		pr_debug("gc1054 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -929,7 +929,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		}
-		pr_debug("gc1054 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1059,7 +1059,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc1054 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "gc1054", sizeof("gc1054"));
 		chip->ident = ident;
@@ -1261,7 +1261,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc1054\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 err_set_sensor_data_interface:
@@ -1314,7 +1314,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init gc1054 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -1329,5 +1329,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Gcoreinc gc1054 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

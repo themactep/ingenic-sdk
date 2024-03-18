@@ -1612,7 +1612,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("jxf37 stream on\n");
+			pr_debug("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -1624,7 +1624,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("jxf37 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1692,7 +1692,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val;
 	hts *= 2;
 	if (0 != ret) {
-		ISP_ERROR("err: jxf37 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1715,7 +1715,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1999,7 +1999,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 #else
 	ident = 0x0f37;
 #endif
-	ISP_WARNING("jxf37 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "jxf37", sizeof("jxf37"));
@@ -2245,7 +2245,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->jxf37\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

@@ -976,12 +976,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		pr_debug("sc4236 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		pr_debug("sc4236 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1029,7 +1029,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x320d, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: sc4236 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1142,7 +1142,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		       client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("sc4236 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "sc4236", sizeof("sc4236"));
 		chip->ident = ident;
@@ -1332,7 +1332,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc4236\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
@@ -1381,7 +1381,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init sc4236 driver.\n");
+		printk("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -1396,5 +1396,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision sc4236 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

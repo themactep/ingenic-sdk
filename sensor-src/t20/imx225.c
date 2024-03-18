@@ -477,11 +477,11 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 	int ret = 0;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("imx225 stream on\n");
+		printk("%s stream on\n", SENSOR_NAME));
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("imx225 stream off\n");
+		printk("%s stream off\n", SENSOR_NAME);
 	}
 //	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
@@ -527,7 +527,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret += sensor_read(sd, 0x380d, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: imx225 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	vts = (pclk << 4) / (hts * (newformat >> 4));
@@ -801,7 +801,7 @@ static int sensor_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	printk("probe ok ------->imx225\n");
+	printk("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);
@@ -859,5 +859,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision imx225 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

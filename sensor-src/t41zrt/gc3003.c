@@ -787,13 +787,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("gc3003 stream on\n");
+			pr_debug("%s stream on\n", SENSOR_NAME);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("gc3003 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1212,7 +1212,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc3003\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

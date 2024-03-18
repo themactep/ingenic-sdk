@@ -849,7 +849,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("mis2008 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
@@ -861,7 +861,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("mis2008 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -893,7 +893,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sensor_write(sd, 0x3201, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3200, (unsigned char)(vts >> 8));
 	if (ret < 0) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -926,7 +926,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_write(sd, 0x3205, h_start);
 	ret += sensor_write(sd, 0x3207, h_end);
 	if (0 != ret)
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 
 	return ret;
 }
@@ -991,7 +991,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		       client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("mis2008 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "mis2008", sizeof("mis2008"));
 		chip->ident = ident;
@@ -1192,7 +1192,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->mis2008\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -1244,7 +1244,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init mis2008 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -1259,5 +1259,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for ImageDesign mis2008 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

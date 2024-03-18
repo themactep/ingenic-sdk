@@ -583,7 +583,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	}
 
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -661,13 +661,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("imx327 stream on\n");
+			pr_debug("%s stream on\n", SENSOR_NAME);
 		}
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("imx327 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1010,7 +1010,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("imx327 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "imx327s1", sizeof("imx327s1"));
 		chip->ident = ident;
@@ -1188,7 +1188,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->imx327\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

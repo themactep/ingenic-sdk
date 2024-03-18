@@ -589,11 +589,11 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("sp1409 stream on\n");
+		printk("%s stream on\n", SENSOR_NAME));
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("sp1409 stream off\n");
+		printk("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -964,5 +964,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision sp1409 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

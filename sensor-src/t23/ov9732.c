@@ -530,7 +530,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		printk("sensor_mipi stream on\n");
+		printk("%s stream on\n", SENSOR_NAME));
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -540,7 +540,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		printk("sensor_mipi stream off\n");
+		printk("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -570,7 +570,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x380d, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: ov9732 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -838,7 +838,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->ov9732\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 err_set_sensor_data_interface:
@@ -890,7 +890,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init ov9732 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -904,5 +904,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision ov9732 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

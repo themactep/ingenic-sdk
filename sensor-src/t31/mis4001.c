@@ -667,7 +667,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	ret = sensor_write(sd,  0x3100, (unsigned char)((value >> 8)& 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(value & 0xff));
 	if (ret < 0)
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 
 	return ret;
 }
@@ -678,7 +678,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	ret = sensor_write(sd, 0x3102, (unsigned char)(value));
 	if (ret < 0)
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 
 	return ret;
 }
@@ -705,7 +705,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 		ret += sensor_write(sd, 0x3111, h_start);
 		ret += sensor_write(sd, 0x3113, h_end);
 		if (0 != ret)
-			ISP_ERROR("err: sensor_write err\n");
+			ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		trig_logic = false;
 	}
 
@@ -751,11 +751,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("mis4001 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 	}
 	else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("mis4001 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -791,7 +791,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sensor_write(sd, 0x310f, (unsigned char)(hts & 0xff));
 	ret += sensor_write(sd, 0x310e, (unsigned char)(hts >> 8));
 	if (ret < 0) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -833,7 +833,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_write(sd, 0x3111, h_start);
 	ret += sensor_write(sd, 0x3113, h_end);
 	if (0 != ret)
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 
 	return ret;
 	*/
@@ -1082,7 +1082,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->mis4001\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_get_mclk:
 	kfree(sensor);
@@ -1131,7 +1131,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init mis4001 driver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -1146,5 +1146,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for ImageDesign mis4001 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

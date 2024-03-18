@@ -831,7 +831,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("sc2232h stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
@@ -843,7 +843,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("sc2232h stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -871,7 +871,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		printk("err: sc2232h read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
@@ -957,7 +957,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 				client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("sc2232h chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "sc2232h", sizeof("sc2232h"));
 		chip->ident = ident;
@@ -1173,7 +1173,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc2232h\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 err_set_sensor_data_interface:
@@ -1225,7 +1225,7 @@ static __init int init_sensor(void)
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init sc2232h driver.\n");
+		printk("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -1240,5 +1240,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision sc2232h sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

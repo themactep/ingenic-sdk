@@ -8,7 +8,6 @@
  * published by the Free Software Foundation.
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -18,13 +17,12 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 
-#define SENSOR_NAME                 "sc2235"
-#define SENSOR_CHIP_ID              0x2235
+#define SENSOR_NAME "sc2235"
+#define SENSOR_CHIP_ID 0x2235
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 1920
@@ -33,10 +31,10 @@
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_PCLK_FPS_30  (74250*1000)
-#define SENSOR_SUPPORT_PCLK_FPS_15  (45000*1000)
-#define SENSOR_OUTPUT_MAX_FPS       30
-#define SENSOR_OUTPUT_MIN_FPS       5
+#define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
+#define SENSOR_SUPPORT_PCLK_FPS_15 (45000*1000)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20200331a"
 

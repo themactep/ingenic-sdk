@@ -661,12 +661,12 @@ static int imx482_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                 if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
                         ret = imx482_write_array(sd, imx482_stream_on_mipi);
-                        ISP_WARNING("imx482 stream on\n");
+                        ISP_WARNING("%s stream on\n", SENSOR_NAME));
                 }
         }
         else {
                 ret = imx482_write_array(sd, imx482_stream_off_mipi);
-                ISP_WARNING("imx482 stream off\n");
+                ISP_WARNING("%s stream off\n", SENSOR_NAME);
         }
 
         return ret;
@@ -707,7 +707,7 @@ static int imx482_set_fps(struct tx_isp_subdev *sd, int fps)
         ret += imx482_read(sd, 0x3028, &val);
         hts = (hts << 8) + val;
         if (0 != ret) {
-                ISP_ERROR("err: imx482 read err\n");
+                ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
                 return -1;
         }
 
@@ -931,7 +931,7 @@ static int imx482_g_chip_ident(struct tx_isp_subdev *sd,
                           client->addr, client->adapter->name);
                 return ret;
         }
-        ISP_WARNING("imx482 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+        ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
         ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
         if (chip) {
                 memcpy(chip->name, "imx482", sizeof("imx482"));
@@ -1091,7 +1091,7 @@ static int imx482_probe(struct i2c_client *client,
         tx_isp_set_subdev_hostdata(sd, sensor);
         private_i2c_set_clientdata(client, sd);
 
-        pr_debug("probe ok ------->imx482\n");
+        pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
         return 0;
 }
@@ -1143,5 +1143,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for imx482 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

@@ -17,11 +17,9 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-
 //#include <linux/delay.h>
 //#include <apical-isp/apical_math.h>
 

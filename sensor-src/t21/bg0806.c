@@ -131,7 +131,7 @@ struct tx_isp_dvp_bus sensor_dvp={
 };
 
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "bg0806",
+	.name = SENSOR_NAME,
 	.chip_id = 0x0806,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
@@ -630,7 +630,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("bg0806 stream on\n");
+		pr_debug("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
@@ -642,7 +642,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("bg0806 stream off\n");
+		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -672,7 +672,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x000f, &val);
 	hts = val;
 	if (0 != ret) {
-		printk("err: bg0806 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -684,7 +684,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x0009, &val);
 	height = val;
 	if (0 != ret) {
-		printk("err: bg0806 read err\n");
+		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	ret += sensor_write(sd, 0x0021, ((vts-height) >> 8) & 0xff);
@@ -763,9 +763,9 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 				client->addr, client->adapter->name);
 		return ret;
 	}
-	printk("bg0806 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
-		memcpy(chip->name, "bg0806", sizeof("bg0806"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -886,7 +886,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "bg0806",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -958,7 +958,7 @@ static int sensor_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->bg0806\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -988,7 +988,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "bg0806", 0 },
+	{ SENSOR_NAME, 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -996,7 +996,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "bg0806",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
@@ -1010,7 +1010,7 @@ static __init int init_sensor(void)
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init bg0806 driver.\n");
+		printk("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
@@ -1025,5 +1025,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision bg0806 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

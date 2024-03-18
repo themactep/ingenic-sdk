@@ -955,12 +955,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc500ai stream on\n");
+		ISP_WARNING("%s stream on\n", SENSOR_NAME));
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_WARNING("sc500ai stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
         printk("------>> %s %d value=0x%x <<------\n", __func__, __LINE__, *((volatile u32 *)0xb0000020));
 
@@ -987,7 +987,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: sc500ai read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + tmp) << 1;
@@ -995,7 +995,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1166,7 +1166,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 #else
 	ident = 0xc500;
 #endif
-	ISP_WARNING("sc500ai chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "sc500ai", sizeof("sc500ai"));
@@ -1366,7 +1366,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc500ai\n");
+	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

@@ -409,13 +409,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING)
 		{
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			ISP_WARNING("cv8001 stream on\n");
+			ISP_WARNING("%s stream on\n", SENSOR_NAME));
 		}
 	}
 	else
 	{
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("cv8001 stream off\n");
+		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -476,7 +476,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = ((hts << 8) | val);
 
 	if (0 != ret) {
-		ISP_ERROR("err: cv8001 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -487,7 +487,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x302A, (unsigned char)((vts >> 16)& 0x0f));
 
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -652,7 +652,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an cv8001 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("cv8001 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip)
 	{
@@ -874,5 +874,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for cv8001 sensors");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");
