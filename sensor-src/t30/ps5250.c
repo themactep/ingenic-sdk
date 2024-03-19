@@ -1086,7 +1086,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 				return ret;
 			if (vals->reg_num == SENSOR_BANK_REG) {
 				val &= 0xe0;
-				val = (vals->value & 0x1f);
+				val |= (vals->value & 0x1f);
 				ret = sensor_write(sd, vals->reg_num, val);
 				ret = sensor_read(sd, vals->reg_num, &val);
 			}

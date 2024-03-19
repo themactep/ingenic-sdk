@@ -536,9 +536,9 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sensor_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += sensor_read(sd, 0x3019, &value);
-	vmax = value << 8;
+	vmax |= value << 8;
 	ret += sensor_read(sd, 0x301a, &value);
-	vmax = (value|0x3) << 16;
+	vmax |= (value|0x3) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += sensor_write(sd, 0x301c, hmax & 0xff);
@@ -658,7 +658,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret = sensor_read(sd, 0x3007, &val);
 	if (enable & 0x2)
-		val = 0x01;
+		val |= 0x01;
 	else
 		val &= 0xfe;
 	ret += sensor_write(sd, 0x3007, val);

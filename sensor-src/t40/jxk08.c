@@ -788,7 +788,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	/*quick launch*/
 	ret = sensor_read(sd, 0x1f, &val);
-	val = 0xc0; /*set bit[7],  register group write function,  auto clean*/
+	val |= 0xc0; /*set bit[7],  register group write function,  auto clean*/
 	ret += sensor_write(sd, 0x1f, val);
 #else
 	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));

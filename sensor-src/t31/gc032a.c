@@ -528,7 +528,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 				return ret;
 			//			if (vals->reg_num == SENSOR_PAGE_REG) {
 			//				val &= 0xf8;
-			//				val = (vals->value & 0x07);
+			//				val |= (vals->value & 0x07);
 			//				ret = sensor_write(sd, vals->reg_num, val);
 			//				ret = sensor_read(sd, vals->reg_num, &val);
 			//			}

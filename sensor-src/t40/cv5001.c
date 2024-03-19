@@ -516,16 +516,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	case 1:
 		val &= 0xFD;
-		val = 0x01;
+		val |= 0x01;
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
 		break;
 	case 2:
 		val &= 0xFC;
-		val = 0x02;
+		val |= 0x02;
 		sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
 		break;
 	case 3:
-		val = 0x03;
+		val |= 0x03;
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
 	};

@@ -81,7 +81,7 @@ unsigned int imx662_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
                 if (isp_gain >= hcg_thr) {
                         isp_gain = isp_gain - hcg;
                         *sensor_again = 0;
-                        *sensor_again = 1 << 12;
+                        *sensor_again |= 1 << 12;
                 } else {
                         *sensor_again = 0;
                         hcg = 0;

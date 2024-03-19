@@ -1218,7 +1218,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ret = sensor_read(sd, 0x0200, &val);
 		short_time = val << 8;
 		ret += sensor_read(sd, 0x0201, &val);
-		short_time = val;
+		short_time |= val;
 	}
 
 	sensor->video.fps = fps;
@@ -1544,7 +1544,7 @@ static int sensor_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
                         sensor_read(sd, 0x0340, &val);
                         ret_val = val << 8;
                         sensor_read(sd, 0x0341, &val);
-                        ret_val = val;
+                        ret_val |= val;
                         ret_val = ret_val * 8 / 3;
                         sensor_write(sd, 0x0340, ret_val >> 8);
                         sensor_write(sd, 0x0341, ret_val & 0xff);

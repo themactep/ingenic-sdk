@@ -58,7 +58,7 @@ unsigned int imx664_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
         if (isp_gain >= hcg_thr) {
                 isp_gain = isp_gain - hcg;
                 *sensor_again = 0;
-                *sensor_again = 1 << 12;
+                *sensor_again |= 1 << 12;
         } else {
                 *sensor_again = 0;
                 hcg = 0;
@@ -82,7 +82,7 @@ unsigned int imx664_alloc_again_short(unsigned int isp_gain, unsigned char shift
         if (isp_gain >= hcg_thr) {
                 isp_gain = isp_gain - hcg;
                 *sensor_again = 0;
-                *sensor_again = 1 << 12;
+                *sensor_again |= 1 << 12;
         } else {
                 *sensor_again = 0;
                 hcg = 0;
@@ -988,16 +988,16 @@ static int imx664_set_vflip(struct tx_isp_subdev *sd, int enable)
 		v_val &= 0xFE;
 		break;
 	case 1:
-		h_val = 0x01;
+		h_val |= 0x01;
 		v_val &= 0xFE;
 		break;
 	case 2:
 		h_val &= 0xFE;
-		v_val = 0x01;
+		v_val |= 0x01;
 		break;
 	case 3:
-		h_val = 0x01;
-		v_val = 0x01;
+		h_val |= 0x01;
+		v_val |= 0x01;
 		break;
 	}
 	ret = imx664_write(sd, 0x3020, h_val);

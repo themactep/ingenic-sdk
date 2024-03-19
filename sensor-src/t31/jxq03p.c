@@ -753,7 +753,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x20, &val);
-	hts = val;
+	hts |= val;
 	hts *= 4;
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
@@ -769,7 +769,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	/*quick launch*/
 	ret = sensor_read(sd, 0x1f, &val);
-	val = 0xc0; /*set bit[7],  register group write function,  auto clean*/
+	val |= 0xc0; /*set bit[7],  register group write function,  auto clean*/
 	ret += sensor_write(sd, 0x1f, val);
 #else
 	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
@@ -862,7 +862,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret += sensor_read(sd, 0x12, &val);
 	if (enable & 0x02) {
-		val = 0x10;
+		val |= 0x10;
 		vwinSt = 0x16;
 	} else {
 		val &= 0xef;
@@ -875,7 +875,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret = sensor_read(sd, 0x1f, &valg);
 	if (ret < 0)
 		return -1;
-	valg = 0xc0; /*bit[7], register group write function,auto clean.bit[6] lanch immediately*/
+	valg |= 0xc0; /*bit[7], register group write function,auto clean.bit[6] lanch immediately*/
 	sensor_write(sd, 0x1f, valg);
 
 	if (!ret)

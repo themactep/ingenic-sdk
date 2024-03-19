@@ -682,8 +682,8 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
                         val1 = ((val1 & 0xfe) | 0x02);
 			break;
 		case 3:
-                        val = 0x03;
-                        val1 = 0x03;
+                        val |= 0x03;
+                        val1 |= 0x03;
 			break;
 	}
 

@@ -921,7 +921,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x380d, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
@@ -1017,7 +1017,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
     ret = sensor_read(sd, 0x3820, &val);
     if (enable & 0x02) {
-        val = 0x06;
+        val |= 0x06;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
     } else {
         val &= 0xF9;

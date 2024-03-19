@@ -993,16 +993,16 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 			vReverse &= 0xFE;
 			break;
 		case 1:
-			hReverse = 0x01;
+			hReverse |= 0x01;
 			vReverse &= 0xFE;
 			break;
 		case 2:
 			hReverse &= 0xFE;
-			vReverse = 0x01;
+			vReverse |= 0x01;
 			break;
 		case 3:
-			hReverse = 0x01;
-			vReverse = 0x01;
+			hReverse |= 0x01;
+			vReverse |= 0x01;
 			break;
 	}
 	ret += sensor_write(sd, 0x304e, hReverse);

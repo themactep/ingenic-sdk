@@ -823,7 +823,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 				return ret;
 			if (vals->reg_num == SENSOR_REG_PAGE) {
 				val &= 0xf8;
-				val = (vals->value & 0x07);
+				val |= (vals->value & 0x07);
 				ret = sensor_write(sd, vals->reg_num, val);
 				ret = sensor_read(sd, vals->reg_num, &val);
 			}
@@ -1037,18 +1037,18 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_read(sd, 0x8c, &val);
 	hts = val<<8;
 	ret += sensor_read(sd, 0x8d, &val);
-	hts = val;
+	hts |= val;
 #if 0
 	/* get vb old */
 	ret += sensor_read(sd, 0x05, &val);
 	vb = val<<8;
 	ret += sensor_read(sd, 0x06, &val);
-	vb = val;
+	vb |= val;
 	/* get vts old */
 	ret += sensor_read(sd, 0x4e, &val);
 	vts = val<<8;
 	ret += sensor_read(sd, 0x4f, &val);
-	vts = val;
+	vts |= val;
 #endif
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
@@ -1267,11 +1267,11 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret = sensor_write(sd, 0xfd, 0x01);
 
 	val &= 0xfc;
-	val = enable;
+	val |= enable;
 	if (enable & 0x1)
 		val &= 0xfe;
 	else
-		val = 0x1;
+		val |= 0x1;
 
 	switch(enable) {
 	case 0:

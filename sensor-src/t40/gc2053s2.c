@@ -609,7 +609,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                         sensor_read(sd, 0x41, &val);
                         ret_val = val << 8;
                         sensor_read(sd, 0x42, &val);
-                        ret_val = val;
+                        ret_val |= val;
                         ret_val = ret_val * 8 / 3;
                         sensor_write(sd, 0x41, ret_val >> 8);
                         sensor_write(sd, 0x42, ret_val & 0xff);
@@ -703,7 +703,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_read(sd, 0x17, &val);
 
 	if (enable & 0x2)
-		val = 0x02;
+		val |= 0x02;
 	else
 		val &= 0xfd;
 

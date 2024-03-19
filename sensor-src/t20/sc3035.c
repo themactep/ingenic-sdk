@@ -36,7 +36,7 @@
 #define DRIVE_CAPABILITY_2
 
 typedef enum {
-	resolution_2048_1536 =0,
+	resolution_2048_1536 = 0,
 	resolution_1536_1536,
 };
 

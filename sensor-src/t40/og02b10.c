@@ -707,15 +707,15 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 			break;
 		case 1:
 			flip_val &= 0xBB;
-			mirror_val = 0x04;
+			mirror_val |= 0x04;
 			break;
 		case 2:
-			flip_val = 0x44;
+			flip_val |= 0x44;
 			mirror_val &= 0x0B;
 			break;
 		case 3:
-			flip_val = 0x44;
-			mirror_val = 0x04;
+			flip_val |= 0x44;
+			mirror_val |= 0x04;
 			break;
 	}
 	ret += sensor_write(sd, 0x3820, flip_val);

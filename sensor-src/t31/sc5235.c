@@ -1365,7 +1365,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret += sensor_read(sd, 0x3221, &val);
 	if (enable & 0x02) {
-		val = 0x60;
+		val |= 0x60;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 	} else {
 		val &= 0x9f;

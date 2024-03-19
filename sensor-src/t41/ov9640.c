@@ -2921,7 +2921,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG12_1X12;
 		break;
 	case 3:
-                val = 0x0C;
+                val |= 0x0C;
 		sensor->video.mbus.code = TISP_VI_FMT_SRGGB12_1X12;
 		break;
 	}

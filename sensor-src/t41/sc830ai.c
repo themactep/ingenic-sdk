@@ -1854,7 +1854,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x320d, &val);
-	hts = val;
+	hts |= val;
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
@@ -1867,10 +1867,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 
 	if (sensor->info.default_boot >= 2) {
-	sensor_read(sd, 0x3e23, &val);
-	short_time = val << 8;
-	sensor_read(sd, 0x3e24, &val);
-	short_time = val;
+		sensor_read(sd, 0x3e23, &val);
+		short_time = val << 8;
+		sensor_read(sd, 0x3e24, &val);
+		short_time |= val;
 	}
 
 	if (0 != ret) {

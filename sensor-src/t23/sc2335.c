@@ -679,7 +679,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 	ret += sensor_read(sd, 0x3975, &tmp);
 	blc_val = tmp;
 	ret += sensor_read(sd, 0x3974, &tmp);
-	blc_val = (tmp << 8);
+	blc_val |= (tmp << 8);
 
 	if (frmcnt < 3) {
 		frmcnt++;

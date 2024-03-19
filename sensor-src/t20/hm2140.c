@@ -818,7 +818,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x343, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;

@@ -376,7 +376,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x0343, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
@@ -386,7 +386,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts_old = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x0341, &val);
-	vts_old = val;
+	vts_old |= val;
 
 	vts = (pclk << 4) / (hts * (newformat >> 4));
 	ret += sensor_write(sd, 0x0341, vts&0xff);
@@ -407,7 +407,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	shs = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x0203, &val);
-	shs = val;
+	shs |= val;
 	sensor_set_integration_time(sd,vts_old-shs);
 	return ret;
 }

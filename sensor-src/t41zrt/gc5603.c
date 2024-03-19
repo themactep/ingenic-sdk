@@ -883,7 +883,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ret = sensor_read(sd, 0x0200, &val);
 		short_time = val << 8;
 		ret += sensor_read(sd, 0x0201, &val);
-		short_time = val;
+		short_time |= val;
 	}
 
 	sensor->video.fps = fps;

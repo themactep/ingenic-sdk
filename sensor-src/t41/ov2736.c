@@ -767,17 +767,17 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 	switch(enable) {
 	case 0:
 			val &= 0xEF;
-			val = 0x08;
+			val |= 0x08;
 		break;
 	case 1:
-			val = 0x18;
+			val |= 0x18;
 		break;
 	case 2:
 			val &= 0xE7;
 		break;
 	case 3:
 			val &= 0xF7;
-			val = 0x10;
+			val |= 0x10;
 		break;
 	}
 	sensor_write(sd, 0x3820, val);

@@ -900,7 +900,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	pr_debug("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val = (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	pr_debug("after register 0x1f value : 0x%02x\n", val);
 #else
@@ -1009,7 +1009,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret += sensor_read(sd, 0x12, &val);
 	if (enable & 0x2)
-		val = 0x10;
+		val |= 0x10;
 	else
 		val &= 0xef;
 
