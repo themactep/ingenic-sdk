@@ -701,9 +701,9 @@ static int imx327_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = imx327_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += imx327_read(sd, 0x3019, &value);
-	vmax = value << 8;
+	vmax |= value << 8;
 	ret += imx327_read(sd, 0x301a, &value);
-	vmax = (value|0x3) << 16;
+	vmax |= (value|0x3) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += imx327_write(sd, 0x301c, hmax & 0xff);

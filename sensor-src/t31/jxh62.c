@@ -707,7 +707,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp = (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts-1;
@@ -761,7 +761,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp = (1 << 7);
+	tmp |= (1 << 7);
 	ret += sensor_write(sd, 0x1f, tmp);
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);

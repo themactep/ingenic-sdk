@@ -1145,13 +1145,13 @@ static int imx415_set_vflip(struct tx_isp_subdev *sd, int enable)
 		val &= 0xfc;
 		break;
 	case 1://sensor mirror
-		val = 0x01;
+		val |= 0x01;
 		break;
 	case 2://sensor flip
-		val = 0x02;
+		val |= 0x02;
 		break;
 	case 3://sensor mirror&flip
-		val = 0x03;
+		val |= 0x03;
 		break;
 	}
 	ret = imx415_write(sd, 0x3030, val);

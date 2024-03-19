@@ -293,7 +293,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
     sensor_write(sd, 0xE5, 0x00);
 
     sensor_read(sd, 0xCA, &reg_1xCA);
-    reg_1xCA = (0x11<<port);
+    reg_1xCA |= (0x11<<port);
     sensor_write(sd, 0xCA, reg_1xCA);
 }
 

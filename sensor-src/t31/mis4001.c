@@ -689,7 +689,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 	if (trig_logic == true) {
 		ret = sensor_read(sd, 0x3007, &flip);
 		if (1 == sv_state) {
-			flip = 0x02;
+			flip |= 0x02;
 			h_start = 0xfd;
 			h_end = 0x9e;
 		} else {
@@ -817,7 +817,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	ret = sensor_read(sd, 0x3007, &flip);
 	if (enable & 0x2) {
-		flip = 0x02;
+		flip |= 0x02;
 		h_start = 0xfd;
 		h_end = 0x9e;
 	} else {

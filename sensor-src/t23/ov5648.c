@@ -1345,7 +1345,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x380d, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;

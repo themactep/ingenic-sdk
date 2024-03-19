@@ -1271,7 +1271,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char val = 0x0;
 	ret = sensor_read(sd, 0x0101, &val);
 	if (enable & 0x2)
-		val = 0x02;
+		val |= 0x02;
 	else
 		val &= 0xfd;
 	ret += sensor_write(sd, 0x031d, 0x2d);

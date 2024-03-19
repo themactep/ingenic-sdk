@@ -751,7 +751,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x20, &val);
-	hts = val;
+	hts |= val;
 	hts *= 2;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
@@ -768,7 +768,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	pr_debug("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val = (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	pr_debug("after register 0x1f value : 0x%02x\n", val);
 

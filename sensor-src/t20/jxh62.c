@@ -552,7 +552,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	ret = sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp = (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 
 	sensor->video.fps = fps;

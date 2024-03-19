@@ -655,7 +655,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	}
 
 	sensor->video.mbus_change = 0;
-	val = (enable ^ 0x01);/* c4390,default mirror on */
+	val |= (enable ^ 0x01);/* c4390,default mirror on */
 	ret += sensor_write(sd, 0x0101, val);
 	ret += sensor_write(sd, 0x3009, startx);
 	ret += sensor_write(sd, 0x300b, starty);

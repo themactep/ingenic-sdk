@@ -492,7 +492,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	case 1:
 		val &= 0xFC;
-		val = 0x02;
+		val |= 0x02;
 		break;
 	};
 	ret = sensor_write(sd, 0x3030, val);

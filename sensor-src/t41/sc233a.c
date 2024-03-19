@@ -1104,7 +1104,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x320d, &val);
-	hts = val;
+	hts |= val;
 	hts *= 2;
 
 	if (0 != ret) {
@@ -1121,7 +1121,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor_read(sd, 0x3e23, &val);
 	short_time = val << 8;
 	sensor_read(sd, 0x3e24, &val);
-	short_time = val;
+	short_time |= val;
 	short_time *= 2;
 	}
 

@@ -58,7 +58,7 @@ unsigned int imx482_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
         if (isp_gain >= hcg_thr) {
             isp_gain = isp_gain - hcg;
             *sensor_again = 0;
-            *sensor_again = 1 << 12;
+            *sensor_again |= 1 << 12;
         } else {
             *sensor_again = 0;
             hcg = 0;
@@ -773,7 +773,7 @@ static int imx482_set_vflip(struct tx_isp_subdev *sd, int enable)
                 ret = imx482_write(sd, 0x317B, 0x08);
 		break;
 	case 3://sensor mirror&flip
-		val = 0x03;
+		val |= 0x03;
                 ret = imx482_write(sd, 0x3152, 0x20);
                 ret = imx482_write(sd, 0x3154, 0xC4);
                 ret = imx482_write(sd, 0x3156, 0x1A);

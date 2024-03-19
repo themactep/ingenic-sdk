@@ -704,7 +704,7 @@ static int imx335_set_vflip(struct tx_isp_subdev *sd, int enable)
 		reg_3075 = 0x00;
 		break;
 	case 1:
-		hreverse = 0x01;
+		hreverse |= 0x01;
 		vreverse &= 0xFC;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
@@ -713,15 +713,15 @@ static int imx335_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	case 2:
 		hreverse &= 0xFC;
-		vreverse = 0x01;
+		vreverse |= 0x01;
 		reg_3081 = 0xFE;
 		reg_3083 = 0xFE;
 		reg_3074 = 0x00;
 		reg_3075 = 0x10;
 		break;
 	case 3:
-		hreverse = 0x01;
-		vreverse = 0x01;
+		hreverse |= 0x01;
+		vreverse |= 0x01;
 		reg_3081 = 0xFE;
 		reg_3083 = 0xFE;
 		reg_3074 = 0x00;

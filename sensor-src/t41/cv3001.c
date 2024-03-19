@@ -415,7 +415,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	val = 0;
 	ret += sensor_read(sd, 0x3028, &val);
 	hts <<= 8;
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
@@ -455,14 +455,14 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	case 1:
 		val &= 0xFD;
-		val = 0x01;
+		val |= 0x01;
 		break;
 	case 2:
 		val &= 0xFE;
-		val = 0x02;
+		val |= 0x02;
 		break;
 	case 3:
-		val = 0x03;
+		val |= 0x03;
 		break;
 	}
 	sensor_write(sd, 0x3030, val);

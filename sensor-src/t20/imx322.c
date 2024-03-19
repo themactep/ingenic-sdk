@@ -307,7 +307,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int int_time)
 	ret = sensor_read(sd, 0x0341, &value);
 	vmax = value;
 	ret = sensor_read(sd, 0x0340, &value);
-	vmax = value << 8;
+	vmax |= value << 8;
 	shs = vmax - int_time - 1;
 
 	ret = sensor_write(sd, 0x0203, (unsigned char)(shs & 0xff));
@@ -450,7 +450,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	hts = val<<8;
 	val = 0;
 	ret += sensor_read(sd, 0x380d, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;

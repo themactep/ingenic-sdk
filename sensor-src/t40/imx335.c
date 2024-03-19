@@ -1410,20 +1410,20 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable)
 		reg_3083 = 0x02;
 		break;
 	case 1://sensor mirror
-		val_h = 0x01;
+		val_h |= 0x01;
 		val_v &= 0xfc;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
 		break;
 	case 2://sensor flip
 		val_h &= 0xfc;
-		val_v = 0x01;
+		val_v |= 0x01;
 		reg_3081 = 0xfe;
 		reg_3083 = 0xfe;
 		break;
 	case 3://sensor mirror&flip
-		val_h = 0x01;
-		val_v = 0x01;
+		val_h |= 0x01;
+		val_v |= 0x01;
 		reg_3081 = 0xfe;
 		reg_3083 = 0xfe;
 		break;
