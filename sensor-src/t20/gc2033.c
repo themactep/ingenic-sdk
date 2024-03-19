@@ -299,7 +299,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
  * the part of driver maybe modify about different sensor and different board.
  */
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "gc2033",
+	.name = SENSOR_NAME,
 	.chip_id = 0x2033,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
@@ -1166,15 +1166,15 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "gc2033", 0 },
-	{ }
+	{SENSOR_NAME, 0},
+	{}
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "gc2033",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
