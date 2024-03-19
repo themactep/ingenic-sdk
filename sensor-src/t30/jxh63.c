@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxh63.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -18,21 +13,19 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
 #define SENSOR_CHIP_ID_H (0x0a)
 #define SENSOR_CHIP_ID_L (0x63)
-
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_PCLK (43200*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20200327"
+
 struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;

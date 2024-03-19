@@ -1,14 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc2023.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
-
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -19,16 +13,14 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x23)
-
 #define SENSOR_FLAG_END 0xff
 #define SENSOR_FLAG_DELAY 0x00
 #define SENSOR_PAGE_REG 0xfe
-
 #define SENSOR_SUPPORT_PCLK_FPS_30 (96*1000*1000)
 #define SENSOR_SUPPORT_PCLK_FPS_15 (42*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -39,6 +31,7 @@ struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;
 };
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
