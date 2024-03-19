@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sp140a.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -33,7 +28,6 @@
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfefe
 #define SENSOR_PAGE_REG 0xfd
-
 #define SENSOR_SUPPORT_PCLK (42000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
