@@ -654,7 +654,7 @@ static int imx482_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
                 if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
                         ret = imx482_write_array(sd, imx482_stream_on_mipi);
-                        ISP_WARNING("%s stream on\n", SENSOR_NAME));
+                        ISP_WARNING("%s stream on\n", SENSOR_NAME);
                 }
         }
         else {

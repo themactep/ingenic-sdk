@@ -484,7 +484,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME));
+		ISP_WARNING("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {

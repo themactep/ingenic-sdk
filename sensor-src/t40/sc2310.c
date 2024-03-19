@@ -1046,7 +1046,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		}
-		ISP_WARNING("%s stream on\n", SENSOR_NAME));
+		ISP_WARNING("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {

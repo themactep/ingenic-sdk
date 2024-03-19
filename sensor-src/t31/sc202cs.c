@@ -662,7 +662,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream on\n", SENSOR_NAME));
+		ISP_WARNING("%s stream on\n", SENSOR_NAME);
 
 	}
 	else {
