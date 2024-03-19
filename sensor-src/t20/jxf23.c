@@ -12,11 +12,11 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/delay.h>
-#include <sensor-common.h>
-#include <sensor-info.h>
-#include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
+#include <apical-isp/apical_math.h>
+#include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_NAME "jxf23"
 #define SENSOR_CHIP_ID 0xf23
@@ -187,7 +187,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
@@ -508,7 +508,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
-	/* 1280*1080 */
+	/* 1920*1080 */
 	{
 		.width = 1920,
 		.height = 1080,
@@ -620,7 +620,6 @@ static int sensor_reset(struct v4l2_subdev *sd, u32 val) {
 static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
-
 	ret = sensor_read(sd, 0x0a, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -628,8 +627,8 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	*ident = v;
 
+	*ident = v;
 	ret = sensor_read(sd, 0x0b, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -649,8 +648,8 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x02, (unsigned char) ((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
-	return 0;
 
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
@@ -673,6 +672,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x00, (unsigned char) (value & 0x7f));
 	if (ret < 0)
 		return ret;
+
 	return 0;
 }
 
@@ -685,8 +685,7 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 }
 
 static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
-	struct tx_isp_sensor *sensor = (container_of(sd,
-	struct tx_isp_sensor, sd));
+	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
@@ -913,7 +912,6 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 				ret = sensor_write_array(sd, sensor_stream_off_dvp);
 			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = sensor_write_array(sd, sensor_stream_off_mipi);
-
 			} else {
 				printk("Don't support this Sensor Data interface\n");
 			}
