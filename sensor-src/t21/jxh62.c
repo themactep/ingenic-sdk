@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxh62.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -30,10 +25,8 @@
 #define SENSOR_CHIP_ID 0xa062
 #define SENSOR_CHIP_ID_H (0xa0)
 #define SENSOR_CHIP_ID_L (0x62)
-
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_30FPS_PCLK (36*1000*1000)
 #define SENSOR_SUPPORT_15FPS_PCLK (24*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
