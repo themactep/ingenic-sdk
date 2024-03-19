@@ -1487,7 +1487,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_ERROR("warn: fps(%d-%d) no in range\n", fps, newformat);
+		ISP_ERROR("warn: fps(%d-%d) not in range\n", fps, newformat);
 		return -1;
 	}
 

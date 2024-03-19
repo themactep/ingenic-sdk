@@ -13,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -713,7 +712,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		pr_debug("warn: fps(%d) no in range\n", fps);
+		pr_debug("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
 	ret += sensor_read(sd, 0x21, &tmp);
