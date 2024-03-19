@@ -576,7 +576,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
-			ISP_WARNING("%s stream on\n", SENSOR_NAME));
+			ISP_WARNING("%s stream on\n", SENSOR_NAME);
 			private_msleep(1000);
 			*((u32 *)0xb3380000) = 0x5;
 		}
