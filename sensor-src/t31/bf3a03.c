@@ -4,7 +4,6 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

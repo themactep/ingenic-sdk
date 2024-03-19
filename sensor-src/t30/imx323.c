@@ -365,7 +365,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int shs = 0;
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		printk("warn: fps(%d) no in range\n", fps);
+		printk("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
 	pclk = SENSOR_SUPPORT_SCLK;

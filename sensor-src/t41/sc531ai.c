@@ -1028,7 +1028,7 @@ switch(info->default_boot) {
 }
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS<< 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_ERROR("warn: fps(%x) no in range\n", fps);
+		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
 
