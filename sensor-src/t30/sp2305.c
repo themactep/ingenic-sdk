@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sp2305.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -20,12 +15,12 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+
 #define SENSOR_CHIP_ID_H (0x27)
 #define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x0
 #define SENSOR_PAGE_REG 0xfd
-
 #define SENSOR_SUPPORT_SCLK (84000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -52,13 +47,11 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x10,	0},
 	{0x11,	5731},
