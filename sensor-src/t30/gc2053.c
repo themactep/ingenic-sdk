@@ -21,8 +21,8 @@
 #define SENSOR_NAME "gc2053"
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
-#define SENSOR_FLAG_END 0xff
-#define SENSOR_FLAG_DELAY 0x00
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0x00
 #define SENSOR_PAGE_REG 0xfe
 #define SENSOR_SUPPORT_WPCLK_FPS_30 (74250000)
 #define SENSOR_SUPPORT_WPCLK_FPS_15 (48000000)
@@ -426,12 +426,12 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfe,0x00},
 	{0x3e,0x40},
 
-  	{SENSOR_FLAG_END, 0x00},
+  	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
@@ -580,7 +580,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -609,12 +609,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 
 static struct regval_list sensor_stream_on[] = {
 	//{ 0xf2, 0x8f},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	//{ 0xf2, 0x80},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -666,8 +666,8 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
@@ -687,8 +687,8 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);

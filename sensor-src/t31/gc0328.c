@@ -20,8 +20,8 @@
 #include <txx-funcs.h>
 
 #define SENSOR_CHIP_ID (0x9d)
-#define SENSOR_FLAG_END 0x00
-#define SENSOR_FLAG_DELAY 0xff
+#define SENSOR_REG_END 0x00
+#define SENSOR_REG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe
 #define SENSOR_SUPPORT_PCLK (6*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 10
@@ -430,7 +430,7 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0xfe, 0x00},
 	{0xf1, 0x07},
 	{0xf2, 0x01},
-	{SENSOR_FLAG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 /*
@@ -454,12 +454,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x00},
 	{0x44, 0xb8},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0xfe, 0x00},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -513,8 +513,8 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
@@ -534,8 +534,8 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 				msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
