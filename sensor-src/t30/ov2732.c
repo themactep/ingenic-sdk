@@ -16,6 +16,7 @@
 #include <apical-isp/apical_math.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_NAME "ov2732"
 #define SENSOR_CHIP_ID_H (0x00)

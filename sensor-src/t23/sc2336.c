@@ -15,6 +15,7 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc2336"

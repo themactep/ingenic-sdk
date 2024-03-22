@@ -22,6 +22,7 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x01)
