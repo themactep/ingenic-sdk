@@ -1,6 +1,0 @@
-sensor:
-  name: sc1235
-  address: 0x30
-  width: 1280
-  height: 960
-  bus: i2c
