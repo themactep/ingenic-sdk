@@ -53,10 +53,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 struct again_lut {

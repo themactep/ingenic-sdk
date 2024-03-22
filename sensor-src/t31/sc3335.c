@@ -74,9 +74,7 @@ static unsigned int gain_val = 0x340;
 static unsigned char temp_val = 0x0;
 static unsigned char cur_lut_node = 255;
 static unsigned char node_change = 0;
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

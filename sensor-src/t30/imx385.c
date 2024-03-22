@@ -614,9 +614,6 @@ struct again_lut sensor_again_lut[] = {
 	{0x230, 609576},
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)

@@ -58,9 +58,6 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct tx_isp_sensor_attribute imx327_attr;
 
 unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)

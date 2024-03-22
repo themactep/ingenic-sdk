@@ -72,9 +72,6 @@ struct regval_list {
 	unsigned int value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

@@ -43,9 +43,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct again_lut sensor_again_lut[] = {
 	{0x0, 0},
 	{0x1, 3827},

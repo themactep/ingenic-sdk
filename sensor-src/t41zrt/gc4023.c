@@ -61,9 +61,6 @@ static unsigned char ht_gain=24;
 static unsigned char gain_flag=0;
 static unsigned char ag_last = 0;
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
     unsigned int index;
     unsigned char reg614;

@@ -303,10 +303,6 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
-
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
