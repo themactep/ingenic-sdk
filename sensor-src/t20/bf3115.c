@@ -24,8 +24,8 @@
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID_H (0x31)
 #define SENSOR_CHIP_ID_L (0x16)
-#define SENSOR_FLAG_END 0x6e
-#define SENSOR_FLAG_DELAY 0xff
+#define SENSOR_REG_END 0x6e
+#define SENSOR_REG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe
 #define SENSOR_SUPPORT_PCLK (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -260,7 +260,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 
 	{0xfe, 0x01},
 	{0xf1, 0x80},/*disable all the isp function inside the sensor*/
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 /*
@@ -281,13 +281,13 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x00},
 	{0xe8, 0x00},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
 	{0xfe, 0x00},
 	{0xe8, 0x01},
-	{SENSOR_FLAG_END, 0x00},
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -334,8 +334,8 @@ static int sensor_write(struct v4l2_subdev *sd, unsigned char reg, unsigned char
 static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
@@ -353,8 +353,8 @@ static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 
 static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != SENSOR_FLAG_END) {
-		if (vals->reg_num == SENSOR_FLAG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
