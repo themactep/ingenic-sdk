@@ -27,6 +27,7 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 #define SENSOR_WITHOUT_INIT
 

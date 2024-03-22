@@ -15,6 +15,7 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 /* VGA@120fps: insmod sensor_sensor_t31.ko sensor_resolution=30 sensor_max_fps=120 */
 /* 1080p@15fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=15 */

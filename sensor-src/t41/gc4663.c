@@ -23,6 +23,7 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define MCLK 27000000
 #define SENSOR_CHIP_ID_H (0x46)

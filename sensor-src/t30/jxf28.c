@@ -15,6 +15,7 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_NAME "jxf28"
 #define SENSOR_CHIP_ID_H (0x0f)
