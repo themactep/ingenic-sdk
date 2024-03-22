@@ -17,6 +17,10 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+#define SENSOR_NAME "gc2053"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+#define SENSOR_CHIP_ID 0x2053
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
 #define SENSOR_REG_END 0xff
@@ -177,11 +181,11 @@ struct tx_isp_dvp_bus sensor_dvp = {
 };
 
 struct tx_isp_sensor_attribute sensor_attr = {
-	.name = "gc2053",
-	.chip_id = 0x2053,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x37,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
