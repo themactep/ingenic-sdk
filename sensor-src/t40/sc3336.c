@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc3336.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  */
 
 #include <linux/init.h>
@@ -18,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -32,12 +26,14 @@
 #define SENSOR_OUTPUT_MIN_FPS 2
 #define SENSOR_VERSION "H20220609a"
 #define MCLK 24000000
+
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int shvflip = 0;
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 char* __attribute__((weak)) sclk_name[4];
+
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;

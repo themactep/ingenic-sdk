@@ -1,15 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc2093.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
+ * 1920*1080  carrier-server  --st=gc2093  data_interface=1  i2c=0x37
  */
-/* 1920*1080  carrier-server  --st=gc2093  data_interface=1  i2c=0x37  */
-
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -20,7 +15,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 

@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0+
-/* imx415.c
- *
+/*
+ * imx415.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          3840*2160       30        mipi_4lane           linear
@@ -22,7 +19,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
