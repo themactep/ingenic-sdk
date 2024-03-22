@@ -271,7 +271,13 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-/* mclk=24m,pclk=75m hts=2200,vts=1125 row_time=29.629us,max 30fps */
+/*
+ * mclk=24m
+ * pclk=75m hts=2200
+ * vts=1125 row_time=29
+ * 629us
+ * max 30fps
+ */
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	/****system****/
 	{0xfe, 0x80},

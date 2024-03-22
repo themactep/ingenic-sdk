@@ -535,9 +535,6 @@ struct again_lut sensor_again_lut[] = {
 	{0x479, 259260},
 	{0x480, 262140},
 };
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 
 struct tx_isp_sensor_attribute sensor_attr;
 

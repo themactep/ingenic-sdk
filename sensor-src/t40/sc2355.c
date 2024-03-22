@@ -48,9 +48,6 @@ struct regval_list {
 
 char* __attribute__((weak)) sclk_name[4];
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int index;
 	unsigned int again_val;

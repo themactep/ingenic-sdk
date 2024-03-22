@@ -295,9 +295,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 {
 	return isp_gain;
 }
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x2033,

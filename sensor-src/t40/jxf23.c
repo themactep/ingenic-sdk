@@ -40,9 +40,6 @@
 #define MCLK 24000000
 #define SENSOR_VERSION "H20220527a"
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

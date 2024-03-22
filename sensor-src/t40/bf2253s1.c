@@ -55,9 +55,6 @@ struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 
 struct tx_isp_sensor_attribute sensor_attr;
 

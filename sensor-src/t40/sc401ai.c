@@ -49,13 +49,11 @@ struct regval_list {
 	unsigned char value;
 };
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x340, 0},
 	{0x341, 1500},

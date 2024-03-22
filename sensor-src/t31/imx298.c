@@ -74,9 +74,7 @@ struct regval_list
 	uint16_t reg_num;
 	unsigned char value;
 };
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct again_lut sensor_again_lut[] = {
 	{0x0002, 0},
 	{0x0007, 940},

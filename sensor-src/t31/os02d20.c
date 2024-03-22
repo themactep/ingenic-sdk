@@ -88,13 +88,12 @@ static unsigned char evl0 = 0;
 static unsigned char evl1 = 0;
 static unsigned char evs0 = 0;
 static unsigned char evs1 = 0;
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x10, 0},
 	{0x11, 5731},

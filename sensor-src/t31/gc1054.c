@@ -299,9 +299,6 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 {
 	return 0;
 }
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 
 struct tx_isp_mipi_bus sensor_mipi={
 	.mode = SENSOR_MIPI_OTHER_MODE,

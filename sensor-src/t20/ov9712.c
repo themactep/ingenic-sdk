@@ -61,13 +61,11 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
 struct again_lut {
 	unsigned char value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x0, 0},//1843},
 	{0x1, 7575},

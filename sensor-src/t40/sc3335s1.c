@@ -46,9 +46,7 @@ struct regval_list {
 };
 
 static unsigned int gain_val = 0x340;
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
