@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * imx347.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps       interface              mode
@@ -23,7 +18,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <txx-funcs.h>
@@ -38,7 +32,6 @@
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
-
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

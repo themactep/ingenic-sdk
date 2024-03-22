@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * og02b10.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps     interface             mode
  *   0          1280*720        60      mipi_2lane           linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -21,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -36,7 +31,6 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20230512a"
 #define MCLK 24000000
-
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

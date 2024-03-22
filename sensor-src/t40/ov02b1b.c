@@ -1,12 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * ov02b1b.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1600*1200       15        mipi_1lane           linear
@@ -21,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -30,9 +25,7 @@
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
-
 #define SENSOR_SUPPORT_SCLK_FPS_15 (16490880)
-
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20230725a"
