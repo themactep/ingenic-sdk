@@ -389,7 +389,7 @@ static struct regval_list imx664_init_regs_2688_1520_30fps_mipi[] = {
 	{SENSOR_REG_DELAY,0x18},
 	{0x3002,0x00},
 	{0x30A5,0x00},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
@@ -603,7 +603,7 @@ static struct regval_list imx664_init_regs_2688_1520_20fps_mipi_dol[] = {
 	{SENSOR_REG_DELAY,0x18},
 	{0x3002,0x00},
 	{0x30A5,0x00},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

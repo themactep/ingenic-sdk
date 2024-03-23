@@ -504,7 +504,7 @@ static struct regval_list sensor_init_regs_320_240_150fps_mipi[] = {
         {0x3631,0x35},
         {0x3600,0x1c},
         {0x0100,0x01},
-		{SENSOR_REG_END, 0x00},/* END MARKER */
+		{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {

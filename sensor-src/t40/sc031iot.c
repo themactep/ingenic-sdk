@@ -396,7 +396,7 @@ static struct regval_list sensor_init_regs_640_480_15fps_mipi[] = {
 	{0xe9, 0x24},
 
 	{SENSOR_REG_DELAY, 0x50},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 

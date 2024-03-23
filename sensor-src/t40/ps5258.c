@@ -250,7 +250,7 @@ static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
         {0x0117, 0x46},
         {0x0111, 0x01},//UpdateFlag
         {0x010F, 0x01},//Sensor_EnH=1
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 

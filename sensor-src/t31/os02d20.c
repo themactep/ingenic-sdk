@@ -595,7 +595,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 
 static struct regval_list sensor_init_regs_640_480_120fps[] = {
 	/*VGA 2lane 120fps*/
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_hdr_30fps[] = {
@@ -713,7 +713,7 @@ static struct regval_list sensor_init_regs_1920_1080_hdr_30fps[] = {
 	{0xfd, 0x00},
 	{0xb1, 0x03}, //mipi en
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

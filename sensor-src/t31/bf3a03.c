@@ -253,7 +253,7 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x8d,0x64},//jz
 	{0x87,0x16},
 	//	{0x87,0xff},//jz
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

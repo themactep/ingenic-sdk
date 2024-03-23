@@ -528,7 +528,7 @@ static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 	{0x4000, 0x79},
 	{0x4603, 0x00},
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
@@ -761,7 +761,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3501,0x0a},
 	{0x3502,0x7a},
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
@@ -994,7 +994,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0x3501,0x05},
 	{0x3502,0x21},
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

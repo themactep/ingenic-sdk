@@ -501,7 +501,7 @@ static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2304_1296_15fps_mipi_dol[] = {
@@ -675,7 +675,7 @@ static struct regval_list sensor_init_regs_2304_1296_15fps_mipi_dol[] = {
 	{0x3039,0x51},
 	{0x3029,0x51},
 	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2560_1440_13fps_mipi[] ={
@@ -865,7 +865,7 @@ static struct regval_list sensor_init_regs_2560_1440_13fps_mipi[] ={
 	{0x3622,0x16}, //0627
 	{0x363a,0x9f},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {

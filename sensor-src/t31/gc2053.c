@@ -844,9 +844,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x7b, 0x2a},
 	{0x23, 0x2d},
 	{0xfe, 0x03},
-	{0x01,0x20},
+	{0x01, 0x20},
 	{0x02, 0x56},
-	{0x03,0xb2},
+	{0x03, 0xb2},
 	{0x12, 0x80},
 	{0x13, 0x07},
 	{0xfe, 0x00},
@@ -1004,7 +1004,6 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x13, 0x07},
 	{0xfe, 0x00},
 	{0x3e, 0x40},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1887,6 +1886,7 @@ static const struct i2c_device_id sensor_id[] = {
 	{SENSOR_NAME, 0},
 	{}
 };
+
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

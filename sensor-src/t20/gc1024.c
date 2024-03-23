@@ -104,7 +104,7 @@ unsigned int fix_point_mult3(unsigned int a, unsigned int b, unsigned int c)
 	return x;
 }
 
-#define  ANALOG_GAIN_MAX (fix_point_mult2(ANALOG_GAIN_9, (0xf<<TX_ISP_GAIN_FIXED_POINT) + (0x3f<<(TX_ISP_GAIN_FIXED_POINT-6))))
+#define ANALOG_GAIN_MAX (fix_point_mult2(ANALOG_GAIN_9, (0xf<<TX_ISP_GAIN_FIXED_POINT) + (0x3f<<(TX_ISP_GAIN_FIXED_POINT-6))))
 
 unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs)
 {

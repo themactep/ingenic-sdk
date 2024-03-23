@@ -341,7 +341,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 	{0x3001, 0x00},//standy cancel
 	{0x3002, 0x00},//Master start
 	{0x3000, 0x01},//standy cancel
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 
 };
 
@@ -417,7 +417,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3001, 0x00},//standy cancel
 	{0x3002, 0x00},//Master start
 	{0x3000, 0x01},//standy cancel
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
@@ -496,7 +496,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{SENSOR_REG_DELAY, 0X18},
 	{0x3002, 0x00},
 	{0x304b, 0x0a},
-	{SENSOR_REG_END, 0X00},/* END MARKER */
+	{SENSOR_REG_END, 0X00},
 };
 
 /*

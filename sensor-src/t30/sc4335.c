@@ -363,7 +363,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x36f9,0x54},
 	{0x0100,0x00},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

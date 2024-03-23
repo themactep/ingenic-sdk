@@ -1672,7 +1672,7 @@ static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 	/* {0x5040,0x80},//color bar */
 	{0x0100, 0x00},
 #endif
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

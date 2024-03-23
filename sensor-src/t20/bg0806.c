@@ -20,11 +20,11 @@
 #include <soc/gpio.h>
 
 #define SENSOR_NAME "bg0806"
-#define SENSOR_CHIP_ID 0x0806
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x32
-#define SENSOR_MAX_WIDTH 0
-#define SENSOR_MAX_HEIGHT 0
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0x0806
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x06)
 #define SENSOR_REG_END 0xffff
@@ -37,28 +37,20 @@
 #define DRIVE_CAPABILITY_1
 
 static int reset_gpio = GPIO_PA(18);
-module_param(reset_gpio,
-int, S_IRUGO);
-MODULE_PARM_DESC(reset_gpio,
-"Reset GPIO NUM");
+module_param(reset_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
 static int pwdn_gpio = -1;
-module_param(pwdn_gpio,
-int, S_IRUGO);
-MODULE_PARM_DESC(pwdn_gpio,
-"Power down GPIO NUM");
+module_param(pwdn_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
 static int sensor_gpio_func = DVP_PA_12BIT;
-module_param(sensor_gpio_func,
-int, S_IRUGO);
-MODULE_PARM_DESC(sensor_gpio_func,
-"Sensor GPIO function");
+module_param(sensor_gpio_func, int, S_IRUGO);
+MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
-module_param(data_interface,
-int, S_IRUGO);
-MODULE_PARM_DESC(data_interface,
-"Sensor Date interface");
+module_param(data_interface, int, S_IRUGO);
+MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -619,7 +611,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hts = val << 8;
 	val = 0;
 	ret += sensor_read(sd, 0x000f, &val);
-	hts = val;
+	hts |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
@@ -631,7 +623,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	height = val << 8;
 	val = 0;
 	ret += sensor_read(sd, 0x0009, &val);
-	height = val;
+	height |= val;
 	if (0 != ret) {
 		printk("Error: %s read error\n", SENSOR_NAME);
 		return ret;
@@ -914,8 +906,8 @@ static const struct i2c_device_id sensor_id[] = {
 	{SENSOR_NAME, 0},
 	{}
 };
-MODULE_DEVICE_TABLE(i2c, sensor_id
-);
+
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
 	.driver = {
