@@ -433,7 +433,7 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	/*AEC*/
 	{0xfe, 0x00},
 	{0x4f, 0x00},
-	{SENSOR_REG_END,  0x00},/* END MARKER */
+	{SENSOR_REG_END,  0x00},
 };
 
 /*

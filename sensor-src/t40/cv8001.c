@@ -153,7 +153,7 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{0x316C, 0x01},
 	{0x3348, 0x00},
 	{0x35EC, 0x04},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 

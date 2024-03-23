@@ -259,7 +259,7 @@ static struct regval_list imx415_init_regs_3840_2160_30fps_mipi[] = {
         {0x3000,0x00},
         {SENSOR_REG_DELAY, 0x1e},
         {0x3002,0x00},
-        {SENSOR_REG_END, 0x00},/* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list imx415_init_regs_3840_2160_20fps_mipi[] = {
@@ -400,7 +400,7 @@ static struct regval_list imx415_init_regs_3840_2160_20fps_mipi[] = {
         {0x3000,0x00},
         {SENSOR_REG_DELAY, 0x18},
         {0x3002,0x00},
-        {SENSOR_REG_END, 0x00},/* END MARKER */
+        {SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {

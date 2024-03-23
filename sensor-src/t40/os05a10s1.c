@@ -999,7 +999,7 @@ static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 	{0x4603, 0x00},
 	{0x0100, 0x00},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2592_1944_30fps[] = {
@@ -1463,7 +1463,7 @@ static struct regval_list sensor_init_regs_2592_1944_30fps[] = {
 	{0x0100, 0x01},
 #endif
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2592_1944_40fps[] = {
@@ -1711,7 +1711,7 @@ static struct regval_list sensor_init_regs_2592_1944_40fps[] = {
 	{0x0100, 0x01},
 	{0x0100, 0x01},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
@@ -1941,7 +1941,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
 	{0x3512, 0x20},
 	{0x0100, 0x01},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 

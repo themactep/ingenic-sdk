@@ -19,11 +19,11 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "jxf23"
-#define SENSOR_CHIP_ID 0xf23
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_CHIP_ID 0xf23
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
 #define SENSOR_REG_END 0xff
@@ -728,7 +728,6 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
@@ -738,7 +737,6 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
-
 		} else {
 			printk("Don't support this Sensor Data interface\n");
 		}
@@ -777,7 +775,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		default:
 			printk("Now we do not support this framerate!!!\n");
 	}
-
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		printk("warn: fps(%d) not in range\n", fps);
@@ -1128,8 +1125,8 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
-	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

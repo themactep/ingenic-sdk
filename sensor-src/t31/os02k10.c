@@ -1041,7 +1041,7 @@ static struct regval_list sensor_init_regs_640_480_120fps[] = {
 	{0x380e, 0x02},
 	{0x380f, 0x71},
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_55fps[] = {

@@ -515,7 +515,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps[] = {
 	{0x3112, 0x06},
 	{0x3006, 0x00},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

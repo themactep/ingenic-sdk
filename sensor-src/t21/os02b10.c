@@ -282,7 +282,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfd, 0x01},
 	{0xfd, 0x00},
 	{0x1b, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 /*

@@ -373,7 +373,7 @@ static struct regval_list sensor_init_regs_2048_1536_30fps_mipi_3m[] = {
 	{0x3630, 0x80},
 	{0x3622, 0xf6},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

@@ -323,7 +323,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x13,0x07},
 	{0xfe,0x00},
 	{0x3e,0x40},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
@@ -474,7 +474,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x2a, 0x0a},/*mipi zero*/
 	{0xfe, 0x00},
 	{0x3e, 0x91},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
@@ -623,7 +623,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
         {0x29, 0x03},
 	{0xfe, 0x00},
 	{0x3e, 0x91},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {

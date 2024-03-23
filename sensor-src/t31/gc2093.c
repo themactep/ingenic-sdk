@@ -85,21 +85,21 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int index;
-    unsigned char regb0;
-    unsigned char regb1;
-    unsigned int regb2;
-    unsigned char regb3;
-    unsigned char regb4;
-    unsigned char regb5;
-    unsigned char regb6;
-    unsigned char regb7;
-    unsigned int gain;
+	unsigned int index;
+	unsigned char regb0;
+	unsigned char regb1;
+	unsigned int regb2;
+	unsigned char regb3;
+	unsigned char regb4;
+	unsigned char regb5;
+	unsigned char regb6;
+	unsigned char regb7;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -281,7 +281,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 		.clk = 392,
 		.lans = 2,
 		.settle_time_apative_en = 1,
-		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 		.mipi_sc.hcrop_diff_en = 0,
 		.mipi_sc.mipi_vcomp_en = 0,
 		.mipi_sc.mipi_hcomp_en = 0,
@@ -326,7 +326,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
-// void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 #if 0
@@ -1417,11 +1417,13 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			  client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n sensor drv version %s", SENSOR_NAME, client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n sensor drv version %s",
+		    SENSOR_NAME, client->addr, client->adapter->name, SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1545,6 +1547,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64) 0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -1562,7 +1565,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_sensor *sensor;
 	unsigned long rate = 0;
 	int ret;
-
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
@@ -1687,6 +1689,7 @@ static const struct i2c_device_id sensor_id[] = {
 	{SENSOR_NAME, 0},
 	{}
 };
+
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

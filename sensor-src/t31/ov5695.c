@@ -739,7 +739,7 @@ static struct regval_list sensor_init_regs_640_480_60fps_mipi[] = {
 	{0x3509,0xf8},
 	{0x0100,0x01},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_2592_1944_30fps_mipi[] = {
@@ -911,7 +911,7 @@ static struct regval_list sensor_init_regs_2592_1944_30fps_mipi[] = {
 	{0x3509,0xf8},
 	{0x0100,0x01},
 
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 
