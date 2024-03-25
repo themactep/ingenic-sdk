@@ -24,6 +24,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define SENSOR_NAME "ov9640"
 #define SENSOR_CHIP_ID_H (0xa6)
 #define SENSOR_CHIP_ID_L (0x40)
 #define SENSOR_REG_END 0xffff
@@ -202,7 +203,7 @@ struct tx_isp_mipi_bus sensor_mipi_960={
 };
 
 struct tx_isp_sensor_attribute sensor_attr={
-	.name = "ov9640",
+	.name = SENSOR_NAME,
 	.chip_id = 0xa640,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
@@ -1385,7 +1386,7 @@ static struct regval_list sensor_init_regs_1280_720_30fps_mipi[] = {
 	{0x3091,0x00},
 	{0x3119,0x55},
 	{0x3012,0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 static struct regval_list sensor_init_regs_1280_960_30fps_mipi[] = {
@@ -2555,7 +2556,7 @@ static struct regval_list sensor_init_regs_1280_960_30fps_mipi[] = {
 	{0x3091,0x00},
 	{0x3119,0x55},
 	{0x3012,0x01},
-	{SENSOR_REG_END, 0x00},
+	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -3086,7 +3087,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "ov9640", sizeof("ov9640"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -3208,7 +3209,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "ov9640",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -3267,7 +3268,7 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "ov9640", 0 },
+	{ SENSOR_NAME, 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
@@ -3275,7 +3276,7 @@ MODULE_DEVICE_TABLE(i2c, sensor_id);
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "ov9640",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
