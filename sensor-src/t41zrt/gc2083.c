@@ -753,8 +753,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 #else
 	ident = 0x2083;
 #endif
-	ISP_WARNING("gc2083 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name,
-		    SENSOR_VERSION);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
+		    SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
