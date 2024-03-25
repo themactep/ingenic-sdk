@@ -859,14 +859,15 @@ static int imx415_g_chip_ident(struct tx_isp_subdev *sd,
        }
        ret = imx415_detect(sd, &ident);
        if (ret) {
-	       ISP_ERROR("chip found @ 0x%x (%s) is not an imx415 chip.\n",
-			 client->addr, client->adapter->name);
-	       return ret;
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			  client->addr, client->adapter->name, SENSOR_NAME);
+		return ret;
        }
 #else
 	ident = 0x415;
 #endif
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
+		    SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));

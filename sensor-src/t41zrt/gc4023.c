@@ -1867,8 +1867,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-	    ISP_ERROR("chip found @ 0x%x (%s) is not an gc4023 chip.\n",
-		      client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			  client->addr, client->adapter->name, SENSOR_NAME);
 	    return ret;
 	}
 #else
