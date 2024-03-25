@@ -63,14 +63,14 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned short reg_num;
-    unsigned short value;
+	unsigned short reg_num;
+	unsigned short value;
 };
 
 struct again_lut {
-    /* unsigned char mode; */
-    unsigned int value;
-    unsigned int gain;
+	/* unsigned char mode; */
+	unsigned int value;
+	unsigned int gain;
 };
 
 /* static unsigned char again_mode = LCG; */
@@ -666,8 +666,7 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 }
 
 static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
-	struct tx_isp_sensor *sensor = (container_of(sd,
-	struct tx_isp_sensor, sd));
+	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
@@ -815,8 +814,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 		return ret;
 	}
 
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
-             SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
@@ -874,8 +872,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 }
 
 static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg) {
-	struct tx_isp_sensor *sensor = container_of(sd,
-	struct tx_isp_sensor, sd);
+	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
@@ -996,7 +993,7 @@ static int sensor_probe(struct i2c_client *client,
 		sensor_win_sizes[i].mbus_code = mbus;
 #endif
 	/*
-	       convert sensor-gain into isp-gain,
+		   convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 262144;
 	sensor_attr.max_dgain = 0;

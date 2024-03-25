@@ -46,8 +46,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 static int reset_gpio = GPIO_PA(18);
@@ -63,8 +63,8 @@ module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -295,7 +295,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
-	/* 1280*720 */
+	/* 1280*800 */
 	{
 		.width = 1280,
 		.height = 720,
@@ -454,8 +454,7 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 }
 
 static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
-	struct tx_isp_sensor *sensor = (container_of(sd,
-	struct tx_isp_sensor, sd));
+	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
@@ -500,7 +499,6 @@ static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) 
 	return 0;
 }
 
-
 static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
@@ -513,9 +511,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
 		return -1;
-	}
 
 	ret += sensor_read(sd, 0x21, &tmp);
 	hts = tmp;
@@ -532,9 +529,9 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret = sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
+
 	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
-
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 1;
 	sensor->video.attr->integration_time_limit = vts - 1;
@@ -604,8 +601,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client,
-			"chip found @ 0x%x (%s) is not an %s chip.\n",
+		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
 			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
@@ -653,8 +649,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 }
 
 static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg) {
-	struct tx_isp_sensor *sensor = container_of(sd,
-	struct tx_isp_sensor, sd);
+	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
@@ -783,7 +778,6 @@ err_set_sensor_gpio:
 	clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 

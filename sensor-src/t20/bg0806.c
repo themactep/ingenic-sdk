@@ -64,13 +64,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -83,8 +83,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	uint32_t mask;
 	/* low 4 bits are fraction bits */
 	gain_one = math_exp2(isp_gain, shift, TX_ISP_GAIN_FIXED_POINT);
-	if (gain_one >= (uint32_t)(15.5 * (1 << TX_ISP_GAIN_FIXED_POINT)))
-		gain_one = (uint32_t)(15.5 * (1 << TX_ISP_GAIN_FIXED_POINT));
+	if (gain_one >= (uint32_t) (15.5 * (1 << TX_ISP_GAIN_FIXED_POINT)))
+		gain_one = (uint32_t) (15.5 * (1 << TX_ISP_GAIN_FIXED_POINT));
 	regs = gain_one >> (TX_ISP_GAIN_FIXED_POINT - 6);
 	*sensor_again = regs;
 	mask = ~0;
@@ -498,8 +498,7 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 }
 
 static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
-	struct tx_isp_sensor *sensor = (container_of(sd,
-	struct tx_isp_sensor, sd));
+	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int i;
@@ -763,8 +762,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 }
 
 static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg) {
-	struct tx_isp_sensor *sensor = container_of(sd,
-	struct tx_isp_sensor, sd);
+	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
@@ -920,11 +918,13 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
 	i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

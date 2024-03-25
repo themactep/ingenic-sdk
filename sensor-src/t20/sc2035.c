@@ -380,19 +380,16 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
 	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return lut[0].gain;
-		}
-		else if (isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
-		}
-		else {
+		} else {
 			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
@@ -405,11 +402,11 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return isp_gain;
 }
-struct tx_isp_sensor_attribute sensor_attr={
+
+struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x2035,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -443,141 +440,141 @@ struct tx_isp_sensor_attribute sensor_attr={
 
 
 static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
-	{0x3105,0x02},  //start up timing begin
-	{0x0103,0x01},  // reset all registers
-	{0x3105,0x02},
-	{0x0100,0x00},  //start up timing end
+	{0x3105, 0x02},  //start up timing begin
+	{0x0103, 0x01},  // reset all registers
+	{0x3105, 0x02},
+	{0x0100, 0x00},  //start up timing end
 
-	{0x301E,0xB0},  // mode select
+	{0x301E, 0xB0},  // mode select
 
-	{0x320c,0x03},  // hts=2000
-	{0x320d,0xe8},
-	{0x3231,0x24},  // half hts  to 2000
-	{0x320E,0x04},
-	{0x320F,0x65},
-	{0x3211,0x08},  //x start 20160113 20160120
-	{0x3213,0x10},  //y start
+	{0x320c, 0x03},  // hts=2000
+	{0x320d, 0xe8},
+	{0x3231, 0x24},  // half hts  to 2000
+	{0x320E, 0x04},
+	{0x320F, 0x65},
+	{0x3211, 0x08},  //x start 20160113 20160120
+	{0x3213, 0x10},  //y start
 
-	{0x3e03,0x03},  //AEC AGC 03 : close aec/agc 00: open aec/agc
-	{0x3e01,0x46},  //exp time
-	{0x3e08,0x00},  //gain 1x
-	{0x3e09,0x10},  //10-1f,16step->1/16
-	{0x3518,0x03},
-	{0x5025,0x09},
+	{0x3e03, 0x03},  //AEC AGC 03 : close aec/agc 00: open aec/agc
+	{0x3e01, 0x46},  //exp time
+	{0x3e08, 0x00},  //gain 1x
+	{0x3e09, 0x10},  //10-1f,16step->1/16
+	{0x3518, 0x03},
+	{0x5025, 0x09},
 
-	{0x3908,0xc0},  //BLC RNCincrease blc target for rnc
-	{0x3907,0x01},  //12.14
-	{0x3928,0x01},  //20160315
-	{0x3416,0x12},  //20160113
-	{0x3401,0x1e},  //12.11
-	{0x3402,0x0c},  //12.11
-	{0x3403,0x70},  //12.11
-	{0x3e0f,0x90},
+	{0x3908, 0xc0},  //BLC RNCincrease blc target for rnc
+	{0x3907, 0x01},  //12.14
+	{0x3928, 0x01},  //20160315
+	{0x3416, 0x12},  //20160113
+	{0x3401, 0x1e},  //12.11
+	{0x3402, 0x0c},  //12.11
+	{0x3403, 0x70},  //12.11
+	{0x3e0f, 0x90},
 
-	{0x3638,0x84},  //RAMP config  20160113B
-	{0x3637,0xbc},  //1018 20160113 20160120
-	{0x3639,0x98},
-	{0x3035,0x01},  //count clk
-	{0x3034,0xc2},  //1111   20160120
+	{0x3638, 0x84},  //RAMP config  20160113B
+	{0x3637, 0xbc},  //1018 20160113 20160120
+	{0x3639, 0x98},
+	{0x3035, 0x01},  //count clk
+	{0x3034, 0xc2},  //1111   20160120
 
-	{0x3300,0x30},  //eq  20160307
-	{0x3301,0x08},  //cmprst  20160120 20160307
-	{0x3308,0x30},  // tx 1111 20160307
-	{0x3306,0x3a},  // count down 1111 20160120
-	{0x330a,0x00},
-	{0x330b,0x90},  // count up
-	{0x3303,0x30},  //ramp gap 20160307
-	{0x3309,0x30},  //cnt up gap 20160307
-	{0x331E,0x2c},  //integ 1st pos point 20160307
-	{0x331F,0x2c},  //integ 2nd pos point 20160307
-	{0x3320,0x2e},  //ofs fine 1st pos point 20160307
-	{0x3321,0x2e},  //ofs fine 2nd pos point 20160307
-	{0x3322,0x2e},  //20160307
-	{0x3323,0x2e},  //20160307
+	{0x3300, 0x30},  //eq  20160307
+	{0x3301, 0x08},  //cmprst  20160120 20160307
+	{0x3308, 0x30},  // tx 1111 20160307
+	{0x3306, 0x3a},  // count down 1111 20160120
+	{0x330a, 0x00},
+	{0x330b, 0x90},  // count up
+	{0x3303, 0x30},  //ramp gap 20160307
+	{0x3309, 0x30},  //cnt up gap 20160307
+	{0x331E, 0x2c},  //integ 1st pos point 20160307
+	{0x331F, 0x2c},  //integ 2nd pos point 20160307
+	{0x3320, 0x2e},  //ofs fine 1st pos point 20160307
+	{0x3321, 0x2e},  //ofs fine 2nd pos point 20160307
+	{0x3322, 0x2e},  //20160307
+	{0x3323, 0x2e},  //20160307
 
-	{0x3626,0x03},  //memory readout delay 0613 0926
-	{0x3621,0x28},  //counter clock div [3] column fpn 0926
-	{0x3F08,0x04},  //WRITE TIME
-	{0x3F09,0x44},  //WRITE/READ TIME GAP
-	{0x4500,0x25},  //data delay 0926
-	{0x3c09,0x08},  // Sram start position
+	{0x3626, 0x03},  //memory readout delay 0613 0926
+	{0x3621, 0x28},  //counter clock div [3] column fpn 0926
+	{0x3F08, 0x04},  //WRITE TIME
+	{0x3F09, 0x44},  //WRITE/READ TIME GAP
+	{0x4500, 0x25},  //data delay 0926
+	{0x3c09, 0x08},  // Sram start position
 
-	{0x335D,0x20},  //prechg tx auto ctrl [5]
-	{0x3368,0x02},  //EXP1
-	{0x3369,0x00},
-	{0x336A,0x04},  //EXP2
-	{0x336b,0x65},
-	{0x330E,0x50},  // start value
-	{0x3367,0x08},  // end value  12.14
+	{0x335D, 0x20},  //prechg tx auto ctrl [5]
+	{0x3368, 0x02},  //EXP1
+	{0x3369, 0x00},
+	{0x336A, 0x04},  //EXP2
+	{0x336b, 0x65},
+	{0x330E, 0x50},  // start value
+	{0x3367, 0x08},  // end value  12.14
 
-	{0x3f00,0x06},
-	{0x3f04,0x01},  // sram write
-	{0x3f05,0xdf},  // 1111  20160113 20160120 20160307
-	{0x3905,0x1c},
+	{0x3f00, 0x06},
+	{0x3f04, 0x01},  // sram write
+	{0x3f05, 0xdf},  // 1111  20160113 20160120 20160307
+	{0x3905, 0x1c},
 
-	{0x5780,0x7f},  //DPC
-	{0x5781,0x0a},  //12.17 20160307
-	{0x5782,0x0a},  //12.17 20160307
-	{0x5783,0x08},  //12.17  20160307  20160317
-	{0x5784,0x08},  //12.17  20160307  20160317
-	{0x5785,0x18},  //12.11 ; 20160112 20160307
-	{0x5786,0x18},  //12.11 ; 20160112 20160307
-	{0x5787,0x18},  //12.11 20160307 20160317
-	{0x5788,0x18},  // 20160307  20160317
-	{0x5789,0x01},  //12.11
-	{0x578a,0x0f},  //12.11
-	{0x5000,0x06},
+	{0x5780, 0x7f},  //DPC
+	{0x5781, 0x0a},  //12.17 20160307
+	{0x5782, 0x0a},  //12.17 20160307
+	{0x5783, 0x08},  //12.17  20160307  20160317
+	{0x5784, 0x08},  //12.17  20160307  20160317
+	{0x5785, 0x18},  //12.11 ; 20160112 20160307
+	{0x5786, 0x18},  //12.11 ; 20160112 20160307
+	{0x5787, 0x18},  //12.11 20160307 20160317
+	{0x5788, 0x18},  // 20160307  20160317
+	{0x5789, 0x01},  //12.11
+	{0x578a, 0x0f},  //12.11
+	{0x5000, 0x06},
 
-	{0x3632,0x44},  //bypass NVDD analog config  20160113
-	{0x3622,0x0e},  //enable sa1/ecl blksun
-	{0x3627,0x08},  //0921 20160307
-	{0x3630,0xb4},  //94 1111  20160113  20160120
-	{0x3633,0x97},  //vrhlp voltage 14~24 could be choosed 20160113
-	{0x3620,0x62},  //comp and bitline current 20160307
-	{0x363a,0x0c},  //sa1 common voltage
-	{0x3333,0x10},  // 20160307
-	{0x3334,0x20},  //column fpn 20160307
-	{0x3312,0x06},  //20160307
-	{0x3340,0x03},  //20160307
-	{0x3341,0xb0},  //20160307
-	{0x3342,0x02},  //20160307
-	{0x3343,0x20},  //20160307
+	{0x3632, 0x44},  //bypass NVDD analog config  20160113
+	{0x3622, 0x0e},  //enable sa1/ecl blksun
+	{0x3627, 0x08},  //0921 20160307
+	{0x3630, 0xb4},  //94 1111  20160113  20160120
+	{0x3633, 0x97},  //vrhlp voltage 14~24 could be choosed 20160113
+	{0x3620, 0x62},  //comp and bitline current 20160307
+	{0x363a, 0x0c},  //sa1 common voltage
+	{0x3333, 0x10},  // 20160307
+	{0x3334, 0x20},  //column fpn 20160307
+	{0x3312, 0x06},  //20160307
+	{0x3340, 0x03},  //20160307
+	{0x3341, 0xb0},  //20160307
+	{0x3342, 0x02},  //20160307
+	{0x3343, 0x20},  //20160307
 
-	{0x303f,0x81}, //format
-	{0x501f,0x00},
-	{0x3b00,0xf8},
-	{0x3b01,0x40},
-	{0x3c01,0x14},
-	{0x4000,0x00},
+	{0x303f, 0x81}, //format
+	{0x501f, 0x00},
+	{0x3b00, 0xf8},
+	{0x3b01, 0x40},
+	{0x3c01, 0x14},
+	{0x4000, 0x00},
 
-	{0x3d08,0x01},  //data output DVP CLK INV
-	{0x3640,0x00},  // pad driver
+	{0x3d08, 0x01},  //data output DVP CLK INV
+	{0x3640, 0x00},  // pad driver
 
 	/*24M input 69M PCLK */
 	/*{0x320f,0x7e},*/
-	{0x303a,0x18},
-	{0x3039,0x96},
-	{0x3034,0xba},
-	{0x3621,0x18},
+	{0x303a, 0x18},
+	{0x3039, 0x96},
+	{0x3034, 0xba},
+	{0x3621, 0x18},
 	/*{0x3e03,0x00},*/
-	{0x3300,0x10},
-	{0x3306,0x3b},
+	{0x3300, 0x10},
+	{0x3306, 0x3b},
 
-	{0x3208,0x07}, //1920
-	{0x3209,0x80},
-	{0x320a,0x04}, //1080
-	{0x320b,0x38},
+	{0x3208, 0x07}, //1920
+	{0x3209, 0x80},
+	{0x320a, 0x04}, //1080
+	{0x320b, 0x38},
 	/* 24M config end */
 
-	 /*{0x0100,0x01},*/
-	 /*{0x303a,0x07}, PLL  67.5M pclk */
-	 /*{0x3039,0x8e),*/
-	 {0x303f,0x82},
-	 {0x3636,0x88},  //lpDVDD
-	 {0x3631,0x80},  //0820  20160113  20160120
-	 {0x3635,0x66},  //1018  20160113  20160120
-	 {0x3105,0x04},  //1018
-	 {0x3105,0x04},  //1018
+	/*{0x0100,0x01},*/
+	/*{0x303a,0x07}, PLL  67.5M pclk */
+	/*{0x3039,0x8e),*/
+	{0x303f, 0x82},
+	{0x3636, 0x88},  //lpDVDD
+	{0x3631, 0x80},  //0820  20160113  20160120
+	{0x3635, 0x66},  //1018  20160113  20160120
+	{0x3105, 0x04},  //1018
+	{0x3105, 0x04},  //1018
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -618,8 +615,7 @@ static struct regval_list sensor_stream_off[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value)
-{
+int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -645,11 +641,10 @@ int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value)
-{
+int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value) {
 	int ret;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	uint8_t buf[3] = {(reg>>8)&0xff, reg&0xff, value};
+	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
 		.addr = client->addr,
 		.flags = 0,
@@ -664,8 +659,7 @@ int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value)
 	return ret;
 }
 
-static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
-{
+static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -679,14 +673,13 @@ static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		printk("read vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
+		printk("read vals->reg_num:0x%02x, vals->value:0x%02x\n", vals->reg_num, val);
 		vals++;
 	}
 	return 0;
 }
 
-static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
-{
+static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -704,19 +697,17 @@ static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 
-static int sensor_reset(struct v4l2_subdev *sd, u32 val)
-{
+static int sensor_reset(struct v4l2_subdev *sd, u32 val) {
 	printk("functiong:%s, line:%d\n", __func__, __LINE__);
 	return 0;
 }
 
-static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
-{
+static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3107, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -724,7 +715,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 		return -ENODEV;
 	*ident = v;
 	ret = sensor_read(sd, 0x3108, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -734,21 +725,20 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int sensor_set_integration_time(struct v4l2_subdev *sd, int value)
-{
+static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
-	printk("sensor expo write value 0x%x\n",value);
+	printk("sensor expo write value 0x%x\n", value);
 
-	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e01, (unsigned char) ((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char) ((value & 0x0f) << 4));
 	if (ret < 0)
 		return ret;
 	return 0;
 }
-static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value)
-{
+
+static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
-	printk("sensor again write value 0x%x\n",value);
+	printk("sensor again write value 0x%x\n", value);
 
 #if 0
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
@@ -756,8 +746,8 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value)
 	if (ret < 0)
 		return ret;
 #endif
-	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
+	ret += sensor_write(sd, 0x3e09, (unsigned char) (value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char) ((value & 0xff00) >> 8));
 	if (ret < 0)
 		return ret;
 
@@ -789,18 +779,16 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value)
 */
 	return 0;
 }
-static int sensor_set_digital_gain(struct v4l2_subdev *sd, int value)
-{
+
+static int sensor_set_digital_gain(struct v4l2_subdev *sd, int value) {
 	return 0;
 }
 
-static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value)
-{
+static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 	return 0;
 }
 
-static int sensor_init(struct v4l2_subdev *sd, u32 enable)
-{
+static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	struct tx_isp_sensor *sensor = (container_of(sd, struct tx_isp_sensor, sd));
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
@@ -818,41 +806,36 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable)
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
-	arg.value = (int)&sensor->video;
+	arg.value = (int) &sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
 	return 0;
 }
 
-static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
-{
+static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		printk("%s stream on\n", SENSOR_NAME));
-	}
-	else {
+	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		printk("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
 
-static int sensor_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
-{
+static int sensor_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) {
 	printk("functiong:%s, line:%d\n", __func__, __LINE__);
 	return 0;
 }
 
-static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms)
-{
+static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) {
 	printk("functiong:%s, line:%d\n", __func__, __LINE__);
 	return 0;
 }
 
-static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
-{
+static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_notify_argument arg;
 	unsigned int pclk = SENSOR_SUPPORT_PCLK;
@@ -878,19 +861,19 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	drop_frame_reg = vts - 0x265;
-	printk("hts = 0x%x=%d\n fps = 0x%x=%d\n vts = 0x%x=%d\n",hts,hts,fps,fps,vts,vts);
+	printk("hts = 0x%x=%d\n fps = 0x%x=%d\n vts = 0x%x=%d\n", hts, hts, fps, fps, vts, vts);
 
-	ret = sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
 	if (ret < 0) {
 		printk("err: sensor_write err\n");
 		return ret;
 	}
 
-	ret = sensor_write(sd, 0x336b, (unsigned char)(vts & 0xff));
-	ret += sensor_write(sd, 0x336a, (unsigned char)(vts >> 8));
-	ret += sensor_write(sd, 0x3369, (unsigned char)(drop_frame_reg & 0xff));
-	ret += sensor_write(sd, 0x3368, (unsigned char)(drop_frame_reg >> 8));
+	ret = sensor_write(sd, 0x336b, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x336a, (unsigned char) (vts >> 8));
+	ret += sensor_write(sd, 0x3369, (unsigned char) (drop_frame_reg & 0xff));
+	ret += sensor_write(sd, 0x3368, (unsigned char) (drop_frame_reg >> 8));
 	if (ret < 0) {
 		printk("err: sensor_write err\n");
 		return ret;
@@ -901,13 +884,12 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
-	arg.value = (int)&sensor->video;
+	arg.value = (int) &sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	return ret;
 }
 
-static int sensor_set_mode(struct tx_isp_sensor *sensor, int value)
-{
+static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 	struct tx_isp_notify_argument arg;
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
@@ -926,21 +908,20 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value)
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-		arg.value = (int)&sensor->video;
+		arg.value = (int) &sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	}
 	return ret;
 }
 
 static int sensor_g_chip_ident(struct v4l2_subdev *sd,
-		struct v4l2_dbg_chip_ident *chip)
-{
+			       struct v4l2_dbg_chip_ident *chip) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	if (reset_gpio != -1) {
-		ret = gpio_request(reset_gpio,"sensor_reset");
+		ret = gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
@@ -949,7 +930,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 		} else {
-			printk("gpio requrest fail %d\n",reset_gpio);
+			printk("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -966,25 +947,23 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		v4l_err(client,
-				"chip found @ 0x%x (%s) is not an sc2035 chip.\n",
-				client->addr, client->adapter->name);
+			"chip found @ 0x%x (%s) is not an sc2035 chip.\n",
+			client->addr, client->adapter->name);
 		return ret;
 	}
 	v4l_info(client, "sc2035 chip found @ 0x%02x (%s)\n",
-			client->addr, client->adapter->name);
+		 client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
-static int sensor_s_power(struct v4l2_subdev *sd, int on)
-{
+static int sensor_s_power(struct v4l2_subdev *sd, int on) {
 	return 0;
 }
 
-static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl)
-{
+static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl) {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
-	switch(ctrl->cmd) {
+	switch (ctrl->cmd) {
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 			ret = sensor_set_integration_time(sd, ctrl->value);
 			break;
@@ -998,7 +977,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = sensor_get_black_pedestal(sd, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = sensor_set_mode(sensor,ctrl->value);
+			ret = sensor_set_mode(sensor, ctrl->value);
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
 			ret = sensor_write_array(sd, sensor_stream_off);
@@ -1010,16 +989,16 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = sensor_set_fps(sensor, ctrl->value);
 			break;
 		default:
-			printk("do not support ctrl->cmd ====%d\n",ctrl->cmd);
+			printk("do not support ctrl->cmd ====%d\n", ctrl->cmd);
 			break;
 	}
 	return 0;
 }
-static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
-{
-	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
+
+static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg) {
+	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
-	switch(cmd) {
+	switch (cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
 			ret = sensor_ops_private_ioctl(sensor, arg);
 			break;
@@ -1084,8 +1063,7 @@ static const struct v4l2_subdev_ops sensor_ops = {
 };
 
 static int sensor_probe(struct i2c_client *client,
-		const struct i2c_device_id *id)
-{
+			const struct i2c_device_id *id) {
 	struct v4l2_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1094,12 +1072,12 @@ static int sensor_probe(struct i2c_client *client,
 	int i = 0;
 	int ret;
 
-	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
@@ -1115,7 +1093,7 @@ static int sensor_probe(struct i2c_client *client,
 
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 
-	switch(sensor_gpio_func) {
+	switch (sensor_gpio_func) {
 		case DVP_PA_LOW_10BIT:
 		case DVP_PA_HIGH_10BIT:
 			mbus = sensor_mbus_code[0];
@@ -1127,12 +1105,12 @@ static int sensor_probe(struct i2c_client *client,
 			goto err_set_sensor_gpio;
 	}
 
-	for(i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
+	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
 
-	 /*
-		convert sensor-gain into isp-gain,
-	 */
+	/*
+	   convert sensor-gain into isp-gain,
+	*/
 	sensor_attr.max_again = 262144;
 	sensor_attr.max_dgain = 0; //sc2135_attr.max_dgain;
 	sd = &sensor->sd;
@@ -1154,8 +1132,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int sensor_remove(struct i2c_client *client)
-{
+static int sensor_remove(struct i2c_client *client) {
 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = v4l2_get_subdev_hostdata(sd);
 
@@ -1173,8 +1150,8 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ SENSOR_NAME, 0 },
-	{ }
+	{SENSOR_NAME, 0},
+	{}
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
@@ -1188,14 +1165,12 @@ static struct i2c_driver sensor_driver = {
 	.id_table = sensor_id,
 };
 
-static __init int init_sensor(void)
-{
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sensor(void)
-{
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
