@@ -950,14 +950,14 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_15)
 			wsize = &sensor_win_sizes[1];
 		else
-			printk("Now os05a10 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_12)
 			wsize = &sensor_win_sizes[0];
 		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_15)
 			wsize = &sensor_win_sizes[1];
 		else
-			printk("Now os05a10 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	}
 
 	if (wsize) {

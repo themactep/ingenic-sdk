@@ -819,7 +819,6 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -836,7 +835,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -891,9 +889,10 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 		dpc_flag = true;
 	}
 	if (ret != 0) {
-		ISP_ERROR("err: sc500ai write err %d\n",__LINE__);
+		ISP_ERROR("err: %s write err %d\n", SENSOR_NAME, __LINE__);
 		return ret;
 	}
+
 	return 0;
 }
 
@@ -951,6 +950,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 
 	if (!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -960,6 +960,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret != 0)
 		return ret;
+
 	/*verion diff*/
 	ret = sensor_read(sd, 0x3109, &val);
 	if (1 == val) {
@@ -975,9 +976,9 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	}
 	if (ret != 0)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
-
 	return 0;
 }
 
@@ -990,7 +991,6 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 	}
-
 	return ret;
 }
 
@@ -1009,13 +1009,14 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
+
 	switch(sensor_resolution) {
-	case SENSOR_RES_400:
-		sclk = SENSOR_SUPPORT_SCLK_4M_FPS_30;
-		break;
-	case SENSOR_RES_370:
-		sclk = SENSOR_SUPPORT_SCLK_3M_FPS_30;
-		break;
+		case SENSOR_RES_400:
+			sclk = SENSOR_SUPPORT_SCLK_4M_FPS_30;
+			break;
+		case SENSOR_RES_370:
+			sclk = SENSOR_SUPPORT_SCLK_3M_FPS_30;
+			break;
 	}
 	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
@@ -1024,6 +1025,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
+
 	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
@@ -1032,13 +1034,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 8;
 	sensor->video.attr->integration_time_limit = vts - 8;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 8;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 

@@ -716,7 +716,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ret = sensor_read(sd, 0x00, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0) {
-		printk("err: ps5280 write error, ret= %d \n",ret);
+		printk("err: %s write error, ret= %d \n", SENSOR_NAME, ret);
 		return ret;
 	}
 	if (v != SENSOR_CHIP_ID_H)
@@ -882,7 +882,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	else if (sensor_raw_mode==SENSOR_RAW_MODE_NATIVE_WDR)
 		hts = (((hts & 0x1f) << 8) | tmp) >> 1;
 	else
-		printk("Now ps5280 Do not support this sensor raw mode.\n");
+		printk("Do not support this sensor raw mode.\n");
 
 	vts = (pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16));
 	Cmd_Lpf = vts -1;
@@ -928,14 +928,14 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if (sensor_raw_mode == SENSOR_RAW_MODE_NATIVE_WDR)
 			wsize = &sensor_win_sizes[1];
 		else
-			printk("Now ps5280 Do not support this sensor raw mode.\n");
+			printk("Do not support this sensor raw mode.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_raw_mode == SENSOR_RAW_MODE_LINEAR)
 			wsize = &sensor_win_sizes[0];
 		else if (sensor_raw_mode == SENSOR_RAW_MODE_NATIVE_WDR)
 			wsize = &sensor_win_sizes[1];
 		else
-			printk("Now ps5280 Do not support this sensor raw mode.\n");
+			printk("Do not support this sensor raw mode.\n");
 	}
 
 	if (wsize) {
@@ -1193,7 +1193,7 @@ static int sensor_probe(struct i2c_client *client,
 		wsize = &sensor_win_sizes[1];
 		break;
 	default:
-		printk("Now ps5280 Do not support this sensor raw mode.\n");
+		printk("Do not support this sensor raw mode.\n");
 		break;
 	}
 	sensor->video.attr = &sensor_attr;

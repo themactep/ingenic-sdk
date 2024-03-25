@@ -945,7 +945,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 		wsize = &sensor_win_sizes[2];
 		break;
 	default:
-		printk("Now sc4236 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		break;
 	}
 
@@ -1006,7 +1006,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
-		printk("Now sc4236 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		ret = -1;
 		break;
 	}
@@ -1059,7 +1059,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if (sensor_resolution == SENSOR_RES_330)
 			wsize = &sensor_win_sizes[2];
 		else
-			printk("Now sc4236 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_resolution == SENSOR_RES_400)
 			wsize = &sensor_win_sizes[0];
@@ -1068,7 +1068,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if (sensor_resolution == SENSOR_RES_330)
 			wsize = &sensor_win_sizes[2];
 		else
-			printk("Now sc4236 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	}
 
 	if (wsize) {
@@ -1310,7 +1310,7 @@ static int sensor_probe(struct i2c_client *client,
 		sensor->video.attr = &sensor_attr_3m;
 		break;
 	default:
-		printk("Now sc4236 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		break;
 	}
 	sensor->video.mbus_change = 0;

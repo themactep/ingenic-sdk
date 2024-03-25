@@ -686,7 +686,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		sclk=SENSOR_SUPPORT_PCLK_MIPI;
 		break;
 	default:
-		ISP_WARNING("jxh62 Do not support this inteface now.\n");
+		ISP_WARNING("Do not support this inteface now.\n");
 		ret = -1;
 		break;
 	}

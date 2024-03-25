@@ -1095,7 +1095,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		}
 		break;
 	default:
-		printk("Now sc5235 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		break;
 	}
 
@@ -1128,7 +1128,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	else if ((sensor_resolution == SENSOR_RES_400) &&(sensor_max_fps == TX_SENSOR_MAX_FPS_15))
 		wsize = &sensor_win_sizes[2];
 	else
-		printk("Now sc5235 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -1183,7 +1183,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		sclk = SENSOR_SUPPORT_SCLK_4M_FPS_15;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 	} else {
-		printk("Now sc5235 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		ret = -1;
 	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1233,7 +1233,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if ((sensor_resolution == SENSOR_RES_400) &&(sensor_max_fps == TX_SENSOR_MAX_FPS_15))
 			wsize = &sensor_win_sizes[2];
 		else
-			printk("Now sc5235 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 	  	if ((sensor_resolution == SENSOR_RES_500) &&(sensor_max_fps == TX_SENSOR_MAX_FPS_15))
 			wsize = &sensor_win_sizes[0];
@@ -1242,7 +1242,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if ((sensor_resolution == SENSOR_RES_400) &&(sensor_max_fps == TX_SENSOR_MAX_FPS_15))
 			wsize = &sensor_win_sizes[2];
 		else
-			printk("Now sc5235 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	}
 
 	if (wsize) {
@@ -1488,7 +1488,7 @@ static int sensor_probe(struct i2c_client *client,
 		}
 		break;
 	default:
-		printk("Now sc5235 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		break;
 	}
 	sensor->video.mbus_change = 0;

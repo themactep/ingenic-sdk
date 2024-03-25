@@ -2149,7 +2149,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	else if (sensor_resolution == SENSOR_RES_300)
 		wsize = &sensor_win_sizes[0];
 	else
-		printk("Now ov4689 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -2201,7 +2201,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	else if (sensor_resolution == SENSOR_RES_300)
 		sclk = SENSOR_SUPPORT_SCLK;
 	else
-		printk("Now ov4689 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 
 	val = 0;
 	ret += sensor_read(sd, 0x380c, &val);
@@ -2246,14 +2246,14 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		else if (sensor_resolution == SENSOR_RES_300)
 			wsize = &sensor_win_sizes[0];
 		else
-			printk("Now ov4689 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_resolution == SENSOR_RES_400)
 			wsize = &sensor_win_sizes[1];
 		else if (sensor_resolution == SENSOR_RES_300)
 			wsize = &sensor_win_sizes[0];
 		else
-			printk("Now ov4689 Do not support this resolution.\n");
+			printk("Do not support this resolution.\n");
 	}
 
 	if (wsize) {
@@ -2491,7 +2491,7 @@ static int sensor_probe(struct i2c_client *client,
 		sensor->video.attr = &sensor_attr;
 		break;
 	default:
-		printk("Now ov4689 Do not support this resolution.\n");
+		printk("Do not support this resolution.\n");
 		break;
 	}
 

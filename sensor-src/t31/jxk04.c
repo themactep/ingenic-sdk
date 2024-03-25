@@ -818,7 +818,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 		wsize = &sensor_win_sizes[2];
 		break;
 	default:
-		ISP_WARNING("jxk04 Do not support this max fps now.\n");
+		ISP_WARNING("Do not support this max fps now.\n");
 	}
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -868,7 +868,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		sclk = SENSOR_SUPPORT_SCLK_30FPS;
 		break;
 	default:
-		ISP_WARNING("jxk04 Do not support this max fps now.\n");
+		ISP_WARNING("Do not support this max fps now.\n");
 	}
 	pr_debug("set fps sclk = %d\n", sclk);
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -937,7 +937,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		wsize = &sensor_win_sizes[2];
 		break;
 	default:
-		ISP_WARNING("jxk04 Do not support this max fps now.\n");
+		ISP_WARNING("Do not support this max fps now.\n");
 	}
 
 	if (wsize) {
@@ -1176,7 +1176,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		wsize=&sensor_win_sizes[2];
 		break;
 	default:
-		ISP_WARNING("jxk04 Do not support this resolution now.\n");
+		ISP_WARNING("Do not support this resolution now.\n");
 		break;
 	}
 
