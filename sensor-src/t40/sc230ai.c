@@ -859,7 +859,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				ISP_ERROR("[%s %d] Don't support this Sensor Data interface\n", __func__, __LINE__);
 			}
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_WARNING("[%s %d] sc230ai stream on\n", __func__, __LINE__);
+			ISP_WARNING("[%s %d] %s stream on\n", __func__, __LINE__, SENSOR_NAME);
                 } else {
                         ISP_WARNING("[%s %d] Failed the open stream, state error!\n", __func__, __LINE__);
 		}
