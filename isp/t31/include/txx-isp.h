@@ -19,43 +19,42 @@
  */
 
 /* Video Device Descriptor types */
-#define TX_ISP_TYPE_HEADER				0x00
-#define TX_ISP_TYPE_SUBDEV				0x01
-#define TX_ISP_TYPE_WIDGET				0x02
+#define TX_ISP_TYPE_HEADER		0x00
+#define TX_ISP_TYPE_SUBDEV		0x01
+#define TX_ISP_TYPE_WIDGET		0x02
 
-#define TX_ISP_HEADER_ID(n)	(TX_ISP_TYPE_HEADER<<4 | n)
-#define TX_ISP_SUBDEV_ID(n)	(TX_ISP_TYPE_SUBDEV<<4 | n)
-#define TX_ISP_WIDGET_ID(n)	(TX_ISP_TYPE_WIDGET<<4 | n)
-#define TX_ISP_GET_ID(n)	((n) & 0xf)
+#define TX_ISP_HEADER_ID(n)		(TX_ISP_TYPE_HEADER << 4 | n)
+#define TX_ISP_SUBDEV_ID(n)		(TX_ISP_TYPE_SUBDEV << 4 | n)
+#define TX_ISP_WIDGET_ID(n)		(TX_ISP_TYPE_WIDGET << 4 | n)
+#define TX_ISP_GET_ID(n)		((n) & 0xf)
 
 /* Video Device Descriptor Subtypes */
-#define TX_ISP_SUBTYPE_UNDEFINE					(0x00)
-#define TX_ISP_SUBTYPE_INPUT_TERMINAL			(0x01)
-#define TX_ISP_SUBTYPE_OUTPUT_TERMINAL			(0x02)
-#define TX_ISP_SUBTYPE_PROCESSING_UNIT			(0x03)
-#define TX_ISP_SUBTYPE_CONTROLLER				(0x04)
-#define TX_ISP_SUBTYPE_SELECTOR_UNIT			(0x05)
+#define TX_ISP_SUBTYPE_UNDEFINE		(0x00)
+#define TX_ISP_SUBTYPE_INPUT_TERMINAL	(0x01)
+#define TX_ISP_SUBTYPE_OUTPUT_TERMINAL	(0x02)
+#define TX_ISP_SUBTYPE_PROCESSING_UNIT	(0x03)
+#define TX_ISP_SUBTYPE_CONTROLLER	(0x04)
+#define TX_ISP_SUBTYPE_SELECTOR_UNIT	(0x05)
 
 /* Video Device Descriptor pad types */
-#define TX_ISP_PADTYPE_UNDEFINE			0x00
-#define TX_ISP_PADTYPE_INPUT			0x01
-#define TX_ISP_PADTYPE_OUTPUT			0x02
-#define TX_ISP_PADSTATE_FREE			(0x2)
-#define TX_ISP_PADSTATE_LINKED			(0x3)
-#define TX_ISP_PADSTATE_STREAM			(0x4)
-#define TX_ISP_PADLINK_DDR				(0x1<<4)
-#define TX_ISP_PADLINK_LFB				(0x1<<5)
-#define TX_ISP_PADLINK_FS				(0x1<<6)
+#define TX_ISP_PADTYPE_UNDEFINE		0x00
+#define TX_ISP_PADTYPE_INPUT		0x01
+#define TX_ISP_PADTYPE_OUTPUT		0x02
+#define TX_ISP_PADSTATE_FREE		(0x2)
+#define TX_ISP_PADSTATE_LINKED		(0x3)
+#define TX_ISP_PADSTATE_STREAM		(0x4)
+#define TX_ISP_PADLINK_DDR		(0x1 << 4)
+#define TX_ISP_PADLINK_LFB		(0x1 << 5)
+#define TX_ISP_PADLINK_FS		(0x1 << 6)
 
 /* Video Device Descriptor link types */
 #define TX_ISP_LINKFLAG_DYNAMIC		(0x0)
 #define TX_ISP_LINKFLAG_ENABLED		(0x1)
-#define TX_ISP_LINKFLAG(v)			((v) & 0xf)
+#define TX_ISP_LINKFLAG(v)		((v) & 0xf)
 
-
-#define TX_ISP_NAME_LEN 16
-#define TX_ISP_PADS_PER_SUBDEV 8
-#define TX_ISP_LINKS_PER_PADS 4
+#define TX_ISP_NAME_LEN			16
+#define TX_ISP_PADS_PER_SUBDEV		8
+#define TX_ISP_LINKS_PER_PADS		4
 
 /*
  * the names of subdev are defined here.
