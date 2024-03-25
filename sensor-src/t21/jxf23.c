@@ -68,13 +68,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -573,8 +573,8 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;
-	ret = sensor_write(sd, 0x01, (unsigned char) (expo & 0xff));
-	ret += sensor_write(sd, 0x02, (unsigned char) ((expo >> 8) & 0xff));
+	ret = sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
@@ -672,7 +672,8 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) { struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -721,7 +722,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) { struct tx_isp_sen
 	if (ret < 0)
 		return -1;
 
-	val |= (1 << 7); //set bit[7], register group write function, auto clean
+	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	pr_debug("after register 0x1f value : 0x%02x\n", val);
 	if (0 != ret) {
@@ -789,9 +790,11 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		printk("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
+		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
+			 client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
+
 	printk("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	printk("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
@@ -916,6 +919,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64) 0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,

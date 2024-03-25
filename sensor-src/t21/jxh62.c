@@ -62,13 +62,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -255,7 +255,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 #ifdef DRIVE_CAPABILITY_1
 	{0x0D, 0x50},
 #elif defined(DRIVE_CAPABILITY_2)
-	{0x0D,0x5c},
+	{0x0D, 0x5c},
 #endif
 	{0x57, 0x80},
 	{0x58, 0x33},
@@ -375,6 +375,7 @@ static struct regval_list sensor_init_regs_1280_720_15fps[] = {
 	{0x16, 0x59},
 	{SENSOR_REG_END, 0x00},
 };
+
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
@@ -701,7 +702,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 	printk("%s chip found @ 0x%02x (%s)\n",
-	       SENSOR_NAME, client->addr, client->adapter->name);
+		 SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -759,8 +760,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int len = 0;
 	int ret = 0;
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
+	}
 
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
@@ -774,8 +776,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
+	}
 
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
@@ -809,6 +812,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64) 0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,

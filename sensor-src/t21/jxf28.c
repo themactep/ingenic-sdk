@@ -65,13 +65,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -451,7 +451,6 @@ static struct regval_list sensor_stream_off_dvp[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -571,10 +570,10 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-
 	ret += sensor_write(sd, 0x00, (unsigned char) (value & 0x7f));
 	if (ret < 0)
 		return ret;
+
 	return 0;
 }
 
@@ -776,7 +775,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 	printk("%s chip found @ 0x%02x (%s)\n",
-	       SENSOR_NAME, client->addr, client->adapter->name);
+		SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -847,8 +846,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int len = 0;
 	int ret = 0;
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
+	}
 
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
@@ -862,8 +862,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
+	}
 
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
@@ -897,6 +898,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64) 0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -916,7 +918,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	enum v4l2_mbus_pixelcode mbus;
 	int ret;
 	int i = 0;
-
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		printk("Failed to allocate sensor subdev.\n");

@@ -64,13 +64,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -85,8 +85,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	uint32_t mask;
 	/* low 4 bits are fraction bits */
 	gain_one = private_math_exp2(isp_gain, shift, TX_ISP_GAIN_FIXED_POINT);
-	if (gain_one >= (uint32_t)(15.5 * (1 << TX_ISP_GAIN_FIXED_POINT)))
-		gain_one = (uint32_t)(15.5 * (1 << TX_ISP_GAIN_FIXED_POINT));
+	if (gain_one >= (uint32_t) (15.5 * (1 << TX_ISP_GAIN_FIXED_POINT)))
+		gain_one = (uint32_t) (15.5 * (1 << TX_ISP_GAIN_FIXED_POINT));
 	regs = gain_one >> (TX_ISP_GAIN_FIXED_POINT - 6);
 	*sensor_again = regs;
 	mask = ~0;
@@ -101,12 +101,12 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
-struct tx_isp_mipi_bus sensor_mipi = {
+struct tx_isp_mipi_bus sensor_mipi={
 	.clk = 800,
 	.lans = 1,
 };
 
-struct tx_isp_dvp_bus sensor_dvp = {
+struct tx_isp_dvp_bus sensor_dvp={
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking = {
 		.vblanking = 0,
@@ -118,9 +118,9 @@ struct tx_isp_dvp_bus sensor_dvp = {
 	},
 };
 
-struct tx_isp_sensor_attribute sensor_attr = {
+struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
-	.chip_id = SENSOR_CHIP_ID,
+	.chip_id = 0x0806,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -140,11 +140,11 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.max_dgain = 0,
 	.min_integration_time = 4,
 	.min_integration_time_native = 4,
-	.max_integration_time_native = 0x546 - 4,
-	.integration_time_limit = 0x546 - 4,
+	.max_integration_time_native = 0x546-4,
+	.integration_time_limit = 0x546-4,
 	.total_width = 0x8ae,
 	.total_height = 0x546,
-	.max_integration_time = 0x546 - 4,
+	.max_integration_time = 0x546-4,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
@@ -286,6 +286,7 @@ const unsigned char Tab_sensor_dsc[768] = {
 	0x06, 0x75, 0x04, 0x68, 0x04, 0x10, 0x03, 0x5c, 0x03, 0x0f, 0x02, 0xeb, 0x02, 0xf6, 0x03, 0x7d, 0x04, 0x0e, 0x04, 0xa7,
 	0x05, 0xc7, 0x06, 0x72, 0x07, 0x84, 0x0a, 0x0d
 };
+
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
@@ -434,7 +435,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		return ret;
 #if 0
 	if (g_vrefh==Vrefh_min_tlb) {  //增益最大
-		printk("sensor_set_integration_time:expo = %d\n",expo);
+		printk("sensor_set_integration_time:expo = %d\n", expo);
 		if (expo > 2400 ) {
 			// low fps
 			ret = sensor_write(sd, 0x0082, 0x04);
@@ -449,7 +450,8 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 			ret += sensor_write(sd, 0x00f2, 0x06);
 			ret += sensor_write(sd, 0x00fb, 0x01);
 		}
-	} else {
+	}
+	else {
 		//normal
 		ret = sensor_write(sd, 0x0082, 0x0b);
 		// ret += sensor_write(sd, 0x007f, 0x01);
@@ -498,7 +500,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x0068, 0x90);
 		if (ret < 0)
 			return ret;
-	} else if (vrefh == Vrefh_min_tlb) {
+	} else if (vrefh == Vrefh_min_tlb)	{
 		ret = sensor_write(sd, 0x0030, 0x01);
 		ret += sensor_write(sd, 0x0031, 0xb0);
 		ret += sensor_write(sd, 0x0034, 0x01);
@@ -725,11 +727,11 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
-		       client->addr, client->adapter->name, SENSOR_NAME);
+			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 	printk("%s chip found @ 0x%02x (%s)\n",
-	       SENSOR_NAME, client->addr, client->adapter->name);
+		SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -851,6 +853,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64) 0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
