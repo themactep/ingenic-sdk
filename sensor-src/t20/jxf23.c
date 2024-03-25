@@ -66,13 +66,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -874,7 +874,8 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
+		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
@@ -1052,7 +1053,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_win_sizes[i].mbus_code = mbus;
 #endif
 	/*
-	       convert sensor-gain into isp-gain,
+	   convert sensor-gain into isp-gain,
 	 */
 	switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_25:
@@ -1125,8 +1126,8 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
-	i2c_del_driver(&sensor_driver);
 	sensor_common_exit();
+	i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sensor);

@@ -44,8 +44,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    unsigned char reg_num;
-    unsigned char value;
+	unsigned char reg_num;
+	unsigned char value;
 };
 
 static int reset_gpio = GPIO_PA(18);
@@ -61,8 +61,8 @@ module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct again_lut {
-    unsigned char value;
-    unsigned int gain;
+	unsigned char value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -645,7 +645,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 }
 
 static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg) {
-	struct tx_isp_sensor *sensor =container_of(sd, struct tx_isp_sensor, sd);
+	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
 		case VIDIOC_ISP_PRIVATE_IOCTL:
@@ -740,7 +740,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 	/*
-	       convert sensor-gain into isp-gain,
+		   convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 255344;
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
