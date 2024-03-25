@@ -1000,11 +1000,12 @@ static int imx327_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = imx327_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an imx327 chip.\n",
-			  client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			  client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
+		    SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;

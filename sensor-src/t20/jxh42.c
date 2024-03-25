@@ -649,12 +649,12 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name,
-			SENSOR_NAME);
+		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
+		 SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
