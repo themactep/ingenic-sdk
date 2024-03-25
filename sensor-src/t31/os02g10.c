@@ -652,12 +652,12 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
 			wsize = &sensor_win_sizes[0];
 		else
-			ISP_ERROR("Now os02g10 Do not support this resolution.\n");
+			ISP_ERROR("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
 			wsize = &sensor_win_sizes[0];
 		else
-			ISP_ERROR("Now os02g10 Do not support this resolution.\n");
+			ISP_ERROR("Do not support this resolution.\n");
 	}
 
 	if (wsize) {

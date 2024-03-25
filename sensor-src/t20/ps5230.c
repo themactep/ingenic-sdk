@@ -926,7 +926,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	ret = sensor_read(sd, 0x00, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
-		printk("err: ps5230 write error, ret= %d \n", ret);
+		printk("err: %s write error, ret= %d \n", SENSOR_NAME, ret);
 		return ret;
 	}
 	if (v != SENSOR_CHIP_ID_H)
