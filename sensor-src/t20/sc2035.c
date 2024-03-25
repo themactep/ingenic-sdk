@@ -951,8 +951,8 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			client->addr, client->adapter->name);
 		return ret;
 	}
-	v4l_info(client, "sc2035 chip found @ 0x%02x (%s)\n",
-		 client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
+		 SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 

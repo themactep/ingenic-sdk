@@ -814,7 +814,8 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 		return ret;
 	}
 
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
+		 SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
