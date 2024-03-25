@@ -22,6 +22,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define SENSOR_NAME "mis4001"
 #define SENSOR_CHIP_ID_H (0x13)
 #define SENSOR_CHIP_ID_L (0x11)
 #define SENSOR_REG_END 0xffff
@@ -180,8 +181,7 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
-{
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;
@@ -189,8 +189,7 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 	return isp_it;
 }
 
-unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
 
 	while (lut->gain <= sensor_attr.max_again) {
@@ -213,12 +212,11 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus sensor_mipi={
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 800,
 	.lans = 2,
@@ -247,8 +245,8 @@ struct tx_isp_mipi_bus sensor_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute sensor_attr={
-	.name = "mis4001",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0x1311,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
@@ -273,185 +271,185 @@ struct tx_isp_sensor_attribute sensor_attr={
 };
 
 static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
-    {0x300a, 0x01},
-    {0x3006, 0x02},
-    {0x4100, 0x04},
-    {0x4101, 0xff},
-    {0x4103, 0xff},
-    {0x4220, 0x2c},
-    {0x4221, 0x6c},
-    {0x4222, 0xac},
-    {0x4223, 0xec},
-    {0x3011, 0x2c},
-    {0x3f00, 0x01},
-    {0x3f02, 0x07},
-    {0x3f01, 0x00},
-    {0x3f04, 0x2a},
-    {0x3f03, 0x00},
-    {0x3f06, 0x6d},
-    {0x3f05, 0x04},
-    {0x3f08, 0xff},
-    {0x3f07, 0x1f},
-    {0x3f0a, 0xa4},
-    {0x3f09, 0x01},
-    {0x3f0c, 0x38},
-    {0x3f0b, 0x00},
-    {0x3f0e, 0xff},
-    {0x3f0d, 0x1f},
-    {0x3f10, 0xff},
-    {0x3f0f, 0x1f},
-    {0x3f13, 0x07},
-    {0x3f12, 0x00},
-    {0x3f15, 0x9d},
-    {0x3f14, 0x01},
-    {0x3f17, 0x31},
-    {0x3f16, 0x00},
-    {0x3f19, 0x73},
-    {0x3f18, 0x01},
-    {0x3f1b, 0x00},
-    {0x3f1a, 0x00},
-    {0x3f1d, 0x71},
-    {0x3f1c, 0x04},
-    {0x3f1f, 0xff},
-    {0x3f1e, 0x1f},
-    {0x3f21, 0xff},
-    {0x3f20, 0x1f},
-    {0x3f23, 0x85},
-    {0x3f22, 0x00},
-    {0x3f25, 0x26},
-    {0x3f24, 0x01},
-    {0x3f28, 0x46},
-    {0x3f27, 0x00},
-    {0x3f2a, 0x07},
-    {0x3f29, 0x00},
-    {0x3f2c, 0x3f},
-    {0x3f2b, 0x00},
-    {0x3f2e, 0x6f},
-    {0x3f2d, 0x01},
-    {0x3f30, 0x38},
-    {0x3f2f, 0x00},
-    {0x3f32, 0x3f},
-    {0x3f31, 0x00},
-    {0x3f34, 0xd1},
-    {0x3f33, 0x00},
-    {0x3f36, 0xc5},
-    {0x3f35, 0x00},
-    {0x3f3a, 0x73},
-    {0x3f39, 0x02},
-    {0x3f4f, 0x73},
-    {0x3f4e, 0x02},
-    {0x3f51, 0x73},
-    {0x3f50, 0x02},
-    {0x3f53, 0x73},
-    {0x3f52, 0x02},
-    {0x3f55, 0x73},
-    {0x3f54, 0x02},
-    {0x3f3c, 0x9a},
-    {0x3f3b, 0x00},
-    {0x3f3e, 0xd0},
-    {0x3f3d, 0x03},
-    {0x3f40, 0x92},
-    {0x3f3f, 0x01},
-    {0x3f42, 0x58},
-    {0x3f41, 0x00},
-    {0x3f44, 0x77},
-    {0x3f43, 0x04},
-    {0x3129, 0x38},
-    {0x3128, 0x00},
-    {0x312b, 0x3d},
-    {0x312a, 0x00},
-    {0x312f, 0x91},
-    {0x312e, 0x00},
-    {0x3124, 0x0e},
-    {0x4200, 0x09},
-    {0x4201, 0x00},
-    {0x420e, 0x69},
-    {0x420f, 0x26},
-    {0x4240, 0x8d},
-    {0x4242, 0x03},
-    {0x4224, 0x00},
-    {0x4225, 0x0a},
-    {0x4226, 0xa0},
-    {0x4227, 0x05},
-    {0x4228, 0x00},
-    {0x4229, 0x0a},
-    {0x422a, 0xa0},
-    {0x422b, 0x05},
-    {0x422c, 0x00},
-    {0x422d, 0x0a},
-    {0x422e, 0xa0},
-    {0x422f, 0x05},
-    {0x4230, 0x00},
-    {0x4231, 0x0a},
-    {0x4232, 0xa0},
-    {0x4233, 0x05},
-    {0x4509, 0x0f},
-    {0x4505, 0x00},
-    {0x4501, 0xff},
-    {0x4502, 0x33},
-    {0x4503, 0x11},
-    {0x4501, 0xf0},
-    {0x4502, 0x30},
-    {0x4503, 0x10},
-    {0x3f3a, 0x2a},
-    {0x3f4f, 0x2b},
-    {0x3f51, 0x2e},
-    {0x3f53, 0x34},
-    {0x3f55, 0x38},
-    {0x4004, 0x00},
-    {0x3A01, 0xc0},
-    {0x401E, 0x3C},
-    {0x401d, 0xa0},
-    {0x3f49, 0x70},
-    {0x3012, 0x03},
-    {0x3500, 0x13},
-    {0x3501, 0x03},
-    {0x3E00, 0x01},
-    {0x3E01, 0x10},
-    {0x400D, 0x30},
-    {0x3508, 0x04},
-    {0x3513, 0x01},
-    {0x3514, 0x09},
-    {0x3515, 0x0b},
-    {0x3702, 0x80},
-    {0x3704, 0x80},
-    {0x3706, 0x80},
-    {0x3708, 0x80},
-    {0x3f36, 0xcd},
-    {0x400D, 0x30},
-    {0x4004, 0x00},
-    {0x4009, 0x09},
-    {0x400a, 0x48},
-    {0x3f0c, 0x30},
-    {0x4006, 0x86},
-    {0x4007, 0xc4},
-    {0x3f38, 0x30},
-    {0x3f37, 0x02},
-    {0x4004, 0x20},
-    {0x4005, 0x0c},
-    {0x3f0c, 0x20},
+	{0x300a, 0x01},
+	{0x3006, 0x02},
+	{0x4100, 0x04},
+	{0x4101, 0xff},
+	{0x4103, 0xff},
+	{0x4220, 0x2c},
+	{0x4221, 0x6c},
+	{0x4222, 0xac},
+	{0x4223, 0xec},
+	{0x3011, 0x2c},
+	{0x3f00, 0x01},
+	{0x3f02, 0x07},
+	{0x3f01, 0x00},
+	{0x3f04, 0x2a},
+	{0x3f03, 0x00},
+	{0x3f06, 0x6d},
+	{0x3f05, 0x04},
+	{0x3f08, 0xff},
+	{0x3f07, 0x1f},
+	{0x3f0a, 0xa4},
+	{0x3f09, 0x01},
+	{0x3f0c, 0x38},
+	{0x3f0b, 0x00},
+	{0x3f0e, 0xff},
+	{0x3f0d, 0x1f},
+	{0x3f10, 0xff},
+	{0x3f0f, 0x1f},
+	{0x3f13, 0x07},
+	{0x3f12, 0x00},
+	{0x3f15, 0x9d},
+	{0x3f14, 0x01},
+	{0x3f17, 0x31},
+	{0x3f16, 0x00},
+	{0x3f19, 0x73},
+	{0x3f18, 0x01},
+	{0x3f1b, 0x00},
+	{0x3f1a, 0x00},
+	{0x3f1d, 0x71},
+	{0x3f1c, 0x04},
+	{0x3f1f, 0xff},
+	{0x3f1e, 0x1f},
+	{0x3f21, 0xff},
+	{0x3f20, 0x1f},
+	{0x3f23, 0x85},
+	{0x3f22, 0x00},
+	{0x3f25, 0x26},
+	{0x3f24, 0x01},
+	{0x3f28, 0x46},
+	{0x3f27, 0x00},
+	{0x3f2a, 0x07},
+	{0x3f29, 0x00},
+	{0x3f2c, 0x3f},
+	{0x3f2b, 0x00},
+	{0x3f2e, 0x6f},
+	{0x3f2d, 0x01},
+	{0x3f30, 0x38},
+	{0x3f2f, 0x00},
+	{0x3f32, 0x3f},
+	{0x3f31, 0x00},
+	{0x3f34, 0xd1},
+	{0x3f33, 0x00},
+	{0x3f36, 0xc5},
+	{0x3f35, 0x00},
+	{0x3f3a, 0x73},
+	{0x3f39, 0x02},
+	{0x3f4f, 0x73},
+	{0x3f4e, 0x02},
+	{0x3f51, 0x73},
+	{0x3f50, 0x02},
+	{0x3f53, 0x73},
+	{0x3f52, 0x02},
+	{0x3f55, 0x73},
+	{0x3f54, 0x02},
+	{0x3f3c, 0x9a},
+	{0x3f3b, 0x00},
+	{0x3f3e, 0xd0},
+	{0x3f3d, 0x03},
+	{0x3f40, 0x92},
+	{0x3f3f, 0x01},
+	{0x3f42, 0x58},
+	{0x3f41, 0x00},
+	{0x3f44, 0x77},
+	{0x3f43, 0x04},
+	{0x3129, 0x38},
+	{0x3128, 0x00},
+	{0x312b, 0x3d},
+	{0x312a, 0x00},
+	{0x312f, 0x91},
+	{0x312e, 0x00},
+	{0x3124, 0x0e},
+	{0x4200, 0x09},
+	{0x4201, 0x00},
+	{0x420e, 0x69},
+	{0x420f, 0x26},
+	{0x4240, 0x8d},
+	{0x4242, 0x03},
+	{0x4224, 0x00},
+	{0x4225, 0x0a},
+	{0x4226, 0xa0},
+	{0x4227, 0x05},
+	{0x4228, 0x00},
+	{0x4229, 0x0a},
+	{0x422a, 0xa0},
+	{0x422b, 0x05},
+	{0x422c, 0x00},
+	{0x422d, 0x0a},
+	{0x422e, 0xa0},
+	{0x422f, 0x05},
+	{0x4230, 0x00},
+	{0x4231, 0x0a},
+	{0x4232, 0xa0},
+	{0x4233, 0x05},
+	{0x4509, 0x0f},
+	{0x4505, 0x00},
+	{0x4501, 0xff},
+	{0x4502, 0x33},
+	{0x4503, 0x11},
+	{0x4501, 0xf0},
+	{0x4502, 0x30},
+	{0x4503, 0x10},
+	{0x3f3a, 0x2a},
+	{0x3f4f, 0x2b},
+	{0x3f51, 0x2e},
+	{0x3f53, 0x34},
+	{0x3f55, 0x38},
+	{0x4004, 0x00},
+	{0x3A01, 0xc0},
+	{0x401E, 0x3C},
+	{0x401d, 0xa0},
+	{0x3f49, 0x70},
+	{0x3012, 0x03},
+	{0x3500, 0x13},
+	{0x3501, 0x03},
+	{0x3E00, 0x01},
+	{0x3E01, 0x10},
+	{0x400D, 0x30},
+	{0x3508, 0x04},
+	{0x3513, 0x01},
+	{0x3514, 0x09},
+	{0x3515, 0x0b},
+	{0x3702, 0x80},
+	{0x3704, 0x80},
+	{0x3706, 0x80},
+	{0x3708, 0x80},
+	{0x3f36, 0xcd},
+	{0x400D, 0x30},
+	{0x4004, 0x00},
+	{0x4009, 0x09},
+	{0x400a, 0x48},
+	{0x3f0c, 0x30},
+	{0x4006, 0x86},
+	{0x4007, 0xc4},
+	{0x3f38, 0x30},
+	{0x3f37, 0x02},
+	{0x4004, 0x20},
+	{0x4005, 0x0c},
+	{0x3f0c, 0x20},
 
-    {0x3306, 0x01},
-    {0x3307, 0x78},
-    {0x3309, 0x01},
-    {0x3308, 0x03},
-    {0x3302, 0x00},
-    {0x330a, 0x04},
-    {0x330b, 0x09},
-    {0x310f, 0xb8},
-    {0x310e, 0x0b},
-    {0x310d, 0xdc},
-    {0x310c, 0x05},
-    {0x3115, 0x10},
-    {0x3114, 0x00},
-    {0x3117, 0x0f},
-    {0x3116, 0x0a},
-    {0x3111, 0xfc},
-    {0x3110, 0x00},
-    {0x3113, 0x9d},
-    {0x3112, 0x06},
-    //{0x300a, 0x01},
-    {0x3006, 0x00},
+	{0x3306, 0x01},
+	{0x3307, 0x78},
+	{0x3309, 0x01},
+	{0x3308, 0x03},
+	{0x3302, 0x00},
+	{0x330a, 0x04},
+	{0x330b, 0x09},
+	{0x310f, 0xb8},
+	{0x310e, 0x0b},
+	{0x310d, 0xdc},
+	{0x310c, 0x05},
+	{0x3115, 0x10},
+	{0x3114, 0x00},
+	{0x3117, 0x0f},
+	{0x3116, 0x0a},
+	{0x3111, 0xfc},
+	{0x3110, 0x00},
+	{0x3113, 0x9d},
+	{0x3112, 0x06},
+	//{0x300a, 0x01},
+	{0x3006, 0x00},
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -473,20 +471,19 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on[] = {
-        {0x3006, 0x00},
+	{0x3006, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-        {0x3006, 0x02},
+	{0x3006, 0x02},
 	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
-		 unsigned char *value)
-{
+		unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
+	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
 		[0] = {
 			.addr = client->addr,
@@ -510,8 +507,7 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg,
 }
 
 int sensor_write(struct tx_isp_subdev *sd, uint16_t reg,
-		  unsigned char value)
-{
+		 unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -548,8 +544,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -564,17 +559,15 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x3000, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -582,7 +575,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sensor_read(sd, 0x3001, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -592,25 +585,24 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 }
 
 
-static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned char tmp;
-	int expo = (value &0xffff);
-	int again = (value &0xffff0000) >> 16;
+	int expo = (value & 0xffff);
+	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd,  0x3100, (unsigned char)((expo >> 8)& 0xff));
-	ret += sensor_write(sd, 0x3101, (unsigned char)(expo & 0xff));
-	ret += sensor_write(sd, 0x3102, (unsigned char)(again));
-    if ((expo > 200) && (expo < 600))
-	    ret += sensor_write(sd, 0x4007, 0x78);
-    else
-	    ret += sensor_write(sd, 0x4007, 0xc4);
+	ret = sensor_write(sd, 0x3100, (unsigned char) ((expo >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3101, (unsigned char) (expo & 0xff));
+	ret += sensor_write(sd, 0x3102, (unsigned char) (again));
+	if ((expo > 200) && (expo < 600))
+		ret += sensor_write(sd, 0x4007, 0x78);
+	else
+		ret += sensor_write(sd, 0x4007, 0xc4);
 
 	ret += sensor_read(sd, 0x3100, &tmp);
-    if (tmp < 1)
+	if (tmp < 1)
 		sensor_write(sd, 0x401d, 0xa0);
-    else
+	else
 		sensor_write(sd, 0x401d, 0xa7);
 
 	if (ret < 0)
@@ -653,8 +645,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	int ret = -1;
 	unsigned char flip = 0x0;
 	unsigned char h_start = 0;
@@ -680,24 +671,21 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 	}
 
 	if ((vic_reset % 20) == 0)
-		*((u32 *)0xb3380000) = 0x5;
+		*((u32 *) 0xb3380000) = 0x5;
 	vic_reset++;
 
 	return ret;
 }
 
-static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
-{
+static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	sensor->video.vi_max_width = wsize->width;
@@ -714,8 +702,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -730,8 +717,7 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -747,8 +733,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = sensor_write_array(sd, sensor_stream_on);
 			ISP_WARNING("%s stream on\n", SENSOR_NAME);
 		}
-	}
-	else {
+	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
@@ -760,8 +745,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 mis4001修改帧率：
     原厂提供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
 */
-static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned int pclk = 0;
@@ -772,12 +756,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 
 	switch (sensor->info.default_boot) {
-	case 0:
-		pclk = SENSOR_SUPPORT_RES_400_PCLK;
-		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
-		break;
-	default:
-		ISP_ERROR("Now we do not support this framerate!!!\n");
+		case 0:
+			pclk = SENSOR_SUPPORT_RES_400_PCLK;
+			sensor_max_fps = TX_SENSOR_MAX_FPS_30;
+			break;
+		default:
+			ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -796,15 +780,15 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = pclk * (fps & 0xffff) / vts / ((fps & 0xffff0000) >> 16);
 
 	ret = sensor_write(sd, 0x300b, 0x00);
-	ret += sensor_write(sd, 0x310f, (unsigned char)(hts & 0xff));
-	ret += sensor_write(sd, 0x310e, (unsigned char)(hts >> 8));
+	ret += sensor_write(sd, 0x310f, (unsigned char) (hts & 0xff));
+	ret += sensor_write(sd, 0x310e, (unsigned char) (hts >> 8));
 	ret += sensor_write(sd, 0x300b, 0x01);
 	if (ret < 0) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *) 0xb3380000) = 0x5;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -819,55 +803,52 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 }
 
 
-
-static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	//uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
 	//val = sensor_read(sd, 0x3007, &val);
-	switch(enable) {
-	case 0:
-		sensor_write(sd, 0x3007, 0x00);
-		sensor_write(sd, 0x3115, 0x10);
-		sensor_write(sd, 0x3117, 0x0f);
-		sensor_write(sd, 0x3111, 0xfc);
-		sensor_write(sd, 0x3113, 0x9d);
-		break;
-	case 1:
-		sensor_write(sd, 0x3007, 0x01);
-		sensor_write(sd, 0x3115, 0x0f);
-		sensor_write(sd, 0x3117, 0x0e);
-		sensor_write(sd, 0x3111, 0xfc);
-		sensor_write(sd, 0x3113, 0x9d);
-		break;
-	case 2:
-		sensor_write(sd, 0x3007, 0x02);
-		sensor_write(sd, 0x3115, 0x10);
-		sensor_write(sd, 0x3117, 0x0f);
-		sensor_write(sd, 0x3111, 0xfd);
-		sensor_write(sd, 0x3113, 0x9e);
-		break;
-	case 3:
-		sensor_write(sd, 0x3007, 0x03);
-		sensor_write(sd, 0x3115, 0x0f);
-		sensor_write(sd, 0x3117, 0x0e);
-		sensor_write(sd, 0x3111, 0xfd);
-		sensor_write(sd, 0x3113, 0x9e);
-		break;
+	switch (enable) {
+		case 0:
+			sensor_write(sd, 0x3007, 0x00);
+			sensor_write(sd, 0x3115, 0x10);
+			sensor_write(sd, 0x3117, 0x0f);
+			sensor_write(sd, 0x3111, 0xfc);
+			sensor_write(sd, 0x3113, 0x9d);
+			break;
+		case 1:
+			sensor_write(sd, 0x3007, 0x01);
+			sensor_write(sd, 0x3115, 0x0f);
+			sensor_write(sd, 0x3117, 0x0e);
+			sensor_write(sd, 0x3111, 0xfc);
+			sensor_write(sd, 0x3113, 0x9d);
+			break;
+		case 2:
+			sensor_write(sd, 0x3007, 0x02);
+			sensor_write(sd, 0x3115, 0x10);
+			sensor_write(sd, 0x3117, 0x0f);
+			sensor_write(sd, 0x3111, 0xfd);
+			sensor_write(sd, 0x3113, 0x9e);
+			break;
+		case 3:
+			sensor_write(sd, 0x3007, 0x03);
+			sensor_write(sd, 0x3115, 0x0f);
+			sensor_write(sd, 0x3117, 0x0e);
+			sensor_write(sd, 0x3111, 0xfd);
+			sensor_write(sd, 0x3113, 0x9e);
+			break;
 	}
 
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *) 0xb3380000) = 0x5;
 	return ret;
 }
 
-static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -879,8 +860,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sensor_attr_check(struct tx_isp_subdev *sd)
-{
+static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -888,75 +868,76 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	unsigned long rate;
 	int ret = 0;
 
-	switch(info->default_boot) {
-	case 0:
-		wsize = &sensor_win_sizes[0];
-		memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
-		sensor_attr.mipi.clk = 620;
-		sensor_attr.min_integration_time = 2;
-		sensor_attr.total_width = 0xbb8,
-		sensor_attr.total_height = 0x5dc,
-		sensor_attr.max_integration_time_native = 0x5dc - 4,
-		sensor_attr.max_integration_time = 0x5dc - 4,
-		sensor_attr.integration_time_limit = 0x5dc - 4,
-		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-		printk("==========> linear is ok");
-		break;
-	default:
-		ISP_ERROR("Have no this setting!!!\n");
+	switch (info->default_boot) {
+		case 0:
+			wsize = &sensor_win_sizes[0];
+			memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
+			sensor_attr.mipi.clk = 620;
+			sensor_attr.min_integration_time = 2;
+			sensor_attr.total_width = 0xbb8,
+			sensor_attr.total_height = 0x5dc,
+			sensor_attr.max_integration_time_native = 0x5dc - 4,
+			sensor_attr.max_integration_time = 0x5dc - 4,
+			sensor_attr.integration_time_limit = 0x5dc - 4,
+			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
+				printk("==========> linear is ok");
+			break;
+		default:
+			ISP_ERROR("Have no this setting!!!\n");
 	}
 
-	switch(info->video_interface) {
-	case TISP_SENSOR_VI_MIPI_CSI0:
-		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.mipi.index = 0;
-		break;
-	case TISP_SENSOR_VI_MIPI_CSI1:
-		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.mipi.index = 1;
-		break;
-	case TISP_SENSOR_VI_DVP:
-		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-		break;
-	default:
-		ISP_ERROR("Have no this interface!!!\n");
+	switch (info->video_interface) {
+		case TISP_SENSOR_VI_MIPI_CSI0:
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+			sensor_attr.mipi.index = 0;
+			break;
+		case TISP_SENSOR_VI_MIPI_CSI1:
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+			sensor_attr.mipi.index = 1;
+			break;
+		case TISP_SENSOR_VI_DVP:
+			sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+			break;
+		default:
+			ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch(info->mclk) {
-	case TISP_SENSOR_MCLK0:
-	case TISP_SENSOR_MCLK1:
-	case TISP_SENSOR_MCLK2:
-            sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
-            sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
+	switch (info->mclk) {
+		case TISP_SENSOR_MCLK0:
+		case TISP_SENSOR_MCLK1:
+		case TISP_SENSOR_MCLK2:
+			sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
+			sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
 			set_sensor_mclk_function(0);
-		break;
-	default:
-		ISP_ERROR("Have no this MCLK Source!!!\n");
+			break;
+		default:
+			ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
 
-	switch(info->default_boot) {
-        case 0:
-                if (((rate / 1000) % 27000) != 0) {
-                        ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
-                        sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
-                        if (IS_ERR(sclka)) {
-                                pr_err("get sclka failed\n");
-                        } else {
-                                rate = private_clk_get_rate(sclka);
-                                if (((rate / 1000) % 27000) != 0) {
-                                        private_clk_set_rate(sclka, 1188000000);
-                                }
-                        }
-                }
-                private_clk_set_rate(sensor->mclk, 27000000);
-                private_clk_prepare_enable(sensor->mclk);
-                break;
+	switch (info->default_boot) {
+		case 0:
+			if (((rate / 1000) % 27000) != 0) {
+				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
+				sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+				if (IS_ERR(sclka)) {
+					pr_err("get sclka failed\n");
+				} else {
+					rate = private_clk_get_rate(sclka);
+					if (((rate / 1000) % 27000) != 0) {
+						private_clk_set_rate(sclka, 1188000000);
+					}
+				}
+			}
+			private_clk_set_rate(sensor->mclk, 27000000);
+			private_clk_prepare_enable(sensor->mclk);
+			break;
 	}
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n", info->default_boot, wsize->width, wsize->height, info->video_interface, info->mclk);
+	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n", info->default_boot,
+		    wsize->width, wsize->height, info->video_interface, info->mclk);
 
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
@@ -967,15 +948,14 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 }
 
 static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
-				struct tx_isp_chip_ident *chip)
-{
+			       struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio,"sensor_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
@@ -984,38 +964,37 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(15);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an mis4001 chip.\n",
-				client->addr, client->adapter->name);
+			  client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_WARNING("mis4001 chip found @ 0x%02x (%s) drv %s\n", client->addr,
-			client->adapter->name, SENSOR_VERSION);
+		    client->adapter->name, SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "mis4001", sizeof("mis4001"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
 	return 0;
 }
 
-static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
@@ -1023,63 +1002,62 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd) {
-	case TX_ISP_EVENT_SENSOR_EXPO:
-		if (arg)
-			ret = sensor_set_expo(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		/*
-		if (arg)
-			ret = sensor_set_integration_time(sd, sensor_val->value);
-		break;
-		*/
-	case TX_ISP_EVENT_SENSOR_AGAIN:
-		/*
-		if (arg)
-			ret = sensor_set_analog_gain(sd, sensor_val->value);
-		break;
-		*/
-	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if (arg)
-			ret = sensor_set_digital_gain(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if (arg)
-			ret = sensor_get_black_pedestal(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if (arg)
-			ret = sensor_set_mode(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (arg)
-			ret = sensor_write_array(sd, sensor_stream_off);
-		break;
-	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (arg)
-			ret = sensor_write_array(sd, sensor_stream_on);
-		break;
-	case TX_ISP_EVENT_SENSOR_FPS:
-		if (arg)
-			ret = sensor_set_fps(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if (arg)
-			ret = sensor_set_vflip(sd, sensor_val->value);
-		break;
-	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if (arg)
-			ret = sensor_set_logic(sd, sensor_val->value);
-	default:
-		break;
+	switch (cmd) {
+		case TX_ISP_EVENT_SENSOR_EXPO:
+			if (arg)
+				ret = sensor_set_expo(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_INT_TIME:
+			/*
+			if (arg)
+				ret = sensor_set_integration_time(sd, sensor_val->value);
+			break;
+			*/
+		case TX_ISP_EVENT_SENSOR_AGAIN:
+			/*
+			if (arg)
+				ret = sensor_set_analog_gain(sd, sensor_val->value);
+			break;
+			*/
+		case TX_ISP_EVENT_SENSOR_DGAIN:
+			if (arg)
+				ret = sensor_set_digital_gain(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
+			if (arg)
+				ret = sensor_get_black_pedestal(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_RESIZE:
+			if (arg)
+				ret = sensor_set_mode(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
+			if (arg)
+				ret = sensor_write_array(sd, sensor_stream_off);
+			break;
+		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
+			if (arg)
+				ret = sensor_write_array(sd, sensor_stream_on);
+			break;
+		case TX_ISP_EVENT_SENSOR_FPS:
+			if (arg)
+				ret = sensor_set_fps(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_VFLIP:
+			if (arg)
+				ret = sensor_set_vflip(sd, sensor_val->value);
+			break;
+		case TX_ISP_EVENT_SENSOR_LOGIC:
+			if (arg)
+				ret = sensor_set_logic(sd, sensor_val->value);
+		default:
+			break;
 	}
 
 	return ret;
 }
 
-static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1096,8 +1074,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	return ret;
 }
 
-static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1134,9 +1111,9 @@ static struct tx_isp_subdev_ops sensor_ops = {
 };
 
 /* It's the sensor device */
-static u64 tx_isp_module_dma_mask = ~(u64)0;
+static u64 tx_isp_module_dma_mask = ~(u64) 0;
 struct platform_device sensor_platform_device = {
-	.name = "mis4001",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -1146,18 +1123,17 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
-	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
@@ -1182,8 +1158,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 }
 
-static int sensor_remove(struct i2c_client *client)
-{
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1201,28 +1176,26 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ "mis4001", 0 },
-	{ }
+	{SENSOR_NAME, 0},
+	{}
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
 	.driver = {
 		.owner = THIS_MODULE,
-		.name = "mis4001",
+		.name = SENSOR_NAME,
 	},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
 };
 
-static __init int init_sensor(void)
-{
+static __init int init_sensor(void) {
 	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_sensor(void)
-{
+static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
 }
 
