@@ -25,16 +25,28 @@
 #include <linux/netlink.h>
 #include <net/netlink.h>
 #include <linux/spi/spi.h>
-#include <soc/irq.h>
+#include <linux/irq.h>
 #include <soc/base.h>
 #include <asm/io.h>
 #include <asm/irq.h>
 #include <asm/uaccess.h>
 #include <asm/cacheflush.h>
 #include <soc/gpio.h>
-#include <mach/platform.h>
+#include <asm/types.h>
 /*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
+
+// TODO
+typedef unsigned long phys_t;
+
+#define ISP_INFO_LEVEL		0x0
+#define ISP_WARNING_LEVEL	0x1
+#define ISP_ERROR_LEVEL		0x2
+#define ISP_PRINT(level, format, ...)			\
+	isp_printf(level, format, ##__VA_ARGS__)
+#define ISP_INFO(...) ISP_PRINT(ISP_INFO_LEVEL, __VA_ARGS__)
+#define ISP_WARNING(...) ISP_PRINT(ISP_WARNING_LEVEL, __VA_ARGS__)
+#define ISP_ERROR(...) ISP_PRINT(ISP_ERROR_LEVEL, __VA_ARGS__)
 
 struct jz_driver_common_interfaces {
 	unsigned int flags_0;			// The flags must be checked.
@@ -211,7 +223,7 @@ int private_platform_device_register(struct platform_device *pdev);
 void private_platform_device_unregister(struct platform_device *pdev);
 struct resource *private_platform_get_resource(struct platform_device *dev,
 					       unsigned int type, unsigned int num);
-int private_dev_set_drvdata(struct device *dev, void *data);
+void private_dev_set_drvdata(struct device *dev, void *data);
 void* private_dev_get_drvdata(const struct device *dev);
 int private_platform_get_irq(struct platform_device *dev, unsigned int num);
 struct resource * private_request_mem_region(resource_size_t start, resource_size_t n,
@@ -296,7 +308,7 @@ unsigned long private_wait_for_completion_timeout(struct completion *x, unsigned
 
 /* misc driver interfaces */
 int private_misc_register(struct miscdevice *mdev);
-int private_misc_deregister(struct miscdevice *mdev);
+void private_misc_deregister(struct miscdevice *mdev);
 
 struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode,
 						struct proc_dir_entry *parent,
@@ -310,7 +322,7 @@ int private_single_open_size(struct file *file, int (*show)(struct seq_file *, v
 			     void *data, size_t size);
 struct proc_dir_entry* private_jz_proc_mkdir(char *s);
 void private_proc_remove(struct proc_dir_entry *de);
-int private_seq_printf(struct seq_file *m, const char *f, ...);
+void private_seq_printf(struct seq_file *m, const char *f, ...);
 unsigned long long private_simple_strtoull(const char *cp, char **endp, unsigned int base);
 
 /* kthread interfaces */
