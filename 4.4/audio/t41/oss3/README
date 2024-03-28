@@ -1,0 +1,19 @@
+================================================================================================================
+编译步骤
+1,在当前目录下执行 make clean;make 命令可以编译出audio_txx.ko
+2,如果需要编译外部codec驱动，请进入 ex_codecs 目录，然后执行 make CODEC_NAME=xxx 编译出外部codec驱动 xxx_txx.ko
+	以T31板机为例 make CODEC_NAME=es8374; 生成 es8374_t31.ko
+
+驱动加载
+1, 如果使用外部codec， 请先加载外部codec驱动，后加载audio_txx.ko
+2, 如果不使用外部codec，只需加载audio_txx.ko
+
+================================================================================================================
+complie steps
+1, make clean;make
+2, If using extern codec, please go into the directory of ex_codecs and execute the command "make CODEC_NAME=xxx".
+	For example: make CODEC_NAME=es8374, if the board is t31, the name of complied driver is es8374_t31.ko
+
+insmod steps
+1, A case that using extern codec, firstly insmod the driver of extern codec, secondly insmod audio_txx.ko
+2, Other cases that only insmod audio_txx.ko

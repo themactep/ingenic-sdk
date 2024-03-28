@@ -1,0 +1,34 @@
+SRCS := $(DIR)/tx-isp-vic.o \
+	$(DIR)/tx-isp-videobuf.o \
+	$(DIR)/tx-isp-video-in.o \
+	$(DIR)/tx-isp-frame-channel.o \
+	$(DIR)/tx-isp-csi.o \
+	$(DIR)/tx-isp-interrupt.o \
+	$(DIR)/tx-isp-debug.o \
+	$(DIR)/tx-isp-device.o \
+	$(DIR)/apical-isp/tx-isp-core-tuning.o \
+	$(DIR)/apical-isp/tx-isp-core.o \
+	$(DIR)/apical-isp/apical_dynamic_calibrations.o \
+	$(DIR)/apical-isp/apical_static_calibrations.o \
+	$(DIR)/apical-isp/apical_calibrations.o \
+	$(DIR)/apical-isp/apical_calibrations_init.o \
+	$(DIR)/apical-isp/tx-isp-load-parameters.o \
+	$(DIR)/apical-isp/apical_custom_initialization.o \
+	$(DIR)/apical-isp/ApicalDefault.o \
+	$(DIR)/apical-isp/system_isp_io.o \
+	$(DIR)/apical-isp/log.o \
+	$(DIR)/apical-isp/system_io.o \
+	$(DIR)/apical-isp/system_i2c.o \
+	$(DIR)/apical-isp/system_spi.o \
+	$(DIR)/apical-isp/system_timer.o \
+	$(DIR)/apical-isp/system_uart.o \
+	$(DIR)/apical-isp/system_semaphore.o \
+	$(DIR)/apical-isp/sensor_drv.o \
+	$(DIR)/apical-isp/system_chardev.o \
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += sdk/lib$(SOC_FAMILY)-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

@@ -1,0 +1,16 @@
+20190611 Update Description.
+        The main modification points are: add LDC distortion correction function.
+        1, New parameter added
+                ispcrop means turn on isp crop function, 0 means not turn on, non-0 means turn on.
+                ispcropwh means turn on isp crop output width high, high 16bit means wide, low 16bit means high.
+                ispcroptl indicates that isp crop crop start point is enabled, high 16bit indicates top, low 16bit indicates left.
+                ispsacler indicates that the isp mscaler function is enabled, 0 means not enabled, non-0 means enabled.
+                ispsaclerwh Indicates that isp mscaler output width is high, high 16bit means wide, low 16bit means high.
+                isp_m1_bufs indicates the number of LDC input buffer, generally default is 2, no need to modify.
+                isp_m2_bufs indicates the number of LDC output buffer, generally default is 2, no need to modify.
+        2, Memory configuration requirements
+                LDC needs extra memory, but no extra memory is needed if LDC is not enabled; the driver uses ispmem to get memory. The memory size is calculated as follows.
+                mem = width * height * (isp_m1_bufs + isp_m2_bufs) * 1.5
+                width is the width of the isp output image; height is the height of the isp output image
+        3, ispw, isph, isptop, and ispleft parameters remain unchanged.
+
