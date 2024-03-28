@@ -12,12 +12,7 @@
 #include "avpu_alloc.h"
 
 #define AVPU_NR_DEVS 4
-
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
 #define AVPU_BASE_OFFSET 0x8000
-#elif defined(CONFIG_SOC_T41)
-#define AVPU_BASE_OFFSET 0x0000
-#endif
 
 #define AXI_ADDR_OFFSET_IP (AVPU_BASE_OFFSET + 0x1208)
 #define AVPU_INTERRUPT_MASK (AVPU_BASE_OFFSET + 0x14)
@@ -60,9 +55,6 @@ struct avpu_codec_desc {
 	struct clk          *clk;
 	struct clk          *clk_mux;
 	struct clk          *clk_gate;
-#ifdef CONFIG_SOC_T41
-	struct clk          *clk_gate_ivdc;
-#endif
 	struct clk          *ahb1_gate;
 };
 

@@ -484,7 +484,7 @@ static const struct dma_buf_ops avpu_dmabuf_ops = {
 	.release	= avpu_dmabuf_release,
 };
 
-#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
+#ifdef CONFIG_KERNEL_4_4_94
 static void define_export_info(struct dma_buf_export_info *exp_info, int size, void *priv)
 {
 	exp_info->owner = THIS_MODULE;
@@ -524,7 +524,7 @@ static struct dma_buf *avpu_get_dmabuf(void *dma_info_priv)
 	struct dma_buf *dbuf;
 	struct avpu_dmabuf_priv *dinfo = dma_info_priv;
 	struct avpu_dma_buffer *buf = dinfo->buffer;
-#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
+#ifdef CONFIG_KERNEL_4_4_94
 	struct dma_buf_export_info exp_info;
 #endif
 
@@ -534,7 +534,7 @@ static struct dma_buf *avpu_get_dmabuf(void *dma_info_priv)
 	if (WARN_ON(!dinfo->sgt_base))
 		return NULL;
 
-#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
+#ifdef CONFIG_KERNEL_4_4_94
 	define_export_info(&exp_info, buf->size, (void *)dinfo);
 	dbuf = dma_buf_export(&exp_info);
 	if (IS_ERR(dbuf)) {

@@ -16,7 +16,7 @@
 #include <linux/module.h>
 #include <linux/miscdevice.h>
 #include <linux/platform_device.h>
-#ifdef CONFIG_SOC_T40
+#ifdef CONFIG_KERNEL_4_4_94
 #include <linux/mfd/ingenic-tcu.h>
 #else
 #include <linux/mfd/jz_tcu.h>
@@ -28,20 +28,19 @@
 #else /* other soc type */
 #define PWM_NUM		4
 #endif
-#define PWM_CONFIG		0x001
-#define PWM_CONFIG_DUTY		0x002
-#define PWM_ENABLE		0x010
-#define PWM_DISABLE		0x100
-#define PWM_QUERY_STATUS	0x200
+#define PWM_CONFIG	0x001
+#define PWM_CONFIG_DUTY	0x002
+#define PWM_ENABLE	0x010
+#define PWM_DISABLE 0x100
 
 struct platform_device pwm_device = {
 	.name = "pwm-jz",
-	.id = -1,
+	.id   = -1,
 };
 
 
 struct pwm_lookup jz_pwm_lookup[] = {
-#ifdef CONFIG_SOC_T40
+#ifdef CONFIG_KERNEL_4_4_94
 #ifdef CONFIG_PWM0
 	PWM_LOOKUP("ingenic,tcu_chn0.0", 1, "pwm-jz", "pwm-jz.0", 2000, 1),
 #endif
@@ -99,14 +98,12 @@ struct pwm_ioctl_t {
 	int duty;
 	int period;
 	int polarity;
-	int enabled;
 };
 
 struct pwm_device_t {
 	int duty;
 	int period;
 	int polarity;
-	int enabled;
 	struct pwm_device *pwm_device;
 };
 
@@ -114,8 +111,7 @@ struct pwm_jz_t {
 	struct device *dev;
 	struct miscdevice mdev;
 	struct pwm_device_t *pwm_device_t[PWM_NUM];
-	spinlock_t pwm_lock;
-	struct mutex mlock;
+    spinlock_t pwm_lock;
 };
 
 static int pwm_jz_open(struct inode *inode, struct file *filp)
@@ -135,36 +131,36 @@ static long pwm_jz_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	struct miscdevice *dev = filp->private_data;
 	struct pwm_jz_t *gpwm = container_of(dev, struct pwm_jz_t, mdev);
 
-	mutex_lock(&gpwm->mlock);
+    spin_lock(&gpwm->pwm_lock);
 	switch(cmd) {
 		case PWM_CONFIG:
 			ret = copy_from_user(&pwm_ioctl, (void __user *)arg, sizeof(pwm_ioctl));
-			if (ret) {
+			if(ret){
 				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
 				ret = -1;
 				break;
 			}
 
 			id = pwm_ioctl.index;
-			if ((id >= PWM_NUM) || (id < 0)) {
+			if((id >= PWM_NUM) || (id < 0)) {
 				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
 				ret = -1;
 				break;
 			}
 
-			if ((pwm_ioctl.period > 1000000000) || (pwm_ioctl.period < 200)) {
+			if((pwm_ioctl.period > 1000000000) || (pwm_ioctl.period < 200)) {
 				dev_err(gpwm->dev, "period error !\n");
 				ret = -1;
 				break;
 			}
 
-			if ((pwm_ioctl.duty > pwm_ioctl.period) || (pwm_ioctl.duty < 0)) {
+			if((pwm_ioctl.duty > pwm_ioctl.period) || (pwm_ioctl.duty < 0)) {
 				dev_err(gpwm->dev, "duty error !\n");
 				ret = -1;
 				break;
 			}
 
-			if ((pwm_ioctl.polarity > 1) || (pwm_ioctl.polarity < 0)) {
+			if((pwm_ioctl.polarity > 1) || (pwm_ioctl.polarity < 0)) {
 				dev_err(gpwm->dev, "polarity error !\n");
 				ret = -1;
 				break;
@@ -177,12 +173,12 @@ static long pwm_jz_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			break;
 		case PWM_CONFIG_DUTY:
 			ret = copy_from_user(&pwm_ioctl, (void __user *)arg, sizeof(pwm_ioctl));
-			if (ret) {
+			if(ret){
 				dev_err(gpwm->dev, "ioctl error(line %d) !\n", __LINE__);
 				ret = -1;
 				break;
 			}
-			if ((pwm_ioctl.duty > pwm_ioctl.period) || (pwm_ioctl.duty < 0)) {
+			if((pwm_ioctl.duty > pwm_ioctl.period) || (pwm_ioctl.duty < 0)) {
 				dev_err(gpwm->dev, "duty error(line %d) !\n",__LINE__);
 				ret = -1;
 				break;
@@ -195,96 +191,62 @@ static long pwm_jz_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		case PWM_ENABLE:
 			id = (int)arg;
 
-			if ((id >= PWM_NUM) || (id < 0)) {
+			if((id >= PWM_NUM) || (id < 0)) {
 				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
 				ret = -1;
 				break;
 			}
 
-			if ((gpwm->pwm_device_t[id]->pwm_device == NULL) || (IS_ERR(gpwm->pwm_device_t[id]->pwm_device))) {
+			if((gpwm->pwm_device_t[id]->pwm_device == NULL) || (IS_ERR(gpwm->pwm_device_t[id]->pwm_device))) {
 				dev_err(gpwm->dev, "pwm could not work !\n");
 				ret = -1;
 				break;
 			}
 
-			if ((gpwm->pwm_device_t[id]->period == -1) || (gpwm->pwm_device_t[id]->duty == -1) || (gpwm->pwm_device_t[id]->polarity == -1)) {
+			if((gpwm->pwm_device_t[id]->period == -1) || (gpwm->pwm_device_t[id]->duty == -1) || (gpwm->pwm_device_t[id]->polarity == -1)) {
 				dev_err(gpwm->dev, "the parameter of pwm could not init !\n");
 				ret = -1;
 				break;
 			}
 
-			if (gpwm->pwm_device_t[id]->polarity == 0)
+			if(gpwm->pwm_device_t[id]->polarity == 0)
 				pwm_set_polarity(gpwm->pwm_device_t[id]->pwm_device, PWM_POLARITY_INVERSED);
 			else
 				pwm_set_polarity(gpwm->pwm_device_t[id]->pwm_device, PWM_POLARITY_NORMAL);
 
 			pwm_enable(gpwm->pwm_device_t[id]->pwm_device);
-			gpwm->pwm_device_t[id]->enabled = 1;
 
 			pwm_config(gpwm->pwm_device_t[id]->pwm_device, gpwm->pwm_device_t[id]->duty, gpwm->pwm_device_t[id]->period);
 			break;
 		case PWM_DISABLE:
 			id = (int)arg;
 
-			if ((id >= PWM_NUM) || (id < 0)) {
+			if((id >= PWM_NUM) || (id < 0)) {
 				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
 				ret = -1;
 				break;
 			}
 
-			if ((gpwm->pwm_device_t[id]->pwm_device == NULL) || (IS_ERR(gpwm->pwm_device_t[id]->pwm_device))) {
+			if((gpwm->pwm_device_t[id]->pwm_device == NULL) || (IS_ERR(gpwm->pwm_device_t[id]->pwm_device))) {
 				dev_err(gpwm->dev, "pwm could not work !\n");
 				ret = -1;
 				break;
 			}
 
-			if ((gpwm->pwm_device_t[id]->period == -1) || (gpwm->pwm_device_t[id]->duty == -1) || (gpwm->pwm_device_t[id]->polarity == -1)) {
+			if((gpwm->pwm_device_t[id]->period == -1) || (gpwm->pwm_device_t[id]->duty == -1) || (gpwm->pwm_device_t[id]->polarity == -1)) {
 				dev_err(gpwm->dev, "the parameter of pwm could not init !\n");
 				ret = -1;
 				break;
 			}
 
 			pwm_disable(gpwm->pwm_device_t[id]->pwm_device);
-			gpwm->pwm_device_t[id]->enabled = 0;
 
 			break;
-		case PWM_QUERY_STATUS:
-			if (copy_from_user(&pwm_ioctl, (struct pwm_ioctl_t __user *)arg, sizeof(pwm_ioctl))) {
-				dev_err(gpwm->dev, "Error copying data from user space!\n");
-				ret = -EFAULT;
-				break;
-			}
-
-			id = pwm_ioctl.index;
-
-			if ((id >= PWM_NUM) || (id < 0)) {
-				dev_err(gpwm->dev, "ioctl error(%d) !\n", __LINE__);
-				ret = -1;
-				break;
-			}
-
-			dev_info(gpwm->dev, "Queried PWM Channel: %d\n", id);
-
-			pwm_ioctl.duty = gpwm->pwm_device_t[id]->duty;
-			pwm_ioctl.period = gpwm->pwm_device_t[id]->period;
-			pwm_ioctl.polarity = gpwm->pwm_device_t[id]->polarity;
-			pwm_ioctl.enabled = gpwm->pwm_device_t[id]->enabled;
-
-			dev_info(gpwm->dev, "Channel %d - Duty: %d, Period: %d, Polarity: %d\n",
-				id, pwm_ioctl.duty, pwm_ioctl.period, pwm_ioctl.polarity);
-
-			if (copy_to_user((void __user *)arg, &pwm_ioctl, sizeof(pwm_ioctl))) {
-				dev_err(gpwm->dev, "Error copying data to user space!\n");
-				ret = -EFAULT;
-			}
-			break;
-
 		default:
 			dev_err(gpwm->dev, "unsupport cmd !\n");
 			break;
 	}
-
-	mutex_unlock(&gpwm->mlock);
+    spin_unlock(&gpwm->pwm_lock);
 
 	return ret;
 }
@@ -303,48 +265,48 @@ static int jz_pwm_probe(struct platform_device *pdev)
 	char pd_name[10];
 
 	gpwm = devm_kzalloc(&pdev->dev, sizeof(struct pwm_jz_t), GFP_KERNEL);
-	if (gpwm == NULL) {
+	if(gpwm == NULL) {
 		dev_err(&pdev->dev, "devm_kzalloc gpwm error !\n");
 		return -ENOMEM;
 	}
 
 	for(i = 0; i < PWM_NUM; i++) {
-		if (i == 0) {
+		if (i == 0){
 #ifndef CONFIG_PWM0
 			continue;
 #endif
-		} else if (i == 1) {
+		} else if (i == 1){
 #ifndef CONFIG_PWM1
 			continue;
 #endif
-		} else if (i == 2) {
+		} else if (i == 2){
 #ifndef CONFIG_PWM2
 			continue;
 #endif
-		} else if (i == 3) {
+		} else if (i == 3){
 #ifndef CONFIG_PWM3
 			continue;
 #endif
-		} else if (i == 4) {
+		} else if (i == 4){
 #ifndef CONFIG_PWM4
 			continue;
 #endif
-		} else if (i == 5) {
+		} else if (i == 5){
 #ifndef CONFIG_PWM5
 			continue;
 #endif
-		} else if (i == 6) {
+		} else if (i == 6){
 #ifndef CONFIG_PWM6
 			continue;
 #endif
-		} else if (i == 7) {
+		} else if (i == 7){
 #ifndef CONFIG_PWM7
 			continue;
 #endif
 		}
 
 		gpwm->pwm_device_t[i] = devm_kzalloc(&pdev->dev, (sizeof(struct pwm_device_t)), GFP_KERNEL);
-		if (gpwm->pwm_device_t[i] == NULL) {
+		if(gpwm->pwm_device_t[i] == NULL) {
 			dev_err(&pdev->dev, "devm_kzalloc pwm_device_t error !\n");
 			return -ENOMEM;
 		}
@@ -361,8 +323,8 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		gpwm->pwm_device_t[i]->polarity = -1;
 	}
 
-	spin_lock_init(&gpwm->pwm_lock);
-	mutex_init(&gpwm->mlock);
+    spin_lock_init(&gpwm->pwm_lock);
+
 	gpwm->mdev.minor = MISC_DYNAMIC_MINOR;
 	gpwm->mdev.name = "pwm";
 	gpwm->mdev.fops = &pwm_jz_fops;
@@ -385,12 +347,12 @@ static int jz_pwm_remove(struct platform_device *pdev)
 {
 	struct pwm_jz_t *gpwm = platform_get_drvdata(pdev);
 	int i = 0;
-	if (gpwm == NULL)
+	if(gpwm == NULL)
 		return 0;
 	misc_deregister(&gpwm->mdev);
 
 	for(i = 0; i < PWM_NUM; i++) {
-		if (gpwm->pwm_device_t[i]->pwm_device) {
+		if(gpwm->pwm_device_t[i]->pwm_device){
 			devm_pwm_put(&pdev->dev, gpwm->pwm_device_t[i]->pwm_device);
 			devm_kfree(&pdev->dev, gpwm->pwm_device_t[i]);
 		}
