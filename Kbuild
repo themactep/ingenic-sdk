@@ -12,7 +12,11 @@ endif
 
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
 ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
+ifeq ($(KERNEL_VERSION),3.10)
+ccflags-y += -I$(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/include
+else
 ccflags-y += -I$(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/include
+endif
 
 #### ALL #####
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
@@ -21,7 +25,11 @@ include $(src)/$(KERNEL_VERSION)/misc/sample_pwm/Kbuild
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
 
 #### PLATFORM ####
+ifeq ($(KERNEL_VERSION),"3.10")
 include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
+else
+include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild
+endif
 
 ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 include $(src)/$(KERNEL_VERSION)/avpu/Kbuild
