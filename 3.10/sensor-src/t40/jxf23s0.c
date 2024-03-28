@@ -54,11 +54,6 @@ MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 static unsigned char val_99 = 0x0F;
 static unsigned char val_9b = 0x0F;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

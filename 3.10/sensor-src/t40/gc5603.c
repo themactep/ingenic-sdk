@@ -33,11 +33,6 @@ static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 4800 * 400;//cache lines corrponding on VPB1
 static int shvflip = 1;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int index;
 	unsigned char reg614;

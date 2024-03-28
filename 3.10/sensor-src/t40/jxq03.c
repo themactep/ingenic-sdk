@@ -57,11 +57,6 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 static unsigned char reg_0c = 0x40;
 static unsigned char reg_82 = 0x01;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

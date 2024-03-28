@@ -5,11 +5,9 @@
 #include <linux/clk.h>
 #include <linux/pwm.h>
 #include <linux/file.h>
-/*#include <linux/list.h>*/
 #include <linux/gpio.h>
 #include <linux/time.h>
 #include <linux/sched.h>
-/*#include <linux/delay.h>*/
 #include <linux/module.h>
 #include <linux/debugfs.h>
 #include <linux/kthread.h>
@@ -33,7 +31,6 @@
 #include <asm/cacheflush.h>
 #include <soc/gpio.h>
 #include <mach/platform.h>
-/*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
 
 struct jz_driver_common_interfaces {
@@ -45,13 +42,11 @@ struct jz_driver_common_interfaces {
 	void *(*platform_get_drvdata)(const struct platform_device *pdev);
 	int (*platform_device_register)(struct platform_device *pdev);
 	void (*platform_device_unregister)(struct platform_device *pdev);
-	struct resource *(*platform_get_resource)(struct platform_device *dev,
-						  unsigned int type, unsigned int num);
+	struct resource *(*platform_get_resource)(struct platform_device *dev, unsigned int type, unsigned int num);
 	int (*dev_set_drvdata)(struct device *dev, void *data);
 	void* (*dev_get_drvdata)(const struct device *dev);
 	int (*platform_get_irq)(struct platform_device *dev, unsigned int num);
-	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n,
-				   const char *name);
+	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n, const char *name);
 	void (*priv_release_mem_region)(resource_size_t start, resource_size_t n);
 	void __iomem * (*priv_ioremap)(phys_t offset, unsigned long size);
 	void (*iounmap)(const volatile void __iomem *addr);
@@ -59,8 +54,8 @@ struct jz_driver_common_interfaces {
 
 	/* interrupt interface */
 	int (*request_threaded_irq)(unsigned int irq, irq_handler_t handler,
-				    irq_handler_t thread_fn, unsigned long irqflags,
-				    const char *devname, void *dev_id);
+		irq_handler_t thread_fn, unsigned long irqflags,
+		const char *devname, void *dev_id);
 	void (*enable_irq)(unsigned int irq);
 	void (*disable_irq)(unsigned int irq);
 	void (*free_irq)(unsigned int irq, void *dev_id);
@@ -187,13 +182,13 @@ struct jz_driver_common_interfaces {
 #define paddr2vaddr(phyaddr) ((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
 
 #if 0
-#define APICAL_ABS(a)        ((a)>=0?(a):-(a))
-#define APICAL_SIGN(a)  ((a)>=0?(1):(-1))
-#define APICAL_MIN(a,b) ((a)>=b?(b):(a))
-#define APICAL_MAX(a,b) ((a)>=b?(a):(b))
-#define APICAL_ABSDIFF(a,b) ((a)>(b)? (a-b) : (b-a))
+#define APICAL_ABS(a)		((a)>=0?(a):-(a))
+#define APICAL_SIGN(a)		((a)>=0?(1):(-1))
+#define APICAL_MIN(a,b)		((a)>=b?(b):(a))
+#define APICAL_MAX(a,b)		((a)>=b?(a):(b))
+#define APICAL_ABSDIFF(a,b)	((a)>(b)? (a-b) : (b-a))
 #define LIN_EQUATION_FRACTION_SIZE 5
-#define round_shift(a,sh)   (((a)>>(sh))+(((a)>>(sh-1))&1))
+#define round_shift(a,sh)	(((a)>>(sh))+(((a)>>(sh-1))&1))
 #endif
 
 uint8_t private_leading_one_position(const uint32_t in);
@@ -342,6 +337,7 @@ mm_segment_t private_get_fs(void);
 void private_set_fs(mm_segment_t val);
 void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
 			 enum dma_data_direction direction);
+
 void private_getrawmonotonic(struct timespec *ts);
 struct net *private_get_init_net(void);
 

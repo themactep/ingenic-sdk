@@ -37,11 +37,6 @@ static int reset_gpio = -1;
 static int pwdn_gpio = GPIO_PA(4);
 static int shvflip = 0;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	int index;
 	unsigned int again_reg_val_0;

@@ -22,10 +22,9 @@
 #define ISP_SUCCESS 0
 
 /* T21 */
-
-#define TX_ISP_INPUT_PORT_MAX_WIDTH		2688
+#define TX_ISP_INPUT_PORT_MAX_WIDTH	2688
 #define TX_ISP_INPUT_PORT_MAX_HEIGHT	2048
-#define TX_ISP_FR_CAHNNEL_MAX_WIDTH		2688
+#define TX_ISP_FR_CAHNNEL_MAX_WIDTH	2688
 #define TX_ISP_FR_CAHNNEL_MAX_HEIGHT	2048
 #define TX_ISP_DS1_CAHNNEL_MAX_WIDTH	1920
 #define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT	1080
@@ -40,26 +39,26 @@
 #define SENSOR_B_BLACK_LEVEL	3
 
 /* External v4l2 format info. */
-#define V4L2_I2C_REG_MAX		(150)
-#define V4L2_I2C_ADDR_16BIT		(0x0002)
-#define V4L2_I2C_DATA_16BIT		(0x0004)
-#define V4L2_SBUS_MASK_SAMPLE_8BITS	0x01
-#define V4L2_SBUS_MASK_SAMPLE_16BITS	0x02
-#define V4L2_SBUS_MASK_SAMPLE_32BITS	0x04
-#define V4L2_SBUS_MASK_ADDR_8BITS	0x08
-#define V4L2_SBUS_MASK_ADDR_16BITS	0x10
-#define V4L2_SBUS_MASK_ADDR_32BITS	0x20
-#define V4L2_SBUS_MASK_ADDR_STEP_16BITS 0x40
-#define V4L2_SBUS_MASK_ADDR_STEP_32BITS 0x80
-#define V4L2_SBUS_MASK_SAMPLE_SWAP_BYTES 0x100
-#define V4L2_SBUS_MASK_SAMPLE_SWAP_WORDS 0x200
-#define V4L2_SBUS_MASK_ADDR_SWAP_BYTES	0x400
-#define V4L2_SBUS_MASK_ADDR_SWAP_WORDS	0x800
-#define V4L2_SBUS_MASK_ADDR_SKIP	0x1000
-#define V4L2_SBUS_MASK_SPI_READ_MSB_SET 0x2000
-#define V4L2_SBUS_MASK_SPI_INVERSE_DATA 0x4000
-#define V4L2_SBUS_MASK_SPI_HALF_ADDR	0x8000
-#define V4L2_SBUS_MASK_SPI_LSB		0x10000
+#define V4L2_I2C_REG_MAX			(150)
+#define V4L2_I2C_ADDR_16BIT			(0x0002)
+#define V4L2_I2C_DATA_16BIT			(0x0004)
+#define V4L2_SBUS_MASK_SAMPLE_8BITS		0x01
+#define V4L2_SBUS_MASK_SAMPLE_16BITS		0x02
+#define V4L2_SBUS_MASK_SAMPLE_32BITS		0x04
+#define V4L2_SBUS_MASK_ADDR_8BITS		0x08
+#define V4L2_SBUS_MASK_ADDR_16BITS		0x10
+#define V4L2_SBUS_MASK_ADDR_32BITS		0x20
+#define V4L2_SBUS_MASK_ADDR_STEP_16BITS		0x40
+#define V4L2_SBUS_MASK_ADDR_STEP_32BITS		0x80
+#define V4L2_SBUS_MASK_SAMPLE_SWAP_BYTES	0x100
+#define V4L2_SBUS_MASK_SAMPLE_SWAP_WORDS	0x200
+#define V4L2_SBUS_MASK_ADDR_SWAP_BYTES		0x400
+#define V4L2_SBUS_MASK_ADDR_SWAP_WORDS		0x800
+#define V4L2_SBUS_MASK_ADDR_SKIP		0x1000
+#define V4L2_SBUS_MASK_SPI_READ_MSB_SET		0x2000
+#define V4L2_SBUS_MASK_SPI_INVERSE_DATA		0x4000
+#define V4L2_SBUS_MASK_SPI_HALF_ADDR		0x8000
+#define V4L2_SBUS_MASK_SPI_LSB			0x10000
 
 //RGBIR
 enum rgbir_mbus_fmt{
@@ -304,8 +303,8 @@ enum tx_isp_priv_ioctl_direction {
 	TX_ISP_PRIVATE_IOCTL_GET,
 };
 
-#define NOTIFICATION_TYPE_CORE_OPS (0x1<<24)
-#define NOTIFICATION_TYPE_SENSOR_OPS (0x2<<24)
+#define NOTIFICATION_TYPE_CORE_OPS	(0x1<<24)
+#define NOTIFICATION_TYPE_SENSOR_OPS	(0x2<<24)
 #define NOTIFICATION_TYPE_FS_OPS 	(0x3<<24)
 #define NOTIFICATION_TYPE_TUN_OPS 	(0x4<<24)
 #define NOTIFICATION_TYPE_OPS(n)	((n) & (0xff<<24))
@@ -351,7 +350,7 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_CORE_DAY_NIGHT,
 };
 
-struct tx_isp_notify_argument{
+struct tx_isp_notify_argument {
 	int value;
 	int ret;
 };
@@ -410,20 +409,20 @@ struct isp_buf_info {
 	uint32_t size;
 };
 
-#define VIDIOC_REGISTER_SENSOR		 _IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR		 _IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
+#define VIDIOC_REGISTER_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
 #define VIDIOC_SET_FRAME_FORMAT		_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
-#define VIDIOC_RESET_FRAME_FORMAT		_IOWR('V', BASE_VIDIOC_PRIVATE + 22, struct frame_image_format)
+#define VIDIOC_RESET_FRAME_FORMAT	_IOWR('V', BASE_VIDIOC_PRIVATE + 22, struct frame_image_format)
 #define VIDIOC_GET_FRAME_FORMAT		_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
-#define VIDIOC_DEFAULT_CMD_SET_BANKS	 _IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
-#define VIDIOC_DEFAULT_CMD_ISP_TUNING	 _IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
+#define VIDIOC_DEFAULT_CMD_SET_BANKS	_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
+#define VIDIOC_DEFAULT_CMD_ISP_TUNING	_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
 
-#define VIDIOC_CREATE_SUBDEV_LINKS	 		_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
-#define VIDIOC_DESTROY_SUBDEV_LINKS	 		_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
-#define VIDIOC_LINKS_STREAMON	 			_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
-#define VIDIOC_LINKS_STREAMOFF	 			_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
-#define VIDIOC_SET_BUF_INFO	 			_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
-#define VIDIOC_GET_BUF_INFO	 			_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
+#define VIDIOC_CREATE_SUBDEV_LINKS	_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
+#define VIDIOC_DESTROY_SUBDEV_LINKS	_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
+#define VIDIOC_LINKS_STREAMON		_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
+#define VIDIOC_LINKS_STREAMOFF		_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
+#define VIDIOC_SET_BUF_INFO		_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
+#define VIDIOC_GET_BUF_INFO		_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -472,10 +471,10 @@ struct tx_isp_sensor{
 #define sd_to_sensor_device(_ep) container_of(_ep, struct tx_isp_sensor, sd)
 
 #define tx_isp_readl(base, reg)		__raw_readl((base) + (reg))
-#define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
+#define tx_isp_writel(base, reg, value)	__raw_writel((value), ((base) + (reg)))
 #define tx_isp_readw(base, reg)		__raw_readw((base) + (reg))
-#define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
+#define tx_isp_writew(base, reg, value)	__raw_writew((value), ((base) + (reg)))
 #define tx_isp_readb(base, reg)		__raw_readb((base) + (reg))
-#define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
+#define tx_isp_writeb(base, reg, value)	__raw_writeb((value), ((base) + (reg)))
 
 #endif /*__TX_ISP_COMMON_H__*/

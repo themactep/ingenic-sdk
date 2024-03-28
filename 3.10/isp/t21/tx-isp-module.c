@@ -9,6 +9,7 @@ static int __init tx_isp_driver_init(void)
 {
 	return tx_isp_init();
 }
+
 static void __exit tx_isp_driver_exit(void)
 {
 	return tx_isp_exit();

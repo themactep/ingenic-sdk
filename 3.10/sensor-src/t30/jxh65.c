@@ -28,11 +28,6 @@
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20200108"
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");

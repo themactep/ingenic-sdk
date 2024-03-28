@@ -34,14 +34,8 @@
 #define LOG2_GAIN_SHIFT 16
 #define SENSOR_VERSION "H20231103a"
 
-
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

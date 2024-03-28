@@ -25,16 +25,9 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
-
-unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again=(isp_gain*20)>>shift;
 	if (again>AGAIN_MAX_DB) again=AGAIN_MAX_DB;
 	*sensor_again = again;

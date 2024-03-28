@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -64,11 +63,6 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	int index;

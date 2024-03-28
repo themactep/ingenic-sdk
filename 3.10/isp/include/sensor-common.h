@@ -11,8 +11,10 @@
 #include "tx-isp-common.h"
 #define private_jzgpio_set_func jzgpio_set_func
 #else
+
 #include <soc/gpio.h>
 #include <txx-funcs.h>
+
 #endif
 
 #if !defined(CONFIG_SOC_T40) && !defined(CONFIG_SOC_T41)
@@ -73,6 +75,11 @@
 #endif
 #endif
 
+struct regval_list {
+	uint16_t reg_num;
+	unsigned char value;
+};
+
 #if defined(CONFIG_SOC_T10)
 struct tx_isp_sensor_win_setting {
 	int width;
@@ -124,8 +131,7 @@ static inline int set_sensor_gpio_function(int func_set) {
 }
 
 #if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
-static inline int set_sensor_mclk_function(int mclk_set)
-{
+static inline int set_sensor_mclk_function(int mclk_set) {
 	int ret = 0;
 
 #if defined(CONFIG_SOC_T40)

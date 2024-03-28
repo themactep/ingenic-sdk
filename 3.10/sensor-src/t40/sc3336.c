@@ -35,11 +35,6 @@ static int shvflip = 0;
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 char* __attribute__((weak)) sclk_name[4];
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct sensor_gain_lut {
 	unsigned int index;
 	unsigned char again;

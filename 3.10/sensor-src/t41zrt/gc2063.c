@@ -37,11 +37,6 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	int index;
 	unsigned int regb4;
