@@ -1,0 +1,20 @@
+SRCS := $(DIR)/tx-isp-funcs.c \
+	$(DIR)/tx-isp-module.c
+
+# Determine the kernel version based on SOC type and KDIR
+ifeq ($(SOC),t41)
+  ifeq ($(findstring 4.4.94,$(KDIR)),4.4.94)
+        KVERSION := 4-4-94
+  else
+        KVERSION := 3-10-14
+  endif
+else ifeq ($(SOC),t40)
+  KVERSION := 4-4-94
+endif
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += sdk/lib$(SOC_FAMILY)-firmware-$(KVERSION).a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

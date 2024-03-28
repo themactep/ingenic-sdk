@@ -1,0 +1,22 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+DIR=$(MODULE_NAME)/$(SOC_FAMILY)
+
+SRCS := \
+  $(DIR)/oss3/audio_dsp.c \
+  $(DIR)/oss3/audio_debug.c \
+  $(DIR)/oss3/host/audio_aic.c \
+  $(DIR)/oss3/host/dmic/as-fmtcov/as-fmtcov.c \
+  $(DIR)/oss3/host/dmic/as-dbus/as-dbus.c \
+  $(DIR)/oss3/host/dmic/as-dma/as-dma.c \
+  $(DIR)/oss3/host/dmic/as-dmic/as-dmic.c \
+  $(DIR)/oss3/inner_codecs/codec.c \
+  $(DIR)/oss3/board/t41_platform.c
+#  $(DIR)/oss3/host/audio_dmic.c \
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

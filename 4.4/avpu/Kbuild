@@ -1,0 +1,26 @@
+MODULE_NAME := avpu
+OUT := $(MODULE_NAME)
+
+DIR=$(MODULE_NAME)
+
+AVPU_NO_DMABUF ?= 0
+
+SRCS := \
+  $(DIR)/avpu_main.c \
+  $(DIR)/avpu_ip.c \
+  $(DIR)/avpu_alloc.c \
+  $(DIR)/avpu_alloc_ioctl.c \
+
+ifeq ($(AVPU_NO_DMABUF),1)
+SRCS += \
+  $(DIR)/avpu_no_dmabuf.c
+else
+SRCS += \
+  $(DIR)/avpu_dmabuf.c
+endif
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

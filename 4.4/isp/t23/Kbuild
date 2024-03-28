@@ -1,0 +1,10 @@
+SRCS := \
+  $(DIR)/tx-isp-debug.c \
+  $(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += sdk/lib$(SOC_FAMILY)-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
