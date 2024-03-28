@@ -33,11 +33,6 @@
 
 uint8_t dismode;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

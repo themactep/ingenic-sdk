@@ -13,11 +13,9 @@
 #include <linux/clk.h>
 #include <linux/delay.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "gc0328"
 #define SENSOR_CHIP_ID (0x9d)
@@ -41,10 +39,6 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");

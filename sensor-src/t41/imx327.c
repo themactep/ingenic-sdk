@@ -55,11 +55,6 @@ MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
 static int rhs1 = 101;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct tx_isp_sensor_attribute imx327_attr;
 
 unsigned int imx327_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {

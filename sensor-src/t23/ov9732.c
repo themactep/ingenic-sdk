@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -46,16 +45,6 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
 struct tx_isp_sensor_attribute sensor_attr;
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
 
 struct again_lut sensor_again_lut[] = {
 	{0x10, 0},

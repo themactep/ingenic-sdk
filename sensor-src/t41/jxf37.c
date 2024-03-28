@@ -73,11 +73,6 @@ static unsigned char reg_2f = 0x44;
 static unsigned char reg_0c = 0x00;
 static unsigned char reg_82 = 0x21;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

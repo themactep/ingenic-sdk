@@ -37,11 +37,6 @@ static int pwdn_gpio = -1;
 static int wdr_bufsize = 1400000;
 static unsigned char switch_wdr = 0;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

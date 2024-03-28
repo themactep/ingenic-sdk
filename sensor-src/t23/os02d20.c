@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -52,11 +51,6 @@ MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 static int sensor_resolution = TX_SENSOR_RES_200;
 module_param(sensor_resolution, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution");
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

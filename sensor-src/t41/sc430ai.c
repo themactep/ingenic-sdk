@@ -41,11 +41,6 @@ static int wdr_bufsize = 1400 * 1000;
 static int shvflip = 0;
 static unsigned char switch_wdr = 0;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

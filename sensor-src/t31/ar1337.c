@@ -12,11 +12,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "ar1337"
 #define SENSOR_CHIP_ID 0x0253
@@ -62,16 +60,6 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
-};
-
-struct regval_list {
-    uint16_t reg_num;
-    uint16_t value;
-};
-
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {

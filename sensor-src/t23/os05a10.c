@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -55,11 +54,6 @@ MODULE_PARM_DESC(data_type, "Sensor Date Type");
 static int wdr_bufsize = 10077696;//cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 static unsigned char evl0 = 0;
 static unsigned char evl1 = 0;

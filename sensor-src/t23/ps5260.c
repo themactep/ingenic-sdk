@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -51,11 +50,6 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

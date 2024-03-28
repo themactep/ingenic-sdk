@@ -50,11 +50,6 @@
 
 static int wdr_bufsize = 2 * 3000 * 188;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int index;
 	unsigned char reg2b3;

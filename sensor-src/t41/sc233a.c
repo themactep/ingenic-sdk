@@ -40,11 +40,6 @@ static int shvflip = 1;
 static unsigned char switch_wdr = 1;
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

@@ -50,17 +50,12 @@ static int sensor_resolution = SENSOR_RES_300;
 module_param(sensor_resolution, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution set interface");
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
-struct again_lut sensor_again_lut[] = {
 
+struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x88, 5731},
 	{0x90, 11136},

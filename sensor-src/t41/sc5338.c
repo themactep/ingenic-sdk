@@ -38,11 +38,6 @@ static int wdr_bufsize = 5760000;//1000*2880*2
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 static unsigned char switch_wdr = 1;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

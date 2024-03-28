@@ -32,11 +32,6 @@
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
