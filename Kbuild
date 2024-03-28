@@ -25,7 +25,7 @@ include $(src)/$(KERNEL_VERSION)/misc/sample_pwm/Kbuild
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
 
 #### PLATFORM ####
-ifeq ($(KERNEL_VERSION),"3.10")
+ifeq ($(KERNEL_VERSION),4.4)
 include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
 else
 include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild

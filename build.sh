@@ -9,7 +9,7 @@ SOC_MODEL="$1"
 KERNEL_VERSION="${2:-$DEFAULT_KERNEL_VERSION}" # Use second argument or default to 3.10
 
 # Update KERNEL_DIR based on KERNEL_VERSION
-KERNEL_DIR="${HOME}/output/t31l_sc2336_atbm6031/build/linux-31d16b0661d1fb337a9dd475b31b5348f21898b6/"
+KERNEL_DIR="${HOME}/output/cinnado_d1_t31l_sc2336_pru/build/linux-custom/"
 
 case "$SOC_MODEL" in
 	clean)
