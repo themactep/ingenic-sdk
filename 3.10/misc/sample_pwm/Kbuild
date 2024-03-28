@@ -1,4 +1,4 @@
-DIR := misc
+DIR := 3.10/misc
 
 PWM_CORE_MODULE := sample_pwm_core
 OBJS1 := $(DIR)/sample_pwm/pwm_core.o
