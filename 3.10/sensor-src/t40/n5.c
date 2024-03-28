@@ -31,12 +31,7 @@ static int pwr_gpio = GPIO_PA(24);
 static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 static int sensor_max_fps = 5; //TX_SENSOR_MAX_FPS_20;
-
 static int shvflip = 0;
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 #if 1
 struct tx_isp_dvp_bus sensor_dvp={

@@ -50,12 +50,6 @@ static int wdr_bufsize = 2520000;//230400;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)

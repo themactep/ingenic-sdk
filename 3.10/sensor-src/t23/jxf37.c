@@ -12,11 +12,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "jxf37"
 #define SENSOR_CHIP_ID_H (0x0f)
@@ -68,11 +66,6 @@ MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 static unsigned char reg_2f = 0x44;
 static unsigned char reg_0c = 0x00;
 static unsigned char reg_82 = 0x21;
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

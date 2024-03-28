@@ -48,7 +48,7 @@
 /***************************************************
 *  Provide extensions to v4l2 for ISP driver.
 ****************************************************/
-#define V4L2_PIX_FMT_RGB310   v4l2_fourcc('R', 'G', 'B', 'A') /* 32  RGB-10-10-10  */
+#define V4L2_PIX_FMT_RGB310 v4l2_fourcc('R', 'G', 'B', 'A') /* 32  RGB-10-10-10  */
 #define V4L2_MBUS_FMT_RGB888_3X8_LE (V4L2_MBUS_FMT_Y8_1X8 - 0x10)
 
 /*
@@ -56,7 +56,7 @@
 */
 
 /* define control bus */
-enum tx_sensor_control_bus_type{
+enum tx_sensor_control_bus_type {
 	TX_SENSOR_CONTROL_INTERFACE_I2C = 1,
 	TX_SENSOR_CONTROL_INTERFACE_SPI,
 };
@@ -74,7 +74,7 @@ struct tx_isp_spi_board_info {
 };
 
 /* define data bus */
-enum tx_sensor_data_bus_type{
+enum tx_sensor_data_bus_type {
 	TX_SENSOR_DATA_INTERFACE_MIPI = 1,
 	TX_SENSOR_DATA_INTERFACE_DVP,
 	TX_SENSOR_DATA_INTERFACE_BT601,
@@ -128,23 +128,23 @@ typedef struct {
 	unsigned char pclk_polar;
 } sensor_dvp_polar;
 
-struct tx_isp_mipi_bus{
+struct tx_isp_mipi_bus {
 	unsigned int clk;
 	unsigned char lans;
 };
 
-struct tx_isp_dvp_bus{
+struct tx_isp_dvp_bus {
 	sensor_dvp_gpio_mode gpio;
 	sensor_dvp_timing_mode mode;
 	sensor_dvp_blanking blanking;
 	sensor_dvp_polar polar;
 };
 
-struct tx_isp_bt1120_bus{
+struct tx_isp_bt1120_bus {
 };
-struct tx_isp_bt656_bus{
+struct tx_isp_bt656_bus {
 };
-struct tx_isp_bt601_bus{
+struct tx_isp_bt601_bus {
 };
 
 /* define sensor attribute */
@@ -152,7 +152,7 @@ struct tx_isp_bt601_bus{
 #define TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS 	1
 #define TX_ISP_SENSOR_FULL_RES_MAX_FPS 		2
 
-struct v4l2_tx_isp_sensor_register_info{
+struct v4l2_tx_isp_sensor_register_info {
 	char name[32];
 	enum tx_sensor_control_bus_type cbus_type;
 	union {
@@ -164,7 +164,7 @@ struct v4l2_tx_isp_sensor_register_info{
 	unsigned short power_gpio;
 };
 
-typedef struct tx_isp_sensor_ctrl{
+typedef struct tx_isp_sensor_ctrl {
 	/* isp_gain mean that the value is output of ISP-FW,it is not a gain multiplier unit.
 	*  gain_multiplier = (2^(isp_gain/(2^LOG_GAIN_SHIFT))).
 	*  the function will convert gain_multiplier to sensor_Xgain.
@@ -175,7 +175,8 @@ typedef struct tx_isp_sensor_ctrl{
 } TX_ISP_SENSOR_CTRL;
 
 #define TX_ISP_GAIN_FIXED_POINT 16
-struct tx_isp_sensor_attribute{
+
+struct tx_isp_sensor_attribute {
 	const char *name;
 	unsigned int chip_id;
 	enum tx_sensor_control_bus_type cbus_type;
@@ -183,11 +184,11 @@ struct tx_isp_sensor_attribute{
 	unsigned int cbus_device;
 	enum tx_sensor_data_bus_type dbus_type;
 	union {
-		struct tx_isp_mipi_bus		mipi;
-		struct tx_isp_dvp_bus		dvp;
-		struct tx_isp_bt1120_bus	bt1120;
-		struct tx_isp_bt656_bus		bt656bus;
-		struct tx_isp_bt601_bus		bt601bus;
+		struct tx_isp_mipi_bus mipi;
+		struct tx_isp_dvp_bus dvp;
+		struct tx_isp_bt1120_bus bt1120;
+		struct tx_isp_bt656_bus bt656bus;
+		struct tx_isp_bt601_bus bt601bus;
 		char string[64];
 	};
 	unsigned int max_again;	//the format is .16
@@ -268,14 +269,14 @@ struct isp_image_tuning_default_ctrl {
 };
 
 
-#define VIDIOC_ISP_PRIVATE_IOCTL		_IOW('V', BASE_VIDIOC_PRIVATE, struct isp_private_ioctl)
-#define VIDIOC_REGISTER_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct v4l2_tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct v4l2_tx_isp_sensor_register_info)
-//#define VIDIOC_DEFAULT_CMD_BYPASS_ISP		_IOW('V', BASE_VIDIOC_PRIVATE + 3, int)
-#define VIDIOC_DEFAULT_CMD_SCALER_CAP		_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_scalercap)
-#define VIDIOC_DEFAULT_CMD_SET_SCALER		_IOW('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_scaler)
-#define VIDIOC_DEFAULT_CMD_SET_BANKS		_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
-#define VIDIOC_DEFAULT_CMD_ISP_TUNING		_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
+#define VIDIOC_ISP_PRIVATE_IOCTL	_IOW('V', BASE_VIDIOC_PRIVATE, struct isp_private_ioctl)
+#define VIDIOC_REGISTER_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct v4l2_tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct v4l2_tx_isp_sensor_register_info)
+//#define VIDIOC_DEFAULT_CMD_BYPASS_ISP	_IOW('V', BASE_VIDIOC_PRIVATE + 3, int)
+#define VIDIOC_DEFAULT_CMD_SCALER_CAP	_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_scalercap)
+#define VIDIOC_DEFAULT_CMD_SET_SCALER	_IOW('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_scaler)
+#define VIDIOC_DEFAULT_CMD_SET_BANKS	_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
+#define VIDIOC_DEFAULT_CMD_ISP_TUNING	_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -350,7 +351,6 @@ struct tx_isp_media_pipeline_ops {
 #define tx_isp_pipeline_call(ent, op, args...)				  \
 	(!(ent) ? -ENOENT : (((ent)->ops && (ent)->ops->op) ? \
 	(ent)->ops->op(((ent)), ##args) : -ENOIOCTLCMD))
-
 #endif
 
 #define tx_isp_sd_notify(ent, args...)				  \
@@ -382,11 +382,11 @@ struct tx_isp_sensor{
 };
 
 #define tx_isp_readl(base, reg)		__raw_readl((base) + (reg))
-#define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
+#define tx_isp_writel(base, reg, value)	__raw_writel((value), ((base) + (reg)))
 #define tx_isp_readw(base, reg)		__raw_readw((base) + (reg))
-#define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
+#define tx_isp_writew(base, reg, value)	__raw_writew((value), ((base) + (reg)))
 #define tx_isp_readb(base, reg)		__raw_readb((base) + (reg))
-#define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
+#define tx_isp_writeb(base, reg, value)	__raw_writeb((value), ((base) + (reg)))
 
 
 /* these structs are private */

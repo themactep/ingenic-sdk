@@ -35,11 +35,6 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 char* __attribute__((weak)) sclk_name[4];
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

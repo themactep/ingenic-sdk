@@ -38,11 +38,6 @@
 static int reset_gpio = GPIO_PA(18);
 //static int pwdn_gpio = -1;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 static struct regval_list cvbs_ntsc_video[] = {
 	{0xff, 0x08},
 	{0x6c, 0x00},

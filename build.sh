@@ -1,15 +1,14 @@
 #!/bin/bash
 
-TOOLCHAIN_DIR=/home/matteius/output/toolchain_xburst1_musl_gcc13/host
+TOOLCHAIN_DIR=${HOME}/dev/toolchain/mipsel-thingino-linux-musl_sdk-buildroot
 CROSS_COMPILE=mipsel-linux-
+KERNEL_DIR=${HOME}/dev/linux
 DEFAULT_KERNEL_VERSION="3.10"
 
 # Extract SoC and Kernel Version from arguments
 SOC_MODEL="$1"
 KERNEL_VERSION="${2:-$DEFAULT_KERNEL_VERSION}" # Use second argument or default to 3.10
 
-# Update KERNEL_DIR based on KERNEL_VERSION
-KERNEL_DIR="${HOME}/output/cinnado_d1_t31l_sc2336_pru/build/linux-custom/"
 
 case "$SOC_MODEL" in
 	clean)

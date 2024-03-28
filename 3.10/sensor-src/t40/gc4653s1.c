@@ -34,11 +34,6 @@ static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 3000 * 188;//cache lines corrponding on VPB1
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int index;
 	unsigned char reg2b3;

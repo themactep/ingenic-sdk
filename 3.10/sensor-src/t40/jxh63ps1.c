@@ -32,11 +32,6 @@ static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
