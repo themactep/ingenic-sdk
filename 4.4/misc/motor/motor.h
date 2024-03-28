@@ -36,6 +36,29 @@ enum jz_motor_cnt {
 	HAS_MOTOR_CNT,
 };
 
+
+/*************************** HORIZONTAL  MOTOR ************************************/
+#define HORIZONTAL_MIN_GPIO		GPIO_PC(13)	/**< motor start point */
+#define HORIZONTAL_MAX_GPIO		GPIO_PC(14)	/**< motor stop point */
+#define HORIZONTAL_GPIO_LEVEL	0		/**< motor irq style */
+
+#define HORIZONTAL_ST1_GPIO		GPIO_PB(22)	/**< Phase A */
+#define HORIZONTAL_ST2_GPIO		GPIO_PB(21)	/**< Phase B */
+#define HORIZONTAL_ST3_GPIO		GPIO_PB(20)	/**< Phase C */
+#define HORIZONTAL_ST4_GPIO		GPIO_PB(19)	/**< Phase D */
+
+/*************************** VERTICAL  MOTOR ************************************/
+#define VERTICAL_MIN_GPIO		GPIO_PC(18)
+#define VERTICAL_MAX_GPIO		GPIO_PB(28)
+#define VERTICAL_GPIO_LEVEL		0
+
+#define VERTICAL_ST1_GPIO		GPIO_PC(11)
+#define VERTICAL_ST2_GPIO		GPIO_PC(12)
+#define VERTICAL_ST3_GPIO		GPIO_PC(15)
+#define VERTICAL_ST4_GPIO		GPIO_PC(16)
+
+/****************************** MOTOR END ************************************/
+
 /* ioctl cmd */
 #define MOTOR_STOP		0x1
 #define MOTOR_RESET		0x2
@@ -44,7 +67,6 @@ enum jz_motor_cnt {
 #define MOTOR_SPEED		0x5
 #define MOTOR_GOBACK	0x6
 #define MOTOR_CRUISE	0x7
-#define MOTOR_GET_MAXSTEPS 0x8
 
 /* motor speed */
 #define MOTOR_MAX_SPEED	900		/**< unit: beats per second */
@@ -60,8 +82,6 @@ struct motor_message {
 	int y;
 	enum motor_status status;
 	int speed;
-	unsigned int x_max_steps;
-	unsigned int y_max_steps;
 };
 
 struct motors_steps{
@@ -84,14 +104,14 @@ enum motor_direction {
 
 struct motor_platform_data {
 	const char name[32];
-	int motor_min_gpio;
-	int motor_max_gpio;
+	unsigned int motor_min_gpio;
+	unsigned int motor_max_gpio;
 	int motor_gpio_level;
 
-	int motor_st1_gpio;
-	int motor_st2_gpio;
-	int motor_st3_gpio;
-	int motor_st4_gpio;
+	unsigned int motor_st1_gpio;
+	unsigned int motor_st2_gpio;
+	unsigned int motor_st3_gpio;
+	unsigned int motor_st4_gpio;
 };
 
 enum motor_ops_state {
@@ -132,15 +152,7 @@ struct motor_device {
 	struct device	 *dev;
 	struct miscdevice misc_dev;
 	struct motor_driver motors[HAS_MOTOR_CNT];
-	char *skip_mode;
-	unsigned int counter;
-	struct completion stop_completion;
-	unsigned int wait_stop;
-#ifdef CONFIG_SOC_T40
 	struct ingenic_tcu_chn *tcu;
-#else
-	struct jz_tcu_chn *tcu;
-#endif
 	int tcu_speed;
 
 	struct mutex dev_mutex;
