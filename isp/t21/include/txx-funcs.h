@@ -45,13 +45,11 @@ struct jz_driver_common_interfaces {
 	void *(*priv_platform_get_drvdata)(const struct platform_device *pdev);
 	int (*priv_platform_device_register)(struct platform_device *pdev);
 	void (*priv_platform_device_unregister)(struct platform_device *pdev);
-	struct resource *(*priv_platform_get_resource)(struct platform_device *dev,
-				       unsigned int type, unsigned int num);
+	struct resource *(*priv_platform_get_resource)(struct platform_device *dev, unsigned int type, unsigned int num);
 	int (*priv_dev_set_drvdata)(struct device *dev, void *data);
 	void* (*priv_dev_get_drvdata)(const struct device *dev);
 	int (*priv_platform_get_irq)(struct platform_device *dev, unsigned int num);
-	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n,
-				   const char *name);
+	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n, const char *name);
 	void (*priv_release_mem_region)(resource_size_t start, resource_size_t n);
 	void __iomem * (*priv_ioremap)(phys_t offset, unsigned long size);
 	void (*priv_iounmap)(const volatile void __iomem *addr);
@@ -59,8 +57,8 @@ struct jz_driver_common_interfaces {
 
 	/* interrupt interface */
 	int (*priv_request_threaded_irq)(unsigned int irq, irq_handler_t handler,
-			 irq_handler_t thread_fn, unsigned long irqflags,
-			 const char *devname, void *dev_id);
+		irq_handler_t thread_fn, unsigned long irqflags,
+		const char *devname, void *dev_id);
 	void (*priv_enable_irq)(unsigned int irq);
 	void (*priv_disable_irq)(unsigned int irq);
 	void (*priv_free_irq)(unsigned int irq, void *dev_id);
@@ -146,13 +144,13 @@ struct jz_driver_common_interfaces {
 #define paddr2vaddr(phyaddr) ((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
 
 #if 0
-#define APICAL_ABS(a)        ((a)>=0?(a):-(a))
-#define APICAL_SIGN(a)  ((a)>=0?(1):(-1))
-#define APICAL_MIN(a,b) ((a)>=b?(b):(a))
-#define APICAL_MAX(a,b) ((a)>=b?(a):(b))
-#define APICAL_ABSDIFF(a,b) ((a)>(b)? (a-b) : (b-a))
+#define APICAL_ABS(a)		((a)>=0?(a):-(a))
+#define APICAL_SIGN(a)		((a)>=0?(1):(-1))
+#define APICAL_MIN(a,b)		((a)>=b?(b):(a))
+#define APICAL_MAX(a,b)		((a)>=b?(a):(b))
+#define APICAL_ABSDIFF(a,b)	((a)>(b)? (a-b) : (b-a))
 #define LIN_EQUATION_FRACTION_SIZE 5
-#define round_shift(a,sh)   (((a)>>(sh))+(((a)>>(sh-1))&1))
+#define round_shift(a,sh)	(((a)>>(sh))+(((a)>>(sh-1))&1))
 #endif
 
 uint8_t private_leading_one_position(const uint32_t in);

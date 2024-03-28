@@ -33,11 +33,6 @@ static int pwdn_gpio = -1;
 
 static unsigned int expo_val = 0x031f0320;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 char* __attribute__((weak)) sclk_name[4];
 
 struct again_lut {

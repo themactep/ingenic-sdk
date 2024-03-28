@@ -56,11 +56,6 @@ static int sensor_raw_mode = SENSOR_RAW_MODE_NATIVE_WDR;
 module_param(sensor_raw_mode, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_raw_mode, "Sensor Raw Mode");
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

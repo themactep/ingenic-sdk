@@ -41,11 +41,6 @@ static int sensor_max_fps = 30;
 
 //static unsigned int expo_val = 2235;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

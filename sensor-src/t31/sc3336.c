@@ -12,11 +12,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc3336"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
@@ -65,12 +63,6 @@ static struct sensor_info sensor_info = {
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
 };
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 
 struct sensor_gain_lut {
 	unsigned int index;

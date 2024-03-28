@@ -1,8 +1,8 @@
 #!/bin/bash
 
-TOOLCHAIN_DIR=/opt/toolchains/thingino/mipsel-thingino-linux-musl_sdk-buildroot
+TOOLCHAIN_DIR=${HOME}/dev/toolchain/mipsel-thingino-linux-musl_sdk-buildroot
 CROSS_COMPILE=mipsel-linux-
-KERNEL_DIR=${HOME}/output/wyze_c2_t20x_jxf23/build/linux-custom
+KERNEL_DIR=${HOME}/dev/linux
 
 case "$1" in
 	clean)

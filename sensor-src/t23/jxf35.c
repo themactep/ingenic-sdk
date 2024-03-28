@@ -12,11 +12,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "jxf35"
 #define SENSOR_CHIP_ID_H (0x0f)
@@ -76,12 +74,6 @@ MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution");
 static unsigned char r2f_val = 0x64;
 static unsigned char r0c_val = 0x40;
 static unsigned char r80_val = 0x02;
-
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

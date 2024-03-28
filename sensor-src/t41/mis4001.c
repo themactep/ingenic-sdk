@@ -38,11 +38,6 @@ static unsigned char sv_state = 0;
 static bool trig_logic = false;
 static unsigned int vic_reset = 0;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

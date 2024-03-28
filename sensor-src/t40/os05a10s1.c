@@ -45,11 +45,6 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 static unsigned char evl0 = 0;
 static unsigned char evl1 = 0;
 static unsigned char evl2 = 0;

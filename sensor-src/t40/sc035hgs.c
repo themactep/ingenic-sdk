@@ -43,11 +43,6 @@ static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 static unsigned short int dpc_flag = 1;
 static unsigned int gain_val = 0x340;
 

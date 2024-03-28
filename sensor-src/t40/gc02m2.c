@@ -30,11 +30,6 @@
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
-};
-
 struct again_lut {
 	int index;
 	unsigned int sensor_again;

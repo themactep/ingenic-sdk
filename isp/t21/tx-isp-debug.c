@@ -9,7 +9,7 @@ MODULE_PARM_DESC(print_level, "isp print level");
 
 static int isp_clk = 100000000;
 module_param(isp_clk, int, S_IRUGO);
-MODULE_PARM_DESC(isp_clk, "isp core clock");
+MODULE_PARM_DESC(isp_clk, "isp clock freq");
 
 int isp_printf(unsigned int level, unsigned char *fmt, ...)
 {

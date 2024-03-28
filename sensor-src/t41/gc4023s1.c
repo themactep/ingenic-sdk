@@ -35,7 +35,6 @@
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int shvflip = 1;
 
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
@@ -43,13 +42,9 @@ MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
 struct proc_dir_entry *g_sinfo_proc;
 
+static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
