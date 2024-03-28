@@ -1,8 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc2336.c
+ *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  */
+
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -18,6 +24,12 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+// ugly hack, but oh well
+#undef ISP_PRINT
+#define ISP_PRINT(level, format, ...)			\
+	pr_err(format, ##__VA_ARGS__)
+
+
 #define SENSOR_NAME "sc2336"
 #define SENSOR_CHIP_ID 0xcb3a
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
@@ -32,6 +44,8 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20210805a"
+
+#define V4L2_MBUS_FMT_SBGGR10_1X10 0x3007
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -1006,8 +1020,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		goto err_get_mclk;
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
-	private_clk_enable(sensor->mclk);
-
+    clk_prepare_enable(sensor->mclk);
+    private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
