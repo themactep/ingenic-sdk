@@ -1,0 +1,21 @@
+Ingenic PWM channel configuration:
+
+You may modify the Makefile to open PWM0 by default. If you want to open multiple channels, just open the corresponding macro;
+
+1. Note: T10 T20 only has channels 0~3; T30 has channels 0~7.
+DEFS += -DCONFIG_PWM0
+DEFS += -DCONFIG_PWM1
+DEFS += -DCONFIG_PWM2
+DEFS += -DCONFIG_PWM3
+#DEFS += -DCONFIG_PWM4
+#DEFS += -DCONFIG_PWM5
+#DEFS += -DCONFIG_PWM6
+#DEFS += -DCONFIG_PWM7
+
+2. KO loading
+The order of loading the modules is important; load sample_pwm_core.ko first, followed by sample_pwm_hal.ko to ensure proper
+operation.
+
+3. Notes:
+T30 uses PC group GPIO by default. If you use the PB group GPIO, you need to make the following modifications manually.
+Kernel file arch/mips/xburst/soc-t21/common/platform.c jzpwm_pdata PC17, PC18 changed to PB17, PB18
