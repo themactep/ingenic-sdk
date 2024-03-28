@@ -1,5 +1,5 @@
 MODULE_NAME := tx-isp-$(SOC_FAMILY)
 OUT := $(MODULE_NAME)
-DIR := isp/$(SOC_FAMILY)
+DIR := 4.4/isp/$(SOC_FAMILY)
 
-include $(src)/isp/$(SOC_FAMILY)/Kbuild
+include $(src)/4.4/isp/$(SOC_FAMILY)/Kbuild

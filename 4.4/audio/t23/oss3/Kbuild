@@ -1,7 +1,7 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(MODULE_NAME)/$(SOC_FAMILY)
+DIR=4.4/$(MODULE_NAME)/$(SOC_FAMILY)
 
 SRCS := \
   $(DIR)/oss3/audio_dsp.c \

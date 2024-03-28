@@ -5,7 +5,7 @@ DIR=sensor-src/$(SOC_FAMILY)
 
 SRCS := $(DIR)/$(SENSOR_MODEL).c sensor-src/common/sensor-info.c
 
-ccflags-y += -I$(src)/sensor-src/include
+ccflags-y += -I$(src)/3.10/sensor-src/include
 
 OBJS := $(SRCS:%.c=%.o) \
 	$(ASM_SRCS:%.S=%.o)
