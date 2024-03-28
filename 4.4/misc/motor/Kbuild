@@ -2,7 +2,7 @@
 MODULE_NAME := motor
 OUT := $(MODULE_NAME)
 
-DIR=misc/motor
+DIR=4.4/misc/motor
 
 SRCS := \
   $(DIR)/motor.c

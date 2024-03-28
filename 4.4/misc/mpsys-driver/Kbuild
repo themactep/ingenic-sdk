@@ -1,7 +1,7 @@
 MODULE_NAME := mpsys_driver
 OUT := $(MODULE_NAME)
 
-DIR=misc/mpsys-driver
+DIR=4.4/misc/mpsys-driver
 
 SRCS := \
   $(DIR)/mpsys_module.c \
