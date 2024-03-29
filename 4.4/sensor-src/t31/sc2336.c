@@ -526,7 +526,7 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 		}
 	};
 	int ret;
-	ret = private_i2c_transfer(client->adapter, msg, 2);
+	ret = i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0) {
 		ret = 0;
 	}
@@ -544,7 +544,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 		.buf = buf,
 	};
 	int ret;
-	ret = private_i2c_transfer(client->adapter, &msg, 1);
+	ret = i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0) {
 		ret = 0;
 	}
@@ -557,7 +557,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
-			private_msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0) {
@@ -574,7 +574,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
-			private_msleep(vals->value);
+			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0) {
@@ -795,25 +795,25 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "sensor_reset");
+		ret = gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
-			private_gpio_direction_output(reset_gpio, 1);
-			private_msleep(5);
-			private_gpio_direction_output(reset_gpio, 0);
-			private_msleep(10);
-			private_gpio_direction_output(reset_gpio, 1);
-			private_msleep(10);
+			gpio_direction_output(reset_gpio, 1);
+			msleep(5);
+			gpio_direction_output(reset_gpio, 0);
+			msleep(10);
+			gpio_direction_output(reset_gpio, 1);
+			msleep(10);
 		} else {
 			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
+		ret = gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
-			private_gpio_direction_output(pwdn_gpio, 1);
-			private_msleep(10);
-			private_gpio_direction_output(pwdn_gpio, 0);
-			private_msleep(10);
+			gpio_direction_output(pwdn_gpio, 1);
+			msleep(10);
+			gpio_direction_output(pwdn_gpio, 0);
+			msleep(10);
 		} else {
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
@@ -940,7 +940,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
-	if (!private_capable(CAP_SYS_ADMIN)) {
+	if (!capable(CAP_SYS_ADMIN)) {
 		return -EPERM;
 	}
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
@@ -957,7 +957,7 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
-	if (!private_capable(CAP_SYS_ADMIN)) {
+	if (!capable(CAP_SYS_ADMIN)) {
 		return -EPERM;
 	}
 
@@ -1014,14 +1014,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	memset(sensor, 0, sizeof(*sensor));
 
-	sensor->mclk = clk_get(NULL, "cgu_cim");
+	sensor->mclk = clk_get(NULL, "div_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock div_cim\n");
 		goto err_get_mclk;
 	}
-	private_clk_set_rate(sensor->mclk, 24000000);
+	clk_set_rate(sensor->mclk, 24000000);
     clk_prepare_enable(sensor->mclk);
-    private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
+    jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
@@ -1040,33 +1040,33 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
-	private_i2c_set_clientdata(client, sd);
+	i2c_set_clientdata(client, sd);
 
 	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
 err_get_mclk:
-	private_clk_disable(sensor->mclk);
-	private_clk_put(sensor->mclk);
+	clk_disable(sensor->mclk);
+	clk_put(sensor->mclk);
 	kfree(sensor);
 
 	return -1;
 }
 
 static int sensor_remove(struct i2c_client *client) {
-	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
+	struct tx_isp_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
 	if (reset_gpio != -1) {
-		private_gpio_free(reset_gpio);
+		gpio_free(reset_gpio);
 	}
 	if (pwdn_gpio != -1) {
-		private_gpio_free(pwdn_gpio);
+		gpio_free(pwdn_gpio);
 	}
 
-	private_clk_disable(sensor->mclk);
-	private_clk_put(sensor->mclk);
+	clk_disable(sensor->mclk);
+	clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 
@@ -1091,19 +1091,12 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
-	int ret = 0;
 	sensor_common_init(&sensor_info);
-
-	ret = private_driver_get_interface();
-	if (ret) {
-		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
-		return -1;
-	}
-	return private_i2c_add_driver(&sensor_driver);
+	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
-	private_i2c_del_driver(&sensor_driver);
+	i2c_del_driver(&sensor_driver);
 	sensor_common_exit();
 }
 
