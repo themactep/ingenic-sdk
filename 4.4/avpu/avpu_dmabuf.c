@@ -469,12 +469,10 @@ static const struct dma_buf_ops avpu_dmabuf_ops = {
 	.detach		= avpu_dmabuf_detach,
 	.map_dma_buf	= avpu_dmabuf_map,
 	.unmap_dma_buf	= avpu_dmabuf_unmap,
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0)
 /* the map_atomic interface was removed after 4.4 */
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 4, 0)
 	.map_atomic	= avpu_dmabuf_kmap,
-#endif
-	.map		= avpu_dmabuf_kmap,
+    .map		= avpu_dmabuf_kmap,
 #else
 	.kmap_atomic	= avpu_dmabuf_kmap,
 	.kmap		= avpu_dmabuf_kmap,
