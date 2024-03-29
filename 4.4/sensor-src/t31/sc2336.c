@@ -1014,9 +1014,9 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	memset(sensor, 0, sizeof(*sensor));
 
-	sensor->mclk = clk_get(NULL, "cgu_cim");
+	sensor->mclk = clk_get(NULL, "div_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock div_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);
