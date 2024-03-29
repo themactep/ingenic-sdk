@@ -1092,7 +1092,7 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
-	return private_i2c_add_driver(&sensor_driver);
+	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
