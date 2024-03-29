@@ -34,19 +34,18 @@
 
 #define DEV_NAME "avpu"
 
-#define AVPU_DRIVER_VERSION "H20220825a"
-
 int avpu_codec_major;
 int avpu_codec_nr_devs = AVPU_NR_DEVS;
 module_param(avpu_codec_nr_devs, int, S_IRUGO);
 static char *clk_name = "mpll";
 module_param(clk_name, charp, S_IRUGO);
 MODULE_PARM_DESC(clk_name, "chose parent clk");
-static int avpu_clk = 550000000;
+static int avpu_clk = 440000000;
 module_param(avpu_clk, int, S_IRUGO);
 MODULE_PARM_DESC(avpu_clk, "avpu clock freq");
 static struct class *module_class;
 
+#if 1
 struct flush_cache_info {
 	unsigned int	addr;
 	unsigned int	len;
@@ -55,17 +54,14 @@ struct flush_cache_info {
 #define WBACK_INV	DMA_BIDIRECTIONAL
 	unsigned int	dir;
 };
-
-static void jz_avpu_release(struct device *dev) {
-	return;
-}
-
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
-#define AVPU_IOBASE    0x13200000
-#elif defined(CONFIG_SOC_T41)
-#define AVPU_IOBASE    0x13100000
 #endif
 
+static void jz_avpu_release(struct device *dev)
+{
+    return;
+}
+
+#define AVPU_IOBASE    0x13200000
 #define AVPU_IOBASE_UNIT(ID)	(AVPU_IOBASE + 0x400000 * ID)
 static u64 avpu_dmamask = ~(u64)0;
 static struct resource jz_avpu_irq_resources[] = {			\
@@ -75,25 +71,26 @@ static struct resource jz_avpu_irq_resources[] = {			\
 		.flags          = IORESOURCE_MEM,			\
 	},								\
 	[1] = {								\
-		.start          = 32+30+8,				\
-		.end            = 32+30+8,				\
+		.start          = 32+30+8,		\
+		.end            = 32+30+8,	\
 		.flags          = IORESOURCE_IRQ,			\
 	},
 };
 
-struct platform_device jz_avpu_irq_device = {				\
+struct platform_device jz_avpu_irq_device = {					\
 	.name = "avpu",							\
-	.id = 0,							\
-	.dev = {							\
-		.dma_mask               = &avpu_dmamask,		\
-		.coherent_dma_mask      = 0xffffffff,			\
-		.release                = jz_avpu_release,		\
-	},								\
-	.num_resources  = ARRAY_SIZE(jz_avpu_irq_resources),		\
-	.resource       = jz_avpu_irq_resources,			\
+	.id = 0,								\
+	.dev = {								\
+		.dma_mask				= &avpu_dmamask,			\
+		.coherent_dma_mask      = 0xffffffff,				\
+		.release                = jz_avpu_release,				\
+	},									\
+	.num_resources  = ARRAY_SIZE(jz_avpu_irq_resources),			\
+	.resource       = jz_avpu_irq_resources,				\
 };
 
-int channel_is_ready(struct avpu_codec_chan *chan) {
+int channel_is_ready(struct avpu_codec_chan *chan)
+{
 	unsigned long flags;
 	int ret = chan->unblock;
 
@@ -103,7 +100,8 @@ int channel_is_ready(struct avpu_codec_chan *chan) {
 	return ret;
 }
 
-static int avpu_codec_open(struct inode *inode, struct file *filp) {
+static int avpu_codec_open(struct inode *inode, struct file *filp)
+{
 	struct avpu_codec_chan *chan;
 	int ret;
 	/* initialize channel */
@@ -137,7 +135,8 @@ fail:
 	return ret;
 }
 
-static int avpu_codec_release(struct inode *inode, struct file *filp) {
+static int avpu_codec_release(struct inode *inode, struct file *filp)
+{
 	struct avpu_codec_chan *chan = filp->private_data;
 	struct avpu_dma_buf_mmap *tmp;
 	struct list_head *pos, *n;
@@ -154,7 +153,9 @@ static int avpu_codec_release(struct inode *inode, struct file *filp) {
 	return 0;
 }
 
-static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
+static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd,
+				    unsigned long arg)
+{
 	long ret = -ENOIOCTLCMD;
 
 	if (file->f_op->unlocked_ioctl)
@@ -163,7 +164,8 @@ static long avpu_codec_compat_ioctl(struct file *file, unsigned int cmd, unsigne
 	return ret;
 }
 
-static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int desc_id) {
+static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int desc_id)
+{
 	struct avpu_dma_buf_mmap *cur_buf_mmap;
 
 	list_for_each_entry(cur_buf_mmap, &chan->mem, list){
@@ -174,7 +176,8 @@ static struct avpu_dma_buffer *find_buf_by_id(struct avpu_codec_chan *chan, int 
 	return NULL;
 }
 
-static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma) {
+static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma)
+{
 	struct avpu_codec_chan *chan = filp->private_data;
 	unsigned long start = vma->vm_start;
 	unsigned long vsize = vma->vm_end - start;
@@ -200,14 +203,16 @@ static int avpu_dma_mmap(struct file *filp, struct vm_area_struct *vma) {
 	return 0;
 }
 
-static int unblock_channel(struct avpu_codec_chan *chan) {
+static int unblock_channel(struct avpu_codec_chan *chan)
+{
 	chan->unblock = 1;
 //	printk("--------------%s(%d)-----------\n", __func__, __LINE__);
 	wake_up_interruptible(&chan->irq_queue);
 	return 0;
 }
 
-static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg) {
+static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg)
+{
 	struct avpu_codec_desc *codec = chan->codec;
 	int callback;
 	struct r_irq *i_callback;
@@ -241,7 +246,8 @@ static int wait_irq(struct avpu_codec_chan *chan, unsigned long arg) {
 	return ret;
 }
 
-static int read_reg(struct avpu_codec_chan *chan, unsigned long arg) {
+static int read_reg(struct avpu_codec_chan *chan, unsigned long arg)
+{
 	struct avpu_reg reg;
 	struct avpu_codec_desc *codec = chan->codec;
 	int err;
@@ -254,20 +260,11 @@ static int read_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 			reg.id);
 		return -EINVAL;
 	}
-
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
 	if (reg.id < 0x8000 || reg.id > chan->codec->regs_size) {
 		avpu_err("Out-of-range register read: 0x%.4X\n",
 			reg.id);
 		return -EINVAL;
 	}
-#elif defined(CONFIG_SOC_T41)
-	if (reg.id < 0x0000 || reg.id > chan->codec->regs_size) {
-		avpu_err("Out-of-range register read: 0x%.4X\n",
-			reg.id);
-		return -EINVAL;
-	}
-#endif
 
 	err = avpu_codec_read_register(chan, &reg);
 	if (err)
@@ -281,7 +278,8 @@ static int read_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 	return 0;
 }
 
-static int write_reg(struct avpu_codec_chan *chan, unsigned long arg) {
+static int write_reg(struct avpu_codec_chan *chan, unsigned long arg)
+{
 	struct avpu_reg reg;
 	struct avpu_codec_desc *codec = chan->codec;
 
@@ -296,18 +294,10 @@ static int write_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 			reg.id);
 		return -EINVAL;
 	}
-
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
 	if (reg.id < 0x8000 || reg.id > chan->codec->regs_size) {
 		avpu_dbg("Out-of-range register write: 0x%.4X\n", reg.id);
 		return -EINVAL;
 	}
-#elif defined(CONFIG_SOC_T41)
-	if (reg.id < 0x0000 || reg.id > chan->codec->regs_size) {
-		avpu_dbg("Out-of-range register write: 0x%.4X\n", reg.id);
-		return -EINVAL;
-	}
-#endif
 
 	avpu_codec_write_register(chan, &reg);
 
@@ -316,10 +306,9 @@ static int write_reg(struct avpu_codec_chan *chan, unsigned long arg) {
 
 	return 0;
 }
-
 #if 1
-
-static long jz_cmd_flush_cache(long arg) {
+static long jz_cmd_flush_cache(long arg)
+{
 	struct flush_cache_info info;
 	long ret = 0;
 	if (copy_from_user(&info, (void *)arg, sizeof(info))) {
@@ -331,31 +320,32 @@ static long jz_cmd_flush_cache(long arg) {
 	return ret;
 }
 #endif
-
-static long avpu_codec_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
+static long avpu_codec_ioctl(struct file *filp, unsigned int cmd,
+			     unsigned long arg)
+{
 	struct avpu_codec_chan *chan = filp->private_data;
 	struct avpu_codec_desc *codec = chan->codec;
 
 	switch (cmd) {
-		case GET_DMA_MMAP:
-			return avpu_ioctl_get_dma_mmap(codec->device, chan, arg);
-		case GET_DMA_FD:
-			return avpu_ioctl_get_dma_fd(codec->device, arg);
-		case GET_DMA_PHY:
-			return avpu_ioctl_get_dmabuf_dma_addr(codec->device, arg);
-		case AL_CMD_UNBLOCK_CHANNEL:
-			return unblock_channel(chan);
-		case AL_CMD_IP_WAIT_IRQ:
-			return wait_irq(chan, arg);
-		case AL_CMD_IP_READ_REG:
-			return read_reg(chan, arg);
-		case AL_CMD_IP_WRITE_REG:
-			return write_reg(chan, arg);
-		case JZ_CMD_FLUSH_CACHE:
-			return jz_cmd_flush_cache(arg);
-		default:
-			avpu_err("Unknown ioctl: 0x%.8X\n", cmd);
-			return -EINVAL;
+	case GET_DMA_MMAP:
+		return avpu_ioctl_get_dma_mmap(codec->device, chan, arg);
+	case GET_DMA_FD:
+		return avpu_ioctl_get_dma_fd(codec->device, arg);
+	case GET_DMA_PHY:
+		return avpu_ioctl_get_dmabuf_dma_addr(codec->device, arg);
+	case AL_CMD_UNBLOCK_CHANNEL:
+		return unblock_channel(chan);
+	case AL_CMD_IP_WAIT_IRQ:
+		return wait_irq(chan, arg);
+	case AL_CMD_IP_READ_REG:
+		return read_reg(chan, arg);
+	case AL_CMD_IP_WRITE_REG:
+		return write_reg(chan, arg);
+	case JZ_CMD_FLUSH_CACHE:
+		return jz_cmd_flush_cache(arg);
+	default:
+		avpu_err("Unknown ioctl: 0x%.8X\n", cmd);
+		return -EINVAL;
 	}
 }
 
@@ -368,11 +358,13 @@ const struct file_operations avpu_codec_fops = {
 	.mmap		= avpu_dma_mmap,
 };
 
-void clean_up_avpu_codec_cdev(struct avpu_codec_desc *dev) {
+void clean_up_avpu_codec_cdev(struct avpu_codec_desc *dev)
+{
 	cdev_del(&dev->cdev);
 }
 
-int setup_chrdev_region(void) {
+int setup_chrdev_region(void)
+{
 	dev_t dev = 0;
 	int err;
 
@@ -389,7 +381,9 @@ int setup_chrdev_region(void) {
 	return 0;
 }
 
-int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor, const char *device_name) {
+int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor,
+			  const char *device_name)
+{
 	struct device *device;
 	int err, devno =
 		MKDEV(avpu_codec_major, minor);
@@ -415,7 +409,8 @@ int avpu_setup_codec_cdev(struct avpu_codec_desc *codec, int minor, const char *
 	return 0;
 }
 
-static int init_codec_desc(struct avpu_codec_desc *codec) {
+static int init_codec_desc(struct avpu_codec_desc *codec)
+{
 	INIT_LIST_HEAD(&codec->irq_masks);
 	spin_lock_init(&codec->i_lock);
 	/* make chan requirement explicit */
@@ -429,11 +424,13 @@ static int init_codec_desc(struct avpu_codec_desc *codec) {
 	return 0;
 }
 
-static void deinit_codec_desc(struct avpu_codec_desc *codec) {
+static void deinit_codec_desc(struct avpu_codec_desc *codec)
+{
 	kmem_cache_destroy(codec->cache);
 }
 
-int avpu_codec_probe(struct platform_device *pdev) {
+int avpu_codec_probe(struct platform_device *pdev)
+{
 	int err, irq;
     int ret = -1;
 	static int current_minor;
@@ -472,94 +469,7 @@ int avpu_codec_probe(struct platform_device *pdev) {
 		has_irq = false;
 	}
 
-#ifdef CONFIG_SOC_T41
 #ifdef CONFIG_KERNEL_4_4_94
-	codec->ahb1_gate = clk_get(&pdev->dev, "div_ispa");
-	if (IS_ERR(codec->ahb1_gate)) {
-		avpu_err("ahb1_gate get failed\n");
-		err = PTR_ERR(codec->ahb1_gate);
-		goto out_get_ahb1_clk_gate;
-	}
-
-	codec->clk_gate_ivdc = clk_get(&pdev->dev, "gate_ivdc");
-	if (IS_ERR(codec->clk_gate_ivdc)) {
-		avpu_err("clk_gate_ivdc get failed\n");
-		err = PTR_ERR(codec->clk_gate_ivdc);
-		goto out_get_clk_gate;
-	}
-	clk_prepare_enable(codec->clk_gate_ivdc);
-
-	codec->clk_gate = clk_get(&pdev->dev, "gate_el200");
-	if (IS_ERR(codec->clk_gate)) {
-		avpu_err("clk_gate get failed\n");
-		err = PTR_ERR(codec->clk_gate);
-		goto out_get_clk_gate;
-	}
-
-	codec->clk_mux = clk_get(&pdev->dev,"mux_el200");
-	if (IS_ERR(codec->clk_mux)) {
-		avpu_err("clk get failed\n");
-		err = PTR_ERR(codec->clk_mux);
-		goto out_get_vpu_clk_cgu;
-	}
-
-	ret = clk_set_parent(codec->clk_mux, clk_get(NULL, clk_name));
-	if (ret){
-		printk("clk_set_parent failed!!! parent name = %s\n", clk_name);
-	}
-	codec->clk = clk_get(&pdev->dev,"div_el200");
-	if (IS_ERR(codec->clk)) {
-		avpu_err("clk get failed\n");
-		err = PTR_ERR(codec->clk);
-		goto out_get_vpu_clk_cgu;
-	}
-	clk_set_rate(codec->clk, avpu_clk);
-
-	clk_prepare_enable(codec->ahb1_gate);
-	clk_prepare_enable(codec->clk_gate);
-	clk_prepare_enable(codec->clk);
-#elif defined(CONFIG_KERNEL_3_10)
-	codec->ahb1_gate = clk_get(&pdev->dev, "cgu_ispa");
-	if (IS_ERR(codec->ahb1_gate)) {
-		avpu_err("ahb1_gate get failed\n");
-		err = PTR_ERR(codec->ahb1_gate);
-		goto out_get_ahb1_clk_gate;
-	}
-
-	codec->clk_gate_ivdc = clk_get(&pdev->dev, "ivdc");
-	if (IS_ERR(codec->clk_gate_ivdc)) {
-		avpu_err("clk_gate_ivdc get failed\n");
-		err = PTR_ERR(codec->clk_gate_ivdc);
-		goto out_get_clk_gate;
-	}
-	clk_enable(codec->clk_gate_ivdc);
-
-	codec->clk_gate = clk_get(&pdev->dev, "avpu");
-	if (IS_ERR(codec->clk_gate)) {
-		avpu_err("clk_gate get failed\n");
-		err = PTR_ERR(codec->clk_gate);
-		goto out_get_clk_gate;
-	}
-
-	codec->clk = clk_get(&pdev->dev,"cgu_vpu");
-	if (IS_ERR(codec->clk)) {
-		avpu_err("clk get failed\n");
-		err = PTR_ERR(codec->clk);
-		goto out_get_vpu_clk_cgu;
-	}
-
-	ret = clk_set_parent(codec->clk, clk_get(NULL, clk_name));
-	if (ret){
-		printk("clk_set_parent failed!!! parent name = %s\n", clk_name);
-	}
-
-	clk_set_rate(codec->clk, avpu_clk);
-
-	clk_enable(codec->ahb1_gate);
-	clk_enable(codec->clk_gate);
-	clk_enable(codec->clk);
-#endif
-#elif defined(CONFIG_SOC_T40)
 	codec->ahb1_gate = clk_get(&pdev->dev, "gate_ahb1");
 	if (IS_ERR(codec->ahb1_gate)) {
 		avpu_err("ahb1_gate get failed\n");
@@ -596,8 +506,7 @@ int avpu_codec_probe(struct platform_device *pdev) {
 	clk_prepare_enable(codec->ahb1_gate);
 	clk_prepare_enable(codec->clk_gate);
 	clk_prepare_enable(codec->clk);
-
-#elif defined(CONFIG_SOC_T31)
+#else
 	codec->ahb1_gate = clk_get(&pdev->dev, "ahb1");
 	if (IS_ERR(codec->ahb1_gate)) {
 		avpu_err("ahb1_gate get failed\n");
@@ -623,10 +532,6 @@ int avpu_codec_probe(struct platform_device *pdev) {
 		printk("clk_set_parent failed!!! parent name = %s\n", clk_name);
 	}
 	clk_set_rate(codec->clk, avpu_clk);
-
-	clk_enable(codec->ahb1_gate);
-	clk_enable(codec->clk_gate);
-	clk_enable(codec->clk);
 #endif
 
 	err = init_codec_desc(codec);
@@ -657,48 +562,29 @@ int avpu_codec_probe(struct platform_device *pdev) {
 
 	codec->minor = current_minor;
 	++current_minor;
-	printk("@@@@ avpu driver ok(version %s) @@@@@\n", AVPU_DRIVER_VERSION);
 
 	return 0;
 
+out_failed_request_irq:
 out_get_vpu_clk_cgu:
 out_get_clk_gate:
 out_get_ahb1_clk_gate:
-out_failed_request_irq:
 out_map_register:
 out_no_resource:
 	return err;
 
 }
 
-int avpu_codec_remove(struct platform_device *pdev) {
+int avpu_codec_remove(struct platform_device *pdev)
+{
 	struct avpu_codec_desc *codec = platform_get_drvdata(pdev);
 	dev_t dev = MKDEV(avpu_codec_major, codec->minor);
 
-#ifdef CONFIG_SOC_T41
 #ifdef CONFIG_KERNEL_4_4_94
 	clk_disable_unprepare(codec->clk);
 	clk_disable_unprepare(codec->clk_gate);
-	clk_disable_unprepare(codec->clk_gate_ivdc);
 	clk_disable_unprepare(codec->ahb1_gate);
-#elif defined(CONFIG_KERNEL_3_10)
-	clk_disable(codec->clk);
-	clk_disable(codec->clk_gate);
-	clk_disable(codec->clk_gate_ivdc);
-	clk_disable(codec->ahb1_gate);
-	clk_put(codec->clk);
-	clk_put(codec->clk_gate);
-	clk_put(codec->clk_gate_ivdc);
-	clk_put(codec->ahb1_gate);
-#endif
-#elif defined(CONFIG_SOC_T40)
-	clk_disable_unprepare(codec->clk);
-	clk_disable_unprepare(codec->clk_gate);
-	clk_disable_unprepare(codec->ahb1_gate);
-#elif defined(CONFIG_SOC_T31)
-	clk_disable(codec->clk);
-	clk_disable(codec->clk_gate);
-	clk_disable(codec->ahb1_gate);
+#else
 	clk_put(codec->clk);
 	clk_put(codec->clk_gate);
 	clk_put(codec->ahb1_gate);
@@ -727,7 +613,8 @@ static struct platform_driver avpu_platform_driver = {
 	},
 };
 
-static int create_module_class(void) {
+static int create_module_class(void)
+{
 	module_class = class_create(THIS_MODULE, "avpu_class");
 	if (IS_ERR(module_class))
 		return PTR_ERR(module_class);
@@ -735,11 +622,13 @@ static int create_module_class(void) {
 	return 0;
 }
 
-static void destroy_module_class(void) {
+static void destroy_module_class(void)
+{
 	class_destroy(module_class);
 }
 
-int avpu_module_init(void) {
+int avpu_module_init(void)
+{
 	int ret;
 
 	ret = platform_device_register(&jz_avpu_irq_device);
@@ -753,12 +642,14 @@ int avpu_module_init(void) {
 	return ret;
 }
 
-void avpu_module_deinit(void) {
+void avpu_module_deinit(void)
+{
 	platform_driver_unregister(&avpu_platform_driver);
 	platform_device_unregister(&jz_avpu_irq_device);
 }
 
-static int __init avpu_codec_init(void) {
+static int __init avpu_codec_init(void)
+{
 	dev_t devno;
 	int err = setup_chrdev_region();
 
@@ -782,7 +673,8 @@ fail:
 	return err;
 }
 
-static void __exit avpu_codec_exit(void) {
+static void __exit avpu_codec_exit(void)
+{
 	dev_t devno = MKDEV(avpu_codec_major, 0);
 
 	avpu_module_deinit();
