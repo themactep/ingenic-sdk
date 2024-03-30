@@ -1,7 +1,7 @@
 MODULE_NAME := gpio
 OUT := $(MODULE_NAME)
 
-DIR=4.4/$(MODULE_NAME)
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)
 
 SRCS := $(DIR)/gpio.c
 

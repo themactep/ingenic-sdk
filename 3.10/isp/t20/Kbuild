@@ -27,7 +27,7 @@ SRCS := $(DIR)/tx-isp-vic.o \
 	$(DIR)/apical-isp/system_chardev.o \
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += 3.10/sdk/lib$(SOC_FAMILY)-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 
