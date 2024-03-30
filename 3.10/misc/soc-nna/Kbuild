@@ -1,7 +1,7 @@
 MODULE_NAME := soc-nna
 OUT := $(MODULE_NAME)
 
-DIR=3.10/$(MODULE_NAME)misc/soc-nna
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)misc/soc-nna
 
 SRCS := \
   $(DIR)/soc_nna_main.c \

@@ -32,7 +32,7 @@ SRCS := $(DIR)/platform.o \
 	$(DIR)/tx-isp-device.o
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += 4.4/sdk/lib$(SOC_FAMILY)-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 

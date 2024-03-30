@@ -2,7 +2,7 @@ MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
 # Assuming the SOC_FAMILY variable is still relevant
-DIR := 4.4/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+DIR := $(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
 
 ifeq (${CONFIG_SOC_T31}, y)
 SRCS := \
@@ -10,7 +10,7 @@ SRCS := \
   $(DIR)/audio_debug.c \
   $(DIR)/host/audio_dmic.c \
   $(DIR)/inner_codecs/codec.c \
-  $(DIR)/boards/t31_platform.c 
+  $(DIR)/boards/t31_platform.c
 else
 # Assuming there's a default set of sources when CONFIG_SOC_T31 is not enabled
 # Adjust the paths according to your project's structure

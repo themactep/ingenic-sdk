@@ -2,7 +2,7 @@
 MODULE_NAME := dtrng_dev
 OUT := $(MODULE_NAME)
 
-DIR=3.10/$(MODULE_NAME)misc/jz-dtrng
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)misc/jz-dtrng
 
 SRCS := \
   $(DIR)/jz-dtrng.c

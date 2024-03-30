@@ -1,5 +1,9 @@
 MODULE_NAME := tx-isp-$(SOC_FAMILY)
-OUT := $(MODULE_NAME)
-DIR := 3.10/isp/$(SOC_FAMILY)
 
-include $(src)/3.10/isp/$(SOC_FAMILY)/Kbuild
+OUT := $(MODULE_NAME)
+
+DIR := $(KERNEL_VERSION)/isp/$(SOC_FAMILY)
+
+ccflags-y += -I$(src)/include
+
+include $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/Kbuild
