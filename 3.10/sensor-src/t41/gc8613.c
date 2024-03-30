@@ -19,11 +19,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "gc8613"
 #define SENSOR_CHIP_ID_H (0x86)
@@ -36,6 +34,11 @@
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int index;

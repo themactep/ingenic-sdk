@@ -17,11 +17,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "imx515"
 #define SENSOR_CHIP_ID 0x2823
@@ -1203,5 +1201,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sony imx515 sensor");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

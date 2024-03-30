@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "ov9732"
 #define SENSOR_CHIP_ID 0x9732
@@ -414,9 +413,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

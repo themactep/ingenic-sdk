@@ -55,6 +55,11 @@ static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -263,9 +268,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x12, 0x05},

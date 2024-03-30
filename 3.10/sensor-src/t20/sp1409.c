@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "sp1409"
 #define SENSOR_CHIP_ID 0x1409
@@ -54,6 +53,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int rpc;
@@ -344,9 +348,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x01},

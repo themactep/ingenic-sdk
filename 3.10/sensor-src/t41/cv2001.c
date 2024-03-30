@@ -8,11 +8,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "cv2001"
 #define SENSOR_CHIP_ID_L 0x01

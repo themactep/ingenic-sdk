@@ -17,11 +17,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "imx335"
 #define SENSOR_CHIP_ID 0x380a
@@ -960,7 +958,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		          client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", 
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
 		SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
@@ -1196,5 +1194,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sony imx335 sensor");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

@@ -16,10 +16,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "gc3003a"
 #define SENSOR_CHIP_ID_H (0x30)
@@ -36,6 +34,11 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = GPIO_PA(4);
 static int shvflip = 0;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	int index;
@@ -359,9 +362,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

@@ -64,6 +64,11 @@ static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	int index;
 	unsigned int regb4;
@@ -1161,9 +1166,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},

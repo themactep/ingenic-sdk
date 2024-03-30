@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -100,9 +99,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

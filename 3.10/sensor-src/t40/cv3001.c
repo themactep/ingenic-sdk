@@ -8,10 +8,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "cv3001"
 #define SENSOR_CHIP_ID_H 0x30

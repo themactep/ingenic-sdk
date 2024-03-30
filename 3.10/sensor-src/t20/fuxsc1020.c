@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "fuxsc1020"
 #define SENSOR_CHIP_ID 0xa042
@@ -109,9 +108,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

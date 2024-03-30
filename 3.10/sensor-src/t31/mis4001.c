@@ -66,6 +66,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -528,9 +533,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

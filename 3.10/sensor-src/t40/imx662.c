@@ -18,10 +18,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "imx662"
 #define SENSOR_CHIP_ID_H (0x00)
@@ -591,9 +589,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
         {0x3000, 0x00},
@@ -1334,5 +1329,5 @@ static __exit void exit_sensor(void)
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sony imx662 sensor");
+MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
 MODULE_LICENSE("GPL");

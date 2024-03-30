@@ -17,11 +17,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc5338"
 #define SENSOR_CHIP_ID_H (0xce)
@@ -37,6 +35,11 @@ static int pwdn_gpio = GPIO_PA(19);
 static int wdr_bufsize = 5760000;//1000*2880*2
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 static unsigned char switch_wdr = 1;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

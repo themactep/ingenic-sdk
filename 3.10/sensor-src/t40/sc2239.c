@@ -12,11 +12,10 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "sc2239" 
+#define SENSOR_NAME "sc2239"
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x10)
 #define SENSOR_REG_END 0xffff
@@ -46,6 +45,11 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -316,9 +320,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},

@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -55,6 +54,11 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_raw_mode = SENSOR_RAW_MODE_NATIVE_WDR;
 module_param(sensor_raw_mode, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_raw_mode, "Sensor Raw Mode");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -582,9 +586,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

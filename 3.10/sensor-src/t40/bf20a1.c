@@ -12,10 +12,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "bf20a1"
 #define SENSOR_CHIP_ID_H (0x20)
@@ -34,6 +32,11 @@ static int shvflip = 0;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 char* __attribute__((weak)) sclk_name[4];
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -260,9 +263,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},

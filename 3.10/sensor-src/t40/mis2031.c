@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -39,6 +38,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int wdr_bufsize = 4073600;//1451520;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -1618,9 +1622,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[1];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x3006, 0x00},

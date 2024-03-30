@@ -66,6 +66,11 @@ static struct sensor_info sensor_info = {
 //static unsigned short int dpc_flag = 1;
 //static unsigned int gain_val = 0x37e;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

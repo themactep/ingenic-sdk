@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "bf3115"
 #define SENSOR_CHIP_ID 0x3116
@@ -54,6 +53,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_12BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned char value;

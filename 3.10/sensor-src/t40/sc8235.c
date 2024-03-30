@@ -12,10 +12,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc8235"
 #define SENSOR_CHIP_ID_H (0x82)
@@ -38,6 +36,11 @@ module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
 static unsigned int expo_val = 0x031f0320;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

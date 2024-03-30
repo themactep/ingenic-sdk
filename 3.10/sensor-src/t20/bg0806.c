@@ -17,7 +17,6 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "bg0806"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
@@ -61,6 +60,11 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
 };
 
 struct again_lut {

@@ -53,6 +53,11 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -794,9 +799,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},

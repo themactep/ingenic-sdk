@@ -16,7 +16,6 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "jxh65"
 #define SENSOR_CHIP_ID 0x0a65
@@ -234,9 +233,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGBRG8_1X8,
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x12, 0x00},

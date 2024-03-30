@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -43,6 +42,11 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -9428,9 +9432,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x3012, 0x01},

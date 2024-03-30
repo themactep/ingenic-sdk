@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -32,6 +31,11 @@ static int pwdn_gpio = -1;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 
 struct tx_isp_sensor_attribute sensor_attr;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

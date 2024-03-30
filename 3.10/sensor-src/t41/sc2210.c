@@ -18,11 +18,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc2210"
 #define SENSOR_CHIP_ID_H (0x22)
@@ -40,6 +38,11 @@ static int pwdn_gpio = -1;
 static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

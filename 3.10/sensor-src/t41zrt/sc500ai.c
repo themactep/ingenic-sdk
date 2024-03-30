@@ -12,11 +12,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc500ai"
 #define SENSOR_CHIP_ID_H (0xce)
@@ -37,6 +35,11 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int shvflip = 0;
 
 static bool dpc_flag = true;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

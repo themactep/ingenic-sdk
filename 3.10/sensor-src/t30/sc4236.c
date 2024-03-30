@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -50,6 +49,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_resolution = SENSOR_RES_400;
 module_param(sensor_resolution, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution set interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -712,9 +716,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},

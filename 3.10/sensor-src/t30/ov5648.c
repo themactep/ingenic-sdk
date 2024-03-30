@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -42,6 +41,11 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -538,9 +542,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

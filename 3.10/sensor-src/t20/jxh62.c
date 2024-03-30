@@ -13,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/delay.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <apical-isp/apical_math.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -56,6 +55,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

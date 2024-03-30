@@ -16,7 +16,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -38,6 +37,11 @@ static int rst_gpio = GPIO_PA(18);
 static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

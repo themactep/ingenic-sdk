@@ -17,11 +17,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "gc3003s1"
 #define SENSOR_CHIP_ID_H (0x30)
@@ -39,6 +37,11 @@ static int shvflip = 1;
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	int index;
