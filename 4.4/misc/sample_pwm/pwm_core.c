@@ -221,18 +221,13 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	ingenic_tcu_config(tcu_pwm);
 	ingenic_tcu_set_period(tcu_pwm->cib.id, tcu_pwm->full_num);
 	ingenic_tcu_set_duty(tcu_pwm->cib.id, tcu_pwm->half_num);
-	if (duty_ns == 0)
-	{
+	if (duty_ns == 0) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 0;
-	}
-	else if (duty_ns == period_ns)
-	{
+	} else if (duty_ns == period_ns) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, tcu_pwm->init_level > 0 ? GPIO_OUTPUT1 : GPIO_OUTPUT0, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 0;
-	}
-	else if (pwm_func[tcu_pwm->cib.id] == 0 && jz_pwm_en[tcu_pwm->cib.id])
-	{
+	} else if (pwm_func[tcu_pwm->cib.id] == 0 && jz_pwm_en[tcu_pwm->cib.id]) {
 		jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group, pwm_pin[tcu_pwm->cib.id].func, pwm_pin[tcu_pwm->cib.id].pins);
 		pwm_func[tcu_pwm->cib.id] = 1;
 	}
@@ -241,18 +236,13 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	jz_tcu_config_chn(tcu_pwm);
 	jz_tcu_set_period(tcu_pwm, tcu_pwm->full_num);
 	jz_tcu_set_duty(tcu_pwm, tcu_pwm->half_num);
-	if (duty_ns == 0)
-	{
+	if (duty_ns == 0) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1, BIT(tcu_pwm->gpio & 0x1f));
 		pwm_func[tcu_pwm->index] = 0;
-	}
-	else if (duty_ns == period_ns)
-	{
+	} else if (duty_ns == period_ns) {
 		jzgpio_set_func(tcu_pwm->gpio / 32, tcu_pwm->init_level > 0 ? GPIO_OUTPUT1 : GPIO_OUTPUT0, BIT(tcu_pwm->gpio & 0x1f));
 		pwm_func[tcu_pwm->index] = 0;
-	}
-	else if (pwm_func[tcu_pwm->index] == 0 && jz_pwm_en[tcu_pwm->index])
-	{
+	} else if (pwm_func[tcu_pwm->index] == 0 && jz_pwm_en[tcu_pwm->index]) {
 #if defined(CONFIG_SOC_T21)
 		if (tcu_pwm->index == 1 || tcu_pwm->index == 0)
 			jzgpio_set_func(tcu_pwm->gpio / 32, GPIO_FUNC_0, BIT(tcu_pwm->gpio & 0x1f));

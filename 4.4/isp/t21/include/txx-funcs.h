@@ -45,13 +45,11 @@ struct jz_driver_common_interfaces {
 	void *(*priv_platform_get_drvdata)(const struct platform_device *pdev);
 	int (*priv_platform_device_register)(struct platform_device *pdev);
 	void (*priv_platform_device_unregister)(struct platform_device *pdev);
-	struct resource *(*priv_platform_get_resource)(struct platform_device *dev,
-				       unsigned int type, unsigned int num);
+	struct resource *(*priv_platform_get_resource)(struct platform_device *dev, unsigned int type, unsigned int num);
 	int (*priv_dev_set_drvdata)(struct device *dev, void *data);
 	void* (*priv_dev_get_drvdata)(const struct device *dev);
 	int (*priv_platform_get_irq)(struct platform_device *dev, unsigned int num);
-	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n,
-				   const char *name);
+	struct resource * (*priv_request_mem_region)(resource_size_t start, resource_size_t n, const char *name);
 	void (*priv_release_mem_region)(resource_size_t start, resource_size_t n);
 	void __iomem * (*priv_ioremap)(phys_t offset, unsigned long size);
 	void (*priv_iounmap)(const volatile void __iomem *addr);
