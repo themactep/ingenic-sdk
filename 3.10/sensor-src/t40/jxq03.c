@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -56,6 +55,11 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
 static unsigned char reg_0c = 0x40;
 static unsigned char reg_82 = 0x01;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -591,9 +595,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 

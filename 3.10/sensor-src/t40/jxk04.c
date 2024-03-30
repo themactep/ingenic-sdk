@@ -12,10 +12,8 @@
 #include "linux/gpio.h"
 #include "linux/clk.h"
 #include "linux/proc_fs.h"
-#include <soc/gpio.h>
 #include "tx-isp-common.h"
 #include "sensor-common.h"
-#include "txx-funcs.h"
 
 #define SENSOR_NAME "jxk04"
 #define SENSOR_CHIP_ID_H (0x04)
@@ -36,6 +34,11 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 static int wdr_bufsize = 55296000;//cache lines corrponding on VPB1
 
 char* __attribute__((weak)) sclk_name[4];
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
         unsigned int value;
@@ -842,9 +845,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[1];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
         //{0x12, 0x00},

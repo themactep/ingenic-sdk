@@ -16,7 +16,6 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "ov2732"
 #define SENSOR_CHIP_ID 0x2732
@@ -409,9 +408,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},

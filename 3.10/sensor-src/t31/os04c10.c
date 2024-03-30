@@ -85,6 +85,11 @@ static unsigned char evs0 = 0;
 static unsigned char evs1 = 0;
 static unsigned char evs2 = 0;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -2151,9 +2156,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

@@ -16,7 +16,6 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "sc1245"
 #define SENSOR_CHIP_ID 0x1245
@@ -59,6 +58,11 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
 };
 
 struct again_lut {
@@ -191,7 +195,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 
@@ -356,9 +359,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_gain_init2[] = {
 	{0x3303, 0x20},

@@ -18,11 +18,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 //#define SENSOR_WITHOUT_INIT
 
@@ -40,6 +38,11 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = GPIO_PA(4);
 static int shvflip = 0;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	int index;

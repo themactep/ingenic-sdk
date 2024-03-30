@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -28,6 +27,11 @@
 
 static unsigned char val_99 = 0x0F;
 static unsigned char val_9b = 0x0F;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -452,9 +456,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 static struct regval_list sensor_stream_on_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},

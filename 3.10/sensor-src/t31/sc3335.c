@@ -68,6 +68,11 @@ static unsigned char temp_val = 0x0;
 static unsigned char cur_lut_node = 255;
 static unsigned char node_change = 0;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

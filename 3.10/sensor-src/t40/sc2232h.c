@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 //#include <tx-isp-debug.h>
@@ -52,6 +51,11 @@ MODULE_PARM_DESC(data_type, "Sensor Date Type");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -796,9 +800,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 #endif
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},

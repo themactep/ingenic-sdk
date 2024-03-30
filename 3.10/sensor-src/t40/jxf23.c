@@ -22,7 +22,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -34,6 +33,11 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
 #define SENSOR_VERSION "H20220527a"
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

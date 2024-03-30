@@ -12,7 +12,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <linux/proc_fs.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
@@ -65,6 +64,11 @@ static int sinfo_proc_show(struct seq_file *m, void *v) {
 static int sinfo_proc_open(struct inode *inode, struct file *file) {
 	return single_open(file, sinfo_proc_show, NULL);
 }
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int index;

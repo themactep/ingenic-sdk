@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "jxh42"
 #define SENSOR_CHIP_ID 0xa042
@@ -56,6 +55,11 @@ module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct tx_isp_sensor_attribute sensor_attr;
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

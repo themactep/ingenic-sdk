@@ -12,10 +12,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc035hgs"
 #define SENSOR_CHIP_ID_H (0x00)
@@ -45,6 +43,11 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
 static unsigned short int dpc_flag = 1;
 static unsigned int gain_val = 0x340;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;

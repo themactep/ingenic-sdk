@@ -14,7 +14,6 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "ar0130"
 #define SENSOR_CHIP_ID 0x0051
@@ -52,6 +51,11 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
 };
 
 struct again_lut {

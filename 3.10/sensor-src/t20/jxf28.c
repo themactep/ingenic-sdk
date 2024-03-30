@@ -13,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/delay.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <apical-isp/apical_math.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -58,6 +57,11 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
 };
 
 struct again_lut {

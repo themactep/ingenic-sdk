@@ -19,7 +19,6 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -36,6 +35,11 @@
 #define SENSOR_VERSION "H20230928a"
 
 static int wdr_bufsize = 2 * 3000 * 188;
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int index;

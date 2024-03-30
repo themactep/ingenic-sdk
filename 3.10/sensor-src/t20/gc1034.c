@@ -16,7 +16,6 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
 #define SENSOR_NAME "gc1034"
 #define SENSOR_CHIP_ID 0x1034
@@ -501,9 +500,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x03},

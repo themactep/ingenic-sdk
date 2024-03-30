@@ -75,6 +75,11 @@ static unsigned char r2f_val = 0x64;
 static unsigned char r0c_val = 0x40;
 static unsigned char r80_val = 0x02;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

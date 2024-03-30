@@ -16,11 +16,9 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <txx-funcs.h>
 
 #define SENSOR_NAME "sc3332"
 #define SENSOR_CHIP_ID_H (0xcc)
@@ -32,6 +30,11 @@
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
