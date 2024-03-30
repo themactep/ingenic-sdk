@@ -2,3 +2,4 @@
 *.cmd
 *.mod
 *.mod.c
+lib/**/*.txt
