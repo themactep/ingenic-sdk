@@ -72,7 +72,6 @@ static int avpu_dmabuf_attach(struct dma_buf *dbuf, struct device* dev, struct d
 	return 0;
 }
 
-#ifndef CONFIG_VIDEO_V4L2
 __weak int is_dma_buf_file(struct file *);
 
 struct dma_buf_list {
@@ -335,7 +334,6 @@ __weak void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
 	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
 						direction);
 }
-#endif
 
 static void avpu_dmabuf_detach(struct dma_buf *dbuf,
 			      struct dma_buf_attachment *db_attach)
@@ -465,24 +463,25 @@ static void *avpu_dmabuf_vmap(struct dma_buf *dbuf)
 }
 
 static const struct dma_buf_ops avpu_dmabuf_ops = {
-	.attach		= avpu_dmabuf_attach,
-	.detach		= avpu_dmabuf_detach,
-	.map_dma_buf	= avpu_dmabuf_map,
-	.unmap_dma_buf	= avpu_dmabuf_unmap,
-/* the map_atomic interface was removed after 4.4 */
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 4, 0)
-	.map_atomic	= avpu_dmabuf_kmap,
-    .map		= avpu_dmabuf_kmap,
+        .attach		= avpu_dmabuf_attach,
+        .detach		= avpu_dmabuf_detach,
+        .map_dma_buf	= avpu_dmabuf_map,
+        .unmap_dma_buf	= avpu_dmabuf_unmap,
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
+        /* the map_atomic interface was removed after 4.19 */
+	#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 19, 0)
+		.map_atomic	= avpu_dmabuf_kmap,
+	#endif
+	.map		= avpu_dmabuf_kmap,
 #else
-	.kmap_atomic	= avpu_dmabuf_kmap,
-	.kmap		= avpu_dmabuf_kmap,
+        .kmap_atomic	= avpu_dmabuf_kmap,
+        .kmap		= avpu_dmabuf_kmap,
 #endif
-	.vmap		= avpu_dmabuf_vmap,
-	.mmap		= avpu_dmabuf_mmap,
-	.release	= avpu_dmabuf_release,
+        .vmap		= avpu_dmabuf_vmap,
+        .mmap		= avpu_dmabuf_mmap,
+        .release	= avpu_dmabuf_release,
 };
 
-#ifdef CONFIG_KERNEL_4_4_94
 static void define_export_info(struct dma_buf_export_info *exp_info, int size, void *priv)
 {
 	exp_info->owner = THIS_MODULE;
@@ -493,7 +492,6 @@ static void define_export_info(struct dma_buf_export_info *exp_info, int size, v
 	exp_info->size = size;
 	exp_info->priv = priv;
 }
-#endif
 
 static struct sg_table *avpu_get_base_sgt(struct avpu_dmabuf_priv *dinfo)
 {
@@ -522,9 +520,9 @@ static struct dma_buf *avpu_get_dmabuf(void *dma_info_priv)
 	struct dma_buf *dbuf;
 	struct avpu_dmabuf_priv *dinfo = dma_info_priv;
 	struct avpu_dma_buffer *buf = dinfo->buffer;
-#ifdef CONFIG_KERNEL_4_4_94
+
 	struct dma_buf_export_info exp_info;
-#endif
+
 
 	if (!dinfo->sgt_base)
 		dinfo->sgt_base = avpu_get_base_sgt(dinfo);
@@ -532,20 +530,13 @@ static struct dma_buf *avpu_get_dmabuf(void *dma_info_priv)
 	if (WARN_ON(!dinfo->sgt_base))
 		return NULL;
 
-#ifdef CONFIG_KERNEL_4_4_94
+
 	define_export_info(&exp_info, buf->size, (void *)dinfo);
 	dbuf = dma_buf_export(&exp_info);
 	if (IS_ERR(dbuf)) {
 		pr_err("couldn't export dma buf\n");
 		return NULL;
 	}
-#else
-	dbuf = dma_buf_export((void *)dinfo, &avpu_dmabuf_ops, buf->size, O_RDWR);
-	if (IS_ERR(buf)) {
-		pr_err("couldn't export dma buf\n");
-		return NULL;
-	}
-#endif
 	return dbuf;
 }
 
