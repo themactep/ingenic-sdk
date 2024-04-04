@@ -19,7 +19,9 @@ ccflags-y += -I$(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/include
 endif
 
 #### ALL #####
+ifeq ($(KERNEL_VERSION),3.10)
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
+endif
 include $(src)/$(KERNEL_VERSION)/gpio/Kbuild
 include $(src)/$(KERNEL_VERSION)/misc/sample_pwm/Kbuild
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
