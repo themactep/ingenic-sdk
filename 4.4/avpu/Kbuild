@@ -11,13 +11,14 @@ SRCS := \
   $(DIR)/avpu_alloc.c \
   $(DIR)/avpu_alloc_ioctl.c \
 
-ifeq ($(AVPU_NO_DMABUF),1)
+# AVPU_NO_DMABUF is not getting passed through the kernel build system
+#ifeq ($(AVPU_NO_DMABUF),1)
 SRCS += \
   $(DIR)/avpu_no_dmabuf.c
-else
-SRCS += \
-  $(DIR)/avpu_dmabuf.c
-endif
+#else
+#SRCS += \
+#  $(DIR)/avpu_dmabuf.c
+#endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 

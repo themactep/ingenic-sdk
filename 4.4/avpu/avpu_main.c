@@ -580,7 +580,7 @@ int avpu_codec_remove(struct platform_device *pdev)
 	struct avpu_codec_desc *codec = platform_get_drvdata(pdev);
 	dev_t dev = MKDEV(avpu_codec_major, codec->minor);
 
-#ifdef CONFIG_KERNEL_4_4_94
+#ifdef CONFIG_SOC_T40
 	clk_disable_unprepare(codec->clk);
 	clk_disable_unprepare(codec->clk_gate);
 	clk_disable_unprepare(codec->ahb1_gate);

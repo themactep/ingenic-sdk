@@ -47,7 +47,7 @@
 
 #define V4L2_MBUS_FMT_SBGGR10_1X10 0x3007
 
-static int reset_gpio = GPIO_PA(18);
+static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
