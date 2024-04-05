@@ -31,6 +31,16 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 static int sensor_max_fps = 5; //TX_SENSOR_MAX_FPS_20;
 static int shvflip = 0;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 #if 1
 struct tx_isp_dvp_bus sensor_dvp={
 	.mode = SENSOR_DVP_HREF_MODE,

@@ -54,6 +54,16 @@ const unsigned int  ANALOG_GAIN_8 = (11<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)
 const unsigned int  ANALOG_GAIN_9 = (16<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.55*(1<<TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int  ANALOG_GAIN_10 = (22<<TX_ISP_GAIN_FIXED_POINT)|(unsigned int)((0.68*(1<<TX_ISP_GAIN_FIXED_POINT)));
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int fix_point_mult2(unsigned int a, unsigned int b)

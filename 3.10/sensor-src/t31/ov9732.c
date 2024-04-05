@@ -49,6 +49,16 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 static struct sensor_info sensor_info = {
@@ -60,16 +70,6 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
-};
-
-struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
-};
-
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {

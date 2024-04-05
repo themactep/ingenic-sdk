@@ -41,6 +41,16 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again=(isp_gain*20)>>LOG2_GAIN_SHIFT;
 	// Limit Max gain

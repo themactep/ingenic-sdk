@@ -571,6 +571,17 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = FHD_1080P25_video,
 	},
 };
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 struct tx_isp_sensor_attribute sensor_attr;

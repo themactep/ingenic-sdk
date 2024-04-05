@@ -61,8 +61,8 @@ struct regval_list {
 };
 
 struct again_lut {
-	unsigned int value;
-	unsigned int gain;
+    unsigned int value;
+    unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {

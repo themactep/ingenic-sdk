@@ -46,6 +46,16 @@ MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
 static int rhs1 = 101;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)

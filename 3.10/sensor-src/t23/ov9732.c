@@ -44,6 +44,16 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 struct again_lut sensor_again_lut[] = {
