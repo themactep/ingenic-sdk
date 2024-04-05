@@ -55,6 +55,7 @@ module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct tx_isp_sensor_attribute sensor_attr;
+
 struct regval_list {
     uint16_t reg_num;
     unsigned char value;

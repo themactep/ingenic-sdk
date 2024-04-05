@@ -36,6 +36,16 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int shvflip = 0;
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
+
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
 struct sensor_gain_lut {
 	unsigned int index;
 	unsigned char again;
