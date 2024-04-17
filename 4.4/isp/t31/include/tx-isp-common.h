@@ -29,6 +29,9 @@
 #define TX_ISP_DS1_CAHNNEL_MAX_WIDTH		1920
 #define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT		1080
 
+/* Color settings */
+#define V4L2_MBUS_FMT_SBGGR10_1X10 0x3007
+#define V4L2_MBUS_FMT_SRGGB10_1X10 0x300f
 
 /*****************************************************
  			sensor attributes
