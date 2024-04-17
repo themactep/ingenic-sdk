@@ -45,7 +45,6 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20210805a"
 
-#define V4L2_MBUS_FMT_SBGGR10_1X10 0x3007
 
 static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
