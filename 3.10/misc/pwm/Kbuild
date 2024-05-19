@@ -1,10 +1,10 @@
 DIR := $(KERNEL_VERSION)/misc
 
-PWM_CORE_MODULE := sample_pwm_core
-OBJS1 := $(DIR)/sample_pwm/pwm_core.o
+PWM_CORE_MODULE := pwm_core
+OBJS1 := $(DIR)/pwm/pwm_core.o
 
-PWM_HAL_MODULE := sample_pwm_hal
-OBJS2 := $(DIR)/sample_pwm/pwm_hal.o
+PWM_HAL_MODULE := pwm_hal
+OBJS2 := $(DIR)/pwm/pwm_hal.o
 
 obj-m += $(PWM_CORE_MODULE).o
 obj-m += $(PWM_HAL_MODULE).o
