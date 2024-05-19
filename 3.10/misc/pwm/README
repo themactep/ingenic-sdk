@@ -13,7 +13,7 @@ DEFS += -DCONFIG_PWM3
 #DEFS += -DCONFIG_PWM7
 
 2. KO loading
-The order of loading the modules is important; load sample_pwm_core.ko first, followed by sample_pwm_hal.ko to ensure proper
+The order of loading the modules is important; load pwm_core.ko first, followed by pwm_hal.ko to ensure proper
 operation.
 
 3. Notes:
