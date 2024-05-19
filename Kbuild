@@ -31,8 +31,10 @@ include $(src)/$(KERNEL_VERSION)/gpio/Kbuild
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/sample_pwm/Kbuild
 
+ifeq ($(BR2_MOTORS),y)
 $(info Building Motor for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
+endif
 
 #### PLATFORM ####
 ifeq ($(KERNEL_VERSION),3.10)
