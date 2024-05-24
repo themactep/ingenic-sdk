@@ -25,8 +25,8 @@ endif
 $(info Building ISP for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
 
-$(info Building GPIO for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/gpio/Kbuild
+#$(info Building GPIO for Kernel $(KERNEL_VERSION))
+#include $(src)/$(KERNEL_VERSION)/gpio/Kbuild
 
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
