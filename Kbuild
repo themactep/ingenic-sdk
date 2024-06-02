@@ -13,14 +13,6 @@ endif
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
 ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
 
-ifeq ($(KERNEL_VERSION),3.10)
-$(info Building OSS for Kernel $(KERNEL_VERSION))
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/include
-else
-$(info Building OSS for Kernel $(KERNEL_VERSION))
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/include
-endif
-
 #### ALL #####
 $(info Building ISP for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
@@ -37,15 +29,25 @@ include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
 endif
 
 #### PLATFORM ####
-ifeq ($(KERNEL_VERSION),3.10)
-$(info Building Audio for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild
+# Check if building for SOC T23, which overrides other conditions
+ifeq ($(CONFIG_SOC_T23),y)
+    $(info Building Audio for SOC T23 using oss)
+    include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
+
+# Handle other kernel versions and SOC configurations
 else
-$(info Building Audio for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
+    # Check for kernel version 3.10
+    ifeq ($(KERNEL_VERSION),3.10)
+        $(info Building Audio for Kernel $(KERNEL_VERSION) using oss2)
+        include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild
+    else
+        # Default to oss3 for any other kernel version
+        $(info Building Audio for Kernel $(KERNEL_VERSION) using oss3)
+        include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
+    endif
 endif
 
-ifeq ($(CONFIG_SOC_T23)$(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
+ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 $(info Building AVPU for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/avpu/Kbuild
 endif
