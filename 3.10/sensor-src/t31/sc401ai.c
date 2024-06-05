@@ -40,7 +40,7 @@ static int pwdn_gpio = -1;
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
-static int shvflip = 1;
+static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
