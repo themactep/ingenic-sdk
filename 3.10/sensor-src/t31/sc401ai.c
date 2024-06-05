@@ -44,7 +44,7 @@ static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-static int sensor_resolution = TX_SENSOR_RES_100;
+static int sensor_resolution = TX_SENSOR_RES_400;
 module_param(sensor_resolution, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_resolution, "Sensor resolution");
 
