@@ -10,7 +10,7 @@
 #include <linux/gpio.h>
 //#include <mach/jzsnd.h>
 #include <linux/bitops.h>
-#include <codec-common.h>
+#include "../include/codec-common.h"
 
 #define BASE_ADDR_CODEC			0x10021000
 

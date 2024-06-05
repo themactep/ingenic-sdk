@@ -7,7 +7,7 @@
 #include <linux/seq_file.h>
 #include <asm/io.h>
 #include <linux/delay.h>
-#include <codec-common.h>
+#include "../include/codec-common.h"
 
 /**
  * global variable
