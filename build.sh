@@ -32,7 +32,12 @@ case "$SOC_MODEL" in
 		export CROSS_COMPILE="mipsel-linux-"
 
 		FAM="SOC_FAMILY=$SOC_MODEL CONFIG_SOC_${SOC_MODEL^^}=y KERNEL_VERSION=${KERNEL_VERSION}"
-		make V=2 ARCH=mips $FAM -C $ISP_ENV_KERNEL_DIR M=$PWD ${@:3}
+		make \
+		V=0 \
+		BR2_MOTORS=y \
+		BR2_MOTORS_SPI=y \
+		ARCH=mips \
+		$FAM -C $ISP_ENV_KERNEL_DIR M=$PWD ${@:3}
 		;;
 	*)
 		echo "Usage: $0 <soc> [kernel_version] <make_args>"
