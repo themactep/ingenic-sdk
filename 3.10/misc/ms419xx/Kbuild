@@ -1,0 +1,20 @@
+# Match the factory module name
+MODULE_NAME := ms419xx
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/misc/ms419xx
+
+# Source files (use .c instead of .o for SRCS, make sure paths are correct)
+SRCS := \
+  $(DIR)/ms419xx_spi_dev.c \
+  $(DIR)/motor.c
+
+# Object files (automatically generated from source files)
+OBJS := $(SRCS:%.c=%.o)
+
+# Specify the objects for the module
+$(OUT)-objs := $(OBJS)
+
+# Add the module to the list of modules to be built
+obj-m += $(OUT).o
+
