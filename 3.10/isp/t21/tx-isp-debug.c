@@ -17,7 +17,7 @@ int isp_printf(unsigned int level, unsigned char *fmt, ...)
 	va_list args;
 	int r = 0;
 
-	if(level >= print_level){
+	if (level >= print_level) {
 		va_start(args, fmt);
 
 		vaf.fmt = fmt;
@@ -25,7 +25,7 @@ int isp_printf(unsigned int level, unsigned char *fmt, ...)
 
 		r = printk("%pV",&vaf);
 		va_end(args);
-		if(level >= ISP_ERROR_LEVEL)
+		if (level >= ISP_ERROR_LEVEL)
 			dump_stack();
 	}
 	return r;

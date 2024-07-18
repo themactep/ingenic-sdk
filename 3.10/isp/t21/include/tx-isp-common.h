@@ -31,7 +31,7 @@
 
 
 /*****************************************************
- 			sensor attributes
+	sensor attributes
 *****************************************************/
 #define SENSOR_R_BLACK_LEVEL	0
 #define SENSOR_GR_BLACK_LEVEL	1
@@ -115,8 +115,8 @@ enum rgbir_mbus_fmt{
 };
 
 struct tx_isp_sensor_win_setting {
-	int	width;
-	int	height;
+	int width;
+	int height;
 	int fps;
 	enum v4l2_mbus_pixelcode mbus_code;
 	enum v4l2_colorspace colorspace;
@@ -234,8 +234,8 @@ struct tx_isp_bt601_bus{
 
 /* define sensor attribute */
 
-#define TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS 	1
-#define TX_ISP_SENSOR_FULL_RES_MAX_FPS 		2
+#define TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS	1
+#define TX_ISP_SENSOR_FULL_RES_MAX_FPS		2
 
 struct tx_isp_sensor_register_info{
 	char name[32];
@@ -269,15 +269,15 @@ struct tx_isp_sensor_attribute{
 	unsigned int cbus_device;
 	enum tx_sensor_data_bus_type dbus_type;
 	union {
-		struct tx_isp_mipi_bus 		mipi;
-		struct tx_isp_dvp_bus 		dvp;
-		struct tx_isp_bt1120_bus 	bt1120;
+		struct tx_isp_mipi_bus		mipi;
+		struct tx_isp_dvp_bus		dvp;
+		struct tx_isp_bt1120_bus	bt1120;
 		struct tx_isp_bt656_bus		bt656bus;
 		struct tx_isp_bt601_bus		bt601bus;
 		char string[64];
 	};
-	unsigned int max_again;	//the format is .16
-	unsigned int max_dgain;	//the format is .16
+	unsigned int max_again; //the format is .16
+	unsigned int max_dgain; //the format is .16
 	unsigned int again;
 	unsigned int dgain;
 	unsigned short min_integration_time;
@@ -305,8 +305,8 @@ enum tx_isp_priv_ioctl_direction {
 
 #define NOTIFICATION_TYPE_CORE_OPS	(0x1<<24)
 #define NOTIFICATION_TYPE_SENSOR_OPS	(0x2<<24)
-#define NOTIFICATION_TYPE_FS_OPS 	(0x3<<24)
-#define NOTIFICATION_TYPE_TUN_OPS 	(0x4<<24)
+#define NOTIFICATION_TYPE_FS_OPS	(0x3<<24)
+#define NOTIFICATION_TYPE_TUN_OPS	(0x4<<24)
 #define NOTIFICATION_TYPE_OPS(n)	((n) & (0xff<<24))
 enum tx_isp_notification {
 	/* the events of subdev */
@@ -381,14 +381,14 @@ struct frame_image_format {
 	struct v4l2_pix_format pix;
 
 	/* crop */
-	bool	crop_enable;
+	bool crop_enable;
 	unsigned int crop_top;
 	unsigned int crop_left;
 	unsigned int crop_width;
 	unsigned int crop_height;
 
 	/* scaler */
-	bool	scaler_enable;
+	bool scaler_enable;
 	unsigned int scaler_out_width;
 	unsigned int scaler_out_height;
 
@@ -412,7 +412,6 @@ struct isp_buf_info {
 #define VIDIOC_REGISTER_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
 #define VIDIOC_RELEASE_SENSOR		_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
 #define VIDIOC_SET_FRAME_FORMAT		_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
-#define VIDIOC_RESET_FRAME_FORMAT	_IOWR('V', BASE_VIDIOC_PRIVATE + 22, struct frame_image_format)
 #define VIDIOC_GET_FRAME_FORMAT		_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
 #define VIDIOC_DEFAULT_CMD_SET_BANKS	_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
 #define VIDIOC_DEFAULT_CMD_ISP_TUNING	_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
@@ -423,6 +422,7 @@ struct isp_buf_info {
 #define VIDIOC_LINKS_STREAMOFF		_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
 #define VIDIOC_SET_BUF_INFO		_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
 #define VIDIOC_GET_BUF_INFO		_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
+#define VIDIOC_RESET_FRAME_FORMAT	_IOWR('V', BASE_VIDIOC_PRIVATE + 22, struct frame_image_format)
 
 enum tx_isp_vidioc_default_command {
 	TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -446,8 +446,8 @@ struct tx_isp_video_in {
 	struct v4l2_mbus_framefmt mbus;
 	unsigned int mbus_change;
 	struct tx_isp_sensor_attribute *attr;
-	unsigned int vi_max_width;	//the max width of sensor output setting
-	unsigned int vi_max_height;	//the max height of sensor output setting
+	unsigned int vi_max_width; //the max width of sensor output setting
+	unsigned int vi_max_height; //the max height of sensor output setting
 	unsigned int fps;
 	int grp_id;
 };

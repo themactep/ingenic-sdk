@@ -111,8 +111,7 @@ static inline unsigned short isp_intc_state(void)
 
 void system_program_interrupt_event(uint8_t event, uint8_t id)
 {
-	switch(event)
-	{
+	switch(event) {
 		case 0: apical_isp_interrupts_interrupt0_source_write(id); break;
 		case 1: apical_isp_interrupts_interrupt1_source_write(id); break;
 		case 2: apical_isp_interrupts_interrupt2_source_write(id); break;
@@ -148,8 +147,7 @@ void system_set_interrupt_handler(uint8_t source,
 void system_init_interrupt(void)
 {
 	int i;
-	for (i = 0; i < APICAL_IRQ_COUNT; i++)
-	{
+	for (i = 0; i < APICAL_IRQ_COUNT; i++) {
 		isr_func[i] = NULL;
 		isr_param[i] = NULL;
 	}
@@ -177,7 +175,7 @@ static int isp_set_buffer_lineoffset_vflip_disable(struct isp_core_output_channe
 	struct frame_image_format *fmt = &(chan->fmt);
 	unsigned int regw = 0xb00;
 
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			APICAL_WRITE_32(regw + 0xa0 + 0x100 * (chan->index), chan->lineoffset);//lineoffset
@@ -192,7 +190,7 @@ static int isp_set_buffer_lineoffset_vflip_enable(struct isp_core_output_channel
 {
 	struct frame_image_format *fmt = &(chan->fmt);
 	unsigned int regw = 0xb00;
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			/* UV */
@@ -241,12 +239,12 @@ static int isp_set_buffer_address_vflip_enable(struct isp_core_output_channel *c
 	unsigned int regw = 0xb00;
 	unsigned int offset;
 	unsigned int offset_uv;
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			/* UV */
 			offset = fmt->pix.width * fmt->pix.height;
-			if(pad->link.flag & TX_ISP_PADLINK_FS)
+			if (pad->link.flag & TX_ISP_PADLINK_FS)
 				offset_uv = (fmt->pix.height & 0xf) ? fmt->pix.width * (0x10 - (fmt->pix.height & 0xf)) :0; /* align at 16 lines */
 			else
 				offset_uv = 0;
@@ -268,7 +266,7 @@ static int isp_enable_dma_transfer(struct isp_core_output_channel *chan, int ono
 	unsigned int regw = 0xb00;
 	//	unsigned int primary;
 	//	printk("^~^ %s[%d] index = %d onoff = %d ^~^\n",__func__, __LINE__, video->index, onoff);
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			if(onoff)
@@ -296,25 +294,25 @@ static int isp_configure_base_addr(struct tx_isp_core_device *core)
 	unsigned char bank_id = 0;
 	unsigned char i = 0;
 	int index = 0;
-	for(index = 0; index < core->num_chans; index++){
+	for (index = 0; index < core->num_chans; index++) {
 		chan = &(core->chans[index]);
-		if(chan->state == TX_ISP_MODULE_RUNNING){
-			if(chan->pad->link.flag & TX_ISP_PADLINK_LFB)
+		if (chan->state == TX_ISP_MODULE_RUNNING) {
+			if (chan->pad->link.flag & TX_ISP_PADLINK_LFB)
 				continue;
 
 			/*printk("## %s %d banks = %d ##\n",__func__,__LINE__, chan->usingbanks);	*/
 			hw_dma = APICAL_READ_32(0xb24 + 0x100*index);
 			current_bank = (hw_dma >> 8) & 0x7;
 			/* The begin pointer is next bank. */
-			for(i = 0, bank_id = current_bank; i < chan->usingbanks; i++, bank_id++){
+			for (i = 0, bank_id = current_bank; i < chan->usingbanks; i++, bank_id++) {
 				bank_id = bank_id % chan->usingbanks;
-				if(chan->bank_flag[bank_id] == 0){
+				if (chan->bank_flag[bank_id] == 0) {
 					buf = pop_buffer_fifo(&chan->fifo);
 					if(buf != NULL){
 #if 0
-						if(core->vflip_state){
+						if (core->vflip_state) {
 							isp_set_buffer_address_vflip_enable(chan, buf, bank_id);
-						}else{
+						} else {
 							isp_set_buffer_address_vflip_disable(chan, buf, bank_id);
 						}
 #else
@@ -323,7 +321,7 @@ static int isp_configure_base_addr(struct tx_isp_core_device *core)
 						chan->vflip_flag[bank_id] = core->vflip_state;
 						chan->bank_flag[bank_id] = 1;
 						chan->banks_addr[bank_id] = buf->addr;
-					}else
+					} else
 						break;
 				}
 			}
@@ -338,13 +336,13 @@ static inline int isp_enable_channel(struct isp_core_output_channel *chan)
 	unsigned char next_bank = 0;
 	hw_dma = APICAL_READ_32(0xb24 + 0x100 * (chan->index));
 	next_bank = (((hw_dma >> 8) & 0x7) + 1) % chan->usingbanks;
-	if(chan->pad->link.flag & TX_ISP_PADLINK_LFB){
-		if(chan->state == TX_ISP_MODULE_RUNNING){
-			if(chan->dma_state == 0)
+	if (chan->pad->link.flag & TX_ISP_PADLINK_LFB) {
+		if (chan->state == TX_ISP_MODULE_RUNNING) {
+			if (chan->dma_state == 0)
 				isp_enable_dma_transfer(chan, 1);
 			chan->dma_state = 1;
-		}else{
-			if(chan->dma_state)
+		} else {
+			if (chan->dma_state)
 				isp_enable_dma_transfer(chan, 0);
 			chan->dma_state = 0;
 		}
@@ -363,17 +361,17 @@ static int isp_modify_dma_direction(struct isp_core_output_channel *chan)
 {
 	unsigned int hw_dma = 0;
 	unsigned char next_bank = 0;
-	if(chan->state == TX_ISP_MODULE_RUNNING){
-		if(chan->pad->link.flag & TX_ISP_PADLINK_LFB)
+	if (chan->state == TX_ISP_MODULE_RUNNING) {
+		if (chan->pad->link.flag & TX_ISP_PADLINK_LFB)
 			return 0;
 		hw_dma = APICAL_READ_32(0xb24 + 0x100 * (chan->index));
 		next_bank = (((hw_dma >> 8) & 0x7) + 1) % chan->usingbanks;
-		if(chan->vflip_flag[next_bank] ^ chan->vflip_state){
+		if (chan->vflip_flag[next_bank] ^ chan->vflip_state) {
 			chan->vflip_state = chan->vflip_flag[next_bank];
 #if 0
-			if(chan->vflip_state){
+			if (chan->vflip_state) {
 				isp_set_buffer_lineoffset_vflip_enable(chan);
-			}else{
+			} else {
 				isp_set_buffer_lineoffset_vflip_disable(chan);
 			}
 #else
@@ -389,8 +387,8 @@ static inline void cleanup_chan_banks(struct isp_core_output_channel *chan)
 	int bank_id = 0;
 	struct tx_isp_core_device *core = chan->priv;
 	struct frame_channel_buffer buf;
-	while(bank_id < chan->usingbanks){
-		if(chan->bank_flag[bank_id]){
+	while (bank_id < chan->usingbanks) {
+		if (chan->bank_flag[bank_id]) {
 			buf.addr = chan->banks_addr[bank_id];
 			buf.priv = core->frame_sequeue;
 			tx_isp_send_event_to_remote(chan->pad, TX_ISP_EVENT_FRAME_CHAN_DQUEUE_BUFFER, &buf);
@@ -418,20 +416,20 @@ static inline void isp_core_update_addr(struct isp_core_output_channel *chan)
 	unsigned int value = 0;
 	unsigned int isnv = 0;
 
-	if(chan->pad->link.flag & TX_ISP_PADLINK_LFB){
-		if(chan->state == TX_ISP_MODULE_RUNNING){
-			if(chan->dma_state == 0)
+	if (chan->pad->link.flag & TX_ISP_PADLINK_LFB) {
+		if (chan->state == TX_ISP_MODULE_RUNNING) {
+			if (chan->dma_state == 0)
 				isp_enable_dma_transfer(chan, 1);
 			chan->dma_state = 1;
-		}else{
-			if(chan->dma_state)
+		} else {
+			if (chan->dma_state)
 				isp_enable_dma_transfer(chan, 0);
 			chan->dma_state = 0;
 		}
 		return;
 	}
 
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			uv_hw_dma = APICAL_READ_32(0xba4 + 0x100 * chan->index);
@@ -446,10 +444,10 @@ static inline void isp_core_update_addr(struct isp_core_output_channel *chan)
 	current_bank = (y_hw_dma >> 8) & 0x7;
 	uv_bank = (uv_hw_dma >> 8) & 0x7;
 
-	if(isnv && (uv_bank != current_bank)){
+	if (isnv && (uv_bank != current_bank)) {
 		/*printk("##### y_bank = %d, nv_bank = %d\n",current_bank,uv_bank);*/
 		value = (0x1<<3) | (chan->usingbanks - 1);
-		switch(fmt->pix.pixelformat){
+		switch (fmt->pix.pixelformat) {
 			case V4L2_PIX_FMT_NV12:
 			case V4L2_PIX_FMT_NV21:
 				APICAL_WRITE_32(0xb9c + 0x100*(chan->index), value);
@@ -463,7 +461,7 @@ static inline void isp_core_update_addr(struct isp_core_output_channel *chan)
 	if(chan->reset_dma_flag){
 		/*printk("##### y_bank = %d, nv_bank = %d\n",current_bank,uv_bank);*/
 		value = (0x0<<3) | (chan->usingbanks - 1);
-		switch(fmt->pix.pixelformat){
+		switch (fmt->pix.pixelformat) {
 			case V4L2_PIX_FMT_NV12:
 			case V4L2_PIX_FMT_NV21:
 				APICAL_WRITE_32(0xb9c + 0x100*(chan->index), value);
@@ -480,17 +478,17 @@ static inline void isp_core_update_addr(struct isp_core_output_channel *chan)
 	}else{
 		bank_id = current_bank;
 	}
-	if(chan->bank_flag[bank_id]){
+	if (chan->bank_flag[bank_id]) {
 		buf.addr = chan->banks_addr[bank_id];
 		buf.priv = core->frame_sequeue;
 		tx_isp_send_event_to_remote(chan->pad, TX_ISP_EVENT_FRAME_CHAN_DQUEUE_BUFFER, &buf);
 		chan->bank_flag[bank_id] = 0;
-	}else{
+	} else {
 		tx_isp_send_event_to_remote(chan->pad, TX_ISP_EVENT_FRAME_CHAN_DQUEUE_BUFFER, NULL);
 	}
 
 	next_bank = (current_bank + 1) % chan->usingbanks;
-	if(chan->bank_flag[next_bank] != 1){
+	if (chan->bank_flag[next_bank] != 1) {
 		isp_enable_channel(chan);
 	}
 	return;
@@ -507,16 +505,15 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 	unsigned char color = apical_isp_top_rggb_start_read();
 	unsigned int i = 0;
 	irqreturn_t ret = IRQ_HANDLED;
-	if((isp_irq_status = isp_intc_state()) != 0)
-	{
+	if ((isp_irq_status = isp_intc_state()) != 0) {
 		apical_isp_interrupts_interrupt_clear_write(0);
 		apical_isp_interrupts_interrupt_clear_write(isp_irq_status);
 		/* printk("0xb00 = 0x%0x state = 0x%x\n", APICAL_READ_32(0xb00), isp_irq_status); */
-		for(i = 0; i < APICAL_IRQ_COUNT; i++){
-			if(isp_irq_status & (1 << i)){
-				switch(i){
+		for (i = 0; i < APICAL_IRQ_COUNT; i++) {
+			if (isp_irq_status & (1 << i)) {
+				switch (i) {
 					case APICAL_IRQ_FRAME_START:
-						if(isr_func[i])
+						if (isr_func[i])
 							isr_func[i](isr_param[i]);
 						/*printk("^~^ frame start ^~^\n");*/
 						isp_configure_base_addr(core);
@@ -525,7 +522,7 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 						ret = IRQ_WAKE_THREAD;
 						break;
 					case APICAL_IRQ_FRAME_WRITER_FR:
-						if(isr_func[i])
+						if (isr_func[i])
 							isr_func[APICAL_IRQ_FRAME_WRITER_FR](isr_param[APICAL_IRQ_FRAME_WRITER_FR]);
 						chan = &core->chans[ISP_FR_VIDEO_CHANNEL];
 						/*printk("^~^ fr dma done ^~^\n");*/
@@ -533,14 +530,14 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 						isp_modify_dma_direction(chan);
 						break;
 					case APICAL_IRQ_FRAME_WRITER_DS:
-						if(isr_func[i])
+						if (isr_func[i])
 							isr_func[APICAL_IRQ_FRAME_WRITER_DS](isr_param[APICAL_IRQ_FRAME_WRITER_DS]);
 						chan = &core->chans[ISP_DS1_VIDEO_CHANNEL];
 						isp_core_update_addr(chan);
 						isp_modify_dma_direction(chan);
 						break;
 					case APICAL_IRQ_FRAME_WRITER_DS2:
-						if(isr_func[i])
+						if (isr_func[i])
 							isr_func[i](isr_param[i]);
 						#if TX_ISP_EXIST_DS2_CHANNEL
 						chan = &core->chans[ISP_DS2_VIDEO_CHANNEL];
@@ -549,12 +546,12 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 						#endif
 						break;
 					case APICAL_IRQ_FRAME_END:
-						if(core->hflip_change == 1){
+						if (core->hflip_change == 1) {
 							core->hflip_change = 0;
 							color ^= 1;
 							apical_isp_top_bypass_mirror_write(core->hflip_state ?0:1);
 						}
-						if(core->vflip_change == 1){
+						if (core->vflip_change == 1) {
 							core->vflip_change = 0;
 							if(core->vin.mbus_change == 1)
 								color ^= 2;
@@ -566,26 +563,26 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 						core->frame_state = 0;
 						isp_configure_base_addr(core);
 						isp_modify_dma_direction(chan);
-						if(chan->dma_state != 1){
+						if (chan->dma_state != 1) {
 							isp_enable_channel(chan);
 						}
 
-						if(core->tuning)
+						if (core->tuning)
 							core->tuning->event(core->tuning, TX_ISP_EVENT_CORE_FRAME_DONE, NULL);
 
 						if (1 == core->isp_daynight_switch) {
-							if(core->tuning)
+							if (core->tuning)
 								core->tuning->event(core->tuning, TX_ISP_EVENT_CORE_DAY_NIGHT, NULL);
 							core->isp_daynight_switch = 0;
 						}
 						tx_isp_sync_ldc();
 						if (g_switch_lfb_off) {
-						    isp_lfb_ctrl_flb_enable(0);
-						    g_switch_lfb_off = 0;
+							isp_lfb_ctrl_flb_enable(0);
+							g_switch_lfb_off = 0;
 						}
 						if (g_switch_lfb_on) {
-						    isp_lfb_ctrl_flb_enable(1);
-						    g_switch_lfb_on = 0;
+							isp_lfb_ctrl_flb_enable(1);
+							g_switch_lfb_on = 0;
 						}
 					case APICAL_IRQ_AE_STATS:
 					case APICAL_IRQ_AWB_STATS:
@@ -593,13 +590,13 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 					case APICAL_IRQ_FPGA_FRAME_START:
 					case APICAL_IRQ_FPGA_FRAME_END:
 					case APICAL_IRQ_FPGA_WDR_BUF:
-						if(isr_func[i])
+						if (isr_func[i])
 							isr_func[i](isr_param[i]);
 						break;
 					case APICAL_IRQ_DS1_OUTPUT_END:
 						chan = &core->chans[ISP_DS1_VIDEO_CHANNEL];
 						isp_modify_dma_direction(chan);
-						if(chan->dma_state != 1){
+						if (chan->dma_state != 1) {
 							isp_enable_channel(chan);
 						}
 						break;
@@ -607,7 +604,7 @@ static irqreturn_t ispcore_interrupt_service_routine(struct tx_isp_subdev *sd, u
 					case APICAL_IRQ_DS2_OUTPUT_END:
 						chan = &core->chans[ISP_DS2_VIDEO_CHANNEL];
 						isp_modify_dma_direction(chan);
-						if(chan->dma_state != 1){
+						if (chan->dma_state != 1) {
 							isp_enable_channel(chan);
 						}
 						break;
@@ -630,12 +627,12 @@ static irqreturn_t ispcore_irq_thread_handle(struct tx_isp_subdev *sd, void *dat
 	unsigned int value = 0;
 	int i = 0;
 
-	if(core){
-		for(i = 0; i < TX_ISP_I2C_SET_BUTTON; i++){
-			if(core->i2c_msgs[i].flag == 0)
+	if (core) {
+		for (i = 0; i < TX_ISP_I2C_SET_BUTTON; i++) {
+			if (core->i2c_msgs[i].flag == 0)
 				continue;
 			core->i2c_msgs[i].flag = 0;
-			switch(i){
+			switch (i) {
 				case TX_ISP_I2C_SET_AGAIN:
 					cmd = TX_ISP_EVENT_SENSOR_AGAIN;
 					break;
@@ -802,7 +799,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 	int ret = ISP_SUCCESS;
 	unsigned int csc = 0xf;
 
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			/* dma channel uv write */
@@ -812,7 +809,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 		case V4L2_PIX_FMT_YUYV:
 		case V4L2_PIX_FMT_UYVY:
 		case V4L2_PIX_FMT_YUV444:
-			switch(chan->index){
+			switch (chan->index) {
 				case ISP_FR_VIDEO_CHANNEL:
 					if(mbus->code == V4L2_MBUS_FMT_YUYV8_1X16)
 						csc = 0x08;
@@ -852,7 +849,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 		case V4L2_PIX_FMT_BGR24:
 		case V4L2_PIX_FMT_BGR32:
 		case V4L2_PIX_FMT_RGB310:
-			switch(chan->index){
+			switch (chan->index) {
 				case ISP_FR_VIDEO_CHANNEL:
 					isp_core_config_top_ctl_register(FR_CSC_BIT,
 							ISP_MODULE_BYPASS_ENABLE);
@@ -889,7 +886,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 	api.dir = COMMAND_SET;
 	api.id = -1;
 	api.value = -1;
-	switch(chan->index){
+	switch (chan->index) {
 		case ISP_FR_VIDEO_CHANNEL:
 			api.id = FR_OUTPUT_MODE_ID;
 			break;
@@ -903,7 +900,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 			ret = -EINVAL;
 			break;
 	}
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			api.value = YUV420;
@@ -929,7 +926,7 @@ static int ispcore_config_dma_channel_write(struct isp_core_output_channel *chan
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
 	}
 
-	switch(chan->index){
+	switch (chan->index) {
 	case ISP_FR_VIDEO_CHANNEL:
 		APICAL_WRITE_32(0x570, csc);
 		break;
@@ -1024,14 +1021,14 @@ static int ispcore_frame_channel_try_fmt (struct tx_isp_core_device *core, struc
 	/*printk("^^^^ %s[%d] i = %d^^^^\n",__func__,__LINE__,i);*/
 	for(; i <= contrl->fmt_end; i++){
 		cfmt = &(isp_output_fmt[i]);
-		if(fmt->pix.pixelformat == cfmt->fourcc){
+		if (fmt->pix.pixelformat == cfmt->fourcc) {
 			break;
 		}
 	}
 	//	printk("^^^^ %s[%d] i = %d^^^^\n",__func__,__LINE__,i);
-	if(i > contrl->fmt_end){
+	if (i > contrl->fmt_end) {
 		printk("%s[%d], don't support the format(0x%08x), i = %d start = %d end = %d\n",
-				__func__, __LINE__, fmt->pix.pixelformat, i, contrl->fmt_start, contrl->fmt_end);
+			__func__, __LINE__, fmt->pix.pixelformat, i, contrl->fmt_start, contrl->fmt_end);
 		return -EINVAL;
 	}
 
@@ -1045,9 +1042,9 @@ static int ispcore_frame_channel_s_fmt(struct isp_core_output_channel *chan, str
 	struct frame_channel_format *cfmt = NULL;
 	int i = 0;
 
-	for(i = contrl->fmt_start; i <= contrl->fmt_end; i++){
+	for (i = contrl->fmt_start; i <= contrl->fmt_end; i++) {
 		cfmt = &(isp_output_fmt[i]);
-		if(fmt->pix.pixelformat == cfmt->fourcc)
+		if (fmt->pix.pixelformat == cfmt->fourcc)
 			break;
 	}
 
@@ -1058,7 +1055,7 @@ static int ispcore_frame_channel_s_fmt(struct isp_core_output_channel *chan, str
 
 	fmt->pix.bytesperline = fmt->pix.width * cfmt->depth / 8;
 
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			fmt->pix.sizeimage = fmt->pix.bytesperline * ((fmt->pix.height + 0xf) & (~0xf)); // the size must be algin 16 lines.
@@ -1079,7 +1076,7 @@ static int ispcore_frame_channel_set_crop(struct isp_core_output_channel *chan, 
 	unsigned char status = 0;
 	int ret = ISP_SUCCESS;
 
-	switch(chan->index){
+	switch (chan->index) {
 		case ISP_FR_VIDEO_CHANNEL:
 			apical_isp_top_bypass_fr_crop_write((fmt && fmt->crop_enable)?0:1);
 			index = CROP_FR;
@@ -1096,11 +1093,11 @@ static int ispcore_frame_channel_set_crop(struct isp_core_output_channel *chan, 
 			ret = -EINVAL;
 			break;
 	}
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 	api.type = TIMAGE;
 	api.dir = COMMAND_SET;
-	if(fmt && fmt->crop_enable){
+	if (fmt && fmt->crop_enable){
 		api.value = (index << 16) + fmt->crop_width;
 		api.id = IMAGE_RESIZE_WIDTH_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
@@ -1125,8 +1122,7 @@ static int ispcore_frame_channel_set_crop(struct isp_core_output_channel *chan, 
 		api.id = IMAGE_RESIZE_ENABLE_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
 		//	printk("[%d]apical command: status = %d, ret = 0x%08x\n",__LINE__, status, ret);
-
-	}else{
+	} else {
 		api.value = (index << 16) + DISABLE;
 		api.id = IMAGE_RESIZE_ENABLE_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
@@ -1141,27 +1137,27 @@ static int ispcore_frame_channel_set_scaler(struct isp_core_output_channel *chan
 	unsigned char status = 0;
 	int ret = ISP_SUCCESS;
 
-	switch(chan->index){
-	case ISP_DS1_VIDEO_CHANNEL:
-		apical_isp_top_bypass_ds1_scaler_write((fmt && fmt->scaler_enable)?0:1);
-		apical_isp_ds1_scaler_imgrst_write(1);
-		index = SCALER;
-		break;
-	case ISP_DS2_VIDEO_CHANNEL:
-		apical_isp_top_bypass_ds2_scaler_write((fmt && fmt->scaler_enable)?0:1);
-		apical_isp_ds2_scaler_imgrst_write(1);
-		index = SCALER2;
-		break;
-	case ISP_FR_VIDEO_CHANNEL:
-	default:
-		ret = -EINVAL;
-		break;
+	switch (chan->index) {
+		case ISP_DS1_VIDEO_CHANNEL:
+			apical_isp_top_bypass_ds1_scaler_write((fmt && fmt->scaler_enable)?0:1);
+			apical_isp_ds1_scaler_imgrst_write(1);
+			index = SCALER;
+			break;
+		case ISP_DS2_VIDEO_CHANNEL:
+			apical_isp_top_bypass_ds2_scaler_write((fmt && fmt->scaler_enable)?0:1);
+			apical_isp_ds2_scaler_imgrst_write(1);
+			index = SCALER2;
+			break;
+		case ISP_FR_VIDEO_CHANNEL:
+		default:
+			ret = -EINVAL;
+			break;
 	}
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 	api.type = TIMAGE;
 	api.dir = COMMAND_SET;
-	if(fmt && fmt->scaler_enable){
+	if (fmt && fmt->scaler_enable) {
 		api.value = (index << 16) + DISABLE;
 		api.id = IMAGE_RESIZE_ENABLE_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
@@ -1175,7 +1171,7 @@ static int ispcore_frame_channel_set_scaler(struct isp_core_output_channel *chan
 		api.id = IMAGE_RESIZE_HEIGHT_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
 		//	printk("[%d]apical command: status = %d, ret = 0x%08x\n",__LINE__, status, ret);
-		switch(chan->index){
+		switch (chan->index) {
 		case ISP_DS1_VIDEO_CHANNEL:
 			apical_isp_ds1_scaler_imgrst_write(0);
 			break;
@@ -1193,7 +1189,7 @@ static int ispcore_frame_channel_set_scaler(struct isp_core_output_channel *chan
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
 		//	printk("[%d]apical command: status = %d, ret = 0x%08x\n",__LINE__, status, ret);	return ret;
 
-	}else{
+	} else {
 		api.value = (index << 16) + DISABLE;
 		api.id = IMAGE_RESIZE_ENABLE_ID;
 		status = apical_command(api.type, api.id, api.value, api.dir, &ret);
@@ -1213,19 +1209,19 @@ static int ispcore_frame_channel_streamon(struct tx_isp_subdev_pad *pad)
 	unsigned long flags = 0;
 	int retry = 0;
 
-	if(pad->state != TX_ISP_PADSTATE_LINKED){
+	if (pad->state != TX_ISP_PADSTATE_LINKED) {
 		ISP_ERROR("ISP pad state is wrong!\n");
 		return -EPERM;
 	}
 
-	if(core->state != TX_ISP_MODULE_RUNNING){
+	if (core->state != TX_ISP_MODULE_RUNNING) {
 		ISP_ERROR("Please enable isp firstly!\n");
 		return -EPERM;
 	}
 
 	fmt = &(chan->fmt);
 
-	if(pad->link.flag & TX_ISP_PADLINK_LFB){
+	if (pad->link.flag & TX_ISP_PADLINK_LFB) {
 		struct frame_channel_buffer buf;
 		chan->usingbanks = 2;
 		buf.addr = ISP_LFB_DEFAULT_BUF_BASE0;
@@ -1235,7 +1231,7 @@ static int ispcore_frame_channel_streamon(struct tx_isp_subdev_pad *pad)
 		buf.addr = ISP_LFB_DEFAULT_BUF_BASE1;
 		isp_set_buffer_address_vflip_disable(chan, &buf, 1);
 		/* configure lfb */
-		switch(chan->index){
+		switch (chan->index) {
 			case ISP_FR_VIDEO_CHANNEL:
 				isp_lfb_ctrl_select_fr();
 				break;
@@ -1267,7 +1263,7 @@ static int ispcore_frame_channel_streamon(struct tx_isp_subdev_pad *pad)
 	chan->vflip_state = 0xff;
 	chan->state = TX_ISP_MODULE_ACTIVATE;
 
-	switch(fmt->pix.pixelformat){
+	switch (fmt->pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			/* dma channel uv write */
@@ -1339,17 +1335,17 @@ static int ispcore_frame_channel_streamoff(struct tx_isp_subdev_pad *pad)
 	int ret = ISP_SUCCESS;
 	int retry = 0;
 
-	if(pad->state != TX_ISP_PADSTATE_STREAM)
+	if (pad->state != TX_ISP_PADSTATE_STREAM)
 		return ret;
 
 	spin_lock_irqsave(&chan->slock, flags);
-	if(chan->state != TX_ISP_MODULE_RUNNING){
+	if (chan->state != TX_ISP_MODULE_RUNNING) {
 		private_spin_unlock_irqrestore(&chan->slock, flags);
 		return ISP_SUCCESS;
 	}
 	private_spin_unlock_irqrestore(&chan->slock, flags);
 
-	if(pad->link.flag & TX_ISP_PADLINK_LFB){
+	if (pad->link.flag & TX_ISP_PADLINK_LFB) {
 		g_switch_lfb_off = 1;
 		retry = 100;
 		while (g_switch_lfb_off) {
@@ -1362,7 +1358,7 @@ static int ispcore_frame_channel_streamoff(struct tx_isp_subdev_pad *pad)
 		}
 		//isp_lfb_ctrl_flb_enable(0);
 	}
-	switch(chan->fmt.pix.pixelformat){
+	switch (chan->fmt.pix.pixelformat) {
 		case V4L2_PIX_FMT_NV12:
 		case V4L2_PIX_FMT_NV21:
 			/* dma channel uv write */
@@ -1420,12 +1416,12 @@ static int ispcore_frame_channel_qbuf(struct tx_isp_subdev_pad *pad, void *data)
 	buf = data;
 	chan = pad->priv;
 
-	if(pad->link.flag & TX_ISP_PADLINK_LFB){
+	if (pad->link.flag & TX_ISP_PADLINK_LFB) {
 		return 0;
 	}
 
 	/*printk("## %s %d buf = 0x%08x ##\n", __func__,__LINE__, buf->addr);*/
-	if(buf && chan){
+	if (buf && chan) {
 		private_spin_lock_irqsave(&chan->slock, flags);
 		push_buffer_fifo(&chan->fifo, buf);
 		private_spin_unlock_irqrestore(&chan->slock, flags);
@@ -1438,12 +1434,12 @@ static int ispcore_frame_channel_freebufs(struct tx_isp_subdev_pad *pad, void *d
 	struct isp_core_output_channel *chan = NULL;
 	unsigned long flags = 0;
 
-	if(pad->link.flag & TX_ISP_PADLINK_LFB){
+	if (pad->link.flag & TX_ISP_PADLINK_LFB) {
 		return 0;
 	}
 
 	chan = pad->priv;
-	if(chan){
+	if (chan) {
 		private_spin_lock_irqsave(&chan->slock, flags);
 		cleanup_buffer_fifo(&chan->fifo);
 		private_spin_unlock_irqrestore(&chan->slock, flags);
@@ -1460,10 +1456,10 @@ static inline int ispcore_frame_channel_get_fmt(struct tx_isp_subdev_pad *pad, v
 	struct frame_channel_format *cfmt;
 
 	chan = pad->priv;
-	if(data && chan){
+	if (data && chan) {
 		core = chan->priv;
 		contrl = &core->contrl;
-		if(core->bypass == TX_ISP_FRAME_CHANNEL_BYPASS_ISP_ENABLE){
+		if (core->bypass == TX_ISP_FRAME_CHANNEL_BYPASS_ISP_ENABLE) {
 			cfmt = &(isp_output_fmt[contrl->fmt_end]);
 			fmt = data;
 
@@ -1473,7 +1469,7 @@ static inline int ispcore_frame_channel_get_fmt(struct tx_isp_subdev_pad *pad, v
 			fmt->pix.sizeimage = chan->fmt.pix.sizeimage;
 			fmt->crop_enable = 0;
 			fmt->scaler_enable = 0;
-		}else{
+		} else {
 			memcpy(data, &(chan->fmt), sizeof(struct frame_image_format));
 		}
 	}
@@ -1491,7 +1487,7 @@ static int ispcore_frame_channel_set_fmt(struct tx_isp_subdev_pad *pad, void *da
 	unsigned int height = 0;
 	int ret = 0;
 
-	if(IS_ERR_OR_NULL(core)){
+	if (IS_ERR_OR_NULL(core)) {
 		return -EINVAL;
 	}
 
@@ -1499,22 +1495,22 @@ static int ispcore_frame_channel_set_fmt(struct tx_isp_subdev_pad *pad, void *da
 	mbus = &core->vin.mbus;
 	fmt = data;
 
-	if((core->bypass == TX_ISP_FRAME_CHANNEL_BYPASS_ISP_ENABLE) && (fmt->crop_enable | fmt->scaler_enable)){
+	if ((core->bypass == TX_ISP_FRAME_CHANNEL_BYPASS_ISP_ENABLE) && (fmt->crop_enable | fmt->scaler_enable)) {
 		ISP_ERROR("Can't set chan%d fmt when bypass ispcore!\n", chan->index);
 		return -EPERM;
 	}
 
-	if((mbus->code == V4L2_MBUS_FMT_YUYV8_1X16) && (fmt->crop_enable | fmt->scaler_enable)){
+	if ((mbus->code == V4L2_MBUS_FMT_YUYV8_1X16) && (fmt->crop_enable | fmt->scaler_enable)) {
 		ISP_ERROR("Chan%d can't be set fmt when sensor is YUYV8_1x16!\n", chan->index);
 		return -EINVAL;
 	}
 
 	/* check format */
-	if(fmt->crop_enable == true && chan->has_crop == false){
+	if (fmt->crop_enable == true && chan->has_crop == false) {
 		ISP_ERROR("Chan%d can't be cropped!\n", chan->index);
 		return -EINVAL;
 	}
-	if(fmt->scaler_enable == true && chan->has_scaler == false){
+	if (fmt->scaler_enable == true && chan->has_scaler == false) {
 		ISP_ERROR("Chan%d can't be scaler!\n", chan->index);
 		return -EINVAL;
 	}
@@ -1522,18 +1518,18 @@ static int ispcore_frame_channel_set_fmt(struct tx_isp_subdev_pad *pad, void *da
 	width = chan->fmt.pix.width;
 	height = chan->fmt.pix.height;
 	/*printk("## %s %d; width=%d height=%d ##\n",__func__,__LINE__,width,height);*/
-	if(fmt->crop_enable){
-		if(fmt->crop_top + fmt->crop_height > chan->max_height ||
-				fmt->crop_left + fmt->crop_width > chan->max_width){
-		ISP_ERROR("The chan%d crop %d*%d, %d*%d!\n", chan->index, fmt->crop_left, fmt->crop_top, fmt->crop_width, fmt->crop_height);
-		return -EINVAL;
+	if (fmt->crop_enable) {
+		if (fmt->crop_top + fmt->crop_height > chan->max_height ||
+				fmt->crop_left + fmt->crop_width > chan->max_width) {
+			ISP_ERROR("The chan%d crop %d*%d, %d*%d!\n", chan->index, fmt->crop_left, fmt->crop_top, fmt->crop_width, fmt->crop_height);
+			return -EINVAL;
 		}
 		width = fmt->crop_width;
 		height = fmt->crop_height;
 	}
 
-	if(fmt->scaler_enable){
-		if(width < fmt->scaler_out_width || height < fmt->scaler_out_height){
+	if (fmt->scaler_enable) {
+		if (width < fmt->scaler_out_width || height < fmt->scaler_out_height) {
 			ISP_ERROR("The chan%d in-scaler %d*%d out-scaler %d*%d!\n", chan->index, width, height, fmt->scaler_out_width, fmt->scaler_out_height);
 			return -EINVAL;
 		}
@@ -1541,49 +1537,49 @@ static int ispcore_frame_channel_set_fmt(struct tx_isp_subdev_pad *pad, void *da
 		height = fmt->scaler_out_height;
 	}
 
-	if(width < chan->min_width || height < chan->min_height){
-			ISP_ERROR("The chan%d Can't output %d*%d!\n", chan->index, width, height);
-			return -EINVAL;
+	if (width < chan->min_width || height < chan->min_height) {
+		ISP_ERROR("The chan%d Can't output %d*%d!\n", chan->index, width, height);
+		return -EINVAL;
 	}
 
-	if(width != fmt->pix.width || height != fmt->pix.height){
-			ISP_ERROR("The chan%d output %d*%d error!\n", chan->index, width, height);
-			return -EINVAL;
+	if (width != fmt->pix.width || height != fmt->pix.height) {
+		ISP_ERROR("The chan%d output %d*%d error!\n", chan->index, width, height);
+		return -EINVAL;
 	}
 	/* try fmt */
 	ret = ispcore_frame_channel_try_fmt(core, fmt);
-	if(ret){
+	if (ret) {
 		char *value = (char *)&(fmt->pix.pixelformat);
 		ISP_ERROR("ISP can't support the fmt(%c%c%c%c)\n", value[0], value[1], value[2], value[3]);
 		return ret;
 	}
 	/* set fmt */
-	if(fmt->crop_enable){
+	if (fmt->crop_enable) {
 		ret = ispcore_frame_channel_set_crop(chan, fmt);
-		if(ret){
+		if (ret) {
 			ISP_ERROR("Failed to set crop!\n");
 			goto exit;
 		}
 	}
 
-	if(fmt->scaler_enable){
+	if (fmt->scaler_enable) {
 		ret = ispcore_frame_channel_set_scaler(chan, fmt);
-		if(ret){
+		if (ret) {
 			ISP_ERROR("Failed to set scaler!\n");
 			goto failed_scaler;
 		}
 	}
 	ret = ispcore_frame_channel_s_fmt(chan, fmt);
-	if(ret){
+	if (ret) {
 		goto failed_s_fmt;
 	}
 	chan->fmt = *fmt;
 	return 0;
 failed_s_fmt:
-	if(fmt->scaler_enable)
+	if (fmt->scaler_enable)
 		ret = ispcore_frame_channel_set_scaler(chan, NULL);
 failed_scaler:
-	if(fmt->crop_enable)
+	if (fmt->crop_enable)
 		ispcore_frame_channel_set_crop(chan, NULL);
 exit:
 	return ret;
@@ -1594,7 +1590,7 @@ static inline int ispcore_frame_channel_s_banks(struct tx_isp_subdev_pad *pad, v
 	struct isp_core_output_channel *chan = pad->priv;
 	int reqbufs = *(int*)data;
 
-	if(pad->link.flag & TX_ISP_PADLINK_LFB){
+	if (pad->link.flag & TX_ISP_PADLINK_LFB) {
 		return 0;
 	}
 
@@ -1607,10 +1603,10 @@ static int ispcore_pad_event_handle(struct tx_isp_subdev_pad *pad, unsigned int 
 {
 	int ret = 0;
 
-	if(pad->type == TX_ISP_MODULE_UNDEFINE)
+	if (pad->type == TX_ISP_MODULE_UNDEFINE)
 		return 0;
 
-	switch(event){
+	switch (event) {
 		case TX_ISP_EVENT_FRAME_CHAN_BYPASS_ISP:
 			break;
 		case TX_ISP_EVENT_FRAME_CHAN_GET_FMT:
@@ -1649,7 +1645,7 @@ static int ispcore_core_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 	int index = 0;
 
 	/* This module operation */
-	switch(cmd){
+	switch (cmd) {
 		case TX_ISP_EVENT_SYNC_SENSOR_ATTR:
 			ret = tx_isp_subdev_call(sd, sensor, sync_sensor_attr, arg);
 			break;
@@ -1660,17 +1656,17 @@ static int ispcore_core_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 			break;
 	}
 
-	if(ret && ret != -ENOIOCTLCMD){
+	if (ret && ret != -ENOIOCTLCMD) {
 		ISP_ERROR("%s %d Failed to ioctl!\n", __func__, __LINE__);
 		return ret;
 	}
 
 	/* its sub-modules are as follow */
-	for(index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++){
+	for (index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++) {
 		submod = sd->module.submods[index];
-		if(submod){
+		if (submod) {
 			subdev = module_to_subdev(submod);
-			switch(cmd){
+			switch (cmd) {
 				case TX_ISP_EVENT_SYNC_SENSOR_ATTR:
 					ret = tx_isp_subdev_call(subdev, sensor, sync_sensor_attr, arg);
 					break;
@@ -1681,7 +1677,7 @@ static int ispcore_core_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, vo
 					break;
 			}
 			/*ret = tx_isp_subdev_call(subdev, core, ioctl, cmd, arg);*/
-			if(ret && ret != -ENOIOCTLCMD)
+			if (ret && ret != -ENOIOCTLCMD)
 				break;
 		}
 	}
@@ -1701,7 +1697,7 @@ static void isp_core_config_frame_channel_attr(struct tx_isp_core_device *core)
 	cfmt = &(isp_output_fmt[contrl->fmt_end]);
 	for(index = 0; index < core->num_chans; index++){
 		chan = &(core->chans[index]);
-		if(chan->state == TX_ISP_MODULE_UNDEFINE)
+		if (chan->state == TX_ISP_MODULE_UNDEFINE)
 			continue;
 		chan->fmt.pix.width = contrl->inwidth;
 		chan->fmt.pix.height = contrl->inheight;
@@ -1720,11 +1716,11 @@ static int isp_config_input_port(struct tx_isp_core_device *core)
 	unsigned char color = APICAL_ISP_TOP_RGGB_START_DEFAULT;
 	int ret = ISP_SUCCESS;
 
-	if(mbus->width > TX_ISP_INPUT_PORT_MAX_WIDTH || mbus->height > TX_ISP_INPUT_PORT_MAX_HEIGHT){
+	if (mbus->width > TX_ISP_INPUT_PORT_MAX_WIDTH || mbus->height > TX_ISP_INPUT_PORT_MAX_HEIGHT) {
 		printk("Sensor outputs bigger resolution than that ISP device can't deal with!\n");
 		return -1;
 	}
-	switch(mbus->code){
+	switch (mbus->code) {
 		case V4L2_MBUS_FMT_SBGGR8_1X8:
 		case V4L2_MBUS_FMT_SBGGR10_DPCM8_1X8:
 		case V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_BE:
@@ -1805,7 +1801,7 @@ static int isp_config_input_port(struct tx_isp_core_device *core)
 		contrl->inheight = mbus->height;
 		contrl->pattern = color;
 		apical_isp_top_rggb_start_write(color); //Starting color of the rggb pattern
-		if(core->state != TX_ISP_MODULE_RUNNING){
+		if (core->state != TX_ISP_MODULE_RUNNING) {
 			apical_isp_top_active_width_write(contrl->inwidth);
 			apical_isp_top_active_height_write(contrl->inheight);
 			isp_core_config_frame_channel_attr(core);
@@ -1850,9 +1846,9 @@ static int inline isp_core_video_streamon(struct tx_isp_core_device *core)
 	api.dir = COMMAND_SET;
 	api.value = RUN;
 	status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-	if(status == ISP_SUCCESS){
+	if (status == ISP_SUCCESS) {
 		core->state = TX_ISP_MODULE_RUNNING;
-	}else{
+	} else {
 		ISP_ERROR("%s[%d] state = %d, reason = %d!\n",
 				__func__,__LINE__, status, ret);
 		ret = -EPERM;
@@ -1874,7 +1870,7 @@ static int ispcore_video_s_stream(struct tx_isp_subdev *sd, int enable)
 	int index = 0;
 
 	private_spin_lock_irqsave(&core->slock, flags);
-	if(core->state < TX_ISP_MODULE_INIT){
+	if (core->state < TX_ISP_MODULE_INIT) {
 		ISP_ERROR("%s[%d] the device hasn't been inited!\n",__func__,__LINE__);
 		private_spin_unlock_irqrestore(&core->slock, flags);
 		return -EPERM;
@@ -1885,19 +1881,19 @@ static int ispcore_video_s_stream(struct tx_isp_subdev *sd, int enable)
 	core->vflip_state = 0;
 	core->hflip_state = 0;
 	core->frame_sequeue = 0;
-	if(enable){
+	if (enable) {
 		/* streamon */
-		if(core->state == TX_ISP_MODULE_INIT){
+		if (core->state == TX_ISP_MODULE_INIT) {
 			ret = isp_core_video_streamon(core);
 		}
-	}else{
+	} else {
 		/* streamoff */
-		if(core->state == TX_ISP_MODULE_RUNNING){
+		if (core->state == TX_ISP_MODULE_RUNNING) {
 			/* At least one channel is in streamon state. */
 			/* Firstly we must be streamoff them */
-			for(index = 0; index < ISP_MAX_OUTPUT_VIDEOS; index++){
+			for (index = 0; index < ISP_MAX_OUTPUT_VIDEOS; index++) {
 				chan = &(core->chans[index]);
-				if(chan->state == TX_ISP_MODULE_RUNNING){
+				if (chan->state == TX_ISP_MODULE_RUNNING) {
 					ispcore_frame_channel_streamoff(chan->pad);
 				}
 			}
@@ -1907,9 +1903,9 @@ static int ispcore_video_s_stream(struct tx_isp_subdev *sd, int enable)
 			api.dir = COMMAND_SET;
 			api.value = PAUSE;
 			status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-			if(status == ISP_SUCCESS){
+			if (status == ISP_SUCCESS) {
 				core->state = TX_ISP_MODULE_INIT;
-			}else{
+			} else {
 				ISP_ERROR("%s[%d] status = %d, reason = %d!\n",
 						__func__,__LINE__, status, ret);
 				ret = -EINVAL;
@@ -1918,13 +1914,13 @@ static int ispcore_video_s_stream(struct tx_isp_subdev *sd, int enable)
 	}
 
 	/* its sub-modules are as follow */
-	for(index = TX_ISP_ENTITY_ENUM_MAX_DEPTH; index >= 0 ; index--){
+	for (index = TX_ISP_ENTITY_ENUM_MAX_DEPTH; index >= 0 ; index--) {
 		submod = sd->module.submods[index];
-		if(submod){
+		if (submod) {
 			/*printk("## %s %d submod %s ##\n", __func__,__LINE__, submod->name);*/
 			subdev = module_to_subdev(submod);
 			ret = tx_isp_subdev_call(subdev, video, s_stream, enable);
-			if(ret && ret != -ENOIOCTLCMD)
+			if (ret && ret != -ENOIOCTLCMD)
 				break;
 		}
 	}
@@ -1941,15 +1937,15 @@ static void ispcore_clks_ops(struct tx_isp_subdev *sd, int on)
 	unsigned long rate = 0;
 	int i = 0;
 
-	if(on){
-		for(i = 0; i < sd->clk_num; i++){
+	if (on) {
+		for (i = 0; i < sd->clk_num; i++) {
 			rate = private_clk_get_rate(clks[i]);
-			if(rate != DUMMY_CLOCK_RATE)
+			if (rate != DUMMY_CLOCK_RATE)
 				private_clk_set_rate(clks[i], isp_clk);
 			private_clk_enable(clks[i]);
 		}
-	}else{
-		for(i = sd->clk_num - 1; i >=0; i--)
+	} else {
+		for (i = sd->clk_num - 1; i >=0; i--)
 			private_clk_disable(clks[i]);
 	}
 	return;
@@ -1957,7 +1953,7 @@ static void ispcore_clks_ops(struct tx_isp_subdev *sd, int on)
 
 static int isp_fw_process(void *data)
 {
-	while(!kthread_should_stop()){
+	while (!kthread_should_stop()) {
 		apical_process();
 #if ISP_HAS_CONNECTION_DEBUG && ISP_HAS_API
 		apical_cmd_process();
@@ -1978,23 +1974,23 @@ static int ispcore_core_ops_init(struct tx_isp_subdev *sd, int on)
 	unsigned long flags = 0;
 	int ret = ISP_SUCCESS;
 
-	if(IS_ERR_OR_NULL(core)){
+	if (IS_ERR_OR_NULL(core)) {
 		return -EINVAL;
 	}
 
-	if(core->state == TX_ISP_MODULE_SLAKE)
+	if (core->state == TX_ISP_MODULE_SLAKE)
 		return 0;
 	/*printk("## %s %d on=%d ##\n", __func__,__LINE__, on);*/
 
-	if(on){
-		if(private_reset_tx_isp_module(TX_ISP_CORE_SUBDEV_ID)){
+	if (on) {
+		if (private_reset_tx_isp_module(TX_ISP_CORE_SUBDEV_ID)) {
 			ISP_ERROR("Failed to reset %s\n", sd->module.name);
 			ret = -EINVAL;
 			goto exit;
 		}
 
 		private_spin_lock_irqsave(&core->slock, flags);
-		if(core->state != TX_ISP_MODULE_ACTIVATE){
+		if (core->state != TX_ISP_MODULE_ACTIVATE) {
 			private_spin_unlock_irqrestore(&core->slock, flags);
 			ISP_ERROR("Can't init ispcore when its state is %d \n!", core->state);
 			ret = -EPERM;
@@ -2012,18 +2008,18 @@ static int ispcore_core_ops_init(struct tx_isp_subdev *sd, int on)
 		system_program_interrupt_event(APICAL_IRQ_DS2_OUTPUT_END, 53);
 #endif
 		core->process_thread = kthread_run(isp_fw_process, NULL, "apical_isp_fw_process");
-		if(IS_ERR_OR_NULL(core->process_thread)){
+		if (IS_ERR_OR_NULL(core->process_thread)) {
 			ISP_ERROR("%s[%d] kthread_run was failed!\n",__func__,__LINE__);
 			ret = -EINVAL;
 			goto exit;
 		}
 		core->state = TX_ISP_MODULE_INIT;
 		/*ispcore_video_s_stream(sd , 1);*/
-	}else{
-		if(core->state == TX_ISP_MODULE_RUNNING){
+	} else {
+		if (core->state == TX_ISP_MODULE_RUNNING) {
 			ispcore_video_s_stream(sd, 0);
 		}
-		if(core->state == TX_ISP_MODULE_INIT){
+		if (core->state == TX_ISP_MODULE_INIT) {
 			ret = kthread_stop(core->process_thread);
 			isp_clear_irq_source();
 			core->state = TX_ISP_MODULE_DEINIT;
@@ -2044,16 +2040,16 @@ static struct tx_isp_subdev_core_ops ispcore_subdev_core_ops ={
 static int ispcore_sync_sensor_attr(struct tx_isp_subdev *sd, void *arg)
 {
 	struct tx_isp_core_device *core = IS_ERR_OR_NULL(sd) ? NULL : tx_isp_get_subdevdata(sd);
-	if(IS_ERR_OR_NULL(core)){
+	if (IS_ERR_OR_NULL(core)) {
 		ISP_ERROR("The parameter is invalid!\n");
 		return -EINVAL;
 	}
 	/*printk("## %s %d arg = %p ##\n", __func__,__LINE__, arg);*/
-	if(arg){
+	if (arg) {
 		memcpy(&core->vin, (void *)arg, sizeof(struct tx_isp_video_in));
 		/* isp_config_input_port(core); */
 		stab.global_max_integration_time = core->vin.attr->max_integration_time;
-	}else
+	} else
 		memset(&core->vin, 0, sizeof(struct tx_isp_video_in));
 	return 0;
 }
@@ -2066,12 +2062,12 @@ static int ispcore_sensor_ops_release_all_sensor(struct tx_isp_subdev *sd)
 	long ret = 0;
 
 	/* its sub-modules are as follow */
-	for(index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++){
+	for (index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++) {
 		submod = sd->module.submods[index];
-		if(submod){
+		if (submod) {
 			subdev = module_to_subdev(submod);
 			ret = tx_isp_subdev_call(subdev, sensor, release_all_sensor);
-			if(ret && ret != -ENOIOCTLCMD)
+			if (ret && ret != -ENOIOCTLCMD)
 				break;
 		}
 	}
@@ -2089,14 +2085,13 @@ static int ispcore_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 
 	/* This module operation */
 
-
 	/* its sub-modules are as follow */
-	for(index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++){
+	for (index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++) {
 		submod = sd->module.submods[index];
-		if(submod){
+		if (submod) {
 			subdev = module_to_subdev(submod);
 			ret = tx_isp_subdev_call(subdev, sensor, ioctl, cmd, arg);
-			if(ret && ret != -ENOIOCTLCMD)
+			if (ret && ret != -ENOIOCTLCMD)
 				break;
 		}
 	}
@@ -2120,16 +2115,16 @@ static int ispcore_activate_module(struct tx_isp_subdev *sd)
 	int index = 0;
 	int ret = 0;
 
-	if(IS_ERR_OR_NULL(core))
+	if (IS_ERR_OR_NULL(core))
 		return -EINVAL;
-	if(core->state != TX_ISP_MODULE_SLAKE)
+	if (core->state != TX_ISP_MODULE_SLAKE)
 		return 0;
 
 	/* clk ops */
 	ispcore_clks_ops(sd, 1);
 	/* this module ops */
-	for(index = 0; index < core->num_chans; index++){
-		if(core->chans[index].state != TX_ISP_MODULE_SLAKE){
+	for (index = 0; index < core->num_chans; index++) {
+		if (core->chans[index].state != TX_ISP_MODULE_SLAKE) {
 			ISP_ERROR("The state of channel%d is invalid when be activated!\n", index);
 			return -1;
 		}
@@ -2139,21 +2134,21 @@ static int ispcore_activate_module(struct tx_isp_subdev *sd)
 
 	/* sync all subwidget irqdev */
 	module = &(core->sd.module);
-	for(index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++){
-		if(IS_ERR_OR_NULL(module->submods[index]))
+	for (index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++) {
+		if (IS_ERR_OR_NULL(module->submods[index]))
 			continue;
 		submod = module->submods[index];
 		widget = module_to_subdev(submod);
 		memcpy(&widget->irqdev, &(sd->irqdev), sizeof(sd->irqdev));
 		ret = tx_isp_subdev_call(widget, internal, activate_module);
-		if(ret && ret != -ENOIOCTLCMD){
+		if (ret && ret != -ENOIOCTLCMD) {
 			ISP_ERROR("Failed to activate %s\n", submod->name);
 			break;
 		}
 	}
 
 	/* downscaler paramerters */
-	for(index = 0; index < (sizeof(apical_downscaler_lut) / sizeof(apical_downscaler_lut[0])); index++)
+	for (index = 0; index < (sizeof(apical_downscaler_lut) / sizeof(apical_downscaler_lut[0])); index++)
 		APICAL_WRITE_32(apical_downscaler_lut[index].reg, apical_downscaler_lut[index].value);
 	core->state = TX_ISP_MODULE_ACTIVATE;
 	return 0;
@@ -2168,16 +2163,16 @@ static int ispcore_slake_module(struct tx_isp_subdev *sd)
 	int index = 0;
 	int ret = 0;
 
-	if(IS_ERR_OR_NULL(core))
+	if (IS_ERR_OR_NULL(core))
 		return -EINVAL;
-	if(core->state == TX_ISP_MODULE_SLAKE)
+	if (core->state == TX_ISP_MODULE_SLAKE)
 		return 0;
 
-	if(core->state > TX_ISP_MODULE_ACTIVATE){
+	if (core->state > TX_ISP_MODULE_ACTIVATE) {
 		ispcore_core_ops_init(sd, 0);
 	}
 
-	for(index = 0; index < core->num_chans; index++){
+	for (index = 0; index < core->num_chans; index++) {
 		core->chans[index].state = TX_ISP_MODULE_SLAKE;
 	}
 	core->tuning->event(core->tuning, TX_ISP_EVENT_SLAVE_MODULE, NULL);
@@ -2185,14 +2180,14 @@ static int ispcore_slake_module(struct tx_isp_subdev *sd)
 
 	/* sync all subwidget irqdev */
 	module = &(core->sd.module);
-	for(index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++){
-		if(IS_ERR_OR_NULL(module->submods[index]))
+	for (index = 0; index < TX_ISP_ENTITY_ENUM_MAX_DEPTH; index++) {
+		if (IS_ERR_OR_NULL(module->submods[index]))
 			continue;
 		submod = module->submods[index];
 		widget = module_to_subdev(submod);
 		widget->irqdev.irq = 0;
 		ret = tx_isp_subdev_call(widget, internal, slake_module);
-		if(ret && ret != -ENOIOCTLCMD){
+		if (ret && ret != -ENOIOCTLCMD) {
 			ISP_ERROR("Failed to slake %s\n", submod->name);
 			break;
 		}
@@ -2242,21 +2237,21 @@ static int isp_core_output_channel_init(struct tx_isp_core_device *core)
 
 	core->num_chans = sd->num_outpads;
 	chans = (struct isp_core_output_channel *)kzalloc(sizeof(*chans) * sd->num_outpads, GFP_KERNEL);
-	if(!chans){
+	if (!chans) {
 		ISP_ERROR("Failed to allocate sensor device\n");
 		ret = -ENOMEM;
 		goto exit;
 	}
 
-	for(index = 0; index < core->num_chans; index++){
+	for (index = 0; index < core->num_chans; index++) {
 		chan = &chans[index];
 		chan->index = index;
 		chan->pad = &(sd->outpads[index]);
-		if(sd->outpads[index].type == TX_ISP_PADTYPE_UNDEFINE){
+		if (sd->outpads[index].type == TX_ISP_PADTYPE_UNDEFINE) {
 			chan->state = TX_ISP_MODULE_UNDEFINE;
 			continue;
 		}
-		switch(index){
+		switch (index) {
 			case ISP_FR_VIDEO_CHANNEL:
 				chan->max_width = TX_ISP_FR_CHANNEL_MAX_WIDTH;
 				chan->max_height = TX_ISP_FR_CHANNEL_MAX_HEIGHT;
@@ -2287,7 +2282,6 @@ static int isp_core_output_channel_init(struct tx_isp_core_device *core)
 		sd->outpads[index].event = ispcore_pad_event_handle;
 		sd->outpads[index].priv = chan;
 	}
-
 	core->chans = chans;
 	return ISP_SUCCESS;
 exit:
@@ -2296,7 +2290,7 @@ exit:
 
 static int isp_core_output_channel_deinit(struct tx_isp_core_device *core)
 {
-	if(core->state > TX_ISP_MODULE_SLAKE)
+	if (core->state > TX_ISP_MODULE_SLAKE)
 		ispcore_slake_module(&core->sd);
 
 	kfree(core->chans);
@@ -2342,11 +2336,11 @@ static int isp_info_show(struct seq_file *m, void *v)
 	uint8_t evtolux = 0;
 
 	len += seq_printf(m ,"****************** ISP INFO **********************\n");
-	if(core->state < TX_ISP_MODULE_RUNNING){
+	if (core->state < TX_ISP_MODULE_RUNNING) {
 		len += seq_printf(m ,"sensor doesn't work, please enable sensor\n");
 		return len;
 	}
-	switch(contrl->pattern){
+	switch (contrl->pattern) {
 		case APICAL_ISP_TOP_RGGB_START_R_GR_GB_B:
 			colorspace = "RGGB";
 			break;
@@ -2378,16 +2372,16 @@ static int isp_info_show(struct seq_file *m, void *v)
 	api.id = AE_SPLIT_PRESET_ID;
 	api.value = 0;
 	status = apical_command(api.type, api.id, api.value, api.dir, &reason);
-	switch(reason){
-	case AE_SPLIT_BALANCED:
-		ae_strategy = "AE_SPLIT_BALANCED";
-		break;
-	case AE_SPLIT_INTEGRATION_PRIORITY:
-		ae_strategy = "AE_SPLIT_INTEGRATION_PRIORITY";
-		break;
-	default:
-		ae_strategy = "AE_STRATEGY_BUTT";
-		break;
+	switch (reason) {
+		case AE_SPLIT_BALANCED:
+			ae_strategy = "AE_SPLIT_BALANCED";
+			break;
+		case AE_SPLIT_INTEGRATION_PRIORITY:
+			ae_strategy = "AE_SPLIT_INTEGRATION_PRIORITY";
+			break;
+		default:
+			ae_strategy = "AE_STRATEGY_BUTT";
+			break;
 	}
 
 	api.type = TSYSTEM;
@@ -2568,7 +2562,7 @@ static int tx_isp_core_probe(struct platform_device *pdev)
 	desc = pdev->dev.platform_data;
 	sd = &core_dev->sd;
 	ret = tx_isp_subdev_init(pdev, sd, &core_subdev_ops);
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init isp module(%d.%d)\n", desc->parentid, desc->unitid);
 		ret = -ENOMEM;
 		goto failed_to_ispmodule;
@@ -2580,7 +2574,7 @@ static int tx_isp_core_probe(struct platform_device *pdev)
 	core_dev->pdata = pdev->dev.platform_data;
 
 	ret = isp_core_output_channel_init(core_dev);
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init output channels!\n");
 		ret = -EINVAL;
 		goto failed_to_output_channel;
@@ -2588,7 +2582,7 @@ static int tx_isp_core_probe(struct platform_device *pdev)
 
 	/*printk("%s %d\n", __func__, __LINE__);*/
 	core_dev->tuning = isp_core_tuning_init(sd);
-	if(core_dev->tuning == NULL){
+	if (core_dev->tuning == NULL) {
 		ISP_ERROR("Failed to init tuning module!\n");
 		ret = -EINVAL;
 		goto failed_to_tuning;
@@ -2623,7 +2617,7 @@ static int __exit tx_isp_core_remove(struct platform_device *pdev)
 	struct tx_isp_subdev *sd = module_to_subdev(module);
 	struct tx_isp_core_device *core = tx_isp_get_subdevdata(sd);
 
-	if(core->tuning){
+	if (core->tuning) {
 		isp_core_tuning_deinit(core->tuning);
 		core->tuning = NULL;
 	}

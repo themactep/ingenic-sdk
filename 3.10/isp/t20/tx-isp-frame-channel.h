@@ -19,7 +19,6 @@ struct tx_isp_frame_channel_video_device;
 
 typedef struct tx_isp_frame_channel_video_device frame_chan_vdev_t;
 
-
 struct frame_channel_attribute {
 /* Private: internal use only */
 	unsigned short max_width;
@@ -28,15 +27,15 @@ struct frame_channel_attribute {
 	unsigned short min_height;
 	unsigned short step_width;
 	unsigned short step_height;
-	struct v4l2_rect        bounds;
+	struct v4l2_rect bounds;
 	struct frame_image_scalercap scalercap;
 
 /* Public: user could set it through special ioctl */
-	struct v4l2_rect        crop;
+	struct v4l2_rect crop;
 	struct frame_image_scaler scaler;
-	struct v4l2_format	output;
-	unsigned int  crop_enable :1;
-	unsigned int  scaler_enable :1;
+	struct v4l2_format output;
+	unsigned int crop_enable :1;
+	unsigned int scaler_enable :1;
 	unsigned int lineoffset;
 	int frame_rate;
 };
@@ -72,8 +71,7 @@ struct tx_isp_frame_channel_video_device {
 	struct mutex mlock;
 	atomic_t state;
 	struct completion comp;
-	int (*interrupt_service_routine)(frame_chan_vdev_t  *chan,
-						u32 status, bool *handled);
+	int (*interrupt_service_routine)(frame_chan_vdev_t *chan, u32 status, bool *handled);
 	unsigned int out_frames;
 	unsigned int lose_frames;
 	struct v4l2_fmtdesc *fmtdesc;

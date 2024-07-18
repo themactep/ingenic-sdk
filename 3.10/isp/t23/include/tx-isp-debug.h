@@ -40,7 +40,6 @@ void private_set_current_state(unsigned int state);
 int private_schedule_hrtimeout(ktime_t *ex, const enum hrtimer_mode mode);
 bool private_schedule_work(struct work_struct *work);
 void private_do_gettimeofday(struct timeval *tv);
-void private_dma_sync_single_for_device(struct device *dev,
-							      dma_addr_t addr, size_t size, enum dma_data_direction dir);
+void private_dma_sync_single_for_device(struct device *dev, dma_addr_t addr, size_t size, enum dma_data_direction dir);
 __must_check int private_get_driver_interface(struct jz_driver_common_interfaces **pfaces);
 #endif /* _ISP_DEBUG_H_ */
