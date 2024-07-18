@@ -476,7 +476,7 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_CORE_DAY_NIGHT,
 };
 
-struct tx_isp_notify_argument{
+struct tx_isp_notify_argument {
 	int value;
 	int ret;
 };

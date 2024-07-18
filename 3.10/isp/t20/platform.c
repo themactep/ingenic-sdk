@@ -20,9 +20,9 @@
 
 #include <mach/platform.h>
 
-static u64 tx_isp_module_dma_mask = ~(u64)0;
+static u64 tx_isp_module_dma_mask = ~(u64) 0;
 
-/* the widget is the controller of  all sensors */
+/* the widget is the controller of all sensors */
 struct tx_isp_widget_descriptor tx_isp_widget_vin = {
 	.type = TX_ISP_TYPE_WIDGET,
 	.subtype = TX_ISP_SUBTYPE_INPUT_TERMINAL,
@@ -41,7 +41,6 @@ struct platform_device tx_isp_vin_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 /* the controller is mipi interfaces*/
 static struct resource tx_isp_csi_resource[] = {
