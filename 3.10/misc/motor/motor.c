@@ -544,7 +544,8 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 	long ret = 0;
 	int times = 0;
 	struct motor_message msg;
-	printk("%s%d\n",__func__,__LINE__);
+	
+	/* printk("%s%d\n",__func__,__LINE__); DEBUG INFO */
 
 	if(mdev == NULL || rdata == NULL){
 		printk("ERROR: the parameters of %s is wrong!!\n",__func__);
