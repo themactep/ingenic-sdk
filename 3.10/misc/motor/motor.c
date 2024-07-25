@@ -126,6 +126,10 @@ int vst4 = 63;
 module_param(vst4, int, S_IRUGO);
 MODULE_PARM_DESC(vst4, "Vertical motor GPIO for Phase D. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
+int invert_gpio_dir = 0;
+module_param(invert_gpio_dir, int, S_IRUGO);
+MODULE_PARM_DESC(invert_gpio_dir, "Invert the value of the GPIOs (motor_st*_gpio). Default: 0 (no)");
+
 
 struct motor_platform_data motors_pdata[HAS_MOTOR_CNT] = {
 	{
@@ -159,13 +163,13 @@ static void motor_set_default(struct motor_device *mdev)
 		motor =  &mdev->motors[index];
 		motor->state = MOTOR_OPS_STOP;
 		if (motor->pdata->motor_st1_gpio)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st2_gpio)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st3_gpio)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st4_gpio)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, (0 ^ invert_gpio_dir) & 0x1);
 	}
 	return;
 }
@@ -191,22 +195,22 @@ static void motor_move_step(struct motor_device *mdev, int index)
 		step = motor->cur_steps % 8;
 		step = step < 0 ? step + 8 : step;
 		if (motor->pdata->motor_st1_gpio)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, step_8[step] & 0x8);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
 		if (motor->pdata->motor_st2_gpio)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, step_8[step] & 0x4);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
 		if (motor->pdata->motor_st3_gpio)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, step_8[step] & 0x2);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
 		if (motor->pdata->motor_st4_gpio)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, step_8[step] & 0x1);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
 	}else{
 		if (motor->pdata->motor_st1_gpio)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st2_gpio)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st3_gpio)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st4_gpio)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, 0);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, (0 ^ invert_gpio_dir) & 0x1);
 	}
 	if(motor->state == MOTOR_OPS_RESET){
 		motor->total_steps++;
@@ -905,6 +909,8 @@ static int motor_probe(struct platform_device *pdev)
 	motors_pdata[1].motor_st2_gpio = vst2;
 	motors_pdata[1].motor_st3_gpio = vst3;
 	motors_pdata[1].motor_st4_gpio = vst4;
+
+	if (invert_gpio_dir != 0) invert_gpio_dir = 1;
 
 	for(i = 0; i < HAS_MOTOR_CNT; i++) {
 		motor = &(mdev->motors[i]);
