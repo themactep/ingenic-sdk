@@ -1,11 +1,11 @@
 # Match the factory module name
-MODULE_NAME := gpio-keys
+MODULE_NAME := gpio-userkeys
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/misc/gpio-keys
+DIR=$(KERNEL_VERSION)/misc/gpio-userkeys
 
 SRCS := \
-  $(DIR)/gpio-keys.c
+  $(DIR)/gpio-userkeys.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 
