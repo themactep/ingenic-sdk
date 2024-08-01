@@ -17,8 +17,8 @@ ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
 $(info Building ISP for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
 
-$(info Building GPIO-Keys for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/misc/gpio-keys/Kbuild
+$(info Building GPIO-UserKeys for Kernel $(KERNEL_VERSION))
+include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
 
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
