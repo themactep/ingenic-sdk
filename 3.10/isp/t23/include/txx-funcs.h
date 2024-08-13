@@ -296,8 +296,20 @@ bool private_kthread_should_stop(void);
 struct task_struct* private_kthread_run(int (*threadfn)(void *data), void *data, const char namefmt[]);
 int private_kthread_stop(struct task_struct *k);
 
+/* #define TX_ISP_MALLOC_TEST */
+#ifndef TX_ISP_MALLOC_TEST
 void* private_kmalloc(size_t s, gfp_t gfp);
 void private_kfree(void *p);
+#else
+extern struct jz_driver_common_interfaces *pfaces;
+extern void *kmalloc_t;
+#define private_kmalloc(s, gfp) \
+	(kmalloc_t = pfaces->priv_kmalloc(s, gfp)); \
+        printk("[%s %d] kmalloc addr is %p, size is %d\n", __func__, __LINE__, kmalloc_t, s)
+#define private_kfree(p) \
+	pfaces->priv_kfree(p); \
+        printk("[%s %d] kfree addr is %p\n", __func__, __LINE__, p)
+#endif /* TX_ISP_MALLOC_TEST */
 long private_copy_from_user(void *to, const void __user *from, long size);
 long private_copy_to_user(void __user *to, const void *from, long size);
 

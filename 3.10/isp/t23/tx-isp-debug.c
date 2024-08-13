@@ -24,6 +24,12 @@ static int isp_clka = 416000000;
 module_param(isp_clka, int, S_IRUGO);
 MODULE_PARM_DESC(isp_clka, "isp aclock freq");
 
+#ifdef SENSOR_DOUBLE
+static int mipi_switch_gpio = GPIO_PA(7);
+module_param(mipi_switch_gpio, int , S_IRUGO);
+MODULE_PARM_DESC(mipi_switch_gpio, "select mipi switch gpio");
+#endif
+
 extern int isp_ch0_pre_dequeue_time;
 module_param(isp_ch0_pre_dequeue_time, int, S_IRUGO);
 MODULE_PARM_DESC(isp_ch0_pre_dequeue_time, "isp pre dequeue time, unit ms");
@@ -60,7 +66,12 @@ int ivdc_threshold_line = 0;
 module_param(ivdc_threshold_line, int, S_IRUGO);
 MODULE_PARM_DESC(ivdc_threshold_line, "ivdc threshold line");
 
+#ifdef SENSOR_DOUBLE
+const int isp_config_hz = CONFIG_HZ;
+#endif
+
 char *sclk_name[2] = {"mpll", "sclka"};
+
 int isp_printf(unsigned int level, unsigned char *fmt, ...)
 {
 	struct va_format vaf;
@@ -102,6 +113,14 @@ char *get_clka_name(void)
 	return clka_name;
 }
 
+#ifdef SENSOR_DOUBLE
+int get_mipi_switch_gpio(void)
+{
+	return  mipi_switch_gpio;
+}
+#endif
+
+#ifndef TX_ISP_MALLOC_TEST
 void *private_vmalloc(unsigned long size)
 {
 	void *addr = vmalloc(size);
@@ -112,6 +131,9 @@ void private_vfree(const void *addr)
 {
 	vfree(addr);
 }
+#else
+void *vmalloc_t = NULL;
+#endif /* TX_ISP_MALLOC_TEST */
 
 ktime_t private_ktime_set(const long secs, const unsigned long nsecs)
 {
@@ -163,3 +185,51 @@ __must_check int private_get_driver_interface(struct jz_driver_common_interfaces
 	}
 	return 0;
 }
+
+#ifdef SENSOR_DOUBLE
+struct pwm_device *private_pwm_request(int pwm, const char *label)
+{
+#ifdef CONFIG_JZ_PWM
+	return pwm_request(pwm, label);
+#else
+	return NULL;
+#endif
+}
+
+void private_pwm_set_period(struct pwm_device *pwm, unsigned int period)
+{
+#ifdef CONFIG_JZ_PWM
+	pwm_set_period(pwm, period);
+#endif
+}
+
+void private_pwm_set_duty_cycle(struct pwm_device *pwm, unsigned int duty)
+{
+#ifdef CONFIG_JZ_PWM
+	pwm_set_duty_cycle(pwm, duty);
+#endif
+}
+
+int private_pwm_enable(struct pwm_device *pwm)
+{
+#ifdef CONFIG_JZ_PWM
+	return pwm_enable(pwm);
+#else
+	return 0;
+#endif
+}
+
+void private_pwm_disable(struct pwm_device *pwm)
+{
+#ifdef CONFIG_JZ_PWM
+	pwm_disable(pwm);
+#endif
+}
+
+void private_pwm_free(struct pwm_device *pwm)
+{
+#ifdef CONFIG_JZ_PWM
+	pwm_free(pwm);
+#endif
+}
+#endif
