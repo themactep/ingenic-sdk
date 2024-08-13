@@ -352,7 +352,7 @@ struct tx_isp_bt601_bus{
 
 struct tx_isp_sensor_register_info{
 	char name[32];
-	int16_t sensor_id;
+	uint16_t sensor_id;
 	enum tx_sensor_control_bus_type cbus_type;
 	union {
 		struct tx_isp_i2c_board_info i2c;
@@ -390,8 +390,8 @@ enum tx_isp_sensor_fsync_mode {
 };
 
 struct tx_isp_sensor_fsync_pwm {
-	unsigned int mgpio;     /**< master gpio */
-	unsigned int sgpio;     /**< slave gpio */
+	unsigned int mpwmx;     /**< master pwmx */
+	unsigned int spwmx;     /**< slave pwmx */
 	unsigned int freq;      /**< frequency (unit:Hz) */
 	unsigned int dratio;    /**< duty ratio (range:[0, 100]) */
 	unsigned int polar;     /**< polarity (range:[0, 1])*/
@@ -508,6 +508,10 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_SENSOR_EXPO,
 	TX_ISP_EVENT_GPIO_INIT,
 	TX_ISP_EVENT_SET_GPIO_STATE,
+#ifdef SENSOR_DOUBLE
+	TX_ISP_EVENT_VIC_STREAM_CHECK,
+	TX_ISP_EVENT_VIC_STREAM_OUT,
+#endif
 	/* the events of frame-channel are defined as follows. */
 	TX_ISP_EVENT_FRAME_CHAN_BYPASS_ISP = NOTIFICATION_TYPE_FS_OPS,
 	TX_ISP_EVENT_FRAME_CHAN_GET_FMT,
@@ -649,6 +653,8 @@ struct isp_set_gpio_attr{
 #ifdef SENSOR_DOUBLE
 #define TISP_VIDIOC_SET_FRAME_DROP1	_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
 #define TISP_VIDIOC_GET_FRAME_DROP1	_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
+#define TISP_VIDIOC_STREAM_CHECK	_IOWR('V',BASE_VIDIOC_PRIVATE + 44, int)
+#define TISP_VIDIOC_SET_STREAM_OUT	_IOWR('V',BASE_VIDIOC_PRIVATE + 45, int)
 #endif
 
 //ivdc ioctl
@@ -701,6 +707,9 @@ struct tx_isp_video_in {
 	int grp_id;
 	unsigned int shvflip;
 	int state;
+#ifdef SENSOR_DOUBLE
+	struct pwm_device *pwm[2];
+#endif
 };
 
 enum tx_isp_notify_statement {

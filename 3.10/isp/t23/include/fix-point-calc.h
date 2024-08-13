@@ -30,12 +30,12 @@ uint32_t tisp_log2_fixed_to_fixed(const uint32_t val, const int in_fix_point, co
 uint32_t tisp_log2_fixed_to_fixed_64(uint64_t val, int32_t in_fix_point, uint8_t out_fix_point);
 
 uint32_t tisp_simple_intp(uint32_t x_int, uint32_t x_fra, uint32_t *y_array);
-uint8_t tisp_simple_intp_int8(uint32_t x_int, uint32_t x_fra, uint8_t *y_array);
-uint16_t tisp_simple_intp_int16(uint32_t x_int, uint32_t x_fra, uint16_t *y_array);
+// uint8_t tisp_simple_intp_int8(uint32_t x_int, uint32_t x_fra, uint8_t *y_array);
+// uint16_t tisp_simple_intp_int16(uint32_t x_int, uint32_t x_fra, uint16_t *y_array);
 
-int64_t tisp_round_int64(int64_t val, int32_t p);
+// int64_t tisp_round_int64(int64_t val, int32_t p);
 
-int64_t tisp_max(int64_t a, int64_t b);
-int64_t tisp_min(int64_t a, int64_t b);
-int32_t tisp_ratio(uint8_t ratio, uint32_t stren, uint32_t max_val);
+// int64_t tisp_max(int64_t a, int64_t b);
+// int64_t tisp_min(int64_t a, int64_t b);
+// int32_t tisp_ratio(uint8_t ratio, uint32_t stren, uint32_t max_val);
 #endif /* __FIX_POINT_CALC_H__ */
