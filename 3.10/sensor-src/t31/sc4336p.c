@@ -790,12 +790,10 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-			printk(" ok1 \n");
 		} else {
 			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
 		}
 	}
-	printk(" ok2 \n");
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
