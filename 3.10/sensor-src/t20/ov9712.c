@@ -517,7 +517,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 	unsigned char val_l;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("%s stream on\n", SENSOR_NAME));
+		printk("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		printk("%s stream off\n", SENSOR_NAME);
@@ -834,7 +834,7 @@ static __init int init_sensor(void) {
 	return i2c_add_driver(&sensor_driver);
 }
 
-static __exi void exit_sensor(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
