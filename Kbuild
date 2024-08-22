@@ -17,8 +17,10 @@ ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
 $(info Building ISP for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
 
-$(info Building GPIO-UserKeys for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
+ifeq ($(KERNEL_VERSION),3.10)
+    $(info Building GPIO-UserKeys for Kernel $(KERNEL_VERSION))
+    include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
+endif
 
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
@@ -69,3 +71,4 @@ else
 $(info Building for sensor $(SENSOR_MODEL))
 include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
+#include $(src)/sinfo/Kbuild
