@@ -71,4 +71,4 @@ else
 $(info Building for sensor $(SENSOR_MODEL))
 include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
-#include $(src)/sinfo/Kbuild
+#include $(src)/$(KERNEL_VERSION)/misc/sinfo/Kbuild
