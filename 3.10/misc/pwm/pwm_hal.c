@@ -308,7 +308,7 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 
-	for(i = 0; i < PWM_NUM; i++) {
+	for (i = 0; i < PWM_NUM; i++) {
 		if (i == 0) {
 #ifndef CONFIG_PWM0
 			continue;
@@ -343,7 +343,7 @@ static int jz_pwm_probe(struct platform_device *pdev)
 #endif
 		}
 
-		gpwm->pwm_device_t[i] = devm_kzalloc(&pdev->dev, (sizeof(struct pwm_device_t)), GFP_KERNEL);
+		gpwm->pwm_device_t[i] = devm_kzalloc(&pdev->dev, sizeof(struct pwm_device_t), GFP_KERNEL);
 		if (gpwm->pwm_device_t[i] == NULL) {
 			dev_err(&pdev->dev, "devm_kzalloc pwm_device_t error !\n");
 			return -ENOMEM;
@@ -352,8 +352,16 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		sprintf(pd_name, "pwm-jz.%d", i);
 		gpwm->pwm_device_t[i]->pwm_device = devm_pwm_get(&pdev->dev, pd_name);
 		if (IS_ERR(gpwm->pwm_device_t[i]->pwm_device)) {
-			dev_err(&pdev->dev, "devm_pwm_get error !");
-			return -ENOMEM;
+			int err = PTR_ERR(gpwm->pwm_device_t[i]->pwm_device);
+
+			if (err == -EBUSY || err == -EPROBE_DEFER) {
+				dev_warn(&pdev->dev, "PWM channel %d not available (error %d), skipping...\n", i, err);
+				gpwm->pwm_device_t[i]->pwm_device = NULL;
+				continue;  // Skip and continue with the next channel, probably already registered.
+			} else {
+				dev_err(&pdev->dev, "devm_pwm_get error for channel %d: %d\n", i, err);
+				return err;
+			}
 		}
 
 		gpwm->pwm_device_t[i]->duty = -1;
