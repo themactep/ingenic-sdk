@@ -130,6 +130,14 @@ int invert_gpio_dir = 0;
 module_param(invert_gpio_dir, int, S_IRUGO);
 MODULE_PARM_DESC(invert_gpio_dir, "Invert the value of the GPIOs (motor_st*_gpio). Default: 0 (no)");
 
+static unsigned int use_direction_gpio = 0;
+module_param(use_direction_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(use_direction_gpio, "Set to 1 if the motor uses a direction GPIO");
+
+static int direction_gpio = -1;
+module_param(direction_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(direction_gpio, "GPIO for direction control (1 = left/right, 0 = up/down)");
+
 
 struct motor_platform_data motors_pdata[HAS_MOTOR_CNT] = {
 	{
@@ -185,24 +193,45 @@ static unsigned char step_8[8] = {
 	0x09
 };
 
-static void motor_move_step(struct motor_device *mdev, int index)
-{
+static void motor_move_step(struct motor_device *mdev, int index) {
 	struct motor_driver *motor = NULL;
 	int step = 0;
 
-	motor =  &mdev->motors[index];
-	if(motor->state != MOTOR_OPS_STOP){
+	motor = &mdev->motors[index];
+	if (motor->state != MOTOR_OPS_STOP) {
 		step = motor->cur_steps % 8;
 		step = step < 0 ? step + 8 : step;
-		if (motor->pdata->motor_st1_gpio)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
-		if (motor->pdata->motor_st2_gpio)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
-		if (motor->pdata->motor_st3_gpio)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
-		if (motor->pdata->motor_st4_gpio)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
-	}else{
+
+		if (use_direction_gpio && direction_gpio >= 0) {
+			// Set direction based on motor axis (e.g., X/Y) and movement
+			if (index == HORIZONTAL_MOTOR) {
+				gpio_direction_output(direction_gpio, 1); // Left/right movement
+			} else if (index == VERTICAL_MOTOR) {
+				gpio_direction_output(direction_gpio, 0); // Up/down movement
+			}
+
+			// Use the same GPIOs for both X and Y axes
+			if (motor->pdata->motor_st1_gpio)
+				gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
+			if (motor->pdata->motor_st2_gpio)
+				gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
+			if (motor->pdata->motor_st3_gpio)
+				gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
+			if (motor->pdata->motor_st4_gpio)
+				gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
+		} else {
+			// Regular mode (8 GPIOs)
+			if (motor->pdata->motor_st1_gpio)
+				gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
+			if (motor->pdata->motor_st2_gpio)
+				gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
+			if (motor->pdata->motor_st3_gpio)
+				gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
+			if (motor->pdata->motor_st4_gpio)
+				gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
+		}
+	} else {
+		// Reset all GPIOs
 		if (motor->pdata->motor_st1_gpio)
 			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
 		if (motor->pdata->motor_st2_gpio)
@@ -946,6 +975,15 @@ static int motor_probe(struct platform_device *pdev)
 	mdev->motors[HORIZONTAL_MOTOR].max_steps = hmaxstep+100;
 	mdev->motors[VERTICAL_MOTOR].max_steps = vmaxstep+30;
 
+	// Request the direction GPIO if needed
+	if (use_direction_gpio && direction_gpio >= 0) {
+		ret = gpio_request(direction_gpio, "direction_gpio");
+		if (ret) {
+			dev_err(&pdev->dev, "Failed to request direction GPIO\n");
+			goto error_request_irq;
+		}
+	}
+
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_channel_to_virq(mdev->tcu);
 	mdev->run_step_irq = mdev->tcu->virq[0];
@@ -1055,6 +1093,10 @@ static int motor_remove(struct platform_device *pdev)
 
 		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_free(motor->pdata->motor_st4_gpio);
+
+		if (use_direction_gpio && direction_gpio >= 0)
+			gpio_free(direction_gpio);
+
 		motor->pdata = 0;
 		motor->min_pos_irq = 0;
 		motor->max_pos_irq = 0;
