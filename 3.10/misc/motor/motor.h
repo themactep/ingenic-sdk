@@ -47,8 +47,8 @@ enum jz_motor_cnt {
 #define MOTOR_GET_MAXSTEPS 0x8
 
 /* motor speed */
-#define MOTOR_MAX_SPEED	900		/**< unit: beats per second */
-#define MOTOR_MIN_SPEED	100
+#define MOTOR_MAX_SPEED	2000		/**< unit: beats per second */
+#define MOTOR_MIN_SPEED	1
 
 enum motor_status {
 	MOTOR_IS_STOP,
