@@ -53,7 +53,7 @@
 #include <asm/cacheflush.h>
 #include <soc/gpio.h>
 #include "motor.h"
-#define JZ_MOTOR_DRIVER_VERSION "H20171204a-16-jul-23-openipc"
+#define JZ_MOTOR_DRIVER_VERSION "H20171204a"
 
 #define HMOTOR2VMOTORRATIO 1
 static unsigned int hmotor2vmotor = 1;
@@ -787,7 +787,7 @@ static int motor_info_show(struct seq_file *m, void *v)
 	int index = 0;
 
 #ifdef CONFIG_SOC_T40
-	seq_printf(m ,"The version of Motor driver is %s. SoC is T40\n",JZ_MOTOR_DRIVER_VERSION);
+	seq_printf(m ,"The version of Motor driver is %s. SoC is XBurst2\n",JZ_MOTOR_DRIVER_VERSION);
 	seq_printf(m ,"Motor driver is %s\n", mdev->flag?"opened":"closed");
 	seq_printf(m ,"The max speed is %d and the min speed is %d\n", MOTOR_MAX_SPEED, MOTOR_MIN_SPEED);
 	motor_get_message(mdev, &msg);
@@ -796,7 +796,7 @@ static int motor_info_show(struct seq_file *m, void *v)
 	seq_printf(m ,"The speed of motor is %d\n", msg.speed);
 
 	for(index = 0; index < HAS_MOTOR_CNT; index++){
-		seq_printf(m ,"## motor is %s ##\n", mdev->motors[index].pdata->name);
+		seq_printf(m ,"## %s ##\n", mdev->motors[index].pdata->name);
 		seq_printf(m ,"max steps %d\n", mdev->motors[index].max_steps);
 		seq_printf(m ,"motor direction %d\n", mdev->motors[index].move_dir);
 		seq_printf(m ,"motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
@@ -804,7 +804,7 @@ static int motor_info_show(struct seq_file *m, void *v)
 		seq_printf(m ,"the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
 	}
 #else
-	len += seq_printf(m ,"The version of Motor driver is %s. SoC is not T40\n",JZ_MOTOR_DRIVER_VERSION);
+	len += seq_printf(m ,"The version of Motor driver is %s. SoC is not XBurst2\n",JZ_MOTOR_DRIVER_VERSION);
 	len += seq_printf(m ,"Motor driver is %s\n", mdev->flag?"opened":"closed");
 	len += seq_printf(m ,"The max speed is %d and the min speed is %d\n", MOTOR_MAX_SPEED, MOTOR_MIN_SPEED);
 	motor_get_message(mdev, &msg);
@@ -813,7 +813,7 @@ static int motor_info_show(struct seq_file *m, void *v)
 	len += seq_printf(m ,"The speed of motor is %d\n", msg.speed);
 
 	for(index = 0; index < HAS_MOTOR_CNT; index++){
-		len += seq_printf(m ,"## motor is %s ##\n", mdev->motors[index].pdata->name);
+		len += seq_printf(m ,"## %s ##\n", mdev->motors[index].pdata->name);
 		len += seq_printf(m ,"GPIOs: Min %d, Max %d, Level %d, ST1 %d, ST2 %d, ST3 %d, ST4 %d\n",
 			mdev->motors[index].pdata->motor_min_gpio,
 			mdev->motors[index].pdata->motor_max_gpio,
