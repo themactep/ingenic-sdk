@@ -61,11 +61,11 @@ module_param(hmotor2vmotor, int, S_IRUGO);
 MODULE_PARM_DESC(hmotor2vmotor, "The value is hmotor's speed / vmotor's");
 
 
-static unsigned int hmaxstep = 4300;
+static unsigned int hmaxstep = -1;
 module_param(hmaxstep, int, S_IRUGO);
 MODULE_PARM_DESC(hmaxstep, "The max steps of horizontal motor");
 
-static unsigned int vmaxstep = 300;
+static unsigned int vmaxstep = -1;
 module_param(vmaxstep, int, S_IRUGO);
 MODULE_PARM_DESC(vmaxstep, "The max steps of vertical motor");
 
@@ -82,19 +82,19 @@ int hlevel = 0;
 module_param(hlevel, int, S_IRUGO);
 MODULE_PARM_DESC(hlevel, "Horizontal motor IRQ style");
 
-int hst1 = 49;
+int hst1 = -1;
 module_param(hst1, int, S_IRUGO);
 MODULE_PARM_DESC(hst1, "Horizontal motor GPIO for Phase A. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int hst2 = 57;
+int hst2 = -1;
 module_param(hst2, int, S_IRUGO);
 MODULE_PARM_DESC(hst2, "Horizontal motor GPIO for Phase B. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int hst3 = 54;
+int hst3 = -1;
 module_param(hst3, int, S_IRUGO);
 MODULE_PARM_DESC(hst3, "Horizontal motor GPIO for Phase C. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int hst4 = 51;
+int hst4 = -1;
 module_param(hst4, int, S_IRUGO);
 MODULE_PARM_DESC(hst4, "Horizontal motor GPIO for Phase D. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
@@ -110,19 +110,19 @@ int vlevel = 0;
 module_param(vlevel, int, S_IRUGO);
 MODULE_PARM_DESC(vlevel, "Vertical motor IRQ style");
 
-int vst1 = 60;
+int vst1 = -1;
 module_param(vst1, int, S_IRUGO);
 MODULE_PARM_DESC(vst1, "Vertical motor GPIO for Phase A. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int vst2 = 61;
+int vst2 = -1;
 module_param(vst2, int, S_IRUGO);
 MODULE_PARM_DESC(vst2, "Vertical motor GPIO for Phase B. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int vst3 = 62;
+int vst3 = -1;
 module_param(vst3, int, S_IRUGO);
 MODULE_PARM_DESC(vst3, "Vertical motor GPIO for Phase C. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
-int vst4 = 63;
+int vst4 = -1;
 module_param(vst4, int, S_IRUGO);
 MODULE_PARM_DESC(vst4, "Vertical motor GPIO for Phase D. Use absolute GPIO index (i.e. GPIOB is 32 + gpio pin, GPIOC is 64 + gpio pin, etc)");
 
@@ -130,6 +130,33 @@ int invert_gpio_dir = 0;
 module_param(invert_gpio_dir, int, S_IRUGO);
 MODULE_PARM_DESC(invert_gpio_dir, "Invert the value of the GPIOs (motor_st*_gpio). Default: 0 (no)");
 
+int shared_gpio_mode = 1;  // 1 for dual mode (8 GPIOs), 0 for 4 GPIOs + direction
+module_param(shared_gpio_mode, int, S_IRUGO);
+MODULE_PARM_DESC(shared_gpio_mode, "Set to 1 for normal gpio mode (8 GPIOs), 0 for shared gpio mode (4 GPIOs + direction select).");
+
+// direction_select_gpio specifies the GPIO pin used to select the motor direction when in shared_gpio_mode.
+int direction_select_gpio = -1; // Default is -1, meaning no direction GPIO is set.
+module_param(direction_select_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(direction_select_gpio, "Direction select GPIO, requied for shared_gpio_mode.");
+
+// invert_direction_polarity allows the user to invert the output polarity of the direction GPIO.
+// Set to 0 for normal polarity (default), or 1 to invert the direction GPIO output.
+int invert_direction_polarity = 1;
+module_param(invert_direction_polarity, int, S_IRUGO);
+MODULE_PARM_DESC(invert_direction_polarity, "Set to 0 for normal polarity, 1 to invert direction_select_gpio output, used with shared_gpio_mode.");
+
+// motor_set_direction sets the direction GPIO based on the move_direction value.
+// If invert_direction_polarity is set, the output is inverted.
+static void motor_set_direction(struct motor_device *mdev, int move_direction)
+{
+	if (direction_select_gpio != -1) {
+		int gpio_value = (move_direction == MOTOR_MOVE_RIGHT_UP) ? 1 : 0;
+		if (invert_direction_polarity) {
+			gpio_value = !gpio_value;
+		}
+		gpio_direction_output(direction_select_gpio, gpio_value);
+	}
+}
 
 struct motor_platform_data motors_pdata[HAS_MOTOR_CNT] = {
 	{
@@ -190,33 +217,48 @@ static void motor_move_step(struct motor_device *mdev, int index)
 	struct motor_driver *motor = NULL;
 	int step = 0;
 
-	motor =  &mdev->motors[index];
-	if(motor->state != MOTOR_OPS_STOP){
+	motor = &mdev->motors[index];
+	if (motor->state != MOTOR_OPS_STOP) {
 		step = motor->cur_steps % 8;
 		step = step < 0 ? step + 8 : step;
-		if (motor->pdata->motor_st1_gpio)
+
+		// In single motor mode, set the direction GPIO and skip vertical GPIOs
+		if (!shared_gpio_mode) {
+			motor_set_direction(mdev, (index == HORIZONTAL_MOTOR) ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN);
+		}
+
+		// Only set GPIOs if they are valid (i.e., not -1)
+		if (motor->pdata->motor_st1_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
-		if (motor->pdata->motor_st2_gpio)
+		}
+		if (motor->pdata->motor_st2_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
-		if (motor->pdata->motor_st3_gpio)
+		}
+		if (motor->pdata->motor_st3_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
-		if (motor->pdata->motor_st4_gpio)
+		}
+		if (motor->pdata->motor_st4_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
-	}else{
-		if (motor->pdata->motor_st1_gpio)
+		}
+
+	} else {
+		// Reset GPIOs only if they are valid (not -1)
+		if (motor->pdata->motor_st1_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
-		if (motor->pdata->motor_st2_gpio)
+		}
+		if (motor->pdata->motor_st2_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st2_gpio, (0 ^ invert_gpio_dir) & 0x1);
-		if (motor->pdata->motor_st3_gpio)
+		}
+		if (motor->pdata->motor_st3_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st3_gpio, (0 ^ invert_gpio_dir) & 0x1);
-		if (motor->pdata->motor_st4_gpio)
+		}
+		if (motor->pdata->motor_st4_gpio != -1) {
 			gpio_direction_output(motor->pdata->motor_st4_gpio, (0 ^ invert_gpio_dir) & 0x1);
+		}
 	}
 	if(motor->state == MOTOR_OPS_RESET){
 		motor->total_steps++;
 	}
-
-	return;
 }
 
 static void move_to_min_pose_ops(struct motor_driver *motor)
@@ -781,56 +823,47 @@ static struct file_operations motor_fops = {
 
 static int motor_info_show(struct seq_file *m, void *v)
 {
-	int len = 0;
 	struct motor_device *mdev = (struct motor_device *)(m->private);
 	struct motor_message msg;
 	int index = 0;
 
-#ifdef CONFIG_SOC_T40
-	seq_printf(m ,"The version of Motor driver is %s. SoC is XBurst2\n",JZ_MOTOR_DRIVER_VERSION);
-	seq_printf(m ,"Motor driver is %s\n", mdev->flag?"opened":"closed");
+	seq_printf(m ,"The version of Motor driver is %s\n", JZ_MOTOR_DRIVER_VERSION);
+	seq_printf(m ,"Motor driver is %s\n", mdev->flag ? "opened" : "closed");
 	seq_printf(m ,"The max speed is %d and the min speed is %d\n", MOTOR_MAX_SPEED, MOTOR_MIN_SPEED);
 	motor_get_message(mdev, &msg);
-	seq_printf(m ,"The status of motor is %s\n", msg.status?"running":"stop");
+	seq_printf(m ,"The status of motor is %s\n", msg.status ? "running" : "stop");
 	seq_printf(m ,"The pos of motor is (%d, %d)\n", msg.x, msg.y);
 	seq_printf(m ,"The speed of motor is %d\n", msg.speed);
 
-	for(index = 0; index < HAS_MOTOR_CNT; index++){
+	for (index = 0; index < HAS_MOTOR_CNT; index++) {
 		seq_printf(m ,"## %s ##\n", mdev->motors[index].pdata->name);
+
+#ifdef CONFIG_SOC_T40
 		seq_printf(m ,"max steps %d\n", mdev->motors[index].max_steps);
 		seq_printf(m ,"motor direction %d\n", mdev->motors[index].move_dir);
 		seq_printf(m ,"motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
 		seq_printf(m ,"the irq's counter of max pos is %d\n", mdev->motors[index].max_pos_irq_cnt);
 		seq_printf(m ,"the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
-	}
 #else
-	len += seq_printf(m ,"The version of Motor driver is %s. SoC is not XBurst2\n",JZ_MOTOR_DRIVER_VERSION);
-	len += seq_printf(m ,"Motor driver is %s\n", mdev->flag?"opened":"closed");
-	len += seq_printf(m ,"The max speed is %d and the min speed is %d\n", MOTOR_MAX_SPEED, MOTOR_MIN_SPEED);
-	motor_get_message(mdev, &msg);
-	len += seq_printf(m ,"The status of motor is %s\n", msg.status?"running":"stop");
-	len += seq_printf(m ,"The pos of motor is (%d, %d)\n", msg.x, msg.y);
-	len += seq_printf(m ,"The speed of motor is %d\n", msg.speed);
-
-	for(index = 0; index < HAS_MOTOR_CNT; index++){
-		len += seq_printf(m ,"## %s ##\n", mdev->motors[index].pdata->name);
-		len += seq_printf(m ,"GPIOs: Min %d, Max %d, Level %d, ST1 %d, ST2 %d, ST3 %d, ST4 %d\n",
-			mdev->motors[index].pdata->motor_min_gpio,
-			mdev->motors[index].pdata->motor_max_gpio,
-			mdev->motors[index].pdata->motor_gpio_level,
-			mdev->motors[index].pdata->motor_st1_gpio,
-			mdev->motors[index].pdata->motor_st2_gpio,
-			mdev->motors[index].pdata->motor_st3_gpio,
-			mdev->motors[index].pdata->motor_st4_gpio);
-		len += seq_printf(m ,"max steps %d\n", mdev->motors[index].max_steps);
-		len += seq_printf(m ,"motor direction %d\n", mdev->motors[index].move_dir);
-		len += seq_printf(m ,"motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
-		len += seq_printf(m ,"the irq's counter of max pos is %d\n", mdev->motors[index].max_pos_irq_cnt);
-		len += seq_printf(m ,"the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
-	}
+		seq_printf(m ,"GPIOs: Min %d, Max %d, Level %d, ST1 %d, ST2 %d, ST3 %d, ST4 %d, hmax %d, vmax %d\n",
+				mdev->motors[index].pdata->motor_min_gpio,
+				mdev->motors[index].pdata->motor_max_gpio,
+				mdev->motors[index].pdata->motor_gpio_level,
+				mdev->motors[index].pdata->motor_st1_gpio,
+				mdev->motors[index].pdata->motor_st2_gpio,
+				mdev->motors[index].pdata->motor_st3_gpio,
+				mdev->motors[index].pdata->motor_st4_gpio,
+				hmaxstep,
+				vmaxstep);
+		seq_printf(m ,"max steps %d\n", mdev->motors[index].max_steps);
+		seq_printf(m ,"motor direction %d\n", mdev->motors[index].move_dir);
+		seq_printf(m ,"motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
+		seq_printf(m ,"the irq's counter of max pos is %d\n", mdev->motors[index].max_pos_irq_cnt);
+		seq_printf(m ,"the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
 #endif
+	}
 
-	return len;
+	return 0;
 }
 
 static int motor_info_open(struct inode *inode, struct file *file)
@@ -874,7 +907,7 @@ static int motor_probe(struct platform_device *pdev)
 #endif
 	mdev->tcu->irq_type = FULL_IRQ_MODE;
 	mdev->tcu->clk_src = TCU_CLKSRC_EXT;
-	mdev->tcu_speed = MOTOR_MAX_SPEED;
+	mdev->tcu_speed = MOTOR_DEF_SPEED;
 #ifdef CONFIG_SOC_T40
 	mdev->tcu->is_pwm = 0;
 	mdev->tcu->cib.func = TRACKBALL_FUNC;
@@ -894,21 +927,40 @@ static int motor_probe(struct platform_device *pdev)
 	platform_set_drvdata(pdev, mdev);
 
 	/* copy module parameters to the motors struct */
-	motors_pdata[0].motor_min_gpio = hmin;
-	motors_pdata[0].motor_max_gpio = hmax;
-	motors_pdata[0].motor_gpio_level = hlevel;
-	motors_pdata[0].motor_st1_gpio = hst1;
-	motors_pdata[0].motor_st2_gpio = hst2;
-	motors_pdata[0].motor_st3_gpio = hst3;
-	motors_pdata[0].motor_st4_gpio = hst4;
+	if (shared_gpio_mode) {
+		motors_pdata[0].motor_min_gpio = hmin;
+		motors_pdata[0].motor_max_gpio = hmax;
+		motors_pdata[0].motor_gpio_level = hlevel;
+		motors_pdata[0].motor_st1_gpio = hst1;
+		motors_pdata[0].motor_st2_gpio = hst2;
+		motors_pdata[0].motor_st3_gpio = hst3;
+		motors_pdata[0].motor_st4_gpio = hst4;
 
-	motors_pdata[1].motor_min_gpio = vmin;
-	motors_pdata[1].motor_max_gpio = vmax;
-	motors_pdata[1].motor_gpio_level = vlevel;
-	motors_pdata[1].motor_st1_gpio = vst1;
-	motors_pdata[1].motor_st2_gpio = vst2;
-	motors_pdata[1].motor_st3_gpio = vst3;
-	motors_pdata[1].motor_st4_gpio = vst4;
+		motors_pdata[1].motor_min_gpio = vmin;
+		motors_pdata[1].motor_max_gpio = vmax;
+		motors_pdata[1].motor_gpio_level = vlevel;
+		motors_pdata[1].motor_st1_gpio = vst1;
+		motors_pdata[1].motor_st2_gpio = vst2;
+		motors_pdata[1].motor_st3_gpio = vst3;
+		motors_pdata[1].motor_st4_gpio = vst4;
+	} else {
+		// Only assign horizontal motor GPIOs in shared gpio mode
+		motors_pdata[0].motor_min_gpio = hmin;
+		motors_pdata[0].motor_max_gpio = hmax;
+		motors_pdata[0].motor_gpio_level = hlevel;
+		motors_pdata[0].motor_st1_gpio = hst1;
+		motors_pdata[0].motor_st2_gpio = hst2;
+		motors_pdata[0].motor_st3_gpio = hst3;
+		motors_pdata[0].motor_st4_gpio = hst4;
+
+		motors_pdata[1].motor_min_gpio = vmin;
+		motors_pdata[1].motor_max_gpio = vmax;
+		motors_pdata[1].motor_gpio_level = vlevel;
+		motors_pdata[1].motor_st1_gpio = hst1;
+		motors_pdata[1].motor_st2_gpio = hst2;
+		motors_pdata[1].motor_st3_gpio = hst3;
+		motors_pdata[1].motor_st4_gpio = hst4;
+	}
 
 	if (invert_gpio_dir != 0) invert_gpio_dir = 1;
 
@@ -916,7 +968,7 @@ static int motor_probe(struct platform_device *pdev)
 		motor = &(mdev->motors[i]);
 		motor->pdata = &motors_pdata[i];
 		motor->move_dir	= MOTOR_MOVE_STOP;
-		dev_info(&pdev->dev, "'%s' GPIOs: Min %d, Max %d, Level %d, ST1 %d, ST2 %d, ST3 %d, ST4 %d\n",
+		dev_info(&pdev->dev, "'%s' GPIOs: Min %d, Max %d, Level %d, ST1 %d, ST2 %d, ST3 %d, ST4 %d, hmax %d, vmax %d\n",
 			motor->pdata->name,
 			motor->pdata->motor_min_gpio,
 			motor->pdata->motor_max_gpio,
@@ -924,7 +976,9 @@ static int motor_probe(struct platform_device *pdev)
 			motor->pdata->motor_st1_gpio,
 			motor->pdata->motor_st2_gpio,
 			motor->pdata->motor_st3_gpio,
-			motor->pdata->motor_st4_gpio
+			motor->pdata->motor_st4_gpio,
+			hmaxstep,
+			vmaxstep
 		);
 
 		init_completion(&motor->reset_completion);
