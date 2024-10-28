@@ -168,6 +168,7 @@ struct motor_platform_data motors_pdata[HAS_MOTOR_CNT] = {
 		.motor_st2_gpio		= -1,
 		.motor_st3_gpio		= -1,
 		.motor_st4_gpio		= -1,
+		.motor_switch_gpio	= -1,
 	},
 	{
 		.name = "Vertical motor",
@@ -952,6 +953,7 @@ static int motor_probe(struct platform_device *pdev)
 		motors_pdata[0].motor_st2_gpio = hst2;
 		motors_pdata[0].motor_st3_gpio = hst3;
 		motors_pdata[0].motor_st4_gpio = hst4;
+		motors_pdata[0].motor_switch_gpio = direction_select_gpio;
 
 		motors_pdata[1].motor_min_gpio = vmin;
 		motors_pdata[1].motor_max_gpio = vmax;
@@ -963,6 +965,10 @@ static int motor_probe(struct platform_device *pdev)
 	}
 
 	if (invert_gpio_dir != 0) invert_gpio_dir = 1;
+
+	if (motors_pdata[0].motor_switch_gpio != -1) {
+		gpio_request(motors_pdata[0].motor_switch_gpio, "motor_switch_gpio");
+	}
 
 	for(i = 0; i < HAS_MOTOR_CNT; i++) {
 		motor = &(mdev->motors[i]);
@@ -1058,6 +1064,9 @@ error_get_irq:
 		if(motor->pdata == NULL)
 			continue;
 
+		if (motor->pdata->motor_switch_gpio != -1)
+			gpio_free(motor->pdata->motor_switch_gpio);
+
 		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_free(motor->pdata->motor_st1_gpio);
 
@@ -1097,6 +1106,9 @@ static int motor_remove(struct platform_device *pdev)
 		motor = &(mdev->motors[i]);
 		if(motor->pdata == NULL)
 			continue;
+
+		if (motor->pdata->motor_switch_gpio != -1)
+			gpio_free(motor->pdata->motor_switch_gpio);
 
 		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_free(motor->pdata->motor_st1_gpio);

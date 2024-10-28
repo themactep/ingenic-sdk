@@ -88,6 +88,7 @@ struct motor_platform_data {
 	int motor_min_gpio;
 	int motor_max_gpio;
 	int motor_gpio_level;
+	int motor_switch_gpio;
 
 	int motor_st1_gpio;
 	int motor_st2_gpio;
