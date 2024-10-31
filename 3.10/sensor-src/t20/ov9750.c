@@ -18,9 +18,9 @@
 #define SENSOR_NAME "ov9750"
 #define SENSOR_CHIP_ID 0x9750
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 0
-#define SENSOR_MAX_HEIGHT 0
+#define SENSOR_I2C_ADDRESS 0x36
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 960
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x50)
 #define SENSOR_REG_END 0xffff
@@ -1149,10 +1149,12 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	return i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }
 
