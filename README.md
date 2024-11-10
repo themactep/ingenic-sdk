@@ -14,7 +14,7 @@ To compile the kernel modules for Ingenic SoCs, run the following command from y
 Example for building the kernel module for the GC2053 sensor on a T31 SoC with kernel version 3.10:
 
 ```console
-SENSOR=gc2053 ./build.sh t31 3.10
+SENSOR_MODEL=gc2053 ./build.sh t31 3.10
 ```
 
 ### Parameters:
