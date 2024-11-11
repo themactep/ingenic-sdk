@@ -838,7 +838,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 		    SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, SENSOR_NAME, sizeof("jxq03"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
