@@ -1016,7 +1016,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	  private_gpio_direction_output(pwdn_gpio, 0);
 	  private_msleep(10);
 	  } else {
-	  printk("gpio requrest fail %d\n",pwdn_gpio);
+	  printk("gpio request fail %d\n",pwdn_gpio);
 	  }
 	  }*/
 	if (reset_gpio != -1) {
@@ -1029,7 +1029,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 		} else {
-			printk("gpio requrest fail %d\n",reset_gpio);
+			printk("gpio request fail %d\n",reset_gpio);
 		}
 	}
 

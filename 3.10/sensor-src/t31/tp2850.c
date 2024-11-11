@@ -4,17 +4,7 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
-#include <linux/init.h>
-#include <linux/module.h>
-#include <linux/slab.h>
-#include <linux/i2c.h>
-#include <linux/delay.h>
-#include <linux/gpio.h>
-#include <linux/clk.h>
-#include <linux/proc_fs.h>
-#include <tx-isp-common.h>
-#include <sensor-common.h>
-#include <sensor-info.h>
+#include "t31-common.h"
 
 #define SENSOR_NAME "tp2850"
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
@@ -487,7 +477,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+			ISP_ERROR("gpio request fail %d\n",reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -500,7 +490,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+			ISP_ERROR("gpio request fail %d\n",pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
