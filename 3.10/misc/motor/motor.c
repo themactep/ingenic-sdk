@@ -682,7 +682,8 @@ static int motor_speed(struct motor_device *mdev, int speed)
 {
 	__asm__("ssnop");
 	if ((speed < MOTOR_MIN_SPEED) || (speed > MOTOR_MAX_SPEED)) {
-		dev_err(mdev->dev, "speed(%d) set error\n", speed);
+		dev_err(mdev->dev, "Invalid speed: %d. Accepted range is %d - %d.\n",
+			speed, MOTOR_MIN_SPEED, MOTOR_MAX_SPEED);
 		return -1;
 	}
 	__asm__("ssnop");
@@ -703,7 +704,8 @@ static int motor_open(struct inode *inode, struct file *file)
 	int ret = 0;
 	if(mdev->flag){
 		ret = -EBUSY;
-		dev_err(mdev->dev, "Motor driver busy now!\n");
+		dev_err(mdev->dev, "Failed to open motor driver: device is currently in use.\n");
+
 	}else{
 		mdev->flag = 1;
 	}
@@ -727,7 +729,7 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	long ret = 0;
 
 	if(mdev->flag == 0){
-		printk("Please Open /dev/motor Firstly\n");
+		dev_err(mdev->dev, "Motor device not opened. Please open /dev/motor before issuing commands.\n");
 		return -EPERM;
 	}
 
@@ -888,14 +890,14 @@ static int motor_probe(struct platform_device *pdev)
 	mdev = devm_kzalloc(&pdev->dev, sizeof(struct motor_device), GFP_KERNEL);
 	if (!mdev) {
 		ret = -ENOENT;
-		dev_err(&pdev->dev, "kzalloc motor device memery error\n");
+		dev_err(&pdev->dev, "Failed to allocate memory for motor device.\n");
 		goto error_devm_kzalloc;
 	}
 
 	mdev->cell = mfd_get_cell(pdev);
 	if (!mdev->cell) {
 		ret = -ENOENT;
-		dev_err(&pdev->dev, "Failed to get mfd cell for motor_probe!\n");
+		dev_err(&pdev->dev, "Failed to retrieve MFD cell for motor device.\n");
 		goto error_devm_kzalloc;
 	}
 
