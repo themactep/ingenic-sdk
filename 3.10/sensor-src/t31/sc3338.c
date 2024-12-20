@@ -358,7 +358,7 @@ struct tx_isp_mipi_bus sensor_mipi0={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_mipi ={
+struct tx_isp_mipi_bus sensor_mipi1 ={
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 495,
     .lans = 2,
@@ -387,7 +387,7 @@ struct tx_isp_mipi_bus sensor_mipi ={
     .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_mipi ={
+struct tx_isp_mipi_bus sensor_mipi2 ={
     .mode = SENSOR_MIPI_OTHER_MODE,
     .clk = 255,
     .lans = 2,
