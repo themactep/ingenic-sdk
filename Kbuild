@@ -25,10 +25,10 @@ endif
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
 
-ifeq ($(BR2_MOTORS),y)
+ifeq ($(BR2_THINGINO_MOTORS),y)
 $(info Building Motor for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
-ifeq ($(BR2_MOTORS_SPI),y)
+ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
 $(info Building Motor SPI for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
 endif
