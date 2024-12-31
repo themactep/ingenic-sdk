@@ -22,15 +22,19 @@ ifeq ($(KERNEL_VERSION),3.10)
     include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
 endif
 
+ifeq ($(KERNEL_VERSION),3.10)
 $(info Building PWM for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
+endif
 
 ifeq ($(BR2_THINGINO_MOTORS),y)
 $(info Building Motor for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
 ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
+ifeq ($(KERNEL_VERSION),3.10)
 $(info Building Motor SPI for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
+endif
 endif
 endif
 
