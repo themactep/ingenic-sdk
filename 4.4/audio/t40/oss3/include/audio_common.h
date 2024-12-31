@@ -50,10 +50,10 @@ enum audio_inter_cmd {
 
 /* the size of one data fragment is 10ms */
 struct dsp_data_fragment {
-	struct list_head list;
-	bool state;
-	void *vaddr;
-	dma_addr_t paddr;
+	struct list_head	list;
+	bool 				state;
+	void 				*vaddr;
+	dma_addr_t          paddr;
 	void *priv;			/* when enable aec function, it points aec fragment */
 };
 
@@ -63,28 +63,28 @@ struct dsp_data_fragment {
 struct dsp_data_manage {
 	/* buffer manager */
 	struct dsp_data_fragment *fragments;
-	unsigned int sample_size; // samplesize = channel * format_to_bytes(format) / 8;
-	unsigned int fragment_size;
-	unsigned int fragment_cnt;
-	struct list_head fragments_head;
-	unsigned int buffersize;	/* current using the total size of fragments data */
-	unsigned int dma_tracer;	/* It's offset in buffer */
-	unsigned int new_dma_tracer;	/* It's offset in buffer */
-	unsigned int io_tracer;		/* It's offset in buffer */
-	unsigned int aec_dma_tracer;	/* It's valid in amic and dmic */
+	unsigned int 		sample_size; // samplesize = channel * format_to_bytes(format) / 8;
+	unsigned int 		fragment_size;
+	unsigned int 		fragment_cnt;
+	struct list_head    fragments_head;
+	unsigned int		buffersize;			/* current using the total size of fragments data */
+	unsigned int dma_tracer;				/* It's offset in buffer */
+	unsigned int new_dma_tracer;			/* It's offset in buffer */
+	unsigned int io_tracer;				/* It's offset in buffer */
+	unsigned int aec_dma_tracer;			/* It's valid in amic and dmic */
 };
 
 struct audio_pipe {
 	char *name;
 	/* dma */
-	struct dma_chan *dma_chan;
-	struct dma_slave_config dma_config; /* define by device */
+	struct dma_chan     *dma_chan;
+	struct dma_slave_config dma_config;     /* define by device */
 	int dma_type;
 
 	/* dma buffer */
-	void *vaddr;
-	dma_addr_t paddr;
-	unsigned int reservesize; /* the size must be setted when initing this driver */
+	void				*vaddr;
+	dma_addr_t          paddr;
+	unsigned int		reservesize; 		/* the size must be setted when initing this driver */
 	spinlock_t pipe_lock;
 	volatile bool is_trans;
 	/* operation */
@@ -95,19 +95,19 @@ struct audio_pipe {
 };
 
 struct volume {
-	unsigned int channel; //1-left 2-right 3-stereo
-	unsigned int gain[2]; //0-left 1-right
+	unsigned int channel;   //1-left 2-right 3-stereo
+	unsigned int gain[2];   //0-left 1-right
 };
 
 struct channel_mute {
-	unsigned int channel; //1-left 2-right 3-stereo
-	unsigned int mute_en; //0-left 1-right
+	unsigned int channel;   //1-left 2-right 3-stereo
+	unsigned int mute_en;   //0-left 1-right
 };
 
 struct alc_gain {
-	unsigned int channel; //1-left 2-right 3-stereo
+	unsigned int channel;   //1-left 2-right 3-stereo
 	unsigned int maxgain[2];
-	unsigned int mingain[2]; //0-left 1-right
+	unsigned int mingain[2];//0-left 1-right
 };
 
 #endif /* _JZ_AUDIO_COMMON_H_ */

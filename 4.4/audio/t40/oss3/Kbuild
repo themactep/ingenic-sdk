@@ -1,18 +1,21 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+
+ccflags-y += -I$(src)/$(DIR)/include
 
 SRCS := \
-  $(DIR)/oss3/audio_dsp.c \
-  $(DIR)/oss3/audio_debug.c \
-  $(DIR)/oss3/host/audio_aic.c \
-  $(DIR)/oss3/host/audio_dmic.c \
-  $(DIR)/oss3/inner_codecs/codec.c \
-  $(DIR)/oss3/board/t40_platform.c
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/audio_aic.c \
+  $(DIR)/host/audio_dmic.c \
+  $(DIR)/inner_codecs/codec.c \
+  $(DIR)/boards/t40_platform.c
 
-OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS := $(SRCS:%.c=%.o)
 
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
+
