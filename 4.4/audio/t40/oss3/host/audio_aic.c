@@ -21,10 +21,10 @@
 #include <soc/base.h>
 #include <linux/i2c.h>
 #include "audio_aic.h"
-#include "../include/audio_common.h"
-#include "../include/codec-common.h"
-#include "../include/audio_dsp.h"
-#include "../include/audio_debug.h"
+#include "audio_common.h"
+#include "codec-common.h"
+#include "audio_dsp.h"
+#include "audio_debug.h"
 
 #define AUDIO_DRIVER_VERSION "V30-20201030a"
 #define DEFAULT_EXCODEC_ADDR 0xff
@@ -533,7 +533,7 @@ static int set_codec_mic_datatype(struct audio_aic_device *aic, void *data)
 
 	if (data_type.sample_channel != MONO_LEFT && data_type.sample_channel != MONO_RIGHT &&
 		data_type.sample_channel != STEREO) {
-		audio_err_print("T40 only support record mono, stereo channel now.\n");
+		audio_err_print("T40 only support record mono , stereo channel now.\n");
 		return -EINVAL;
 	}
 	//set samplerate
@@ -855,6 +855,7 @@ static int set_codec_mic_start(struct audio_aic_device *aic, void *data)
 			break;
 	}
 
+
 	vfs_write(fp, pdata, frm_cnt * 2, pos);
 	filp_close(fp, NULL);
 	kfree(pdata);
@@ -1118,7 +1119,7 @@ static int set_codec_spk_datatype(struct audio_aic_device *aic, void *data)
 	data_type.frame_vsize = param->format;
 	data_type.frame_size = 32;
 	if (data_type.sample_channel != MONO_LEFT && data_type.sample_channel != STEREO) {
-		audio_err_print("We only support replay mono, stereo channel now.\n");
+		audio_err_print("We only support replay mono ,stereo channel now.\n");
 		return -EINVAL;
 	}
 	//set samplerate
@@ -1266,6 +1267,7 @@ static int set_codec_spk_start(struct audio_aic_device *aic, void *data)
 
 	__i2s_enable(aic);
 	ret = aic->livingcodec->playback->set_endpoint(CODEC_SPK_START);
+
 	{
 		__i2s_flush_tfifo(aic);
 		__i2s_enable_transmit_dma(aic);
@@ -2106,20 +2108,17 @@ static int __exit audio_aic_remove(struct platform_device *pdev)
 	release_audio_pipe(aic->mic_pipe);
 	release_audio_pipe(aic->spk_pipe);
 	release_audio_pipe(aic->aec_pipe);
-
-	if (aic->incodec) {
+	if (aic->incodec){
 		inner_codec_release(aic->livingcodec);
 		codec_device = pdev->dev.platform_data;
 		platform_device_unregister(codec_device);
 		platform_driver_unregister(&audio_codec_driver);
 	}
-	if (aic->excodec) {
+	if (aic->excodec){
 		extern_codec_release(aic);
 	}
-
 	//dma release
 	pipe_release_dma(aic, &pdev->dev);
-
 	__i2s_disable(aic);
 	clk_disable(aic->aic_clock);
 	clk_disable(aic->mic_clock);

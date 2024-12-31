@@ -23,7 +23,7 @@
 #include <linux/err.h>
 #include <linux/seq_file.h>
 #include "../host/audio_aic.h"
-#include "../include/audio_debug.h"
+#include "audio_debug.h"
 #include "codec.h"
 
 static int spk_gpio =  GPIO_PB(31);
