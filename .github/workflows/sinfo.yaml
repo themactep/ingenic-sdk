@@ -1,0 +1,136 @@
+name: ingenic-sdk-sinfo
+on:
+  workflow_dispatch:
+env:
+  TAG_NAME: sinfo
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TERM: linux
+  TZ: America/Los_Angeles
+jobs:
+  build:
+    name: build-${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    container:
+      image: debian:bookworm
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: mango
+            chip: t10
+          - target: bull
+            chip: t20
+          - target: turkey
+            chip: t21
+          - target: pike
+            chip: t23
+          - target: monkey
+            chip: t30
+          - target: swan
+            chip: t31
+    steps:
+      - name: Update package manager sources
+        run: |
+          apt-get update
+
+      - name: Install build dependencies
+        run: |
+          apt-get install -y --no-install-recommends --no-install-suggests 7zip build-essential bc ccache cpio curl ca-certificates file git gh jq make gawk lzop procps rsync tzdata u-boot-tools unzip
+
+      - name: Set timezone
+        run: |
+          ln -sf /usr/share/zoneinfo/${{ env.TZ }} /etc/localtime
+          echo ${{ env.TZ }} > /etc/timezone
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive tzdata
+
+      - name: Setup gh workspace to container
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout repository source
+        uses: actions/checkout@v4
+        with:
+          ref: "master"
+          fetch-depth: "1"
+
+      - name: Setup cache directories
+        run: |
+          mkdir -p /github/home/.ccache
+
+      - name: Restore build cache
+        uses: actions/cache@v4
+        if: always()
+        with:
+          path: /github/home/.ccache
+          key: ${{ runner.os }}-ccache-${{ matrix.target }}-${{ github.sha }}-
+          restore-keys: |
+            ${{ runner.os }}-ccache-${{ matrix.target }}-${{ github.sha }}-
+            ${{ runner.os }}-ccache-${{ matrix.target }}
+            ${{ runner.os }}-ccache-
+
+      - name: Download toolchain
+        run: |
+          curl -L https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -o ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz
+          tar -xf ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -C ~/
+          ~/mipsel-thingino-linux-musl_sdk-buildroot/relocate-sdk.sh
+
+      - name: Build
+        if: ${{ github.event.inputs.debug_enabled != 'true' }}
+        shell: bash
+        run: |
+          export CCACHE_DIR=/github/home/.ccache
+          export PATH="/usr/lib/ccache:$PATH"
+          export PATH="/github/home/mipsel-thingino-linux-musl_sdk-buildroot/bin:$PATH"
+          ccache -M 4G
+
+          # Clone Linux repository
+          git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t31 linux
+
+          # Build kernel
+          cd linux
+          make isvp_${{ matrix.target }}_defconfig
+          CROSS_COMPILE=mipsel-linux- make -j$(nproc) uImage
+          cd ..
+
+          # Build sinfo module
+          rm -rf /tmp/sinfo
+          mkdir -p /tmp/sinfo/misc/sinfo
+          cd /tmp/sinfo
+
+          echo "obj-m := sinfo.o" > Makefile
+          cp $GITHUB_WORKSPACE/3.10/misc/sinfo/Kbuild .
+          cp $GITHUB_WORKSPACE/3.10/misc/sinfo/sensor_info.c misc/sinfo/
+
+          make -C $GITHUB_WORKSPACE/linux M=$PWD ARCH=mips CROSS_COMPILE=mipsel-linux- modules
+
+          # Copy built module with target suffix
+          cp sinfo.ko /tmp/sinfo-${{ matrix.chip }}.ko
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sinfo-${{ matrix.chip }}
+          path: /tmp/sinfo-${{ matrix.chip }}.ko
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          
+      - name: Release
+        uses: softprops/action-gh-release@v2.1.0
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          files: |
+            ./artifacts/sinfo-t10/sinfo-t10.ko
+            ./artifacts/sinfo-t20/sinfo-t20.ko
+            ./artifacts/sinfo-t21/sinfo-t21.ko
+            ./artifacts/sinfo-t23/sinfo-t23.ko
+            ./artifacts/sinfo-t30/sinfo-t30.ko
+            ./artifacts/sinfo-t31/sinfo-t31.ko
