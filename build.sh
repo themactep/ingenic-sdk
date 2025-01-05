@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KERNEL_DIR=""
+KERNEL_DIR="${KERNEL_DIR:-}"
 CROSS_COMPILE=mipsel-linux-
 DEFAULT_KERNEL_VERSION="3.10"
 
