@@ -91,6 +91,7 @@ jobs:
           # Build kernel
           cd linux
           make isvp_${{ matrix.target }}_defconfig
+          scripts/config --disable LOCALVERSION_AUTO
           CROSS_COMPILE="ccache mipsel-linux-" make -j$(nproc) uImage
           cd ..
 
