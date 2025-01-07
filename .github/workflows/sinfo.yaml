@@ -31,6 +31,11 @@ jobs:
             chip: t30
           - target: swan
             chip: t31
+          - target: shark
+            chip: t40
+          #- target: marmot
+          #  chip: t41
+  
     steps:
       - name: Update package manager sources
         run: |
@@ -76,17 +81,37 @@ jobs:
           tar -xf ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -C ~/
           ~/mipsel-thingino-linux-musl_sdk-buildroot/relocate-sdk.sh
 
+          curl -L https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst2_musl_gcc14-linux-mipsel.tar.gz -o ~/thingino-toolchain_xburst2_musl_gcc14-linux-mipsel.tar.gz
+          mkdir -p ~/temp_xburst2
+          tar -xf ~/thingino-toolchain_xburst2_musl_gcc14-linux-mipsel.tar.gz -C ~/temp_xburst2
+          mkdir -p ~/mipsel-thingino-linux-musl-xburst2_sdk-buildroot
+          mv ~/temp_xburst2/*/* ~/mipsel-thingino-linux-musl-xburst2_sdk-buildroot/
+          rm -rf ~/temp_xburst2
+          ~/mipsel-thingino-linux-musl-xburst2_sdk-buildroot/relocate-sdk.sh
+
+
       - name: Build
         if: ${{ github.event.inputs.debug_enabled != 'true' }}
         shell: bash
         run: |
           export CCACHE_DIR=/github/home/.ccache
           export PATH="/usr/lib/ccache:$PATH"
-          export PATH="/github/home/mipsel-thingino-linux-musl_sdk-buildroot/bin:$PATH"
+
+          # Set toolchain path based on target
+          if [ "${{ matrix.chip }}" = "t40" ]; then
+            export PATH="/github/home/mipsel-thingino-linux-musl-xburst2_sdk-buildroot/bin:$PATH"
+          else
+            export PATH="/github/home/mipsel-thingino-linux-musl_sdk-buildroot/bin:$PATH"
+          fi
+
           ccache -M 4G
 
           # Clone Linux repository
+          if [ "${{ matrix.chip }}" = "t40" ]; then
+          git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t40 linux
+          else
           git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t31 linux
+          fi
 
           # Build kernel
           cd linux
@@ -132,6 +157,6 @@ jobs:
             ./artifacts/sinfo-t23/sinfo-t23.ko
             ./artifacts/sinfo-t30/sinfo-t30.ko
             ./artifacts/sinfo-t31/sinfo-t31.ko
-            #./artifacts/sinfo-t31/sinfo-t40.ko
+            ./artifacts/sinfo-t40/sinfo-t40.ko
             #./artifacts/sinfo-t31/sinfo-t41.ko
 
