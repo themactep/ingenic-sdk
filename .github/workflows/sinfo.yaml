@@ -96,14 +96,11 @@ jobs:
           cd ..
 
           # Build sinfo module
-          rm -rf /tmp/sinfo
-          mkdir -p /tmp/sinfo/misc/sinfo
-          cd /tmp/sinfo
-
+          cd $GITHUB_WORKSPACE/sinfo
+          mkdir -p sinfo
+          mv sensor_info.c sinfo/sinfo.c
+          cd sinfo
           echo "obj-m := sinfo.o" > Makefile
-          cp $GITHUB_WORKSPACE/3.10/misc/sinfo/Kbuild .
-          cp $GITHUB_WORKSPACE/3.10/misc/sinfo/sensor_info.c misc/sinfo/
-
           make -C $GITHUB_WORKSPACE/linux M=$PWD ARCH=mips CROSS_COMPILE="ccache mipsel-linux-" modules
 
           # Copy built module with target suffix
@@ -123,7 +120,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
-          
+
       - name: Release
         uses: softprops/action-gh-release@v2.1.0
         with:
@@ -135,3 +132,6 @@ jobs:
             ./artifacts/sinfo-t23/sinfo-t23.ko
             ./artifacts/sinfo-t30/sinfo-t30.ko
             ./artifacts/sinfo-t31/sinfo-t31.ko
+            #./artifacts/sinfo-t31/sinfo-t40.ko
+            #./artifacts/sinfo-t31/sinfo-t41.ko
+
