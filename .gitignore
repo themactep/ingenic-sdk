@@ -3,3 +3,4 @@
 *.mod
 *.mod.c
 lib/**/*.txt
+.vscode
