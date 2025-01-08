@@ -33,9 +33,9 @@ jobs:
             chip: t31
           - target: shark
             chip: t40
-          #- target: marmot
-          #  chip: t41
-  
+          - target: marmot
+            chip: t41
+
     steps:
       - name: Update package manager sources
         run: |
@@ -158,5 +158,5 @@ jobs:
             ./artifacts/sinfo-t30/sinfo-t30.ko
             ./artifacts/sinfo-t31/sinfo-t31.ko
             ./artifacts/sinfo-t40/sinfo-t40.ko
-            #./artifacts/sinfo-t31/sinfo-t41.ko
+            ./artifacts/sinfo-t31/sinfo-t41.ko
 
