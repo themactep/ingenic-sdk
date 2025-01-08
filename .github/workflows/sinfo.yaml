@@ -109,6 +109,8 @@ jobs:
           # Clone Linux repository
           if [ "${{ matrix.chip }}" = "t40" ]; then
           git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t40 linux
+          elif [ "${{ matrix.chip }}" = "t41" ]; then
+          git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t41-4.4.94 linux
           else
           git clone --depth 1 https://github.com/gtxaspec/thingino-linux -b ingenic-t31 linux
           fi
