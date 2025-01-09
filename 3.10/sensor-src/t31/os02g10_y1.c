@@ -222,7 +222,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-//Sensor initialisation rewritten according to factory value
+//Sensor initialisation 
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x01},
