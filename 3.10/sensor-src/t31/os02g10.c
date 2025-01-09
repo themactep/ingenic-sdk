@@ -223,6 +223,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
+//Sensor initialisation rewritten according to factory value
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x01},
@@ -334,6 +335,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xb1, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
+
+//End sensor initialisation
 
 
 /*
@@ -719,47 +722,39 @@ static int sensor_st(struct tx_isp_subdev *sd, int enable)
 {
 	return 0;
 }
+// Sensor_set_vflip rewritten
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	int ret = 0;
-	unsigned char val = 0x01;
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    int ret = 0;
+    unsigned char val = 0x00;
 
-	ret = sensor_write(sd, 0xfd, 0x01);
+    // Always set the sensor for normal image
+    ret = sensor_write(sd, 0xfd, 0x01);
+    if (ret < 0) return ret;
 
-	val &= 0xfc;
-	val |= enable;
-	if (enable & 0x1)
-		val &= 0xfe;
-	else
-		val |= 0x1;
+    if (enable) {
+        val = 0x02; // Set to vertical flip
+        sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10; // Adjust Bayer pattern for vertical flip
+    } else {
+        val = 0x00; // Set to normal
+        sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10; // Ensure BGGR pattern for normal orientation
+    }
+    ret += sensor_write(sd, 0x3f, val);
+    if (ret < 0) return ret;
 
-	switch(enable) {
-	case 0:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
-		break;
-	case 1:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
-		break;
-	case 2:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
-		break;
-	case 3:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
-		break;
-	default:
-		ISP_ERROR("Sensor Can Not Support This HV flip mode!!!\n");
-	}
-	sensor->video.mbus_change = 1;
-	ret += sensor_write(sd, 0x3f, val);
-	ret += sensor_write(sd, 0x01, 0x01);
+    sensor->video.mbus_change = 1;
 
-	if (!ret)
-		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+    ret += sensor_write(sd, 0x01, 0x01);
+    if (!ret)
+        ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	return ret;
+    return ret;
 }
+//end vflip
+
+
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
