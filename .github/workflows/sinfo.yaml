@@ -160,5 +160,5 @@ jobs:
             ./artifacts/sinfo-t30/sinfo-t30.ko
             ./artifacts/sinfo-t31/sinfo-t31.ko
             ./artifacts/sinfo-t40/sinfo-t40.ko
-            ./artifacts/sinfo-t31/sinfo-t41.ko
+            ./artifacts/sinfo-t41/sinfo-t41.ko
 
