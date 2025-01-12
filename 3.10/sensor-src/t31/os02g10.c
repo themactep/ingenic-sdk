@@ -46,7 +46,7 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-static int shvflip = 1;
+static int shvflip = O;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
@@ -344,7 +344,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 25 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SGBRG10_1X10,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps,
 	},
@@ -737,16 +737,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 	switch(enable) {
 	case 0:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
-		break;
-	case 1:
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 		break;
+	case 1:
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
+		break;
 	case 2:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
 		break;
 	case 3:
-		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
 		break;
 	default:
 		ISP_ERROR("Sensor Can Not Support This HV flip mode!!!\n");
