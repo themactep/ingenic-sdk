@@ -1,21 +1,21 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+ccflags-y += -I$(src)/$(DIR)/include
 
 SRCS := \
-  $(DIR)/oss3/audio_dsp.c \
-  $(DIR)/oss3/audio_debug.c \
-  $(DIR)/oss3/host/audio_aic.c \
-  $(DIR)/oss3/host/dmic/as-fmtcov/as-fmtcov.c \
-  $(DIR)/oss3/host/dmic/as-dbus/as-dbus.c \
-  $(DIR)/oss3/host/dmic/as-dma/as-dma.c \
-  $(DIR)/oss3/host/dmic/as-dmic/as-dmic.c \
-  $(DIR)/oss3/inner_codecs/codec.c \
-  $(DIR)/oss3/board/t41_platform.c
-#  $(DIR)/oss3/host/audio_dmic.c \
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/audio_aic.c \
+  $(DIR)/inner_codecs/codec.c \
+  $(DIR)/host/dmic/as-fmtcov/as-fmtcov.c \
+  $(DIR)/host/dmic/as-dbus/as-dbus.o \
+  $(DIR)/host/dmic/as-dma/as-dma.o \
+  $(DIR)/host/dmic/as-dmic/as-dmic.o \
+  $(DIR)/board/t41_platform.o
 
-OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS := $(SRCS:%.c=%.o)
 
 $(OUT)-objs := $(OBJS)
 
