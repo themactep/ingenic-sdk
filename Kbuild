@@ -80,4 +80,7 @@ else
 $(info Building for sensor $(SENSOR_MODEL))
 include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
-#include $(src)/sinfo/Kbuild
+
+ifeq ($(BR2_THINGINO_SINFO),y)
+include $(src)/sinfo/Kbuild
+endif
