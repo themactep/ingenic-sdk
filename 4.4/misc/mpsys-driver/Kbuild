@@ -3,19 +3,18 @@ OUT := $(MODULE_NAME)
 
 DIR=$(KERNEL_VERSION)/misc/mpsys-driver
 
-SRCS := \
-  $(DIR)/mpsys_module.c \
-  $(DIR)/private-funcs.c
+SRCS := $(DIR)/mpsys_module.c \
+	$(DIR)/private-funcs.c
 
 # Determine the kernel version based on SOC type and KDIR
 ifeq ($(SOC_FAMILY),t41)
-  ifeq ($(findstring 4.4.94,$(KDIR)),4.4.94)
-	KVERSION := 4-4-94
-  else
-	KVERSION := 3-10-14
-  endif
+	ifeq ($(KERNEL_VERSION),4.4)
+		KVERSION := 4-4-94
+	else
+		KVERSION := 3-10-14
+	endif
 else ifeq ($(SOC_FAMILY),t40)
-  KVERSION := 4-4-94
+	KVERSION := 4-4-94
 endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
@@ -24,4 +23,3 @@ OBJS += $(DIR)/$(SOC_FAMILY)-libmpsys-firmware-$(KVERSION).a
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
-

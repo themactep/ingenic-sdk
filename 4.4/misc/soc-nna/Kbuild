@@ -3,13 +3,11 @@ OUT := $(MODULE_NAME)
 
 DIR=$(KERNEL_VERSION)/misc/soc-nna
 
-SRCS := \
-  $(DIR)/soc_nna_main.c \
-  $(DIR)/platform.c
+SRCS := $(DIR)/soc_nna_main.c \
+	$(DIR)/platform.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
-
