@@ -1,13 +1,13 @@
 ifeq ($(SOC_FAMILY),)
-$(error SOC_FAMILY missing)
+    $(error SOC_FAMILY missing)
 else
-$(info Building for SoC $(SOC_FAMILY))
+    $(info Building for SoC $(SOC_FAMILY))
 endif
 
 ifeq ($(KERNEL_VERSION),)
-$(error KERNEL_VERSION missing)
+    $(error KERNEL_VERSION missing)
 else
-$(info Building for Kernel $(KERNEL_VERSION))
+    $(info Building for Kernel $(KERNEL_VERSION))
 endif
 
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
@@ -23,19 +23,19 @@ ifeq ($(KERNEL_VERSION),3.10)
 endif
 
 ifeq ($(KERNEL_VERSION),3.10)
-$(info Building PWM for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
+    $(info Building PWM for Kernel $(KERNEL_VERSION))
+    include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
 endif
 
 ifeq ($(BR2_THINGINO_MOTORS),y)
-$(info Building Motor for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
-ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
-ifeq ($(KERNEL_VERSION),3.10)
-$(info Building Motor SPI for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
-endif
-endif
+    $(info Building Motor for Kernel $(KERNEL_VERSION))
+    include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
+    ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
+        ifeq ($(KERNEL_VERSION),3.10)
+            $(info Building Motor SPI for Kernel $(KERNEL_VERSION))
+            include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
+        endif
+    endif
 endif
 
 #### PLATFORM ####
@@ -58,29 +58,26 @@ else
 endif
 
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
-$(info Building AVPU for Kernel $(KERNEL_VERSION))
-ifeq ($(CONFIG_SOC_T31),y)
-include $(src)/$(KERNEL_VERSION)/avpu/t31/Kbuild
-endif
-ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
-include $(src)/$(KERNEL_VERSION)/avpu/t40/Kbuild
-endif
+    $(info Building AVPU for Kernel $(KERNEL_VERSION))
+    ifeq ($(CONFIG_SOC_T31),y)
+        include $(src)/$(KERNEL_VERSION)/avpu/t31/Kbuild
+    endif
+    ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
+        include $(src)/$(KERNEL_VERSION)/avpu/t40/Kbuild
+    endif
 endif
 
 ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
-include $(src)/$(KERNEL_VERSION)/misc/mpsys-driver/Kbuild
-include $(src)/$(KERNEL_VERSION)/misc/soc-nna/Kbuild
-include $(src)/$(KERNEL_VERSION)/misc/jz-dtrng/Kbuild
+    include $(src)/$(KERNEL_VERSION)/misc/mpsys-driver/Kbuild
+    include $(src)/$(KERNEL_VERSION)/misc/soc-nna/Kbuild
+    include $(src)/$(KERNEL_VERSION)/misc/jz-dtrng/Kbuild
 endif
 
 #### SENSORS ####
 ifeq ($(SENSOR_MODEL),)
-$(warning SENSOR_MODEL missing)
+    $(info SENSOR_MODEL missing, building sinfo module)
+    include $(src)/sinfo/Kbuild
 else
-$(info Building for sensor $(SENSOR_MODEL))
-include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
-endif
-
-ifeq ($(BR2_THINGINO_SINFO),y)
-include $(src)/sinfo/Kbuild
+    $(info Building for sensor $(SENSOR_MODEL))
+    include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
