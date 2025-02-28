@@ -28,7 +28,7 @@
 #ifdef CONFIG_SOC_T40
 #include <dt-bindings/interrupt-controller/t40-irq.h>
 #else
-#include <soc/irq.h>
+#include <dt-bindings/interrupt-controller/t41-irq.h>
 #endif
 #include "jz-dtrng.h"
 #define SBUFF_SIZE		128
