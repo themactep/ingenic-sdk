@@ -1,3 +1,5 @@
+ldflags-y += --no-warn-mismatch
+
 SRCS := $(DIR)/tx-isp-funcs.c \
 	$(DIR)/tx-isp-module.c
 
