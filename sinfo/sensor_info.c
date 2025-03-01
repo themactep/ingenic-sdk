@@ -118,6 +118,7 @@ SENSOR_INFO_T g_sinfo[] =
 	{"gc2083", 0x37,  "cgu_cim", 24000000, {0x20, 0x83}, 1, {0x3f0, 0x3f1}, 2, 2, NULL},
 	{"gc4023", 0x21,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
 	{"gc4023", 0x29,  "cgu_cim", 24000000, {0x40, 0x23}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
+	{"gc5603", 0x31,  "cgu_cim", 24000000, {0x56, 0x03}, 1, {0x03f0, 0x03f1}, 2, 2, NULL},
 	{"hm2131", 0x24,  "cgu_cim", 24000000, {0x14, 0x0a}, 1, {0x0000, 0x0001}, 2, 2, NULL},
 	{"hm2140", 0x24,  "cgu_cim", 24000000, {0x21, 0x40}, 1, {0x0000, 0x0001}, 2, 2, NULL},
 	// Several Sony sensors share identical ID's, for now, lets leave the imx307 enabled and disable the others.
