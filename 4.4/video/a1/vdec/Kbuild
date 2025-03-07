@@ -1,0 +1,17 @@
+MODULE_NAME := vdec_module
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/video/a1/vdec
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/vdec-module.c \
+	$(DIR)/vdec-funcs.c
+
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(KERNEL_VERSION)/sdk/libvde-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

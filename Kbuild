@@ -14,6 +14,8 @@ ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURC
 ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
 
 #### ALL #####
+
+ifneq ($(CONFIG_SOC_A1),y)
 $(info Building ISP for Kernel $(KERNEL_VERSION))
 include $(src)/$(KERNEL_VERSION)/isp/Kbuild
 
@@ -36,6 +38,8 @@ ifeq ($(BR2_THINGINO_MOTORS),y)
             include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
         endif
     endif
+endif
+
 endif
 
 #### PLATFORM ####
@@ -80,4 +84,14 @@ ifeq ($(SENSOR_MODEL),)
 else
     $(info Building for sensor $(SENSOR_MODEL))
     include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
+endif
+
+#### A1 ######
+
+ifeq ($(CONFIG_SOC_A1),y)
+include $(src)/$(KERNEL_VERSION)/fb/Kbuild
+include $(src)/$(KERNEL_VERSION)/ipu/Kbuild
+include $(src)/$(KERNEL_VERSION)/video/a1/vde/Kbuild
+include $(src)/$(KERNEL_VERSION)/video/a1/vdec/Kbuild
+include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/hdmi_audio/Kbuild
 endif

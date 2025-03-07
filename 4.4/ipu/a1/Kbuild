@@ -1,0 +1,17 @@
+MODULE_NAME := ipu-module
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/ipu/a1
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/ipu-module.c \
+	$(DIR)/private-funcs.c
+
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(KERNEL_VERSION)/sdk/libipu-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

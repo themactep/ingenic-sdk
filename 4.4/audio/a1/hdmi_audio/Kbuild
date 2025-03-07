@@ -1,0 +1,16 @@
+MODULE_NAME := hdmi_audio
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/hdmi_audio
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/hdmi_dsp.c \
+	$(DIR)/hdmi_audio_debug.c
+
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

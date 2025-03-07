@@ -1,0 +1,17 @@
+MODULE_NAME := fb-module
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/fb/a1
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/fb-module.c \
+	$(DIR)/private-funcs.c
+
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(KERNEL_VERSION)/sdk/libfb-firmware.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

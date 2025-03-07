@@ -1,0 +1,20 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := \
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/A1/audio_aic.c \
+  $(DIR)/inner_codecs/A1/codec.c \
+  $(DIR)/boards/a1_platform.c
+  
+OBJS := $(SRCS:%.c=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
+

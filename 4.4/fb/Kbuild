@@ -1,0 +1,9 @@
+MODULE_NAME := fb-$(SOC_FAMILY)
+
+OUT := $(MODULE_NAME)
+
+DIR := $(KERNEL_VERSION)/fb/$(SOC_FAMILY)
+
+ccflags-y += -I$(src)/include
+
+include $(src)/$(KERNEL_VERSION)/fb/$(SOC_FAMILY)/Kbuild

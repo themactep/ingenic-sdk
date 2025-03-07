@@ -2,7 +2,7 @@
  *	private-funcs.c
  * */
 
-#include "private-funcs.h"
+#include "include/private-funcs.h"
 
 static int print_level = IPU_WARNING_LEVEL;
 module_param(print_level, int, S_IRUGO);
