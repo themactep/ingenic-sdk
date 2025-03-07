@@ -89,6 +89,7 @@ endif
 #### A1 ######
 
 ifeq ($(CONFIG_SOC_A1),y)
+include $(src)/$(KERNEL_VERSION)/aip/a1/Kbuild
 include $(src)/$(KERNEL_VERSION)/fb/Kbuild
 include $(src)/$(KERNEL_VERSION)/ipu/Kbuild
 include $(src)/$(KERNEL_VERSION)/video/a1/vde/Kbuild

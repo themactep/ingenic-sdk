@@ -1,0 +1,14 @@
+MODULE_NAME := ingenic-aip
+OUT := $(MODULE_NAME)
+
+DIR=$(KERNEL_VERSION)/aip/a1
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/ingenic_aip.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
