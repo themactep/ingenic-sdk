@@ -78,6 +78,8 @@ ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
 endif
 
 #### SENSORS ####
+ifneq ($(CONFIG_SOC_A1),y)
+
 ifeq ($(SENSOR_MODEL),)
     $(info SENSOR_MODEL missing, building sinfo module)
     include $(src)/sinfo/Kbuild
@@ -86,6 +88,7 @@ else
     include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
 
+endif
 #### A1 ######
 
 ifeq ($(CONFIG_SOC_A1),y)
