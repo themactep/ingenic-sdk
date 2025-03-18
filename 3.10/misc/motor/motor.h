@@ -1,14 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
- * Copyright (C) 2015 Ingenic Semiconductor Co.,Ltd
- *
- * This software is licensed under the terms of the GNU General Public
- * License version 2, as published by the Free Software Foundation, and
- * may be copied, distributed, and modified under those terms.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * (c) 2015 Ingenic Semiconductor Co.,Ltd
+ * (c) 2024 thingino
  */
 
 #ifndef __MOTOR_H__
@@ -19,20 +12,19 @@
 #include <linux/seq_file.h>
 #include <linux/proc_fs.h>
 #include <jz_proc.h>
+
 /*
- *  HORIZONTAL is X axis and VERTICAL is Y axis;
- *  while the Zero point is left-bottom, Origin point
- *  is cross point of horizontal midpoint and vertical midpoint.
- *
-*/
+ * PAN is X axis and TILT is Y axis;
+ * Zero is the left-bottom point.
+ * Origin point is cross point of horizontal midpoint and vertical midpoint.
+ */
 
-
-/*#define PLATFORM_HAS_HORIZONTAL_MOTOR 	1*/
-/*#define PLATFORM_HAS_VERTICAL_MOTOR 	1*/
+/*#define PLATFORM_HAS_PAN_MOTOR 1*/
+/*#define PLATFORM_HAS_TILT_MOTOR 1*/
 
 enum jz_motor_cnt {
-	HORIZONTAL_MOTOR,
-	VERTICAL_MOTOR,
+	PAN_MOTOR,
+	TILT_MOTOR,
 	HAS_MOTOR_CNT,
 };
 
@@ -42,14 +34,14 @@ enum jz_motor_cnt {
 #define MOTOR_MOVE		0x3
 #define MOTOR_GET_STATUS	0x4
 #define MOTOR_SPEED		0x5
-#define MOTOR_GOBACK	0x6
-#define MOTOR_CRUISE	0x7
-#define MOTOR_GET_MAXSTEPS 0x8
+#define MOTOR_GOBACK		0x6
+#define MOTOR_CRUISE		0x7
+#define MOTOR_GET_MAXSTEPS	0x8
 
-/* motor speed */
-#define MOTOR_MAX_SPEED	2000		/**< unit: beats per second */
-#define MOTOR_DEF_SPEED	900		/**< unit: beats per second */
-#define MOTOR_MIN_SPEED	1
+/* motor speed, beats per second */
+#define MOTOR_MAX_SPEED		2000
+#define MOTOR_DEF_SPEED		900
+#define MOTOR_MIN_SPEED		1
 
 enum motor_status {
 	MOTOR_IS_STOP,
@@ -85,9 +77,6 @@ enum motor_direction {
 
 struct motor_platform_data {
 	const char name[32];
-	int motor_min_gpio;
-	int motor_max_gpio;
-	int motor_gpio_level;
 	int motor_switch_gpio;
 
 	int motor_st1_gpio;
@@ -107,8 +96,8 @@ struct motor_driver {
 	struct motor_platform_data *pdata;
 	int max_pos_irq;
 	int min_pos_irq;
-	int max_steps;	/* It is right-top point when x is max and y is max.*/
-	int cur_steps;	/* It is left-bottom point when x is 0 and y is 0.*/
+	int max_steps;
+	int cur_steps;
 	int total_steps;
 	char reset_min_pos;
 	char reset_max_pos;
@@ -118,6 +107,7 @@ struct motor_driver {
 
 	struct timer_list min_timer;
 	struct timer_list max_timer;
+
 	/* debug parameters */
 	unsigned int max_pos_irq_cnt;
 	unsigned int min_pos_irq_cnt;

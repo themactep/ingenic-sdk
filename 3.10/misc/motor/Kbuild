@@ -1,15 +1,13 @@
-# Match the factory module name
 MODULE_NAME := motor
+
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/misc/motor
+DIR := $(KERNEL_VERSION)/misc/motor
 
-SRCS := \
-  $(DIR)/motor.c
+SRCS := $(DIR)/motor.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 
 $(OUT)-objs := $(OBJS)
 
 obj-m += $(OUT).o
-
