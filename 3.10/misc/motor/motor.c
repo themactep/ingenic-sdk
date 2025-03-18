@@ -16,23 +16,21 @@
 #include <linux/list.h>
 #include <linux/mempolicy.h>
 #include <linux/mfd/core.h>
+#include <linux/miscdevice.h>
 #include <linux/mm.h>
 #include <linux/module.h>
+#include <linux/platform_device.h>
 #include <linux/pwm.h>
 #include <linux/sched.h>
 #include <linux/time.h>
+
 #ifdef CONFIG_SOC_T40
+#include <dt-bindings/interrupt-controller/t40-irq.h>
 #include <linux/mfd/ingenic-tcu.h>
 #else
 #include <linux/mfd/jz_tcu.h>
-#endif
-#include <linux/miscdevice.h>
-#include <linux/platform_device.h>
-#ifdef CONFIG_SOC_T40
-#include <dt-bindings/interrupt-controller/t40-irq.h>
-#else
-#include <soc/irq.h>
 #include <mach/platform.h>
+#include <soc/irq.h>
 #endif
 
 #include <soc/base.h>
