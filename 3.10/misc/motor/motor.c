@@ -200,7 +200,7 @@ static void motor_set_direction(struct motor_device *mdev, int move_direction)
 
 static void motor_set_default(struct motor_device *mdev)
 {
-	int index = 0;
+	int index;
 	int value;
 
 	struct motor_driver *motor = NULL;
@@ -227,10 +227,10 @@ static void motor_set_default(struct motor_device *mdev)
 
 static void motor_move_step(struct motor_device *mdev, int index)
 {
+	int step;
 	int value;
 
 	struct motor_driver *motor = NULL;
-	int step = 0;
 
 	motor = &mdev->motors[index];
 	if (motor->state != MOTOR_OPS_STOP) {
@@ -589,6 +589,7 @@ static long motor_ops_cruise(struct motor_device *mdev)
 
 	spin_unlock_irqrestore(&mdev->slock, flags);
 	mutex_unlock(&mdev->dev_mutex);
+
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_counter_begin(mdev->tcu);
 #else
@@ -634,7 +635,7 @@ static inline int motor_ops_reset_check_params(struct motor_reset_data *rdata)
 static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *rdata)
 {
 	unsigned long flags;
-	int index = 0;
+	int index;
 	long ret = 0;
 	int times = 0;
 	struct motor_message msg;
@@ -650,16 +651,19 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		/* app set max steps and current pos */
 		mutex_lock(&mdev->dev_mutex);
 		spin_lock_irqsave(&mdev->slock, flags);
+
 		mdev->motors[PAN_MOTOR].max_steps = rdata->x_max_steps;
 		mdev->motors[PAN_MOTOR].cur_steps = rdata->x_cur_step;
 		mdev->motors[TILT_MOTOR].max_steps = rdata->y_max_steps;
 		mdev->motors[TILT_MOTOR].cur_steps = rdata->y_cur_step;
+
 		spin_unlock_irqrestore(&mdev->slock, flags);
 		mutex_unlock(&mdev->dev_mutex);
 	} else {
 		/* driver calculate max steps. */
 		mutex_lock(&mdev->dev_mutex);
 		spin_lock_irqsave(&mdev->slock, flags);
+
 		for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 			mdev->motors[index].move_dir = MOTOR_MOVE_RIGHT_UP;
 			mdev->motors[index].state = MOTOR_OPS_RESET;
@@ -672,6 +676,7 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		mdev->cur_move.one.y = 0;
 		mdev->cur_move.times = 0;
 		mdev->dev_state = MOTOR_OPS_RESET;
+
 		spin_unlock_irqrestore(&mdev->slock, flags);
 		mutex_unlock(&mdev->dev_mutex);
 #ifdef CONFIG_SOC_T40
@@ -722,6 +727,7 @@ exit:
 #endif
 	msleep(10);
 	motor_set_default(mdev);
+
 	return ret;
 }
 
@@ -736,11 +742,13 @@ static int motor_speed(struct motor_device *mdev, int speed)
 	__asm__("ssnop");
 
 	mdev->tcu_speed = speed;
+
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_set_period(mdev->tcu->cib.id, (24000000 / 64 / mdev->tcu_speed));
 #else
 	jz_tcu_set_period(mdev->tcu, (24000000 / 64 / mdev->tcu_speed));
 #endif
+
 	return 0;
 }
 
@@ -783,10 +791,11 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	switch (cmd) {
 		case MOTOR_STOP:
-			motor_ops_stop(mdev);
 			/*printk("MOTOR_STOP\n");*/
+			motor_ops_stop(mdev);
 			break;
 		case MOTOR_RESET:
+			/*printk("MOTOR_RESET\n");*/
 			{
 				struct motor_reset_data rdata;
 				if (arg == 0) {
@@ -804,10 +813,10 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 						return -EFAULT;
 					}
 				}
-				/*printk("MOTOR_RESET\n");*/
 				break;
 			}
 		case MOTOR_MOVE:
+			/*printk("MOTOR_MOVE\n");*/
 			{
 				struct motors_steps dst;
 				if (copy_from_user(&dst, (void __user *)arg, sizeof(struct motors_steps))) {
@@ -816,9 +825,9 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				}
 				ret = motor_ops_move(mdev, dst.x, dst.y);
 			}
-			/*printk("MOTOR_MOVE\n");*/
 			break;
 		case MOTOR_GET_STATUS:
+			/*printk("MOTOR_GET_STATUS\n");*/
 			{
 				struct motor_message msg;
 
@@ -828,9 +837,9 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 					return -EFAULT;
 				}
 			}
-			/*printk("MOTOR_GET_STATUS\n");*/
 			break;
 		case MOTOR_SPEED:
+			/*printk("MOTOR_SPEED\n");*/
 			{
 				int speed;
 
@@ -841,7 +850,6 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 				motor_speed(mdev, speed);
 			}
-			/*printk("MOTOR_SPEED\n");*/
 			break;
 		case MOTOR_GOBACK:
 			/*printk("MOTOR_GOBACK\n");*/
@@ -873,7 +881,9 @@ static int motor_info_show(struct seq_file *m, void *v)
 	seq_printf(m, "The version of Motor driver is %s\n", JZ_MOTOR_DRIVER_VERSION);
 	seq_printf(m, "Motor driver is %s\n", mdev->flag ? "opened" : "closed");
 	seq_printf(m, "The max speed is %d and the min speed is %d\n", MOTOR_MAX_SPEED, MOTOR_MIN_SPEED);
+
 	motor_get_message(mdev, &msg);
+
 	seq_printf(m, "The status of motor is %s\n", msg.status ? "running" : "stop");
 	seq_printf(m, "The pos of motor is (%d, %d)\n", msg.x, msg.y);
 	seq_printf(m, "The speed of motor is %d\n", msg.speed);
@@ -980,6 +990,7 @@ static int motor_probe(struct platform_device *pdev)
 		motor = &(mdev->motors[i]);
 		motor->pdata = &motors_pdata[i];
 		motor->move_dir = MOTOR_MOVE_STOP;
+
 		dev_info(&pdev->dev, "'%s' GPIOs: ST1 %d, ST2 %d, ST3 %d, ST4 %d, hmax %d, vmax %d\n",
 			motor->pdata->name,
 			motor->pdata->motor_st1_gpio,
@@ -992,18 +1003,14 @@ static int motor_probe(struct platform_device *pdev)
 
 		init_completion(&motor->reset_completion);
 
-		if (motor->pdata->motor_st1_gpio != -1) {
+		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_request(motor->pdata->motor_st1_gpio, "motor_st1_gpio");
-		}
-		if (motor->pdata->motor_st2_gpio != -1) {
+		if (motor->pdata->motor_st2_gpio != -1)
 			gpio_request(motor->pdata->motor_st2_gpio, "motor_st2_gpio");
-		}
-		if (motor->pdata->motor_st3_gpio != -1) {
+		if (motor->pdata->motor_st3_gpio != -1)
 			gpio_request(motor->pdata->motor_st3_gpio, "motor_st3_gpio");
-		}
-		if (motor->pdata->motor_st4_gpio != -1) {
+		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_request(motor->pdata->motor_st4_gpio, "motor_st4_gpio");
-		}
 	}
 
 	mdev->motors[PAN_MOTOR].max_steps = hmaxstep + 100;
@@ -1074,13 +1081,10 @@ error_get_irq:
 
 		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_free(motor->pdata->motor_st1_gpio);
-
 		if (motor->pdata->motor_st2_gpio != -1)
 			gpio_free(motor->pdata->motor_st2_gpio);
-
 		if (motor->pdata->motor_st3_gpio != -1)
 			gpio_free(motor->pdata->motor_st3_gpio);
-
 		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_free(motor->pdata->motor_st4_gpio);
 
@@ -1118,13 +1122,10 @@ static int motor_remove(struct platform_device *pdev)
 
 		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_free(motor->pdata->motor_st1_gpio);
-
 		if (motor->pdata->motor_st2_gpio != -1)
 			gpio_free(motor->pdata->motor_st2_gpio);
-
 		if (motor->pdata->motor_st3_gpio != -1)
 			gpio_free(motor->pdata->motor_st3_gpio);
-
 		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_free(motor->pdata->motor_st4_gpio);
 
