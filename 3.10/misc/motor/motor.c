@@ -871,14 +871,11 @@ static int motor_info_show(struct seq_file *m, void *v)
 
 	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		seq_printf(m, "## %s ##\n", mdev->motors[index].pdata->name);
-
-#ifdef CONFIG_SOC_T40
 		seq_printf(m, "max steps %d\n", mdev->motors[index].max_steps);
 		seq_printf(m, "motor direction %d\n", mdev->motors[index].move_dir);
 		seq_printf(m, "motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
 		seq_printf(m, "the irq's counter of max pos is %d\n", mdev->motors[index].max_pos_irq_cnt);
 		seq_printf(m, "the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
-#else
 		seq_printf(m, "GPIOs: ST1 %d, ST2 %d, ST3 %d, ST4 %d, hmax %d, vmax %d\n",
 				mdev->motors[index].pdata->motor_st1_gpio,
 				mdev->motors[index].pdata->motor_st2_gpio,
@@ -886,12 +883,6 @@ static int motor_info_show(struct seq_file *m, void *v)
 				mdev->motors[index].pdata->motor_st4_gpio,
 				hmaxstep,
 				vmaxstep);
-		seq_printf(m, "max steps %d\n", mdev->motors[index].max_steps);
-		seq_printf(m, "motor direction %d\n", mdev->motors[index].move_dir);
-		seq_printf(m, "motor state %d (normal; cruise; reset)\n", mdev->motors[index].state);
-		seq_printf(m, "the irq's counter of max pos is %d\n", mdev->motors[index].max_pos_irq_cnt);
-		seq_printf(m, "the irq's counter of min pos is %d\n", mdev->motors[index].min_pos_irq_cnt);
-#endif
 	}
 
 	return 0;
