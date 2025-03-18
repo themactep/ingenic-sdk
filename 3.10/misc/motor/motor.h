@@ -25,7 +25,7 @@
 enum jz_motor_cnt {
 	PAN_MOTOR,
 	TILT_MOTOR,
-	HAS_MOTOR_CNT,
+	NUMBER_OF_MOTORS,
 };
 
 /* ioctl cmd */
@@ -123,7 +123,7 @@ struct motor_device {
 	const struct mfd_cell *cell;
 	struct device	 *dev;
 	struct miscdevice misc_dev;
-	struct motor_driver motors[HAS_MOTOR_CNT];
+	struct motor_driver motors[NUMBER_OF_MOTORS];
 	char *skip_mode;
 	unsigned int counter;
 	struct completion stop_completion;

@@ -151,7 +151,7 @@ int vmax = -1;
 module_param(vmax, int, S_IRUGO);
 MODULE_PARM_DESC(vmax, "Tilt motor stop point GPIO");
 
-struct motor_platform_data motors_pdata[HAS_MOTOR_CNT] = {
+struct motor_platform_data motors_pdata[NUMBER_OF_MOTORS] = {
 	{
 		.name = "Pan motor",
 		.motor_st1_gpio = -1,
@@ -205,7 +205,7 @@ static void motor_set_default(struct motor_device *mdev)
 	int index = 0;
 	struct motor_driver *motor = NULL;
 	mdev->dev_state = MOTOR_OPS_STOP;
-	for (index = 0; index < HAS_MOTOR_CNT; index++) {
+	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		motor = &mdev->motors[index];
 		motor->state = MOTOR_OPS_STOP;
 		if (motor->pdata->motor_st1_gpio)
@@ -651,7 +651,7 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		/* driver calculate max steps. */
 		mutex_lock(&mdev->dev_mutex);
 		spin_lock_irqsave(&mdev->slock, flags);
-		for (index = 0; index < HAS_MOTOR_CNT; index++) {
+		for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 			mdev->motors[index].move_dir = MOTOR_MOVE_RIGHT_UP;
 			mdev->motors[index].state = MOTOR_OPS_RESET;
 			mdev->motors[index].cur_steps = 0x0;
@@ -671,7 +671,7 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		jz_tcu_enable_counter(mdev->tcu);
 #endif
 
-		for (index = 0; index < HAS_MOTOR_CNT; index++) {
+		for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 			do {
 				ret = wait_for_completion_interruptible_timeout(&mdev->motors[index].reset_completion, msecs_to_jiffies(150000));
 				if (ret == 0) {
@@ -869,7 +869,7 @@ static int motor_info_show(struct seq_file *m, void *v)
 	seq_printf(m, "The pos of motor is (%d, %d)\n", msg.x, msg.y);
 	seq_printf(m, "The speed of motor is %d\n", msg.speed);
 
-	for (index = 0; index < HAS_MOTOR_CNT; index++) {
+	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		seq_printf(m, "## %s ##\n", mdev->motors[index].pdata->name);
 
 #ifdef CONFIG_SOC_T40
@@ -976,7 +976,7 @@ static int motor_probe(struct platform_device *pdev)
 		gpio_request(motors_pdata[0].motor_switch_gpio, "motor_switch_gpio");
 	}
 
-	for (i = 0; i < HAS_MOTOR_CNT; i++) {
+	for (i = 0; i < NUMBER_OF_MOTORS; i++) {
 		motor = &(mdev->motors[i]);
 		motor->pdata = &motors_pdata[i];
 		motor->move_dir = MOTOR_MOVE_STOP;
@@ -1064,7 +1064,7 @@ error_misc_register:
 	free_irq(mdev->run_step_irq, mdev);
 error_request_irq:
 error_get_irq:
-	for (i = 0; i < HAS_MOTOR_CNT; i++) {
+	for (i = 0; i < NUMBER_OF_MOTORS; i++) {
 		motor = &(mdev->motors[i]);
 		if (motor->pdata == NULL)
 			continue;
@@ -1108,7 +1108,7 @@ static int motor_remove(struct platform_device *pdev)
 	mutex_destroy(&mdev->dev_mutex);
 
 	free_irq(mdev->run_step_irq, mdev);
-	for (i = 0; i < HAS_MOTOR_CNT; i++) {
+	for (i = 0; i < NUMBER_OF_MOTORS; i++) {
 		motor = &(mdev->motors[i]);
 		if (motor->pdata == NULL)
 			continue;
