@@ -203,19 +203,25 @@ static void motor_set_direction(struct motor_device *mdev, int move_direction)
 static void motor_set_default(struct motor_device *mdev)
 {
 	int index = 0;
+	int value;
+
 	struct motor_driver *motor = NULL;
 	mdev->dev_state = MOTOR_OPS_STOP;
+
+	value = ((0 ^ invert_gpio_dir) & 0x1);
+
 	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		motor = &mdev->motors[index];
 		motor->state = MOTOR_OPS_STOP;
+
 		if (motor->pdata->motor_st1_gpio)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
 		if (motor->pdata->motor_st2_gpio)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
 		if (motor->pdata->motor_st3_gpio)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
 		if (motor->pdata->motor_st4_gpio)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
 	}
 
 	return;
@@ -223,6 +229,8 @@ static void motor_set_default(struct motor_device *mdev)
 
 static void motor_move_step(struct motor_device *mdev, int index)
 {
+	int value;
+
 	struct motor_driver *motor = NULL;
 	int step = 0;
 
@@ -231,26 +239,29 @@ static void motor_move_step(struct motor_device *mdev, int index)
 		step = motor->cur_steps % 8;
 		step = step < 0 ? step + 8 : step;
 
+	        value = (step_8[step] ^ 0xff);
+
 		motor_set_direction(mdev, (index == PAN_MOTOR) ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN);
 
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, (step_8[step] ^ 0xff) & 0x8);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, value & 0x8);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, (step_8[step] ^ 0xff) & 0x4);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, value & 0x4);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, (step_8[step] ^ 0xff) & 0x2);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, value & 0x2);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, (step_8[step] ^ 0xff) & 0x1);
-
+			gpio_direction_output(motor->pdata->motor_st4_gpio, value & 0x1);
 	} else {
+		value = ((0 ^ invert_gpio_dir) & 0x1);
+
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, (0 ^ invert_gpio_dir) & 0x1);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
 	}
 
 	if (motor->state == MOTOR_OPS_RESET) {
