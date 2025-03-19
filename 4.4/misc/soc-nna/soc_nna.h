@@ -8,7 +8,11 @@
 
 /* oram information */
 #define NNA_ORAM_BASE_ADDR      0x12600000
+#if defined(CONFIG_SOC_A1)
+#define NNA_ORAM_BASE_SIZE      0x60000         //(512-128)*1024
+#else
 #define NNA_ORAM_BASE_SIZE      0xe0000         //(1024-128)*1024
+#endif
 
 /* IOCTL MACRO DEFINE PLACE */
 #define SOC_NNA_MAGIC               'c'
