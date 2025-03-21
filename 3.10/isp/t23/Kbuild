@@ -2,7 +2,12 @@ SRCS := $(DIR)/tx-isp-debug.c \
 	$(DIR)/tx-isp-module.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
+ifdef CONFIG_MULTI_SENSOR
+    OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware-double.a
+    ccflags-y += -DCONFIG_MULTI_SENSOR
+else
+    OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
+endif
 
 $(OUT)-objs := $(OBJS)
 
