@@ -83,14 +83,25 @@ endif
 #### SENSORS ####
 ifneq ($(CONFIG_SOC_A1),y)
 
-ifeq ($(SENSOR_MODEL),)
+ifeq ($(strip $(SENSOR_MODEL)$(SENSOR_MODEL_1)$(SENSOR_MODEL_2)),)
     $(info SENSOR_MODEL missing, building sinfo module)
     include $(src)/sinfo/Kbuild
 else
+ifneq ($(SENSOR_MODEL),)
     $(info Building for sensor $(SENSOR_MODEL))
     include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
 
+ifneq ($(SENSOR_MODEL_1),)
+$(info Building for sensor $(SENSOR_MODEL_1))
+include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
+endif
+
+ifneq ($(SENSOR_MODEL_2),)
+$(info Building for sensor $(SENSOR_MODEL_2))
+include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
+endif
+endif
 endif
 #### A1 ######
 
