@@ -39,7 +39,7 @@
 /* Video Device Descriptor pad types */
 #define TX_ISP_PADTYPE_UNDEFINE			0x00
 #define TX_ISP_PADTYPE_INPUT			0x01
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 #define TX_ISP_PADTYPE_OUTPUT			0x04
 #else
 #define TX_ISP_PADTYPE_OUTPUT			0x02

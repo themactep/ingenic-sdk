@@ -83,7 +83,7 @@ struct tx_isp_subdev_pad {
 
 struct tx_isp_dbg_register {
 	char *name;
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	int sensor_id;
 #endif
 	unsigned int size;
@@ -103,7 +103,7 @@ struct tx_isp_chip_ident {
 	unsigned int ident;
 };
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 enum tx_isp_sensor_fsync_place {
 	TX_ISP_SENSOR_FSYNC_PLACE_INIT_BEFORE = 0,
 	TX_ISP_SENSOR_FSYNC_PLACE_INIT_AFTER,
@@ -142,7 +142,7 @@ struct tx_isp_subdev_sensor_ops {
 	int (*release_all_sensor)(struct tx_isp_subdev *sd);
 	int (*sync_sensor_attr)(struct tx_isp_subdev *sd, void *arg);
 	int (*ioctl)(struct tx_isp_subdev *sd, unsigned int cmd, void *arg);
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	int (*fsync)(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync);
 #endif
 };
@@ -251,7 +251,7 @@ struct tx_isp_device {
 	spinlock_t slock;
 	int refcnt;
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	int active_link[4];
 #else
 	int active_link;

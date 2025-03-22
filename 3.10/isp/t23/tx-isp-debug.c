@@ -24,7 +24,7 @@ static int isp_clka = 416000000;
 module_param(isp_clka, int, S_IRUGO);
 MODULE_PARM_DESC(isp_clka, "isp aclock freq");
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 static int mipi_switch_gpio = GPIO_PA(7);
 module_param(mipi_switch_gpio, int , S_IRUGO);
 MODULE_PARM_DESC(mipi_switch_gpio, "select mipi switch gpio");
@@ -66,7 +66,7 @@ int ivdc_threshold_line = 0;
 module_param(ivdc_threshold_line, int, S_IRUGO);
 MODULE_PARM_DESC(ivdc_threshold_line, "ivdc threshold line");
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 const int isp_config_hz = CONFIG_HZ;
 #endif
 
@@ -113,7 +113,7 @@ char *get_clka_name(void)
 	return clka_name;
 }
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 int get_mipi_switch_gpio(void)
 {
 	return  mipi_switch_gpio;
@@ -186,7 +186,7 @@ __must_check int private_get_driver_interface(struct jz_driver_common_interfaces
 	return 0;
 }
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 struct pwm_device *private_pwm_request(int pwm, const char *label)
 {
 #ifdef CONFIG_JZ_PWM

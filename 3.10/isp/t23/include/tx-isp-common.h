@@ -19,7 +19,7 @@
 #include "tx-isp-debug.h"
 
 #define ISP_SUCCESS 0
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 #define SENSORNUM  3
 #endif
 
@@ -377,7 +377,7 @@ typedef struct tx_isp_sensor_ctrl{
 	unsigned int (*alloc_integration_time_short)(unsigned int it_short, unsigned char shift, unsigned int *sensor_it_short);
 } TX_ISP_SENSOR_CTRL;
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 enum tx_isp_sensor_fsync_mode {
 	TX_ISP_SENSOR_FSYNC_MODE_CLOSE = 0,
 	TX_ISP_SENSOR_FSYNC_MODE_MS_SINGLE,
@@ -454,7 +454,7 @@ struct tx_isp_sensor_attribute{
 	unsigned int wdr_cache;	//the format is .16
 	unsigned int expo;
 	unsigned int expo_fs;
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	struct tx_isp_sensor_fsync_attr fsync_attr;
 #endif
 	void *priv; /* point to struct tx_isp_sensor_board_info */
@@ -466,7 +466,7 @@ enum tx_isp_priv_ioctl_direction {
 	TX_ISP_PRIVATE_IOCTL_GET,
 };
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 struct tx_isp_dualcamer_sensorevent {
 	int sensor_id;
 	int value;
@@ -508,7 +508,7 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_SENSOR_EXPO,
 	TX_ISP_EVENT_GPIO_INIT,
 	TX_ISP_EVENT_SET_GPIO_STATE,
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	TX_ISP_EVENT_VIC_STREAM_CHECK,
 	TX_ISP_EVENT_VIC_STREAM_OUT,
 #endif
@@ -556,7 +556,7 @@ struct frame_image_scaler {
 struct isp_image_tuning_default_ctrl {
 	enum tx_isp_priv_ioctl_direction dir;
 	struct v4l2_control control;
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	uint32_t vinum;
 #endif
 };
@@ -650,7 +650,7 @@ struct isp_set_gpio_attr{
 #define VIDIOC_SET_GPIO_INIT		_IOWR('V',BASE_VIDIOC_PRIVATE + 40, int)
 #define VIDIOC_SET_GPIO_STA		_IOWR('V',BASE_VIDIOC_PRIVATE + 41, int)
 
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 #define TISP_VIDIOC_SET_FRAME_DROP1	_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
 #define TISP_VIDIOC_GET_FRAME_DROP1	_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
 #define TISP_VIDIOC_STREAM_CHECK	_IOWR('V',BASE_VIDIOC_PRIVATE + 44, int)
@@ -698,7 +698,7 @@ struct tx_isp_video_in {
 	struct v4l2_mbus_framefmt mbus;
 	unsigned int mbus_change;
 	struct tx_isp_sensor_attribute *attr;
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	struct tx_isp_sensor_register_info *info;
 #endif
 	unsigned int vi_max_width; //the max width of sensor output setting
@@ -707,7 +707,7 @@ struct tx_isp_video_in {
 	int grp_id;
 	unsigned int shvflip;
 	int state;
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 	struct pwm_device *pwm[2];
 #endif
 };

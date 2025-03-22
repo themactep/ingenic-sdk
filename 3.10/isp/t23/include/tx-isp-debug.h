@@ -30,7 +30,7 @@ extern char *sclk_name[2];
 int isp_printf(unsigned int level, unsigned char *fmt, ...);
 int get_isp_clk(void);
 int get_isp_clka(void);
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 int get_mipi_switch_gpio(void);
 #endif
 char *get_clk_name(void);
@@ -56,7 +56,7 @@ bool private_schedule_work(struct work_struct *work);
 void private_do_gettimeofday(struct timeval *tv);
 void private_dma_sync_single_for_device(struct device *dev, dma_addr_t addr, size_t size, enum dma_data_direction dir);
 __must_check int private_get_driver_interface(struct jz_driver_common_interfaces **pfaces);
-#ifdef SENSOR_DOUBLE
+#ifdef CONFIG_MULTI_SENSOR
 struct pwm_device *private_pwm_request(int pwm, const char *label);
 void private_pwm_set_period(struct pwm_device *pwm, unsigned int period);
 void private_pwm_set_duty_cycle(struct pwm_device *pwm, unsigned int duty);
