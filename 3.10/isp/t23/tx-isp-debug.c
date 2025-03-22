@@ -24,7 +24,7 @@ static int isp_clka = 416000000;
 module_param(isp_clka, int, S_IRUGO);
 MODULE_PARM_DESC(isp_clka, "isp aclock freq");
 
-#ifdef CONFIG_MULTI_SENSOR
+#ifdef SENSOR_DOUBLE
 static int mipi_switch_gpio = GPIO_PA(7);
 module_param(mipi_switch_gpio, int , S_IRUGO);
 MODULE_PARM_DESC(mipi_switch_gpio, "select mipi switch gpio");
@@ -66,18 +66,19 @@ int ivdc_threshold_line = 0;
 module_param(ivdc_threshold_line, int, S_IRUGO);
 MODULE_PARM_DESC(ivdc_threshold_line, "ivdc threshold line");
 
-#ifdef CONFIG_MULTI_SENSOR
+#ifdef SENSOR_DOUBLE
 const int isp_config_hz = CONFIG_HZ;
 #endif
 
 char *sclk_name[2] = {"mpll", "sclka"};
+
 int isp_printf(unsigned int level, unsigned char *fmt, ...)
 {
 	struct va_format vaf;
 	va_list args;
 	int r = 0;
 
-	if(level >= print_level){
+	if (level >= print_level) {
 		va_start(args, fmt);
 
 		vaf.fmt = fmt;
@@ -85,7 +86,7 @@ int isp_printf(unsigned int level, unsigned char *fmt, ...)
 
 		r = printk("%pV",&vaf);
 		va_end(args);
-		if(level >= ISP_ERROR_LEVEL)
+		if (level >= ISP_ERROR_LEVEL)
 			dump_stack();
 	}
 	return r;
@@ -112,7 +113,7 @@ char *get_clka_name(void)
 	return clka_name;
 }
 
-#ifdef CONFIG_MULTI_SENSOR
+#ifdef SENSOR_DOUBLE
 int get_mipi_switch_gpio(void)
 {
 	return  mipi_switch_gpio;
@@ -164,71 +165,71 @@ void private_do_gettimeofday(struct timeval *tv)
 }
 
 
-void private_dma_sync_single_for_device(struct device *dev,
-							      dma_addr_t addr, size_t size, enum dma_data_direction dir)
+void private_dma_sync_single_for_device(struct device *dev, dma_addr_t addr, size_t size, enum dma_data_direction dir)
 {
 	dma_sync_single_for_device(dev, addr, size, dir);
 	return;
 }
 
 
-/* Must be check the return value */
+/* Must check the return value */
 __must_check int private_get_driver_interface(struct jz_driver_common_interfaces **pfaces)
 {
-	if(pfaces == NULL)
+	if (pfaces == NULL)
 		return -1;
+
 	*pfaces = get_driver_common_interfaces();
-	if(*pfaces && ((*pfaces)->flags_0 != (unsigned int)printk || (*pfaces)->flags_0 !=(*pfaces)->flags_1)){
+	if (*pfaces && ((*pfaces)->flags_0 != (unsigned int)printk || (*pfaces)->flags_0 !=(*pfaces)->flags_1)) {
 		ISP_ERROR("flags = 0x%08x, jzflags = %p,0x%08x", (*pfaces)->flags_0, printk, (*pfaces)->flags_1);
 		return -1;
-	}else
-		return 0;
+	}
+	return 0;
 }
 
-#ifdef CONFIG_MULTI_SENSOR
+#ifdef SENSOR_DOUBLE
 struct pwm_device *private_pwm_request(int pwm, const char *label)
 {
 #ifdef CONFIG_JZ_PWM
-        return pwm_request(pwm, label);
+	return pwm_request(pwm, label);
 #else
-        return NULL;
+	return NULL;
 #endif
 }
 
 void private_pwm_set_period(struct pwm_device *pwm, unsigned int period)
 {
 #ifdef CONFIG_JZ_PWM
-        pwm_set_period(pwm, period);
+	pwm_set_period(pwm, period);
 #endif
 }
 
 void private_pwm_set_duty_cycle(struct pwm_device *pwm, unsigned int duty)
 {
 #ifdef CONFIG_JZ_PWM
-        pwm_set_duty_cycle(pwm, duty);
+	pwm_set_duty_cycle(pwm, duty);
 #endif
 }
 
 int private_pwm_enable(struct pwm_device *pwm)
 {
 #ifdef CONFIG_JZ_PWM
-        return pwm_enable(pwm);
+	return pwm_enable(pwm);
 #else
-        return 0;
+	return 0;
 #endif
 }
 
 void private_pwm_disable(struct pwm_device *pwm)
 {
 #ifdef CONFIG_JZ_PWM
-        pwm_disable(pwm);
+	pwm_disable(pwm);
 #endif
 }
 
 void private_pwm_free(struct pwm_device *pwm)
 {
 #ifdef CONFIG_JZ_PWM
-        pwm_free(pwm);
+	pwm_free(pwm);
 #endif
 }
 #endif
