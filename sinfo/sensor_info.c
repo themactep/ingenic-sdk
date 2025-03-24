@@ -62,6 +62,8 @@ MODULE_PARM_DESC(cim_gpio, "Cim GPIO NUM");
 #define I2C_WRITE 0
 #define I2C_READ  1
 
+#define MAX_DETECTED_SENSORS 4
+
 struct i2c_trans {
 	uint32_t addr;
 	uint32_t r_w;
@@ -208,7 +210,7 @@ SENSOR_INFO_T g_sinfo[] =
 	{"sc1245a", 0x30,  "cgu_cim", 24000000, {0x12, 0x45, 0x02}, 1, {0x3107, 0x3108, 0x3020}, 2, 3, NULL},
 	{"sc1346", 0x30,  "cgu_cim", 24000000, {0xda, 0x4d}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc1a4t", 0x30,  "cgu_cim", 24000000, {0x9a, 0x4d}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-//	{"sc1a4ts1", 0x30,  "cgu_cim", 24000000, {0x9a, 0x4d}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc1a4ts1", 0x32,  "cgu_cim", 24000000, {0x9a, 0x4d}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc200ai", 0x30,  "cgu_cim", 24000000, {0xcb, 0x1c}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2135", 0x30,  "cgu_cim", 24000000, {0x21, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2145", 0x30,  "cgu_cim", 24000000, {0x21, 0x45}, 1, {0x3107, 0x3108}, 2, 2, NULL},
@@ -219,12 +221,13 @@ SENSOR_INFO_T g_sinfo[] =
 	{"sc233a",  0x30,  "cgu_cim", 24000000, {0xcb, 0x3e}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2300", 0x30,  "cgu_cim", 24000000, {0x23, 0x00}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2310", 0x30,  "cgu_cim", 24000000, {0x23, 0x11}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-//	{"sc2331s1", 0x30,  "cgu_cim", 24000000, {0xcb, 0x17}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2331s1", 0x32,  "cgu_cim", 24000000, {0xcb, 0x17}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2332", 0x30,  "cgu_cim", 24000000, {0xcb, 0x17}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2335", 0x30,  "cgu_cim", 24000000, {0xcb, 0x14}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc2336", 0x30,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-//	{"sc2336ps1", 0x30,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
-	{"sc2337ps1", 0x32,  "cgu_cim", 24000000, {0x9b, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2336p", 0x30,  "cgu_cim", 24000000, {0x9b, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2336s1", 0x32,  "cgu_cim", 24000000, {0xcb, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
+	{"sc2336ps1", 0x32,  "cgu_cim", 24000000, {0x9b, 0x3a}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc3035", 0x30,  "cgu_cim", 24000000, {0x30, 0x35}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc301iot", 0x30,  "cgu_cim", 24000000, {0xcc, 0x40}, 1, {0x3107, 0x3108}, 2, 2, NULL},
 	{"sc3235", 0x30,  "cgu_cim", 24000000, {0xcc, 0x05}, 1, {0x3107, 0x3108}, 2, 2, NULL},
@@ -253,9 +256,9 @@ SENSOR_INFO_T g_sinfo[] =
 #endif
 };
 
-//FIXME: add sensor ignore module parameter to support sub sensors
-
 static int8_t g_sensor_id = -1;
+static int8_t g_sensor_ids[MAX_DETECTED_SENSORS];
+static int8_t g_num_detected_sensors = 0;
 static struct mutex g_mutex;
 
 int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, uint32_t *value)
@@ -339,6 +342,9 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		mutex_unlock(&g_mutex);
 		return 0;
 	}
+
+    // Reset detection counter
+    g_num_detected_sensors = 0;
 
 #ifdef CONFIG_SOC_T40
 	if(cim1_gpio != -1){
@@ -448,22 +454,38 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 			gpio_free(pwdn_gpio);
 		clk_disable(mclk);
 		clk_put(mclk);
+
 		if (j == idcnt) {
+			// Match!
 			g_sinfo[i].adap = adap;
-			g_sensor_id = i;
-			if (g_sinfo[i].adap) {
-				printk("sinfo: Successful sensor detection: %s, I2C Bus: %d, I2C Address: 0x%X\n", g_sinfo[i].name, g_sinfo[i].adap->nr, g_sinfo[i].i2c_addr);
-			} else {
-				printk("sinfo: Successful sensor detection: %s, I2C Bus: unknown, I2C Address: 0x%X\n", g_sinfo[i].name, g_sinfo[i].i2c_addr);
-		}
-			goto end_sensor_find;
+
+			// Add to detected sensors array if there's room
+			if (g_num_detected_sensors < MAX_DETECTED_SENSORS) {
+				g_sensor_ids[g_num_detected_sensors] = i;
+				g_num_detected_sensors++;
+
+				if (g_sinfo[i].adap) {
+					printk("sinfo: Successful sensor detection: %s, I2C Bus: %d, I2C Address: 0x%X\n",
+						g_sinfo[i].name, g_sinfo[i].adap->nr, g_sinfo[i].i2c_addr);
+				} else {
+					printk("sinfo: Successful sensor detection: %s, I2C Bus: unknown, I2C Address: 0x%X\n",
+						g_sinfo[i].name, g_sinfo[i].i2c_addr);
+				}
+			}
+
+			// Continue checking all other sensors (don't exit)
 		}
 	}
-	printk("sinfo: [Info] Failed to find sensor\n");
-	g_sensor_id = -1;
-	mutex_unlock(&g_mutex);
-	return 0;
-end_sensor_find:
+
+	// Set g_sensor_id to the first detected sensor (for backward compatibility)
+	if (g_num_detected_sensors > 0) {
+		g_sensor_id = g_sensor_ids[0];
+		printk("sinfo: Total sensors detected: %d\n", g_num_detected_sensors);
+	} else {
+		printk("sinfo: [Info] Failed to find any sensors\n");
+		g_sensor_id = -1;
+	}
+
 	mutex_unlock(&g_mutex);
 	return 0;
 }
@@ -631,6 +653,7 @@ static int32_t i2c_read_write(struct device *dev, void *data)
 	mutex_unlock(&g_mutex);
 	return 0;
 }
+
 static long sinfo_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	int ret = 0;
@@ -659,11 +682,13 @@ static long sinfo_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	mutex_unlock(&g_mutex);
 	return ret;
 }
+
 static int sinfo_open(struct inode *inode, struct file *filp)
 {
 	i2c_for_each_dev(NULL, process_one_adapter);
 	return 0;
 }
+
 static int sinfo_release(struct inode *inode, struct file *filp)
 {
 	printk("sinfo: Sensor release function invoked\n");
@@ -691,13 +716,43 @@ static struct miscdevice misc_sinfo = {
 	.fops = &sinfo_fops,
 };
 
-
 static int sinfo_proc_show(struct seq_file *m, void *v)
 {
-	if (-1 == g_sensor_id)
-		seq_printf(m, "sensor not found\n");
-	else
-		seq_printf(m, "sensor :%s\n", g_sinfo[g_sensor_id].name);
+	int i, j;
+
+	if (g_num_detected_sensors == 0) {
+		seq_printf(m, "No sensors found\n");
+	} else {
+		seq_printf(m, "Detected sensors (%d):\n", g_num_detected_sensors);
+		for (i = 0; i < g_num_detected_sensors; i++) {
+			int8_t id = g_sensor_ids[i];
+
+			// Display basic sensor info
+			if (g_sinfo[id].adap) {
+				seq_printf(m, "%d: %s (I2C Bus: %d, Address: 0x%X)\n",
+						i+1, g_sinfo[id].name, g_sinfo[id].adap->nr, g_sinfo[id].i2c_addr);
+			} else {
+				seq_printf(m, "%d: %s (I2C Bus: unknown, Address: 0x%X)\n",
+						i+1, g_sinfo[id].name, g_sinfo[id].i2c_addr);
+			}
+
+			// Display ID values
+			seq_printf(m, "   ID Values: ");
+			for (j = 0; j < g_sinfo[id].id_cnt; j++) {
+				seq_printf(m, "0x%X ", g_sinfo[id].id_value[j]);
+			}
+			seq_printf(m, "\n");
+
+			// Display ID registers
+			seq_printf(m, "   ID Registers: ");
+			for (j = 0; j < g_sinfo[id].id_cnt; j++) {
+				seq_printf(m, "0x%X ", g_sinfo[id].id_addr[j]);
+			}
+			seq_printf(m, "\n");
+		}
+
+		seq_printf(m, "Primary sensor: %s\n", g_sinfo[g_sensor_id].name);
+	}
 	return 0;
 }
 
