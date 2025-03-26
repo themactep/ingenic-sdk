@@ -1,3 +1,5 @@
+FW_VER=1.6.2
+
 MODULE_NAME := vde_module
 OUT := $(MODULE_NAME)
 
@@ -10,7 +12,7 @@ SRCS := $(DIR)/vde_module.c \
 
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/libvde-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(FW_VER)/libvde-firmware.a
 
 $(OUT)-objs := $(OBJS)
 

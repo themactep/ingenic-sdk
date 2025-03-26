@@ -1,3 +1,5 @@
+FW_VER=1.6.2
+
 MODULE_NAME := vdec_module
 OUT := $(MODULE_NAME)
 
@@ -10,7 +12,7 @@ SRCS := $(DIR)/vdec-module.c \
 
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/libvdec-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(FW_VER)/libvdec-firmware.a
 
 $(OUT)-objs := $(OBJS)
 
