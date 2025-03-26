@@ -1,3 +1,5 @@
+ISP_FW_VER=1.2.0
+
 SRCS := $(DIR)/tx-isp-funcs.c \
 	$(DIR)/tx-isp-module.c
 
@@ -13,7 +15,7 @@ else ifeq ($(SOC),t40)
 endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware-$(KVERSION).a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware-$(KVERSION).a
 
 $(OUT)-objs := $(OBJS)
 

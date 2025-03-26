@@ -1,3 +1,5 @@
+ISP_FW_VER=1.0.5
+
 SRCS := $(DIR)/platform.o \
 	$(DIR)/videoin/tx-isp-vic.o \
 	$(DIR)/videoin/tx-isp-video-in.o \
@@ -32,7 +34,7 @@ SRCS := $(DIR)/platform.o \
 	$(DIR)/tx-isp-device.o
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 

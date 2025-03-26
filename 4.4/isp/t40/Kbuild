@@ -1,8 +1,10 @@
+ISP_FW_VER=1.2.0
+
 SRCS := $(DIR)/tx-isp-funcs.c \
 	$(DIR)/tx-isp-module.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/lib$(SOC_FAMILY)-firmware.a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 
