@@ -352,7 +352,11 @@ struct tx_isp_bt601_bus{
 
 struct tx_isp_sensor_register_info{
 	char name[32];
+#ifdef CONFIG_MULTI_SENSOR
 	uint16_t sensor_id;
+#else
+	int16_t sensor_id;
+#endif
 	enum tx_sensor_control_bus_type cbus_type;
 	union {
 		struct tx_isp_i2c_board_info i2c;
