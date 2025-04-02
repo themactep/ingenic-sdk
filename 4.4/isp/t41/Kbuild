@@ -17,7 +17,7 @@ else ifeq ($(SOC_FAMILY),t40)
 endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware-$(KVERSION).a
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware.a
 
 $(OUT)-objs := $(OBJS)
 
