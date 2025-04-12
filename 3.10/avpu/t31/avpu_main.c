@@ -61,7 +61,7 @@ static void jz_avpu_release(struct device *dev)
     return;
 }
 
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100) || defined(CONFIG_SOC_T40)
 #define AVPU_IOBASE    0x13200000
 #elif defined(CONFIG_SOC_T41)
 #define AVPU_IOBASE    0x13100000
@@ -266,7 +266,7 @@ static int read_reg(struct avpu_codec_chan *chan, unsigned long arg)
 		return -EINVAL;
 	}
 
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100) || defined(CONFIG_SOC_T40)
 	if (reg.id < 0x8000 || reg.id > chan->codec->regs_size) {
 		avpu_err("Out-of-range register read: 0x%.4X\n",
 			reg.id);
@@ -309,7 +309,7 @@ static int write_reg(struct avpu_codec_chan *chan, unsigned long arg)
 		return -EINVAL;
 	}
 
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100) || defined(CONFIG_SOC_T40)
 	if (reg.id < 0x8000 || reg.id > chan->codec->regs_size) {
 		avpu_dbg("Out-of-range register write: 0x%.4X\n", reg.id);
 		return -EINVAL;
@@ -616,7 +616,7 @@ int avpu_codec_probe(struct platform_device *pdev)
 	clk_prepare_enable(codec->clk_gate);
 	clk_prepare_enable(codec->clk);
 
-#elif defined(CONFIG_SOC_T31)
+#elif defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100)
 	codec->ahb1_gate = clk_get(&pdev->dev, "ahb1");
 	if (IS_ERR(codec->ahb1_gate)) {
 		avpu_err("ahb1_gate get failed\n");
@@ -666,7 +666,11 @@ int avpu_codec_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, codec);
 
+#if defined(CONFIG_SOC_T31)
 	if (of_property_read_string(codec->device->of_node, "t31,devicename",
+#elif defined(CONFIG_SOC_C100)
+	if (of_property_read_string(codec->device->of_node, "c100,devicename",
+#endif
 				    (const char **)&device_name) != 0)
 		device_name = NULL;
 
@@ -715,7 +719,7 @@ int avpu_codec_remove(struct platform_device *pdev)
 	clk_disable_unprepare(codec->clk);
 	clk_disable_unprepare(codec->clk_gate);
 	clk_disable_unprepare(codec->ahb1_gate);
-#elif defined(CONFIG_SOC_T31)
+#elif defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100)
 	clk_disable(codec->clk);
 	clk_disable(codec->clk_gate);
 	clk_disable(codec->ahb1_gate);
@@ -733,6 +737,7 @@ int avpu_codec_remove(struct platform_device *pdev)
 
 static const struct of_device_id avpu_codec_of_match[] = {
 	{ .compatible = "t31,avpu" },
+	{ .compatible = "c100,avpu" },
 	{ /* sentinel */ },
 };
 
@@ -821,4 +826,4 @@ module_exit(avpu_codec_exit);
 MODULE_LICENSE("GPL v2");
 MODULE_AUTHOR("Kevin Grandemange");
 MODULE_AUTHOR("Sebastien Alaiwan");
-MODULE_DESCRIPTION("T31 Vpu Driver");
+MODULE_DESCRIPTION("VPU Driver");

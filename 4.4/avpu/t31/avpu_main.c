@@ -552,7 +552,11 @@ int avpu_codec_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, codec);
 
+#if defined(CONFIG_SOC_T31)
 	if (of_property_read_string(codec->device->of_node, "t31,devicename",
+#elif defined(CONFIG_SOC_C100)
+	if (of_property_read_string(codec->device->of_node, "c100,devicename",
+#endif
 				    (const char **)&device_name) != 0)
 		device_name = NULL;
 
@@ -599,6 +603,7 @@ int avpu_codec_remove(struct platform_device *pdev)
 
 static const struct of_device_id avpu_codec_of_match[] = {
 	{ .compatible = "t31,avpu" },
+	{ .compatible = "c100,avpu" },
 	{ /* sentinel */ },
 };
 
@@ -687,4 +692,4 @@ module_exit(avpu_codec_exit);
 MODULE_LICENSE("GPL v2");
 MODULE_AUTHOR("Kevin Grandemange");
 MODULE_AUTHOR("Sebastien Alaiwan");
-MODULE_DESCRIPTION("T31 Vpu Driver");
+MODULE_DESCRIPTION("Ingenic VPU Driver");

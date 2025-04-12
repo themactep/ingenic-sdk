@@ -13,7 +13,7 @@
 
 #define AVPU_NR_DEVS 4
 
-#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_C100) || defined(CONFIG_SOC_T40)
 #define AVPU_BASE_OFFSET 0x8000
 #elif defined(CONFIG_SOC_T41)
 #define AVPU_BASE_OFFSET 0x0000
