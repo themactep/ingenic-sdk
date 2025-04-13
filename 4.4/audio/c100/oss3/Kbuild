@@ -1,0 +1,23 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+# Assuming the SOC_FAMILY variable is still relevant
+DIR := $(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+
+ccflags-y += -I$(src)/include
+
+ifeq (${CONFIG_SOC_C100}, y)
+SRCS := \
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/c100/audio_aic.c \
+  $(DIR)/host/c100/audio_dmic.c \
+  $(DIR)/inner_codecs/c100/codec.c \
+  $(DIR)/boards/c100_platform.c
+endif
+
+OBJS := $(SRCS:%.c=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

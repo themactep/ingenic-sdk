@@ -1,0 +1,101 @@
+#ifndef _AK7755_CODEC_H
+#define _AK7755_CODEC_H
+
+#define AK7755_AUDIO_IF_MODE		AK7755_AIF_BICK64	//32fs, 48fs, 64fs, 256fs(TDM)
+#define AK7755_TDM_INPUT_SOURCE		AK7755_TDM_DSP		//Effective only in TDM mode
+
+#define AK7755_BCKP_BIT				(0 << 6)	//BICK Edge Setting
+#define AK7755_SOCFG_BIT  			(0 << 4)	//SO pin Hi-z Setting
+#define AK7755_DMCLKP1_BIT			(0 << 6)	//DigitalMIC 1 Channnel Setting
+#define AK7755_DMCLKP2_BIT			(0 << 3)	//DigitalMIC 1 Channnel Setting
+/* Register */
+#define AK7755_C0_CLOCK_SETTING1			0xC0
+#define AK7755_C1_CLOCK_SETTING2			0xC1
+#define AK7755_C2_SERIAL_DATA_FORMAT		0xC2
+#define AK7755_C3_DELAY_RAM_DSP_IO			0xC3
+#define AK7755_C4_DATARAM_CRAM_SETTING		0xC4
+#define AK7755_C5_ACCELARETOR_SETTING		0xC5
+#define AK7755_C6_DAC_DEM_SETTING			0xC6
+#define AK7755_C7_DSP_OUT_SETTING			0xC7
+#define AK7755_C8_DAC_IN_SETTING			0xC8
+#define AK7755_C9_ANALOG_IO_SETTING			0xC9
+#define AK7755_CA_CLK_SDOUT_SETTING			0xCA
+#define AK7755_CB_TEST_SETTING				0xCB
+#define AK7755_CC_VOLUME_TRANSITION			0xCC
+#define AK7755_CD_STO_DLS_SETTING			0xCD
+#define AK7755_CE_POWER_MANAGEMENT			0xCE
+#define AK7755_CF_RESET_POWER_SETTING		0xCF
+
+#define AK7755_D0_FUNCTION_SETTING			0xD0
+#define AK7755_D1_DSPMCLK_SETTING			0xD1
+#define AK7755_D2_MIC_GAIN_SETTING			0xD2
+#define AK7755_D3_LIN_LO3_VOLUME_SETTING	0xD3
+#define AK7755_D4_LO1_LO2_VOLUME_SETTING	0xD4
+#define AK7755_D5_ADC_DVOLUME_SETTING1		0xD5
+#define AK7755_D6_ADC_DVOLUME_SETTING2		0xD6
+#define AK7755_D7_ADC2_DVOLUME_SETTING1		0xD7
+#define AK7755_D8_DAC_DVOLUME_SETTING1		0xD8
+#define AK7755_D9_DAC_DVOLUME_SETTING2		0xD9
+#define AK7755_DA_MUTE_ADRC_ZEROCROSS_SET	0xDA
+#define AK7755_DB_ADRC_MIC_GAIN_READ		0xDB
+#define AK7755_DC_TEST_SETTING				0xDC
+#define AK7755_DD_ADC2_DVOLUME_SETTING2		0xDD
+#define AK7755_DE_DMIC_IF_SETTING			0xDE
+#define AK7755_E6_CONT26					0xE6
+#define AK7755_EA_CONT2A					0xEA
+
+#define AK7755_MAX_REGISTERS	(AK7755_EA_CONT2A + 1)
+/* Register */
+
+/* Bitfield Definitions */
+/* AK7755_C0_CLOCK_SETTING1 (0xC0) Fields*/
+/* DFS[2:0]:D2,D1,D0*/
+#define AK7755_FS				0x07
+#define AK7755_FS_8KHZ			(0x00 << 0)
+#define AK7755_FS_12KHZ			(0x01 << 0)
+#define AK7755_FS_16KHZ			(0x02 << 0)
+#define AK7755_FS_24KHZ			(0x03 << 0)
+#define AK7755_FS_32KHZ			(0x04 << 0)
+#define AK7755_FS_48KHZ			(0x05 << 0)
+#define AK7755_FS_96KHZ			(0x06 << 0)
+/* CKM[2:0]:D6,D5,D4*/
+#define AK7755_M_S				0x30		//CKM1-0 (CKM2 bit is not use)
+#define AK7755_M_S_0			(0 << 4)	//Master, XTI=12.288MHz
+#define AK7755_M_S_1			(1 << 4)	//Master, XTI=18.432MHz
+#define AK7755_M_S_2			(2 << 4)	//Slave, XTI=12.288MHz
+#define AK7755_M_S_3			(3 << 4)	//Slave, BICK
+
+/* AK7755_C2_SERIAL_DATA_FORMAT (0xC2) Fields */
+/* LRCK I/F Format */
+#define AK7755_LRIF					0x30
+#define AK7755_LRIF_MSB_MODE		(0 << 4)
+#define AK7755_LRIF_I2S_MODE		(1 << 4)
+#define AK7755_LRIF_PCM_SHORT_MODE	(2 << 4)
+#define AK7755_LRIF_PCM_LONG_MODE	(3 << 4)
+
+/* AK7755_CA_CLK_SDOUT_SETTING (0xCA) Fields */
+#define AK7755_BICK_LRCK			(3 << 5)	//BICKOE, LRCKOE
+/* Bitfield Definitions */
+
+enum ak7755_ram_type {
+	RAMTYPE_PRAM = 0,
+	RAMTYPE_CRAM,
+	RAMTYPE_OFREG,
+	RAMTYPE_ACRAM,
+};
+
+enum ak7755_status {
+	POWERDOWN = 0,
+	SUSPEND,
+	STANDBY,
+	DOWNLOAD,
+	RUN,
+};
+
+int ak7755_i2c_drv_init(void);
+void ak7755_i2c_drv_exit(void);
+
+int jz_ak7755_init(void);
+void jz_ak7755_exit(void);
+
+#endif
