@@ -61,9 +61,9 @@ else
     endif
 endif
 
-ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
+ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_C100)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
     $(info Building AVPU for Kernel $(KERNEL_VERSION))
-    ifeq ($(CONFIG_SOC_T31),y)
+    ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_C100),y)
         include $(src)/$(KERNEL_VERSION)/avpu/t31/Kbuild
     endif
     ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
