@@ -1,4 +1,9 @@
 ISP_FW_VER=1.1.5.2
+
+ifeq ($(SOC_FAMILY),c100)
+        ISP_FW_VER=2.1.0
+endif
+
 COMPILER_VER=540
 
 SRCS := $(DIR)/tx-isp-debug.c \
