@@ -969,9 +969,9 @@ static int sensor_probe(struct i2c_client *client,
 	}
 	memset(sensor, 0 ,sizeof(*sensor));
 	/* request mclk of sensor */
-	sensor->mclk = clk_get(NULL, "cgu_cim");
+	sensor->mclk = clk_get(NULL, "div_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock div_cim\n");
 		goto err_get_mclk;
 	}
 	rate = clk_get_rate(clk_get_parent(sensor->mclk));
@@ -1106,11 +1106,11 @@ static __init int init_sensor(void)
 	int ret = 0;
 	sensor_common_init(&sensor_info);
 
-	ret = private_driver_get_interface();
+	/*ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
-	}
+	}*/
 
 	return private_i2c_add_driver(&sensor_driver);
 }
