@@ -5,9 +5,6 @@
 #include <linux/err.h>
 #include <linux/dma-mapping.h>
 #include <linux/dmaengine.h>
-#ifdef CONFIG_SOC_T31
-//#include <mach/jzdma.h>
-#endif
 
 enum audio_error_value {
 	AUDIO_SUCCESS,

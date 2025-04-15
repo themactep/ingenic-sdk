@@ -15,39 +15,39 @@ MODULE_PARM_DESC(dmic_gpio, "dmic gpio port select.");
 /* debug audio dmic info */
 static int audio_dmic_show(struct seq_file *m, void *v)
 {
-    int i;
-    struct dmic_device_info *info = NULL;
-    struct audio_dmic_device *dmic = (struct audio_dmic_device*)(m->private);
+	int len = 0, i;
+	struct dmic_device_info *info = NULL;
+	struct audio_dmic_device *dmic = (struct audio_dmic_device*)(m->private);
 
-    if (NULL == dmic) {
-        audio_warn_print("error, dmic is null\n");
-        return -EINVAL; // or appropriate error code
-    }
+	if (NULL == dmic) {
+		audio_warn_print("error, dmic is null\n");
+		return len;
+	}
 
-    info = dmic->info;
-    if (NULL == info) {
-        audio_warn_print("error, dmic info is null\n");
-        return -EINVAL; // or appropriate error code
-    }
+	info = dmic->info;
+	if (NULL == info) {
+		audio_warn_print("error, dmic info is null");
+		return len;
+	}
 
-    seq_puts(m, "\nDmic attr list : \n");
-    seq_printf(m, "The living rate of dmic : %lu\n", info->record_rate);
-    seq_printf(m, "The living channel of dmic : %d\n", info->record_channel);
-    seq_printf(m, "The living format of dmic : %d\n", info->record_format);
-    seq_printf(m, "The living datatype of dmic : 16\n");
-    seq_printf(m, "The living gain of dmic : %u\n", info->gain);
+	len += seq_printf(m, "\nDmic attr list : \n");
+	len += seq_printf(m, "The living rate of dmic : %lu\n", info->record_rate);
+	len += seq_printf(m, "The living channel of dmic : %d\n", info->record_channel);
+	len += seq_printf(m, "The living format of dmic : %d\n", info->record_format);
+	len += seq_printf(m, "The living datatype of dmic : 16\n");
+	len += seq_printf(m, "The living gain of dmic : %u\n", info->gain);
 
-    //dump dmic regs
-    printk("\nDump Dmic Regs:\n");
-    for (i = 0; i <= 0x20; i += 4)
-        printk("reg[%04x], value = %04x\n", i, readl(dmic->iomem + i));
-    printk("reg[%04x], value = %04x\n", 0x30, readl(dmic->iomem + 0x30));
-    printk("reg[%04x], value = %04x\n", 0x34, readl(dmic->iomem + 0x34));
-    printk("reg[%04x], value = %04x\n", 0x38, readl(dmic->iomem + 0x38));
-    printk("reg[%04x], value = %04x\n", 0x50, readl(dmic->iomem + 0x50));
-    printk("Dump Dmic Regs End.\n");
+	//dump dmic regs
+	printk("\nDump Dmic Regs:\n");
+	for (i = 0  ; i <= 0x20; i+=4)
+		printk("reg[%04x], value = %04x\n", i, readl(dmic->iomem + i));
+	printk("reg[%04x], value = %04x\n", 0x30, readl(dmic->iomem + 0x30));
+	printk("reg[%04x], value = %04x\n", 0x34, readl(dmic->iomem + 0x34));
+	printk("reg[%04x], value = %04x\n", 0x38, readl(dmic->iomem + 0x38));
+	printk("reg[%04x], value = %04x\n", 0x50, readl(dmic->iomem + 0x50));
+	printk("Dump Dmic Regs End.\n");
 
-    return 0; // Assuming successful execution
+	return len;
 }
 
 
@@ -513,12 +513,12 @@ static int dmic_probe(struct platform_device *pdev)
 	}
 
 	//get clock
-	dmic_clk = clk_get(&pdev->dev, "dmic");
+	dmic_clk = devm_clk_get(&pdev->dev, "gate_dmic");
 	if (IS_ERR(dmic_clk)) {
 		audio_err_print("failed to get dmic clock.\n");
 		goto err_get_dmic_clk;
 	}
-	clk_enable(dmic_clk);
+	clk_prepare_enable(dmic_clk);
 	dmic->clk = dmic_clk;
 
 	platform_set_drvdata(pdev, dmic);

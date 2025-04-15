@@ -230,7 +230,7 @@ int inner_codec_release(struct codec_attributes *codec_attr)
 /* dump aic controller registers */
 static void dump_aic_regs(void)
 {
-	printk("T31 AIC registers list:\n");
+	printk("c100 AIC registers list:\n");
 	printk("AICFR: %04x\n" ,readl(globe_aic->i2s_iomem + 0));
 	printk("AICCR: %04x\n" ,readl(globe_aic->i2s_iomem + 0x4));
 	printk("I2SCR: %04x\n" ,readl(globe_aic->i2s_iomem + 0x10));
@@ -245,47 +245,47 @@ static void dump_aic_regs(void)
 /* debug audio aic info */
 static int audio_aic_show(struct seq_file *m, void *v)
 {
-    struct codec_info *info = NULL;
-    struct audio_aic_device *aic = (struct audio_aic_device*)(m->private);
+	int len = 0;
+	struct codec_info *info = NULL;
+	struct audio_aic_device *aic = (struct audio_aic_device*)(m->private);
 
-    if (NULL == aic) {
-        audio_warn_print("error, aic is null\n");
-        return -EINVAL; // or appropriate error code
-    }
+	if (NULL == aic) {
+		audio_warn_print("error, aic is null\n");
+		return len;
+	}
 
-    seq_printf(m ,"\nThe version of audio driver is : %s\n", AUDIO_DRIVER_VERSION);
+	len += seq_printf(m ,"\nThe version of audio driver is : %s\n", AUDIO_DRIVER_VERSION);
 
-    info = aic->codec_mic_info;
-    if (NULL == info) {
-        audio_warn_print("error, codec mic info is null\n");
-        return -EINVAL; // or appropriate error code
-    }
-    seq_puts(m, "Record attr list : \n");
-    seq_printf(m, "The living rate of record : %lu\n", info->rate);
-    seq_printf(m, "The living channel of record : %d\n", info->channel);
-    seq_printf(m, "The living format of record : %d\n", info->format);
-    seq_printf(m, "The living datatype of record : %u\n", info->data_type.frame_vsize);
-    seq_printf(m, "The living again of record : %d\n", info->again);
-    seq_printf(m, "The living dgain of record : %d\n", info->dgain);
+	info = aic->codec_mic_info;
+	if (NULL == info) {
+		audio_warn_print("error, codec mic info is null\n");
+		return len;
+	}
+	len += seq_printf(m, "Record attr list : \n");
+	len += seq_printf(m, "The living rate of record : %lu\n", info->rate);
+	len += seq_printf(m, "The living channel of record : %d\n", info->channel);
+	len += seq_printf(m, "The living format of record : %d\n", info->format);
+	len += seq_printf(m, "The living datatype of record : %u\n", info->data_type.frame_vsize);
+	len += seq_printf(m, "The living again of record : %d\n", info->again);
+	len += seq_printf(m, "The living dgain of record : %d\n", info->dgain);
 
-    info = aic->codec_spk_info;
-    if (NULL == info) {
-        audio_warn_print("error, codec spk info is null\n");
-        return -EINVAL; // or appropriate error code
-    }
-    seq_puts(m, "Replay attr list : \n");
-    seq_printf(m, "The living rate of replay : %lu\n", info->rate);
-    seq_printf(m, "The living channel of replay : %d\n", info->channel);
-    seq_printf(m, "The living format of replay : %d\n", info->format);
-    seq_printf(m, "The living datatype of replay : %u\n", info->data_type.frame_vsize);
-    seq_printf(m, "The living again of replay : %d\n", info->again);
-    seq_printf(m, "The living dgain of replay : %d\n", info->dgain);
+	info = aic->codec_spk_info;
+	if (NULL == info) {
+		audio_warn_print("error, codec spk info is null\n");
+		return len;
+	}
+	len += seq_printf(m, "Replay attr list : \n");
+	len += seq_printf(m, "The living rate of replay : %lu\n", info->rate);
+	len += seq_printf(m, "The living channel of replay : %d\n", info->channel);
+	len += seq_printf(m, "The living format of replay : %d\n", info->format);
+	len += seq_printf(m, "The living datatype of replay : %u\n", info->data_type.frame_vsize);
+	len += seq_printf(m, "The living again of replay : %d\n", info->again);
+	len += seq_printf(m, "The living dgain of replay : %d\n", info->dgain);
 
-    dump_aic_regs();
+	dump_aic_regs();
 
-    return 0; // Assuming successful execution
+	return len;
 }
-
 
 static int dump_audio_aic_open(struct inode *inode, struct file *file)
 {

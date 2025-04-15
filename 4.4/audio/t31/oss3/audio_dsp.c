@@ -38,6 +38,7 @@ MODULE_PARM_DESC(aic_enable, "Enable or disable aic");
 static struct audio_dsp_device* globe_dspdev = NULL;
 
 
+static unsigned work_cnt = 0;
 static void dsp_workqueue_handle(struct work_struct *work)
 {
 	struct audio_dsp_device *dsp = container_of(work,
@@ -58,6 +59,7 @@ static void dsp_workqueue_handle(struct work_struct *work)
 	unsigned int cnt = 0;
 	unsigned int index = 0;
 
+	work_cnt++;
 	/* first: save new dma tracer */
 	spin_lock_irqsave(&dsp->slock, lock_flags);
 	/* amic */
@@ -160,6 +162,9 @@ static void dsp_workqueue_handle(struct work_struct *work)
 					if(dma_tracer == dmic_route->manage.io_tracer)
 						io_late = 1;
 					dma_tracer = (dma_tracer + 1) % dmic_route->manage.fragment_cnt;
+					if(unlikely(dmic_new_tracer >= dmic_route->manage.fragment_cnt))
+						printk("%s: dmic_new_tracer wrong!:%d, fcnt:%d\n",
+							__func__, dmic_new_tracer, dmic_route->manage.fragment_cnt);
 				}
 				dmic_route->manage.dma_tracer = dma_tracer;
 			}
@@ -211,6 +216,9 @@ static void dsp_workqueue_handle(struct work_struct *work)
 							ao_route->manage.fragment_size, DMA_TO_DEVICE);
 					ao_route->manage.fragments[dma_tracer].state = false;
 					dma_tracer = (dma_tracer + 1) % ao_route->manage.fragment_cnt;
+					if (unlikely(ao_new_tracer >= ao_route->manage.fragment_cnt))
+						printk("%s: ao_new_tracer wrong!:%d, fcnt:%d\n",
+						       __func__, ao_new_tracer, ao_route->manage.fragment_cnt);
 				}
 				ao_route->manage.dma_tracer = dma_tracer;
 				/* clear dma prepare-buffer and sync io_tracer */
@@ -266,6 +274,7 @@ static void dsp_workqueue_handle(struct work_struct *work)
 	return;
 }
 
+static unsigned hrtimer_callback_cnt = 0;
 static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) {
 	struct audio_dsp_device *dsp = container_of(hr_timer,
 			struct audio_dsp_device, hr_timer);
@@ -276,6 +285,7 @@ static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) 
 	unsigned int id = 0;
 	unsigned long lock_flags;
 
+	hrtimer_callback_cnt++;
 	if (atomic_read(&dsp->timer_stopped))
 		goto out;
 	hrtimer_start(&dsp->hr_timer, dsp->expires, HRTIMER_MODE_REL);
@@ -290,6 +300,8 @@ static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) 
 			dma_currentaddr = pipe->dma_chan->device->get_current_trans_addr(pipe->dma_chan, NULL, NULL,
 					pipe->dma_config.direction);
 			index = (dma_currentaddr - pipe->paddr) / route->manage.fragment_size;
+			if(unlikely(index >= route->manage.fragment_cnt))
+				index %= route->manage.fragment_cnt;
 			route->manage.new_dma_tracer = index;
 		}
 	}
@@ -509,7 +521,7 @@ static long dsp_create_dma_chan(struct audio_route *route)
 	}
 	manage->buffersize = manage->fragment_cnt * manage->fragment_size;
 	memset(pipe->vaddr, 0, manage->buffersize);
-	dma_sync_single_for_device(NULL, pipe->paddr, manage->buffersize, DMA_TO_DEVICE);
+	dma_sync_single_for_device(NULL, pipe->paddr, manage->buffersize, DMA_FROM_DEVICE);
 
 	dmaengine_slave_config(pipe->dma_chan, &pipe->dma_config);
 
@@ -1907,6 +1919,24 @@ static struct platform_driver audio_dsp_driver = {
 	},
 };
 
+ssize_t audio_dsp_cnt_read(struct file *f, char __user *b, size_t l, loff_t *o){
+	if(*o > 0)
+		return 0;
+
+	char str[256] = {0};
+	sprintf(str, "hrtimer_callback_cnt:%u, work_cnt:%u.\n",
+		hrtimer_callback_cnt, work_cnt);
+
+	int len = strlen(str);
+	copy_to_user(b, str, len);
+	*o = len;
+	return len;
+}
+
+struct file_operations audio_dsp_cnt_op = {
+	.read = audio_dsp_cnt_read,
+};
+
 extern struct platform_device audio_dsp_platform_device;
 static int __init audio_dsp_init(void)
 {
@@ -1922,6 +1952,8 @@ static int __init audio_dsp_init(void)
 	if(ret){
 		platform_device_unregister(&audio_dsp_platform_device);
 	}
+
+	proc_create("audio_dsp_cnt", 0666, NULL, &audio_dsp_cnt_op);
 	return ret;
 }
 

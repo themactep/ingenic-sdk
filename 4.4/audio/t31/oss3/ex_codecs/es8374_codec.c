@@ -628,7 +628,7 @@ static int es8374_detect(struct codec_attributes *attrs)
 			msleep(10);
 			gpio_set_value(reset_gpio, 1);
 		}else{
-			printk("gpio request fail %d\n",reset_gpio);
+			printk("gpio requrest fail %d\n",reset_gpio);
 		}
 	}
 	ident = es8374_reg_read(EXCODEC_ID_REG);

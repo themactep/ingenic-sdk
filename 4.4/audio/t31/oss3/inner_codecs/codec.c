@@ -89,7 +89,7 @@ int dump_codec_regs(void)
 	for (i = 0; i < 0x140; i += 4) {
 		printk("reg = 0x%04x [0x%04x]:		val = 0x%04x\n", i, i/4, codec_reg_read(g_codec_dev, i));
 	}
-	printk("Dump T31 Codec register End.\n");
+	printk("Dump C100 Codec register End.\n");
 
 	return i;
 }
@@ -487,14 +487,13 @@ static int codec_playback_set_dgain(struct volume gain)
 /* debug codec info */
 static int inner_codec_show(struct seq_file *m, void *v)
 {
-    // No need to track length since seq_printf now returns void
-    seq_printf(m, "The name of codec is ingenic inner codec\n");
+	int len = 0;
 
-    // Assuming dump_codec_regs() prints to the kernel log and doesn't return length
-    dump_codec_regs();
+	len += seq_printf(m ,"The name of codec is ingenic inner codec\n");
 
-    // Since we're not tracking the length for a return value, just return 0 indicating success
-    return 0;
+	dump_codec_regs();
+
+	return len;
 }
 
 static int dump_inner_codec_open(struct inode *inode, struct file *file)
