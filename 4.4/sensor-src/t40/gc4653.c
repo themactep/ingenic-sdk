@@ -17,8 +17,15 @@
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 #define SENSOR_NAME "gc4653"
+#define SENSOR_RESET_GPIO GPIO_PC(27)
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x29
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
+#define SENSOR_CHIP_ID 0x4653
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
 #define SENSOR_REG_END 0xffff
@@ -30,7 +37,7 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_VERSION "H20220426a"
 
-static int reset_gpio = GPIO_PC(27);
+static int reset_gpio = SENSOR_RESET_GPIO;
 static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 3000 * 188;//cache lines corrponding on VPB1
 static int shvflip = 1;
@@ -38,6 +45,18 @@ static int shvflip = 1;
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
+};
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+	.rst_gpio = SENSOR_RESET_GPIO,
 };
 
 struct again_lut {
@@ -234,12 +253,12 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
-	.chip_id = 0x4653,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL,
-	.cbus_device = 0x29,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 409243,
 	.max_dgain = 0,
 	.expo_fs = 1,
@@ -1401,12 +1420,14 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void)
 {
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void)
 {
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
