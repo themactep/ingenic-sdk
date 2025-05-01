@@ -10,6 +10,7 @@ struct sensor_info {
 	unsigned int chip_i2c_addr;
 	int width;
 	int height;
+	int rst_gpio;
 };
 
 void sensor_common_init(struct sensor_info *info);
