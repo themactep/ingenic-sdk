@@ -419,6 +419,12 @@ static irqreturn_t jz_timer_interrupt(int irq, void *dev_id)
 			complete(&mdev->stop_completion);
 		}
 
+#ifdef CONFIG_SOC_T40
+		ingenic_tcu_counter_stop(mdev->tcu);
+#else
+		jz_tcu_disable_counter(mdev->tcu);
+#endif
+
 		return IRQ_HANDLED;
 	}
 
