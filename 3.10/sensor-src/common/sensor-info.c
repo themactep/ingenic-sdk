@@ -39,6 +39,11 @@ static const struct file_operations max_fps_fops = {
 	.owner = THIS_MODULE,
 };
 
+static const struct file_operations actual_fps_fops = {
+	.read = sensor_actual_fps_read,
+	.owner = THIS_MODULE,
+};
+
 static const struct file_operations i2c_addr_fops = {
 	.read = sensor_i2c_addr_read,
 	.owner = THIS_MODULE,
@@ -66,6 +71,7 @@ void sensor_common_init(struct sensor_info *info) {
 	proc_create("jz/sensor/version", 0444, NULL, &version_fops);
 	proc_create("jz/sensor/min_fps", 0444, NULL, &min_fps_fops);
 	proc_create("jz/sensor/max_fps", 0444, NULL, &max_fps_fops);
+	proc_create("jz/sensor/actual_fps", 0444, NULL, &actual_fps_fops);
 	proc_create("jz/sensor/i2c_addr", 0444, NULL, &i2c_addr_fops);
 	proc_create("jz/sensor/height", 0444, NULL, &height_fops);
 	proc_create("jz/sensor/width", 0444, NULL, &width_fops);
@@ -78,10 +84,17 @@ void sensor_common_exit(void) {
 	remove_proc_entry("jz/sensor/version", NULL);
 	remove_proc_entry("jz/sensor/min_fps", NULL);
 	remove_proc_entry("jz/sensor/max_fps", NULL);
+	remove_proc_entry("jz/sensor/actual_fps", NULL);
 	remove_proc_entry("jz/sensor/i2c_addr", NULL);
 	remove_proc_entry("jz/sensor/height", NULL);
 	remove_proc_entry("jz/sensor/width", NULL);
 	remove_proc_entry("jz/sensor", NULL);
+}
+
+void sensor_update_actual_fps(int fps) {
+	if (sensor_info_ptr) {
+		sensor_info_ptr->actual_fps = fps;
+	}
 }
 
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
@@ -111,6 +124,12 @@ static ssize_t sensor_fps_min_read(struct file *file, char __user *buf, size_t c
 static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	char buffer[32];
 	int len = snprintf(buffer, sizeof(buffer), "%d\n", sensor_info_ptr->max_fps);
+	return simple_read_from_buffer(buf, count, ppos, buffer, len);
+}
+
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
+	char buffer[32];
+	int len = snprintf(buffer, sizeof(buffer), "%d\n", sensor_info_ptr->actual_fps);
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
 
