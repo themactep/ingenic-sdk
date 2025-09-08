@@ -9,6 +9,7 @@ static ssize_t sensor_chip_id_read(struct file *file, char __user *buf, size_t c
 static ssize_t sensor_version_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_min_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_i2c_addr_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_width_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_height_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
