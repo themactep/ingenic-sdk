@@ -828,7 +828,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		printk("--->[0x%2x,0x%2x]---\n",vals->reg_num,val);
+		printk("--->[0x%2x, 0x%2x]---\n",vals->reg_num,val);
 		vals++;
 	}
 

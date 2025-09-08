@@ -606,7 +606,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 		frmcnt = 3;
 	}
 
-	ret += sensor_write(sd,0x3812,0x30);/*group write effect*/
+	ret += sensor_write(sd, 0x3812, 0x30);/*group write effect*/
 	if (ret < 0)
 		return ret;
 
@@ -689,10 +689,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd,0x3812,0x00);
+	ret = sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
-	ret += sensor_write(sd,0x3812,0x30);
+	ret += sensor_write(sd, 0x3812, 0x30);
 	if (0 != ret) {
 		printk("err: sensor_write err\n");
 		return ret;

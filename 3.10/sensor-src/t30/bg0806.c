@@ -561,23 +561,23 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 #define BG0806B1 0x03
 #define BG0806B2 0x0f
 
-	sensor_read(sd,0x45,&pid);
+	sensor_read(sd, 0x45,&pid);
 	pid &= 0x3f;
 	switch(pid) {
 	case BG0806A:
-		sensor_write(sd,0x0207, 0xc8);
-		sensor_write(sd,0x0133, 0x38);
+		sensor_write(sd, 0x0207, 0xc8);
+		sensor_write(sd, 0x0133, 0x38);
 		break;
 	case BG0806B1:
 	case BG0806B2:
-		sensor_write(sd,0x0207, 0xde);
-		sensor_write(sd,0x0133, 0x22);
+		sensor_write(sd, 0x0207, 0xde);
+		sensor_write(sd, 0x0133, 0x22);
 		break;
 	case BG0806C1:
 	case BG0806C2:
 	default:
-		sensor_write(sd,0x0207, 0xaa);
-		sensor_write(sd,0x0133, 0x56);
+		sensor_write(sd, 0x0207, 0xaa);
+		sensor_write(sd, 0x0133, 0x56);
 		break;
 	}
 	for (i=0; i<768; i++)

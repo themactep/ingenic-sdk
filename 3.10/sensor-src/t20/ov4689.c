@@ -1421,11 +1421,11 @@ static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 #ifdef DRIVE_CAPABILITY_1
 	{0x3011, 0x00},
 #elif defined(DRIVE_CAPABILITY_2)
-	{0x3011,0x20},
+	{0x3011, 0x20},
 #elif defined(DRIVE_CAPABILITY_3)
-	{0x3011,0x40},
+	{0x3011, 0x40},
 #elif defined(DRIVE_CAPABILITY_4)
-	{0x3011,0x60},
+	{0x3011, 0x60},
 #endif
 	{0x3018, 0x32},
 	{0x3020, 0x93},
@@ -1665,7 +1665,7 @@ static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 	{0x8007, 0x00},
 	{0x8008, 0x00},
 	{0x3638, 0x00},
-	/* {0x5040,0x80},//color bar */
+	/* {0x5040, 0x80},//color bar */
 	{0x0100, 0x00},
 #endif
 	{SENSOR_REG_END, 0x00},

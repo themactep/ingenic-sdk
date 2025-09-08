@@ -540,7 +540,7 @@ static struct regval_list sensor_init_regs_2880_1620_30fps_mipi_2lane[] = {
 	{0x36e9, 0x54},
 	{0x37f9, 0x54},
 	{0x0100, 0x01},
-	{SENSOR_REG_DELAY,0x50},
+	{SENSOR_REG_DELAY, 0x50},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -694,7 +694,7 @@ static struct regval_list sensor_init_regs_2880_1620_30fps_mipi_4lane[] = {
 	{0x36e9, 0x53},
 	{0x37f9, 0x54},
 	{0x0100, 0x01},
-	{SENSOR_REG_DELAY,0x50},
+	{SENSOR_REG_DELAY, 0x50},
 	{SENSOR_REG_END, 0x00},
 };
 

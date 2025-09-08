@@ -360,7 +360,7 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x22, 0xc0},
 	{0x23, 0x82},
 #ifdef DRIVE_CAPABILITY_1
-	{0x24,0x2f},
+	{0x24, 0x2f},
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x24, 0x2a},
 #endif

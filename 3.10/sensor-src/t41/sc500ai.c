@@ -35,7 +35,7 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
-static int wdr_bufsize = 2350080;  /* {0x3e24,0x3e23}/2*fps/SENSOR_OUTPUT_MIN_FPS*2880*2 */
+static int wdr_bufsize = 2350080;  /* {0x3e24, 0x3e23}/2*fps/SENSOR_OUTPUT_MIN_FPS*2880*2 */
 
 static int shvflip = 1;
 

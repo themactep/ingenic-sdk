@@ -927,7 +927,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 			ret = sensor_write(sd, 0x3820, (val_f | 0x04));
 			break;
 	}
-//ret += sensor_write(sd, 0x00eb,0x01);
+//ret += sensor_write(sd, 0x00eb, 0x01);
 	//if (!ret)
 	//ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 

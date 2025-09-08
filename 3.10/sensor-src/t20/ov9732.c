@@ -248,11 +248,11 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 #ifdef DRIVE_CAPABILITY_1
 	{0x3009, 0x03},//pad driver
 #elif defined(DRIVE_CAPABILITY_2)
-	{0x3009,0x23},
+	{0x3009, 0x23},
 #elif defined(DRIVE_CAPABILITY_3)
-	{0x3009,0x43},
+	{0x3009, 0x43},
 #elif defined(DRIVE_CAPABILITY_4)
-	{0x3009,0x63},
+	{0x3009, 0x63},
 #endif
 	{0x3010, 0x00},
 	{0x3011, 0x00},

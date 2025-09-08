@@ -473,29 +473,29 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 #if 1
     if (value < 0x20) {
        if (temper < 0xa0)  {
-               sensor_write(sd,0x4104, 0x2d);
+               sensor_write(sd, 0x4104, 0x2d);
       }
        else {
-               sensor_write(sd,0x4104, 0x27);
+               sensor_write(sd, 0x4104, 0x27);
       }
 }
        else {
-             sensor_write(sd,0x4104, 0x27);
+             sensor_write(sd, 0x4104, 0x27);
 }
 #endif
 #if 1
       if  (temper < 0xa0 ) {
-           sensor_write(sd,0x370c, 0x01);
-           sensor_write(sd,0x370e, 0x01);
+           sensor_write(sd, 0x370c, 0x01);
+           sensor_write(sd, 0x370e, 0x01);
 }
      else if (temper >= 0xa0 && temper < 0xb4)
 {
-           sensor_write(sd,0x370c, 0x03);
-           sensor_write(sd,0x370e, 0x03);
+           sensor_write(sd, 0x370c, 0x03);
+           sensor_write(sd, 0x370e, 0x03);
 }
      else if (temper >= 0xb4)  {
-           sensor_write(sd,0x370c, 0x03);
-           sensor_write(sd,0x370e, 0x07);
+           sensor_write(sd, 0x370c, 0x03);
+           sensor_write(sd, 0x370e, 0x07);
 }
 #endif
 
@@ -507,14 +507,14 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
     else {
 	Ratio = 0x790;
 }
-        sensor_write(sd,0x3701,(unsigned char) (Ratio & 0xff00) >> 8);
-        sensor_write(sd,0x3702,(unsigned char) Ratio & 0xff);
-        sensor_write(sd,0x3703,(unsigned char) (Ratio & 0xff00) >> 8);
-        sensor_write(sd,0x3704,(unsigned char) Ratio & 0xff);
-        sensor_write(sd,0x3705,(unsigned char) (Ratio & 0xff00) >> 8);
-        sensor_write(sd,0x3706,(unsigned char) Ratio & 0xff);
-        sensor_write(sd,0x3707,(unsigned char) (Ratio & 0xff00) >> 8);
-        sensor_write(sd,0x3708,(unsigned char) Ratio & 0xff);
+        sensor_write(sd, 0x3701,(unsigned char) (Ratio & 0xff00) >> 8);
+        sensor_write(sd, 0x3702,(unsigned char) Ratio & 0xff);
+        sensor_write(sd, 0x3703,(unsigned char) (Ratio & 0xff00) >> 8);
+        sensor_write(sd, 0x3704,(unsigned char) Ratio & 0xff);
+        sensor_write(sd, 0x3705,(unsigned char) (Ratio & 0xff00) >> 8);
+        sensor_write(sd, 0x3706,(unsigned char) Ratio & 0xff);
+        sensor_write(sd, 0x3707,(unsigned char) (Ratio & 0xff00) >> 8);
+        sensor_write(sd, 0x3708,(unsigned char) Ratio & 0xff);
 #endif
 	return 0;
 }

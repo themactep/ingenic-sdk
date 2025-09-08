@@ -548,13 +548,13 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	/* add by Huddy */
 	/* {0x503d, 0x80}, //[7] [5:4] color bar */
 #ifdef DRIVE_CAPABILITY_1
-	{0x302c,0x00},
+	{0x302c, 0x00},
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x302c, 0x40},
 #elif defined(DRIVE_CAPABILITY_3)
-	{0x302c,0x80},
+	{0x302c, 0x80},
 #elif defined(DRIVE_CAPABILITY_4)
-	{0x302c,0xc0},
+	{0x302c, 0xc0},
 #endif
 	{0x3503, 0x07}, //Manual,AEC[0],AGC[1],VTS manual enable[2]
 	{0x3500, 0x00}, //integration time

@@ -329,7 +329,7 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x1468, 0x15},
 	{0x1469, 0x70},
 	{0x146a, 0xe8},//b8
-	//{0x1412,0x20},
+	//{0x1412, 0x20},
 	{0x0707, 0x07},
 	{0x0737, 0x0f},
 	{0x0704, 0x01},
@@ -405,8 +405,8 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
 	{0x0a67, 0x00},
-	//{0x022c,0x03},
-	//{0x0063,0x03},
+	//{0x022c, 0x03},
+	//{0x0063, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -557,8 +557,8 @@ static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x0436, 0x59},
 	{0x0437, 0x59},
 	{0x0100, 0x09},
-	//{0x022c,0x03},
-	//{0x0063,0x03},
+	//{0x022c, 0x03},
+	//{0x0063, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1043,7 +1043,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
-	ret += sensor_write(sd, 0x031d ,0x2d);
+	ret += sensor_write(sd, 0x031d , 0x2d);
 	ret += sensor_write(sd, 0x0614, val_lut[value].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[value].reg615);
 	ret += sensor_write(sd, 0x0225, val_lut[value].reg225);

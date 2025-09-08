@@ -794,25 +794,25 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 			return ret;
 		if (1 == logic_trig) {
 			if (gain_val< 0x740) {
-				ret += sensor_write(sd,0x363c,0x05);
-				ret += sensor_write(sd,0x330e,0x29);
+				ret += sensor_write(sd, 0x363c, 0x05);
+				ret += sensor_write(sd, 0x330e, 0x29);
 			} else if (gain_val >= 0x740 && gain_val < 0x1f40) {
-				ret += sensor_write(sd,0x363c,0x07);
-				ret += sensor_write(sd,0x330e,0x25);
+				ret += sensor_write(sd, 0x363c, 0x07);
+				ret += sensor_write(sd, 0x330e, 0x25);
 			} else {
-				ret += sensor_write(sd,0x363c,0x07);
-				ret += sensor_write(sd,0x330e,0x18);
+				ret += sensor_write(sd, 0x363c, 0x07);
+				ret += sensor_write(sd, 0x330e, 0x18);
 			}
 		} else {
 			if (gain_val< 0x740) {
-				ret += sensor_write(sd,0x363c,0x06);
-				ret += sensor_write(sd,0x330e,0x29);
+				ret += sensor_write(sd, 0x363c, 0x06);
+				ret += sensor_write(sd, 0x330e, 0x29);
 			} else if (gain_val >= 0x740 && gain_val < 0x1f40) {
-				ret += sensor_write(sd,0x363c,0x08);
-				ret += sensor_write(sd,0x330e,0x25);
+				ret += sensor_write(sd, 0x363c, 0x08);
+				ret += sensor_write(sd, 0x330e, 0x25);
 			} else {
-				ret += sensor_write(sd,0x363c,0x08);
-				ret += sensor_write(sd,0x330e,0x18);
+				ret += sensor_write(sd, 0x363c, 0x08);
+				ret += sensor_write(sd, 0x330e, 0x18);
 			}
 		}
 	}

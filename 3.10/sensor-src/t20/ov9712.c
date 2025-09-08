@@ -437,7 +437,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	if (ret < 0)
 		return ret;
 
-	/*[15:0] = 0x16,0x10 */
+	/*[15:0] = 0x16, 0x10 */
 	return 0;
 }
 

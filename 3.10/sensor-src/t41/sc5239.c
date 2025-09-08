@@ -924,51 +924,51 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	   int ret = 0;
 		if (value<0x0720)
 		{
-			ret += sensor_write(sd, 0x3301,0x20);
-			ret += sensor_write(sd, 0x3630,0x30);
-			ret += sensor_write(sd, 0x3633,0x34);
-			ret += sensor_write(sd, 0x3622,0xf6);
-			ret += sensor_write(sd, 0x363a,0x83);
+			ret += sensor_write(sd, 0x3301, 0x20);
+			ret += sensor_write(sd, 0x3630, 0x30);
+			ret += sensor_write(sd, 0x3633, 0x34);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x83);
 			if (ret < 0)
 					return ret;
 		}
 		else if (value>=0x0720 && value<0x0f20)
 		{
-			ret += sensor_write(sd, 0x3301,0x28);
-			ret += sensor_write(sd, 0x3630,0x34);
-			ret += sensor_write(sd, 0x3633,0x35);
-			ret += sensor_write(sd, 0x3622,0xf6);
-			ret += sensor_write(sd, 0x363a,0x87);
+			ret += sensor_write(sd, 0x3301, 0x28);
+			ret += sensor_write(sd, 0x3630, 0x34);
+			ret += sensor_write(sd, 0x3633, 0x35);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x87);
 			if (ret < 0)
 					return ret;
 		}
 		else if (value>=0x0f20 && value<0x1f20)
 		{
-			ret += sensor_write(sd, 0x3301,0x28);
-			ret += sensor_write(sd, 0x3630,0x24);
-			ret += sensor_write(sd, 0x3633,0x35);
-			ret += sensor_write(sd, 0x3622,0xf6);
-			ret += sensor_write(sd, 0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x28);
+			ret += sensor_write(sd, 0x3630, 0x24);
+			ret += sensor_write(sd, 0x3633, 0x35);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 			if (ret < 0)
 					return ret;
 		}
 		else if (value>=0x1f20 && value<0x1f3e)
 		{
-			ret += sensor_write(sd, 0x3301,0x48);
-			ret += sensor_write(sd, 0x3630,0x16);
-			ret += sensor_write(sd, 0x3633,0x45);
-			ret += sensor_write(sd, 0x3622,0xf6);
-			ret += sensor_write(sd, 0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x48);
+			ret += sensor_write(sd, 0x3630, 0x16);
+			ret += sensor_write(sd, 0x3633, 0x45);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 			if (ret < 0)
 					return ret;
 		}
 		else
 		{
-			ret += sensor_write(sd, 0x3301,0x48);
-			ret += sensor_write(sd, 0x3630,0x09);
-			ret += sensor_write(sd, 0x3633,0x46);
-			ret += sensor_write(sd, 0x3622,0x16);
-			ret += sensor_write(sd, 0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x48);
+			ret += sensor_write(sd, 0x3630, 0x09);
+			ret += sensor_write(sd, 0x3633, 0x46);
+			ret += sensor_write(sd, 0x3622, 0x16);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 			if (ret < 0)
 					return ret;
 		}

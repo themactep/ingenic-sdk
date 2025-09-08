@@ -464,7 +464,7 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
 	{0x36fd, 0x24},
 	{0x3908, 0x82},
 	{0x391f, 0x18},
-{0x3e00,0x00},//
+{0x3e00, 0x00},//
 	{0x3e01, 0xa8},
 	{0x3e02, 0x20},
 	{0x3f09, 0x48},
@@ -565,7 +565,7 @@ static struct regval_list sensor_init_regs_2304_1296_20fps_mipi[] = {
 	{0x36fd, 0x24},
 	{0x3908, 0x82},
 	{0x391f, 0x18},
-{0x3e00,0x00},//
+{0x3e00, 0x00},//
 	{0x3e01, 0xb3},
 	{0x3e02, 0x60},
 	{0x3f00, 0x4c},
@@ -796,14 +796,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 
 	/*blooming & DC tradeoff & precharge lag*/
 	if (gain_val< 0x740) {
-		ret += sensor_write(sd,0x363c,0x05);
-		ret += sensor_write(sd,0x330e,0x29);
+		ret += sensor_write(sd, 0x363c, 0x05);
+		ret += sensor_write(sd, 0x330e, 0x29);
 	} else if (gain_val >= 0x740 && gain_val < 0x1f40) {
-		ret += sensor_write(sd,0x363c,0x07);
-		ret += sensor_write(sd,0x330e,0x25);
+		ret += sensor_write(sd, 0x363c, 0x07);
+		ret += sensor_write(sd, 0x330e, 0x25);
 	} else {
-		ret += sensor_write(sd,0x363c,0x07);
-		ret += sensor_write(sd,0x330e,0x18);
+		ret += sensor_write(sd, 0x363c, 0x07);
+		ret += sensor_write(sd, 0x330e, 0x18);
 	}
 
 	/*DPC strength*/

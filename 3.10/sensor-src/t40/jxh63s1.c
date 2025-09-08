@@ -322,7 +322,7 @@ static struct regval_list sensor_init_regs_1280_720_30fps_mipi[] = {
 	{0x12, 0x04},
 	{0x48, 0x85},
 	{0x48, 0x05},
-	{SENSOR_REG_DELAY,0x10},
+	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -420,7 +420,7 @@ static struct regval_list sensor_init_regs_1280_720_30fps_dvp[] = {
 	{0x12, 0x04},
 	{0x48, 0x85},
 	{0x48, 0x05},
-	{SENSOR_REG_DELAY,0x10},
+	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
 };
 

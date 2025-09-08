@@ -621,16 +621,16 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret;
 #if 0
 	if (again_mode == LCG) {
-		ret = sensor_write(sd,0x3202, 0x0080);
-		ret += sensor_write(sd,0x3206, 0x0B08);
-		ret += sensor_write(sd,0x3208, 0x1E13);
-		ret += sensor_write(sd,0x3100, 0x00);
+		ret = sensor_write(sd, 0x3202, 0x0080);
+		ret += sensor_write(sd, 0x3206, 0x0B08);
+		ret += sensor_write(sd, 0x3208, 0x1E13);
+		ret += sensor_write(sd, 0x3100, 0x00);
 
 	} else if (again_mode == HCG) {
-		ret = sensor_write(sd,0x3202, 0x00B0);
-		ret += sensor_write(sd,0x3206, 0x1C0E);
-		ret += sensor_write(sd,0x3208, 0x4E39);
-		ret += sensor_write(sd,0x3100, 0x04);
+		ret = sensor_write(sd, 0x3202, 0x00B0);
+		ret += sensor_write(sd, 0x3206, 0x1C0E);
+		ret += sensor_write(sd, 0x3208, 0x4E39);
+		ret += sensor_write(sd, 0x3100, 0x04);
 	} else {
 		printk("Do not support this Again mode!\n");
 	}

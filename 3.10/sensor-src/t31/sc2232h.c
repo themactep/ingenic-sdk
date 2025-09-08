@@ -828,7 +828,7 @@ static struct regval_list sensor_stream_off_dvp[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{0x0100,0x01},
+	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -980,34 +980,34 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	/* denoise logic */
 	if (value < 0x110) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x12);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x12);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x110&&value<0x310) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x20);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x20);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x310&&value<0x710) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x28);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x28);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x710&&value<=0x71e) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x64);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x64);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else { //may be flick
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x64);
-		sensor_write(sd,0x3632,0x48);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x64);
+		sensor_write(sd, 0x3632, 0x48);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
@@ -1035,28 +1035,28 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 		ret += sensor_write(sd, 0x3314, 0x04);
 	}
 	/* set denoise logic */
-	ret += sensor_write(sd,0x3812,0x00);
+	ret += sensor_write(sd, 0x3812, 0x00);
 	if (again < 0x110) {
-		ret += sensor_write(sd,0x3301,0x12);
-		ret += sensor_write(sd,0x3632,0x08);
+		ret += sensor_write(sd, 0x3301, 0x12);
+		ret += sensor_write(sd, 0x3632, 0x08);
 	}
 	else if (again>=0x110&&again<0x310) {
-		ret += sensor_write(sd,0x3301,0x20);
-		ret += sensor_write(sd,0x3632,0x08);
+		ret += sensor_write(sd, 0x3301, 0x20);
+		ret += sensor_write(sd, 0x3632, 0x08);
 	}
 	else if (again>=0x310&&again<0x710) {
-		ret += sensor_write(sd,0x3301,0x28);
-		ret += sensor_write(sd,0x3632,0x08);
+		ret += sensor_write(sd, 0x3301, 0x28);
+		ret += sensor_write(sd, 0x3632, 0x08);
 	}
 	else if (again>=0x710&&again<=0x71e) {
-		ret += sensor_write(sd,0x3301,0x64);
-		ret += sensor_write(sd,0x3632,0x08);
+		ret += sensor_write(sd, 0x3301, 0x64);
+		ret += sensor_write(sd, 0x3632, 0x08);
 	}
 	else { //may be flick
-		ret += sensor_write(sd,0x3301,0x64);
-		ret += sensor_write(sd,0x3632,0x48);
+		ret += sensor_write(sd, 0x3301, 0x64);
+		ret += sensor_write(sd, 0x3632, 0x48);
 	}
-	ret += sensor_write(sd,0x3812,0x30);
+	ret += sensor_write(sd, 0x3812, 0x30);
 	/*set analog gain*/
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((again >> 8 << 2) | 0x03));

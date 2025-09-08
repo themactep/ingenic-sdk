@@ -218,8 +218,8 @@ static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
         {0x010B, 0x07},//Cmd_Sw_TriState[0]=1
         {0x0114, 0x09},//Cmd_LineTime[12:0]=2400
         {0x0115, 0x60},//Cmd_LineTime[12:0]=2400
-{0x0118,0x02},
-{0x0119,0x32},
+{0x0118, 0x02},
+{0x0119, 0x32},
         {0x0178, 0xB0},//B06A: Version
         {0x0179, 0x6A},//B06A: Version
         {0x020A, 0x33},//T_ODACMODE=1, B04A - improve streaking

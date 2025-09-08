@@ -35,7 +35,7 @@
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PC(18);
 
-static int wdr_bufsize = 6727680;  /* (2*{0x3e24,0x3e23}-10)*fps/SENSOR_OUTPUT_MIN_FPS*1920*2 */
+static int wdr_bufsize = 6727680;  /* (2*{0x3e24, 0x3e23}-10)*fps/SENSOR_OUTPUT_MIN_FPS*1920*2 */
 
 static int shvflip = 1;
 
@@ -560,7 +560,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x04},//{0x320c,0x320d}default = 0x44c     hts = 2*{0x320c,0x320d}
+	{0x320c, 0x04},//{0x320c, 0x320d}default = 0x44c     hts = 2*{0x320c, 0x320d}
 	{0x320d, 0x4c},
 	{0x320e, 0x04},//vts -> 0x4b0 = 1200
 	{0x320f, 0xb0},//

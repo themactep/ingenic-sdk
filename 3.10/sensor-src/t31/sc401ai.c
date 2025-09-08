@@ -609,7 +609,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x36e9, 0x23},
 	{0x36f9, 0x23},
 	{0x0100, 0x01},
-	{SENSOR_REG_DELAY,0x10},
+	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -887,9 +887,9 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 
 	/* cut off logic when 0x363a==0x12*/
 	if (again < 0x2740) {
-		ret += sensor_write(sd,0x363a,0x0b);
+		ret += sensor_write(sd, 0x363a, 0x0b);
 	} else {
-		ret += sensor_write(sd,0x363a,0x17);
+		ret += sensor_write(sd, 0x363a, 0x17);
 	}
 
 	if (ret < 0)

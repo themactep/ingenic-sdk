@@ -602,7 +602,7 @@ static struct regval_list sensor_stream_off_dvp[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{0x0100,0x01},
+	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -754,34 +754,34 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	/* denoise logic */
 	if (value < 0x110) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x12);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x12);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x110&&value<0x310) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x20);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x20);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x310&&value<0x710) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x28);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x28);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else if (value>=0x710&&value<=0x71e) {
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x64);
-		sensor_write(sd,0x3632,0x08);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x64);
+		sensor_write(sd, 0x3632, 0x08);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	else { //may be flick
-		sensor_write(sd,0x3812,0x00);
-		sensor_write(sd,0x3301,0x64);
-		sensor_write(sd,0x3632,0x48);
-		sensor_write(sd,0x3812,0x30);
+		sensor_write(sd, 0x3812, 0x00);
+		sensor_write(sd, 0x3301, 0x64);
+		sensor_write(sd, 0x3632, 0x48);
+		sensor_write(sd, 0x3812, 0x30);
 	}
 	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
@@ -885,10 +885,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd,0x3812,0x00);
+	ret = sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
-	ret += sensor_write(sd,0x3812,0x30);
+	ret += sensor_write(sd, 0x3812, 0x30);
 	if (0 != ret) {
 		printk("err: sensor_write err\n");
 		return ret;

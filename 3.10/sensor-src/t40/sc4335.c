@@ -540,26 +540,26 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	if (ret < 0)
 		return ret;
 
-//	sensor_write(sd,0x3812,0x00);
+//	sensor_write(sd, 0x3812, 0x00);
 	/* denoise logic */
 	if (again < 0x720) { //<2
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x88);
-		sensor_write(sd,0x3636,0x25);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x88);
+		sensor_write(sd, 0x3636, 0x25);
 	} else if (again >= 0x720 &&  again< 0xf20) {//>=2 <4
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x8e);
-		sensor_write(sd,0x3636,0x25);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x8e);
+		sensor_write(sd, 0x3636, 0x25);
 	} else if (again >= 0xf20 &&  again< 0x1f20) {//>=2 <8
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x80);
-		sensor_write(sd,0x3636,0x65);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x80);
+		sensor_write(sd, 0x3636, 0x65);
 	} else { ////>=8x
-		sensor_write(sd,0x3632,0xd8);
-		sensor_write(sd,0x3631,0x80);
-		sensor_write(sd,0x3636,0x65);
+		sensor_write(sd, 0x3632, 0xd8);
+		sensor_write(sd, 0x3631, 0x80);
+		sensor_write(sd, 0x3636, 0x65);
 	}
-	//sensor_write(sd,0x3812,0x30);
+	//sensor_write(sd, 0x3812, 0x30);
 
 	return 0;
 }
@@ -586,25 +586,25 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 
 	/* denoise logic */
-	sensor_write(sd,0x3812,0x00);
+	sensor_write(sd, 0x3812, 0x00);
 	if (value < 0x720) { //<2
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x88);
-		sensor_write(sd,0x3636,0x25);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x88);
+		sensor_write(sd, 0x3636, 0x25);
 	} else if (value >= 0x720 && value < 0xf20) {//>=2 <4
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x8e);
-		sensor_write(sd,0x3636,0x25);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x8e);
+		sensor_write(sd, 0x3636, 0x25);
 	} else if (value >= 0xf20 && value < 0x1f20) {//>=2 <8
-		sensor_write(sd,0x3632,0x18);
-		sensor_write(sd,0x3631,0x80);
-		sensor_write(sd,0x3636,0x65);
+		sensor_write(sd, 0x3632, 0x18);
+		sensor_write(sd, 0x3631, 0x80);
+		sensor_write(sd, 0x3636, 0x65);
 	} else { ////>=8x
-		sensor_write(sd,0x3632,0xd8);
-		sensor_write(sd,0x3631,0x80);
-		sensor_write(sd,0x3636,0x65);
+		sensor_write(sd, 0x3632, 0xd8);
+		sensor_write(sd, 0x3631, 0x80);
+		sensor_write(sd, 0x3636, 0x65);
 	}
-	sensor_write(sd,0x3812,0x30);
+	sensor_write(sd, 0x3812, 0x30);
 
 	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
@@ -710,10 +710,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-//	ret = sensor_write(sd,0x3812,0x00);
+//	ret = sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
-//	ret += sensor_write(sd,0x3812,0x30);
+//	ret += sensor_write(sd, 0x3812, 0x30);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;

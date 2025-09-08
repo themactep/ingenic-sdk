@@ -335,7 +335,7 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 	if (ret > 0)
 		ret = 0;
 
-//	printk("	{0x%x,0x%x}\n",*(msg[0].buf), *(msg[1].buf));
+//	printk("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
 //	private_msleep(5);
 	return ret;
 }
@@ -355,7 +355,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-//	printk("	{0x%x,0x%x}\n",buf[0], buf[1]);
+//	printk("	{0x%x, 0x%x}\n",buf[0], buf[1]);
 //	private_msleep(5);
 	return ret;
 }
@@ -386,7 +386,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	while (len --) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
 //		ret = sensor_read(sd, vals->reg_num, &val);
-//		printk("	{0x%x,0x%x}\n", vals->reg_num, val);
+//		printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		if (ret < 0)
 			return ret;
 		vals++;

@@ -481,7 +481,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
-			printk("read:{0x%x,0x%x}\n", vals->reg_num, vals->value);
+			printk("read:{0x%x, 0x%x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 			if (vals->reg_num == SENSOR_REG_PAGE) {

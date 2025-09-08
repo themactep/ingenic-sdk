@@ -867,7 +867,7 @@ static struct regval_list sensor_stream_off_dvp[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{0x0100,0x01},
+	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
