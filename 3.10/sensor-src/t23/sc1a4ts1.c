@@ -17,20 +17,39 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc1a4ts1"
+#define SENSOR_VERSION "H20230921a"
 #define SENSOR_CHIP_ID 0x9a4d /* 0xda4d ? */
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 1280
-#define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID_H (0x9a)
 #define SENSOR_CHIP_ID_L (0x4d)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_15FPS_SCLK (72000000)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230921a"
 
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);

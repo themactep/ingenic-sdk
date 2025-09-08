@@ -30,9 +30,16 @@
 #define SC2336P_REG_END		0xffff
 #define SC2336P_REG_DELAY	0xfffe
 #define SC2336P_SUPPORT_30FPS_SCLK (81000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_VERSION "H20230921a"
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20230921a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

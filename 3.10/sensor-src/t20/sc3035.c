@@ -17,21 +17,40 @@
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc3035"
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x3035
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 2048
-#define SENSOR_MAX_HEIGHT 1536
 #define SENSOR_CHIP_ID_H (0x30)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2048
+#define SENSOR_MAX_HEIGHT 1536
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_2048_1536_PCLK (99000*1000)
 #define SENSOR_SUPPORT_1536_1536_PCLK (75600*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
 #define DRIVE_CAPABILITY_2
 
 typedef enum {

@@ -17,20 +17,39 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "bf3a03"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x6e
+#define SENSOR_VERSION "H20200116a"
 #define SENSOR_CHIP_ID 0x3a03
 #define SENSOR_CHIP_ID_H (0x3a)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x6e
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_PAGE_REG 0xfa
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (12*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 10
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION "H20200116a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_PAGE_REG 0xfa
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

@@ -21,20 +21,40 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc2093"
+#define SENSOR_VERSION "H20220408a"
 #define SENSOR_CHIP_ID 0x2093
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x37
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x93)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (58725000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220408a"
+
 #ifdef FAST_AE
 #define SENSOR_FAST_AE 0xfffe
 unsigned long long time_reg = 0;

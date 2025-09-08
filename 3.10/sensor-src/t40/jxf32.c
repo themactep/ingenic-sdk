@@ -15,11 +15,23 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxf32"
+#define SENSOR_VERSION "H20200930a"
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (86400000)
 #define SENSOR_SUPPORT_15FPS_SCLK (43200000)
 #define SENSOR_SUPPORT_55FPS_SCLK (39600000)
@@ -29,7 +41,6 @@
 #define SENSOR_SUPPORT_VGA_SCLK (43189920)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20200930a"
 
 typedef enum {
     SENSOR_RES_30 = 30,

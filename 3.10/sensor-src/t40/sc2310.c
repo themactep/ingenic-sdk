@@ -15,16 +15,27 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc2310"
+#define SENSOR_VERSION "H20181031a"
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_L (0x11)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK (81000000)
 #define SENSOR_SUPPORT_SCLK_15FPS (81000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20181031a"
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

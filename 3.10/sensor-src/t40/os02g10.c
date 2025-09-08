@@ -20,18 +20,33 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "os02g10"
+#define SENSOR_VERSION "H20230725a"
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_M (0x02)
 #define SENSOR_CHIP_ID_L (0x47)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_FPS_30 (72000000)
 #define SENSOR_VTS_30_FPS 0x455
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230725a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_REG_PAGE 0xfd
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

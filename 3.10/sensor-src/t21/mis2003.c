@@ -16,16 +16,35 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "mis2003"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x2003
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (72000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5

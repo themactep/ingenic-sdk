@@ -15,17 +15,28 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc5235"
+#define SENSOR_VERSION "H20211102a"
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_5M_FPS_15 (120000000)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define MCLK 24000000
-#define SENSOR_VERSION "H20211102a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

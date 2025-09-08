@@ -16,17 +16,37 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "os05a10"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 2592
-#define SENSOR_MAX_HEIGHT 1944
+#define SENSOR_VERSION "H20190817a"
 #define SENSOR_CHIP_ID 0x530541
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x05)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_MAX_HEIGHT 1944
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_FPS_25 (107289600)
 #define SENSOR_SUPPORT_SCLK_FPS_30 (104417280)
 #define SENSOR_SUPPORT_SCLK_FPS_12 (107969400)
@@ -34,7 +54,6 @@
 #define SENSOR_SUPPORT_SCLK_WDR (54000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20190817a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

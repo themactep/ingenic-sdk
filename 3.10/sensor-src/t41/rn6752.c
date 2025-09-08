@@ -23,14 +23,24 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "rn6752"
+#define SENSOR_VERSION "H20221205a"
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x01)
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define MCLK 27000000
-#define SENSOR_VERSION "H20221205a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_DELAY 0xfd
 #define SENSOR_REG_END 0xfa
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define USE_BLUE_SCREEN 1
 #define USE_CVBS_ONE_FIELD 1
 

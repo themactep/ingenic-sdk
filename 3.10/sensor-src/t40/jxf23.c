@@ -25,14 +25,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxf23"
+#define SENSOR_VERSION "H20220527a"
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
-#define SENSOR_VERSION "H20220527a"
 
 struct regval_list {
     uint16_t reg_num;

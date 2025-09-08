@@ -15,15 +15,26 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc035hgs"
+#define SENSOR_VERSION "H20220225a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x31)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_60FPS_SCLK   (71976960)
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_60FPS_SCLK (71976960)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220225a"
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

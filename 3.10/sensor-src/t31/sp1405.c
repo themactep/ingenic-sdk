@@ -17,21 +17,40 @@
 #include <sensor-info.h>
 #include <tx-isp-debug.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sp1405"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 1280
-#define SENSOR_MAX_HEIGHT 720
+#define SENSOR_VERSION "H20220228a"
 #define SENSOR_CHIP_ID 0x9732
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_SCLK  (35560680)
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_SCLK (35560680)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION "H20220228a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

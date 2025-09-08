@@ -16,18 +16,37 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc5603"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x31
-#define SENSOR_MAX_WIDTH 2560
-#define SENSOR_MAX_HEIGHT 1440
+#define SENSOR_VERSION "H20220510a"
 #define SENSOR_CHIP_ID 0x5603
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x31
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220510a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

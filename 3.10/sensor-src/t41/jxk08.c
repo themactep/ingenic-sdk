@@ -20,15 +20,26 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxk08"
+#define SENSOR_VERSION "H20230802a"
 #define SENSOR_CHIP_ID_H (0x06)
 #define SENSOR_CHIP_ID_L (0x05)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK 4000*2400*15
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230802a"
 
 uint8_t dismode;
 static int rst_gpio = GPIO_PA(18);

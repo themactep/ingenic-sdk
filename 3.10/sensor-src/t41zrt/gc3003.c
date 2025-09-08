@@ -24,15 +24,26 @@
 
 //#define SENSOR_WITHOUT_INIT
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc3003"
+#define SENSOR_VERSION "H20230809a"
 #define SENSOR_CHIP_ID_H (0x30)
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x10)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230809a"
 #define MCLK 27000000
 
 static int reset_gpio = -1;

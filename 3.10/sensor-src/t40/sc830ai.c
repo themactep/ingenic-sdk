@@ -15,17 +15,28 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc830ai"
+#define SENSOR_VERSION "H20220610a"
 #define SENSOR_CHIP_ID_H (0xc1)
 #define SENSOR_CHIP_ID_L (0x43)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_8M_FPS_30 (143892000)
 #define SENSOR_SUPPORT_SCLK_8M_FPS_15 (71946000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION "H20220610a"
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);

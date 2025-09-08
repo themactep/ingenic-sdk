@@ -20,16 +20,27 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "imx386"
+#define SENSOR_VERSION "H20220920a"
 #define SENSOR_CHIP_ID_H (0x28)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION "H20220920a"
 
 static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);

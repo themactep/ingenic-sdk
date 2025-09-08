@@ -17,17 +17,28 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc2093"
+#define SENSOR_VERSION "H20220325a"
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x93)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0xb1c * 0x465 * 30)
 #define SENSOR_SUPPORT_30FPS_SCLK_HDR (0x294 * 0x4e2 * 60)
 #define SENSOR_SUPPORT_30FPS_SCLK_60FPS (0x294 * 2 * 0x4e2 * 60)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220325a"
 #define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(27);

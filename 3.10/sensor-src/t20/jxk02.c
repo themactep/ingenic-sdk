@@ -17,20 +17,39 @@
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxk02"
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x0403
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
-#define SENSOR_MAX_WIDTH 2048
-#define SENSOR_MAX_HEIGHT 1520
 #define SENSOR_CHIP_ID_H (0x04)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2048
+#define SENSOR_MAX_HEIGHT 1520
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (216*100000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

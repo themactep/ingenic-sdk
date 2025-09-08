@@ -15,20 +15,39 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc1045"
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x1045
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 1280
-#define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x45)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (43200*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
 #define DRIVE_CAPABILITY_1
 
 static struct sensor_info sensor_info = {

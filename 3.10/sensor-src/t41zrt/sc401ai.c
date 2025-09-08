@@ -22,14 +22,28 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc401ai"
+#define SENSOR_VERSION "H20230722a"
 #define SENSOR_CHIP_ID_H (0xcd)
 #define SENSOR_CHIP_ID_L (0x2e)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230722a"
 
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_WITHOUT_INIT
 
 /* CONFIG_SENSOR_SUSPEND:支持Sensor suspend功能

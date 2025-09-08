@@ -16,22 +16,41 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc3338"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 2304
-#define SENSOR_MAX_HEIGHT 1296
+#define SENSOR_VERSION "H20220609a"
 #define SENSOR_CHIP_ID 0xcc41
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_RES_300 (0x4e2 * 2 * 0x550 * 30)
 #define SENSOR_SUPPORT_SCLK_RES_200 (0x4e2 * 2 * 0x528 * 30)
 #define SENSOR_SUPPORT_SCLK_RES_30 (1250 * 0x198 * 100)
 #define SENSOR_OUTPUT_MAX_FPS 100
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220609a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

@@ -16,12 +16,23 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "ps5270"
+#define SENSOR_VERSION "H20180911a"
 #define SENSOR_CHIP_ID_H 0x52
 #define SENSOR_CHIP_ID_L 0x70
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_BANK_REG 0xef
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK_FPS20 58000000
 #define SENSOR_SUPPORT_PCLK_FPS30 86000000
 #define SENSOR_SUPPORT_PCLK_WDR 70000000
@@ -33,7 +44,11 @@
 #define NEPLS_UB 255
 #define NEPLS_SCALE 32
 #define NE_NEP_CONST (0x1F4+0x64)
-#define SENSOR_VERSION "H20180911a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_BANK_REG 0xef
 
 typedef enum {
 	SENSOR_RAW_MODE_LINEAR_20FPS = 0,

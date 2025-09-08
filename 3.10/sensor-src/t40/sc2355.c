@@ -15,17 +15,32 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc2355"
+#define SENSOR_VERSION "H20220609a"
 #define SENSOR_CHIP_ID_H (0xeb)
 #define SENSOR_CHIP_ID_L (0x2c)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_60FPS_SCLK (72000000)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define DRIVE_CAPABILITY_1
 #define MCLK 24000000
-#define SENSOR_VERSION "H20220609a"
 #define DUAL_CAMERA_MODE 1
 #define MAIN_SENSOR 1
 #define SECOND_SENSOR 0

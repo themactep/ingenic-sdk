@@ -17,21 +17,40 @@
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc2145"
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x2145
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x21)
 #define SENSOR_CHIP_ID_L (0x45)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK_FPS_30 (74250*1000)
 #define SENSOR_SUPPORT_PCLK_FPS_15 (37125*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -433,7 +452,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x0100, 0x00},

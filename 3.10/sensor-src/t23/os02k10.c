@@ -23,17 +23,28 @@
 /* 1080p@55fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=55 */
 /* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "os02k10"
+#define SENSOR_VERSION "H20200704a"
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x02)
 #define SENSOR_CHIP_ID_L (0x43)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK (108000000)
 #define SENSOR_SUPPORT_SCLK_55 (107971875)
 #define SENSOR_OUTPUT_MAX_FPS 120
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20200704a"
 
 typedef enum {
 	SENSOR_OUTPUT_MAX_FPS_15 = 15,

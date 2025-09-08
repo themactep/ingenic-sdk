@@ -16,17 +16,36 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "ps5270"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x48
-#define SENSOR_MAX_WIDTH 1536
-#define SENSOR_MAX_HEIGHT 1536
+#define SENSOR_VERSION "H20200916a"
 #define SENSOR_CHIP_ID 0x5270
 #define SENSOR_CHIP_ID_H 0x52
 #define SENSOR_CHIP_ID_L 0x70
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x48
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1536
+#define SENSOR_MAX_HEIGHT 1536
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_BANK_REG 0xef
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_MIPI_SCLK (86016000)
 #define SENSOR_SUPPORT_45FPS_MIPI_SCLK (86042250)
 #define SENSOR_SUPPORT_VGA_SCLK (85932000)
@@ -38,7 +57,11 @@
 #define NEPLS_UB 255
 #define NEPLS_SCALE 32
 #define NE_NEP_CONST (0x1F4+0x64)
-#define SENSOR_VERSION "H20200916a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_BANK_REG 0xef
 
 /* VGA@110fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=110  */
 /* 1536x1536@25fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=200 sensor_max_fps=30  */

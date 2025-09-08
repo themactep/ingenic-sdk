@@ -16,11 +16,23 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc2053"
+#define SENSOR_VERSION "H20230726a"
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_40FPS_MIPI_SCLK (99000000)
 #define SENSOR_SUPPORT_30FPS_MIPI_SCLK (78000000)
 #define SENSOR_SUPPORT_25FPS_MIPI_SCLK (72000000)
@@ -29,7 +41,6 @@
 #define SENSOR_SUPPORT_15FPS_DVP_SCLK (37125000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230726a"
 
 static unsigned char vts0 = 0x05;
 static unsigned char vts1 = 0x8a;

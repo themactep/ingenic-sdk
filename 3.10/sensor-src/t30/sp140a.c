@@ -15,16 +15,31 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sp140a"
+#define SENSOR_VERSION "H20181031a"
 #define SENSOR_CHIP_ID_H (0x14)
 #define SENSOR_CHIP_ID_L (0x0a)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfefe
-#define SENSOR_PAGE_REG 0xfd
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (42000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20181031a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_PAGE_REG 0xfd
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

@@ -16,20 +16,39 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "imx335"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x1a
-#define SENSOR_MAX_WIDTH 2616
-#define SENSOR_MAX_HEIGHT 1964
+#define SENSOR_VERSION "H20220622a"
 #define SENSOR_CHIP_ID 0x080
 #define SENSOR_CHIP_ID_H (0x38)
 #define SENSOR_CHIP_ID_L (0x0a)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2616
+#define SENSOR_MAX_HEIGHT 1964
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK (74250000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220622a"
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16

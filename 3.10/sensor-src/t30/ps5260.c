@@ -16,12 +16,23 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "ps5260"
+#define SENSOR_VERSION "H20170911a"
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x60)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_BANK_REG 0xef
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (38002500)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -31,7 +42,11 @@
 #define NEPLS_UB (200)
 #define NEPLS_SCALE (38)
 #define NE_NEP_CONST_LINEAR (0x868+0x19)
-#define SENSOR_VERSION "H20170911a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_BANK_REG 0xef
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

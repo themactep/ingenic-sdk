@@ -21,18 +21,29 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "os04c10"
+#define SENSOR_VERSION "H20220105a"
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_L (0x04)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_20FPS_SCLK_HDR (1070 * 20 * 2523)
 #define SENSOR_SUPPORT_30FPS_SCLK_HDR (1070 * 30 * 1682)
 #define SENSOR_SUPPORT_30FPS_SCLK_LINEAR (1070 * 30 * 3151)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MAX_FPS_DOL 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220105a"
 #define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(27);

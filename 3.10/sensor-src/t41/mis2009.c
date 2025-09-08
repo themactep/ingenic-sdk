@@ -20,14 +20,25 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "mis2009"
+#define SENSOR_VERSION "H20230704a"
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x08)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_RES_400_PCLK (72000000)
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230704a"
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);

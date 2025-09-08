@@ -17,22 +17,45 @@
 #include <apical-isp/apical_math.h>
 #include <linux/proc_fs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc1024"
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x1004
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x3c
-#define SENSOR_MAX_WIDTH 2078
-#define SENSOR_MAX_HEIGHT 924
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x04)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2078
+#define SENSOR_MAX_HEIGHT 924
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
-#define SENSOR_PAGE_REG 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (48*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
 #define DRIVE_CAPABILITY_2
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_PAGE_REG 0xfe
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

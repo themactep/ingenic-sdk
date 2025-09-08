@@ -20,14 +20,25 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc501ai"
+#define SENSOR_VERSION "H20230704a"
 #define SENSOR_CHIP_ID_H (0xce)
 #define SENSOR_CHIP_ID_L (0x1f)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230704a"
 #define MCLK 24000000
 
 static int reset_gpio = -1;

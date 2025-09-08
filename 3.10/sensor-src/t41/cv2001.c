@@ -12,14 +12,21 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "cv2001"
+#define SENSOR_VERSION "H20230505a"
 #define SENSOR_CHIP_ID_L 0x01
 #define SENSOR_CHIP_ID_H 0x20
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define CV2001_MCLK 24000000  //24M
 #define CV2001_AGAIN_MAX 0xB4
-#define SENSOR_VERSION "H20230505a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

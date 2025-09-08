@@ -16,13 +16,24 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "os04b10"
+#define SENSOR_VERSION "H20200103a"
 #define SENSOR_CHIP_ID_H (0x43)
 #define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_CHIP_ID_L (0x01)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_FPS_25 (72000000)
 #define SENSOR_SUPPORT_SCLK_FPS_20 (84000000)
 #define SENSOR_VTS_25_FPS 0x71a
@@ -31,7 +42,11 @@
 #define SENSOR_VB_20_FPS 0x48a
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20200103a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_REG_PAGE 0xfd
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

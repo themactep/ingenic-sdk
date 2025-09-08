@@ -16,22 +16,57 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "ov9732"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 1280
-#define SENSOR_MAX_HEIGHT 720
+#define SENSOR_VERSION "20180320"
 #define SENSOR_CHIP_ID 0x9732
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 0
+#define SENSOR_MAX_HEIGHT 0
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_SUPPORT_MCLK (24 * 1000 * 1000)
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "20180320"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_SUPPORT_MCLK (24*1000*1000)
 #define DRIVE_CAPABILITY_1
 #define OV9732_USE_AGAIN_ONLY
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.actual_fps = 0,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -56,18 +91,6 @@ struct again_lut {
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
-
-static struct sensor_info sensor_info = {
-	.name = SENSOR_NAME,
-	.chip_id = SENSOR_CHIP_ID,
-	.version = SENSOR_VERSION,
-	.min_fps = SENSOR_OUTPUT_MIN_FPS,
-	.max_fps = SENSOR_OUTPUT_MAX_FPS,
-	.actual_fps = 0,
-	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
-	.width = SENSOR_MAX_WIDTH,
-	.height = SENSOR_MAX_HEIGHT,
-};
 
 static uint32_t fix_point_mult2(uint32_t a, uint32_t b) {
 	uint32_t x1, x2, x;
@@ -1053,8 +1076,8 @@ static int sensor_remove(struct i2c_client *client)
 }
 
 static const struct i2c_device_id sensor_id[] = {
-	{ SENSOR_NAME, 0 },
-	{ }
+	{SENSOR_NAME, 0},
+	{}
 };
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 

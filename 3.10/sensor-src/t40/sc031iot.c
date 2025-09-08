@@ -15,17 +15,32 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc031iot"
+#define SENSOR_VERSION "H20220524b"
 #define SENSOR_CHIP_ID_H (0x9a)
 #define SENSOR_CHIP_ID_L (0x46)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE 0xf0
 #define SENSOR_REG_DELAY 0x04
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_15FPS_SCLK (13500 * 1000)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 12000000
-#define SENSOR_VERSION "H20220524b"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_REG_PAGE 0xf0
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

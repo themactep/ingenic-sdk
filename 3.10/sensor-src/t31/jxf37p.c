@@ -16,21 +16,44 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxf37p"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_VERSION "H20210419a"
 #define SENSOR_CHIP_ID 0x841
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK_MIPI (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_RES_13 13
-#define SENSOR_VERSION "H20210419a"
 
 /* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */

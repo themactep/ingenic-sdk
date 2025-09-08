@@ -14,18 +14,29 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "imx334"
+#define SENSOR_VERSION "H20220531a"
 #define SENSOR_CHIP_ID_H (0x18)
 #define SENSOR_CHIP_ID_L (0x0f)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_8M (74250000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
-#define SENSOR_VERSION "H20220531a"
 
 /* t40 sensor hvflip function only takes effect when shvflip == 1 */
 static int shvflip = 1;

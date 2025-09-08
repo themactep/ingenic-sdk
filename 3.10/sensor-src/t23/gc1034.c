@@ -16,22 +16,45 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc1034"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x21
-#define SENSOR_MAX_WIDTH 512
-#define SENSOR_MAX_HEIGHT 512
+#define SENSOR_VERSION "H20200116a"
 #define SENSOR_CHIP_ID 0x1034
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x34)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x21
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 512
+#define SENSOR_MAX_HEIGHT 512
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
-#define SENSOR_PAGE_REG 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (39*1000*1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION "H20200116a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_PAGE_REG 0xfe
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

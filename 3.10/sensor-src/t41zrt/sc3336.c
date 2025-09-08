@@ -18,17 +18,32 @@
 
 /* 定义SENSOR_WITHOUT_INIT时表示boot阶段已进行sensor初始化，下sensor初始化配置，可节省初始化sensor时间。*/
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
-#define SENSOR_WITHOUT_INIT
-
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc3336"
+#define SENSOR_VERSION "H20220609a"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (51000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION "H20220609a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_WITHOUT_INIT
+
 #define MCLK 24000000
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;

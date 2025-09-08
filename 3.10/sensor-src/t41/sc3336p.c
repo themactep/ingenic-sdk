@@ -23,13 +23,24 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc3336p"
+#define SENSOR_VERSION "H20231011a"
 #define SENSOR_CHIP_ID_H (0x9c)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20231011a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

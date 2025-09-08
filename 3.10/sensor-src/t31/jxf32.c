@@ -16,22 +16,41 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxf32"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_VERSION "H20221208a"
 #define SENSOR_CHIP_ID 0xf35
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_1920_1080_60FPS_SCLK_MIPI (1125*640*60*4)
 #define SENSOR_SUPPORT_1280_720_60FPS_SCLK_MIPI (1133*600*60*4)
 #define SENSOR_SUPPORT_640_360_60FPS_SCLK_MIPI (400*1800*60*2)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20221208a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;

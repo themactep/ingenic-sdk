@@ -24,15 +24,26 @@
 #include <sensor-info.h>
 
 #define MCLK 27000000
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc4663"
+#define SENSOR_VERSION "H20230928a"
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (144 * 1000 * 1000)
 #define SENSOR_SUPPORT_30FPS_SCLK_HDR (132000000)
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230928a"
 
 static int wdr_bufsize = 2 * 3000 * 188;
 

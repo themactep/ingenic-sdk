@@ -16,15 +16,26 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "imx335"
+#define SENSOR_VERSION "H20200622a"
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x00)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK (74250000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20200622a"
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16

@@ -17,20 +17,34 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc4023s1"
+#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+#define SENSOR_VERSION "H20230912a"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
-#define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230912a"
-#define SENSOR_HIGH_TEMP    "highTemp"
-#define SENSOR_LOW_TEMP    "lowTemp"
+
 #define CAMERA_PROC_NAME "camera"
-#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_HIGH_TEMP "highTemp"
+#define SENSOR_LOW_TEMP "lowTemp"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

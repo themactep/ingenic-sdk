@@ -16,17 +16,28 @@
 #include <sensor-common.h>
 //#include <tx-isp-debug.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc2232h"
+#define SENSOR_VERSION "H20200521a"
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_M (0x07)
 #define SENSOR_CHIP_ID_L (0x01)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK (78000000)
 #define SENSOR_SUPPORT_SCLK_15FPS (54000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20200521a"
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
