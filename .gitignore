@@ -3,4 +3,6 @@
 *.mod
 *.mod.c
 lib/**/*.txt
-.vscode
+.idea/
+.vscode/
+
