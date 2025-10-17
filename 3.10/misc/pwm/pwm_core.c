@@ -41,6 +41,22 @@ static int jz_pwm_en[PWM_NUM] = {0};
 #define CONFIG_PWM3
 #endif
 
+/* Default-enable channels 4..7 on 8-channel SoCs (T30/T21/T40) */
+#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
+#ifndef CONFIG_PWM4
+#define CONFIG_PWM4
+#endif
+#ifndef CONFIG_PWM5
+#define CONFIG_PWM5
+#endif
+#ifndef CONFIG_PWM6
+#define CONFIG_PWM6
+#endif
+#ifndef CONFIG_PWM7
+#define CONFIG_PWM7
+#endif
+#endif
+
 #ifdef CONFIG_SOC_T40
 struct jz_pwm_device{
 	short id;
