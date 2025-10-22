@@ -23,35 +23,7 @@
 #endif
 #include <linux/spinlock.h>
 
-/* Default-enable channels 0..3 if not provided by Kconfig/Kbuild */
-#ifndef CONFIG_PWM0
-#define CONFIG_PWM0
-#endif
-#ifndef CONFIG_PWM1
-#define CONFIG_PWM1
-#endif
-#ifndef CONFIG_PWM2
-#define CONFIG_PWM2
-#endif
-#ifndef CONFIG_PWM3
-#define CONFIG_PWM3
-#endif
-
-/* Default-enable channels 4..7 on 8-channel SoCs (T30/T21/T40) */
-#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
-#ifndef CONFIG_PWM4
-#define CONFIG_PWM4
-#endif
-#ifndef CONFIG_PWM5
-#define CONFIG_PWM5
-#endif
-#ifndef CONFIG_PWM6
-#define CONFIG_PWM6
-#endif
-#ifndef CONFIG_PWM7
-#define CONFIG_PWM7
-#endif
-#endif
+/* Channels are selected by Kconfig/Kbuild/DT. Do not auto-enable here. */
 
 #if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T40)
 #define PWM_NUM		8

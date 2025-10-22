@@ -33,6 +33,39 @@
 #include <soc/irq.h>
 #endif
 
+#include "../tcu_alloc/tcu_alloc.h"
+
+#define MOTOR_MAX_TCU 8
+static char *motor_tcu_channels;
+module_param_named(tcu_channels, motor_tcu_channels, charp, 0644);
+MODULE_PARM_DESC(tcu_channels, "Comma-separated TCU channels for motor (e.g., 2 or 2,3)");
+
+static int motor_bind_channel = 2; /* first channel parsed; used for binding */
+static void motor_parse_channels(void)
+{
+	if (motor_tcu_channels && *motor_tcu_channels) {
+		char *str = kstrdup(motor_tcu_channels, GFP_KERNEL);
+		char *p = str, *tok;
+		if (!str)
+			return;
+		while ((tok = strsep(&p, ",")) != NULL) {
+			unsigned long v;
+			if (!kstrtoul(tok, 0, &v) && v < MOTOR_MAX_TCU) {
+				motor_bind_channel = (int)v; /* pick first valid for binding */
+				break;
+			}
+		}
+		kfree(str);
+	}
+}
+
+#ifdef CONFIG_SOC_T40
+static struct of_device_id motor_match_dynamic[2];
+static char motor_match_str[32];
+#endif
+
+static char motor_driver_name[16] = "tcu_chn2";
+
 #include <soc/base.h>
 #include <soc/extal.h>
 #include <soc/gpio.h>
@@ -946,6 +979,29 @@ static int motor_probe(struct platform_device *pdev)
 #else
 	mdev->tcu = (struct jz_tcu_chn *)mdev->cell->platform_data;
 #endif
+	/* Claim TCU channel ownership to avoid conflicts */
+#ifdef CONFIG_SOC_T40
+	{
+		int ch = mdev->tcu->cib.id;
+		ret = tcu_alloc_claim(ch, "motor");
+		if (ret) {
+			const char *own = tcu_alloc_owner(ch);
+			dev_err(&pdev->dev, "TCU ch%d busy (owner=%s), motor refusing to bind: %d\n", ch, own ? own : "unknown", ret);
+			goto error_devm_kzalloc;
+		}
+	}
+#else
+	{
+		int ch = mdev->tcu->index;
+		ret = tcu_alloc_claim(ch, "motor");
+		if (ret) {
+			const char *own = tcu_alloc_owner(ch);
+			dev_err(&pdev->dev, "TCU ch%d busy (owner=%s), motor refusing to bind: %d\n", ch, own ? own : "unknown", ret);
+			goto error_devm_kzalloc;
+		}
+	}
+#endif
+
 	mdev->tcu->irq_type = FULL_IRQ_MODE;
 	mdev->tcu->clk_src = TCU_CLKSRC_EXT;
 	mdev->tcu_speed = MOTOR_DEF_SPEED;
@@ -1104,11 +1160,16 @@ static int motor_remove(struct platform_device *pdev)
 	struct motor_driver *motor = NULL;
 
 #ifdef CONFIG_SOC_T40
+	int ch = mdev->tcu->cib.id;
 	ingenic_tcu_counter_stop(mdev->tcu);
 #else
+	int ch = mdev->tcu->index;
 	jz_tcu_disable_counter(mdev->tcu);
 	jz_tcu_stop_counter(mdev->tcu);
 #endif
+	/* Release ownership */
+	tcu_alloc_release(ch, "motor");
+
 	mutex_destroy(&mdev->dev_mutex);
 
 	free_irq(mdev->run_step_irq, mdev);
@@ -1146,20 +1207,13 @@ static int motor_remove(struct platform_device *pdev)
 	return 0;
 }
 
-#ifdef CONFIG_SOC_T40
-static struct of_device_id motor_match[] = {
-	{.compatible = "ingenic,tcu_chn2",},
-	{}
-};
-#endif
-
 static struct platform_driver motor_driver = {
 	.probe = motor_probe,
 	.remove = motor_remove,
 	.driver = {
-		.name = "tcu_chn2",
+		.name = motor_driver_name,
 #ifdef CONFIG_SOC_T40
-		.of_match_table = motor_match,
+		.of_match_table = motor_match_dynamic,
 #endif
 		.owner = THIS_MODULE,
 	}
@@ -1167,6 +1221,16 @@ static struct platform_driver motor_driver = {
 
 static int __init motor_init(void)
 {
+	/* Parse CSV channels and configure dynamic binding name based on first channel */
+	motor_parse_channels();
+	snprintf(motor_driver_name, sizeof(motor_driver_name), "tcu_chn%d", motor_bind_channel);
+#ifdef CONFIG_SOC_T40
+	snprintf(motor_match_str, sizeof(motor_match_str), "ingenic,tcu_chn%d", motor_bind_channel);
+	/* Populate of_match table at runtime (static storage) */
+	memset(motor_match_dynamic, 0, sizeof(motor_match_dynamic));
+	motor_match_dynamic[0].compatible = motor_match_str;
+	motor_match_dynamic[1].compatible = NULL;
+#endif
 	return platform_driver_register(&motor_driver);
 }
 
