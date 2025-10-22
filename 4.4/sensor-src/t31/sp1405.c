@@ -50,6 +50,16 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
+struct regval_list {
+	uint16_t reg_num;
+	unsigned char value;
+};
+
+struct again_lut {
+	unsigned int value;
+	unsigned int gain;
+};
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 static struct sensor_info sensor_info = {
@@ -61,16 +71,6 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
-};
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -211,7 +211,7 @@ struct tx_isp_dvp_bus sensor_dvp={
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
-	.chip_id = 0x9732,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -442,6 +442,7 @@ static struct regval_list sensor_init_regs_1280_720_30fps_mipi[] = {
   {SENSOR_REG_DELAY, 50},
   {SENSOR_REG_END, 0x00},
 };
+
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
