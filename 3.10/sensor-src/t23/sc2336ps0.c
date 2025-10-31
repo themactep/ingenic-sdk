@@ -27,6 +27,7 @@
 
 #define SC2336P_CHIP_ID_H	(0x9b)
 #define SC2336P_CHIP_ID_L	(0x3a)
+#define SENSOR_CHIP_ID ((SC2336P_CHIP_ID_H << 8) | SC2336P_CHIP_ID_L)
 #define SC2336P_REG_END		0xffff
 #define SC2336P_REG_DELAY	0xfffe
 #define SC2336P_SUPPORT_30FPS_SCLK (81000000)
@@ -271,7 +272,7 @@ unsigned int sc2336p_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 
 struct tx_isp_sensor_attribute sc2336p_attr={
 	.name = "sc2336p",
-	.chip_id = 0x9b3a,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,

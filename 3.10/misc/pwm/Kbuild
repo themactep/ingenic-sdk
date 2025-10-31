@@ -16,7 +16,8 @@ $(PWM_HAL_MODULE)-objs := $(OBJS2)
 DEFS =
 DEFS += -DCONFIG_PWM0
 DEFS += -DCONFIG_PWM1
-DEFS += -DCONFIG_PWM2
+# NOTE: leave PWM2 disabled to avoid conflict with motor driver (uses tcu_chn2)
+#DEFS += -DCONFIG_PWM2
 DEFS += -DCONFIG_PWM3
 #DEFS += -DCONFIG_PWM4
 #DEFS += -DCONFIG_PWM5

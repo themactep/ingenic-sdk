@@ -23,6 +23,7 @@
 #define SENSOR_VERSION "H20190906a"
 #define SENSOR_CHIP_ID_H (0xcd)
 #define SENSOR_CHIP_ID_L (0x01)
+#define SENSOR_CHIP_ID 0xcd01
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -222,7 +223,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
-	.chip_id = 0xcd01,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,

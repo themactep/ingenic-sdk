@@ -24,6 +24,13 @@ ifeq ($(KERNEL_VERSION),3.10)
     include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
 endif
 
+
+# Build TCU allocator (central ownership registry) for 3.10
+ifeq ($(KERNEL_VERSION),3.10)
+    $(info Building TCU allocator for Kernel $(KERNEL_VERSION))
+    include $(src)/$(KERNEL_VERSION)/misc/tcu_alloc/Kbuild
+endif
+
 ifeq ($(KERNEL_VERSION),3.10)
     $(info Building PWM for Kernel $(KERNEL_VERSION))
     include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild

@@ -27,6 +27,7 @@
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_M (0x29)
 #define SENSOR_CHIP_ID_L (0x02)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -178,7 +179,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
-	.chip_id = 0x232902,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = 0x3d,

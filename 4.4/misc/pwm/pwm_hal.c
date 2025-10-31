@@ -314,8 +314,22 @@ static int jz_pwm_probe(struct platform_device *pdev)
 		sprintf(pd_name, "pwm-jz.%d", i);
 		gpwm->pwm_device_t[i]->pwm_device = devm_pwm_get(&pdev->dev, pd_name);
 		if (IS_ERR(gpwm->pwm_device_t[i]->pwm_device)) {
-			dev_err(&pdev->dev, "devm_pwm_get error !");
-			return -ENOMEM;
+			int err = PTR_ERR(gpwm->pwm_device_t[i]->pwm_device);
+			/* If provider not ready yet, skip this channel (it may not be configured) */
+			if (err == -EPROBE_DEFER) {
+				dev_dbg(&pdev->dev, "PWM provider not ready for channel %d, skipping...\n", i);
+				gpwm->pwm_device_t[i]->pwm_device = NULL;
+				continue;
+			}
+			/* If busy, skip this channel but keep the driver alive */
+			if (err == -EBUSY) {
+				dev_warn(&pdev->dev, "PWM channel %d busy (error %d), skipping...\n", i, err);
+				gpwm->pwm_device_t[i]->pwm_device = NULL;
+				continue;
+			}
+			/* Other errors are fatal */
+			dev_err(&pdev->dev, "devm_pwm_get error for channel %d: %d\n", i, err);
+			return err;
 		}
 
 		gpwm->pwm_device_t[i]->duty = -1;

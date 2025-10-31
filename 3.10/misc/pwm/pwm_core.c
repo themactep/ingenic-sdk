@@ -19,6 +19,7 @@
 #include <soc/gpio.h>
 #include <linux/slab.h>
 
+
 #if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
 #define PWM_NUM		8
 #else /* other soc type */
@@ -26,6 +27,64 @@
 #endif
 static int jz_pwm_en[PWM_NUM] = {0};
 #define PWM_DRIVER_VERSION "H20210412a"
+
+/* PWM channels are selected via Kbuild/Kconfig (CONFIG_PWMn).
+ * Do not auto-enable here to allow other drivers (e.g. motor) to own specific TCU channels.
+ */
+
+#include "../tcu_alloc/tcu_alloc.h"
+
+static char *pwm_tcu_channels;
+module_param_named(tcu_channels, pwm_tcu_channels, charp, 0644);
+MODULE_PARM_DESC(tcu_channels, "Comma-separated TCU channels for PWM (e.g., 0,1,3)");
+
+static bool pwm_selected[PWM_NUM];
+
+static void pwm_parse_channel_list(void)
+{
+	int i;
+	for (i = 0; i < PWM_NUM; i++)
+		pwm_selected[i] = false;
+	if (pwm_tcu_channels && *pwm_tcu_channels) {
+		char *str = kstrdup(pwm_tcu_channels, GFP_KERNEL);
+		char *p, *tok;
+		if (!str)
+			return;
+		p = str;
+		while ((tok = strsep(&p, ",")) != NULL) {
+			unsigned long v;
+			if (!kstrtoul(tok, 0, &v) && v < PWM_NUM)
+				pwm_selected[v] = true;
+		}
+		kfree(str);
+	} else {
+		/* Fallback to compiled selections */
+		#ifdef CONFIG_PWM0
+		pwm_selected[0] = true;
+		#endif
+		#ifdef CONFIG_PWM1
+		pwm_selected[1] = true;
+		#endif
+		#ifdef CONFIG_PWM2
+		pwm_selected[2] = true;
+		#endif
+		#ifdef CONFIG_PWM3
+		pwm_selected[3] = true;
+		#endif
+		#ifdef CONFIG_PWM4
+		pwm_selected[4] = true;
+		#endif
+		#ifdef CONFIG_PWM5
+		pwm_selected[5] = true;
+		#endif
+		#ifdef CONFIG_PWM6
+		pwm_selected[6] = true;
+		#endif
+		#ifdef CONFIG_PWM7
+		pwm_selected[7] = true;
+		#endif
+	}
+}
 #ifdef CONFIG_SOC_T40
 struct jz_pwm_device{
 	short id;
@@ -73,6 +132,7 @@ struct jz_pwm_device{
 	const char *label;
 	struct jz_tcu_chn *tcu_cha;
 };
+
 #endif
 
 struct jz_pwm_chip {
@@ -126,8 +186,10 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
 #else
 	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 
+
 	jz_tcu_start_counter(tcu_pwm);
 	jz_tcu_enable_counter(tcu_pwm);
+	pr_debug("pwm_core: enable hwpwm=%u\n", pwm->hwpwm);
 
 	jz_pwm_en[tcu_pwm->index] = 1;
 #endif
@@ -178,6 +240,8 @@ static void jz_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
 
 	jz_tcu_stop_counter(tcu_pwm);
 	jzgpio_set_func(tcu_pwm->gpio / 32,tcu_pwm->init_level > 0 ? GPIO_OUTPUT0 : GPIO_OUTPUT1,BIT(tcu_pwm->gpio & 0x1f));
+	pr_debug("pwm_core: disable hwpwm=%u\n", pwm->hwpwm);
+
 	jz_pwm_en[tcu_pwm->index] = 0;
 #endif
 }
@@ -191,6 +255,8 @@ static int jz_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
 	int prescaler = 0; /*prescale = 0,1,2,3,4,5*/
 	static int pwm_func[PWM_NUM] = {0};
 #ifdef CONFIG_SOC_T40
+	pr_debug("pwm_core: config hwpwm=%u duty_ns=%d period_ns=%d\n", pwm->hwpwm, duty_ns, period_ns);
+
 	struct ingenic_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 #else
 	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
@@ -301,6 +367,8 @@ int jz_pwm_set_polarity(struct pwm_chip *chip,struct pwm_device *pwm, enum pwm_p
 	struct jz_tcu_chn *tcu_pwm = jz->pwm_chrs->tcu_cha;
 #endif
 
+	pr_debug("pwm_core: set_polarity hwpwm=%u polarity=%d\n", pwm->hwpwm, polarity);
+
 	if (polarity == PWM_POLARITY_INVERSED)
 		tcu_pwm->init_level = 0;
 
@@ -325,6 +393,8 @@ static int jz_pwm_probe(struct platform_device *pdev)
 	struct jz_pwm_chip *jz;
 	int ret;
 
+	pr_debug("pwm_core: probe begin for %s\n", dev_name(&pdev->dev));
+
 	jz = kzalloc(sizeof(struct jz_pwm_chip), GFP_KERNEL);
 
 	jz->pwm_chrs = kzalloc(sizeof(struct jz_pwm_device),GFP_KERNEL);
@@ -345,19 +415,39 @@ static int jz_pwm_probe(struct platform_device *pdev)
 
 #ifdef CONFIG_SOC_T40
 	jz->pwm_chrs->tcu_cha = (struct ingenic_tcu_chn *)jz->cell->platform_data;
+	{
+		int ch = jz->pwm_chrs->tcu_cha->cib.id;
+		ret = tcu_alloc_claim(ch, "pwm");
+		if (ret) {
+			const char *own = tcu_alloc_owner(ch);
+			dev_err(&pdev->dev, "TCU ch%d busy (owner=%s), PWM refusing to bind: %d\n", ch, own ? own : "unknown", ret);
+			goto err_free;
+		}
+	}
 #else
 	jz->pwm_chrs->tcu_cha = (struct jz_tcu_chn *)jz->cell->platform_data;
+	{
+		int ch = jz->pwm_chrs->tcu_cha->index;
+		ret = tcu_alloc_claim(ch, "pwm");
+		if (ret) {
+			const char *own = tcu_alloc_owner(ch);
+			dev_err(&pdev->dev, "TCU ch%d busy (owner=%s), PWM refusing to bind: %d\n", ch, own ? own : "unknown", ret);
+			goto err_free;
+		}
+	}
 #endif
 
 	ret = pwmchip_add(&jz->chip);
-	if (ret < 0) {
-		printk("%s[%d] ret = %d\n", __func__,__LINE__, ret);
-		goto err_free;
-	}
+	if (ret < 0)
+		pr_err("pwm_core: pwmchip_add failed for %s: %d\n", dev_name(&pdev->dev), ret);
+	else
+		pr_info("pwm_core: bound to %s (claimed TCU ch)\n", dev_name(&pdev->dev));
 
 	if (pdev->dev.driver)
 		printk("%s[%d] d_name = %s\n", __func__,__LINE__,pdev->dev.driver->name);
 	platform_set_drvdata(pdev, jz);
+	if (pdev->dev.driver)
+		pr_debug("pwm_core: %s bound to driver %s\n", dev_name(&pdev->dev), pdev->dev.driver->name);
 
 	return 0;
 err_free:
@@ -371,10 +461,18 @@ static int jz_pwm_remove(struct platform_device *pdev)
 	struct jz_pwm_chip *jz = platform_get_drvdata(pdev);
 	int ret;
 
+	/* Release TCU channel ownership */
+#ifdef CONFIG_SOC_T40
+	if (jz && jz->pwm_chrs && jz->pwm_chrs->tcu_cha)
+		tcu_alloc_release(jz->pwm_chrs->tcu_cha->cib.id, "pwm");
+#else
+	if (jz && jz->pwm_chrs && jz->pwm_chrs->tcu_cha)
+		tcu_alloc_release(jz->pwm_chrs->tcu_cha->index, "pwm");
+#endif
+
 	ret = pwmchip_remove(&jz->chip);
 	if (ret < 0)
 		return ret;
-
 
 	return 0;
 }
@@ -406,6 +504,7 @@ static struct platform_driver jz_pwm1_driver = {
 	},
 #else
 	.driver = {
+
 		.name = "tcu_chn1",
 		.owner = THIS_MODULE,
 	},
@@ -482,7 +581,7 @@ static struct platform_driver jz_pwm5_driver = {
 	},
 #else
 	.driver = {
-		.name = "tcu_chn05",
+		.name = "tcu_chn5",
 		.owner = THIS_MODULE,
 	},
 #endif
@@ -539,29 +638,67 @@ static struct platform_driver jz_pwm7_driver = {
 
 static int __init pwm_init(void)
 {
+	/* Configure max channels and parse selection mask */
+	tcu_alloc_set_max_channels(PWM_NUM);
+	pwm_parse_channel_list();
+
+	/* Debug: announce platform driver registrations for each channel */
 #ifdef CONFIG_PWM0
-	platform_driver_register(&jz_pwm0_driver);
+	pr_debug("pwm_core: registering driver tcu_chn0\n");
 #endif
 #ifdef CONFIG_PWM1
-	platform_driver_register(&jz_pwm1_driver);
+	pr_debug("pwm_core: registering driver tcu_chn1\n");
 #endif
 #ifdef CONFIG_PWM2
-	platform_driver_register(&jz_pwm2_driver);
+	pr_debug("pwm_core: registering driver tcu_chn2\n");
 #endif
 #ifdef CONFIG_PWM3
-	platform_driver_register(&jz_pwm3_driver);
+	pr_debug("pwm_core: registering driver tcu_chn3\n");
 #endif
 #ifdef CONFIG_PWM4
-	platform_driver_register(&jz_pwm4_driver);
+	pr_debug("pwm_core: registering driver tcu_chn4\n");
 #endif
 #ifdef CONFIG_PWM5
-	platform_driver_register(&jz_pwm5_driver);
+	pr_debug("pwm_core: registering driver tcu_chn5\n");
 #endif
 #ifdef CONFIG_PWM6
-	platform_driver_register(&jz_pwm6_driver);
+	pr_debug("pwm_core: registering driver tcu_chn6\n");
 #endif
 #ifdef CONFIG_PWM7
-	platform_driver_register(&jz_pwm7_driver);
+	pr_debug("pwm_core: registering driver tcu_chn7\n");
+#endif
+
+#ifdef CONFIG_PWM0
+	if (pwm_selected[0])
+		platform_driver_register(&jz_pwm0_driver);
+#endif
+#ifdef CONFIG_PWM1
+	if (pwm_selected[1])
+		platform_driver_register(&jz_pwm1_driver);
+#endif
+#ifdef CONFIG_PWM2
+	if (pwm_selected[2])
+		platform_driver_register(&jz_pwm2_driver);
+#endif
+#ifdef CONFIG_PWM3
+	if (pwm_selected[3])
+		platform_driver_register(&jz_pwm3_driver);
+#endif
+#ifdef CONFIG_PWM4
+	if (pwm_selected[4])
+		platform_driver_register(&jz_pwm4_driver);
+#endif
+#ifdef CONFIG_PWM5
+	if (pwm_selected[5])
+		platform_driver_register(&jz_pwm5_driver);
+#endif
+#ifdef CONFIG_PWM6
+	if (pwm_selected[6])
+		platform_driver_register(&jz_pwm6_driver);
+#endif
+#ifdef CONFIG_PWM7
+	if (pwm_selected[7])
+		platform_driver_register(&jz_pwm7_driver);
 #endif
 	printk("The version of PWM driver is %s\n", PWM_DRIVER_VERSION);
 	return 0;
@@ -570,28 +707,36 @@ static int __init pwm_init(void)
 static void __exit pwm_exit(void)
 {
 #ifdef CONFIG_PWM0
-	platform_driver_unregister(&jz_pwm0_driver);
+	if (pwm_selected[0])
+		platform_driver_unregister(&jz_pwm0_driver);
 #endif
 #ifdef CONFIG_PWM1
-	platform_driver_unregister(&jz_pwm1_driver);
+	if (pwm_selected[1])
+		platform_driver_unregister(&jz_pwm1_driver);
 #endif
 #ifdef CONFIG_PWM2
-	platform_driver_unregister(&jz_pwm2_driver);
+	if (pwm_selected[2])
+		platform_driver_unregister(&jz_pwm2_driver);
 #endif
 #ifdef CONFIG_PWM3
-	platform_driver_unregister(&jz_pwm3_driver);
+	if (pwm_selected[3])
+		platform_driver_unregister(&jz_pwm3_driver);
 #endif
 #ifdef CONFIG_PWM4
-	platform_driver_unregister(&jz_pwm4_driver);
+	if (pwm_selected[4])
+		platform_driver_unregister(&jz_pwm4_driver);
 #endif
 #ifdef CONFIG_PWM5
-	platform_driver_unregister(&jz_pwm5_driver);
+	if (pwm_selected[5])
+		platform_driver_unregister(&jz_pwm5_driver);
 #endif
 #ifdef CONFIG_PWM6
-	platform_driver_unregister(&jz_pwm6_driver);
+	if (pwm_selected[6])
+		platform_driver_unregister(&jz_pwm6_driver);
 #endif
 #ifdef CONFIG_PWM7
-	platform_driver_unregister(&jz_pwm7_driver);
+	if (pwm_selected[7])
+		platform_driver_unregister(&jz_pwm7_driver);
 #endif
 }
 #undef PWM_NUM
