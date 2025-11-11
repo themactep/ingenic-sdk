@@ -14,6 +14,10 @@ static struct gpio_keys_button *new_buttons;
 static struct gpio_keys_platform_data new_button_data;
 static struct platform_device *new_button_device;
 
+static void gpio_keys_device_release(struct device *dev)
+{
+	/* nothing to free here; platform data owned by module */
+}
 static char *gpio_config = "";
 module_param(gpio_config, charp, 0000);
 MODULE_PARM_DESC(gpio_config, "GPIO configuration: <KEYCODE,GPIO,ACTIVE_LOW>;...");
@@ -93,6 +97,7 @@ static int __init add_gpio_keys_init(void)
 	}
 
 	new_button_device->dev.platform_data = &new_button_data;
+		new_button_device->dev.release = gpio_keys_device_release;
 
 	// Unregister the existing device
 	platform_device_unregister(&jz_button_device);
@@ -117,6 +122,12 @@ static void __exit add_gpio_keys_exit(void)
 	// Clear the additional buttons data
 	int existing_buttons = board_button_data.nbuttons;
 	int i;
+
+		if (new_button_device) {
+			platform_device_unregister(new_button_device);
+			new_button_device = NULL;
+		}
+
 
 	for (i = existing_buttons; i < new_button_data.nbuttons; i++) {
 		new_buttons[i].code = 0;
