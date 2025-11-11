@@ -113,7 +113,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x9750,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -141,7 +141,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 #if 1
@@ -637,9 +636,6 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*960 */
 	{
@@ -668,8 +664,7 @@ static struct regval_list sensor_stream_off[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-int sensor_read(struct v4l2_subdev *sd, uint16_t reg,
-		unsigned char *value) {
+int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {
@@ -694,8 +689,7 @@ int sensor_read(struct v4l2_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int sensor_write(struct v4l2_subdev *sd, uint16_t reg,
-		 unsigned char value) {
+int sensor_write(struct v4l2_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -769,11 +763,10 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 }
 
 static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
-
-
 	int ret = 0;
 	/* low 4 bits are fraction bits */
 	unsigned int expo = value << 4;
+
 	ret = sensor_write(sd, 0x3502, (unsigned char) (expo & 0xff));
 	if (ret < 0)
 		return ret;
@@ -874,6 +867,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	}
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
+
 	ret += sensor_write(sd, 0x3208, 0x00);
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
@@ -1091,7 +1085,6 @@ static int sensor_probe(struct i2c_client *client,
 	}
 	clk_set_rate(sensor->mclk, 24000000);
 	clk_enable(sensor->mclk);
-
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)
 		goto err_set_sensor_gpio;
@@ -1115,11 +1108,11 @@ static int sensor_probe(struct i2c_client *client,
 
 	/*
 	 *(volatile unsigned int*)(0xb000007c) = 0x20000020;
-	 while (*(volatile unsigned int*)(0xb000007c) & (1 << 28));
+	 * while (*(volatile unsigned int*)(0xb000007c) & (1 << 28));
 	 */
 
 	/*
-	   convert sensor-gain into isp-gain,
+	  convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 0x3f446;
 	sensor_attr.max_dgain = 0;
@@ -1137,7 +1130,6 @@ err_set_sensor_gpio:
 	clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 
