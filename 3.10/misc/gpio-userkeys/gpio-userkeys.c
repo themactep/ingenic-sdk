@@ -2,6 +2,7 @@
 #include <linux/input.h>
 #include <linux/module.h>
 #include <linux/platform_device.h>
+#include <linux/types.h> /* for bool in old headers */
 #include <linux/slab.h>
 
 extern struct platform_device jz_button_device;
