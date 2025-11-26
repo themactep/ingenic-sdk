@@ -12,6 +12,7 @@
 #include <linux/ioctl.h>
 #include <linux/miscdevice.h>
 #include <linux/mutex.h>
+#include <linux/string.h>
 #include <jz_proc.h>
 
 #include <linux/proc_fs.h>
@@ -63,12 +64,23 @@ MODULE_PARM_DESC(cim_gpio, "Cim GPIO NUM");
 #define I2C_READ  1
 
 #define MAX_DETECTED_SENSORS 4
+#define MAX_I2C_SCAN_RESULTS 128
 
 struct i2c_trans {
 	uint32_t addr;
 	uint32_t r_w;
 	uint32_t data;
 	uint32_t datalen;
+};
+
+// Structure to store I2C scan results for diagnostics
+struct i2c_scan_result {
+	uint8_t i2c_addr;
+	uint8_t responded;
+	uint32_t reg_values[8];  // Store up to 8 register values
+	uint32_t reg_addrs[8];   // Store corresponding register addresses
+	uint8_t num_regs;
+	char sensor_name[32];    // Name if matched, empty if not
 };
 
 uint8_t *sclk_name;
@@ -181,6 +193,7 @@ SENSOR_INFO_T g_sinfo[] =
 	{"os04a10",  0x36,  "cgu_cim", 24000000, {0x53, 0x04, 0x41}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
 	{"os04b10", 0x3c,  "cgu_cim", 24000000, {0x43, 0x08, 0x01}, 1, {0x02, 0x03, 0x04}, 1, 3, NULL},
 	{"os04c10",  0x36,  "cgu_cim", 24000000, {0x53, 0x04}, 1, {0x300a, 0x300b}, 2, 2, NULL},
+	{"os04d10", 0x3c,  "cgu_cim", 24000000, {0x53, 0x04}, 1, {0x02, 0x03}, 1, 2, NULL},
 	{"os05a10", 0x36,  "cgu_cim", 24000000, {0x53, 0x05, 0x41}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
 	{"os08a10",  0x36,  "cgu_cim", 24000000, {0x53, 0x08, 0x41}, 1, {0x300a, 0x300b, 0x300c}, 2, 3, NULL},
 	{"ov2710", 0x36,  "cgu_cim", 24000000, {0x27, 0x10}, 1, {0x300a, 0x300b}, 2, 2, NULL},
@@ -260,6 +273,11 @@ static int8_t g_sensor_id = -1;
 static int8_t g_sensor_ids[MAX_DETECTED_SENSORS];
 static int8_t g_num_detected_sensors = 0;
 static struct mutex g_mutex;
+
+// Global storage for I2C scan diagnostics
+static struct i2c_scan_result g_scan_results[MAX_I2C_SCAN_RESULTS];
+static int g_num_scan_results = 0;
+static int g_last_scan_complete = 0;
 
 int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, uint32_t *value)
 {
@@ -343,8 +361,10 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		return 0;
 	}
 
-    // Reset detection counter
+    // Reset detection counters and scan results
     g_num_detected_sensors = 0;
+    g_num_scan_results = 0;
+    g_last_scan_complete = 0;
 
 #ifdef CONFIG_SOC_T40
 	if(cim1_gpio != -1){
@@ -366,6 +386,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 
 	for (i = 0; i < scnt; i++) {
 		uint8_t idcnt = g_sinfo[i].id_cnt;
+		struct i2c_scan_result scan_res;
 
 #ifdef CONFIG_SOC_T40
 		g_sinfo[i].mclk_name = "div_cim1";
@@ -432,13 +453,30 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 			}
 		}
 
+		// Initialize scan result for diagnostics
+		memset(&scan_res, 0, sizeof(scan_res));
+		scan_res.i2c_addr = g_sinfo[i].i2c_addr;
+		scan_res.responded = 0;
+		scan_res.num_regs = 0;
+
 		for (j = 0; j < idcnt; j++) {
 			uint32_t value = 0;
 			ret = sensor_read(&g_sinfo[i], adap, g_sinfo[i].id_addr[j], &value);
+
+			// Store register read attempt for diagnostics
+			if (scan_res.num_regs < 8) {
+				scan_res.reg_addrs[scan_res.num_regs] = g_sinfo[i].id_addr[j];
+				scan_res.reg_values[scan_res.num_regs] = value;
+				scan_res.num_regs++;
+			}
+
 			if (0 != ret) {
 				printk("sinfo: [Error] Failed to read sensor at address 0x%x, value read: 0x%x\n", g_sinfo[i].id_addr[j], value);
 				break;
 			}
+
+			scan_res.responded = 1;  // Device responded to I2C
+
 			if(strcmp(g_sinfo[i].name, "ov2735b") == 0 && j == 2){
 				if (value == g_sinfo[i].id_value[j])
 					j++;
@@ -458,6 +496,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		if (j == idcnt) {
 			// Match!
 			g_sinfo[i].adap = adap;
+			strncpy(scan_res.sensor_name, g_sinfo[i].name, sizeof(scan_res.sensor_name) - 1);
 
 			// Add to detected sensors array if there's room
 			if (g_num_detected_sensors < MAX_DETECTED_SENSORS) {
@@ -475,6 +514,12 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 
 			// Continue checking all other sensors (don't exit)
 		}
+
+		// Store scan result if device responded or if we want to track all attempts
+		if (scan_res.responded && g_num_scan_results < MAX_I2C_SCAN_RESULTS) {
+			g_scan_results[g_num_scan_results] = scan_res;
+			g_num_scan_results++;
+		}
 	}
 
 	// Set g_sensor_id to the first detected sensor (for backward compatibility)
@@ -482,9 +527,30 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 		g_sensor_id = g_sensor_ids[0];
 		printk("sinfo: Total sensors detected: %d\n", g_num_detected_sensors);
 	} else {
-		printk("sinfo: [Info] Failed to find any sensors\n");
+		printk("sinfo: [Info] No matching sensors found in database\n");
 		g_sensor_id = -1;
 	}
+
+	// Mark scan as complete and print diagnostic summary
+	g_last_scan_complete = 1;
+	printk("sinfo: ========== I2C Scan Complete ==========\n");
+	printk("sinfo: Scanned %d sensor definitions\n", scnt);
+	printk("sinfo: Found %d I2C devices that responded\n", g_num_scan_results);
+	printk("sinfo: Matched %d known sensors\n", g_num_detected_sensors);
+
+	if (g_num_scan_results > 0) {
+		printk("sinfo: I2C devices detected (see /proc/jz/sinfo/info for details):\n");
+		for (i = 0; i < g_num_scan_results; i++) {
+			if (g_scan_results[i].sensor_name[0] != '\0') {
+				printk("sinfo:   - 0x%02X: %s (MATCHED)\n",
+					g_scan_results[i].i2c_addr, g_scan_results[i].sensor_name);
+			} else {
+				printk("sinfo:   - 0x%02X: Unknown device (responded but no ID match)\n",
+					g_scan_results[i].i2c_addr);
+			}
+		}
+	}
+	printk("sinfo: ========================================\n");
 
 	mutex_unlock(&g_mutex);
 	return 0;
@@ -720,39 +786,123 @@ static int sinfo_proc_show(struct seq_file *m, void *v)
 {
 	int i, j;
 
-	if (g_num_detected_sensors == 0) {
-		seq_printf(m, "No sensors found\n");
-	} else {
-		seq_printf(m, "Detected sensors (%d):\n", g_num_detected_sensors);
+	seq_printf(m, "========== Sensor Detection Report ==========\n\n");
+
+	if (!g_last_scan_complete) {
+		seq_printf(m, "No scan has been performed yet.\n");
+		seq_printf(m, "Run: echo 1 > /proc/jz/sinfo/info\n\n");
+		return 0;
+	}
+
+	// Show matched sensors
+	if (g_num_detected_sensors > 0) {
+		seq_printf(m, "MATCHED SENSORS (%d):\n", g_num_detected_sensors);
+		seq_printf(m, "-------------------------------------------\n");
 		for (i = 0; i < g_num_detected_sensors; i++) {
 			int8_t id = g_sensor_ids[i];
 
 			// Display basic sensor info
 			if (g_sinfo[id].adap) {
-				seq_printf(m, "%d: %s (I2C Bus: %d, Address: 0x%X)\n",
-						i+1, g_sinfo[id].name, g_sinfo[id].adap->nr, g_sinfo[id].i2c_addr);
+				seq_printf(m, "%d. %s\n", i+1, g_sinfo[id].name);
+				seq_printf(m, "   I2C Bus: %d\n", g_sinfo[id].adap->nr);
+				seq_printf(m, "   I2C Address: 0x%02X\n", g_sinfo[id].i2c_addr);
 			} else {
-				seq_printf(m, "%d: %s (I2C Bus: unknown, Address: 0x%X)\n",
-						i+1, g_sinfo[id].name, g_sinfo[id].i2c_addr);
+				seq_printf(m, "%d. %s\n", i+1, g_sinfo[id].name);
+				seq_printf(m, "   I2C Bus: unknown\n");
+				seq_printf(m, "   I2C Address: 0x%02X\n", g_sinfo[id].i2c_addr);
 			}
 
-			// Display ID values
-			seq_printf(m, "   ID Values: ");
+			seq_printf(m, "   Clock: %s @ %u Hz\n", g_sinfo[id].mclk_name, g_sinfo[id].clk);
+
+			// Display ID registers and values
+			seq_printf(m, "   ID Registers: ");
 			for (j = 0; j < g_sinfo[id].id_cnt; j++) {
-				seq_printf(m, "0x%X ", g_sinfo[id].id_value[j]);
+				seq_printf(m, "0x%04X%s", g_sinfo[id].id_addr[j],
+					(j < g_sinfo[id].id_cnt - 1) ? ", " : "");
 			}
 			seq_printf(m, "\n");
 
-			// Display ID registers
-			seq_printf(m, "   ID Registers: ");
+			seq_printf(m, "   ID Values:    ");
 			for (j = 0; j < g_sinfo[id].id_cnt; j++) {
-				seq_printf(m, "0x%X ", g_sinfo[id].id_addr[j]);
+				seq_printf(m, "0x%02X%s", g_sinfo[id].id_value[j],
+					(j < g_sinfo[id].id_cnt - 1) ? ", " : "");
+			}
+			seq_printf(m, "\n\n");
+		}
+
+		seq_printf(m, "Primary sensor: %s\n\n", g_sinfo[g_sensor_id].name);
+	} else {
+		seq_printf(m, "MATCHED SENSORS: None\n\n");
+	}
+
+	// Show all I2C devices that responded (including unmatched)
+	if (g_num_scan_results > 0) {
+		seq_printf(m, "ALL I2C DEVICES DETECTED (%d):\n", g_num_scan_results);
+		seq_printf(m, "-------------------------------------------\n");
+
+		for (i = 0; i < g_num_scan_results; i++) {
+			struct i2c_scan_result *res = &g_scan_results[i];
+
+			if (res->sensor_name[0] != '\0') {
+				seq_printf(m, "I2C Address 0x%02X: %s [MATCHED]\n",
+					res->i2c_addr, res->sensor_name);
+			} else {
+				seq_printf(m, "I2C Address 0x%02X: UNKNOWN DEVICE\n", res->i2c_addr);
+			}
+
+			if (res->num_regs > 0) {
+				seq_printf(m, "  Register reads:\n");
+				for (j = 0; j < res->num_regs; j++) {
+					seq_printf(m, "    0x%04X = 0x%02X\n",
+						res->reg_addrs[j], res->reg_values[j]);
+				}
 			}
 			seq_printf(m, "\n");
 		}
-
-		seq_printf(m, "Primary sensor: %s\n", g_sinfo[g_sensor_id].name);
+	} else {
+		seq_printf(m, "I2C DEVICES DETECTED: None responded\n\n");
 	}
+
+	// Provide helpful information for unknown devices
+	if (g_num_scan_results > g_num_detected_sensors) {
+		seq_printf(m, "SETUP HELP FOR UNKNOWN DEVICES:\n");
+		seq_printf(m, "-------------------------------------------\n");
+		seq_printf(m, "Found %d device(s) that responded but didn't match known sensors.\n\n",
+			g_num_scan_results - g_num_detected_sensors);
+
+		for (i = 0; i < g_num_scan_results; i++) {
+			struct i2c_scan_result *res = &g_scan_results[i];
+			if (res->sensor_name[0] == '\0') {
+				seq_printf(m, "Device at I2C address 0x%02X:\n", res->i2c_addr);
+				seq_printf(m, "  To add this sensor to the database, you need:\n");
+				seq_printf(m, "  1. Sensor model name\n");
+				seq_printf(m, "  2. ID register addresses (tried: ");
+				for (j = 0; j < res->num_regs; j++) {
+					seq_printf(m, "0x%04X%s", res->reg_addrs[j],
+						(j < res->num_regs - 1) ? ", " : "");
+				}
+				seq_printf(m, ")\n");
+				seq_printf(m, "  3. Expected ID values (read: ");
+				for (j = 0; j < res->num_regs; j++) {
+					seq_printf(m, "0x%02X%s", res->reg_values[j],
+						(j < res->num_regs - 1) ? ", " : "");
+				}
+				seq_printf(m, ")\n");
+				seq_printf(m, "  4. Clock frequency (currently using default)\n\n");
+			}
+		}
+	}
+
+	seq_printf(m, "CONFIGURATION:\n");
+	seq_printf(m, "-------------------------------------------\n");
+	seq_printf(m, "I2C Adapter: %d\n", i2c_adapter_nr);
+	seq_printf(m, "Reset GPIO: %d\n", reset_gpio);
+	seq_printf(m, "Power Down GPIO: %d\n", pwdn_gpio);
+	seq_printf(m, "\n");
+
+	seq_printf(m, "To re-scan: echo 1 > /proc/jz/sinfo/info\n");
+	seq_printf(m, "=============================================\n");
+
 	return 0;
 }
 
