@@ -29,11 +29,11 @@ enum jz_motor_cnt {
 };
 
 /* ioctl cmd */
-#define MOTOR_STOP		0x1
-#define MOTOR_RESET		0x2
-#define MOTOR_MOVE		0x3
+#define MOTOR_STOP			0x1
+#define MOTOR_RESET			0x2
+#define MOTOR_MOVE			0x3
 #define MOTOR_GET_STATUS	0x4
-#define MOTOR_SPEED		0x5
+#define MOTOR_SPEED			0x5
 #define MOTOR_GOBACK		0x6
 #define MOTOR_CRUISE		0x7
 #define MOTOR_GET_MAXSTEPS	0x8

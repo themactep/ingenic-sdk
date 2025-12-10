@@ -1148,7 +1148,6 @@ error_get_irq:
 		motor->min_pos_irq = 0;
 		motor->max_pos_irq = 0;
 	}
-	kfree(mdev);
 error_devm_kzalloc:
 	return ret;
 }
@@ -1201,8 +1200,6 @@ static int motor_remove(struct platform_device *pdev)
 		proc_remove(mdev->proc);
 
 	misc_deregister(&mdev->misc_dev);
-
-	kfree(mdev);
 
 	return 0;
 }
