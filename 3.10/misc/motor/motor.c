@@ -2,7 +2,7 @@
 /*
  * motor.c - Ingenic motor driver
  * (c) 2015 Ingenic Semiconductor Co.,Ltd
- * (c) 2024 thingino
+ * (c) 2025 Thingino Project
  */
 
 #include <linux/clk.h>
@@ -304,12 +304,7 @@ static void motor_move_step(struct motor_device *mdev, int index)
 
 static void move_to_min_pose_ops(struct motor_driver *motor)
 {
-	// printk("%s min %d\n", motor->pdata->name, __LINE__);
 	if (motor->state == MOTOR_OPS_RESET) {
-		/* motor->state = MOTOR_OPS_STOP; */
-		/* // complete(&motor->reset_completion); */
-		/* motor->move_dir = MOTOR_MOVE_RIGHT_UP; */
-	} else if (motor->state == MOTOR_OPS_NORMAL) {
 		if (motor->move_dir == MOTOR_MOVE_LEFT_DOWN) {
 			motor->state = MOTOR_OPS_STOP;
 		}
@@ -318,7 +313,6 @@ static void move_to_min_pose_ops(struct motor_driver *motor)
 	}
 
 	motor->cur_steps = 0;
-	//printk("%s min; cur_steps = %d max_steps = %d\n", motor->pdata->name,motor->cur_steps, motor->max_steps);
 }
 
 static void move_to_max_pose_ops(struct motor_driver *motor, int index)
@@ -339,7 +333,6 @@ static void move_to_max_pose_ops(struct motor_driver *motor, int index)
 	}
 
 	motor->cur_steps = motor->max_steps;
-	//printk("%s max; cur_steps = %d max_steps = %d\n", motor->pdata->name,motor->cur_steps, motor->max_steps);
 }
 
 static inline void calc_slow_mode(struct motor_device *mdev, unsigned int steps)
@@ -474,9 +467,6 @@ static long motor_ops_move(struct motor_device *mdev, int x, int y)
 			y = 0;
 	}
 
-	/*x_dir = x > 0 ? MOTOR_MOVE_RIGHT_UP : (x < 0 ? MOTOR_MOVE_LEFT_DOWN : MOTOR_MOVE_STOP);*/
-	/*y_dir = y > 0 ? MOTOR_MOVE_RIGHT_UP : (y < 0 ? MOTOR_MOVE_LEFT_DOWN : MOTOR_MOVE_STOP);*/
-
 	x_dir = x > 0 ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN;
 	y_dir = y > 0 ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN;
 
@@ -508,10 +498,6 @@ static long motor_ops_move(struct motor_device *mdev, int x, int y)
 	spin_unlock_irqrestore(&mdev->slock, flags);
 
 	mutex_unlock(&mdev->dev_mutex);
-
-	/* printk("%s%d x=%d y=%d t=%d\n", __func__, __LINE__,
-		mdev->dst_move.one.x, mdev->dst_move.one.y, mdev->dst_move.times); */
-	/* printk("x_dir=%d, y_dir=%d\n", x_dir, y_dir); */
 
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_counter_begin(mdev->tcu);
@@ -600,8 +586,6 @@ static long motor_ops_goback(struct motor_device *mdev)
 	cx = motors[PAN_MOTOR].cur_steps;
 	cy = motors[TILT_MOTOR].cur_steps;
 
-	//printk("sx=%d, sy=%d, cx=%d, cy=%d\n", sx, sy, cx, cy);
-
 	return motor_ops_move(mdev, sx-cx, sy-cy);
 }
 
@@ -673,8 +657,6 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 	int times = 0;
 	struct motor_message msg;
 
-	/* printk("%s%d\n", __func__, __LINE__); */
-
 	if (mdev == NULL || rdata == NULL) {
 		printk("ERROR: the parameters of %s is wrong!!\n", __func__);
 		return -EPERM;
@@ -698,9 +680,11 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		spin_lock_irqsave(&mdev->slock, flags);
 
 		for (index = 0; index < NUMBER_OF_MOTORS; index++) {
-			mdev->motors[index].move_dir = MOTOR_MOVE_RIGHT_UP;
-			mdev->motors[index].state = MOTOR_OPS_RESET;
-			mdev->motors[index].cur_steps = 0x0;
+			struct motor_driver *drv = &mdev->motors[index];
+			int half = drv->max_steps > 0 ? drv->max_steps / 2 : 0;
+			drv->move_dir = MOTOR_MOVE_RIGHT_UP;
+			drv->state = MOTOR_OPS_RESET;
+			drv->cur_steps = half > 0 ? half : 0;
 		}
 		mdev->dst_move.one.x = mdev->motors[PAN_MOTOR].max_steps;
 		mdev->dst_move.one.y = mdev->motors[TILT_MOTOR].max_steps;
@@ -728,11 +712,31 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 			} while (ret == -ERESTARTSYS);
 		}
 	}
-	/* printk("x_max = %d, y_max = %d\n",
-		mdev->motors[PAN_MOTOR].max_steps, mdev->motors[TILT_MOTOR].max_steps); */
-	ret = motor_ops_goback(mdev);
-	/* ret = motor_ops_move(mdev, (mdev->motors[PAN_MOTOR].max_steps) >> 1, (mdev->motors[TILT_MOTOR].max_steps) >> 1); */
+	/*
+	 * At this point we have swept both axes to their mechanical limits.
+	 * Run a reverse move back to the origin so max step counts reflect
+	 * the total travel range, then finish at center via motor_ops_goback().
+	 */
+	ret = motor_ops_move(mdev,
+			     -mdev->motors[PAN_MOTOR].cur_steps,
+			     -mdev->motors[TILT_MOTOR].cur_steps);
 
+	do {
+		msleep(10);
+		motor_get_message(mdev, &msg);
+		times++;
+		if (times > 1000) {
+			printk("ERROR:wait motor timeout %s%d\n", __func__, __LINE__);
+			ret = -ETIMEDOUT;
+			goto exit;
+		}
+	} while (msg.status == MOTOR_IS_RUNNING);
+
+	/* Finish reset with the fixture sitting at logical center. */
+	ret = motor_ops_goback(mdev);
+	if (ret)
+		goto exit;
+	times = 0;
 	do {
 		msleep(10);
 		motor_get_message(mdev, &msg);
@@ -824,11 +828,9 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	switch (cmd) {
 		case MOTOR_STOP:
-			/*printk("MOTOR_STOP\n");*/
 			motor_ops_stop(mdev);
 			break;
 		case MOTOR_RESET:
-			/*printk("MOTOR_RESET\n");*/
 			{
 				struct motor_reset_data rdata;
 				if (arg == 0) {
@@ -849,7 +851,6 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				break;
 			}
 		case MOTOR_MOVE:
-			/*printk("MOTOR_MOVE\n");*/
 			{
 				struct motors_steps dst;
 				if (copy_from_user(&dst, (void __user *)arg, sizeof(struct motors_steps))) {
@@ -860,7 +861,6 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			}
 			break;
 		case MOTOR_GET_STATUS:
-			/*printk("MOTOR_GET_STATUS\n");*/
 			{
 				struct motor_message msg;
 
@@ -872,7 +872,6 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			}
 			break;
 		case MOTOR_SPEED:
-			/*printk("MOTOR_SPEED\n");*/
 			{
 				int speed;
 
@@ -885,11 +884,9 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			}
 			break;
 		case MOTOR_GOBACK:
-			/*printk("MOTOR_GOBACK\n");*/
 			ret = motor_ops_goback(mdev);
 			break;
 		case MOTOR_CRUISE:
-			/*printk("MOTOR_CRUISE\n");*/
 			ret = motor_ops_cruise(mdev);
 			break;
 		default:
@@ -1072,6 +1069,22 @@ static int motor_probe(struct platform_device *pdev)
 	mdev->motors[PAN_MOTOR].max_steps = hmaxstep + 100;
 	mdev->motors[TILT_MOTOR].max_steps = vmaxstep + 30;
 
+	/*
+	 * Seed the logical position at mid travel so the very first
+	 * MOTORS_MOVE request can safely step in the negative direction.
+	 * Otherwise the guard in motor_ops_move() treats cur_steps == 0 as
+	 * already at the minimum stop and clamps any backward motion, which
+	 * prevents the initial two-way homing sweep from ever starting.
+	 */
+	if (mdev->motors[PAN_MOTOR].max_steps > 0) {
+		int half = mdev->motors[PAN_MOTOR].max_steps / 2;
+		mdev->motors[PAN_MOTOR].cur_steps = half > 0 ? half : 1;
+	}
+	if (mdev->motors[TILT_MOTOR].max_steps > 0) {
+		int half = mdev->motors[TILT_MOTOR].max_steps / 2;
+		mdev->motors[TILT_MOTOR].cur_steps = half > 0 ? half : 1;
+	}
+
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_channel_to_virq(mdev->tcu);
 	mdev->run_step_irq = mdev->tcu->virq[0];
@@ -1117,7 +1130,6 @@ static int motor_probe(struct platform_device *pdev)
 
 	motor_set_default(mdev);
 	mdev->flag = 0;
-	/* printk("%s%d\n", __func__, __LINE__); */
 #ifdef CONFIG_SOC_T40
 	ingenic_tcu_counter_begin(mdev->tcu);
 #endif
