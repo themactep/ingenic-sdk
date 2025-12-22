@@ -231,29 +231,71 @@ static void motor_set_direction(struct motor_device *mdev, int move_direction)
 	}
 }
 
-static void motor_set_default(struct motor_device *mdev)
+// motor_power_off disables all motor GPIO pins to cut power
+// When gpio_invert=true (invert_gpio_dir=1): set to HIGH (1) to cut power
+// When gpio_invert=false (invert_gpio_dir=0): set to LOW (0) to cut power
+static void motor_power_off(struct motor_device *mdev)
 {
 	int index;
 	int value;
-
 	struct motor_driver *motor = NULL;
-	mdev->dev_state = MOTOR_OPS_STOP;
+
+	/* Power-off state depends on inversion setting */
+	/* invert_gpio_dir=1 (true): LOW=energize, HIGH=cut -> value=1 */
+	/* invert_gpio_dir=0 (false): HIGH=energize, LOW=cut -> value=0 */
+	value = (invert_gpio_dir & 0x1);
+
+	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
+		motor = &mdev->motors[index];
+
+		if (motor->pdata->motor_st1_gpio != -1)
+			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
+		if (motor->pdata->motor_st2_gpio != -1)
+			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
+		if (motor->pdata->motor_st3_gpio != -1)
+			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
+		if (motor->pdata->motor_st4_gpio != -1)
+			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
+	}
+}
+
+// motor_power_on re-enables motor GPIO pins as outputs
+// Called before motor movement to energize the coils
+static void motor_power_on(struct motor_device *mdev)
+{
+	int index;
+	int value;
+	struct motor_driver *motor = NULL;
 
 	value = ((0 ^ invert_gpio_dir) & 0x1);
 
 	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		motor = &mdev->motors[index];
-		motor->state = MOTOR_OPS_STOP;
 
-		if (motor->pdata->motor_st1_gpio)
+		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
-		if (motor->pdata->motor_st2_gpio)
+		if (motor->pdata->motor_st2_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
-		if (motor->pdata->motor_st3_gpio)
+		if (motor->pdata->motor_st3_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
-		if (motor->pdata->motor_st4_gpio)
+		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
 	}
+}
+
+static void motor_set_default(struct motor_device *mdev)
+{
+	int index;
+	struct motor_driver *motor = NULL;
+	mdev->dev_state = MOTOR_OPS_STOP;
+
+	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
+		motor = &mdev->motors[index];
+		motor->state = MOTOR_OPS_STOP;
+	}
+
+	/* Cut power to motor coils */
+	motor_power_off(mdev);
 
 	return;
 }
@@ -477,6 +519,9 @@ static long motor_ops_move(struct motor_device *mdev, int x, int y)
 		return 0;
 	}
 
+	/* Enable motor GPIO outputs before movement */
+	motor_power_on(mdev);
+
 	mutex_lock(&mdev->dev_mutex);
 	spin_lock_irqsave(&mdev->slock, flags);
 
@@ -597,6 +642,9 @@ static long motor_ops_cruise(struct motor_device *mdev)
 
 	motor_ops_goback(mdev);
 
+	/* Enable motor GPIO outputs before cruise */
+	motor_power_on(mdev);
+
 	mutex_lock(&mdev->dev_mutex);
 	spin_lock_irqsave(&mdev->slock, flags);
 
@@ -676,6 +724,9 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		mutex_unlock(&mdev->dev_mutex);
 	} else {
 		/* driver calculate max steps. */
+		/* Enable motor GPIO outputs before reset/homing */
+		motor_power_on(mdev);
+
 		mutex_lock(&mdev->dev_mutex);
 		spin_lock_irqsave(&mdev->slock, flags);
 
