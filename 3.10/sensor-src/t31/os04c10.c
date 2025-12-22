@@ -2851,6 +2851,7 @@ static int sensor_probe(struct i2c_client *client,
 			switch (sensor_max_fps) {
 			case TX_SENSOR_MAX_FPS_30:
 				wsize = &sensor_win_sizes[0];
+				sensor_info.max_fps = 30;
 				sensor_attr.max_integration_time_native = 0x626 - 8;
 				sensor_attr.integration_time_limit = 0x626 - 8;
 				sensor_attr.total_width = 0x85c * 2;
@@ -2865,6 +2866,7 @@ static int sensor_probe(struct i2c_client *client,
 			switch (sensor_max_fps) {
 			    case TX_SENSOR_MAX_FPS_30:
 				wsize = &sensor_win_sizes[5];
+				sensor_info.max_fps = 30;
 				sensor_attr.mipi.image_twidth = 2448;
 				sensor_attr.mipi.image_theight = 1520;
 				sensor_attr.max_integration_time_native = 0x626 - 8;
@@ -2881,6 +2883,7 @@ static int sensor_probe(struct i2c_client *client,
 			switch (sensor_max_fps) {
 			case TX_SENSOR_MAX_FPS_60:
 				wsize = &sensor_win_sizes[1];
+				sensor_info.max_fps = 60;
 				sensor_attr.mipi.image_twidth = 1920;
 				sensor_attr.mipi.image_theight = 1080;
 				sensor_attr.max_integration_time_native = 0x49d - 8;
@@ -2892,6 +2895,7 @@ static int sensor_probe(struct i2c_client *client,
 				break;
 			case TX_SENSOR_MAX_FPS_30:
 				wsize = &sensor_win_sizes[3];
+				sensor_info.max_fps = 30;
 				sensor_attr.mipi.image_twidth = 1920;
 				sensor_attr.mipi.image_theight = 1080;
 				sensor_attr.max_integration_time_native = 0x93a - 8;
@@ -2908,6 +2912,7 @@ static int sensor_probe(struct i2c_client *client,
 			switch (sensor_max_fps) {
 			case TX_SENSOR_MAX_FPS_60:
 			    wsize = &sensor_win_sizes[4];
+			    sensor_info.max_fps = 60;
 			    sensor_attr.mipi.image_twidth = 1280;
 			    sensor_attr.mipi.image_theight = 720;
 			    sensor_attr.max_integration_time_native = 0x626 - 8;
@@ -2919,6 +2924,7 @@ static int sensor_probe(struct i2c_client *client,
 		    	    break;
 			case TX_SENSOR_MAX_FPS_110:
 			    wsize = &sensor_win_sizes[6];
+			    sensor_info.max_fps = 110;
 			    sensor_attr.mipi.image_twidth = 1224;
 			    sensor_attr.mipi.image_theight = 760;
 			    sensor_attr.max_integration_time_native = 0x391 - 8;
@@ -2934,6 +2940,7 @@ static int sensor_probe(struct i2c_client *client,
 		}
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[2];
+		sensor_info.max_fps = 15;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_dol),sizeof(sensor_mipi_dol));
 		sensor_attr.max_again = 259142;
 		sensor_attr.max_again_short = 259142;

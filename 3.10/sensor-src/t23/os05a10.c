@@ -2108,6 +2108,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 //	ret = sensor_write(sd, 0x12, 0x40);
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[4];
+		sensor_info.max_fps = 15;
 		sensor->video.vi_max_width = wsize->width;
 		sensor->video.vi_max_height = wsize->height;
 		sensor->video.mbus.width = wsize->width;
@@ -2139,6 +2140,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	} else if (wdr_en == 0) {
 		wsize = &sensor_win_sizes[2];
+		sensor_info.max_fps = 25;
 		sensor->video.vi_max_width = wsize->width;
 		sensor->video.vi_max_height = wsize->height;
 		sensor->video.mbus.width = wsize->width;
@@ -2389,6 +2391,7 @@ static int sensor_probe(struct i2c_client *client,
 		switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_12:
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 12;
 			sensor_attr.max_integration_time_native = 0x921 - 8;
 			sensor_attr.integration_time_limit = 0x921 - 8;
 			sensor_attr.total_width = 0xe70;
@@ -2397,6 +2400,7 @@ static int sensor_probe(struct i2c_client *client,
 			break;
 		case TX_SENSOR_MAX_FPS_15:
 			wsize = &sensor_win_sizes[1];
+			sensor_info.max_fps = 15;
 			sensor_attr.max_integration_time_native = 0x9c0 - 8;
 			sensor_attr.integration_time_limit = 0x9c0 - 8;
 			sensor_attr.total_width = 0xb40;
@@ -2406,6 +2410,7 @@ static int sensor_probe(struct i2c_client *client,
 			break;
 		case TX_SENSOR_MAX_FPS_25:
 			wsize = &sensor_win_sizes[2];
+			sensor_info.max_fps = 25;
 			sensor_attr.max_integration_time_native = 0x840 - 8;
 			sensor_attr.integration_time_limit = 0x840 - 8;
 			sensor_attr.total_width = 0x7f0 * 2;
@@ -2415,6 +2420,7 @@ static int sensor_probe(struct i2c_client *client,
 			break;
 		case TX_SENSOR_MAX_FPS_30:
 			wsize = &sensor_win_sizes[3];
+			sensor_info.max_fps = 30;
 			sensor_attr.max_integration_time_native = 0x840 - 8;
 			sensor_attr.integration_time_limit = 0x840 - 8;
 			sensor_attr.total_width = 0x670 * 2;
@@ -2427,6 +2433,7 @@ static int sensor_probe(struct i2c_client *client,
 		}
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[4];
+		sensor_info.max_fps = 15;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_dol),sizeof(sensor_mipi_dol));
 		sensor_attr.max_again = 262144;
 		sensor_attr.max_again_short = 262144;

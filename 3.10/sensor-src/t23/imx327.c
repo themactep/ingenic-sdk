@@ -1130,6 +1130,7 @@ static int sensor_probe(struct i2c_client *client,
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_60) {
 			wsize = &sensor_win_sizes[2];
+			sensor_info.max_fps = 30;
 			data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 			sensor_attr.max_again = 589824;
@@ -1150,6 +1151,7 @@ static int sensor_probe(struct i2c_client *client,
 		} else {
 			sensor_attr.data_type = data_type;
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 25;
 
 			sensor_attr.max_again = 589824;
 			sensor_attr.max_again_short = 589824;

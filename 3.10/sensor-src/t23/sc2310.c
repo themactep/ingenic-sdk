@@ -1043,6 +1043,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
     }
 
 	wsize = &sensor_win_sizes[0];
+	sensor_attr.max_fps = 30;
 	sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 	sensor_attr.max_integration_time_native = 2244;
 	sensor_attr.integration_time_limit = 2244;

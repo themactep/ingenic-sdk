@@ -609,9 +609,11 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	switch(sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 15;
 		break;
 	case TX_SENSOR_MAX_FPS_25:
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 25;
 		break;
 	default:
 		ISP_WARNING("Do not support this max fps now.\n");

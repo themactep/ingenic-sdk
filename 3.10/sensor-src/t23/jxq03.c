@@ -1236,6 +1236,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 
 		sensor_attr.one_line_expr_in_us = 25;
@@ -1248,6 +1249,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1600 - 4;
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 15;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_dol),sizeof(sensor_mipi_dol));
 		sensor_attr.one_line_expr_in_us = 25;
 		sensor_attr.wdr_cache = wdr_bufsize;

@@ -1417,10 +1417,12 @@ static int sensor_probe(struct i2c_client *client,
 	switch(sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_25:
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 25;
 			memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
         	break;
 		case TX_SENSOR_MAX_FPS_30:
 			wsize = &sensor_win_sizes[1];
+			sensor_info.max_fps = 30;
 			memcpy(&(sensor_attr.mipi), &sensor_mipi1, sizeof(sensor_mipi1));
         	break;
 		default:

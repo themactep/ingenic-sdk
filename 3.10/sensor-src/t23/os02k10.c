@@ -2484,10 +2484,12 @@ static int sensor_probe(struct i2c_client *client,
 	switch (sensor_max_fps) {
 	case SENSOR_OUTPUT_MAX_FPS_15:
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 15;
 		sensor_attr.one_line_expr_in_us = 13;
 		break;
 	case SENSOR_OUTPUT_MAX_FPS_120:
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 120;
 		sensor_attr.max_integration_time_native = 625 - 8;
 		sensor_attr.one_line_expr_in_us = 13;
 		sensor_attr.integration_time_limit = 625 - 8;
@@ -2501,6 +2503,7 @@ static int sensor_probe(struct i2c_client *client,
 		break;
 	case SENSOR_OUTPUT_MAX_FPS_60:
 		wsize = &sensor_win_sizes[2];
+		sensor_info.max_fps = 60;
 		sensor_attr.one_line_expr_in_us = 13;
 		sensor_attr.max_integration_time_native = 0x4e2 - 8;
 		sensor_attr.integration_time_limit = 0x4e2 - 8;
@@ -2510,6 +2513,7 @@ static int sensor_probe(struct i2c_client *client,
 		break;
 	case SENSOR_OUTPUT_MAX_FPS_55:
 		wsize = &sensor_win_sizes[3];
+		sensor_info.max_fps = 55;
 		sensor_attr.one_line_expr_in_us = 16;
 		sensor_attr.max_integration_time_native = 0x465 - 8;
 		sensor_attr.integration_time_limit = 0x465 - 8;
@@ -2519,6 +2523,7 @@ static int sensor_probe(struct i2c_client *client,
 		break;
 	case SENSOR_OUTPUT_MAX_FPS_50:
 		wsize = &sensor_win_sizes[4];
+		sensor_info.max_fps = 50;
 		sensor_attr.one_line_expr_in_us = 16;
 		sensor_attr.max_integration_time_native = 0x4d4 - 8;
 		sensor_attr.integration_time_limit = 0x4d4 - 8;
@@ -2528,6 +2533,7 @@ static int sensor_probe(struct i2c_client *client,
 		break;
 	case SENSOR_OUTPUT_MAX_FPS_45:
 		wsize = &sensor_win_sizes[5];
+		sensor_info.max_fps = 45;
 		sensor_attr.one_line_expr_in_us = 16;
 		sensor_attr.max_integration_time_native = 0x55f - 8;
 		sensor_attr.integration_time_limit = 0x55f - 8;

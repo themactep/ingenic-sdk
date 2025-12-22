@@ -1441,6 +1441,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_15) {
 			wsize = &sensor_win_sizes[2];
+			sensor_info.max_fps = 15;
 			sensor_attr.max_integration_time_native = 1498;
 			sensor_attr.integration_time_limit = 1498;
 			sensor_attr.total_width = 2400;
@@ -1449,6 +1450,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 25;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 	} else {
 		ISP_ERROR("Don't support this Sensor Data Output Interface.\n");

@@ -1242,6 +1242,19 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 
+	switch (sensor_max_fps) {
+	case TX_SENSOR_MAX_FPS_25:
+		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
+		break;
+	case TX_SENSOR_MAX_FPS_30:
+		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 30;
+		break;
+	default:
+		ISP_ERROR("Now we do not support this framerate!!!\n");
+	}
+
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

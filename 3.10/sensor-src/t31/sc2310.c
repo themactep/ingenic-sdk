@@ -2339,12 +2339,15 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.wdr_cache = 0;
 		if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 25;
 			memcpy((void*)(&(sensor_attr.dvp)),(void*)(&sensor_dvp),sizeof(sensor_dvp));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 			wsize = &sensor_win_sizes[2];
+			sensor_info.max_fps = 25;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 			wsize = &sensor_win_sizes[1];
+			sensor_info.max_fps = 15;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 			sensor_attr.max_integration_time_native = 0x1260 - 3;//  0x1260*2 - 0x11a - 5;
 			sensor_attr.integration_time_limit = 0x1260 - 3;
@@ -2361,6 +2364,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.wdr_cache = wdr_bufsize;
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25) {
 			wsize = &sensor_win_sizes[4];
+			sensor_info.max_fps = 25;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_wdr_25),sizeof(sensor_mipi_wdr_25));
 			sensor_attr.min_integration_time = 3;
 			sensor_attr.min_integration_time_short = 2;
@@ -2375,6 +2379,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.max_integration_time = 0xce7;
 		} else {
 			wsize = &sensor_win_sizes[3];
+			sensor_info.max_fps = 15;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_wdr),sizeof(sensor_mipi_wdr));
 			sensor_attr.min_integration_time = 3;
 			sensor_attr.min_integration_time_short = 2;

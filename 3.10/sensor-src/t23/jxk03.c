@@ -632,8 +632,10 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 15;
 	}
 
 	if (wsize) {

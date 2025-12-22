@@ -1219,6 +1219,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 15;
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_wdr),sizeof(sensor_mipi_wdr));
 		sensor_attr.data_type = data_type;
@@ -1236,6 +1237,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		printk("------------> switch wdr ok <-------------\n");
 	} else if (wdr_en == 0) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 15;
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 		sensor_attr.data_type = data_type;
@@ -1633,6 +1635,7 @@ static int sensor_probe(struct i2c_client *client,
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_500)) {
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 15;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 			sensor_attr.max_integration_time_native = 2662;
 			sensor_attr.integration_time_limit = 2662;
@@ -1643,6 +1646,7 @@ static int sensor_probe(struct i2c_client *client,
 			printk("------------> linear is ok <-------------\n");
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_400)) {
 			wsize = &sensor_win_sizes[2];
+			sensor_info.max_fps = 13;
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_linear),sizeof(sensor_mipi_linear));
 			sensor_attr.max_integration_time_native = 1650;
 			sensor_attr.integration_time_limit = 1650;
@@ -1657,6 +1661,7 @@ static int sensor_probe(struct i2c_client *client,
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		sensor_attr.wdr_cache = wdr_bufsize;
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 15;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_wdr),sizeof(sensor_mipi_wdr));
 		sensor_attr.one_line_expr_in_us = 25;
 		sensor_attr.max_again = 260651;

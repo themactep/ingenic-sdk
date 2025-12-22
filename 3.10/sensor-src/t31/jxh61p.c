@@ -890,6 +890,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 25;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 			memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 		sensor_attr.total_width = 1920;
@@ -919,6 +920,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 				goto err_set_sensor_gpio;
 		}
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 30;
 		ISP_WARNING("----->dvp\n");
 	} else {
 		ISP_ERROR("%s %d not supported data_interface!!\n",__func__,__LINE__);

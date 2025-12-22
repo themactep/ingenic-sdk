@@ -936,6 +936,7 @@ static int sensor_probe(struct i2c_client *client,
 	private_clk_enable(sensor->mclk);
 
 	wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 25;
 	memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 	sensor_attr.max_integration_time_native = 1764 - 9;
 	sensor_attr.integration_time_limit = 1764 - 9;

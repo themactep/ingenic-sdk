@@ -1233,12 +1233,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 15;
 		sensor_attr.max_integration_time_native = 1498;
 		sensor_attr.integration_time_limit = 1498;
 		sensor_attr.total_width = 2080;
@@ -1250,10 +1252,12 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		wsize = &sensor_win_sizes[2];
+		sensor_info.max_fps = 25;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi1),sizeof(sensor_mipi1));
 
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		wsize = &sensor_win_sizes[3];
+		sensor_info.max_fps = 15;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi2),sizeof(sensor_mipi2));
 	} else {
 		ISP_ERROR("Can not support this data interface and fps!!!\n");

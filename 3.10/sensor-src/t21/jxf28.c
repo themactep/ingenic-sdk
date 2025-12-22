@@ -614,9 +614,11 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_30:
 			wsize = &sensor_win_sizes[0];
+			sensor_info.max_fps = 25;
 			break;
 		case TX_SENSOR_MAX_FPS_15:
 			wsize = &sensor_win_sizes[1];
+			sensor_info.max_fps = 15;
 			break;
 		default:
 			printk("Now we do not support this framerate!!!\n");
@@ -742,8 +744,10 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 25;
 	}
 
 	if (wsize) {

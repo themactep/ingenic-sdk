@@ -949,9 +949,11 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize = &sensor_win_sizes[0];
+		sensor_attr.max_fps = 25;
 		break;
 	case TX_SENSOR_MAX_FPS_20:
 		wsize = &sensor_win_sizes[1];
+		sensor_attr.max_fps = 20;
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
@@ -1074,18 +1076,22 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 	int ret = ISP_SUCCESS;
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
-		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
+		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25) {
 			wsize = &sensor_win_sizes[0];
-		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20)
+			sensor_attr.max_fps = 25;
+		} else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20) {
 			wsize = &sensor_win_sizes[1];
-		else
+			sensor_attr.max_fps = 20;
+		} else
 			ISP_ERROR("Do not support this resolution.\n");
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
+		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25) {
 			wsize = &sensor_win_sizes[0];
-		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20)
+			sensor_attr.max_fps = 25;
+		} else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20) {
 			wsize = &sensor_win_sizes[1];
-		else
+			sensor_attr.max_fps = 20;
+		} else
 			ISP_ERROR("Do not support this resolution.\n");
 	}
 
@@ -1373,9 +1379,11 @@ static int sensor_probe(struct i2c_client *client,
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize = &sensor_win_sizes[0];
+		sensor_attr.max_fps = 25;
 		break;
 	case TX_SENSOR_MAX_FPS_20:
 		wsize = &sensor_win_sizes[1];
+		sensor_attr.max_fps = 20;
 		sensor_attr.max_integration_time_native = 0xa5b - 21;
 		sensor_attr.integration_time_limit = 0xa5b - 21;
 		sensor_attr.total_width = 1584;

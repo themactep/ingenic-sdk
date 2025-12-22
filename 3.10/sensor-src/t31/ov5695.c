@@ -1475,6 +1475,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	switch(sensor_resolution) {
 	case TX_SENSOR_RES_200:
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 60;
 		printk("-----> 1920*1080 <------\n");
 		break;
 	case TX_SENSOR_RES_100:
@@ -1491,6 +1492,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		break;
 	case TX_SENSOR_RES_500:
 		wsize = &sensor_win_sizes[3];
+		sensor_info.max_fps = 30;
 		sensor_attr.mipi.image_twidth = 2592;
 		sensor_attr.mipi.image_theight = 1944;
 		sensor_attr.max_integration_time_native = 0x7e8 - 4;

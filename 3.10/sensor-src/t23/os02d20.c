@@ -1011,9 +1011,11 @@ static int sensor_probe(struct i2c_client *client,
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_30:
 		wsize = &sensor_win_sizes[0];
+		sensor_info.max_fps = 30;
 		break;
 	case TX_SENSOR_MAX_FPS_60:
 		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 60;
 		sensor_attr.total_width = 0x53a;
 		sensor_attr.total_height = 0x44f;
 		sensor_attr.max_integration_time_native = 0x44f - 4;
@@ -1024,6 +1026,7 @@ static int sensor_probe(struct i2c_client *client,
 	case TX_SENSOR_MAX_FPS_120:
 		/*not set yet*/
 		wsize = &sensor_win_sizes[2];
+		sensor_info.max_fps = 120;
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");

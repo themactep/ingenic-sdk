@@ -1145,6 +1145,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[1];
+		sensor_attr.max_fps = 15;
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi_dol),sizeof(sensor_mipi_dol));
 		sensor_attr.data_type = data_type;
@@ -1158,6 +1159,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		printk("------------> switch wdr ok <-------------\n");
 	} else if (wdr_en == 0) {
 		wsize = &sensor_win_sizes[0];
+		sensor_attr.max_fps = 25;
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 		sensor_attr.data_type = data_type;
@@ -1384,6 +1386,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		wsize = &sensor_win_sizes[0];
+		sensor_attr.max_fps = 25;
 		sensor_attr.data_type = data_type;
 		sensor_attr.max_integration_time_native = 1920 - 8;
 		sensor_attr.integration_time_limit = 1920 - 8;
@@ -1393,6 +1396,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[1];
+		sensor_attr.max_fps = 15;
 		sensor_attr.data_type = data_type;
 		sensor_attr.wdr_cache = wdr_bufsize;
 		sensor_attr.max_integration_time_native = 6400 - 191 - 5;
