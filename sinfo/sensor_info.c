@@ -29,7 +29,7 @@ MODULE_PARM_DESC(i2c_adapter_nr, "sensor used i2c_adapter nr");
 
 #ifdef CONFIG_SOC_T40
 static int reset_gpio = GPIO_PC(27);
-#elif defined CONFIG_SOC_T41
+#elif defined(CONFIG_SOC_T41)
 static int reset_gpio = GPIO_PC(28);
 #else
 static int reset_gpio = GPIO_PA(18);
@@ -394,7 +394,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 
 		clk_set_rate(mclk, g_sinfo[i].clk);
 
-#if defined (CONFIG_SOC_T40) || (CONFIG_SOC_T41)
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 		clk_prepare_enable(mclk);
 #else
 		clk_enable(mclk);
@@ -525,7 +525,7 @@ static int32_t sensor_open(void)
 	}
 	clk_set_rate(mclk, g_sinfo[g_sensor_id].clk);
 
-#if defined (CONFIG_SOC_T40) || (CONFIG_SOC_T41)
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	clk_prepare_enable(mclk);
 #else
 	clk_enable(mclk);
