@@ -89,29 +89,22 @@ endif
 
 #### SENSORS ####
 ifneq ($(CONFIG_SOC_A1),y)
-
-ifeq ($(strip $(SENSOR_MODEL)$(SENSOR_MODEL_1)$(SENSOR_MODEL_2)),)
-    $(info SENSOR_MODEL missing, building sinfo module)
+ifeq ($(strip $(SENSOR_1_MODEL)$(SENSOR_2_MODEL)),)
+    $(info Sensor models missing, building sinfo module)
     include $(src)/sinfo/Kbuild
 else
-ifneq ($(SENSOR_MODEL),)
-    $(info Building for sensor $(SENSOR_MODEL))
+ifneq ($(SENSOR_1_MODEL),)
+    $(info Building for sensor $(SENSOR_2_MODEL))
     include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
 endif
+ifneq ($(SENSOR_2_MODEL),)
+    $(info Building for sensor $(SENSOR_1_MODEL))
+    include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
+endif
+endif
+endif
 
-ifneq ($(SENSOR_MODEL_1),)
-$(info Building for sensor $(SENSOR_MODEL_1))
-include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
-endif
-
-ifneq ($(SENSOR_MODEL_2),)
-$(info Building for sensor $(SENSOR_MODEL_2))
-include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
-endif
-endif
-endif
 #### A1 ######
-
 ifeq ($(CONFIG_SOC_A1),y)
 include $(src)/$(KERNEL_VERSION)/aip/a1/Kbuild
 include $(src)/$(KERNEL_VERSION)/fb/Kbuild
