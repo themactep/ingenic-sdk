@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
- * sc301IoT.c
+ * sc301iot.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
@@ -16,7 +16,7 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "sc301IoT"
+#define SENSOR_NAME "sc301iot"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x40)
 #define SENSOR_REG_END 0xffff

@@ -18,7 +18,7 @@
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
-#define SENSOR_NAME "sc301IoT"
+#define SENSOR_NAME "sc301iot"
 #define SENSOR_VERSION "H20220705a"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x40)
