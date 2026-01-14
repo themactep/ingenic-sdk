@@ -1,19 +1,43 @@
-MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
-
-OUT := $(MODULE_NAME)
-
+ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/include
+ccflags-y += -I$(src)/$(KERNEL_VERSION)/sensor-src/include
 DIR=$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
 
-SRCS := \
-    $(DIR)/$(SENSOR_MODEL).c \
-    $(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+ifneq ($(SENSOR_MODEL),)
+	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
+	OUT := $(MODULE_NAME)
+	SRCS := \
+		$(DIR)/$(SENSOR_MODEL).c \
+		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+	OBJS := $(SRCS:%.c=%.o) \
+		$(ASM_SRCS:%.S=%.o)
+	$(OUT)-objs := $(OBJS)
+	obj-m += $(OUT).o
+	CFLAGS_$(SENSOR_MODEL).o := -DKBUILD_MODNAME=\"$(MODULE_NAME)\"
+endif
 
-ccflags-y += -I$(src)/include
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/sensor-src/include
+# Build additional sensor modules if defined
+ifneq ($(SENSOR_1_MODEL),)
+	MODULE_1_NAME := sensor_$(SENSOR_1_MODEL)_$(SOC_FAMILY)
+	OUT_1 := $(MODULE_1_NAME)
+	SRCS_1 := \
+		$(DIR)/$(SENSOR_1_MODEL).c \
+		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+	OBJS_1 := $(SRCS_1:%.c=%.o) \
+			$(ASM_SRCS:%.S=%.o)
+	$(OUT_1)-objs := $(OBJS_1)
+	obj-m += $(OUT_1).o
+	CFLAGS_$(SENSOR_1_MODEL).o := -DKBUILD_MODNAME=\"$(MODULE_1_NAME)\"
+endif
 
-OBJS := $(SRCS:%.c=%.o) \
-	$(ASM_SRCS:%.S=%.o)
-
-$(OUT)-objs := $(OBJS)
-
-obj-m += $(OUT).o
+ifneq ($(SENSOR_2_MODEL),)
+	MODULE_2_NAME := sensor_$(SENSOR_2_MODEL)_$(SOC_FAMILY)
+	OUT_2 := $(MODULE_2_NAME)
+	SRCS_2 := \
+		$(DIR)/$(SENSOR_2_MODEL).c \
+		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+	OBJS_2 := $(SRCS_2:%.c=%.o) \
+			$(ASM_SRCS:%.S=%.o)
+	$(OUT_2)-objs := $(OBJS_2)
+	obj-m += $(OUT_2).o
+	CFLAGS_$(SENSOR_2_MODEL).o := -DKBUILD_MODNAME=\"$(MODULE_2_NAME)\"
+endif
