@@ -277,13 +277,13 @@ static void motor_power_on(struct motor_device *mdev)
 		value = invert_gpio_dir ? (step_8[step] ^ 0xff) : step_8[step];
 
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, value & 0x8);
+			gpio_set_value(motor->pdata->motor_st1_gpio, value & 0x8);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, value & 0x4);
+			gpio_set_value(motor->pdata->motor_st2_gpio, value & 0x4);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, value & 0x2);
+			gpio_set_value(motor->pdata->motor_st3_gpio, value & 0x2);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, value & 0x1);
+			gpio_set_value(motor->pdata->motor_st4_gpio, value & 0x1);
 	}
 }
 
@@ -524,11 +524,11 @@ static long motor_ops_move(struct motor_device *mdev, int x, int y)
 		return 0;
 	}
 
-	/* Enable motor GPIO outputs before movement */
-	motor_power_on(mdev);
-
 	mutex_lock(&mdev->dev_mutex);
 	spin_lock_irqsave(&mdev->slock, flags);
+
+	/* Enable motor GPIO outputs before movement */
+	motor_power_on(mdev);
 
 	calc_slow_mode(mdev, x1);
 
@@ -647,11 +647,11 @@ static long motor_ops_cruise(struct motor_device *mdev)
 
 	motor_ops_goback(mdev);
 
-	/* Enable motor GPIO outputs before cruise */
-	motor_power_on(mdev);
-
 	mutex_lock(&mdev->dev_mutex);
 	spin_lock_irqsave(&mdev->slock, flags);
+
+	/* Enable motor GPIO outputs before cruise */
+	motor_power_on(mdev);
 
 	mdev->dev_state = MOTOR_OPS_CRUISE;
 	motors[PAN_MOTOR].state = MOTOR_OPS_CRUISE;
@@ -729,11 +729,11 @@ static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *
 		mutex_unlock(&mdev->dev_mutex);
 	} else {
 		/* driver calculate max steps. */
-		/* Enable motor GPIO outputs before reset/homing */
-		motor_power_on(mdev);
-
 		mutex_lock(&mdev->dev_mutex);
 		spin_lock_irqsave(&mdev->slock, flags);
+
+		/* Enable motor GPIO outputs before reset/homing */
+		motor_power_on(mdev);
 
 		for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 			struct motor_driver *drv = &mdev->motors[index];
