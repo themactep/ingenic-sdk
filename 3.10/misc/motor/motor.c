@@ -312,7 +312,7 @@ static void motor_move_step(struct motor_device *mdev, int index)
 		step = motor->cur_steps % 8;
 		step = step < 0 ? step + 8 : step;
 
-	        value = (step_8[step] ^ 0xff);
+	    value = invert_gpio_dir ? (step_8[step] ^ 0xff) : step_8[step];
 
 		motor_set_direction(mdev, (index == PAN_MOTOR) ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN);
 
@@ -325,7 +325,8 @@ static void motor_move_step(struct motor_device *mdev, int index)
 		if (motor->pdata->motor_st4_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st4_gpio, value & 0x1);
 	} else {
-		value = ((0 ^ invert_gpio_dir) & 0x1);
+		// power off the coils
+		value = invert_gpio_dir ? 1 : 0;
 
 		if (motor->pdata->motor_st1_gpio != -1)
 			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
