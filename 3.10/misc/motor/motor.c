@@ -260,26 +260,30 @@ static void motor_power_off(struct motor_device *mdev)
 }
 
 // motor_power_on re-enables motor GPIO pins as outputs
-// Called before motor movement to energize the coils
+// Called before motor movement to ensure initial state of the coils.
 static void motor_power_on(struct motor_device *mdev)
 {
 	int index;
 	int value;
+	int step;
 	struct motor_driver *motor = NULL;
-
-	value = ((0 ^ invert_gpio_dir) & 0x1);
 
 	for (index = 0; index < NUMBER_OF_MOTORS; index++) {
 		motor = &mdev->motors[index];
 
+		// apply torque, assuming cur_steps reflects actual position
+		step = motor->cur_steps % 8;
+		step = step < 0 ? step + 8 : step;
+		value = invert_gpio_dir ? (step_8[step] ^ 0xff) : step_8[step];
+
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
+			gpio_direction_output(motor->pdata->motor_st1_gpio, value & 0x8);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
+			gpio_direction_output(motor->pdata->motor_st2_gpio, value & 0x4);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
+			gpio_direction_output(motor->pdata->motor_st3_gpio, value & 0x2);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
+			gpio_direction_output(motor->pdata->motor_st4_gpio, value & 0x1);
 	}
 }
 
