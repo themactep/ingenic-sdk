@@ -317,25 +317,25 @@ static void motor_move_step(struct motor_device *mdev, int index)
 		motor_set_direction(mdev, (index == PAN_MOTOR) ? MOTOR_MOVE_RIGHT_UP : MOTOR_MOVE_LEFT_DOWN);
 
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, value & 0x8);
+			gpio_set_value(motor->pdata->motor_st1_gpio, value & 0x8);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, value & 0x4);
+			gpio_set_value(motor->pdata->motor_st2_gpio, value & 0x4);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, value & 0x2);
+			gpio_set_value(motor->pdata->motor_st3_gpio, value & 0x2);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, value & 0x1);
+			gpio_set_value(motor->pdata->motor_st4_gpio, value & 0x1);
 	} else {
 		// power off the coils
 		value = invert_gpio_dir ? 1 : 0;
 
 		if (motor->pdata->motor_st1_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st1_gpio, value);
+			gpio_set_value(motor->pdata->motor_st1_gpio, value);
 		if (motor->pdata->motor_st2_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st2_gpio, value);
+			gpio_set_value(motor->pdata->motor_st2_gpio, value);
 		if (motor->pdata->motor_st3_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st3_gpio, value);
+			gpio_set_value(motor->pdata->motor_st3_gpio, value);
 		if (motor->pdata->motor_st4_gpio != -1)
-			gpio_direction_output(motor->pdata->motor_st4_gpio, value);
+			gpio_set_value(motor->pdata->motor_st4_gpio, value);
 	}
 
 	if (motor->state == MOTOR_OPS_RESET) {
