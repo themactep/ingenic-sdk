@@ -497,6 +497,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 			// Match!
 			g_sinfo[i].adap = adap;
 			strncpy(scan_res.sensor_name, g_sinfo[i].name, sizeof(scan_res.sensor_name) - 1);
+			scan_res.sensor_name[sizeof(scan_res.sensor_name) - 1] = '\0';
 
 			// Add to detected sensors array if there's room
 			if (g_num_detected_sensors < MAX_DETECTED_SENSORS) {
