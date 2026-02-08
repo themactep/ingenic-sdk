@@ -331,7 +331,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1280,
 		.height = 720,
 		.fps = 30 << 16 | 1,
-		.mbus_code = MBUS_FMT(SGRBG10_1X10),
+		.mbus_code = V4L2_MBUS_FMT_SGRBG10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_30fps_mipi,
 	}
