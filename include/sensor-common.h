@@ -15,6 +15,15 @@
 #include <txx-funcs.h>
 #endif
 
+/* Media bus format compatibility layer for kernel 3.10 and 4.4 */
+#if defined(CONFIG_KERNEL_4_4_94)
+/* Kernel 4.4 uses MEDIA_BUS_FMT_* constants */
+#define MBUS_FMT(x) MEDIA_BUS_FMT_##x
+#else
+/* Kernel 3.10 uses V4L2_MBUS_FMT_* constants */
+#define MBUS_FMT(x) V4L2_MBUS_FMT_##x
+#endif
+
 #if !defined(CONFIG_SOC_T40) && !defined(CONFIG_SOC_T41)
 #define SENSOR_R_BLACK_LEVEL   0
 #define SENSOR_GR_BLACK_LEVEL  1
