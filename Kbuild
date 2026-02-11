@@ -25,11 +25,9 @@ ifeq ($(KERNEL_VERSION),3.10)
 endif
 
 
-# Build TCU allocator (central ownership registry) for 3.10
-ifeq ($(KERNEL_VERSION),3.10)
-    $(info Building TCU allocator for Kernel $(KERNEL_VERSION))
-    include $(src)/$(KERNEL_VERSION)/misc/tcu_alloc/Kbuild
-endif
+# Build TCU allocator (central ownership registry) for both 3.10 and 4.4
+$(info Building TCU allocator for Kernel $(KERNEL_VERSION))
+include $(src)/$(KERNEL_VERSION)/misc/tcu_alloc/Kbuild
 
 ifeq ($(KERNEL_VERSION),3.10)
     $(info Building PWM for Kernel $(KERNEL_VERSION))
