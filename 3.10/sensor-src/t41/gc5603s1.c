@@ -52,8 +52,8 @@ module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
@@ -1055,7 +1055,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
-	ret += sensor_write(sd, 0x031d , 0x2d);
+	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0614, val_lut[value].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[value].reg615);
 	ret += sensor_write(sd, 0x0225, val_lut[value].reg225);
