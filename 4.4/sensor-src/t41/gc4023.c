@@ -37,6 +37,7 @@
 // ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 
 #define CAMERA_PROC_NAME "camera"
