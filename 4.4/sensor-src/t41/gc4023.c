@@ -249,7 +249,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
-	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
+	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 393216,
 	.max_dgain = 0,
@@ -398,8 +398,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 2560,
 		.height = 1440,
 		.fps = 30 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
-		.colorspace = V4L2_COLORSPACE_SRGB,
+		.mbus_code = TISP_MBUS_FMT_SRGGB10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2560_1440_25fps_mipi,
 	}
 
@@ -615,7 +615,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
-	sensor->video.mbus.field = V4L2_FIELD_NONE;
+	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
@@ -720,7 +720,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
-		sensor->video.mbus.field = V4L2_FIELD_NONE;
+		sensor->video.mbus.field = TISP_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
 
@@ -989,7 +989,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
-	sensor->video.mbus.field = V4L2_FIELD_NONE;
+	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
