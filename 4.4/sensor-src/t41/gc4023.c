@@ -2001,12 +2001,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
-
-	if (reset_gpio != -1)
-		private_gpio_free(reset_gpio);
-	if (pwdn_gpio != -1)
-		private_gpio_free(pwdn_gpio);
-
 	private_clk_disable_unprepare(sensor->mclk);
 	private_devm_clk_put(&client->dev, sensor->mclk);
 	tx_isp_subdev_deinit(sd);
