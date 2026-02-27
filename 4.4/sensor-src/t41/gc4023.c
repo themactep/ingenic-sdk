@@ -1046,14 +1046,14 @@ static struct i2c_driver sensor_driver = {
 
 static __init int init_sensor(void)
 {
-	int ret = 0;
 	sensor_common_init(&sensor_info);
 
-	ret = private_driver_get_interface();
-	if (ret) {
-		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
-		return -1;
+    g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
+	if (!g_sinfo_proc) {
+		printk("err: jz_proc_mkdir failed\n");
 	}
+	proc_create_data(SENSOR_TEMP_PROC_NAME, S_IRUGO, g_sinfo_proc, &sinfo_proc_fops, NULL);
+	printk(KERN_INFO "/proc/%s/%s created\n", CAMERA_PROC_NAME, SENSOR_TEMP_PROC_NAME);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
