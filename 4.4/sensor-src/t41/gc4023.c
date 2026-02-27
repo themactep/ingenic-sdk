@@ -62,6 +62,19 @@ static unsigned char ag_last = 0;
 /* Function prototypes */
 static int sinfo_proc_open(struct inode *inode, struct file *file);
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.actual_fps = 0,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
+
 static const struct file_operations sinfo_proc_fops = {
 	.owner = THIS_MODULE,
 	.open = sinfo_proc_open,
@@ -2005,8 +2018,11 @@ static struct i2c_driver sensor_driver = {
 	.id_table = sensor_id,
 };
 
-static __init int init_sensor(void) {
-	g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
+static __init int init_sensor(void)
+{
+	sensor_common_init(&sensor_info);
+
+    g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
 	if (!g_sinfo_proc) {
 		printk("err: jz_proc_mkdir failed\n");
 	}
@@ -2018,6 +2034,7 @@ static __init int init_sensor(void) {
 static __exit void exit_sensor(void) {
 	proc_remove(g_sinfo_proc);
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
