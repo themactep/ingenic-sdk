@@ -12,40 +12,48 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <linux/proc_fs.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc4023"
+#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+#define SENSOR_VERSION "H20230720"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
-#define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230720"
-#define SENSOR_HIGH_TEMP    "highTemp"
-#define SENSOR_LOW_TEMP    "lowTemp"
+
 #define CAMERA_PROC_NAME "camera"
-#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_HIGH_TEMP "highTemp"
+#define SENSOR_LOW_TEMP "lowTemp"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int shvflip = 1;
 
 struct proc_dir_entry *g_sinfo_proc;
 
+static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
@@ -70,6 +78,11 @@ static int sinfo_proc_show(struct seq_file *m, void *v) {
 static int sinfo_proc_open(struct inode *inode, struct file *file) {
 	return single_open(file, sinfo_proc_show, NULL);
 }
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int index;
