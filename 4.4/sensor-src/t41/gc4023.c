@@ -77,7 +77,7 @@ static int sinfo_proc_open(struct inode *inode, struct file *file);
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = SENSOR_CHIP_ID,
+	.chip_id = SENSOR_CHIP_ID_H,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
