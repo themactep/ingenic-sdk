@@ -1379,6 +1379,36 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
+static int sensor_resume(struct tx_isp_subdev *sd)
+{
+	int ret = 0;
+	int expo = (resume_expo & 0xffff);
+	int again = (resume_expo & 0xffff0000) >> 16;
+	struct again_lut *val_lut = sensor_again_lut;
+
+	ret = sensor_write(sd, 0x0203, expo & 0xff);
+	ret += sensor_write(sd, 0x0202, expo >> 8);
+	if (ret < 0)
+		return ret;
+
+	ret = sensor_write(sd, 0x0614, val_lut[again].reg614);
+	ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
+	ret += sensor_write(sd, 0x0218, val_lut[again].reg218);
+	ret += sensor_write(sd, 0x1467, val_lut[again].reg1467);
+	ret += sensor_write(sd, 0x1468, val_lut[again].reg1468);
+	ret += sensor_write(sd, 0x00b8, val_lut[again].regb8);
+	ret += sensor_write(sd, 0x00b9, val_lut[again].regb9);
+	if (ret < 0)
+		return ret;
+
+	if (resume_vts) {
+		ret = sensor_write(sd, 0x0340, (unsigned char)((resume_vts & 0x3f00) >> 8));
+		ret += sensor_write(sd, 0x0341, (unsigned char)(resume_vts & 0xff));
+	}
+
+	return ret;
+}
+
 #endif
 
 #if 0
@@ -1510,6 +1540,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
+#ifdef SENSOR_POWER_OFF
+			if (init->enable == 2) {
+				ret = sensor_resume(sd);
+				if (ret < 0)
+					return ret;
+			}
+#endif
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
@@ -1576,6 +1613,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x0341, (unsigned char) (vts & 0xff));
 	if (ret < 0)
 		return -1;
+
+	resume_vts = vts;
 
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 8;
@@ -1717,9 +1756,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			sensor_attr.one_line_expr_in_us = 44;
 			sensor_attr.total_width = 2250;
 			sensor_attr.total_height = 400;
-			sensor_attr.max_integration_time_native = 1125 - 8;
-			sensor_attr.integration_time_limit = 1125 - 8;
-			sensor_attr.max_integration_time = 1125 - 8;
+			sensor_attr.max_integration_time_native = 400 - 8;
+			sensor_attr.integration_time_limit = 400 - 8;
+			sensor_attr.max_integration_time = 400 - 8;
 			sensor_attr.again = 0;
 			sensor_attr.integration_time = 0x627;
 			break;
@@ -1758,7 +1797,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		case 1:
 		case 2:
 		case 3:
-		case 4:
 			if (((rate / 1000) % 27000) != 0) {
 				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 				printk("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK,
@@ -1775,6 +1813,25 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 				}
 			}
 			private_clk_set_rate(sensor->mclk, 27000000);
+			private_clk_prepare_enable(sensor->mclk);
+			break;
+		case 4:
+			if (((rate / 1000) % 27000) != 0) {
+				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
+				printk("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK,
+				       ret);
+				sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+				if (IS_ERR(sclka)) {
+					pr_err("get sclka failed\n");
+				} else {
+					rate = private_clk_get_rate(sclka);
+					printk("\n====>[private_clk_get_rate(sclka)=%ld]\n", rate);
+					if (((rate / 1000) % 27000) != 0) {
+						private_clk_set_rate(sclka, 1080000000);
+					}
+				}
+			}
+			private_clk_set_rate(sensor->mclk, 24000000);
 			private_clk_prepare_enable(sensor->mclk);
 			break;
 	}
@@ -1800,7 +1857,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if (reset_gpio != -1) {
+	if (sensor_gpio_valid(reset_gpio)) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
@@ -1813,7 +1870,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio request fail %d\n", reset_gpio);
 		}
 	}
-	if (pwdn_gpio != -1) {
+	if (sensor_gpio_valid(pwdn_gpio)) {
 		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
@@ -2001,6 +2058,12 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+
+	if (sensor_gpio_valid(reset_gpio))
+		private_gpio_free(reset_gpio);
+	if (sensor_gpio_valid(pwdn_gpio))
+		private_gpio_free(pwdn_gpio);
+
 	private_clk_disable_unprepare(sensor->mclk);
 	private_devm_clk_put(&client->dev, sensor->mclk);
 	tx_isp_subdev_deinit(sd);
@@ -2025,11 +2088,9 @@ static struct i2c_driver sensor_driver = {
 	.id_table = sensor_id,
 };
 
-static __init int init_sensor(void)
-{
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
-
-    g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
+	g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
 	if (!g_sinfo_proc) {
 		printk("err: jz_proc_mkdir failed\n");
 	}
