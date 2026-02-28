@@ -12,40 +12,61 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 #include <linux/proc_fs.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc4023"
+#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+#define SENSOR_VERSION "H20230720"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x29
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
-#define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108*1000*1000
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230720"
-#define SENSOR_HIGH_TEMP    "highTemp"
-#define SENSOR_LOW_TEMP    "lowTemp"
+
 #define CAMERA_PROC_NAME "camera"
-#define SENSOR_TEMP_PROC_NAME "sensorTemp"
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_HIGH_TEMP "highTemp"
+#define SENSOR_LOW_TEMP "lowTemp"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int shvflip = 1;
 
 struct proc_dir_entry *g_sinfo_proc;
 
+static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
@@ -53,6 +74,19 @@ static unsigned char ag_last = 0;
 
 /* Function prototypes */
 static int sinfo_proc_open(struct inode *inode, struct file *file);
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID_H,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.actual_fps = 0,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 
 static const struct file_operations sinfo_proc_fops = {
 	.owner = THIS_MODULE,
@@ -70,6 +104,11 @@ static int sinfo_proc_show(struct seq_file *m, void *v) {
 static int sinfo_proc_open(struct inode *inode, struct file *file) {
 	return single_open(file, sinfo_proc_show, NULL);
 }
+
+struct regval_list {
+    uint16_t reg_num;
+    unsigned char value;
+};
 
 struct again_lut {
 	unsigned int index;
@@ -1340,6 +1379,36 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
+static int sensor_resume(struct tx_isp_subdev *sd)
+{
+	int ret = 0;
+	int expo = (resume_expo & 0xffff);
+	int again = (resume_expo & 0xffff0000) >> 16;
+	struct again_lut *val_lut = sensor_again_lut;
+
+	ret = sensor_write(sd, 0x0203, expo & 0xff);
+	ret += sensor_write(sd, 0x0202, expo >> 8);
+	if (ret < 0)
+		return ret;
+
+	ret = sensor_write(sd, 0x0614, val_lut[again].reg614);
+	ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
+	ret += sensor_write(sd, 0x0218, val_lut[again].reg218);
+	ret += sensor_write(sd, 0x1467, val_lut[again].reg1467);
+	ret += sensor_write(sd, 0x1468, val_lut[again].reg1468);
+	ret += sensor_write(sd, 0x00b8, val_lut[again].regb8);
+	ret += sensor_write(sd, 0x00b9, val_lut[again].regb9);
+	if (ret < 0)
+		return ret;
+
+	if (resume_vts) {
+		ret = sensor_write(sd, 0x0340, (unsigned char)((resume_vts & 0x3f00) >> 8));
+		ret += sensor_write(sd, 0x0341, (unsigned char)(resume_vts & 0xff));
+	}
+
+	return ret;
+}
+
 #endif
 
 #if 0
@@ -1471,6 +1540,13 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
+#ifdef SENSOR_POWER_OFF
+			if (init->enable == 2) {
+				ret = sensor_resume(sd);
+				if (ret < 0)
+					return ret;
+			}
+#endif
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
@@ -1537,6 +1613,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x0341, (unsigned char) (vts & 0xff));
 	if (ret < 0)
 		return -1;
+
+	resume_vts = vts;
 
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 8;
@@ -1678,9 +1756,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			sensor_attr.one_line_expr_in_us = 44;
 			sensor_attr.total_width = 2250;
 			sensor_attr.total_height = 400;
-			sensor_attr.max_integration_time_native = 1125 - 8;
-			sensor_attr.integration_time_limit = 1125 - 8;
-			sensor_attr.max_integration_time = 1125 - 8;
+			sensor_attr.max_integration_time_native = 400 - 8;
+			sensor_attr.integration_time_limit = 400 - 8;
+			sensor_attr.max_integration_time = 400 - 8;
 			sensor_attr.again = 0;
 			sensor_attr.integration_time = 0x627;
 			break;
@@ -1719,7 +1797,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		case 1:
 		case 2:
 		case 3:
-		case 4:
 			if (((rate / 1000) % 27000) != 0) {
 				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 				printk("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK,
@@ -1736,6 +1813,25 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 				}
 			}
 			private_clk_set_rate(sensor->mclk, 27000000);
+			private_clk_prepare_enable(sensor->mclk);
+			break;
+		case 4:
+			if (((rate / 1000) % 27000) != 0) {
+				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
+				printk("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK,
+				       ret);
+				sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+				if (IS_ERR(sclka)) {
+					pr_err("get sclka failed\n");
+				} else {
+					rate = private_clk_get_rate(sclka);
+					printk("\n====>[private_clk_get_rate(sclka)=%ld]\n", rate);
+					if (((rate / 1000) % 27000) != 0) {
+						private_clk_set_rate(sclka, 1080000000);
+					}
+				}
+			}
+			private_clk_set_rate(sensor->mclk, 24000000);
 			private_clk_prepare_enable(sensor->mclk);
 			break;
 	}
@@ -1761,7 +1857,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if (reset_gpio != -1) {
+	if (sensor_gpio_valid(reset_gpio)) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
@@ -1774,7 +1870,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio request fail %d\n", reset_gpio);
 		}
 	}
-	if (pwdn_gpio != -1) {
+	if (sensor_gpio_valid(pwdn_gpio)) {
 		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
@@ -1963,9 +2059,9 @@ static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if (reset_gpio != -1)
+	if (sensor_gpio_valid(reset_gpio))
 		private_gpio_free(reset_gpio);
-	if (pwdn_gpio != -1)
+	if (sensor_gpio_valid(pwdn_gpio))
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1993,6 +2089,7 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
 	if (!g_sinfo_proc) {
 		printk("err: jz_proc_mkdir failed\n");
@@ -2005,6 +2102,7 @@ static __init int init_sensor(void) {
 static __exit void exit_sensor(void) {
 	proc_remove(g_sinfo_proc);
 	private_i2c_del_driver(&sensor_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);

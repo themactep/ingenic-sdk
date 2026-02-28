@@ -9,10 +9,10 @@ static ssize_t sensor_chip_id_read(struct file *file, char __user *buf, size_t c
 static ssize_t sensor_version_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_min_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_i2c_addr_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_width_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_height_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
-static ssize_t sensor_rst_gpio_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 
 // File operations for the proc entries
 static const struct file_operations name_fops = {
@@ -40,6 +40,11 @@ static const struct file_operations max_fps_fops = {
 	.owner = THIS_MODULE,
 };
 
+static const struct file_operations actual_fps_fops = {
+	.read = sensor_actual_fps_read,
+	.owner = THIS_MODULE,
+};
+
 static const struct file_operations i2c_addr_fops = {
 	.read = sensor_i2c_addr_read,
 	.owner = THIS_MODULE,
@@ -55,11 +60,6 @@ static const struct file_operations height_fops = {
 	.owner = THIS_MODULE,
 };
 
-static const struct file_operations rst_gpio_fops = {
-	.read = sensor_rst_gpio_read,
-	.owner = THIS_MODULE,
-};
-
 void sensor_common_init(struct sensor_info *info) {
 	sensor_info_ptr = info;
 
@@ -72,10 +72,10 @@ void sensor_common_init(struct sensor_info *info) {
 	proc_create("jz/sensor/version", 0444, NULL, &version_fops);
 	proc_create("jz/sensor/min_fps", 0444, NULL, &min_fps_fops);
 	proc_create("jz/sensor/max_fps", 0444, NULL, &max_fps_fops);
+	proc_create("jz/sensor/actual_fps", 0444, NULL, &actual_fps_fops);
 	proc_create("jz/sensor/i2c_addr", 0444, NULL, &i2c_addr_fops);
 	proc_create("jz/sensor/height", 0444, NULL, &height_fops);
 	proc_create("jz/sensor/width", 0444, NULL, &width_fops);
-	proc_create("jz/sensor/rst_gpio", 0444, NULL, &rst_gpio_fops);
 }
 
 void sensor_common_exit(void) {
@@ -85,11 +85,17 @@ void sensor_common_exit(void) {
 	remove_proc_entry("jz/sensor/version", NULL);
 	remove_proc_entry("jz/sensor/min_fps", NULL);
 	remove_proc_entry("jz/sensor/max_fps", NULL);
+	remove_proc_entry("jz/sensor/actual_fps", NULL);
 	remove_proc_entry("jz/sensor/i2c_addr", NULL);
 	remove_proc_entry("jz/sensor/height", NULL);
 	remove_proc_entry("jz/sensor/width", NULL);
 	remove_proc_entry("jz/sensor", NULL);
-	remove_proc_entry("jz/sensor/rst_gpio", NULL);
+}
+
+void sensor_update_actual_fps(int fps) {
+	if (sensor_info_ptr) {
+		sensor_info_ptr->actual_fps = fps;
+	}
 }
 
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
@@ -122,6 +128,12 @@ static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t c
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
 
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
+	char buffer[32];
+	int len = snprintf(buffer, sizeof(buffer), "%d\n", sensor_info_ptr->actual_fps);
+	return simple_read_from_buffer(buf, count, ppos, buffer, len);
+}
+
 static ssize_t sensor_i2c_addr_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	char chip_i2c_addr_str[16];
 	int len = snprintf(chip_i2c_addr_str, sizeof(chip_i2c_addr_str), "0x%x\n", sensor_info_ptr->chip_i2c_addr);
@@ -137,11 +149,5 @@ static ssize_t sensor_width_read(struct file *file, char __user *buf, size_t cou
 static ssize_t sensor_height_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	char buffer[32];
 	int len = snprintf(buffer, sizeof(buffer), "%d\n", sensor_info_ptr->height);
-	return simple_read_from_buffer(buf, count, ppos, buffer, len);
-}
-
-static ssize_t sensor_rst_gpio_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
-	char buffer[32];
-	int len = snprintf(buffer, sizeof(buffer), "%d\n", sensor_info_ptr->rst_gpio);
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
