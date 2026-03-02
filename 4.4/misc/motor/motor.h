@@ -19,58 +19,36 @@
 #include <linux/seq_file.h>
 #include <linux/proc_fs.h>
 #include <jz_proc.h>
+
 /*
  *  HORIZONTAL is X axis and VERTICAL is Y axis;
  *  while the Zero point is left-bottom, Origin point
  *  is cross point of horizontal midpoint and vertical midpoint.
- *
-*/
-
+ */
 
 /*#define PLATFORM_HAS_HORIZONTAL_MOTOR 	1*/
 /*#define PLATFORM_HAS_VERTICAL_MOTOR 	1*/
 
 enum jz_motor_cnt {
-	HORIZONTAL_MOTOR,
-	VERTICAL_MOTOR,
-	HAS_MOTOR_CNT,
+	PAN_MOTOR,
+	TILT_MOTOR,
+	NUMBER_OF_MOTORS,
 };
 
-
-/*************************** HORIZONTAL  MOTOR ************************************/
-#define HORIZONTAL_MIN_GPIO		GPIO_PC(13)	/**< motor start point */
-#define HORIZONTAL_MAX_GPIO		GPIO_PC(14)	/**< motor stop point */
-#define HORIZONTAL_GPIO_LEVEL	0		/**< motor irq style */
-
-#define HORIZONTAL_ST1_GPIO		GPIO_PB(22)	/**< Phase A */
-#define HORIZONTAL_ST2_GPIO		GPIO_PB(21)	/**< Phase B */
-#define HORIZONTAL_ST3_GPIO		GPIO_PB(20)	/**< Phase C */
-#define HORIZONTAL_ST4_GPIO		GPIO_PB(19)	/**< Phase D */
-
-/*************************** VERTICAL  MOTOR ************************************/
-#define VERTICAL_MIN_GPIO		GPIO_PC(18)
-#define VERTICAL_MAX_GPIO		GPIO_PB(28)
-#define VERTICAL_GPIO_LEVEL		0
-
-#define VERTICAL_ST1_GPIO		GPIO_PC(11)
-#define VERTICAL_ST2_GPIO		GPIO_PC(12)
-#define VERTICAL_ST3_GPIO		GPIO_PC(15)
-#define VERTICAL_ST4_GPIO		GPIO_PC(16)
-
-/****************************** MOTOR END ************************************/
-
 /* ioctl cmd */
-#define MOTOR_STOP		0x1
-#define MOTOR_RESET		0x2
-#define MOTOR_MOVE		0x3
+#define MOTOR_STOP			0x1
+#define MOTOR_RESET			0x2
+#define MOTOR_MOVE			0x3
 #define MOTOR_GET_STATUS	0x4
-#define MOTOR_SPEED		0x5
-#define MOTOR_GOBACK	0x6
-#define MOTOR_CRUISE	0x7
+#define MOTOR_SPEED			0x5
+#define MOTOR_GOBACK		0x6
+#define MOTOR_CRUISE		0x7
+// #define MOTOR_GET_MAXSTEPS	0x8
 
-/* motor speed */
-#define MOTOR_MAX_SPEED	900		/**< unit: beats per second */
-#define MOTOR_MIN_SPEED	100
+/* motor speed, beats per second */
+#define MOTOR_MAX_SPEED		2000
+#define MOTOR_DEF_SPEED		300
+#define MOTOR_MIN_SPEED		1
 
 enum motor_status {
 	MOTOR_IS_STOP,
@@ -82,6 +60,10 @@ struct motor_message {
 	int y;
 	enum motor_status status;
 	int speed;
+
+	// these 2 fields are not standard
+	unsigned int x_max_steps;
+	unsigned int y_max_steps;
 };
 
 struct motors_steps{
@@ -97,21 +79,21 @@ struct motor_reset_data {
 };
 
 enum motor_direction {
-	MOTOR_MOVE_LEFT_DOWN = -1,
+	MOTOR_MOVE_NEGATIVE = -1,
 	MOTOR_MOVE_STOP,
-	MOTOR_MOVE_RIGHT_UP,
+	MOTOR_MOVE_POSITIVE,
 };
 
 struct motor_platform_data {
 	const char name[32];
-	unsigned int motor_min_gpio;
-	unsigned int motor_max_gpio;
-	int motor_gpio_level;
+	int motor_min_gpio;
+	int motor_max_gpio;
+	int motor_endstop_level;
 
-	unsigned int motor_st1_gpio;
-	unsigned int motor_st2_gpio;
-	unsigned int motor_st3_gpio;
-	unsigned int motor_st4_gpio;
+	int motor_st1_gpio;
+	int motor_st2_gpio;
+	int motor_st3_gpio;
+	int motor_st4_gpio;
 };
 
 enum motor_ops_state {
@@ -146,12 +128,20 @@ struct motor_move {
 	short times;
 };
 
+struct step_spread_param {
+	int factor_a;
+	int factor_b;
+	int numerator;
+};
+
 struct motor_device {
 	struct platform_device *pdev;
 	const struct mfd_cell *cell;
 	struct device	 *dev;
 	struct miscdevice misc_dev;
-	struct motor_driver motors[HAS_MOTOR_CNT];
+	struct motor_driver motors[NUMBER_OF_MOTORS];
+	struct completion stop_completion;
+	unsigned int wait_stop;
 	struct ingenic_tcu_chn *tcu;
 	int tcu_speed;
 
@@ -165,6 +155,8 @@ struct motor_device {
 
 	int run_step_irq;
 	int flag;
+
+	struct step_spread_param step_spread;
 
 	/* debug parameters */
 	struct proc_dir_entry *proc;

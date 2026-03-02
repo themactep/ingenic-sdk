@@ -1,0 +1,9 @@
+DIR := $(KERNEL_VERSION)/misc/tcu_alloc
+
+TCU_ALLOC_MODULE := tcu_alloc
+OBJS := $(DIR)/tcu_alloc.o
+
+obj-m += $(TCU_ALLOC_MODULE).o
+
+$(TCU_ALLOC_MODULE)-objs := $(OBJS)
+
