@@ -7,6 +7,7 @@ struct sensor_info {
 	const char *version;
 	int min_fps;
 	int max_fps;
+	int actual_fps;
 	unsigned int chip_i2c_addr;
 	int width;
 	int height;
