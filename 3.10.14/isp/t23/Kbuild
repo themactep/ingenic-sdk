@@ -1,0 +1,17 @@
+ISP_FW_VER=1.3.0
+COMPILER_VER=540
+
+SRCS := $(DIR)/tx-isp-debug.c \
+	$(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+ifdef CONFIG_MULTI_SENSOR
+    OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)-double/lib$(SOC_FAMILY)-firmware.a
+    ccflags-y += -DCONFIG_MULTI_SENSOR
+else
+    OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/lib$(SOC_FAMILY)-firmware.a
+endif
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

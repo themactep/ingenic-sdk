@@ -2,7 +2,7 @@
 set -e  # Exit on error
 
 # Configuration variables with defaults
-DEFAULT_KERNEL_VERSION="3.10"
+DEFAULT_KERNEL_VERSION="3.10.14"
 KDIR="${KDIR:-}"
 CROSS_COMPILE="${CROSS_COMPILE:-}"
 
@@ -12,7 +12,7 @@ show_usage() {
 	echo "Usage: $0 clean"
 	echo ""
 	echo "Supported SoCs: t10, t20, t21, t23, t30, t31, c100, t40, t41, a1"
-	echo "Example: $0 t20 3.10"
+	echo "Example: $0 t20 3.10.14"
 	echo ""
 	echo "Environment variables:"
 	echo "  KDIR          - Path to kernel source (required)"
