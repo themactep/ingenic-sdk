@@ -83,8 +83,7 @@ void sensor_common_init(struct sensor_info *info) {
 	/* Create per-sensor directory: /proc/jz/sensor/<sensor_name>/ */
 	snprintf(ctx->dir_path, sizeof(ctx->dir_path), "jz/sensor/%s", info->name);
 
-	/* Ensure parent directories exist */
-	proc_mkdir("jz", NULL);
+	/* The platform owns /proc/jz; only create the sensor subtree here. */
 	proc_mkdir("jz/sensor", NULL);
 	ctx->dir = proc_mkdir(ctx->dir_path, NULL);
 
