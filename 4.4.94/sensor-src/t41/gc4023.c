@@ -37,6 +37,23 @@ static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = 30,
+	.chip_i2c_addr = 0x29,
+	.width = 2560,
+	.height = 1440,
+	.rst_gpio = GPIO_PC(27),
+	.pwdn_gpio = -1,
+	.boot = 0,              /* linear */
+	.mclk = 1,              /* MCLK1 */
+	.video_interface = 0,   /* MIPI CSI0 */
+	.i2c_adapter = 0,
+};
+
 struct proc_dir_entry *g_sinfo_proc;
 
 module_param(shvflip, int, S_IRUGO);
@@ -1618,6 +1635,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	unsigned long rate;
 	int ret = 0;
 
+	/* Save driver defaults before framework overwrites them */
+	int default_rst_gpio = reset_gpio;
+	int default_pwdn_gpio = pwdn_gpio;
+
 	switch (info->default_boot) {
 		case 0:
 			wsize = &sensor_win_sizes[0];
@@ -1750,6 +1771,26 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.fps = wsize->fps;
 	sensor->video.max_fps = wsize->fps;
 	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
+
+	/* Populate sensor_info for /proc/jz/sensor/ — must happen here
+	 * (not init_sensor) because ISP framework fields are only
+	 * available after the sensor is probed and attr_check runs. */
+	if (info->rst_gpio >= 0)
+		sensor_info.rst_gpio = info->rst_gpio;
+	if (info->pwdn_gpio >= 0)
+		sensor_info.pwdn_gpio = info->pwdn_gpio;
+	/* Only overwrite static defaults if framework provides valid values.
+	 * Cast to int — enum types are unsigned, so -1 wraps to UINT_MAX. */
+	if ((int)info->default_boot >= 0)
+		sensor_info.boot = info->default_boot;
+	if ((int)info->mclk >= 0)
+		sensor_info.mclk = (int)info->mclk;
+	if ((int)info->video_interface >= 0)
+		sensor_info.video_interface = (int)info->video_interface;
+	sensor_info.i2c_adapter = client->adapter->nr;
+	/* No sensor_common_init here — already called in init_sensor.
+	 * The proc entries read from sensor_info at access time, so
+	 * updating the struct fields here is sufficient. */
 
 	return 0;
 }
@@ -1999,10 +2040,15 @@ static __init int init_sensor(void) {
 	}
 	proc_create_data(SENSOR_TEMP_PROC_NAME, S_IRUGO, g_sinfo_proc, &sinfo_proc_fops, NULL);
 	printk(KERN_INFO "/proc/%s/%s created\n", CAMERA_PROC_NAME, SENSOR_TEMP_PROC_NAME);
+	/* Create proc entries with static defaults now; dynamic fields
+	 * (boot/mclk/gpio) are updated in sensor_attr_check when the
+	 * ISP framework probes the sensor later. */
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	proc_remove(g_sinfo_proc);
 	private_i2c_del_driver(&sensor_driver);
 }

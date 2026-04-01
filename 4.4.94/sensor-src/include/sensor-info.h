@@ -11,7 +11,12 @@ struct sensor_info {
 	int width;
 	int height;
 	int rst_gpio;
-	void *priv;  /* Private data for proc context */
+	int pwdn_gpio;        /* power-down GPIO (-1 = not used) */
+	int boot;             /* boot mode (0=linear, 1=WDR, 2=60fps crop) */
+	int mclk;             /* clock source (0=MCLK0, 1=MCLK1, 2=MCLK2) */
+	int video_interface;  /* 0=MIPI, 1=DVP */
+	int i2c_adapter;      /* I2C bus number */
+	void *priv;           /* Private data for proc context */
 };
 
 void sensor_common_init(struct sensor_info *info);
