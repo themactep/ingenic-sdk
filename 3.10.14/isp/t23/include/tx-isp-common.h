@@ -20,7 +20,7 @@
 
 #define ISP_SUCCESS 0
 #ifdef CONFIG_MULTI_SENSOR
-#define SENSORNUM  3
+#define  SENSORNUM  3
 #endif
 
 /* T31 */
@@ -41,26 +41,26 @@
 #define SENSOR_B_BLACK_LEVEL	3
 
 /* External v4l2 format info. */
-#define V4L2_I2C_REG_MAX			(150)
-#define V4L2_I2C_ADDR_16BIT			(0x0002)
-#define V4L2_I2C_DATA_16BIT			(0x0004)
-#define V4L2_SBUS_MASK_SAMPLE_8BITS		0x01
-#define V4L2_SBUS_MASK_SAMPLE_16BITS		0x02
-#define V4L2_SBUS_MASK_SAMPLE_32BITS		0x04
-#define V4L2_SBUS_MASK_ADDR_8BITS		0x08
-#define V4L2_SBUS_MASK_ADDR_16BITS		0x10
-#define V4L2_SBUS_MASK_ADDR_32BITS		0x20
-#define V4L2_SBUS_MASK_ADDR_STEP_16BITS		0x40
-#define V4L2_SBUS_MASK_ADDR_STEP_32BITS		0x80
-#define V4L2_SBUS_MASK_SAMPLE_SWAP_BYTES	0x100
-#define V4L2_SBUS_MASK_SAMPLE_SWAP_WORDS	0x200
-#define V4L2_SBUS_MASK_ADDR_SWAP_BYTES		0x400
-#define V4L2_SBUS_MASK_ADDR_SWAP_WORDS		0x800
-#define V4L2_SBUS_MASK_ADDR_SKIP		0x1000
-#define V4L2_SBUS_MASK_SPI_READ_MSB_SET		0x2000
-#define V4L2_SBUS_MASK_SPI_INVERSE_DATA		0x4000
-#define V4L2_SBUS_MASK_SPI_HALF_ADDR		0x8000
-#define V4L2_SBUS_MASK_SPI_LSB			0x10000
+#define V4L2_I2C_REG_MAX		(150)
+#define V4L2_I2C_ADDR_16BIT		(0x0002)
+#define V4L2_I2C_DATA_16BIT		(0x0004)
+#define V4L2_SBUS_MASK_SAMPLE_8BITS	0x01
+#define V4L2_SBUS_MASK_SAMPLE_16BITS	0x02
+#define V4L2_SBUS_MASK_SAMPLE_32BITS	0x04
+#define V4L2_SBUS_MASK_ADDR_8BITS	0x08
+#define V4L2_SBUS_MASK_ADDR_16BITS	0x10
+#define V4L2_SBUS_MASK_ADDR_32BITS	0x20
+#define V4L2_SBUS_MASK_ADDR_STEP_16BITS 0x40
+#define V4L2_SBUS_MASK_ADDR_STEP_32BITS 0x80
+#define V4L2_SBUS_MASK_SAMPLE_SWAP_BYTES 0x100
+#define V4L2_SBUS_MASK_SAMPLE_SWAP_WORDS 0x200
+#define V4L2_SBUS_MASK_ADDR_SWAP_BYTES	0x400
+#define V4L2_SBUS_MASK_ADDR_SWAP_WORDS	0x800
+#define V4L2_SBUS_MASK_ADDR_SKIP	0x1000
+#define V4L2_SBUS_MASK_SPI_READ_MSB_SET 0x2000
+#define V4L2_SBUS_MASK_SPI_INVERSE_DATA 0x4000
+#define V4L2_SBUS_MASK_SPI_HALF_ADDR	0x8000
+#define V4L2_SBUS_MASK_SPI_LSB		0x10000
 
 //RGBIR
 enum rgbir_mbus_fmt{
@@ -118,85 +118,85 @@ enum rgbir_mbus_fmt{
 
 #ifdef CONFIG_KERNEL_4_4_94
 enum v4l2_mbus_pixelcode {
-    V4L2_MBUS_FMT_FIXED = 0x0001,
+	V4L2_MBUS_FMT_FIXED = 0x0001,
 
-    /* RGB - next is 0x100d */
-    V4L2_MBUS_FMT_RGB444_2X8_PADHI_BE = 0x1001,
-    V4L2_MBUS_FMT_RGB444_2X8_PADHI_LE = 0x1002,
-    V4L2_MBUS_FMT_RGB555_2X8_PADHI_BE = 0x1003,
-    V4L2_MBUS_FMT_RGB555_2X8_PADHI_LE = 0x1004,
-    V4L2_MBUS_FMT_BGR565_2X8_BE = 0x1005,
-    V4L2_MBUS_FMT_BGR565_2X8_LE = 0x1006,
-    V4L2_MBUS_FMT_RGB565_2X8_BE = 0x1007,
-    V4L2_MBUS_FMT_RGB565_2X8_LE = 0x1008,
-    V4L2_MBUS_FMT_RGB666_1X18 = 0x1009,
-    V4L2_MBUS_FMT_RGB888_1X24 = 0x100a,
-    V4L2_MBUS_FMT_RGB888_2X12_BE = 0x100b,
-    V4L2_MBUS_FMT_RGB888_2X12_LE = 0x100c,
+	/* RGB - next is 0x100d */
+	V4L2_MBUS_FMT_RGB444_2X8_PADHI_BE = 0x1001,
+	V4L2_MBUS_FMT_RGB444_2X8_PADHI_LE = 0x1002,
+	V4L2_MBUS_FMT_RGB555_2X8_PADHI_BE = 0x1003,
+	V4L2_MBUS_FMT_RGB555_2X8_PADHI_LE = 0x1004,
+	V4L2_MBUS_FMT_BGR565_2X8_BE = 0x1005,
+	V4L2_MBUS_FMT_BGR565_2X8_LE = 0x1006,
+	V4L2_MBUS_FMT_RGB565_2X8_BE = 0x1007,
+	V4L2_MBUS_FMT_RGB565_2X8_LE = 0x1008,
+	V4L2_MBUS_FMT_RGB666_1X18 = 0x1009,
+	V4L2_MBUS_FMT_RGB888_1X24 = 0x100a,
+	V4L2_MBUS_FMT_RGB888_2X12_BE = 0x100b,
+	V4L2_MBUS_FMT_RGB888_2X12_LE = 0x100c,
 
-    /* YUV (including grey) - next is 0x2017 */
-    V4L2_MBUS_FMT_Y8_1X8 = 0x2001,
-    V4L2_MBUS_FMT_UV8_1X8 = 0x2015,
-    V4L2_MBUS_FMT_UYVY8_1_5X8 = 0x2002,
-    V4L2_MBUS_FMT_VYUY8_1_5X8 = 0x2003,
-    V4L2_MBUS_FMT_YUYV8_1_5X8 = 0x2004,
-    V4L2_MBUS_FMT_YVYU8_1_5X8 = 0x2005,
-    V4L2_MBUS_FMT_UYVY8_2X8 = 0x2006,
-    V4L2_MBUS_FMT_VYUY8_2X8 = 0x2007,
-    V4L2_MBUS_FMT_YUYV8_2X8 = 0x2008,
-    V4L2_MBUS_FMT_YVYU8_2X8 = 0x2009,
-    V4L2_MBUS_FMT_Y10_1X10 = 0x200a,
-    V4L2_MBUS_FMT_YUYV10_2X10 = 0x200b,
-    V4L2_MBUS_FMT_YVYU10_2X10 = 0x200c,
-    V4L2_MBUS_FMT_Y12_1X12 = 0x2013,
-    V4L2_MBUS_FMT_UYVY8_1X16 = 0x200f,
-    V4L2_MBUS_FMT_VYUY8_1X16 = 0x2010,
-    V4L2_MBUS_FMT_YUYV8_1X16 = 0x2011,
-    V4L2_MBUS_FMT_YVYU8_1X16 = 0x2012,
-    V4L2_MBUS_FMT_YDYUYDYV8_1X16 = 0x2014,
-    V4L2_MBUS_FMT_YUYV10_1X20 = 0x200d,
-    V4L2_MBUS_FMT_YVYU10_1X20 = 0x200e,
-    V4L2_MBUS_FMT_YUV10_1X30 = 0x2016,
+	/* YUV (including grey) - next is 0x2017 */
+	V4L2_MBUS_FMT_Y8_1X8 = 0x2001,
+	V4L2_MBUS_FMT_UV8_1X8 = 0x2015,
+	V4L2_MBUS_FMT_UYVY8_1_5X8 = 0x2002,
+	V4L2_MBUS_FMT_VYUY8_1_5X8 = 0x2003,
+	V4L2_MBUS_FMT_YUYV8_1_5X8 = 0x2004,
+	V4L2_MBUS_FMT_YVYU8_1_5X8 = 0x2005,
+	V4L2_MBUS_FMT_UYVY8_2X8 = 0x2006,
+	V4L2_MBUS_FMT_VYUY8_2X8 = 0x2007,
+	V4L2_MBUS_FMT_YUYV8_2X8 = 0x2008,
+	V4L2_MBUS_FMT_YVYU8_2X8 = 0x2009,
+	V4L2_MBUS_FMT_Y10_1X10 = 0x200a,
+	V4L2_MBUS_FMT_YUYV10_2X10 = 0x200b,
+	V4L2_MBUS_FMT_YVYU10_2X10 = 0x200c,
+	V4L2_MBUS_FMT_Y12_1X12 = 0x2013,
+	V4L2_MBUS_FMT_UYVY8_1X16 = 0x200f,
+	V4L2_MBUS_FMT_VYUY8_1X16 = 0x2010,
+	V4L2_MBUS_FMT_YUYV8_1X16 = 0x2011,
+	V4L2_MBUS_FMT_YVYU8_1X16 = 0x2012,
+	V4L2_MBUS_FMT_YDYUYDYV8_1X16 = 0x2014,
+	V4L2_MBUS_FMT_YUYV10_1X20 = 0x200d,
+	V4L2_MBUS_FMT_YVYU10_1X20 = 0x200e,
+	V4L2_MBUS_FMT_YUV10_1X30 = 0x2016,
 
-    /* Bayer - next is 0x3019 */
-    V4L2_MBUS_FMT_SBGGR8_1X8 = 0x3001,
-    V4L2_MBUS_FMT_SGBRG8_1X8 = 0x3013,
-    V4L2_MBUS_FMT_SGRBG8_1X8 = 0x3002,
-    V4L2_MBUS_FMT_SRGGB8_1X8 = 0x3014,
-    V4L2_MBUS_FMT_SBGGR10_ALAW8_1X8 = 0x3015,
-    V4L2_MBUS_FMT_SGBRG10_ALAW8_1X8 = 0x3016,
-    V4L2_MBUS_FMT_SGRBG10_ALAW8_1X8 = 0x3017,
-    V4L2_MBUS_FMT_SRGGB10_ALAW8_1X8 = 0x3018,
-    V4L2_MBUS_FMT_SBGGR10_DPCM8_1X8 = 0x300b,
-    V4L2_MBUS_FMT_SGBRG10_DPCM8_1X8 = 0x300c,
-    V4L2_MBUS_FMT_SGRBG10_DPCM8_1X8 = 0x3009,
-    V4L2_MBUS_FMT_SRGGB10_DPCM8_1X8 = 0x300d,
-    V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_BE = 0x3003,
-    V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_LE = 0x3004,
-    V4L2_MBUS_FMT_SBGGR10_2X8_PADLO_BE = 0x3005,
-    V4L2_MBUS_FMT_SBGGR10_2X8_PADLO_LE = 0x3006,
-    V4L2_MBUS_FMT_SBGGR10_1X10 = 0x3007,
-    V4L2_MBUS_FMT_SGBRG10_1X10 = 0x300e,
-    V4L2_MBUS_FMT_SGRBG10_1X10 = 0x300a,
-    V4L2_MBUS_FMT_SRGGB10_1X10 = 0x300f,
-    V4L2_MBUS_FMT_SBGGR12_1X12 = 0x3008,
-    V4L2_MBUS_FMT_SGBRG12_1X12 = 0x3010,
-    V4L2_MBUS_FMT_SGRBG12_1X12 = 0x3011,
-    V4L2_MBUS_FMT_SRGGB12_1X12 = 0x3012,
+	/* Bayer - next is 0x3019 */
+	V4L2_MBUS_FMT_SBGGR8_1X8 = 0x3001,
+	V4L2_MBUS_FMT_SGBRG8_1X8 = 0x3013,
+	V4L2_MBUS_FMT_SGRBG8_1X8 = 0x3002,
+	V4L2_MBUS_FMT_SRGGB8_1X8 = 0x3014,
+	V4L2_MBUS_FMT_SBGGR10_ALAW8_1X8 = 0x3015,
+	V4L2_MBUS_FMT_SGBRG10_ALAW8_1X8 = 0x3016,
+	V4L2_MBUS_FMT_SGRBG10_ALAW8_1X8 = 0x3017,
+	V4L2_MBUS_FMT_SRGGB10_ALAW8_1X8 = 0x3018,
+	V4L2_MBUS_FMT_SBGGR10_DPCM8_1X8 = 0x300b,
+	V4L2_MBUS_FMT_SGBRG10_DPCM8_1X8 = 0x300c,
+	V4L2_MBUS_FMT_SGRBG10_DPCM8_1X8 = 0x3009,
+	V4L2_MBUS_FMT_SRGGB10_DPCM8_1X8 = 0x300d,
+	V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_BE = 0x3003,
+	V4L2_MBUS_FMT_SBGGR10_2X8_PADHI_LE = 0x3004,
+	V4L2_MBUS_FMT_SBGGR10_2X8_PADLO_BE = 0x3005,
+	V4L2_MBUS_FMT_SBGGR10_2X8_PADLO_LE = 0x3006,
+	V4L2_MBUS_FMT_SBGGR10_1X10 = 0x3007,
+	V4L2_MBUS_FMT_SGBRG10_1X10 = 0x300e,
+	V4L2_MBUS_FMT_SGRBG10_1X10 = 0x300a,
+	V4L2_MBUS_FMT_SRGGB10_1X10 = 0x300f,
+	V4L2_MBUS_FMT_SBGGR12_1X12 = 0x3008,
+	V4L2_MBUS_FMT_SGBRG12_1X12 = 0x3010,
+	V4L2_MBUS_FMT_SGRBG12_1X12 = 0x3011,
+	V4L2_MBUS_FMT_SRGGB12_1X12 = 0x3012,
 
-    /* JPEG compressed formats - next is 0x4002 */
-    V4L2_MBUS_FMT_JPEG_1X8 = 0x4001,
+	/* JPEG compressed formats - next is 0x4002 */
+	V4L2_MBUS_FMT_JPEG_1X8 = 0x4001,
 
-    /* Vendor specific formats - next is 0x5002 */
+	/* Vendor specific formats - next is 0x5002 */
 
-    /* S5C73M3 sensor specific interleaved UYVY and JPEG */
-    V4L2_MBUS_FMT_S5C_UYVY_JPEG_1X8 = 0x5001,
+	/* S5C73M3 sensor specific interleaved UYVY and JPEG */
+	V4L2_MBUS_FMT_S5C_UYVY_JPEG_1X8 = 0x5001,
 };
 #endif
 
 struct tx_isp_sensor_win_setting {
-    int width;
-    int height;
+    int	width;
+    int	height;
     int fps;
     enum v4l2_mbus_pixelcode mbus_code;
     enum v4l2_colorspace colorspace;
@@ -340,7 +340,7 @@ typedef struct {
     unsigned short hblanking;
 } sensor_dvp_blanking;
 
-enum mipi_sensor_data_type_value {
+enum  mipi_sensor_data_type_value {
     YUV422_8BIT = 0x1e,
     RAW8 = 0x2a,
     RAW10 = 0x2b,
@@ -425,8 +425,8 @@ struct tx_isp_bt601_bus{
 
 /* define sensor attribute */
 
-#define TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS	1
-#define TX_ISP_SENSOR_FULL_RES_MAX_FPS		2
+#define TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS 	1
+#define TX_ISP_SENSOR_FULL_RES_MAX_FPS 		2
 
 struct tx_isp_sensor_register_info{
     char name[32];
@@ -492,7 +492,6 @@ struct tx_isp_sensor_fsync_attr {
     void *priv;
 };
 #endif
-
 #define TX_ISP_GAIN_FIXED_POINT 16
 #define LOG2_GAIN_SHIFT 16
 struct tx_isp_sensor_attribute{
@@ -503,16 +502,16 @@ struct tx_isp_sensor_attribute{
     unsigned int cbus_device;
     enum tx_sensor_data_bus_type dbus_type;
     union {
-        struct tx_isp_mipi_bus		mipi;
-        struct tx_isp_dvp_bus		dvp;
-        struct tx_isp_bt1120_bus	bt1120;
+        struct tx_isp_mipi_bus 		mipi;
+        struct tx_isp_dvp_bus 		dvp;
+        struct tx_isp_bt1120_bus 	bt1120;
         struct tx_isp_bt656_bus		bt656bus;
         struct tx_isp_bt601_bus		bt601bus;
         char string[64];
     };
     enum tx_sensor_data_type data_type;
-    unsigned int max_again; //the format is .16
-    unsigned int max_dgain; //the format is .16
+    unsigned int max_again;	//the format is .16
+    unsigned int max_dgain;	//the format is .16
     unsigned int again;
     unsigned int dgain;
     unsigned short min_integration_time;
@@ -555,10 +554,10 @@ struct tx_isp_dualcamer_sensorevent {
 };
 #endif
 
-#define NOTIFICATION_TYPE_CORE_OPS	(0x1<<24)
-#define NOTIFICATION_TYPE_SENSOR_OPS	(0x2<<24)
-#define NOTIFICATION_TYPE_FS_OPS	(0x3<<24)
-#define NOTIFICATION_TYPE_TUN_OPS	(0x4<<24)
+#define NOTIFICATION_TYPE_CORE_OPS (0x1<<24)
+#define NOTIFICATION_TYPE_SENSOR_OPS (0x2<<24)
+#define NOTIFICATION_TYPE_FS_OPS 	(0x3<<24)
+#define NOTIFICATION_TYPE_TUN_OPS 	(0x4<<24)
 #define NOTIFICATION_TYPE_OPS(n)	((n) & (0xff<<24))
 enum tx_isp_notification {
     /* the events of subdev */
@@ -615,12 +614,12 @@ enum tx_isp_notification {
     TX_ISP_EVENT_CORE_DAY_NIGHT,
 };
 
-struct tx_isp_notify_argument {
+struct tx_isp_notify_argument{
     int value;
     int ret;
 };
 
-struct tx_isp_initarg {
+struct tx_isp_initarg{
     int enable;
     int vinum;
 };
@@ -654,14 +653,14 @@ struct frame_image_format {
     struct v4l2_pix_format pix;
 
     /* crop */
-    bool crop_enable;
+    bool	crop_enable;
     unsigned int crop_top;
     unsigned int crop_left;
     unsigned int crop_width;
     unsigned int crop_height;
 
     /* scaler */
-    bool scaler_enable;
+    bool	scaler_enable;
     unsigned int scaler_out_width;
     unsigned int scaler_out_height;
 
@@ -669,7 +668,7 @@ struct frame_image_format {
     unsigned int rate_mask;
 
     /* crop front */
-    bool fcrop_enable;
+    bool	fcrop_enable;
     unsigned int fcrop_top;
     unsigned int fcrop_left;
     unsigned int fcrop_width;
@@ -720,63 +719,63 @@ struct tx_isp_user_switch_gpio {
 };
 #endif
 
-#define VIDIOC_REGISTER_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
-#define VIDIOC_RELEASE_SENSOR			_IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
-#define VIDIOC_SET_FRAME_FORMAT			_IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
-#define VIDIOC_GET_FRAME_FORMAT			_IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
-#define VIDIOC_DEFAULT_CMD_SET_BANKS		_IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
-#define VIDIOC_DEFAULT_CMD_ISP_TUNING		_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
-#define VIDIOC_SET_DEFAULT_BIN_PATH		_IOWR('V',BASE_VIDIOC_PRIVATE + 7, int)
-#define VIDIOC_GET_DEFAULT_BIN_PATH		_IOWR('V',BASE_VIDIOC_PRIVATE + 8, int)
+#define VIDIOC_REGISTER_SENSOR			  _IOW('V', BASE_VIDIOC_PRIVATE + 1, struct tx_isp_sensor_register_info)
+#define VIDIOC_RELEASE_SENSOR			  _IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
+#define VIDIOC_SET_FRAME_FORMAT			  _IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
+#define VIDIOC_GET_FRAME_FORMAT               _IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
+#define VIDIOC_DEFAULT_CMD_SET_BANKS	      _IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
+#define VIDIOC_DEFAULT_CMD_ISP_TUNING	      _IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)
+#define VIDIOC_SET_DEFAULT_BIN_PATH               _IOWR('V',BASE_VIDIOC_PRIVATE + 7, int)
+#define VIDIOC_GET_DEFAULT_BIN_PATH               _IOWR('V',BASE_VIDIOC_PRIVATE + 8, int)
 #ifdef CONFIG_MULTI_SENSOR
-#define TISP_VIDIOC_SET_DUALSENSOR_MODE	_IOWR('V',BASE_VIDIOC_PRIVATE + 9, int)
+#define TISP_VIDIOC_SET_DUALSENSOR_MODE           _IOWR('V',BASE_VIDIOC_PRIVATE + 9, int)
 #endif
 
-#define VIDIOC_CREATE_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
-#define VIDIOC_DESTROY_SUBDEV_LINKS		_IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
-#define VIDIOC_LINKS_STREAMON			_IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
-#define VIDIOC_LINKS_STREAMOFF			_IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
-#define VIDIOC_SET_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
-#define VIDIOC_GET_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
-#define VIDIOC_SET_WDR_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 22, struct isp_buf_info)
-#define VIDIOC_GET_WDR_BUF_INFO			_IOW('V', BASE_VIDIOC_PRIVATE + 23, struct isp_buf_info)
-#define VIDIOC_ISP_WDR_ENABLE			_IOW('V', BASE_VIDIOC_PRIVATE + 24, int)
-#define VIDIOC_ISP_WDR_DISABLE			_IOW('V', BASE_VIDIOC_PRIVATE + 25, int)
+#define VIDIOC_CREATE_SUBDEV_LINKS            _IOW('V', BASE_VIDIOC_PRIVATE + 16, int)
+#define VIDIOC_DESTROY_SUBDEV_LINKS	 		  _IOW('V', BASE_VIDIOC_PRIVATE + 17, int)
+#define VIDIOC_LINKS_STREAMON	 			  _IOW('V', BASE_VIDIOC_PRIVATE + 18, int)
+#define VIDIOC_LINKS_STREAMOFF	 			  _IOW('V', BASE_VIDIOC_PRIVATE + 19, int)
+#define VIDIOC_SET_BUF_INFO	 		    	  _IOW('V', BASE_VIDIOC_PRIVATE + 20, struct isp_buf_info)
+#define VIDIOC_GET_BUF_INFO					  _IOW('V', BASE_VIDIOC_PRIVATE + 21, struct isp_buf_info)
+#define VIDIOC_SET_WDR_BUF_INFO	 		    	  _IOW('V', BASE_VIDIOC_PRIVATE + 22, struct isp_buf_info)
+#define VIDIOC_GET_WDR_BUF_INFO	 		    	  _IOW('V', BASE_VIDIOC_PRIVATE + 23, struct isp_buf_info)
+#define VIDIOC_ISP_WDR_ENABLE                             _IOW('V', BASE_VIDIOC_PRIVATE + 24, int)
+#define VIDIOC_ISP_WDR_DISABLE                             _IOW('V', BASE_VIDIOC_PRIVATE + 25, int)
 
-#define TISP_VIDIOC_SET_AE_ALGO_FUNC		_IOW('V',BASE_VIDIOC_PRIVATE + 26, int)
-#define TISP_VIDIOC_GET_AE_ALGO_HANDLE		_IOW('V',BASE_VIDIOC_PRIVATE + 27, int)
-#define TISP_VIDIOC_SET_AE_ALGO_HANDLE		_IOW('V',BASE_VIDIOC_PRIVATE + 28, int)
-#define TISP_VIDIOC_SET_AE_ALGO_OPEN		_IOW('V',BASE_VIDIOC_PRIVATE + 29, int)
-#define TISP_VIDIOC_SET_AE_ALGO_CLOSE		_IOW('V',BASE_VIDIOC_PRIVATE + 30, int)
-#define TISP_VIDIOC_SET_AE_ALGO_CTRL		_IOW('V',BASE_VIDIOC_PRIVATE + 31, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_FUNC		_IOWR('V',BASE_VIDIOC_PRIVATE + 32, int)
-#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE		_IOWR('V',BASE_VIDIOC_PRIVATE + 33, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE		_IOWR('V',BASE_VIDIOC_PRIVATE + 34, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_OPEN		_IOWR('V',BASE_VIDIOC_PRIVATE + 35, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_CLOSE		_IOWR('V',BASE_VIDIOC_PRIVATE + 36, int)
-#define TISP_VIDIOC_SET_AWB_ALGO_CTRL		_IOWR('V',BASE_VIDIOC_PRIVATE + 37, int)
-#define TISP_VIDIOC_SET_FRAME_DROP		_IOWR('V',BASE_VIDIOC_PRIVATE + 38, int)
-#define TISP_VIDIOC_GET_FRAME_DROP		_IOWR('V',BASE_VIDIOC_PRIVATE + 39, int)
+#define TISP_VIDIOC_SET_AE_ALGO_FUNC                           _IOW('V',BASE_VIDIOC_PRIVATE + 26, int)
+#define TISP_VIDIOC_GET_AE_ALGO_HANDLE                         _IOW('V',BASE_VIDIOC_PRIVATE + 27, int)
+#define TISP_VIDIOC_SET_AE_ALGO_HANDLE                         _IOW('V',BASE_VIDIOC_PRIVATE + 28, int)
+#define TISP_VIDIOC_SET_AE_ALGO_OPEN                           _IOW('V',BASE_VIDIOC_PRIVATE + 29, int)
+#define TISP_VIDIOC_SET_AE_ALGO_CLOSE                          _IOW('V',BASE_VIDIOC_PRIVATE + 30, int)
+#define TISP_VIDIOC_SET_AE_ALGO_CTRL                           _IOW('V',BASE_VIDIOC_PRIVATE + 31, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_FUNC				_IOWR('V',BASE_VIDIOC_PRIVATE + 32, int)
+#define TISP_VIDIOC_GET_AWB_ALGO_HANDLE				_IOWR('V',BASE_VIDIOC_PRIVATE + 33, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_HANDLE				_IOWR('V',BASE_VIDIOC_PRIVATE + 34, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_OPEN				_IOWR('V',BASE_VIDIOC_PRIVATE + 35, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_CLOSE				_IOWR('V',BASE_VIDIOC_PRIVATE + 36, int)
+#define TISP_VIDIOC_SET_AWB_ALGO_CTRL				_IOWR('V',BASE_VIDIOC_PRIVATE + 37, int)
+#define TISP_VIDIOC_SET_FRAME_DROP				_IOWR('V',BASE_VIDIOC_PRIVATE + 38, int)
+#define TISP_VIDIOC_GET_FRAME_DROP				_IOWR('V',BASE_VIDIOC_PRIVATE + 39, int)
 
-#define VIDIOC_SET_GPIO_INIT			_IOWR('V',BASE_VIDIOC_PRIVATE + 40, int)
-#define VIDIOC_SET_GPIO_STA			_IOWR('V',BASE_VIDIOC_PRIVATE + 41, int)
+#define VIDIOC_SET_GPIO_INIT                              _IOWR('V',BASE_VIDIOC_PRIVATE + 40, int)
+#define VIDIOC_SET_GPIO_STA                              _IOWR('V',BASE_VIDIOC_PRIVATE + 41, int)
 
 #ifdef CONFIG_MULTI_SENSOR
-#define TISP_VIDIOC_SET_FRAME_DROP1		_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
-#define TISP_VIDIOC_GET_FRAME_DROP1		_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
-#define TISP_VIDIOC_STREAM_CHECK		_IOWR('V',BASE_VIDIOC_PRIVATE + 44, int)
-#define TISP_VIDIOC_SET_STREAM_OUT		_IOWR('V',BASE_VIDIOC_PRIVATE + 45, int)
-#define TISP_VIDIOC_SET_USER_SWITCH_GPIO	_IOWR('V',BASE_VIDIOC_PRIVATE + 46, int)
+#define TISP_VIDIOC_SET_FRAME_DROP1				_IOWR('V',BASE_VIDIOC_PRIVATE + 42, int)
+#define TISP_VIDIOC_GET_FRAME_DROP1				_IOWR('V',BASE_VIDIOC_PRIVATE + 43, int)
+#define TISP_VIDIOC_STREAM_CHECK   				_IOWR('V',BASE_VIDIOC_PRIVATE + 44, int)
+#define TISP_VIDIOC_SET_STREAM_OUT 				_IOWR('V',BASE_VIDIOC_PRIVATE + 45, int)
+#define TISP_VIDIOC_SET_USER_SWITCH_GPIO 			_IOWR('V',BASE_VIDIOC_PRIVATE + 46, int)
 #endif
 
 //ivdc ioctl
-#define BASE_IVDC_PRIVATE			60
-#define TISP_VIDIOC_SET_JPEG			_IO('T', BASE_IVDC_PRIVATE + 1)
-#define TISP_VIDIOC_SET_H264_H265		_IO('T', BASE_IVDC_PRIVATE + 2)
-#define TISP_VIDIOC_GET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 3, int)
-#define TISP_VIDIOC_SET_DIRECT			_IOWR('T', BASE_IVDC_PRIVATE + 4, int)
-#define TISP_VIDIOC_SET_PADDR			_IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
-#define TISP_VIDIOC_MEM_LINE			_IOWR('T', BASE_IVDC_PRIVATE + 6, int)
+#define BASE_IVDC_PRIVATE                       60
+#define TISP_VIDIOC_SET_JPEG                    _IO('T', BASE_IVDC_PRIVATE + 1)
+#define TISP_VIDIOC_SET_H264_H265               _IO('T', BASE_IVDC_PRIVATE + 2)
+#define TISP_VIDIOC_GET_DIRECT                  _IOWR('T', BASE_IVDC_PRIVATE + 3, int)
+#define TISP_VIDIOC_SET_DIRECT                  _IOWR('T', BASE_IVDC_PRIVATE + 4, int)
+#define TISP_VIDIOC_SET_PADDR                   _IOWR('T', BASE_IVDC_PRIVATE + 5, unsigned int)
+#define TISP_VIDIOC_MEM_LINE                    _IOWR('T', BASE_IVDC_PRIVATE + 6, int)
 
 enum tx_isp_vidioc_default_command {
     TX_ISP_VIDIOC_DEFAULT_CMD_BYPASS_ISP,
@@ -813,8 +812,8 @@ struct tx_isp_video_in {
 #ifdef CONFIG_MULTI_SENSOR
     struct tx_isp_sensor_register_info *info;
 #endif
-    unsigned int vi_max_width; //the max width of sensor output setting
-    unsigned int vi_max_height; //the max height of sensor output setting
+    unsigned int vi_max_width;	//the max width of sensor output setting
+    unsigned int vi_max_height;	//the max height of sensor output setting
     unsigned int fps;
     int grp_id;
     unsigned int shvflip;
@@ -843,10 +842,10 @@ struct tx_isp_sensor{
 #define sd_to_sensor_device(_ep) container_of(_ep, struct tx_isp_sensor, sd)
 
 #define tx_isp_readl(base, reg)		__raw_readl((base) + (reg))
-#define tx_isp_writel(base, reg, value)	__raw_writel((value), ((base) + (reg)))
+#define tx_isp_writel(base, reg, value)		__raw_writel((value), ((base) + (reg)))
 #define tx_isp_readw(base, reg)		__raw_readw((base) + (reg))
-#define tx_isp_writew(base, reg, value)	__raw_writew((value), ((base) + (reg)))
+#define tx_isp_writew(base, reg, value)		__raw_writew((value), ((base) + (reg)))
 #define tx_isp_readb(base, reg)		__raw_readb((base) + (reg))
-#define tx_isp_writeb(base, reg, value)	__raw_writeb((value), ((base) + (reg)))
+#define tx_isp_writeb(base, reg, value)		__raw_writeb((value), ((base) + (reg)))
 
 #endif /*__TX_ISP_COMMON_H__*/

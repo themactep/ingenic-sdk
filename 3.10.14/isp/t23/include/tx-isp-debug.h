@@ -43,10 +43,10 @@ void private_vfree(const void *addr);
 extern void *vmalloc_t;
 #define private_vmalloc(size) \
     (vmalloc_t = vmalloc(size)); \
-    printk("[%s %d] vmalloc addr is %p, size is %d\n", __func__, __LINE__, vmalloc_t, size)
+printk("[%s %d] vmalloc addr is %p, size is %d\n", __func__, __LINE__, vmalloc_t, size)
 #define private_vfree(addr) \
     vfree(addr); \
-    printk("[%s %d] vfree addr is %p\n", __func__, __LINE__, addr)
+printk("[%s %d] vfree addr is %p\n", __func__, __LINE__, addr)
 #endif /* TX_ISP_MALLOC_TEST */
 
 ktime_t private_ktime_set(const long secs, const unsigned long nsecs);

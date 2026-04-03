@@ -5,9 +5,11 @@
 #include <linux/clk.h>
 #include <linux/pwm.h>
 #include <linux/file.h>
+/*#include <linux/list.h>*/
 #include <linux/gpio.h>
 #include <linux/time.h>
 #include <linux/sched.h>
+/*#include <linux/delay.h>*/
 #include <linux/module.h>
 #include <linux/debugfs.h>
 #include <linux/kthread.h>
@@ -45,7 +47,7 @@
 
 #ifdef CONFIG_KERNEL_3_10
 struct jz_driver_common_interfaces {
-    unsigned int flags_0; // The flags must be checked.
+    unsigned int flags_0;			// The flags must be checked.
     /* platform interface */
     int (*platform_driver_register)(struct platform_driver *drv);
     void (*platform_driver_unregister)(struct platform_driver *drv);
@@ -184,7 +186,7 @@ struct jz_driver_common_interfaces {
 
     /* isp driver interface */
     void (*get_isp_priv_mem)(unsigned int *phyaddr, unsigned int *size);
-    unsigned int flags_1; // The flags must be checked.
+    unsigned int flags_1;			// The flags must be checked.
 };
 #else
 struct jz_driver_common_interfaces {
@@ -331,19 +333,19 @@ struct jz_driver_common_interfaces {
 #endif
 
 #ifndef U16_MAX
-#define U16_MAX 0xFFFF
+#define U16_MAX 					0xFFFF
 #endif
 
 #define paddr2vaddr(phyaddr) ((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
 
 #if 0
-#define APICAL_ABS(a)		((a)>=0?(a):-(a))
-#define APICAL_SIGN(a)		((a)>=0?(1):(-1))
-#define APICAL_MIN(a,b)		((a)>=b?(b):(a))
-#define APICAL_MAX(a,b)		((a)>=b?(a):(b))
-#define APICAL_ABSDIFF(a,b)	((a)>(b)? (a-b) : (b-a))
+#define APICAL_ABS(a)        ((a)>=0?(a):-(a))
+#define APICAL_SIGN(a)  ((a)>=0?(1):(-1))
+#define APICAL_MIN(a,b) ((a)>=b?(b):(a))
+#define APICAL_MAX(a,b) ((a)>=b?(a):(b))
+#define APICAL_ABSDIFF(a,b) ((a)>(b)? (a-b) : (b-a))
 #define LIN_EQUATION_FRACTION_SIZE 5
-#define round_shift(a,sh)	(((a)>>(sh))+(((a)>>(sh-1))&1))
+#define round_shift(a,sh)   (((a)>>(sh))+(((a)>>(sh-1))&1))
 #endif
 
 uint8_t private_leading_one_position(const uint32_t in);
@@ -393,9 +395,10 @@ void private_mutex_unlock(struct mutex *lock);
 void private_raw_mutex_init(struct mutex *lock, const char *name, struct lock_class_key *key);
 
 #define private_mutex_init(mutex) \
-    do {							\
-        static struct lock_class_key __key;			\
-        private_raw_mutex_init((mutex), #mutex, &__key);	\
+    do {								\
+        static struct lock_class_key __key;		\
+        \
+        private_raw_mutex_init((mutex), #mutex, &__key);		\
     } while (0)
 
 /* clock interfaces */
@@ -489,10 +492,10 @@ extern struct jz_driver_common_interfaces *pfaces;
 extern void *kmalloc_t;
 #define private_kmalloc(s, gfp) \
     (kmalloc_t = pfaces->priv_kmalloc(s, gfp)); \
-    printk("[%s %d] kmalloc addr is %p, size is %d\n", __func__, __LINE__, kmalloc_t, s)
+printk("[%s %d] kmalloc addr is %p, size is %d\n", __func__, __LINE__, kmalloc_t, s)
 #define private_kfree(p) \
     pfaces->priv_kfree(p); \
-    printk("[%s %d] kfree addr is %p\n", __func__, __LINE__, p)
+printk("[%s %d] kfree addr is %p\n", __func__, __LINE__, p)
 #endif /* TX_ISP_MALLOC_TEST */
 long private_copy_from_user(void *to, const void __user *from, long size);
 long private_copy_to_user(void __user *to, const void *from, long size);
