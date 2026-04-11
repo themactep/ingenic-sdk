@@ -8,7 +8,7 @@ SRCS := $(DIR)/mpsys_module.c \
 
 # Determine the kernel version based on SOC type and KDIR
 ifeq ($(SOC_FAMILY),t41)
-	ifeq ($(KERNEL_VERSION),4.4)
+	ifneq ($(findstring 4.4,$(KERNEL_VERSION)),)
 		KVERSION := 4-4-94
 	else
 		KVERSION := 3-10-14
