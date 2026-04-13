@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "jxh62"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID 0xa062
 #define SENSOR_CHIP_ID_H (0xa0)
 #define SENSOR_CHIP_ID_L (0x62)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_PCLK_DVP (36000000)
@@ -427,8 +432,6 @@ static struct regval_list sensor_init_regs_1280_720_25fps_mipi[] = {
 	{0x1F,0x01},
 	{SENSOR_REG_END, 0x00},
 };
-
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*720 */

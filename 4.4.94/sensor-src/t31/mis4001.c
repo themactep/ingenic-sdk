@@ -19,13 +19,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "mis4001"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_CHIP_ID 0x1311
 #define SENSOR_CHIP_ID_H (0x13)
 #define SENSOR_CHIP_ID_L (0x11)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 
@@ -220,7 +225,6 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 	return it;
 }
 
-
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	struct again_lut *lut = sensor_again_lut;
@@ -244,7 +248,6 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 	return isp_gain;
 }
-
 
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {

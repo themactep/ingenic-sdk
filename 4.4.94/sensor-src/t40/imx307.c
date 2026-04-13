@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "imx307"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x1a
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0xa0b2
 #define SENSOR_CHIP_ID_H (0xA0)
 #define SENSOR_CHIP_ID_L (0xB2)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
 #define SENSOR_RESET_GPIO GPIO_PC(27)
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
@@ -1323,7 +1328,6 @@ static int sensor_probe(struct i2c_client *client,
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {

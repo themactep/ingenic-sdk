@@ -18,9 +18,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "os08a10"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK_8M_FPS_15 (98222880)
@@ -207,9 +216,9 @@ struct tx_isp_mipi_bus sensor_mipi_ ={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x530841,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -1442,7 +1451,6 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	ret = sensor_read(sd, 0x3508, &evlgain1);
 	ret = sensor_read(sd, 0x3509, &evlgain2);
 
-
 	if (wdr_en == 1) {
 		sensor_max_fps = 15;
 		sensor_attr.mipi.clk = 720;
@@ -1504,7 +1512,6 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 {
 	int ret = 0;
-
 
 	ret = sensor_write(sd, 0x0103, 0x01);
 	private_msleep(5);
@@ -1857,7 +1864,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			 const struct i2c_device_id *id)

@@ -26,8 +26,17 @@
 
 #define MCLK 27000000
 #define SENSOR_NAME "gc4663"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x29
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_30FPS_SCLK (144 * 1000 * 1000)
@@ -208,7 +217,6 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_mipi_bus sensor_mipi_linear_120fps = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 168,
@@ -237,7 +245,6 @@ struct tx_isp_mipi_bus sensor_mipi_linear_120fps = {
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
-
 
 struct tx_isp_mipi_bus sensor_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -271,11 +278,11 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x4653,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL,
-	.cbus_device = 0x29,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 409249,
 	.max_dgain = 0,
 	.expo_fs = 1,
@@ -597,7 +604,6 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_init_regs_1280_720_120fps_mipi[] = {
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
@@ -742,7 +748,6 @@ static struct regval_list sensor_init_regs_1280_720_120fps_mipi[] = {
 	{0x0100, 0x09},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
@@ -961,7 +966,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-
 
 	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
 	ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);

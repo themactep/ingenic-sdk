@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "jxh63"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID 0x0a63
 #define SENSOR_CHIP_ID_H (0x0a)
 #define SENSOR_CHIP_ID_L (0x63)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_PCLK (36*1000*1000)
@@ -53,7 +58,6 @@ MODULE_PARM_DESC(data_interface, "Sensor Data interface");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
-
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

@@ -18,14 +18,19 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "os04b10"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x3c
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_CHIP_ID 0x430801
 #define SENSOR_CHIP_ID_H (0x43)
 #define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_CHIP_ID_L (0x01)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe

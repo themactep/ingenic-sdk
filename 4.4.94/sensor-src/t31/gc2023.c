@@ -17,13 +17,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "gc2023"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x37
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x2023
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
 #define SENSOR_PAGE_REG 0xfe

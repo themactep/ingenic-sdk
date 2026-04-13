@@ -23,8 +23,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "imx347"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x98)
 #define SENSOR_CHIP_ID_L (0x0a)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -49,7 +58,6 @@ MODULE_PARM_DESC(data_type, "Sensor Date Type");
 static int wdr_bufsize = 2520000;//230400;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
-
 
 struct regval_list {
 	uint16_t reg_num;
@@ -118,7 +126,6 @@ struct tx_isp_mipi_bus mipi_2lane_dol = {
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-
 struct tx_isp_mipi_bus mipi_linear = {
 	.mode = SENSOR_MIPI_SONY_MODE,
 	.clk = 1118,
@@ -151,9 +158,9 @@ struct tx_isp_mipi_bus mipi_linear = {
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x890a,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x37,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.max_again = 458752,
@@ -273,7 +280,6 @@ static struct regval_list sensor_init_regs_2688_1520_15fps_mipi_2lane_dol[] = {
 	{0x31A1,0x00},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x300C,0x5B},  // BCWAIT_TIME[7:0]
@@ -666,8 +672,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		pr_debug("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-
-
 
 	/*method 2 change vts*/
 	ret = sensor_read(sd, 0x3035, &value);
@@ -1140,7 +1144,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

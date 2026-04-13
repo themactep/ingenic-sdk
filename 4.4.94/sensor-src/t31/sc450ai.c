@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "sc450ai"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2592
 #define SENSOR_MAX_HEIGHT 1520
 #define SENSOR_CHIP_ID 0xbd2f
 #define SENSOR_CHIP_ID_H (0xbd)
 #define SENSOR_CHIP_ID_L (0x2f)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_PCLK (144000000) /* mipiclk*lane_num/bit = pclk */
@@ -1364,7 +1369,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

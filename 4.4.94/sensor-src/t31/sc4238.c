@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc4238"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_CHIP_ID 0x4235
 #define SENSOR_CHIP_ID_H (0x42)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_25FPS_SCLK (120000000)
@@ -407,7 +412,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0103, 0x01},
@@ -1190,7 +1194,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
               ISP_ERROR("warn: fps(%d) not in range\n", fps);
                  return ret;
          }
-
 
 	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;

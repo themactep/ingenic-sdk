@@ -24,9 +24,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "ov5675"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_M (0x56)
 #define SENSOR_CHIP_ID_L (0x75)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -169,13 +178,12 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x005675,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 259142,
 	.max_dgain = 0,
 	.min_integration_time = 2,
@@ -186,7 +194,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x0100, 0x00},
@@ -369,7 +376,6 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3822, 0x44},
 	{0x3823, 0x08},
 	{0x3832, 0x78},
-
 
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},/* END MARKER */

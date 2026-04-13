@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc3336"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MAX_HEIGHT 1296
 #define SENSOR_CHIP_ID 0xcc41
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK_RES_300 (1250*1632*25*2)
@@ -70,7 +75,6 @@ struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
-
 
 struct sensor_gain_lut {
 	unsigned int index;

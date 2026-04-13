@@ -27,6 +27,13 @@
 #define SENSOR_CHIP_ID 0x380a
 #define SENSOR_CHIP_ID_H (0x38)
 #define SENSOR_CHIP_ID_L (0x0a)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 25
@@ -138,9 +145,9 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x1a,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.max_again = 404346,
@@ -1116,7 +1123,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
         struct tx_isp_subdev *sd;

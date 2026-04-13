@@ -22,9 +22,18 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "os02g10"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_M (0x02)
 #define SENSOR_CHIP_ID_L (0x47)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
@@ -163,9 +172,9 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x560247,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x3c,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -551,7 +560,6 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 
-
 	if (!init->enable)
 		return ISP_SUCCESS;
 
@@ -774,7 +782,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		}
 	}
 #endif
-
 
     private_clk_set_rate(sensor->mclk, 24000000);
     private_clk_prepare_enable(sensor->mclk);

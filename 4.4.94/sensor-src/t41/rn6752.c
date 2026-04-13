@@ -25,8 +25,17 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "rn6752"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x01)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x2c
+
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 27000000
 #define SENSOR_VERSION "H20221205a"
@@ -180,7 +189,6 @@ static struct regval_list cvbs_ntsc_video[] = {
 #endif
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list cvbs_pal_video[] = {
 	{0xff, 0x08},
@@ -622,9 +630,9 @@ struct tx_isp_mipi_bus sensor_mipi = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0X2c4c,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x2c,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
@@ -1057,7 +1065,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
@@ -1077,7 +1084,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 
 	return ret;
 }
-
 
 static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
@@ -1172,7 +1178,6 @@ static struct i2c_driver sensor_driver = {
 	.remove = sensor_remove,
 	.id_table = sensor_id,
 };
-
 
 static __init int init_sensor(void) {
 	/* ret = private_driver_get_interface(); */

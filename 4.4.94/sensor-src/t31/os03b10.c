@@ -18,14 +18,19 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "os03b10"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x3c
 #define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MAX_HEIGHT 1296
 #define SENSOR_CHIP_ID 0x530342
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x42)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+
 #define SENSOR_SUPPORT_SCLK_FPS_25 (1358 * 1590 * 25 *2)
 #define SENSOR_REG_END 0x99
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -465,7 +470,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	}
 	return 0;
 #endif
-
 
 static int sensor_reset(struct tx_isp_subdev *sd, int val)
 {

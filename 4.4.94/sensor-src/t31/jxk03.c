@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "jxk03"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 2592
 #define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_CHIP_ID 0x0503
 #define SENSOR_CHIP_ID_H (0x05)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_PCLK (86400000)
@@ -250,7 +255,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x12, 0x40},

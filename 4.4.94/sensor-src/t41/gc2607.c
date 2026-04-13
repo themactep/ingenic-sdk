@@ -23,8 +23,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "gc2607"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x07)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -131,9 +140,9 @@ struct tx_isp_mipi_bus sensor_mipi = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x2607,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x37,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.max_again = 261029,
 	.max_dgain = 0,
@@ -440,7 +449,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-
 
 	ret = sensor_write(sd, 0x02b3, val_lut[again].reg2b3);
 	ret = sensor_write(sd, 0x02b4, val_lut[again].reg2b4);

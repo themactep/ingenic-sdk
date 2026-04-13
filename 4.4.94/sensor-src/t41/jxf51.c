@@ -19,8 +19,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "jxf51"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x51)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -182,9 +191,9 @@ struct tx_isp_mipi_bus sensor_mipi = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0xf51,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 259142,
@@ -205,7 +214,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1536_1536_25fps_mipi[] = {
 	{0x12, 0x40},
@@ -462,7 +470,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
@@ -527,7 +534,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	if (ret < 0)
 		return ret;
-
 
 	return 0;
 }
@@ -632,7 +638,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-
 
 	sensor_write(sd, 0x22, (unsigned char) (vts & 0xff));
 	sensor_write(sd, 0x23, (unsigned char) (vts >> 8));

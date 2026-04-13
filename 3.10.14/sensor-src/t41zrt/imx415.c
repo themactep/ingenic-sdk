@@ -30,6 +30,12 @@
 #define SENSOR_CHIP_ID_L (0x23)
 
 // ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
+// ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xffff
@@ -111,9 +117,9 @@ struct tx_isp_mipi_bus imx415_mipi = {
 struct tx_isp_sensor_attribute imx415_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x2823,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x1a,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 404346,
 	.max_dgain = 0,
 	.min_integration_time = 4,

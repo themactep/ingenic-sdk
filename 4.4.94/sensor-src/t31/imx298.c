@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "imx298"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x1a
 #define SENSOR_MAX_WIDTH 2328
 #define SENSOR_MAX_HEIGHT 1444
 #define SENSOR_CHIP_ID 0x0000
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x00)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_PCLK (1802 * 5536 * 30)
@@ -1043,7 +1048,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			ISP_ERROR("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
-
 
 	if (pwr_gpio != -1) {
 		ret = private_gpio_request(pwr_gpio,"ov4688_pwdn");

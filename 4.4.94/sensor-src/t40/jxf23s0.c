@@ -19,6 +19,13 @@
 #define SENSOR_NAME "jxf23"
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_30FPS_SCLK (86400000)
@@ -305,9 +312,9 @@ struct tx_isp_dvp_bus sensor_dvp={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0xf23,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -338,7 +345,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 #if 0
@@ -1469,7 +1475,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		tmp9b = (unsigned char)(val_9b);
 	}
 
-
 	sensor_write(sd, 0x0c, tmp1);
 	sensor_write(sd, 0x66, tmp2);
 	sensor_write(sd, 0x99, tmp99);
@@ -1585,7 +1590,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ret = -1;
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
-
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -1925,7 +1929,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		/* sensor_attr.total_width = 0x500; */
 		/* sensor_attr.total_height = 0x1e94; */
 		/* sensor_attr.max_integration_time = 0x1e94 - 4; */
-
 
 			sensor_attr.max_integration_time_native = 0x1194 - 4;
 			sensor_attr.integration_time_limit = 0x1194 -4;

@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "imx307"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x1a
 #define SENSOR_MAX_WIDTH 1948
 #define SENSOR_MAX_HEIGHT 1097
 #define SENSOR_CHIP_ID 0xa0b2
 #define SENSOR_CHIP_ID_H (0xA0)
 #define SENSOR_CHIP_ID_L (0xB2)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_PCLK (74250*1000)
@@ -137,7 +142,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	/* inclk 37.25M clk 1080p@30fps Sunnic */

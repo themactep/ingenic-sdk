@@ -21,7 +21,13 @@
 #define SENSOR_CHIP_ID 0x1311
 #define SENSOR_CHIP_ID_H (0x13)
 #define SENSOR_CHIP_ID_L (0x11)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_REG_END 0xffff
@@ -30,7 +36,6 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
-
 
 static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
@@ -43,7 +48,6 @@ MODULE_PARM_DESC(pwdn_gpio, "Default power down GPIO NUM");
 static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
-
 
 struct regval_list {
     uint16_t reg_num;
@@ -257,7 +261,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
@@ -486,7 +490,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 // This is the global wsize state
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x3006, 0x00},

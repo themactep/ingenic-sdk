@@ -20,11 +20,16 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "gc032a"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x21
 #define SENSOR_CHIP_ID 0x9b
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_L (0x2a)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x21
+
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
 #define SENSOR_SUPPORT_PCLK (16970760)
@@ -511,7 +516,6 @@ static int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
@@ -574,7 +578,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
-
 
 	*ident = v;
 	return 0;

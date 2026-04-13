@@ -27,7 +27,15 @@
 
 #define SENSOR_NAME "imx415"
 #define SENSOR_CHIP_ID_H (0x28)
+
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x1a
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -35,7 +43,6 @@
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16
 #define SENSOR_VERSION "H20221104a"
-
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -100,9 +107,9 @@ struct tx_isp_mipi_bus imx415_mipi = {
 struct tx_isp_sensor_attribute imx415_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x2823,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x1a,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 404346,
 	.max_dgain = 0,
 	.min_integration_time = 4,
@@ -1052,7 +1059,6 @@ static const struct i2c_device_id imx415_id[] = {
 	{}
 };
 
-
 static struct i2c_driver imx415_driver = {
 	.driver = {
 		.owner = NULL,
@@ -1062,7 +1068,6 @@ static struct i2c_driver imx415_driver = {
 	.remove = imx415_remove,
 	.id_table = imx415_id,
 };
-
 
 char *get_sensor_name(void) {
 	return SENSOR_NAME;

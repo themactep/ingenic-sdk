@@ -17,9 +17,18 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "os04d10s1"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x04)
 #define SENSOR_CHIP_ID_L (0x44)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3d
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
@@ -149,9 +158,9 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x530444,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x3d,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -497,7 +506,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
@@ -513,7 +521,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
-
 
 static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;

@@ -17,8 +17,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "sc2355"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0xeb)
 #define SENSOR_CHIP_ID_L (0x2c)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_60FPS_SCLK (72000000)
@@ -205,9 +214,9 @@ struct tx_isp_mipi_bus sensor_mipi={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0xeb2c,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.max_again = 262140,
@@ -364,7 +373,6 @@ static struct regval_list sensor_init_regs_640_360_60fps_mipi[] = {
     {SENSOR_REG_DELAY,10},
     {SENSOR_REG_END, 0x00},
 };
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 640*360 @max 60fps */
@@ -781,8 +789,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 err_get_mclk:
 	return -1;
 }
-
-
 
 static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 			       struct tx_isp_chip_ident *chip)

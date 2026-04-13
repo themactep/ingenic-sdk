@@ -15,9 +15,14 @@
 
 #define SENSOR_MIN_FPS 5
 #define SENSOR_CHIP_ID_L 0x01
-#define SENSOR_NAME "cv4001"
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x35
+
+#define SENSOR_NAME "cv4001"
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_CHIP_ID 0x4001
@@ -48,7 +53,6 @@ struct regval_list {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
 	uint16_t again=(isp_gain*20)>>shift;
@@ -70,7 +74,6 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 
 	return it;
 }
-
 
 struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -180,7 +183,6 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3164, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
@@ -359,7 +361,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -371,7 +372,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	return ret;
 }
-
 
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
@@ -478,7 +478,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 }
 #endif
 
-
 #if 1
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
@@ -500,7 +499,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 #endif
-
 
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
@@ -569,7 +567,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 	return 0;
 }
-
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {

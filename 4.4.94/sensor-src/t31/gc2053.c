@@ -23,15 +23,19 @@
 #define ISP_PRINT(level, format, ...)			\
 	pr_err(format, ##__VA_ARGS__)
 
-
 #define SENSOR_NAME "gc2053"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x37
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x2053
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
 #define SENSOR_SUPPORT_40FPS_MIPI_SCLK (99000000)
@@ -1274,7 +1278,6 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	return ret;
 }
 
-
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
@@ -1290,7 +1293,6 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
-
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;

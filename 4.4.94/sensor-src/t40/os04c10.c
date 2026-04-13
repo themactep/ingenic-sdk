@@ -23,8 +23,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "os04c10"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_L (0x04)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_20FPS_SCLK_HDR (1070 * 20 * 2523)
@@ -252,11 +261,11 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x5304,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 259142,
 	.max_dgain = 0,
 	.min_integration_time = 4,
@@ -1410,7 +1419,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
-
 	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
 	ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
 	ret = sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
@@ -1558,13 +1566,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	return 0;
 }
 
-
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
 	return ret;
 }
-
 
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {

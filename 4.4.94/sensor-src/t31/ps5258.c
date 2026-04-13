@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "ps5258"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x48
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x5258
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x58)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x48
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK_FPS_25 (81000000)
@@ -40,7 +45,6 @@ MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 static int pwdn_gpio = -1;
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
-
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -231,7 +235,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-
 static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
         {0x010B, 0x07},//Cmd_Sw_TriState[0]=1
         {0x0114, 0x09},//Cmd_LineTime[12:0]=2400
@@ -268,7 +271,6 @@ static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
         {0x010F, 0x01},//Sensor_EnH=1
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 2560*1920 */
@@ -717,7 +719,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

@@ -22,8 +22,17 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "jxk08"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x06)
 #define SENSOR_CHIP_ID_L (0x05)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_30FPS_SCLK 4000*2400*15
@@ -155,9 +164,9 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x605,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -205,7 +214,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x12, 0x60},
@@ -313,7 +321,6 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x07, 0x45},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 	{0x12, 0x60},

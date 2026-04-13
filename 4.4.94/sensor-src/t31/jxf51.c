@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "jxf51"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1536
 #define SENSOR_MAX_HEIGHT 1536
 #define SENSOR_CHIP_ID 0xf51
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x51)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_30FPS_SCLK_MIPI (72000000)
@@ -224,7 +229,6 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
@@ -290,7 +294,6 @@ struct tx_isp_mipi_bus sensor_mipi={
 	//.lans = 2,
 };
 
-
 struct tx_isp_dvp_bus sensor_dvp = {
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking = {
@@ -333,7 +336,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1536_1536_30fps_mipi[] = {
     {0x12,0x40},
@@ -604,7 +606,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-
 /*
  * the part of driver was fixed.
  */
@@ -626,8 +627,6 @@ static struct regval_list sensor_stream_on_mipi[] = {
 static struct regval_list sensor_stream_off_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
-
-
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 	       unsigned char *value)
@@ -654,7 +653,6 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg,
 
 	return ret;
 }
-
 
 int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 		unsigned char value)
@@ -789,7 +787,6 @@ static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
 }
-
 
 static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
@@ -988,7 +985,6 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	return 0;
 }
 
-
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -1144,7 +1140,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-
 static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
 {
 	unsigned char val = 0;
@@ -1176,7 +1171,6 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
-
 
 static struct tx_isp_subdev_core_ops sensor_core_ops = {
 	.g_chip_ident = sensor_g_chip_ident,
@@ -1234,7 +1228,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
-
 
         if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		wsize = &sensor_win_sizes[0];

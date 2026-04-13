@@ -17,8 +17,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "ov9732s1"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK  (36*1000*1000)
@@ -182,9 +191,9 @@ struct tx_isp_dvp_bus sensor_dvp={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x9732,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -315,7 +324,6 @@ static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -325,7 +333,6 @@ static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},

@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "sc301iot"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2048
 #define SENSOR_MAX_HEIGHT 1536
 #define SENSOR_CHIP_ID 0xcc40
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x40)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_25FPS_SCLK (54000000)
@@ -382,7 +387,6 @@ struct tx_isp_mipi_bus sensor_mipi_dol={
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
-
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
@@ -1142,7 +1146,6 @@ static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 
 	return ret;
 }
-
 
 static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 {

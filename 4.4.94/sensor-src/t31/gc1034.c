@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "gc1034"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x21
 #define SENSOR_MAX_WIDTH 512
 #define SENSOR_MAX_HEIGHT 512
 #define SENSOR_CHIP_ID 0x1034
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x34)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x21
+
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe

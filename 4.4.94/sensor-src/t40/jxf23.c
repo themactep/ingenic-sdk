@@ -27,8 +27,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "jxf23"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -1437,9 +1446,9 @@ struct tx_isp_dvp_bus sensor_dvp={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0xf23,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 259142,
 	.max_again_short = 0,
 	.max_dgain = 0,
@@ -2019,7 +2028,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		tmp99 = (unsigned char)(val_99);
 		tmp9b = (unsigned char)(val_9b);
 	}
-
 
 	sensor_write(sd, 0x0c, tmp1);
 	sensor_write(sd, 0x66, tmp2);

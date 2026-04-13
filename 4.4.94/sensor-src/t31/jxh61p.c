@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "jxh61p"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x40
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID 0x0849
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x49)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_PCLK (43200*1000)
@@ -862,7 +867,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
-
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize = &sensor_win_sizes[1];

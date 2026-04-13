@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc202cs"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 1600
 #define SENSOR_MAX_HEIGHT 1200
 #define SENSOR_CHIP_ID 0xeb52
 #define SENSOR_CHIP_ID_H (0xeb)
 #define SENSOR_CHIP_ID_L (0x52)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_30FPS_SCLK (1920 * 1250 * 30)
@@ -64,7 +69,6 @@ struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
-
 
 struct again_lut {
 	unsigned int value;
@@ -605,7 +609,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
-
 
 	return 0;
 }

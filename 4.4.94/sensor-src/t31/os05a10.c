@@ -18,14 +18,19 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "os05a10"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 2592
 #define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_CHIP_ID 0x530541
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x05)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK_FPS_25 (107289600)
@@ -1723,7 +1728,6 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
 
 	{SENSOR_REG_END, 0x00},
 };
-
 
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

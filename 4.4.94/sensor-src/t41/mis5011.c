@@ -22,8 +22,17 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "mis5011"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x50)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK (217260000)
@@ -1058,7 +1067,6 @@ struct again_lut sensor_again_lut[] = {
 	{0x3f0, 393210},
 };
 
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
@@ -1142,9 +1150,9 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME",
 	.chip_id = 0x5003,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL,
 	.mipi = {
@@ -1456,7 +1464,6 @@ static struct regval_list sensor_init_regs_2960_1632_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -1602,7 +1609,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int expo = (value & 0xffff);
@@ -1614,13 +1620,11 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 //	ret += sensor_write(sd, 0x310a, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x300c, 0x01);
 
-
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
-
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
@@ -1637,7 +1641,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
-
 
 /*
 static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)

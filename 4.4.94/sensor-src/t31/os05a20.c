@@ -24,14 +24,19 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "os05a20"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 2592
 #define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_CHIP_ID 0x530541
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x05)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK_FPS_25 (214579200) /* 2112 * 2032 * 25 * 2 = 214579200 */
@@ -52,7 +57,6 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
-
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -187,7 +191,6 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
@@ -298,7 +301,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 	{0x0100, 0x00},
@@ -531,7 +533,6 @@ static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x0103,0x01},
 	{0x0303,0x01},
@@ -763,7 +764,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x0100,0x01},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0x0103,0x01},
@@ -1190,7 +1190,6 @@ static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-
 static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
 {
 	return 0;
@@ -1300,7 +1299,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	return ret;
 }
-
 
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {

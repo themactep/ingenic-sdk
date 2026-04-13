@@ -24,12 +24,17 @@
 
 #define SENSOR_NAME "gc2093"
 #define SENSOR_CHIP_ID 0x2093
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x37
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x93)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_30FPS_SCLK (58725000)
@@ -769,7 +774,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_ae[] = {
 	{0x0187, 0x51},//50
 	{0x01a0, 0x00},//awb_en
 	{0x01af, 0x09},//aec_en
-
 
 	/****CISCTL&ANALOG****/
 	{0x0087, 0x18},

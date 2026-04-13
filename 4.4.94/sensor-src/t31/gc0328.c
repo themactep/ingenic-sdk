@@ -21,6 +21,13 @@
 
 #define SENSOR_NAME "gc0328"
 #define SENSOR_CHIP_ID (0x9d)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x21
+
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
 #define SENSOR_PAGE_REG 0xfe
@@ -505,7 +512,6 @@ static int sensor_write(struct tx_isp_subdev *sd, unsigned char reg,
 
 	return ret;
 }
-
 
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {

@@ -28,6 +28,13 @@
 #define SENSOR_NAME "gc8613"
 #define SENSOR_CHIP_ID_H (0x86)
 #define SENSOR_CHIP_ID_L (0x13)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x31
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -95,7 +102,6 @@ struct again_lut_20 {
 	unsigned int gain;
 };
 
-
 struct again_lut_20 sensor_again_lut_20fps[] = {
 	{0x0, 0x0, 0x0, 0x0, 0x46, 0x46, 0x74, 0x2, 0x77, 0},            //1.000000
 	{0x1, 0x90, 0x2, 0x0, 0x47, 0x47, 0x74, 0x2, 0x77, 13726},       //     1.156250
@@ -123,7 +129,6 @@ struct again_lut_20 sensor_again_lut_20fps[] = {
 	{0x17, 0x5, 0x0, 0x1, 0x61, 0x61, 0x7f, 0x0, 0x75, 365304},      //      47.640625
 	{0x18, 0x95, 0x2, 0x1, 0x63, 0x63, 0x7f, 0x0, 0x75, 382780},     //       57.312500
 	{0x19, 0x6, 0x0, 0x1, 0x66, 0x66, 0x7f, 0x0, 0x75, 399272},      //      68.234375
-
 
 };
 
@@ -247,11 +252,11 @@ struct tx_isp_mipi_bus sensor_mipi = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x8613,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	.cbus_device = 0x31,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 393216,
 	.max_dgain = 0,
 	.expo_fs = 1,
@@ -867,7 +872,6 @@ static struct regval_list sensor_init_regs_3840_2160_20fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 
 };
-
 
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */

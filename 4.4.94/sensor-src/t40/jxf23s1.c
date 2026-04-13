@@ -17,8 +17,17 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "jxf23s1"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_30FPS_SCLK (86400000)
@@ -302,9 +311,9 @@ struct tx_isp_dvp_bus sensor_dvp={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0xf23,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -335,7 +344,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 #if 0
@@ -1001,7 +1009,6 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	/* {0x17, 0x00}, */
 	/* {0x16, 0x4F}, */
 
-
 	{0x00,0x00},
 	{0x01,0x0a},
 	{0x02,0x00},
@@ -1451,7 +1458,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		tmp9b = (unsigned char)(val_9b);
 	}
 
-
 	sensor_write(sd, 0x0c, tmp1);
 	sensor_write(sd, 0x66, tmp2);
 	sensor_write(sd, 0x99, tmp99);
@@ -1567,7 +1573,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		ret = -1;
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
-
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

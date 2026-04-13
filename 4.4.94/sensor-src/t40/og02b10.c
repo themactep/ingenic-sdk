@@ -21,9 +21,18 @@
 #include <sensor-common.h>
 
 #define SENSOR_NAME "og02b10"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x23)
 #define SENSOR_CHIP_ID_M (0x11)
 #define SENSOR_CHIP_ID_L (0xa0)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_60FPS_SCLK_LINEAR  79607520 /* 937 * 1416 * 60 */
@@ -187,11 +196,11 @@ struct tx_isp_mipi_bus sensor_mipi_linear={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x2311,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 259142,
 	.max_dgain = 0,
 	.min_integration_time = 4,
@@ -202,7 +211,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1280_720_30fps_mipi_linear[] = {
 	{0x0103,0x01},
@@ -683,7 +691,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	return 0;
 }
 
-
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
 	int ret = 0;
@@ -714,7 +721,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_write(sd, 0x3821, mirror_val);
 	return ret;
 }
-
 
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 {

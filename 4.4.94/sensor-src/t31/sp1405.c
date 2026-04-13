@@ -19,13 +19,18 @@
 #include <tx-isp-debug.h>
 
 #define SENSOR_NAME "sp1405"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_CHIP_ID 0x9732
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK  (35560680)
@@ -464,7 +469,6 @@ static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -474,7 +478,6 @@ static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},

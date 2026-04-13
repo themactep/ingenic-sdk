@@ -18,8 +18,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "jxf37s1"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x37)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x40
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_SUPPORT_30FPS_SCLK_DVP (86400000)
@@ -311,9 +320,9 @@ struct tx_isp_dvp_bus sensor_dvp = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0xf37,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -1136,11 +1145,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x48, 0x85},
 	{0x48, 0x05},
 
-
 	{0x00, 0x1f},
 	{0x01, 0x02},
 	{0x02, 0xff},
-
 
 #else
 	{0x12, 0x60},
@@ -1546,7 +1553,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ag_last = again;
 	if (ret < 0)
 		return ret;
-
 
 	return 0;
 }

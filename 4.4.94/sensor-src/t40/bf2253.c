@@ -18,8 +18,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "bf2253"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x22)
 #define SENSOR_CHIP_ID_L (0x53)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x6d
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
 #define SENSOR_SUPPORT_30FPS_SCLK (66002400)
@@ -108,9 +117,9 @@ struct tx_isp_mipi_bus sensor_mipi={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x2253,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x6d,
+	.cbus_device = SENSOR_I2C_ADDRESS,
     .dbus_type =TX_SENSOR_DATA_INTERFACE_MIPI ,
 	.dvp = {
 		.mode = SENSOR_DVP_HREF_MODE,
@@ -137,7 +146,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
 	/*Version: V01P10_20200409B*/
@@ -170,7 +178,6 @@ static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
     {0x5d,0x73},
     {0x6a,0x2f}, //0x0f - 0x4f   增益
     //{0x6a,0x3f}, //0x0f - 0x4f   增益
-
 
     {0x6b,0x0e},//H  //曝光时间     def 02h
     {0x6c,0x7e},//L                 def afh

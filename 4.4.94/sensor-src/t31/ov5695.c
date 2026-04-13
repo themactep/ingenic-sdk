@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "ov5695"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x5695
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_L (0x95)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 60
@@ -914,7 +919,6 @@ static struct regval_list sensor_init_regs_2592_1944_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 1920*1080 @60fps */
 	{
@@ -1006,7 +1010,6 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 
 	return ret;
 }
-
 
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {

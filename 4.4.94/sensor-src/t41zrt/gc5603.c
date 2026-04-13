@@ -27,7 +27,15 @@
 
 #define SENSOR_NAME "gc5603"
 #define SENSOR_CHIP_ID_H (0x56)
+
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x31
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_SUPPORT_WDR_15FPS_SCLK (126 * 1000 * 1000 * 2)
@@ -224,11 +232,11 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x5603,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	.cbus_device = 0x31,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 390142,
 	.max_dgain = 0,
 	.expo_fs = 1,
@@ -384,7 +392,6 @@ static struct regval_list sensor_init_regs_2880_1620_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
@@ -533,7 +540,6 @@ static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x0100, 0x09},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
@@ -1358,7 +1364,6 @@ int get_sensor_height(void) {
 int get_sensor_wdr_mode(void) {
 	return 1;
 }
-
 
 int init_sensor(void) {
 	return private_i2c_add_driver(&sensor_driver);

@@ -19,13 +19,18 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "c2399"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x36
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x020B
 #define SENSOR_CHIP_ID_H (0x02)
 #define SENSOR_CHIP_ID_L (0x0b)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
+
 #define SENSOR_REG_END 0xFFFF
 #define SENSOR_REG_DELAY 0xFFFE
 #define SENSOR_SUPPORT_30FPS_SCLK (65600000)
@@ -250,7 +255,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.one_line_expr_in_us = 30,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	// SENSOR_1080p_mipi1lane_30fps_V2P0.ini
@@ -555,7 +559,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0100,0x01}, //stream on
 	{SENSOR_REG_END, 0x00},
 };
-
 
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].

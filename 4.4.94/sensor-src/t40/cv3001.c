@@ -14,8 +14,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "cv3001"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H 0x30
 #define SENSOR_CHIP_ID_L 0x01
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x35
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -32,7 +41,6 @@ struct regval_list {
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
-
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 {
@@ -59,9 +67,9 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x3001,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x35,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.max_again = 589824,
 	.max_dgain = 0,
@@ -140,7 +148,6 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3871, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{

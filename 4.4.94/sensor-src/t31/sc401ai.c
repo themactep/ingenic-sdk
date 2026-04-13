@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "sc401ai"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_CHIP_ID 0xcd2e
 #define SENSOR_CHIP_ID_H (0xcd)
 #define SENSOR_CHIP_ID_L (0x2e)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK (126000000)
@@ -64,7 +69,6 @@ struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
-
 
 struct again_lut {
 	unsigned int value;
@@ -896,7 +900,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	if (ret < 0)
 		return ret;
 
-
 	return 0;
 }
 
@@ -1239,7 +1242,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

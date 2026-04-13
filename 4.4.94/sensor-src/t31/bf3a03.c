@@ -20,11 +20,16 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "bf3a03"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x6e
 #define SENSOR_CHIP_ID 0x3a03
 #define SENSOR_CHIP_ID_H (0x3a)
 #define SENSOR_CHIP_ID_L (0x03)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x6e
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_PAGE_REG 0xfa

@@ -19,8 +19,17 @@
 #include <fix-point-calc.h>
 
 #define SENSOR_NAME "hi556"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x05)
 #define SENSOR_CHIP_ID_L (0x56)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x20
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 
@@ -83,9 +92,9 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x0556,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x20,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.mipi = {
@@ -168,7 +177,6 @@ static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 /* Pixel order 	  : Green 1st (=GB) */
 /* X/Y-flip	  : X-flip */
 /* BLC offset	  : 64code */
-
 
         {0x0e00, 0x0102},
         {0x0e02, 0x0102},

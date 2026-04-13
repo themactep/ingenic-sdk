@@ -9,7 +9,6 @@
  *   1          2304*1296       15       mipi_2lane           linear
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -28,8 +27,16 @@
 
 #define SENSOR_NAME "gc3003"
 #define SENSOR_CHIP_ID_H (0x30)
+
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x10)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x37
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 30
@@ -196,9 +203,9 @@ struct tx_isp_mipi_bus sensor_mipi_15FPS_linear = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x300300,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x37,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 393216,
@@ -1247,7 +1254,6 @@ int get_sensor_height(void) {
 int get_sensor_wdr_mode(void) {
 	return 0;
 }
-
 
 int init_sensor(void) {
 	return private_i2c_add_driver(&sensor_driver);

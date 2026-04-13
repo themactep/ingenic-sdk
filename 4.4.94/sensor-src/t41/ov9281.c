@@ -24,8 +24,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "ov9281"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x92)
 #define SENSOR_CHIP_ID_L (0x81)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x60
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_SCLK  (0x2d8*0x38e*120)
@@ -149,9 +158,9 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x9732,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x60,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -200,7 +209,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 struct tx_isp_mipi_bus sensor_mipi_640 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 800,
@@ -229,7 +237,6 @@ struct tx_isp_mipi_bus sensor_mipi_640 = {
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
-
 
 static struct regval_list sensor_init_regs_1280_800_120fps_mipi[] = {
 	/*
@@ -347,7 +354,6 @@ static struct regval_list sensor_init_regs_1280_800_120fps_mipi[] = {
 	{0x4f13, 0xc4},
 	{SENSOR_REG_DELAY, 50},
 	{0x0100, 0x01},
-
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -900,7 +906,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-
 static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val_m;
@@ -935,7 +940,6 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 
 	return ret;
 }
-
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;

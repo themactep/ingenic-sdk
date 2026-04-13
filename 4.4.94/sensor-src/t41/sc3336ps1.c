@@ -26,8 +26,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc3336ps1"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0x9c)
 #define SENSOR_CHIP_ID_L (0x41)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -377,9 +386,9 @@ struct tx_isp_mipi_bus sensor_mipi_40fps_slave = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0x9c41,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 365791,
 	.max_dgain = 0,
 	.min_integration_time = 2,
@@ -776,7 +785,6 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi_slave[] = {
 	{SENSOR_REG_DELAY, 0x01},
 	{SENSOR_REG_END, 0x00},/* END MARKER */
 };
-
 
 static struct regval_list sensor_init_regs_2304_1296_40fps_mipi_master[] = {
 	{0x0103, 0x01},

@@ -24,8 +24,17 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "sc5338"
+// ============================================================================
+
 #define SENSOR_CHIP_ID_H (0xce)
 #define SENSOR_CHIP_ID_L (0x50)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -214,7 +223,6 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-
 unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
@@ -340,9 +348,9 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = 0xce50,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x30,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.max_again = 327680,
 	.max_again_short = 327680,
 	.max_dgain = 0,
@@ -909,7 +917,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
        return 0;
 }
-
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {

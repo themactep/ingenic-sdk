@@ -18,14 +18,19 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "os02g10"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x3c
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID 0x560247
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_M (0x02)
 #define SENSOR_CHIP_ID_L (0x47)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x3c
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
@@ -335,7 +340,6 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xb1, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

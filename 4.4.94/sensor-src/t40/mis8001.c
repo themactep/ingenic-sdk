@@ -18,6 +18,8 @@
 #include <txx-funcs.h>
 
 #define SENSOR_NAME "mis8001"
+// ============================================================================
+
 //#define SENSOR_CHIP_ID_H (0x82)
 //#define SENSOR_CHIP_ID_L (0x35)
 #define SENSOR_REG_END 0xffff
@@ -28,6 +30,12 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
 #define SENSOR_VERSION "H20210622a"
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x36
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);
@@ -339,9 +347,9 @@ struct tx_isp_mipi_bus sensor_mipi_2M={
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
 	.chip_id = 0x8001,
-	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = 0x36,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
@@ -2226,7 +2234,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_read(sd, 0x0006, &val);
 	it = (FH_h | FH_m | val)-(value & 0xffff);
 
-
 	ret += sensor_write(sd, 0x000b, (unsigned char)((it >> 16) & 0x3));
 	ret += sensor_write(sd, 0x000a, (unsigned char)((it >>  8) & 0xff));
 	ret += sensor_write(sd, 0x0009, (unsigned char)( it        & 0xff));
@@ -2267,7 +2274,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 */
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value)
 {
-
 
 	return 0;
 }
@@ -2335,7 +2341,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int max_fps;
 	unsigned char val = 0;
 	unsigned int newformat = 0; //the format is 24.8
-
 
 	switch(sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_30:
@@ -2563,7 +2568,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
@@ -2678,7 +2682,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

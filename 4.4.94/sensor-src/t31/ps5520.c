@@ -18,13 +18,18 @@
 #include <sensor-info.h>
 
 #define SENSOR_NAME "ps5520"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x48
 #define SENSOR_MAX_WIDTH 2608
 #define SENSOR_MAX_HEIGHT 1960
 #define SENSOR_CHIP_ID 0x5520
 #define SENSOR_CHIP_ID_H (0x55)
 #define SENSOR_CHIP_ID_L (0x20)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x48
+
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_BANK_REG 0xef
@@ -580,7 +585,6 @@ static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
  * the part of driver was fixed.
  */
 
-
 static struct regval_list sensor_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
@@ -711,8 +715,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-
-
 static int ag_last = -1;
 static int it_last = -1;
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
@@ -744,7 +746,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	return 0;
 
 }
-
 
 /*
    static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
@@ -1131,14 +1132,12 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)
 {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {

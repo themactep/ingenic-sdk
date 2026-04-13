@@ -19,13 +19,18 @@
 #include <tx-isp-debug.h>
 
 #define SENSOR_NAME "sc4236h"
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_WIDTH 2000
 #define SENSOR_MAX_HEIGHT 1504
 #define SENSOR_CHIP_ID 0x3235
 #define SENSOR_CHIP_ID_H (0x32)
 #define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDRESS 0x30
+
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_SUPPORT_PCLK_FPS_60 (120000*1000)
@@ -1281,7 +1286,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
             default:
 			ISP_ERROR("Now we do not support this framerate!!!\n");
         }
-
 
 	sd = &sensor->sd;
 	sensor_attr.expo_fs = 1;
