@@ -1,0 +1,66 @@
+Ingenic JZ AES Hardware Accelerator
+====================================
+
+Out-of-tree kernel module exposing the AES block found on Ingenic
+T-series SoCs as /dev/aes. Userspace programs use an ioctl interface
+to run AES-128/192/256 in ECB or CBC mode with DMA.
+
+Supported hardware
+------------------
+  T10, T20, T21, T23, T30, T31       PRJ007 register layout
+  T40, T41                           PRJ007 register layout
+  T32, T33                           PRJ008 register layout
+
+The driver auto-selects the layout from CONFIG_SOC_* at build time.
+Tested on T31 (1.4 GHz) and T20 (800 MHz).
+
+Supported kernels
+-----------------
+  3.10, 4.4, 5.15 — DMA alloc and IRQ compat macros cover all three.
+
+Build
+-----
+Built in-tree by the SDK kernel build (see Kbuild). No standalone
+Makefile — sibling misc/ drivers follow the same pattern.
+
+Test programs (test_aes, test_endian, test_le_bit) are userspace
+probes/benches. Compile ad hoc with the target toolchain, e.g.:
+
+    mipsel-linux-gcc -O2 -Wall -o test_aes test_aes.c
+
+Install
+-------
+  insmod jz-aes.ko
+
+Creates /dev/aes (misc device). Any process may open it; the driver
+serializes access to the HW engine internally with a mutex.
+
+Files
+-----
+  jz-aes.c        Kernel module. DMA AES, per-fd session state, HW
+                  mutex, key caching, byte-swap flag, combined
+                  IOCTL_AES_DO (setkey + encrypt + decrypt in one
+                  ioctl for low latency).
+
+  jz-aes.h        Public header. Register definitions for PRJ007 and
+                  PRJ008 layouts, ioctl numbers, AES_FLAG_BSWAP.
+
+  test_aes.c      Userspace test + throughput bench. Roundtrips,
+                  concurrent-session stress, MB/s measurement.
+
+  test_aes.h      Userspace ioctl/struct definitions (same wire
+                  contract as jz-aes.h but without kernel includes).
+
+  test_endian.c   Endianness probe — confirmed key = BE, data = swap
+                  on T31.
+
+  test_le_bit.c   ASCR bit-12 (LE mode) probe. Checks whether the
+                  SoC has the T32/T33 little-endian data path.
+
+mbedTLS integration
+-------------------
+The production mbedTLS ALT integration (AES_ALT + CCM_ALT + GCM_ALT
+with HW/SW threshold dispatch and per-session scratch buffers)
+consuming /dev/aes lives in:
+
+    ~/projects/thingino/jz-crypto/aes/
