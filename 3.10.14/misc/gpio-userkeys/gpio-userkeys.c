@@ -101,8 +101,14 @@ static int __init add_gpio_keys_init(void)
     new_button_device->dev.platform_data = &new_button_data;
     new_button_device->dev.release = gpio_keys_device_release;
 
-    // Unregister the existing device
-    platform_device_unregister(&jz_button_device);
+    // Unregister the existing board device to replace it with our new one.
+    // On reload (after prior rmmod) the device may already be unregistered;
+    // skip to avoid double-free. We check kobj state which is cleared by
+    // device_unregister.
+    if (jz_button_device.dev.kobj.state_initialized) {
+        jz_button_device.dev.release = gpio_keys_device_release;
+        platform_device_unregister(&jz_button_device);
+    }
 
     // Register the new device
     ret = platform_device_add(new_button_device);
