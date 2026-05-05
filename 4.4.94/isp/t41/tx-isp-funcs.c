@@ -25,7 +25,9 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/resource.h>
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 #include <linux/i2c-gpio.h>
+#endif
 
 /* #include <gpio.h> */
 #include <linux/gpio.h>
@@ -40,7 +42,7 @@
 #include <mach/jzsnd.h>
 #endif
 
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 #include <dt-bindings/interrupt-controller/t41-irq.h>
 #endif
 
@@ -105,6 +107,10 @@ MODULE_PARM_DESC(ivdc_mem_line, "ivdc mem line");
 int ivdc_threshold_line = 0;
 module_param(ivdc_threshold_line, int, S_IRUGO);
 MODULE_PARM_DESC(ivdc_threshold_line, "ivdc threshold line");
+
+extern uint16_t tx_isp_core_ioctl_mask[11];
+module_param_array(tx_isp_core_ioctl_mask, short, NULL, 0644);
+MODULE_PARM_DESC(tx_isp_core_ioctl_mask, "isp ioctl calls mask");
 
 char *sclk_name[3] = {"mpll", "vpll", "sclka"};
 
@@ -451,7 +457,7 @@ int private_clk_prepare_enable(struct clk *clk)
 #ifdef CONFIG_KERNEL_3_10
 	return clk_enable(clk);
 #endif
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 	return clk_prepare_enable(clk);
 #endif
 }
@@ -475,7 +481,7 @@ void private_clk_disable_unprepare(struct clk *clk)
 #ifdef CONFIG_KERNEL_3_10
 	clk_disable(clk);
 #endif
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 	clk_disable_unprepare(clk);
 #endif
 }
@@ -535,7 +541,12 @@ EXPORT_SYMBOL(private_i2c_del_driver);
 
 struct i2c_client *private_i2c_new_device(struct i2c_adapter *adap, struct i2c_board_info const *info)
 {
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 	return i2c_new_device(adap, info);
+#endif
+#ifdef CONFIG_KERNEL_6_1
+	return i2c_new_client_device(adap, info);
+#endif
 }
 
 void private_i2c_set_clientdata(struct i2c_client *dev, void *data)
@@ -576,7 +587,23 @@ EXPORT_SYMBOL(private_gpio_free);
 
 int private_gpio_direction_output(unsigned gpio, int value)
 {
-	return gpio_direction_output(gpio, value);
+	uint8_t Px = gpio / 32;
+	uint8_t port = gpio % 32;
+	uint32_t base;
+
+	base = 0xb0010000 + Px * 0x1000;
+
+	*(volatile u32 *)(base + 0x18) = (0x1 << port);
+	*(volatile u32 *)(base + 0x24) = (0x1 << port);
+	*(volatile u32 *)(base + 0x38) = (0x1 << port);
+
+	if (value) {
+		*(volatile u32 *)(base + 0x44) = (0x1 << port);
+	} else {
+		*(volatile u32 *)(base + 0x48) = (0x1 << port);
+	}
+
+	return 0;
 }
 EXPORT_SYMBOL(private_gpio_direction_output);
 
@@ -705,10 +732,18 @@ void private_misc_deregister(struct miscdevice *mdev)
 }
 
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode,
 						struct proc_dir_entry *parent,
 						const struct file_operations *proc_fops,
 						void *data)
+#endif
+#ifdef CONFIG_KERNEL_6_1
+struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode,
+						struct proc_dir_entry *parent,
+						const struct proc_ops *proc_fops,
+						void *data)
+#endif
 {
 	return proc_create_data(name, mode, parent, proc_fops, data);
 }
@@ -757,6 +792,7 @@ int private_filp_close(struct file *filp, fl_owner_t id)
 	return filp_close(filp, id);
 }
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 ssize_t private_vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 {
 	return vfs_read(file, buf, count, pos);
@@ -765,12 +801,24 @@ ssize_t private_vfs_write(struct file *file, const char __user *buf, size_t coun
 {
 	return vfs_write(file, buf, count, pos);
 }
+#endif
+#ifdef CONFIG_KERNEL_6_1
+ssize_t private_vfs_read(struct file *file, void *buf, size_t count, loff_t *pos)
+{
+	return kernel_read(file, buf, count, pos);
+}
+ssize_t private_vfs_write(struct file *file, const void *buf, size_t count, loff_t *pos)
+{
+	return kernel_write(file, buf, count, pos);
+}
+#endif
 
 loff_t private_vfs_llseek(struct file *file, loff_t offset, int whence)
 {
 	return vfs_llseek(file, offset, whence);
 }
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 mm_segment_t private_get_fs(void)
 {
 	return get_fs();
@@ -780,6 +828,7 @@ void private_set_fs(mm_segment_t val)
 {
 	set_fs(val);
 }
+#endif
 
 void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
 			    enum dma_data_direction direction)
@@ -787,10 +836,18 @@ void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
 	dma_cache_sync(dev, vaddr, size, direction);
 }
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 void private_getrawmonotonic(struct timespec *ts)
 {
 	getrawmonotonic(ts);
 }
+#endif
+#ifdef CONFIG_KERNEL_6_1
+void private_getrawmonotonic(struct timespec64 *ts)
+{
+	ktime_get_real_ts64(ts);
+}
+#endif
 
 /* kthread interfaces */
 
@@ -900,9 +957,99 @@ bool private_schedule_work(struct work_struct *work)
 	return schedule_work(work);
 }
 
-
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 void private_do_gettimeofday(struct timeval *tv)
 {
 	do_gettimeofday(tv);
 	return;
+}
+#endif
+#ifdef CONFIG_KERNEL_6_1
+void private_do_gettimeofday(struct timespec64 *ts)
+{
+	ktime_get_ts64(ts);
+	return;
+}
+#endif
+
+void private_atomic_set(atomic_t *v, int i)
+{
+	atomic_set(v, i);
+	return;
+}
+
+int private_atomic_read(atomic_t *v)
+{
+	return atomic_read(v);
+}
+
+long private_wait_event_interruptible_timeout(wait_queue_head_t q, int condition, long timeout)
+{
+	return wait_event_interruptible_timeout(q, condition, timeout);
+}
+
+void private_dma_sync_single_for_device(struct device *dev, dma_addr_t dma_handle, size_t size, enum dma_data_direction dir)
+{
+	dma_sync_single_for_device(dev, dma_handle, size, dir);
+	return;
+}
+
+void private_dma_free_coherent(struct device *dev, size_t size, void *cpu_addr, dma_addr_t dma_handle)
+{
+	dma_free_coherent(dev, size, cpu_addr, dma_handle);
+	return;
+}
+
+unsigned int private_virt_to_phys(volatile const void *address)
+{
+	return virt_to_phys(address);
+}
+
+void *private_phys_to_virt(phys_addr_t address)
+{
+	return phys_to_virt(address);
+}
+
+int private_remap_pfn_range(struct vm_area_struct *vma, unsigned long addr, unsigned long pfn, unsigned long size, pgprot_t prot)
+{
+	return remap_pfn_range(vma, addr, pfn, size, prot);
+}
+
+struct inode* private_file_inode(struct file *file)
+{
+	return file_inode(file);
+}
+
+loff_t private_i_size_read(const struct inode *inode)
+{
+	return i_size_read(inode);
+}
+
+struct class *private_class_create(struct module *owner, const char *name)
+{
+    return class_create(owner, name);
+}
+
+void private_class_destroy(struct class *cls)
+{
+    class_destroy(cls);
+}
+
+struct device *private_device_create(struct class *class, struct device *parent,
+			     dev_t devt, void *drvdata, const char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+
+	return device_create(class, parent, devt, drvdata, fmt, args);
+}
+
+void private_device_destroy(struct class *class, dev_t devt)
+{
+    device_destroy(class, devt);
+}
+
+int private_clk_set_parent(struct clk *clk, struct clk *parent)
+{
+    return clk_set_parent(clk, parent);
 }

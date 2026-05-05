@@ -31,7 +31,7 @@
 #include <mach/platform.h>
 #endif
 
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 #include <dt-bindings/interrupt-controller/t41-irq.h>
 #endif
 
@@ -43,7 +43,10 @@
 #include <soc/gpio.h>
 /*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
+#ifdef CONFIG_KERNEL_6_1
 #include <linux/hrtimer.h>
+#include <linux/proc_fs.h>
+#endif
 
 #ifndef U16_MAX
 #define U16_MAX 					0xFFFF
@@ -181,7 +184,15 @@ void private_init_waitqueue_head(wait_queue_head_t *q);
 int private_misc_register(struct miscdevice *mdev);
 void private_misc_deregister(struct miscdevice *mdev);
 
+#ifdef CONFIG_KERNEL_6_1
+#define PDE_DATA pde_data
+#endif
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode, struct proc_dir_entry *parent,const struct file_operations *proc_fops, void *data);
+#endif
+#ifdef CONFIG_KERNEL_6_1
+struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode, struct proc_dir_entry *parent,const struct proc_ops *proc_fops, void *data);
+#endif
 /* proc file interfaces */
 ssize_t private_seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos);
 loff_t private_seq_lseek(struct file *file, loff_t offset, int whence);
@@ -206,25 +217,62 @@ long private_copy_to_user(void __user *to, const void *from, long size);
 /* file ops */
 struct file *private_filp_open(const char *filename, int flags, umode_t mode);
 int private_filp_close(struct file *filp, fl_owner_t id);
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 ssize_t private_vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos);
 ssize_t private_vfs_write(struct file *file, const char __user *buf, size_t count, loff_t *pos);
+#endif
+#ifdef CONFIG_KERNEL_6_1
+ssize_t private_vfs_read(struct file *file, void *buf, size_t count, loff_t *pos);
+ssize_t private_vfs_write(struct file *file, const void *buf, size_t count, loff_t *pos);
+#endif
 loff_t private_vfs_llseek(struct file *file, loff_t offset, int whence);
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 mm_segment_t private_get_fs(void);
 void private_set_fs(mm_segment_t val);
+#endif
 void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
 			    enum dma_data_direction direction);
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 void private_getrawmonotonic(struct timespec *ts);
+#endif
+#ifdef CONFIG_KERNEL_6_1
+void private_getrawmonotonic(struct timespec64 *ts);
+#endif
 struct net *private_get_init_net(void);
 
 ktime_t private_ktime_set(const long secs, const unsigned long nsecs);
 void private_set_current_state(unsigned int state);
 int private_schedule_hrtimeout(ktime_t *ex, const enum hrtimer_mode mode);
 bool private_schedule_work(struct work_struct *work);
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 void private_do_gettimeofday(struct timeval *tv);
+#endif
+#ifdef CONFIG_KERNEL_6_1
+void private_do_gettimeofday(struct timespec64 *ts);
+#endif
 
 /* isp driver interface */
 void private_get_isp_priv_mem(unsigned int *phyaddr, unsigned int *size);
 
 /* int private_driver_get_interface(void); */
+
+void private_atomic_set(atomic_t *v, int i);
+int private_atomic_read(atomic_t *v);
+long private_wait_event_interruptible_timeout(wait_queue_head_t q, int condition, long timeout);
+void private_dma_sync_single_for_device(struct device *dev, dma_addr_t dma_handle, size_t size, enum dma_data_direction dir);
+void private_dma_free_coherent(struct device *dev, size_t size, void *cpu_addr, dma_addr_t dma_handle);
+unsigned int private_virt_to_phys(volatile const void *address);
+void *private_phys_to_virt(phys_addr_t address);
+int private_remap_pfn_range(struct vm_area_struct *vma, unsigned long addr, unsigned long pfn, unsigned long size, pgprot_t prot);
+struct inode* private_file_inode(struct file *file);
+loff_t private_i_size_read(const struct inode *inode);
+
+struct class *private_class_create(struct module *owner, const char *name);
+void private_class_destroy(struct class *cls);
+struct device *private_device_create(struct class *class, struct device *parent,
+			     dev_t devt, void *drvdata, const char *fmt, ...);
+void private_device_destroy(struct class *class, dev_t devt);
+
+int private_clk_set_parent(struct clk *clk, struct clk *parent);
 
 #endif /*__TXX_DRV_FUNCS_H__*/

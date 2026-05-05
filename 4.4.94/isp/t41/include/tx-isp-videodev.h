@@ -100,6 +100,11 @@ struct tisp_timecode {
 	uint8_t	userbits[4];
 };
 
+struct tisp_timeval {
+	long tv_sec;
+	int tv_usec;
+};
+
 /**
  * struct tisp_plane - plane info for multi-planar buffers
  * @bytesused:		number of bytes occupied by data in the plane (payload)
@@ -170,7 +175,7 @@ struct tisp_buffer {
 	uint32_t		bytesused;
 	uint32_t		flags;
 	uint32_t		field;
-	struct timeval		timestamp;
+	struct tisp_timeval	timestamp;
 	struct tisp_timecode	timecode;
 	uint32_t		sequence;
 
@@ -185,6 +190,13 @@ struct tisp_buffer {
 	uint32_t		length;
 	uint32_t		reserved2;
 	uint32_t		reserved;
+};
+
+struct tisp_buffer_reserved2 {
+	uint32_t fps_num;
+	uint32_t fps_den;
+	uint32_t reserved_size;
+	uint32_t reserved[0];
 };
 
 struct tisp_rect {
@@ -493,10 +505,17 @@ enum input_mbus_fmt {
 	TISP_VI_FMT_SIGGB16_1X16,
 };
 
+struct isp_set_gpio_attr{
+	uint16_t gpio_num[10];
+	uint16_t gpio_sta[10];
+	uint16_t free;
+};
+
 #define BASE_DEVICE_PRIVATE		0
 #define BASE_TUNING_PRIVATE		50
 #define BASE_IVDC_PRIVATE		60
 #define BASE_FS_PRIVATE			80
+#define BASE_LDC_PRIVATE		120
 #define BASE_DEVICE1_PRIVATE		140
 
 //device ioctl
@@ -552,6 +571,8 @@ enum input_mbus_fmt {
 #define TISP_VIDIOC_GET_VIC_DONE_CB		_IOWR('T',BASE_DEVICE_PRIVATE + 50, int)
 //device1 ioctl
 #define TISP_VIDIOC_SET_ISP_WDR_OPEN		_IOWR('T',BASE_DEVICE1_PRIVATE + 1, int)
+#define TISP_VIDIOC_SET_GPIO_INIT		_IOWR('T',BASE_DEVICE1_PRIVATE + 2, int)
+#define TISP_VIDIOC_SET_GPIO_STA		_IOWR('T',BASE_DEVICE1_PRIVATE + 3, int)
 
 //tuning ioctl
 #define TISP_VIDIOC_S_CTRL			_IOWR('T', BASE_TUNING_PRIVATE + 1, struct tisp_control)
@@ -578,4 +599,5 @@ enum input_mbus_fmt {
 #define TISP_VIDIOC_DEFAULT_CMD_SET_BANKS	_IOWR('T', BASE_FS_PRIVATE + 9, int)
 #define TISP_VIDIOC_DEFAULT_CMD_LISTEN_BUF	_IOWR('T', BASE_FS_PRIVATE + 10, int)
 #define TISP_VIDIOC_IMAGE_ALIGN			_IOWR('T', BASE_FS_PRIVATE + 11, int)
+#define TISP_VIDIOC_MISC_FUNCTIONS		_IOWR('T', BASE_FS_PRIVATE + 11, int)
 #endif /* __TISP_VIDEODEV_H__*/

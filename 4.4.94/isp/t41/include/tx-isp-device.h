@@ -34,7 +34,12 @@ struct tx_isp_module {
 	struct file_operations *ops;
 
 	/* the interface */
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 	struct file_operations *debug_ops;
+#endif
+#ifdef CONFIG_KERNEL_6_1
+	struct proc_ops *debug_ops;
+#endif
 
 	/* the list header of sub-modules */
 	struct tx_isp_module *submods[TX_ISP_ENTITY_ENUM_MAX_DEPTH];
@@ -256,7 +261,6 @@ struct tx_isp_device {
 #define irqdev_to_subdev(dev) (container_of(dev, struct tx_isp_subdev, irqdev))
 #define module_to_ispdev(mod) (container_of(mod, struct tx_isp_device, module))
 
-
 #define tx_isp_sd_readl(sd, reg)		\
 	tx_isp_readl(((sd)->base[0]), reg)
 #define tx_isp_sd_writel(sd, reg, value)		\
@@ -274,7 +278,12 @@ static inline void tx_isp_set_module_nodeops(struct tx_isp_module *module, struc
 	module->ops = ops;
 }
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 static inline void tx_isp_set_module_debugops(struct tx_isp_module *module, struct file_operations *ops)
+#endif
+#ifdef CONFIG_KERNEL_6_1
+static inline void tx_isp_set_module_debugops(struct tx_isp_module *module, struct proc_ops *ops)
+#endif
 {
 	module->debug_ops = ops;
 }
@@ -284,7 +293,12 @@ static inline void tx_isp_set_subdev_nodeops(struct tx_isp_subdev *sd, struct fi
 	tx_isp_set_module_nodeops(&sd->module, ops);
 }
 
+#if defined(CONFIG_KERNEL_3_10) || defined(CONFIG_KERNEL_4_4_94)
 static inline void tx_isp_set_subdev_debugops(struct tx_isp_subdev *sd, struct file_operations *ops)
+#endif
+#ifdef CONFIG_KERNEL_6_1
+static inline void tx_isp_set_subdev_debugops(struct tx_isp_subdev *sd, struct proc_ops *ops)
+#endif
 {
 	tx_isp_set_module_debugops(&sd->module, ops);
 }

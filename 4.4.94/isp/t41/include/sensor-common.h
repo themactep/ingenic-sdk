@@ -3,21 +3,21 @@
 #include <soc/gpio.h>
 #include <txx-funcs.h>
 
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 #define SEN_TCLK "vpll"
 #endif
 #ifdef CONFIG_KERNEL_3_10
-#define SEN_TCLK "sclka"
+#define SEN_TCLK "vpll"
 #endif
 
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 #define SEN_MCLK "mux_cim"
 #endif
 #ifdef CONFIG_KERNEL_3_10
 #define SEN_MCLK "cgu_cim"
 #endif
 
-#ifdef CONFIG_KERNEL_4_4_94
+#if defined(CONFIG_KERNEL_4_4_94) || defined(CONFIG_KERNEL_6_1)
 #define SEN_BCLK "div_cim"
 #endif
 #ifdef CONFIG_KERNEL_3_10

@@ -428,6 +428,11 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_GET_INTERNAL_INPUT,
 	TX_ISP_EVENT_SYNC_CORE_INFO,
 	TX_ISP_EVENT_S_WDR_MODE,
+	TX_ISP_EVENT_SYNC_MDNS_FOR_AISP,
+	TX_ISP_EVENT_CH1_DEBUG_FOR_AISP,
+	TX_ISP_EVENT_CH1_DQ_FOR_AISP,
+	TX_ISP_EVENT_GPIO_INIT,
+	TX_ISP_EVENT_SET_GPIO_STATE,
 	/* the events of sensor are defined as follows. */
 	TX_ISP_EVENT_SENSOR_REGISTER = NOTIFICATION_TYPE_SENSOR_OPS,
 	TX_ISP_EVENT_SENSOR_RELEASE,
@@ -474,6 +479,8 @@ enum tx_isp_notification {
 	TX_ISP_EVENT_SLAVE_MODULE,
 	TX_ISP_EVENT_CORE_FRAME_DONE,
 	TX_ISP_EVENT_CORE_DAY_NIGHT,
+	TX_ISP_EVENT_CORE_CH1_QBUF_FOR_AISP,
+	TX_ISP_EVENT_CORE_MODULE_FRAME_DONE,
 };
 
 struct tx_isp_notify_argument{
@@ -564,6 +571,16 @@ struct isp_buf_info {
 	uint32_t vinum;
 	uint32_t paddr;
 	uint32_t size;
+};
+
+struct tx_isp_mdns_to_aisp {
+	unsigned int vinum;
+	unsigned int bsn_addr;
+	unsigned int bsn_stride;
+	unsigned int bsn_size;
+	unsigned int ass_addr;
+	unsigned int ass_stride;
+	unsigned int ass_size;
 };
 
 enum tx_isp_vidioc_default_command {
