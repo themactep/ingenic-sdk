@@ -461,6 +461,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
+	os04d10_write(sd, 0xfd, 0x00);
 	ret = os04d10_read(sd, 0x02, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
