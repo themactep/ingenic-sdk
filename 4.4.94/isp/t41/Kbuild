@@ -1,4 +1,4 @@
-ISP_FW_VER=1.2.0
+ISP_FW_VER=1.2.6
 
 ldflags-y += --no-warn-mismatch
 
