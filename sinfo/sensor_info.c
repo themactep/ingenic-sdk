@@ -369,6 +369,22 @@ int sensor_read(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint32_t addr, ui
 	return ret;
 }
 
+int sensor_write(SENSOR_INFO_P sinfo, struct i2c_adapter *adap, uint16_t reg, unsigned char value)
+{
+	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
+	struct i2c_msg msg = {
+		.addr	= sinfo->i2c_addr,
+		.flags	= 0,
+		.len	= 3,
+		.buf	= buf,
+	};
+	int ret;
+	ret = i2c_transfer(adap, &msg, 1);
+	if (ret > 0)
+		ret = 0;
+	return ret;
+}
+
 static int32_t process_one_adapter(struct device *dev, void *data)
 {
 	int32_t ret;
@@ -458,9 +474,15 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 				gpio_direction_output(reset_gpio, 1);
 				msleep(20);
 				gpio_direction_output(reset_gpio, 0);
-				if(strcmp(g_sinfo[i].name, "sp1409") == 0)
+				if(strcmp(g_sinfo[i].name, "sp1409") == 0) {
 					msleep(600);
-				else{
+				} else if(strcmp(g_sinfo[i].name, "sc2336p") == 0 ||
+					  strcmp(g_sinfo[i].name, "sc2337p") == 0 ||
+					  strcmp(g_sinfo[i].name, "sc3336p") == 0) {
+					msleep(250);
+					gpio_direction_output(reset_gpio, 1);
+					msleep(20);
+				} else {
 					msleep(20);
 					gpio_direction_output(reset_gpio, 1);
 					msleep(20);
@@ -492,9 +514,24 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 
 		for (j = 0; j < idcnt; j++) {
 			uint32_t value = 0;
+
+			if (j == 0 && (strcmp(g_sinfo[i].name, "sc2336p") == 0 ||
+				       strcmp(g_sinfo[i].name, "sc2337p") == 0)) {
+				ret = sensor_write(&g_sinfo[i], adap, 0x301a, 0xf8);
+				ret += sensor_write(&g_sinfo[i], adap, 0x0100, 0x01);
+				if (0 != ret)
+					break;
+				msleep(5);
+			} else if (j == 0 && strcmp(g_sinfo[i].name, "sc3336p") == 0) {
+				ret = sensor_write(&g_sinfo[i], adap, 0x440d, 0x10);
+				ret += sensor_write(&g_sinfo[i], adap, 0x4400, 0x11);
+				if (0 != ret)
+					break;
+				msleep(10);
+			}
+
 			ret = sensor_read(&g_sinfo[i], adap, g_sinfo[i].id_addr[j], &value);
 
-			// Store register read attempt for diagnostics
 			if (scan_res.num_regs < 8) {
 				scan_res.reg_addrs[scan_res.num_regs] = g_sinfo[i].id_addr[j];
 				scan_res.reg_values[scan_res.num_regs] = value;
@@ -506,7 +543,24 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 				break;
 			}
 
-			scan_res.responded = 1;  // Device responded to I2C
+			scan_res.responded = 1;
+
+			if ((strcmp(g_sinfo[i].name, "sc2336p") == 0 ||
+			     strcmp(g_sinfo[i].name, "sc2337p") == 0) && j == 1) {
+				uint32_t reg_val = 0;
+				ret = sensor_read(&g_sinfo[i], adap, 0x801e, &reg_val);
+				if (0 != ret)
+					break;
+				sensor_write(&g_sinfo[i], adap, 0x0100, 0x00);
+				if (strcmp(g_sinfo[i].name, "sc2336p") == 0 && (reg_val & 0x0f) != 0) {
+					j--;
+					break;
+				}
+				if (strcmp(g_sinfo[i].name, "sc2337p") == 0 && (reg_val & 0x0f) == 0) {
+					j--;
+					break;
+				}
+			}
 
 			if(strcmp(g_sinfo[i].name, "ov2735b") == 0 && j == 2){
 				if (value == g_sinfo[i].id_value[j])
