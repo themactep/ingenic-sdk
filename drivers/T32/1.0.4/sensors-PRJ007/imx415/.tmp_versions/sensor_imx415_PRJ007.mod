@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/imx415/sensor_imx415_PRJ007.ko
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/imx415/imx415.o

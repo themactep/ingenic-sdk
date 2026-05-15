@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/sc1a4t-double/sensor_sc1a4ts1_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/sc1a4t-double/sensor_sc1a4ts1_t23.o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/sc1a4t-double/sc1a4ts1.o 

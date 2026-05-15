@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/os05l10/sensor_os05l10_PRJ008.ko
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/os05l10/PRJ008/os05l10.o

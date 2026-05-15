@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/c2399/sensor_c2399_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/c2399/sensor_c2399_t31.o /home/user/git/opensource/drivers/sensors-t31/c2399/c2399.o 

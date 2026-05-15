@@ -1,0 +1,1 @@
+cmd_/home_d/zjxu/git/opensource/drivers/sensors-t41/tp9963/sensor_tp9963_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/zjxu/git/opensource/drivers/sensors-t41/tp9963/sensor_tp9963_t41.o /home_d/zjxu/git/opensource/drivers/sensors-t41/tp9963/tp9963.o 

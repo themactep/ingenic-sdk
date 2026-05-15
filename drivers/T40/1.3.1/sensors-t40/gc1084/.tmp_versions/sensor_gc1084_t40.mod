@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t40/gc1084/sensor_gc1084_t40.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t40/gc1084/gc1084.o

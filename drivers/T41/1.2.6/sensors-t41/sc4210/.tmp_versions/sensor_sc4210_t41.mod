@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc4210/sensor_sc4210_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc4210/sc4210.o

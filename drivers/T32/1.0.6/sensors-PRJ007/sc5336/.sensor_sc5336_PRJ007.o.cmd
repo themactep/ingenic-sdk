@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/sc5336/sensor_sc5336_PRJ007.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/sc5336/sensor_sc5336_PRJ007.o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/sc5336/sc5336.o 

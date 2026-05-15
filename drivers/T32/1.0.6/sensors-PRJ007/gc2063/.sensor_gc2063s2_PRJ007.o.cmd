@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc2063/sensor_gc2063s2_PRJ007.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc2063/sensor_gc2063s2_PRJ007.o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc2063/gc2063s2.o 

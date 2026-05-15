@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/sc2235/sensor_sc2235_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/sc2235/sc2235.o

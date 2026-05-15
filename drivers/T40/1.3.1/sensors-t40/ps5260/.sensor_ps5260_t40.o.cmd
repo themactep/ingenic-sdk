@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/ps5260/sensor_ps5260_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/ps5260/sensor_ps5260_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/ps5260/ps5260.o 

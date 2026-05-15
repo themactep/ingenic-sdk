@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/sc635hai/sensor_sc635hai_PRJ007.ko
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/sc635hai/sc635hai.o

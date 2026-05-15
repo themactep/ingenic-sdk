@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/sc4336/sensor_sc4336_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/sc4336/sc4336.o

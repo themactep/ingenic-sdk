@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/os05a10/sensor_os05a10_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/os05a10/os05a10.o

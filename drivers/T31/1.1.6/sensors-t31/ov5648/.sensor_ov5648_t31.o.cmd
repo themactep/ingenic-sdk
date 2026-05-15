@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/ov5648/sensor_ov5648_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/ov5648/sensor_ov5648_t31.o /home/user/git/opensource/drivers/sensors-t31/ov5648/ov5648.o 

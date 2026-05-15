@@ -1,0 +1,22 @@
+使用说明：
+	1.使用前需要在内核中打开PWM使能
+		具体路径为：Device Drivers → Pulse-Width Modulation (PWM) Support
+		设备树使能：arch/mips/boot/dts/ingenic/t41.dtsi
+			需将pwm设备节点修改为okay
+	2.使能时，需要注意PWM通道使用的GPIO是否和使用开发板相同
+		<*>   Ingenic PWM support
+		PWM channel0 GPIO select (PWM channel0 PB17)  --->
+
+	3.使用方法:(例如使用0通道，周期10000，占空比5000，默认极性)
+		./pwm_test.sh 0 10000 5000 0
+	第一个参数表示PWM通道
+	第二个参数代表PWM周期
+	第三个参数代表PWM占空比
+	第四个参数代表使用极性，0表示默认极性，1表示极性反转
+	若直接使用脚本，将使用默认产生进行输出
+
+使用注意事项：
+	1.使用时最多同时打开3个通道
+	2.使用时可以不输入参数或输入参数时不输入极性
+
+

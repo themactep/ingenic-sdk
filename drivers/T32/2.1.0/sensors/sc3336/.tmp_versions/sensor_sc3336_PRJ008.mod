@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc3336/sensor_sc3336_PRJ008.ko
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc3336/PRJ008/sc3336.o

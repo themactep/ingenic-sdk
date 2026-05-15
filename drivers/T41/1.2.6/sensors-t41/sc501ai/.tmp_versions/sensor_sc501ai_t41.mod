@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc501ai/sensor_sc501ai_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc501ai/sc501ai.o

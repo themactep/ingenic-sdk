@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/imx307/sensor_imx307_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/imx307/sensor_imx307_t40.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/imx307/imx307.o 

@@ -1,0 +1,15 @@
+支持单帧调度，具体参数配置如下：
+1. 在tx-isp-debug.c里配置
+	isp_ch0_pre_dequeue_time = 35;
+	isp_memopt = 1;
+	isp_ch0_pre_dequeue_interrupt_process = 0;
+	isp_ch0_pre_dequeue_valid_lines = 450;
+	make clean;make;make relese;
+2. 重新编译内核
+3. 注意nrvbs设置为1 
+4. vpu频率提高到540M
+5.上层应用需要调用API：IMP_Encoder_SetFrameRelease(int encChn, int num, int den)
+  1) 此API需要在编码通道创建后调用
+  2) encchn：编码通道，主码流：0
+  3）num,den：释放分子分母：num：1 den：5
+

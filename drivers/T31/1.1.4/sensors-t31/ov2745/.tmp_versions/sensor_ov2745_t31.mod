@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/ov2745/sensor_ov2745_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/ov2745/ov2745.o

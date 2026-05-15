@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/sc1346/sensor_sc1346_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/sc1346/sc1346.o

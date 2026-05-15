@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t41/jxf37/sensor_jxf37_t41.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t41/jxf37/jxf37.o

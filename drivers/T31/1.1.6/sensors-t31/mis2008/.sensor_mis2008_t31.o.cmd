@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/mis2008/sensor_mis2008_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/mis2008/sensor_mis2008_t31.o /home/user/git/opensource/drivers/sensors-t31/mis2008/mis2008.o 

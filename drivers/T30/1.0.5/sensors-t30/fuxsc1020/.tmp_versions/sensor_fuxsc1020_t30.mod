@@ -1,0 +1,2 @@
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/fuxsc1020/sensor_fuxsc1020_t30.ko
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/fuxsc1020/fuxsc1020.o

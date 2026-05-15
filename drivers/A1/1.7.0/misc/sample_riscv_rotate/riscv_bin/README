@@ -1,0 +1,2 @@
+eg.
+insmod riscv_debug.ko  riscv_filename="./riscv.bin"

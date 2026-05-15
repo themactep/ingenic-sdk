@@ -1,0 +1,6 @@
+Two ways to get sensor info
+
+1. open /dev/sinfo; ioctl TOCTL_SINFO_GET
+
+2. echo 1 >/proc/jz/sinfo/info; cat /proc/jz/sinfo/info
+   echo 1 >/proc/jz/sinfo1/info1; cat /proc/jz/sinfo1/info1

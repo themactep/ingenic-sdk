@@ -1,0 +1,2 @@
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/sc5235/sensor_sc5235_t30.ko
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/sc5235/sc5235.o

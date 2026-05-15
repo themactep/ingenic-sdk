@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc431hai/sensor_sc431hai_PRJ008.ko
+/home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc431hai/PRJ008/sc431hai.o

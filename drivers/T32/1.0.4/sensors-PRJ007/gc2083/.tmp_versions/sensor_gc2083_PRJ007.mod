@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc2083/sensor_gc2083_PRJ007.ko
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc2083/gc2083.o

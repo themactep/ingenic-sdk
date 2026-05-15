@@ -1,0 +1,1942 @@
+/*
+ * os02g10s1.c
+ *
+ * Copyright (C) 2024 Ingenic Semiconductor Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * @Settings:
+ * sboot        resolution      fps       interface     mode    raw     max_fps     dvdd
+ *  0           1920*1080       30        mipi_2lane    linear  10        30
+ *  1            960*544        60        mipi_2lane    linear  10        60              binning
+ *  2            560*320       100        mipi_2lane    linear  10        100             crop
+ * @I2C addr:0x3c, 0x3d
+ *
+ * @FSync:none
+ *
+ */
+#define DEBUG
+
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/slab.h>
+#include <linux/i2c.h>
+#include <linux/delay.h>
+#include <linux/gpio.h>
+#include <linux/clk.h>
+#include <linux/proc_fs.h>
+#include <soc/gpio.h>
+
+#include <tx-isp-common.h>
+#include <sensor-common.h>
+#include <txx-funcs.h>
+#include <tx-isp-fast.h>
+
+#define TVERSION "V20241113a"
+#define SENSOR_VERSION  "H20250211a"
+
+// #define SENSOR_TEST
+
+#define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+#define SENSOR_AGAIN_TABLE	  /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+//#define SENSOR_WDR_2_FRAME	/**< WDR两帧融合 */
+#define SENSOR_EXPO
+#define SENSOR_MIR_FLIP			/**< 镜像翻转功能开关 */
+// #define SENSOR_HCG
+// #define SENSOR_HCG_SHORT
+
+#define SENSOR_CHIP_ID_H    (0x56)
+#define SENSOR_CHIP_ID_M    (0x02)
+#define SENSOR_CHIP_ID_L    (0x47)
+#define SENSOR_OUTPUT_MIN_FPS 1
+#define SENSOR_MCLK 24000000
+
+#ifdef CONFIG_ZERATUL
+#define ZRT_SENSOR_WITHOUT_INIT
+#endif
+
+#ifdef SENSOR_WDR_2_FRAME
+static int wdr_line = xxx;
+#endif
+
+#ifndef SENSOR_I2C_REG_8BIT
+#define SENSOR_I2C_REG_16BIT
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_8BIT
+#define SENSOR_REG_END	  0xffff
+#define SENSOR_REG_DELAY  0xfffe
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_16BIT
+#define SENSOR_REG_END	  0xffff
+#define SENSOR_REG_DELAY  0xfffe
+#endif /* SENSOR_I2C_REG_16BIT */
+
+struct regval_list {
+#ifdef SENSOR_I2C_REG_8BIT
+    uint16_t reg_num;
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_16BIT
+    uint16_t reg_num;
+#endif /* SENSOR_I2C_REG_16BIT */
+    uint8_t value;
+};
+
+struct tx_isp_sensor_attribute os02g10s1_attr;
+
+/*
+ * The part of driver maybe modify about different sensor and different board.
+ */
+#ifdef SENSOR_AGAIN_TABLE
+struct again_lut {
+    unsigned int value;
+    unsigned int gain;
+};
+
+struct again_lut os02g10s1_again_lut[] = {
+    {0x10, 0},
+    {0x11, 5731},
+    {0x12, 11136},
+    {0x13, 16248},
+    {0x14, 21097},
+    {0x15, 25710},
+    {0x16, 30109},
+    {0x17, 34312},
+    {0x18, 38336},
+    {0x19, 42195},
+    {0x1a, 45904},
+    {0x1b, 49472},
+    {0x1c, 52910},
+    {0x1d, 56228},
+    {0x1e, 59433},
+    {0x1f, 62534},
+    {0x20, 65536},
+    {0x22, 71267},
+    {0x24, 76672},
+    {0x26, 81784},
+    {0x28, 86633},
+    {0x2a, 91246},
+    {0x2c, 95645},
+    {0x2e, 99848},
+    {0x30, 103872},
+    {0x32, 107731},
+    {0x34, 111440},
+    {0x36, 115008},
+    {0x38, 118446},
+    {0x3a, 121764},
+    {0x3c, 124969},
+    {0x3e, 128070},
+    {0x40, 131072},
+    {0x44, 136803},
+    {0x48, 142208},
+    {0x4c, 147320},
+    {0x50, 152169},
+    {0x54, 156782},
+    {0x58, 161181},
+    {0x5c, 165384},
+    {0x60, 169408},
+    {0x64, 173267},
+    {0x68, 176976},
+    {0x6c, 180544},
+    {0x70, 183982},
+    {0x74, 187300},
+    {0x78, 190505},
+    {0x7c, 193606},
+    {0x80, 196608},
+    {0x88, 202339},
+    {0x90, 207744},
+    {0x98, 212856},
+    {0xa0, 217705},
+    {0xa8, 222318},
+    {0xb0, 226717},
+    {0xb8, 230920},
+    {0xc0, 234944},
+    {0xc8, 238803},
+    {0xd0, 242512},
+    {0xd8, 246080},
+    {0xe0, 249518},
+    {0xe8, 252836},
+    {0xf0, 256041},
+    {0xf8, 259142},
+};
+#endif /* SENSOR_AGAIN_TABLE */
+
+unsigned int os02g10s1_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+{
+#ifndef SENSOR_TEST
+#ifdef SENSOR_AGAIN_TABLE
+    /* Analog gain table */
+    struct again_lut *lut = os02g10s1_again_lut;
+    while (lut->gain <= os02g10s1_attr.again.max) {
+        if (isp_gain == 0) {
+            *sensor_again = lut[0].value;
+            return 0;
+        } else if (isp_gain < lut->gain) {
+            *sensor_again = (lut - 1)->value;
+            return (lut - 1)->gain;
+        } else {
+            if ((lut->gain == os02g10s1_attr.again.max) && (isp_gain >= lut->gain)) {
+                *sensor_again = lut->value;
+                return lut->gain;
+            }
+        }
+
+        lut++;
+    }
+
+#else
+    /* Non analog gain table */
+    ...;
+#endif	/* SENSOR_AGAIN_TABLE */
+#endif /* SENSOR_TEST */
+
+    return isp_gain;
+}
+
+#ifdef SENSOR_WDR_2_FRAME
+unsigned int os02g10s1_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+{
+#ifndef SENSOR_TEST
+#ifdef SENSOR_AGAIN_TABLE
+    /* Analog gain table */
+    struct again_lut *lut = os02g10s1_again_lut;
+    while(lut->gain <= os02g10s1_attr.max_again_short) {
+        if(isp_gain == 0) {
+            *sensor_again = 0;
+            return 0;
+        }
+        else if(isp_gain < lut->gain) {
+            *sensor_again = (lut - 1)->value;
+            return (lut - 1)->gain;
+        }
+        else{
+            if((lut->gain == os02g10s1_attr.max_again_short) && (isp_gain >= lut->gain)) {
+                *sensor_again = lut->value;
+                return lut->gain;
+            }
+        }
+
+        lut++;
+    }
+
+    ...;
+#else
+    /* Non analog gain table */
+
+    ...;
+#endif /* SENSOR_AGAIN_TABLE */
+#endif /* SENSOR_TEST */
+
+    return isp_gain;
+}
+#endif /* SENSOR_WDR_2_FRAME */
+
+unsigned int os02g10s1_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+{
+    return 0;
+}
+
+#ifdef SENSOR_HCG
+unsigned int os02g10s1_alloc_hcg(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_hcg)
+{
+
+    return isp_gain;
+}
+#endif /* SENSOR_HCG */
+
+#ifdef SENSOR_HCG_SHORT
+unsigned int os02g10s1_alloc_hcg_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_hcg)
+{
+
+    return isp_gain;
+}
+#endif /* SENSOR_HCG_SHORT */
+
+struct tx_isp_mipi_bus os02g10s1_mipi_linear = {
+    .mode = SENSOR_MIPI_OTHER_MODE,
+    .clk = 360,
+    .lans = 2,
+    .image_twidth = 1920,
+    .image_theight = 1080,
+    .mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
+    .mipi_sc.hcrop_diff_en = 0,
+    .mipi_sc.mipi_vcomp_en = 0,
+    .mipi_sc.mipi_hcomp_en = 0,
+    .mipi_sc.mipi_crop_start0x = 0,
+    .mipi_sc.mipi_crop_start0y = 0,
+    .mipi_sc.mipi_crop_start1x = 0,
+    .mipi_sc.mipi_crop_start1y = 0,
+    .mipi_sc.mipi_crop_start2x = 0,
+    .mipi_sc.mipi_crop_start2y = 0,
+    .mipi_sc.mipi_crop_start3x = 0,
+    .mipi_sc.mipi_crop_start3y = 0,
+    .mipi_sc.line_sync_mode = 0,
+    .mipi_sc.work_start_flag = 0,
+    .mipi_sc.data_type_en = 0,
+    .mipi_sc.data_type_value = RAW10,
+    .mipi_sc.del_start = 0,
+    .mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+    .mipi_sc.sensor_fid_mode = 0,
+    .mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+};
+
+struct tx_isp_dvp_bus os02g10s1_dvp = {
+    .gpio = DVP_PA_LOW_10BIT,
+    .mode = SENSOR_DVP_HREF_MODE,
+    .blanking = {
+        .hblanking = 0,
+        .vblanking = 0,
+    },
+    .polar = {
+        .hsync_polar = 0,
+        .vsync_polar = 0,
+        .pclk_polar = 0,
+    },
+    .dvp_hcomp_en = 0,
+};
+
+struct tx_isp_sensor_attribute os02g10s1_attr = {
+    .name = "os02g10s1",
+    .chip_id = 0x560247,
+    .cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
+    .cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
+    .cbus_device = 0x3c,
+    .sensor_ctrl.alloc_again = os02g10s1_alloc_again,
+    .sensor_ctrl.alloc_dgain = os02g10s1_alloc_dgain,
+#ifdef SENSOR_WDR_2_FRAME
+    .sensor_ctrl.alloc_again_short = os02g10s1_alloc_again_short,
+#endif /* SENSOR_WDR_2_FRAME */
+
+    .dgain = {0},
+    .dgain_short = {0},
+};
+
+static struct regval_list os02g10s1_init_regs_1920_1080_30fps_mipi[] = {
+    //SP230A_mclk24M_1920X1080 MIPI_2lane_360Mbpslane_Linear10_raw10_30fps AM05_roan_20240909
+    //T-line=30us, vts=1109, hts=1082
+    {0xfd, 0x00},
+    {0x36, 0x01},
+    {0xfd, 0x00},
+    {0x36, 0x00},
+    {0xfd, 0x00},
+    /* {0x20, 0x00}, */
+    {SENSOR_REG_DELAY, 0x05},
+    {0xfd, 0x00},
+    {0xfd, 0x00},
+    {0x30, 0x0a},
+    {0x35, 0x04},
+    {0x38, 0x11},
+    {0x41, 0x06},
+    {0x44, 0x20},
+    {0xfd, 0x01},
+    {0x03, 0x04},
+    {0x04, 0x4c},
+    {0x06, 0x00},
+    {0x24, 0x30},
+    {0x01, 0x01},
+    {0x19, 0x50},
+    {0x1a, 0x0c},
+    {0x1b, 0x0d},
+    {0x1c, 0x00},
+    {0x1d, 0x75},
+    {0x1e, 0x52},
+    {0x22, 0x14},
+    {0x25, 0x44},
+    {0x26, 0x0f},
+    {0x3c, 0xca},
+    {0x3d, 0x4a},
+    {0x40, 0x0f},
+    {0x43, 0x38},
+    {0x46, 0x00},
+    {0x47, 0x00},
+    {0x49, 0x32},
+    {0x50, 0x01},
+    {0x51, 0x28},
+    {0x52, 0x20},
+    {0x53, 0x03},
+    {0x57, 0x16},
+    {0x59, 0x01},
+    {0x5a, 0x01},
+    {0x5d, 0x04},
+    {0x6a, 0x04},
+    {0x6b, 0x03},
+    {0x6e, 0x28},
+    {0x71, 0xbe},
+    {0x72, 0x06},
+    {0x73, 0x38},
+    {0x74, 0x06},
+    {0x79, 0x00},
+    {0x7a, 0xb2},
+    {0x7b, 0x10},
+    {0x8f, 0x80},
+    {0x91, 0x38},
+    {0x92, 0x02},
+    {0x9d, 0x03},
+    {0x9e, 0x55},
+    {0xb8, 0x70},
+    {0xb9, 0x70},
+    {0xba, 0x70},
+    {0xbb, 0x70},
+    {0xbc, 0x00},
+    {0xc0, 0x00},
+    {0xc1, 0x00},
+    {0xc2, 0x00},
+    {0xc3, 0x00},
+    {0xc4, 0x6e},
+    {0xc5, 0x6e},
+    {0xc6, 0x6b},
+    {0xc7, 0x6b},
+    {0xcc, 0x11},
+    {0xcd, 0xe0},
+    {0xd0, 0x1b},
+    {0xd2, 0x76},
+    {0xd3, 0x68},
+    {0xd4, 0x68},
+    {0xd5, 0x73},
+    {0xd6, 0x73},
+    {0xe8, 0x55},
+    {0xf0, 0x40},
+    {0xf1, 0x40},
+    {0xf2, 0x40},
+    {0xf3, 0x40},
+    {0xf4, 0x00},
+    {0xfa, 0x1c},
+    {0xfb, 0x33},
+    {0xfc, 0xff},
+    {0xfe, 0x01},
+    {0xfd, 0x03},
+    {0x03, 0x67},
+    {0x00, 0x59},
+    {0x04, 0x11},
+    {0x05, 0x04},
+    {0x06, 0x0c},
+    {0x07, 0x08},
+    {0x08, 0x08},
+    {0x09, 0x4f},
+    {0x0b, 0x08},
+    {0x0d, 0x26},
+    {0x0f, 0x00},
+    {0xfd, 0x02},
+    {0x34, 0xfe},
+    {0x5e, 0x22},
+    {0xa1, 0x06},
+    {0xa3, 0x38},
+    {0xa5, 0x02},
+    {0xa7, 0x80},
+    {0xfd, 0x01},
+    {0xa1, 0x05},
+    {0x94, 0x44},
+    {0x95, 0x44},
+    {0x96, 0x09},
+    {0x98, 0x44},
+    {0x9c, 0x0e},
+    {0xb1, 0x01},
+    {0xfd, 0x01},
+    {0xb1, 0x03},
+    {SENSOR_REG_END, 0x00},/* END MARKER */
+};
+
+static struct regval_list os02g10s1_init_regs_964_544_60fps_mipi[] = {
+    //binning-os02g10s1_MIPI_2LANE_964x544_720M_raw10_60fps_v2.4
+    //@@os02g10s1_MIPI_2LANE_964x544_720M_raw10_60fps_v2.4
+    //HTS=1082 VTS=555 timer_clk=36M fps=36000000/1082/555=59.94
+    {0xfd, 0x00},
+    {0x36, 0x01},
+    {0xfd, 0x00},
+    {0x36, 0x00},
+    {0xfd, 0x00},
+    /* {0x20, 0x00}, */
+    {SENSOR_REG_DELAY, 0x05},
+    {0xfd, 0x00},
+    {0xfd, 0x00},
+    {0x30, 0x0b},
+    {0x31, 0x91},
+    {0x35, 0x04},
+    {0x38, 0x11},
+    {0x41, 0x06},
+    {0x44, 0x20},
+    {0xfd, 0x01},
+    {0x03, 0x00},
+    {0x04, 0x04},
+    {0x06, 0x00},
+    {0x24, 0xff},
+    {0x01, 0x01},
+    {0x19, 0x50},
+    {0x1a, 0x0c},
+    {0x1b, 0x0d},
+    {0x1c, 0x00},
+    {0x1d, 0x75},
+    {0x1e, 0x52},
+    {0x22, 0x14},
+    {0x25, 0x44},
+    {0x26, 0x0f},
+    {0x2c, 0x01},
+    {0x3c, 0xca},
+    {0x3d, 0x4a},
+    {0x40, 0x0f},
+    {0x43, 0x38},
+    {0x46, 0x00},
+    {0x47, 0x00},
+    {0x49, 0x32},
+    {0x50, 0x01},
+    {0x51, 0x28},
+    {0x52, 0x20},
+    {0x53, 0x03},
+    {0x57, 0x16},
+    {0x59, 0x01},
+    {0x5a, 0x01},
+    {0x5d, 0x04},
+    {0x6a, 0x04},
+    {0x6b, 0x03},
+    {0x6e, 0x28},
+    {0x71, 0xbe},
+    {0x72, 0x06},
+    {0x73, 0x38},
+    {0x74, 0x06},
+    {0x79, 0x00},
+    {0x7a, 0xb2},
+    {0x7b, 0x10},
+    {0x92, 0x02},
+    {0x9d, 0x03},
+    {0x9e, 0x55},
+    {0xb8, 0x70},
+    {0xb9, 0x70},
+    {0xba, 0x70},
+    {0xbb, 0x70},
+    {0xbc, 0x00},
+    {0xc0, 0x00},
+    {0xc1, 0x00},
+    {0xc2, 0x00},
+    {0xc3, 0x00},
+    {0xc4, 0x6e},
+    {0xc5, 0x6e},
+    {0xc6, 0x6b},
+    {0xc7, 0x6b},
+    {0xcc, 0x11},
+    {0xcd, 0xe0},
+    {0xd0, 0x1b},
+    {0xd2, 0x76},
+    {0xd3, 0x68},
+    {0xd4, 0x68},
+    {0xd5, 0x73},
+    {0xd6, 0x73},
+    {0xe8, 0x55},
+    {0xf0, 0x40},
+    {0xf1, 0x40},
+    {0xf2, 0x40},
+    {0xf3, 0x40},
+    {0xf4, 0x00},
+    {0xfa, 0x20},
+    {0xfb, 0x31},
+    {0xfc, 0xff},
+    {0xfe, 0x01},
+    {0xfd, 0x03},
+    {0x03, 0x67},
+    {0x00, 0x59},
+    {0x04, 0x11},
+    {0x05, 0x04},
+    {0x06, 0x0c},
+    {0x07, 0x08},
+    {0x08, 0x08},
+    {0x09, 0x4f},
+    {0x0b, 0x08},
+    {0x0d, 0x26},
+    {0x0f, 0x00},
+    {0xfd, 0x02},
+    {0x34, 0x00},
+
+    /* {0x5e, 0x22}, */
+    /* {0xa0, 0x00}, */
+    /* {0xa1, 0x00}, */
+    /* {0xa2, 0x02}, */
+    /* {0xa3, 0x1c}, */
+    /* {0xa4, 0x00}, */
+    /* {0xa5, 0x00}, */
+    /* {0xa6, 0x03}, */
+    /* {0xa7, 0xc0}, */
+
+    {0xfd, 0x01},
+    {0xfd, 0x02},
+    {0x21, 0x02},
+    {0x22, 0x20},
+    {0x23, 0x03},
+    {0x24, 0xc4},
+    {0xfd, 0x01},
+    {0x8e, 0x03},
+    {0x8f, 0xc4},
+    {0x90, 0x02},
+    {0x91, 0x20},
+    {0x31, 0x0c},
+    {0x01, 0x02},
+    {0xfd, 0x03},
+    {0x0e, 0x01},
+    {0xfd, 0x01},
+    {0xa1, 0x01},
+    {0xb1, 0x01},
+    {0x14, 0x02},
+    {0x01, 0x01},
+    {0xfd, 0x01},
+    {0xb1, 0x03},
+    {SENSOR_REG_END, 0x00},/* END MARKER */
+};
+
+static struct regval_list os02g10s1_init_regs_568_320_100fps_mipi[] = {
+    //binning+crop-os02g10s1_MIPI_2LANE_568x320_74.4M_raw10_100fps_v2.4.txt
+    //@@os02g10s1_MIPI_2LANE_568x320_74.4M_raw10_100fps_v2.4
+    //vts=343(p1:0x4e/4f), hts=1082(p1:0x41/42) fps=37200000/343/1082=100.23
+    //pclk=74.4M, timer_clk=37.2M, row_clk=18M, dac_clk=216M
+    {0xfd, 0x00},
+    {0x36, 0x01},
+    {0xfd, 0x00},
+    {0x36, 0x00},
+    {0xfd, 0x00},
+    /* {0x20, 0x00}, */
+    {SENSOR_REG_DELAY, 0x05},
+    {0xfd, 0x00},
+    {0xfd, 0x00},
+    {0x2e, 0x1c},
+    {0x30, 0x0b},
+    {0x31, 0x91},
+    {0x35, 0x04},
+    {0x38, 0x11},
+    {0x41, 0x06},
+    {0x44, 0x20},
+    {0xfd, 0x01},
+    {0x03, 0x00},
+    {0x04, 0x4c},
+    {0x06, 0x08},
+    {0x24, 0x80},
+    {0x01, 0x01},
+    {0x19, 0x50},
+    {0x1a, 0x0c},
+    {0x1b, 0x0d},
+    {0x1c, 0x00},
+    {0x1d, 0x75},
+    {0x1e, 0x52},
+    {0x22, 0x14},
+    {0x25, 0x44},
+    {0x26, 0x0f},
+    {0x3c, 0xca},
+    {0x3d, 0x4a},
+    {0x40, 0x0f},
+    {0x43, 0x38},
+    {0x46, 0x00},
+    {0x47, 0x00},
+    {0x49, 0x32},
+    {0x50, 0x01},
+    {0x51, 0x28},
+    {0x52, 0x20},
+    {0x53, 0x03},
+    {0x57, 0x16},
+    {0x59, 0x01},
+    {0x5a, 0x01},
+    {0x5d, 0x04},
+    {0x6a, 0x04},
+    {0x6b, 0x03},
+    {0x6e, 0x28},
+    {0x71, 0xbe},
+    {0x72, 0x06},
+    {0x73, 0x38},
+    {0x74, 0x06},
+    {0x79, 0x00},
+    {0x7a, 0xb2},
+    {0x7b, 0x10},
+    {0x8f, 0x88},
+    {0x91, 0x40},
+    {0x92, 0x02},
+    {0x9d, 0x03},
+    {0x9e, 0x55},
+    {0xb8, 0x70},
+    {0xb9, 0x70},
+    {0xba, 0x70},
+    {0xbb, 0x70},
+    {0xbc, 0x00},
+    {0xc0, 0x00},
+    {0xc1, 0x00},
+    {0xc2, 0x00},
+    {0xc3, 0x00},
+    {0xc4, 0x6e},
+    {0xc5, 0x6e},
+    {0xc6, 0x6b},
+    {0xc7, 0x6b},
+    {0xcc, 0x11},
+    {0xcd, 0xe0},
+    {0xd0, 0x1b},
+    {0xd2, 0x76},
+    {0xd3, 0x68},
+    {0xd4, 0x68},
+    {0xd5, 0x73},
+    {0xd6, 0x73},
+    {0xe8, 0x55},
+    {0xf0, 0x40},
+    {0xf1, 0x40},
+    {0xf2, 0x40},
+    {0xf3, 0x40},
+    {0xf4, 0x00},
+    {0xfa, 0x1c},
+    {0xfb, 0x33},
+    {0xfc, 0xff},
+    {0xfe, 0x01},
+    {0xfd, 0x03},
+    {0x03, 0x67},
+    {0x00, 0x59},
+    {0x04, 0x11},
+    {0x05, 0x04},
+    {0x06, 0x0c},
+    {0x07, 0x08},
+    {0x08, 0x08},
+    {0x09, 0x4f},
+    {0x0b, 0x08},
+    {0x0d, 0x26},
+    {0x0f, 0x00},
+    {0xfd, 0x01},
+    {0x28, 0x04},
+    {0x34, 0x20},
+    {0x35, 0xc6},
+    {0x36, 0x38},
+    {0x4a, 0x00},
+    {0x4b, 0xe0},
+    {0x4c, 0x02},
+    {0x4d, 0x80},
+    {0xfd, 0x01},
+    {0x31, 0x0d},
+    {0x01, 0x02},
+    {0xfd, 0x03},
+    {0x0e, 0x01},
+    {0xfd, 0x02},
+    {0x21, 0x01},
+    {0x22, 0x40},
+    {0x23, 0x02},
+    {0x24, 0x38},
+    {0x34, 0x80},
+    {0xfd, 0x01},
+    {0x8e, 0x02},
+    {0x8f, 0x38},
+    {0x90, 0x01},
+    {0x91, 0x40},
+    {0xfd, 0x01},
+    {0xa1, 0x05},
+    {0x94, 0x44},
+    {0x95, 0x44},
+    {0x96, 0x09},
+    {0x98, 0x44},
+    {0x9c, 0x0e},
+    {0xb1, 0x01},
+    {0xfd, 0x01},
+    {0xb1, 0x03},
+    {0x01, 0x01},
+    {SENSOR_REG_END, 0x00},/* END MARKER */
+};
+
+/*
+ * the order of the os02g10s1_win_sizes is [full_resolution, preview_resolution].
+ */
+static struct tx_isp_sensor_win_setting os02g10s1_win_sizes[] = {
+    {
+        .width          = 1920,
+        .height         = 1080,
+        .fps            = 30 << 16 | 1,
+        .mbus_code      = TISP_VI_FMT_SBGGR10_1X10,
+        .colorspace     = TISP_COLORSPACE_SRGB,
+        .regs           = os02g10s1_init_regs_1920_1080_30fps_mipi,
+    },
+    {
+        .width          = 960,
+        .height         = 544,
+        .fps            = 60 << 16 | 1,
+        .mbus_code      = TISP_VI_FMT_SBGGR10_1X10,
+        .colorspace     = TISP_COLORSPACE_SRGB,
+        .regs           = os02g10s1_init_regs_964_544_60fps_mipi,
+    },
+    {
+        .width          = 560,
+        .height         = 320,
+        .fps            = 100 << 16 | 1,
+        .mbus_code      = TISP_VI_FMT_SBGGR10_1X10,
+        .colorspace     = TISP_COLORSPACE_SRGB,
+        .regs           = os02g10s1_init_regs_568_320_100fps_mipi,
+    },
+};
+
+static struct tx_isp_sensor_win_setting *wsize = &os02g10s1_win_sizes[0];
+
+/*
+ * the part of driver was fixed.
+ */
+
+static struct regval_list os02g10s1_stream_on_mipi[] = {
+    {0xfd, 0x01},
+    {0xb1, 0x03},
+    {0x01, 0x01},
+    { SENSOR_REG_END, 0x00 }, /* END MARKER */
+};
+
+static struct regval_list os02g10s1_stream_off_mipi[] = {
+    {0xfd, 0x01},
+    {0xb1, 0x01},
+    {0x01, 0x01},
+    { SENSOR_REG_END, 0x00 }, /* END MARKER */
+};
+
+#ifdef SENSOR_I2C_REG_8BIT
+int os02g10s1_read(struct tx_isp_subdev *sd, unsigned char reg,
+                 unsigned char *value)
+{
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    struct i2c_msg msg[2] = {
+        [0] = {
+            .addr	= client->addr,
+            .flags	= 0,
+            .len	= 1,
+            .buf	= &reg,
+        },
+        [1] = {
+            .addr	= client->addr,
+            .flags	= I2C_M_RD,
+            .len	= 1,
+            .buf	= value,
+        }
+    };
+    int ret;
+    ret = private_i2c_transfer(client->adapter, msg, 2);
+    if (ret > 0)
+        ret = 0;
+
+    return ret;
+}
+
+int os02g10s1_write(struct tx_isp_subdev *sd, unsigned char reg,
+                  unsigned char value)
+{
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    unsigned char buf[2] = {reg, value};
+    struct i2c_msg msg = {
+        .addr	= client->addr,
+        .flags	= 0,
+        .len	= 2,
+        .buf	= buf,
+    };
+    int ret;
+    ret = private_i2c_transfer(client->adapter, &msg, 1);
+    if (ret > 0)
+        ret = 0;
+
+    return ret;
+}
+
+#if 0
+static int os02g10s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+{
+    int ret;
+    unsigned char val;
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
+            private_msleep(vals->value);
+        } else {
+            ret = os02g10s1_read(sd, vals->reg_num, &val);
+            /* printk("{0x%x, 0x%x}\n", vals->reg_num, val); */
+            if (ret < 0)
+                return ret;
+        }
+        vals++;
+    }
+
+    return 0;
+}
+#endif
+
+static int os02g10s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+{
+    int ret;
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
+            private_msleep(vals->value);
+        } else {
+            ret = os02g10s1_write(sd, vals->reg_num, vals->value);
+            if (ret < 0)
+                return ret;
+        }
+        vals++;
+    }
+
+    return 0;
+}
+#endif	/* SENSOR_I2C_REG_8BIT */
+
+#ifdef SENSOR_I2C_REG_16BIT
+
+int os02g10s1_read(struct tx_isp_subdev *sd, uint16_t reg,
+                 unsigned char *value) {
+    int ret;
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
+    struct i2c_msg msg[2] = {
+        [0] = {
+            .addr	= client->addr,
+            .flags	= 0,
+            .len	= 2,
+            .buf	= buf,
+        },
+        [1] = {
+            .addr	= client->addr,
+            .flags	= I2C_M_RD,
+            .len	= 1,
+            .buf	= value,
+        }
+    };
+
+    ret = private_i2c_transfer(client->adapter, msg, 2);
+    if (ret > 0)
+        ret = 0;
+
+    return ret;
+}
+
+int os02g10s1_write(struct tx_isp_subdev *sd, uint16_t reg,
+                  unsigned char value)
+{
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
+    struct i2c_msg msg = {
+        .addr	= client->addr,
+        .flags	= 0,
+        .len	= 3,
+        .buf	= buf,
+    };
+    int ret;
+    ret = private_i2c_transfer(client->adapter, &msg, 1);
+    if (ret > 0)
+        ret = 0;
+
+    return ret;
+}
+
+#if 0
+static int os02g10s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+{
+    int ret;
+    unsigned char val;
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
+            private_msleep(vals->value);
+        } else {
+            ret = os02g10s1_read(sd, vals->reg_num, &val);
+            if (ret < 0)
+                return ret;
+        }
+        vals++;
+    }
+    return 0;
+}
+#endif
+
+static int os02g10s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+{
+    int ret;
+    while (vals->reg_num != SENSOR_REG_END) {
+        if (vals->reg_num == SENSOR_REG_DELAY) {
+            private_msleep(vals->value);
+        } else {
+            ret = os02g10s1_write(sd, vals->reg_num, vals->value);
+            if (ret < 0)
+                return ret;
+        }
+        vals++;
+    }
+
+    return 0;
+}
+#endif	/* SENSOR_I2C_REG_16BIT */
+
+static int os02g10s1_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    unsigned long rate;
+    int ret = ISP_SUCCESS;
+
+    rate = private_clk_get_rate(sensor->mclk);
+    if(((rate / 1000) % (mclk / 1000)) != 0) {
+        ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
+        sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+        if (IS_ERR(sclka)) {
+            pr_err("get sclka failed\n");
+        } else {
+            rate = private_clk_get_rate(sclka);
+            if(((rate / 1000) % (mclk / 1000)) != 0) {
+                switch(mclk) {
+                case 24000000:
+                    private_clk_set_rate(sclka, 1200000000);
+                    break;
+                case 27000000:
+                case 37125000:
+                    private_clk_set_rate(sclka, 1188000000);
+                    break;
+                default:
+                    ret = -1;
+                    goto error;
+                }
+            } else {
+                if ((mclk != 24000000) && (mclk != 27000000) && (mclk != 37125000)) {
+                    ret = -1;
+                    goto error;
+                }
+            }
+        }
+    }
+
+    private_clk_set_rate(sensor->mclk, mclk);
+    private_clk_prepare_enable(sensor->mclk);
+
+error:
+    return ret;
+}
+
+static int os02g10s1_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    int ret = ISP_SUCCESS;
+
+    sensor->video.vi_max_width = wsize->width;
+    sensor->video.vi_max_height = wsize->height;
+
+    sensor->video.mbus.width = wsize->width;
+    sensor->video.mbus.height = wsize->height;
+    sensor->video.mbus.field = TISP_FIELD_NONE;
+    sensor->video.mbus.colorspace = wsize->colorspace;
+
+    sensor->video.fps.min = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
+
+#ifdef SENSOR_WDR_2_FRAME
+    sensor->video.wdr = 1;
+#else
+    sensor->video.wdr = 0;
+#endif
+
+    ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+
+    return ret;
+}
+
+static int os02g10s1_setting_select(struct tx_isp_subdev *sd, int deboot)
+{
+    int ret = ISP_SUCCESS;
+
+    switch (deboot) {
+    case 0:
+        wsize = &os02g10s1_win_sizes[0];
+        os02g10s1_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+
+        os02g10s1_attr.again.value = 65536;
+        os02g10s1_attr.again.max = 259142;
+        os02g10s1_attr.again.min = 0;
+        os02g10s1_attr.again.apply_delay = 2;
+
+        os02g10s1_attr.integration_time.value = 0x7b6;
+        os02g10s1_attr.integration_time.max = 1109 - 8;
+        os02g10s1_attr.integration_time.min = 4;
+        os02g10s1_attr.integration_time.apply_delay = 2;
+
+        os02g10s1_attr.total_width = 1082;
+        os02g10s1_attr.total_height = 1109;
+
+        os02g10s1_attr.expo_fs = TX_SENSOR_EXPO_FRAME_START;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg.base_gain = ;
+        os02g10s1_attr.hcg.apply_delay = ;
+#endif /* SENSOR_HCG */
+
+#ifdef SENSOR_WDR_2_FRAME
+        os02g10s1_attr.again_short.value = ;
+        os02g10s1_attr.again_short.max = ;
+        os02g10s1_attr.again_short.min = ;
+        os02g10s1_attr.again_short.apply_delay = ;
+
+        os02g10s1_attr.integration_time_short.value = ;
+        os02g10s1_attr.integration_time_short.max = ;
+        os02g10s1_attr.integration_time_short.min = ;
+        os02g10s1_attr.integration_time_short.apply_delay = ;
+
+        os02g10s1_attr.wdr_cache = wdr_line * os02g10s1_attr.total_width;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg_short.base_gain = ;
+        os02g10s1_attr.hcg_short.apply_delay = ;
+#endif /* SENSOR_HCG */
+#endif /* SENSOR_WDR_2_FRAME */
+
+        memcpy((void *)(&(os02g10s1_attr.mipi)), (void *)(&os02g10s1_mipi_linear), sizeof(os02g10s1_attr.mipi));
+        break;
+    case 1:
+        wsize = &os02g10s1_win_sizes[1];
+        os02g10s1_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+
+        os02g10s1_attr.again.value = 65536;
+        os02g10s1_attr.again.max = 259142;
+        os02g10s1_attr.again.min = 0;
+        os02g10s1_attr.again.apply_delay = 2;
+
+        os02g10s1_attr.integration_time.value = 0x7b6;
+        os02g10s1_attr.integration_time.max = 555 - 8;
+        os02g10s1_attr.integration_time.min = 4;
+        os02g10s1_attr.integration_time.apply_delay = 2;
+
+        os02g10s1_attr.total_width = 1082;
+        os02g10s1_attr.total_height = 555;
+
+        os02g10s1_attr.expo_fs = TX_SENSOR_EXPO_FRAME_START;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg.base_gain = ;
+        os02g10s1_attr.hcg.apply_delay = ;
+#endif /* SENSOR_HCG */
+
+#ifdef SENSOR_WDR_2_FRAME
+        os02g10s1_attr.again_short.value = ;
+        os02g10s1_attr.again_short.max = ;
+        os02g10s1_attr.again_short.min = ;
+        os02g10s1_attr.again_short.apply_delay = ;
+
+        os02g10s1_attr.integration_time_short.value = ;
+        os02g10s1_attr.integration_time_short.max = ;
+        os02g10s1_attr.integration_time_short.min = ;
+        os02g10s1_attr.integration_time_short.apply_delay = ;
+
+        os02g10s1_attr.wdr_cache = wdr_line * os02g10s1_attr.total_width;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg_short.base_gain = ;
+        os02g10s1_attr.hcg_short.apply_delay = ;
+#endif /* SENSOR_HCG */
+#endif /* SENSOR_WDR_2_FRAME */
+
+        memcpy((void *)(&(os02g10s1_attr.mipi)), (void *)(&os02g10s1_mipi_linear), sizeof(os02g10s1_attr.mipi));
+        os02g10s1_attr.mipi.clk = 720;
+        os02g10s1_attr.mipi.image_twidth = 964;
+        os02g10s1_attr.mipi.image_theight = 544;
+        break;
+    case 2:
+        wsize = &os02g10s1_win_sizes[2];
+        os02g10s1_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+
+        os02g10s1_attr.again.value = 65536;
+        os02g10s1_attr.again.max = 259142;
+        os02g10s1_attr.again.min = 0;
+        os02g10s1_attr.again.apply_delay = 2;
+
+        os02g10s1_attr.integration_time.value = 0x7b6;
+        os02g10s1_attr.integration_time.max = 343 - 8;
+        os02g10s1_attr.integration_time.min = 4;
+        os02g10s1_attr.integration_time.apply_delay = 2;
+
+        os02g10s1_attr.total_width = 1082;
+        os02g10s1_attr.total_height = 343;
+
+        os02g10s1_attr.expo_fs = TX_SENSOR_EXPO_FRAME_START;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg.base_gain = ;
+        os02g10s1_attr.hcg.apply_delay = ;
+#endif /* SENSOR_HCG */
+
+#ifdef SENSOR_WDR_2_FRAME
+        os02g10s1_attr.again_short.value = ;
+        os02g10s1_attr.again_short.max = ;
+        os02g10s1_attr.again_short.min = ;
+        os02g10s1_attr.again_short.apply_delay = ;
+
+        os02g10s1_attr.integration_time_short.value = ;
+        os02g10s1_attr.integration_time_short.max = ;
+        os02g10s1_attr.integration_time_short.min = ;
+        os02g10s1_attr.integration_time_short.apply_delay = ;
+
+        os02g10s1_attr.wdr_cache = wdr_line * os02g10s1_attr.total_width;
+
+#ifdef SENSOR_HCG
+        os02g10s1_attr.hcg_short.base_gain = ;
+        os02g10s1_attr.hcg_short.apply_delay = ;
+#endif /* SENSOR_HCG */
+#endif /* SENSOR_WDR_2_FRAME */
+
+        memcpy((void *)(&(os02g10s1_attr.mipi)), (void *)(&os02g10s1_mipi_linear), sizeof(os02g10s1_attr.mipi));
+        os02g10s1_attr.mipi.clk = 720;
+        os02g10s1_attr.mipi.image_twidth = 568;
+        os02g10s1_attr.mipi.image_theight = 320;
+        break;
+    default:
+        ISP_ERROR("Have no this Setting Source!!!\n");
+        break;
+    }
+
+    return ret;
+}
+
+static int os02g10s1_attr_check(struct tx_isp_subdev *sd)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    struct clk *sclka;
+    int ret = ISP_SUCCESS;
+
+    os02g10s1_setting_select(sd, info->default_boot);
+
+    switch (info->video_interface) {
+    case TISP_SENSOR_VI_MIPI_CSI0:
+        os02g10s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+        os02g10s1_attr.mipi.index = 0;
+        break;
+    case TISP_SENSOR_VI_MIPI_CSI1:
+        os02g10s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+        os02g10s1_attr.mipi.index = 1;
+        break;
+    case TISP_SENSOR_VI_DVP:
+        os02g10s1_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+        break;
+    default:
+        ISP_ERROR("Have no this interface!!!\n");
+    }
+
+#ifndef ZRT_SENSOR_WITHOUT_INIT
+    switch (info->mclk) {
+    case TISP_SENSOR_MCLK0:
+        sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
+        sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
+        set_sensor_mclk_function(0);
+        break;
+    case TISP_SENSOR_MCLK1:
+        sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
+        sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
+        set_sensor_mclk_function(1);
+        break;
+    default:
+        ISP_ERROR("Have no this MCLK Source!!!\n");
+    }
+
+    if (IS_ERR(sensor->mclk)) {
+        ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+        goto err_get_mclk;
+    }
+
+    ret = os02g10s1_clk_set(sd, sclka, SENSOR_MCLK);
+    if (ret) {
+        ISP_ERROR("MCLK configuration failed!!!\n");
+    }
+#endif /* ZRT_SENSOR_WITHOUT_INIT */
+
+    sensor->video.mbus.code = wsize->mbus_code;
+    sensor->video.fps.value = wsize->fps;
+    sensor->video.fps.max = wsize->fps;
+    sensor->video.fps.apply_delay = 1;
+    os02g10s1_attr_set(sd, wsize);
+    sensor->priv = wsize;
+
+    return 0;
+
+err_get_mclk:
+    return -1;
+}
+
+static int os02g10s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
+{
+    unsigned char v;
+    int ret;
+
+    ret = os02g10s1_read(sd, 0x02, &v);
+    pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+    if (ret < 0)
+        return ret;
+    if (v != SENSOR_CHIP_ID_H)
+        return -ENODEV;
+    *ident = v;
+
+    ret = os02g10s1_read(sd, 0x03, &v);
+    pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+    if (ret < 0)
+        return ret;
+    if (v != SENSOR_CHIP_ID_M)
+        return -ENODEV;
+    *ident = (*ident << 8) | v;
+
+    ret = os02g10s1_read(sd, 0x04, &v);
+    pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+    if (ret < 0)
+        return ret;
+    if (v != SENSOR_CHIP_ID_L)
+        return -ENODEV;
+    *ident = (*ident << 8) | v;
+
+    return 0;
+}
+
+static int os02g10s1_g_chip_ident(struct tx_isp_subdev *sd,
+                                struct tx_isp_chip_ident *chip)
+{
+    struct i2c_client *client = tx_isp_get_subdevdata(sd);
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+    unsigned int ident = 0;
+    int ret = ISP_SUCCESS;
+
+    os02g10s1_attr_check(sd);
+#ifndef ZRT_SENSOR_WITHOUT_INIT
+    if (info->rst_gpio != -1) {
+        ret = private_gpio_request(info->rst_gpio, "os02g10s1_reset");
+        if (!ret) {
+            private_gpio_direction_output(info->rst_gpio, 1);
+            private_msleep(5);
+            private_gpio_direction_output(info->rst_gpio, 0);
+            private_msleep(10);
+            private_gpio_direction_output(info->rst_gpio, 1);
+            private_msleep(10);
+        } else {
+            ISP_ERROR("gpio requrest fail %d\n", info->rst_gpio);
+        }
+    }
+    if (info->pwdn_gpio != -1) {
+        ret = private_gpio_request(info->pwdn_gpio, "os02g10s1_pwdn");
+        if (!ret) {
+            private_gpio_direction_output(info->pwdn_gpio, 0);
+            private_msleep(5);
+            private_gpio_direction_output(info->pwdn_gpio, 1);
+            private_msleep(5);
+        } else {
+            ISP_ERROR("gpio requrest fail %d\n", info->pwdn_gpio);
+        }
+    }
+    ret = os02g10s1_detect(sd, &ident);
+    if (ret) {
+        ISP_ERROR("chip found @ 0x%x (%s) is not an os02g10s1 chip.\n",
+                  client->addr, client->adapter->name);
+        return ret;
+    }
+#endif /* ZRT_SENSOR_WITHOUT_INIT */
+
+    ISP_WARNING("===================================================\n");
+    ISP_WARNING("os02g10s1 version is %s\n", TVERSION);
+    ISP_WARNING("Sensor driver version is %s\n", SENSOR_VERSION);
+    ISP_WARNING("Sensor name is %s\n", os02g10s1_attr.name);
+    ISP_WARNING("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+    ISP_WARNING("Sensor video interface is %d\n", info->video_interface);
+    ISP_WARNING("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
+                info->default_boot, wsize->width, wsize->height, wsize->fps >> 16, wsize->fps&0xffff);
+    ISP_WARNING("===================================================\n");
+
+    if (chip) {
+        memcpy(chip->name, "os02g10s1", sizeof("os02g10s1"));
+        chip->ident = ident;
+        chip->revision = SENSOR_VERSION;
+    }
+
+    return 0;
+}
+
+static int os02g10s1_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+{
+    return 0;
+}
+
+static int os02g10s1_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    int ret = ISP_SUCCESS;
+
+    if (!init->enable) {
+        sensor->video.state = TX_ISP_MODULE_DEINIT;
+        return ISP_SUCCESS;
+    } else {
+        sensor->video.mbus.code = wsize->mbus_code;
+        sensor->video.fps.value = wsize->fps;
+        sensor->video.fps.max = wsize->fps;
+        sensor->video.fps.apply_delay = 1;
+        ret = os02g10s1_attr_set(sd, wsize);
+        sensor->video.state = TX_ISP_MODULE_DEINIT;
+    }
+
+
+    return ret;
+}
+
+static int os02g10s1_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
+{
+    unsigned char val = 0;
+    int len = 0;
+    int ret = ISP_SUCCESS;
+
+    len = strlen(sd->chip.name);
+    if (len && strncmp(sd->chip.name, reg->name, len)) {
+        return -EINVAL;
+    }
+    if (!private_capable(CAP_SYS_ADMIN))
+        return -EPERM;
+    ret = os02g10s1_read(sd, reg->reg & 0xffff, &val);
+    reg->val = val;
+    reg->size = 2;
+
+    return ret;
+}
+
+static int os02g10s1_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
+{
+    int len = 0;
+
+    len = strlen(sd->chip.name);
+    if (len && strncmp(sd->chip.name, reg->name, len)) {
+        return -EINVAL;
+    }
+    if (!private_capable(CAP_SYS_ADMIN))
+        return -EPERM;
+    os02g10s1_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+
+    return 0;
+}
+
+static int os02g10s1_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    int ret = ISP_SUCCESS;
+
+    if (init->enable) {
+        if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
+#ifndef ZRT_SENSOR_WITHOUT_INIT
+            ret = os02g10s1_write_array(sd, wsize->regs);
+#endif /* ZRT_SENSOR_WITHOUT_INIT */
+            if (ret)
+                return ret;
+            sensor->video.state = TX_ISP_MODULE_INIT;
+        }
+        if (sensor->video.state == TX_ISP_MODULE_INIT) {
+            ret = os02g10s1_write_array(sd, os02g10s1_stream_on_mipi);
+            sensor->video.state = TX_ISP_MODULE_RUNNING;
+            pr_debug("os02g10s1 stream on\n");
+        }
+
+    } else {
+        ret = os02g10s1_write_array(sd, os02g10s1_stream_off_mipi);
+        sensor->video.state = TX_ISP_MODULE_INIT;
+        pr_debug("os02g10s1 stream off\n");
+    }
+
+    return ret;
+}
+
+#ifndef SENSOR_TEST
+#ifdef SENSOR_EXPO
+static int os02g10s1_set_expo(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+    int it = value & 0xffff;
+    int again = (value & 0xffff0000) >> 16;
+
+    ret = os02g10s1_write(sd, 0xfd, 0x01);
+    ret += os02g10s1_write(sd, 0x03, (unsigned char)((it >> 8) & 0xff));
+    ret += os02g10s1_write(sd, 0x04, (unsigned char)(it & 0xff));
+
+    ret += os02g10s1_write(sd, 0x24, (unsigned char)(again & 0xff));
+    ret += os02g10s1_write(sd, 0x01, 0x01);
+
+    return ret;
+}
+#else
+static int os02g10s1_set_integration_time(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    ret = os02g10s1_write(sd, 0xfd, 0x01);
+    ret += os02g10s1_write(sd, 0x03, (unsigned char)((value >> 8) & 0xff));
+    ret += os02g10s1_write(sd, 0x04, (unsigned char)(value & 0xff));
+    ret += os02g10s1_write(sd, 0x01, 0x01);
+
+    return ret;
+}
+
+static int os02g10s1_set_analog_gain(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    ret = os02g10s1_write(sd, 0xfd, 0x01);
+    ret += os02g10s1_write(sd, 0x24, (unsigned char)(value & 0xff));
+    ret += os02g10s1_write(sd, 0x01, 0x01);
+
+    return ret;
+}
+#endif /* SENSOR_EXPO */
+
+static int os02g10s1_set_digital_gain(struct tx_isp_subdev *sd, int value)
+{
+    return 0;
+}
+
+static int os02g10s1_get_black_pedestal(struct tx_isp_subdev *sd, int value)
+{
+    return 0;
+}
+
+static int os02g10s1_set_mode(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    if (wsize) {
+        ret = os02g10s1_attr_set(sd, wsize);
+    }
+
+    return ret;
+}
+
+static int os02g10s1_set_fps(struct tx_isp_subdev *sd, int fps)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+    unsigned int sclk = 0;
+    unsigned int hts = 0;
+    unsigned int vts = 0;
+    unsigned int vts_base = 0;
+    unsigned int vb = 0;
+    unsigned char val = 0;
+    unsigned int newformat = 0; //the format is 24.8
+    unsigned int max_fps = 0;
+    int ret = ISP_SUCCESS;
+
+    switch (info->default_boot) {
+    case 0:
+        sclk = 1082 * 1109 * 30;  /**< HTS * VTS * FPS */
+        max_fps = 30;
+        vts_base = 1109;
+        break;
+    case 1:
+        sclk = 1082 * 555 * 60;  /**< HTS * VTS * FPS */
+        max_fps = 60;
+        vts_base = 555;
+        break;
+    case 2:
+        sclk = 1082 * 343 * 100;  /**< HTS * VTS * FPS */
+        max_fps = 100;
+        vts_base = 335;
+        break;
+    default:
+        ret = -1;
+        ISP_ERROR("Now we do not support this framerate!!!\n");
+    }
+
+    /* max_fps = wsize->fps; */
+    newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
+    if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+        ISP_ERROR("warn: fps(%d/%d) no in range\n", fps >> 16, fps & 0xffff);
+        return -1;
+    }
+
+    ret += os02g10s1_write(sd, 0xfd, 0x01);
+    val = 0;
+    ret += os02g10s1_read(sd, 0x41, &val);
+    hts = val << 8;
+    val = 0;
+    ret += os02g10s1_read(sd, 0x42, &val);
+    hts |= val;
+    if (0 != ret) {
+        ISP_ERROR("err: os02g10s1 read err\n");
+        return ret;
+    }
+
+    vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
+    vb = vts - vts_base;
+
+    ret += os02g10s1_write(sd, 0xfd, 0x01);
+    os02g10s1_write(sd, 0x06, (unsigned char) (vb & 0xff));
+    os02g10s1_write(sd, 0x05, (unsigned char) (vb >> 8));
+    ret += os02g10s1_write(sd, 0x01, 0x01);
+
+    if (0 != ret) {
+        ISP_ERROR("err: os02g10s1_write err\n");
+        return ret;
+    }
+
+    sensor->video.fps.value = fps;
+
+#ifndef SENSOR_WDR_2_FRAME
+    /* Linear mode */
+    sensor->video.attr->total_height = vts;
+    sensor->video.attr->integration_time.max = vts - 8;
+#else
+    /* WDR mode */
+    switch (info->default_boot) {
+    case 0:
+        sensor->video.attr->total_height = vts;
+        sensor->video.attr->integration_time.max = vts - xx;
+        break;
+    case 1:
+        sensor->video.attr->total_height = vts;
+        sensor->video.attr->integration_time.max = vts - xx;
+        sensor->video.attr->integration_time_short.max = vts - xx;
+        break;
+    default:
+        ret = -1;
+        ISP_ERROR("Now we do not support this framerate!!!\n");
+    }
+#endif /* SENSOR_WDR_2_FRAME */
+
+    ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+    if (ret) {
+        ISP_WARNING("Description Failed to synchronize the attributes of sensor!!!");
+    }
+
+    return ret;
+}
+
+static int os02g10s1_set_hvflip(struct tx_isp_subdev *sd, void *arg)
+{
+#ifdef SENSOR_MIR_FLIP
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct tx_isp_hvflip_par *par = (struct tx_isp_hvflip_par *)arg;
+    int ret = ISP_SUCCESS;
+    unsigned char val = 0;
+
+    par->drop_frame = 0;
+    par->reset = 0;
+
+    /* 2'b01:mirror,2'b10:filp */
+    ret = os02g10s1_write(sd, 0xfd, 0x01);
+    ret = os02g10s1_read(sd, 0x3f, &val);
+    switch(par->hvflip) {
+    case TX_ISP_SENSOR_HVFLIP_NOMAL:
+        val &= 0xFC;
+        sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
+        break;
+    case TX_ISP_SENSOR_HVFLIP_HFLIP:
+        val = ((val & 0xFC) | 0x01);
+        sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
+        break;
+    case TX_ISP_SENSOR_HVFLIP_VFLIP:
+        val = ((val & 0xFC) | 0x02);
+        sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
+        break;
+    case TX_ISP_SENSOR_HVFLIP_HVFLIP:
+        val |= 0x03;
+        sensor->video.mbus.code = TISP_VI_FMT_SRGGB10_1X10;
+        break;
+    }
+    ret = os02g10s1_write(sd, 0x3f, val);
+    ret += os02g10s1_write(sd, 0x01, 0x01);
+
+    sensor->video.hvflip_mode = par->hvflip;
+    sensor->video.mbus_change = 1;
+    os02g10s1_attr_set(sd, wsize);
+    return ret;
+#else
+    return -1;
+#endif /* SENSOR_MIR_FLIP */
+}
+
+#ifdef SENSOR_WDR_2_FRAME
+#ifdef SENSOR_EXPO
+static int os02g10s1_set_expo_short(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    ...;
+
+    return ret;
+}
+#else
+static int os02g10s1_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    ...;
+
+    return ret;
+}
+
+static int os02g10s1_set_integration_time_short(struct tx_isp_subdev *sd, int value)
+{
+    int ret = ISP_SUCCESS;
+
+    ...;
+
+    return ret;
+}
+#endif /* SENSOR_EXPO */
+
+static int os02g10s1_set_wdr_stop(struct tx_isp_subdev *sd, void *arg)
+{
+    struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+    struct tx_isp_wdr_par *par = (struct tx_isp_wdr_par *)arg;
+    int ret = ISP_SUCCESS;
+
+    ret = os02g10s1_write_array(sd, os02g10s1_stream_off_mipi);
+    if (par->wdr_en == 1) {
+        if (par->boot == -1) {
+            info->default_boot = 1;
+        }
+        os02g10s1_setting_select(sd, 1);
+        os02g10s1_attr_set(sd, wsize);
+    } else if (par->wdr_en == 0) {
+        if (par->boot == -1) {
+            info->default_boot = 0;
+        }
+        os02g10s1_setting_select(sd, 0);
+        os02g10s1_attr_set(sd, wsize);
+    } else {
+        ISP_ERROR("Can not support this data type!!!");
+        return -1;
+    }
+
+    return 0;
+}
+
+static int os02g10s1_set_wdr(struct tx_isp_subdev *sd, void *arg)
+{
+    struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+    struct tx_isp_wdr_par *par = (struct tx_isp_wdr_par *)arg;
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+    int ret = ISP_SUCCESS;
+
+    private_gpio_direction_output(info->rst_gpio, 0);
+    private_msleep(1);
+    private_gpio_direction_output(info->rst_gpio, 1);
+    private_msleep(1);
+
+    ret = os02g10s1_write_array(sd, wsize->regs);
+    ret = os02g10s1_write_array(sd, os02g10s1_stream_on_mipi);
+
+    return 0;
+}
+#endif /* SENSOR_WDR_2_FRAME */
+
+static int os02g10s1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
+{
+    long ret = 0;
+    struct tx_isp_sensor_value *sensor_val = arg;
+
+    if (IS_ERR_OR_NULL(sd)) {
+        ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
+        return -EINVAL;
+    }
+
+    switch (cmd) {
+#ifdef SENSOR_EXPO
+    case TX_ISP_EVENT_SENSOR_EXPO:
+        if (arg)
+            ret = os02g10s1_set_expo(sd, sensor_val->value);
+        break;
+#else
+    case TX_ISP_EVENT_SENSOR_INT_TIME:
+        if (arg)
+            ret = os02g10s1_set_integration_time(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_AGAIN:
+        if (arg)
+            ret = os02g10s1_set_analog_gain(sd, sensor_val->value);
+        break;
+#endif /* SENSOR_EXPO */
+    case TX_ISP_EVENT_SENSOR_DGAIN:
+        if (arg)
+            ret = os02g10s1_set_digital_gain(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
+        if (arg)
+            ret = os02g10s1_get_black_pedestal(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_RESIZE:
+        if (arg)
+            ret = os02g10s1_set_mode(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
+        if (arg)
+            ret = os02g10s1_write_array(sd, os02g10s1_stream_off_mipi);
+        break;
+    case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
+        if (arg)
+            ret = os02g10s1_write_array(sd, os02g10s1_stream_on_mipi);
+        break;
+    case TX_ISP_EVENT_SENSOR_FPS:
+        if (arg)
+            ret = os02g10s1_set_fps(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_HVFLIP:
+        if(arg)
+            ret = os02g10s1_set_hvflip(sd, (void *)sensor_val->value);
+        break;
+#ifdef SENSOR_WDR_2_FRAME
+#ifdef SENSOR_EXPO
+    case TX_ISP_EVENT_SENSOR_EXPO_SHORT:
+        if (arg)
+            ret = os02g10s1_set_expo_short(sd, sensor_val->value);
+        break;
+#else
+    case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
+        if(arg)
+            ret = os02g10s1_set_integration_time_short(sd, sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
+        if(arg)
+            ret = os02g10s1_set_analog_gain_short(sd, sensor_val->value);
+        break;
+#endif /* SENSOR_EXPO */
+    case TX_ISP_EVENT_SENSOR_WDR:
+        if(arg)
+            ret = os02g10s1_set_wdr(sd, (void *)sensor_val->value);
+        break;
+    case TX_ISP_EVENT_SENSOR_WDR_STOP:
+        if(arg)
+            ret = os02g10s1_set_wdr_stop(sd, (void *)sensor_val->value);
+        break;
+#endif /* SENSOR_WDR_2_FRAME */
+    default:
+        break;
+    }
+
+    return ret;
+}
+#endif /* SENSOR_TEST */
+
+static struct tx_isp_subdev_core_ops os02g10s1_core_ops = {
+    .g_chip_ident = os02g10s1_g_chip_ident,
+    .reset = os02g10s1_reset,
+    .init = os02g10s1_init,
+    .g_register = os02g10s1_g_register,
+    .s_register = os02g10s1_s_register,
+};
+
+static struct tx_isp_subdev_video_ops os02g10s1_video_ops = {
+    .s_stream = os02g10s1_s_stream,
+};
+
+static struct tx_isp_subdev_sensor_ops os02g10s1_sensor_ops = {
+#ifndef SENSOR_TEST
+    .ioctl	= os02g10s1_sensor_ops_ioctl,
+#endif /* SENSOR_TEST */
+};
+
+static struct tx_isp_subdev_ops os02g10s1_ops = {
+    .core = &os02g10s1_core_ops,
+    .video = &os02g10s1_video_ops,
+    .sensor = &os02g10s1_sensor_ops,
+};
+
+/* It's the sensor device */
+static u64 tx_isp_module_dma_mask = ~(u64) 0;
+struct platform_device sensor_platform_device = {
+    .name = "os02g10s1",
+    .id = -1,
+    .dev = {
+        .dma_mask = &tx_isp_module_dma_mask,
+        .coherent_dma_mask = 0xffffffff,
+        .platform_data = NULL,
+    },
+    .num_resources = 0,
+};
+
+static int os02g10s1_probe(struct i2c_client *client,
+                         const struct i2c_device_id *id)
+{
+    struct tx_isp_subdev *sd;
+    struct tx_isp_video_in *video;
+    struct tx_isp_sensor *sensor;
+
+    sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+    if (!sensor) {
+        ISP_ERROR("Failed to allocate sensor subdev.\n");
+        return -ENOMEM;
+    }
+    memset(sensor, 0, sizeof(*sensor));
+    sd = &sensor->sd;
+    video = &sensor->video;
+
+#ifdef SENSOR_MIR_FLIP
+    sensor->video.hvflip_mode = TX_ISP_SENSOR_HVFLIP_NOMAL;
+#endif /* SENSOR_MIR_FLIP */
+    sensor->video.attr = &os02g10s1_attr;
+    sensor->dev = &client->dev;
+    tx_isp_subdev_init(&sensor_platform_device, sd, &os02g10s1_ops);
+    tx_isp_set_subdevdata(sd, client);
+    tx_isp_set_subdev_hostdata(sd, sensor);
+    private_i2c_set_clientdata(client, sd);
+
+    pr_debug("probe ok ------->os02g10s1\n");
+
+    return 0;
+}
+
+static int os02g10s1_remove(struct i2c_client *client)
+{
+    struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
+    struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+    struct tx_isp_sensor_register_info *info = &sensor->info;
+
+    if (info->rst_gpio != -1)
+        private_gpio_free(info->rst_gpio);
+    if (info->pwdn_gpio != -1)
+        private_gpio_free(info->pwdn_gpio);
+
+    private_clk_disable_unprepare(sensor->mclk);
+    tx_isp_subdev_deinit(sd);
+
+    kfree(sensor);
+
+    return 0;
+}
+
+static const struct i2c_device_id os02g10s1_id[] = {
+    {"os02g10s1", 0},
+    {}
+};
+#ifndef CONFIG_ZERATUL
+MODULE_DEVICE_TABLE(i2c, os02g10s1_id);
+#endif	/* CONFIG_ZERATUL */
+
+static struct i2c_driver os02g10s1_driver = {
+    .driver = {
+#ifdef CONFIG_ZERATUL
+        .owner	= NULL,
+#else
+        .owner	= THIS_MODULE,
+#endif	/* CONFIG_ZERATUL */
+        .name	= "os02g10s1",
+    },
+    .probe			= os02g10s1_probe,
+    .remove			= os02g10s1_remove,
+    .id_table		= os02g10s1_id,
+};
+
+#ifndef CONFIG_ZERATUL
+static __init int init_os02g10s1(void) {
+    return private_i2c_add_driver(&os02g10s1_driver);
+}
+
+static __exit void exit_os02g10s1(void) {
+    private_i2c_del_driver(&os02g10s1_driver);
+}
+
+module_init(init_os02g10s1);
+module_exit(exit_os02g10s1);
+#endif	/* CONFIG_ZERATUL */
+
+#ifdef CONFIG_ZERATUL
+static int init_first_os02g10s1(void) {
+    return private_i2c_add_driver(&os02g10s1_driver);
+}
+
+static void exit_first_os02g10s1(void) {
+    private_i2c_del_driver(&os02g10s1_driver);
+}
+
+struct tx_isp_sensor_fast_attr sensor1 = {
+    .name = "os02g10s1",
+    .i2c_addr = 0x3c,
+    .width = 1920,
+    .height = 1080,
+#ifdef SENSOR_WDR_2_FRAME
+    .wdr = 1,
+#else
+    .wdr = 0,
+#endif /* SENSOR_WDR_2_FRAME */
+    .init_sensor = init_first_os02g10s1,
+    .exit_sensor = exit_first_os02g10s1
+};
+#endif	/* CONFIG_ZERATUL */
+
+MODULE_DESCRIPTION("A low-level driver for Sony os02g10s1 sensor");
+MODULE_LICENSE("GPL");

@@ -1,0 +1,19 @@
+test_lzma 测试lzma0 通道
+test_lzma1 测试lzma1通道
+
+./build_test.sh编译测试程序
+./make.sh编译驱动
+
+
+测试方法：
+	先insmod jz_lzma.ko加载驱动
+	执行./test_lzma ./kernel.7z.lzma测试通道0
+	执行./test_lzma1 ./kernel.7z.lzma测试通道1
+
+	lzma0 decode begin和lzma0 decode over的打印时间表示解压时间
+
+
+注意：
+	1、jz_lzma 解压的问题，必须使用enc_tool下的lzma工具进行压缩，因为头部8byte，前4个byte表示字典大小（hexdump -C jz_lzma_out.bin后前4个byte在41上的应该是 00 00 02 00），后4byte表示文件大小，不然jzlzma解压不了。
+	2、根据压缩和解压的大小，需要mem，空余相应的大小。
+

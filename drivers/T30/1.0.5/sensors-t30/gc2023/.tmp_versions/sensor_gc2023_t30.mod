@@ -1,0 +1,2 @@
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/gc2023/sensor_gc2023_t30.ko
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/gc2023/gc2023.o

@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/jxh62/sensor_jxh62_t21.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/jxh62/sensor_jxh62_t21.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/jxh62/jxh62.o 

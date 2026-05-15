@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/jxh63p/sensor_jxh63ps1_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/jxh63p/sensor_jxh63ps1_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/jxh63p/jxh63ps1.o 

@@ -1,0 +1,1 @@
+cmd_/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/sc2310/sensor_sc2310_t30.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/sc2310/sensor_sc2310_t30.o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/sc2310/sc2310.o 

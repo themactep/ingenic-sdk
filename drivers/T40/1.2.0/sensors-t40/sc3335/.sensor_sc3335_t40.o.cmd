@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/sc3335/sensor_sc3335_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/sc3335/sensor_sc3335_t40.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/sc3335/sc3335.o 

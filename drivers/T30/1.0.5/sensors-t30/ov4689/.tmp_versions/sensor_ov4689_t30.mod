@@ -1,0 +1,2 @@
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/ov4689/sensor_ov4689_t30.ko
+/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/ov4689/ov4689.o

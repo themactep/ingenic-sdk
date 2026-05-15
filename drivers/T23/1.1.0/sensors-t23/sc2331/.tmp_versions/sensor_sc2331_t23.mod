@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/sc2331/sensor_sc2331_t23.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/sc2331/sc2331.o

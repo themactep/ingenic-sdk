@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/audio/oss2/audio.ko
+/home/user/git/opensource/drivers/audio/oss2/devices/ex_codecs/codec_i2c_dev.o /home/user/git/opensource/drivers/audio/oss2/devices/ex_codecs/es8374_codec.o /home/user/git/opensource/drivers/audio/oss2/devices/codecs/jz_t10_codec.o /home/user/git/opensource/drivers/audio/oss2/devices/xb47xx_i2s_v12.o /home/user/git/opensource/drivers/audio/oss2/interface/xb_snd_dsp.o /home/user/git/opensource/drivers/audio/oss2/xb_snd_card.o

@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/gc2607/sensor_gc2607_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc2607/sensor_gc2607_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc2607/gc2607.o 

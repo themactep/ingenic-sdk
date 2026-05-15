@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/audio.ko
+/home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/audio_dsp.o /home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/audio_debug.o /home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/host/PRJ008/audio_aic.o /home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/inner_codecs/PRJ008/codec.o /home_a/ingenic/isvp_t33/opensource/drivers/audio/oss3/boards/PRJ008_platform.o

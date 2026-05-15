@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/sc301IoT/sensor_sc301IoT_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/sc301IoT/sensor_sc301IoT_t23.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/sc301IoT/sc301IoT.o 

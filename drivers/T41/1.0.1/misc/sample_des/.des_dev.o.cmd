@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/misc/sample_des/des_dev.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/misc/sample_des/des_dev.o /home_d/jszhang/work/isvp/opensource/drivers/misc/sample_des/jz-des.o 

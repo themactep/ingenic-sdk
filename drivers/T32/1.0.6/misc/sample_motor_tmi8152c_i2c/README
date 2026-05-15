@@ -1,0 +1,4 @@
+1.This driver is based on the tmi8152c chip to drive the motor,
+	and the driver needs to configure relevant registers according to the tmi8152c manual
+2.this sample supports driver operations such as move, pause, stop, reset, etc
+3.Support application layer configuration, and the application layer program is shown in motor_test/motor.app_test. c

@@ -1,0 +1,2 @@
+/home_d/zjxu/git/opensource/drivers/sensors-t41/sc430ai/sensor_sc430ai_t41.ko
+/home_d/zjxu/git/opensource/drivers/sensors-t41/sc430ai/sc430ai.o

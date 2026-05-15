@@ -1,0 +1,1 @@
+cmd_/home_c/xbyu/work/isvp_w/opensource/drivers/misc/sensor_info/sinfo.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_c/xbyu/work/isvp_w/opensource/drivers/misc/sensor_info/sinfo.o /home_c/xbyu/work/isvp_w/opensource/drivers/misc/sensor_info/sensor_info.o 

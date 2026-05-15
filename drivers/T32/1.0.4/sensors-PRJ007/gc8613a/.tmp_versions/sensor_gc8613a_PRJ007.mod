@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc8613a/sensor_gc8613a_PRJ007.ko
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc8613a/gc8613a.o

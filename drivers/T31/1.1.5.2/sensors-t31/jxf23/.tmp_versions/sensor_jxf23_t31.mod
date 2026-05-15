@@ -1,0 +1,2 @@
+/home/user/work/T31-SNIPE/NDA/SDK/ISVP-T31-1.1.4-20210825/sdk/Ingenic-SDK-T31-1.1.4-20210825/opensource/drivers/sensors-t31/jxf23/sensor_jxf23_t31.ko
+/home/user/work/T31-SNIPE/NDA/SDK/ISVP-T31-1.1.4-20210825/sdk/Ingenic-SDK-T31-1.1.4-20210825/opensource/drivers/sensors-t31/jxf23/jxf23.o

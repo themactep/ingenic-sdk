@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t23/imx327/sensor_imx327_t23.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t23/imx327/imx327.o

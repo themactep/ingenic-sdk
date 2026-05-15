@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/jxh62/sensor_jxh62_t21.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/jxh62/jxh62.o

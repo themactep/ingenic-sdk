@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t41/mis2032/sensor_mis2032_t41.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t41/mis2032/mis2032.o

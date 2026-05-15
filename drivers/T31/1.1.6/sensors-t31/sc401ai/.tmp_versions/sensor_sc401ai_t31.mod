@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/sc401ai/sensor_sc401ai_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/sc401ai/sc401ai.o

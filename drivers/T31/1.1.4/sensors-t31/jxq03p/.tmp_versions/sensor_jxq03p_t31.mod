@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/jxq03p/sensor_jxq03p_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/jxq03p/jxq03p.o

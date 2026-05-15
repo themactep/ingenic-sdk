@@ -1,0 +1,5 @@
+ISP编译方法
+
+make toolchain
+make -j
+make install

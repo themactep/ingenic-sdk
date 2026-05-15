@@ -1,0 +1,379 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AICCR	hdmi_aic.h	20;"	d
+AICDR	hdmi_aic.h	25;"	d
+AICFR	hdmi_aic.h	19;"	d
+AICLR	hdmi_aic.h	26;"	d
+AICSR	hdmi_aic.h	22;"	d
+AICTFLR	hdmi_aic.h	27;"	d
+AIC_PROC_CMD_SIZE	hdmi_dsp.h	12;"	d
+AIC_RX_FIFO_DEPTH	hdmi_aic.h	5;"	d
+AIC_TX_FIFO_DEPTH	hdmi_aic.h	4;"	d
+AIC_TX_FIFO_DEPTH	hdmi_dsp.h	11;"	d
+AMIC_HDMI_AO_CLEAR_STREAM	hdmi_dsp.h	45;"	d
+AMIC_HDMI_AO_DISABLE_STREAM	hdmi_dsp.h	46;"	d
+AMIC_HDMI_AO_ENABLE_STREAM	hdmi_dsp.h	47;"	d
+AMIC_HDMI_AO_GET_PARAM	hdmi_dsp.h	50;"	d
+AMIC_HDMI_AO_SET_PARAM	hdmi_dsp.h	49;"	d
+AMIC_HDMI_AO_SET_STREAM	hdmi_dsp.h	48;"	d
+AMIC_HDMI_AO_SYNC_STREAM	hdmi_dsp.h	44;"	d
+AUDIO_BUSY_STATE	hdmi_dsp.h	/^	AUDIO_BUSY_STATE,$/;"	e	enum:audio_state
+AUDIO_CONFIG_STATE	hdmi_dsp.h	/^	AUDIO_CONFIG_STATE,$/;"	e	enum:audio_state
+AUDIO_DRIVER_VERSION	hdmi_dsp.c	48;"	d	file:
+AUDIO_EPARAM	hdmi_dsp.h	/^	AUDIO_EPARAM,$/;"	e	enum:audio_error_value
+AUDIO_EPERM	hdmi_dsp.h	/^	AUDIO_EPERM,$/;"	e	enum:audio_error_value
+AUDIO_ERROR_LEVEL	hdmi_audio_debug.h	15;"	d
+AUDIO_IDLE_STATE	hdmi_dsp.h	/^	AUDIO_IDLE_STATE,$/;"	e	enum:audio_state
+AUDIO_INFO_LEVEL	hdmi_audio_debug.h	13;"	d
+AUDIO_IO_LEADING_DMA	hdmi_dsp.c	49;"	d	file:
+AUDIO_MAX_STATE	hdmi_dsp.h	/^	AUDIO_MAX_STATE,$/;"	e	enum:audio_state
+AUDIO_OPEN_STATE	hdmi_dsp.h	/^	AUDIO_OPEN_STATE,$/;"	e	enum:audio_state
+AUDIO_PRINT	hdmi_audio_debug.h	16;"	d
+AUDIO_SUCCESS	hdmi_dsp.h	/^	AUDIO_SUCCESS,$/;"	e	enum:audio_error_value
+AUDIO_WARNING_LEVEL	hdmi_audio_debug.h	14;"	d
+BLOCK	hdmi_dsp.h	/^	BLOCK   = 1,$/;"	e	enum:__anon1
+CACHED_FRAGMENT	hdmi_dsp.c	50;"	d	file:
+CROSS_COMPILE	Makefile	/^CROSS_COMPILE ?= mips-v720s229-linux-gnu-$/;"	m
+DEFAULT_REPLAY_CLK	hdmi_aic.h	9;"	d
+DEFAULT_REPLAY_TRIGGER	hdmi_aic.h	11;"	d
+DMA_ST	hdmi_dsp.h	/^}DMA_ST;$/;"	t	typeref:enum:__anon1
+HDMI_AIC_H__	hdmi_aic.h	2;"	d
+HDMI_DSP_H__	hdmi_dsp.h	2;"	d
+I2SCR	hdmi_aic.h	21;"	d
+I2SDIV	hdmi_aic.h	24;"	d
+I2SSR	hdmi_aic.h	23;"	d
+I2S_AMSL_MASK	hdmi_aic.h	297;"	d
+I2S_AMSL_OFFSET	hdmi_aic.h	296;"	d
+I2S_ASVTSU_MASK	hdmi_aic.h	159;"	d
+I2S_ASVTSU_OFFSET	hdmi_aic.h	158;"	d
+I2S_AUSEL_MASK	hdmi_aic.h	67;"	d
+I2S_AUSEL_OFFSET	hdmi_aic.h	66;"	d
+I2S_BSY_MASK	hdmi_aic.h	351;"	d
+I2S_BSY_OFFSET	hdmi_aic.h	350;"	d
+I2S_CHANNEL_MASK	hdmi_aic.h	189;"	d
+I2S_CHANNEL_OFFSET	hdmi_aic.h	188;"	d
+I2S_CHBSY_MASK	hdmi_aic.h	357;"	d
+I2S_CHBSY_OFFSET	hdmi_aic.h	356;"	d
+I2S_DATA_MASK	hdmi_aic.h	369;"	d
+I2S_DATA_OFFSET	hdmi_aic.h	368;"	d
+I2S_DMODE_MASK	hdmi_aic.h	73;"	d
+I2S_DMODE_OFFSET	hdmi_aic.h	72;"	d
+I2S_DV_MASK	hdmi_aic.h	395;"	d
+I2S_DV_OFFSET	hdmi_aic.h	394;"	d
+I2S_ENB_MASK	hdmi_aic.h	59;"	d
+I2S_ENB_OFFSET	hdmi_aic.h	58;"	d
+I2S_ENDSW_MASK	hdmi_aic.h	161;"	d
+I2S_ENDSW_OFFSET	hdmi_aic.h	160;"	d
+I2S_ENLBF_MASK	hdmi_aic.h	145;"	d
+I2S_ENLBF_OFFSET	hdmi_aic.h	144;"	d
+I2S_EREC_MASK	hdmi_aic.h	141;"	d
+I2S_EREC_OFFSET	hdmi_aic.h	140;"	d
+I2S_ERFS_MASK	hdmi_aic.h	149;"	d
+I2S_ERFS_OFFSET	hdmi_aic.h	148;"	d
+I2S_EROR_MASK	hdmi_aic.h	153;"	d
+I2S_EROR_OFFSET	hdmi_aic.h	152;"	d
+I2S_ERPL_MASK	hdmi_aic.h	143;"	d
+I2S_ERPL_OFFSET	hdmi_aic.h	142;"	d
+I2S_ETFL_MASK	hdmi_aic.h	186;"	d
+I2S_ETFL_OFFSET	hdmi_aic.h	185;"	d
+I2S_ETFS_MASK	hdmi_aic.h	147;"	d
+I2S_ETFS_OFFSET	hdmi_aic.h	146;"	d
+I2S_ETUR_MASK	hdmi_aic.h	151;"	d
+I2S_ETUR_OFFSET	hdmi_aic.h	150;"	d
+I2S_FIFO_RESET_STAT	hdmi_aic.h	85;"	d
+I2S_ICDC_MASK	hdmi_aic.h	69;"	d
+I2S_ICDC_OFFSET	hdmi_aic.h	68;"	d
+I2S_IDV_MASK	hdmi_aic.h	397;"	d
+I2S_IDV_OFFSET	hdmi_aic.h	396;"	d
+I2S_ISS_MASK	hdmi_aic.h	177;"	d
+I2S_ISS_OFFSET	hdmi_aic.h	176;"	d
+I2S_LOOP_DATA_MASK	hdmi_aic.h	379;"	d
+I2S_LOOP_DATA_OFFSET	hdmi_aic.h	378;"	d
+I2S_LSMP_MASK	hdmi_aic.h	71;"	d
+I2S_LSMP_OFFSET	hdmi_aic.h	70;"	d
+I2S_M2S_MASK	hdmi_aic.h	163;"	d
+I2S_M2S_OFFSET	hdmi_aic.h	162;"	d
+I2S_MONOCTR_MASK	hdmi_aic.h	170;"	d
+I2S_MONOCTR_OFFSET	hdmi_aic.h	169;"	d
+I2S_MONOCTR_RIGHT_MASK	hdmi_aic.h	166;"	d
+I2S_MONOCTR_RIGHT_OFFSET	hdmi_aic.h	165;"	d
+I2S_MSB_MASK	hdmi_aic.h	75;"	d
+I2S_MSB_OFFSET	hdmi_aic.h	74;"	d
+I2S_OSS_MASK	hdmi_aic.h	179;"	d
+I2S_OSS_OFFSET	hdmi_aic.h	178;"	d
+I2S_PACK16_MASK	hdmi_aic.h	191;"	d
+I2S_PACK16_OFFSET	hdmi_aic.h	190;"	d
+I2S_RBSY_MASK	hdmi_aic.h	353;"	d
+I2S_RBSY_OFFSET	hdmi_aic.h	352;"	d
+I2S_RDMS_MASK	hdmi_aic.h	175;"	d
+I2S_RDMS_OFFSET	hdmi_aic.h	174;"	d
+I2S_RFIFOS_MASK	hdmi_aic.h	77;"	d
+I2S_RFIFOS_OFFSET	hdmi_aic.h	76;"	d
+I2S_RFIRST_MASK	hdmi_aic.h	301;"	d
+I2S_RFIRST_OFFSET	hdmi_aic.h	300;"	d
+I2S_RFLUSH_MASK	hdmi_aic.h	155;"	d
+I2S_RFLUSH_OFFSET	hdmi_aic.h	154;"	d
+I2S_RFL_MASK	hdmi_aic.h	330;"	d
+I2S_RFL_OFFSET	hdmi_aic.h	329;"	d
+I2S_RFS_MASK	hdmi_aic.h	322;"	d
+I2S_RFS_OFFSET	hdmi_aic.h	321;"	d
+I2S_RFTH_MASK	hdmi_aic.h	83;"	d
+I2S_RFTH_OFFSET	hdmi_aic.h	82;"	d
+I2S_RMASTER_MASK	hdmi_aic.h	61;"	d
+I2S_RMASTER_OFFSET	hdmi_aic.h	60;"	d
+I2S_ROR_MASK	hdmi_aic.h	326;"	d
+I2S_ROR_OFFSET	hdmi_aic.h	325;"	d
+I2S_RST_MASK	hdmi_aic.h	65;"	d
+I2S_RST_OFFSET	hdmi_aic.h	64;"	d
+I2S_STEREOCTR_MASK	hdmi_aic.h	167;"	d
+I2S_SWLH_MASK	hdmi_aic.h	299;"	d
+I2S_SWLH_OFFSET	hdmi_aic.h	298;"	d
+I2S_TBSY_MASK	hdmi_aic.h	355;"	d
+I2S_TBSY_OFFSET	hdmi_aic.h	354;"	d
+I2S_TDMS_MASK	hdmi_aic.h	173;"	d
+I2S_TDMS_OFFSET	hdmi_aic.h	172;"	d
+I2S_TFIFOS_MASK	hdmi_aic.h	79;"	d
+I2S_TFIFOS_OFFSET	hdmi_aic.h	78;"	d
+I2S_TFIFO_LOOP_MASK	hdmi_aic.h	386;"	d
+I2S_TFIFO_LOOP_OFFSET	hdmi_aic.h	385;"	d
+I2S_TFLUSH_MASK	hdmi_aic.h	157;"	d
+I2S_TFLUSH_OFFSET	hdmi_aic.h	156;"	d
+I2S_TFL_MASK	hdmi_aic.h	328;"	d
+I2S_TFL_OFFSET	hdmi_aic.h	327;"	d
+I2S_TFS_MASK	hdmi_aic.h	320;"	d
+I2S_TFS_OFFSET	hdmi_aic.h	319;"	d
+I2S_TFTH_MASK	hdmi_aic.h	81;"	d
+I2S_TFTH_OFFSET	hdmi_aic.h	80;"	d
+I2S_TLDMS_MASK	hdmi_aic.h	182;"	d
+I2S_TLDMS_OFFSET	hdmi_aic.h	181;"	d
+I2S_TMASTER_MASK	hdmi_aic.h	63;"	d
+I2S_TMASTER_OFFSET	hdmi_aic.h	62;"	d
+I2S_TUR_MASK	hdmi_aic.h	324;"	d
+I2S_TUR_OFFSET	hdmi_aic.h	323;"	d
+ISVP_ENV_KERNEL_DIR	Makefile	/^ISVP_ENV_KERNEL_DIR ?= $(PWD)\/..\/..\/kernel$/;"	m
+KDIR	Makefile	/^KDIR := ${ISVP_ENV_KERNEL_DIR}$/;"	m
+MCLK_DIV_TO_SAMPLE	hdmi_aic.h	7;"	d
+MODULE_NAME	Makefile	/^MODULE_NAME := hdmi_audio$/;"	m
+MONO	hdmi_dsp.h	8;"	d
+NOBLOCK	hdmi_dsp.h	/^	NOBLOCK = 0,$/;"	e	enum:__anon1
+QUERY	hdmi_dsp.h	/^	QUERY   = 2$/;"	e	enum:__anon1
+STEREO	hdmi_dsp.h	9;"	d
+VALID_16BIT	hdmi_aic.h	14;"	d
+VALID_20BIT	hdmi_aic.h	15;"	d
+VALID_24BIT	hdmi_aic.h	16;"	d
+VALID_8BIT	hdmi_aic.h	13;"	d
+_JZ_AUDIO_DEBUG_H_	hdmi_audio_debug.h	2;"	d
+__aic_select_aclink	hdmi_aic.h	89;"	d
+__aic_select_i2s	hdmi_aic.h	87;"	d
+__i2s_channel_is_busy	hdmi_aic.h	365;"	d
+__i2s_clear_ror	hdmi_aic.h	336;"	d
+__i2s_clear_tur	hdmi_aic.h	332;"	d
+__i2s_disable	hdmi_aic.h	136;"	d
+__i2s_disable_24bitmsb	hdmi_aic.h	113;"	d
+__i2s_disable_byteswap	hdmi_aic.h	243;"	d
+__i2s_disable_etfl	hdmi_aic.h	238;"	d
+__i2s_disable_loopback	hdmi_aic.h	282;"	d
+__i2s_disable_mono2stereo	hdmi_aic.h	215;"	d
+__i2s_disable_monoctr_left	hdmi_aic.h	220;"	d
+__i2s_disable_monoctr_right	hdmi_aic.h	225;"	d
+__i2s_disable_overrun_intr	hdmi_aic.h	262;"	d
+__i2s_disable_pack16	hdmi_aic.h	195;"	d
+__i2s_disable_receive_dma	hdmi_aic.h	210;"	d
+__i2s_disable_receive_intr	hdmi_aic.h	277;"	d
+__i2s_disable_record	hdmi_aic.h	292;"	d
+__i2s_disable_replay	hdmi_aic.h	287;"	d
+__i2s_disable_signadj	hdmi_aic.h	248;"	d
+__i2s_disable_tloop	hdmi_aic.h	233;"	d
+__i2s_disable_transmit_dma	hdmi_aic.h	206;"	d
+__i2s_disable_transmit_intr	hdmi_aic.h	272;"	d
+__i2s_disable_underrun_intr	hdmi_aic.h	267;"	d
+__i2s_enable	hdmi_aic.h	134;"	d
+__i2s_enable_24bitmsb	hdmi_aic.h	111;"	d
+__i2s_enable_byteswap	hdmi_aic.h	241;"	d
+__i2s_enable_etfl	hdmi_aic.h	236;"	d
+__i2s_enable_loopback	hdmi_aic.h	280;"	d
+__i2s_enable_mono2stereo	hdmi_aic.h	213;"	d
+__i2s_enable_monoctr_left	hdmi_aic.h	218;"	d
+__i2s_enable_monoctr_right	hdmi_aic.h	223;"	d
+__i2s_enable_overrun_intr	hdmi_aic.h	260;"	d
+__i2s_enable_pack16	hdmi_aic.h	193;"	d
+__i2s_enable_receive_dma	hdmi_aic.h	208;"	d
+__i2s_enable_receive_intr	hdmi_aic.h	275;"	d
+__i2s_enable_record	hdmi_aic.h	290;"	d
+__i2s_enable_replay	hdmi_aic.h	285;"	d
+__i2s_enable_signadj	hdmi_aic.h	246;"	d
+__i2s_enable_stereo	hdmi_aic.h	228;"	d
+__i2s_enable_tloop	hdmi_aic.h	231;"	d
+__i2s_enable_transmit_dma	hdmi_aic.h	204;"	d
+__i2s_enable_transmit_intr	hdmi_aic.h	270;"	d
+__i2s_enable_underrun_intr	hdmi_aic.h	265;"	d
+__i2s_external_codec	hdmi_aic.h	101;"	d
+__i2s_flush_rfifo	hdmi_aic.h	253;"	d
+__i2s_flush_tfifo	hdmi_aic.h	251;"	d
+__i2s_internal_codec_master	hdmi_aic.h	98;"	d
+__i2s_is_busy	hdmi_aic.h	359;"	d
+__i2s_master_clkset	hdmi_aic.h	121;"	d
+__i2s_out_channel_select	hdmi_aic.h	197;"	d
+__i2s_play_lastsample	hdmi_aic.h	128;"	d
+__i2s_play_zero	hdmi_aic.h	126;"	d
+__i2s_read_loopdata	hdmi_aic.h	381;"	d
+__i2s_read_rfifo	hdmi_aic.h	373;"	d
+__i2s_read_tfifo_loop	hdmi_aic.h	388;"	d
+__i2s_reset	hdmi_aic.h	131;"	d
+__i2s_rx_is_busy	hdmi_aic.h	361;"	d
+__i2s_select_i2s	hdmi_aic.h	313;"	d
+__i2s_select_msbjustified	hdmi_aic.h	315;"	d
+__i2s_select_share_clk	hdmi_aic.h	105;"	d
+__i2s_select_spilt_clk	hdmi_aic.h	108;"	d
+__i2s_send_lfirst	hdmi_aic.h	305;"	d
+__i2s_send_rfirst	hdmi_aic.h	303;"	d
+__i2s_set_iss_sample_size	hdmi_aic.h	201;"	d
+__i2s_set_oss_sample_size	hdmi_aic.h	199;"	d
+__i2s_set_receive_trigger	hdmi_aic.h	94;"	d
+__i2s_set_transmit_trigger	hdmi_aic.h	92;"	d
+__i2s_slave_clkset	hdmi_aic.h	116;"	d
+__i2s_switch_lr	hdmi_aic.h	308;"	d
+__i2s_test_flush_rfifo	hdmi_aic.h	257;"	d
+__i2s_test_flush_tfifo	hdmi_aic.h	255;"	d
+__i2s_test_rfl	hdmi_aic.h	346;"	d
+__i2s_test_rfs	hdmi_aic.h	342;"	d
+__i2s_test_ror	hdmi_aic.h	338;"	d
+__i2s_test_tfl	hdmi_aic.h	344;"	d
+__i2s_test_tfs	hdmi_aic.h	340;"	d
+__i2s_test_tur	hdmi_aic.h	334;"	d
+__i2s_tx_is_busy	hdmi_aic.h	363;"	d
+__i2s_unswitch_lr	hdmi_aic.h	310;"	d
+__i2s_write_tfifo	hdmi_aic.h	371;"	d
+__i2s_write_tfifo_loop	hdmi_aic.h	390;"	d
+aic_clk	hdmi_dsp.h	/^	struct clk *aic_clk;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::clk
+aic_iomem	hdmi_dsp.c	/^void __iomem *aic_iomem;$/;"	v
+audio_aic_cmd_set	hdmi_dsp.c	/^static ssize_t audio_aic_cmd_set(struct file *file, const char __user *buffer, size_t count, loff_t *f_pos)$/;"	f	file:
+audio_aic_debug_fops	hdmi_dsp.c	/^static const struct file_operations audio_aic_debug_fops = {$/;"	v	typeref:struct:file_operations	file:
+audio_aic_show	hdmi_dsp.c	/^static int audio_aic_show(struct seq_file *m, void *v)$/;"	f	file:
+audio_dsp_fops	hdmi_dsp.c	/^const struct file_operations audio_dsp_fops = {$/;"	v	typeref:struct:file_operations
+audio_err_print	hdmi_audio_debug.h	20;"	d
+audio_error_value	hdmi_dsp.h	/^enum audio_error_value {$/;"	g
+audio_info_print	hdmi_audio_debug.h	18;"	d
+audio_ouput_stream	hdmi_dsp.h	/^struct audio_ouput_stream {$/;"	s
+audio_parameter	hdmi_dsp.h	/^struct audio_parameter {$/;"	s
+audio_route	hdmi_dsp.h	/^struct audio_route {$/;"	s
+audio_state	hdmi_dsp.h	/^enum audio_state {$/;"	g
+audio_stream	hdmi_dsp.h	/^struct audio_stream {$/;"	s
+audio_warn_print	hdmi_audio_debug.h	19;"	d
+block	hdmi_dsp.h	/^	unsigned int block;$/;"	m	struct:audio_ouput_stream
+buffersize	hdmi_dsp.h	/^	unsigned int        buffersize;         \/* current using the total size of fragments data *\/$/;"	m	struct:dsp_data_manage
+ce_tclk	hdmi_dsp.h	/^	struct clk *ce_tclk;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::clk
+channel	hdmi_dsp.h	/^	unsigned int channel;   \/\/1-left 2-right 3-stereo$/;"	m	struct:volume
+channel	hdmi_dsp.h	/^	unsigned int channel;$/;"	m	struct:audio_route
+channel	hdmi_dsp.h	/^	unsigned short channel;$/;"	m	struct:audio_parameter
+data	hdmi_dsp.h	/^	void __user * data;$/;"	m	struct:audio_ouput_stream
+data	hdmi_dsp.h	/^	void __user * data;$/;"	m	struct:audio_stream
+dma_chan	hdmi_dsp.h	/^	struct dma_chan *dma_chan;$/;"	m	struct:audio_route	typeref:struct:audio_route::dma_chan
+dma_chan_filter	hdmi_dsp.c	/^static bool dma_chan_filter(struct dma_chan *chan, void *filter_param)$/;"	f	file:
+dma_config	hdmi_dsp.h	/^	struct dma_slave_config dma_config;     \/* define by device *\/$/;"	m	struct:audio_route	typeref:struct:audio_route::dma_slave_config
+dma_tracer	hdmi_dsp.h	/^	unsigned int        dma_tracer;                \/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+dma_type	hdmi_dsp.h	/^	int dma_type;$/;"	m	struct:audio_route
+done_completion	hdmi_dsp.h	/^	struct completion done_completion;$/;"	m	struct:audio_route	typeref:struct:audio_route::completion
+dsp_create_dma_chan	hdmi_dsp.c	/^static int dsp_create_dma_chan(struct audio_route *route, struct device *dev)$/;"	f	file:
+dsp_data_fragment	hdmi_dsp.h	/^struct dsp_data_fragment {$/;"	s
+dsp_data_manage	hdmi_dsp.h	/^struct dsp_data_manage {$/;"	s
+dsp_deinit_dma_chan	hdmi_dsp.c	/^static int dsp_deinit_dma_chan(struct audio_route *route)$/;"	f	file:
+dsp_destroy_dma_chan	hdmi_dsp.c	/^static int dsp_destroy_dma_chan(struct audio_route *route)$/;"	f	file:
+dsp_init_dma_chan	hdmi_dsp.c	/^static int dsp_init_dma_chan(struct audio_route *route)$/;"	f	file:
+dsp_ioctl	hdmi_dsp.c	/^static long dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg){$/;"	f	file:
+dsp_open	hdmi_dsp.c	/^static int dsp_open(struct inode *inode, struct file *file)$/;"	f	file:
+dsp_read	hdmi_dsp.c	/^static ssize_t dsp_read(struct file *file, char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+dsp_release	hdmi_dsp.c	/^static int dsp_release(struct inode *inode, struct file *file)$/;"	f	file:
+dsp_workqueue_handle	hdmi_dsp.c	/^static void dsp_workqueue_handle(struct work_struct *work)$/;"	f	file:
+dsp_write	hdmi_dsp.c	/^static ssize_t dsp_write(struct file *file, const char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+dump_audio_aic_open	hdmi_dsp.c	/^static int dump_audio_aic_open(struct inode *inode, struct file *file)$/;"	f	file:
+expires	hdmi_dsp.h	/^	ktime_t expires;$/;"	m	struct:hdmi_dsp_device
+format	hdmi_dsp.h	/^	unsigned int format;$/;"	m	struct:audio_route
+format	hdmi_dsp.h	/^	unsigned short format;$/;"	m	struct:audio_parameter
+format_to_bytes	hdmi_dsp.c	/^static inline unsigned int format_to_bytes(unsigned int format)$/;"	f	file:
+fragment_cnt	hdmi_dsp.h	/^	unsigned int        fragment_cnt;$/;"	m	struct:dsp_data_manage
+fragment_size	hdmi_dsp.h	/^	unsigned int        fragment_size;$/;"	m	struct:dsp_data_manage
+fragment_time	hdmi_dsp.c	/^static int fragment_time = 2;$/;"	v	file:
+fragments	hdmi_dsp.h	/^	struct dsp_data_fragment *fragments;$/;"	m	struct:dsp_data_manage	typeref:struct:dsp_data_manage::dsp_data_fragment
+fragments_head	hdmi_dsp.h	/^	struct list_head    fragments_head;$/;"	m	struct:dsp_data_manage	typeref:struct:dsp_data_manage::list_head
+g_hdmi_dspdev	hdmi_dsp.c	/^static struct hdmi_dsp_device *g_hdmi_dspdev;$/;"	v	typeref:struct:hdmi_dsp_device	file:
+gain	hdmi_dsp.h	/^	unsigned int gain[2];   \/\/0-left 1-right$/;"	m	struct:volume
+hdmi_audio_hrtimer_callback	hdmi_dsp.c	/^static enum hrtimer_restart hdmi_audio_hrtimer_callback(struct hrtimer *hr_timer)$/;"	f	file:
+hdmi_dsp_clear_stream	hdmi_dsp.c	/^int hdmi_dsp_clear_stream(void)$/;"	f
+hdmi_dsp_device	hdmi_dsp.h	/^struct hdmi_dsp_device {$/;"	s
+hdmi_dsp_disable_ao	hdmi_dsp.c	/^int hdmi_dsp_disable_ao(void)$/;"	f
+hdmi_dsp_driver	hdmi_dsp.c	/^static struct platform_driver hdmi_dsp_driver = {$/;"	v	typeref:struct:platform_driver	file:
+hdmi_dsp_enable_ao	hdmi_dsp.c	/^int hdmi_dsp_enable_ao(void)$/;"	f
+hdmi_dsp_exit	hdmi_dsp.c	/^module_exit(hdmi_dsp_exit);$/;"	v
+hdmi_dsp_exit	hdmi_dsp.c	/^void hdmi_dsp_exit(void)$/;"	f
+hdmi_dsp_init	hdmi_dsp.c	/^int hdmi_dsp_init(void)$/;"	f
+hdmi_dsp_init	hdmi_dsp.c	/^module_init(hdmi_dsp_init);$/;"	v
+hdmi_dsp_pm_ops	hdmi_dsp.c	/^static struct dev_pm_ops hdmi_dsp_pm_ops = {$/;"	v	typeref:struct:dev_pm_ops	file:
+hdmi_dsp_probe	hdmi_dsp.c	/^static int hdmi_dsp_probe(struct platform_device *pdev)$/;"	f	file:
+hdmi_dsp_remove	hdmi_dsp.c	/^static int __exit hdmi_dsp_remove(struct platform_device *pdev)$/;"	f	file:
+hdmi_dsp_resume	hdmi_dsp.c	/^static int hdmi_dsp_resume(struct device *dev)$/;"	f	file:
+hdmi_dsp_set_param	hdmi_dsp.c	/^int hdmi_dsp_set_param(struct audio_parameter *param)$/;"	f
+hdmi_dsp_set_stream	hdmi_dsp.c	/^int hdmi_dsp_set_stream(unsigned long arg)$/;"	f
+hdmi_dsp_suspend	hdmi_dsp.c	/^static int hdmi_dsp_suspend(struct device *dev)$/;"	f	file:
+hdmi_dsp_sync_stream	hdmi_dsp.c	/^int hdmi_dsp_sync_stream(void)$/;"	f
+hr_timer	hdmi_dsp.h	/^	struct hrtimer hr_timer;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::hrtimer
+i2s_clear_reg	hdmi_aic.h	53;"	d
+i2s_get_reg	hdmi_aic.h	50;"	d
+i2s_read_reg	hdmi_aic.h	35;"	d
+i2s_set_reg	hdmi_aic.h	/^static void inline i2s_set_reg( unsigned int addr, unsigned int val, unsigned int mask, unsigned int offset)$/;"	f
+i2s_write_reg	hdmi_aic.h	32;"	d
+ingenic_hdmi_dsp_dt_ids	hdmi_dsp.c	/^static const struct of_device_id ingenic_hdmi_dsp_dt_ids[] = {$/;"	v	typeref:struct:of_device_id	file:
+io_tracer	hdmi_dsp.h	/^	unsigned int	    io_tracer;             \/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+iomem	hdmi_dsp.h	/^	void __iomem *iomem;$/;"	m	struct:hdmi_dsp_device
+irq	hdmi_dsp.h	/^	int irq;$/;"	m	struct:hdmi_dsp_device
+is_trans	hdmi_dsp.h	/^	volatile bool is_trans;$/;"	m	struct:audio_route
+list	hdmi_dsp.h	/^	struct list_head    list;$/;"	m	struct:dsp_data_fragment	typeref:struct:dsp_data_fragment::list_head
+manage	hdmi_dsp.h	/^	struct dsp_data_manage manage;$/;"	m	struct:audio_route	typeref:struct:audio_route::dsp_data_manage
+max_sample_rate	hdmi_dsp.c	/^static int max_sample_rate = 48000;$/;"	v	file:
+misc_get_audiodsp	hdmi_dsp.h	148;"	d
+miscdev	hdmi_dsp.h	/^	struct miscdevice miscdev;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::miscdevice
+mlock	hdmi_dsp.h	/^	struct mutex mlock;$/;"	m	struct:audio_route	typeref:struct:audio_route::mutex
+mlock	hdmi_dsp.h	/^	struct mutex mlock;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::mutex
+new_dma_tracer	hdmi_dsp.h	/^	unsigned int	    new_dma_tracer;            \/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+obj-m	Makefile	/^obj-m := $(MODULE_NAME).o$/;"	m
+paddr	hdmi_dsp.h	/^	dma_addr_t          paddr;$/;"	m	struct:audio_route
+paddr	hdmi_dsp.h	/^	dma_addr_t          paddr;$/;"	m	struct:dsp_data_fragment
+pdev	hdmi_dsp.h	/^	struct platform_device *pdev;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::platform_device
+pr_kfree	hdmi_audio_debug.c	/^void pr_kfree(const void *addr)$/;"	f
+pr_kmalloc	hdmi_audio_debug.c	/^void *pr_kmalloc(unsigned long size)$/;"	f
+pr_kzalloc	hdmi_audio_debug.c	/^void *pr_kzalloc(unsigned long size)$/;"	f
+pr_printf	hdmi_audio_debug.c	/^int pr_printf(unsigned int level, unsigned char *fmt, ...)$/;"	f
+print_level	hdmi_audio_debug.c	/^static int print_level = AUDIO_WARNING_LEVEL;$/;"	v	file:
+priv	hdmi_dsp.h	/^	void *priv;$/;"	m	struct:hdmi_dsp_device
+proc	hdmi_dsp.h	/^	struct proc_dir_entry *proc;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::proc_dir_entry
+proc_savefd	hdmi_dsp.h	/^	struct file *proc_savefd;$/;"	m	struct:audio_route	typeref:struct:audio_route::file
+rate	hdmi_dsp.h	/^	unsigned int rate;$/;"	m	struct:audio_parameter
+rate	hdmi_dsp.h	/^	unsigned int rate;$/;"	m	struct:audio_route
+refcnt	hdmi_dsp.h	/^	unsigned int refcnt;$/;"	m	struct:audio_route
+refcnt	hdmi_dsp.h	/^	unsigned int refcnt;$/;"	m	struct:hdmi_dsp_device
+res	hdmi_dsp.h	/^	struct resource *res;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::resource
+reservesize	hdmi_dsp.h	/^	unsigned int        reservesize;        \/* the size must be setted when initing this driver *\/$/;"	m	struct:audio_route
+sample_size	hdmi_dsp.h	/^	unsigned int        sample_size; \/\/ samplesize = channel * format_to_bytes(format) \/ 8;$/;"	m	struct:dsp_data_manage
+save_debugdata	hdmi_dsp.h	/^	bool	save_debugdata;$/;"	m	struct:audio_route
+size	hdmi_dsp.h	/^	unsigned int size;$/;"	m	struct:audio_ouput_stream
+size	hdmi_dsp.h	/^	unsigned int size;$/;"	m	struct:audio_stream
+slock	hdmi_dsp.h	/^	spinlock_t slock;$/;"	m	struct:hdmi_dsp_device
+spk_clk	hdmi_dsp.h	/^	struct clk *spk_clk;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::clk
+spk_route	hdmi_dsp.h	/^	struct audio_route spk_route;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::audio_route
+state	hdmi_dsp.h	/^	bool                state;$/;"	m	struct:dsp_data_fragment
+state	hdmi_dsp.h	/^	enum audio_state state;$/;"	m	struct:audio_route	typeref:enum:audio_route::audio_state
+state	hdmi_dsp.h	/^	enum audio_state state;$/;"	m	struct:hdmi_dsp_device	typeref:enum:hdmi_dsp_device::audio_state
+stream_mlock	hdmi_dsp.h	/^	struct mutex stream_mlock;$/;"	m	struct:audio_route	typeref:struct:audio_route::mutex
+timer_stopped	hdmi_dsp.h	/^	atomic_t timer_stopped;$/;"	m	struct:hdmi_dsp_device
+total_fragment_cnt	hdmi_dsp.c	/^static int total_fragment_cnt = 50;$/;"	v	file:
+vaddr	hdmi_dsp.h	/^	void                *vaddr;$/;"	m	struct:audio_route
+vaddr	hdmi_dsp.h	/^	void                *vaddr;$/;"	m	struct:dsp_data_fragment
+version	hdmi_dsp.h	/^	char *version;$/;"	m	struct:hdmi_dsp_device
+volume	hdmi_dsp.h	/^struct volume {$/;"	s
+wait_cnt	hdmi_dsp.h	/^	unsigned int wait_cnt;$/;"	m	struct:audio_route
+wait_flag	hdmi_dsp.h	/^	bool wait_flag;$/;"	m	struct:audio_route
+workqueue	hdmi_dsp.h	/^	struct work_struct workqueue;$/;"	m	struct:hdmi_dsp_device	typeref:struct:hdmi_dsp_device::work_struct

@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/sc2232h/sensor_sc2232h_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/sc2232h/sensor_sc2232h_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/sc2232h/sc2232h.o 

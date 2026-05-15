@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/jxk308p/sensor_jxk308p_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/jxk308p/sensor_jxk308p_t41.o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/jxk308p/jxk308p.o 

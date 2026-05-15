@@ -1,0 +1,2 @@
+/home/user/Desktop/test/ISVP-T31-1.1.5.2-20230310/software/Ingenic-SDK-T31-1.1.5.2-20230310/opensource/drivers/sensors-t31/jxf37/sensor_jxf37_t31.ko
+/home/user/Desktop/test/ISVP-T31-1.1.5.2-20230310/software/Ingenic-SDK-T31-1.1.5.2-20230310/opensource/drivers/sensors-t31/jxf37/jxf37.o

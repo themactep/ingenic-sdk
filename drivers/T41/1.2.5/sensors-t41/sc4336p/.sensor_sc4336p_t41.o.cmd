@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t41/sc4336p/sensor_sc4336p_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t41/sc4336p/sensor_sc4336p_t41.o /home_a/jszhang/work/opensource/drivers/sensors-t41/sc4336p/sc4336p.o 

@@ -1,0 +1,3 @@
+.
+├── ingenic_lzmacomp.sh		/*君正lzma压缩脚本*/
+├── lzma					/*君正私有压缩*/

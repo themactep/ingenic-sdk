@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/ov9732/sensor_ov9732_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/ov9732/sensor_ov9732_t31.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/ov9732/ov9732.o 

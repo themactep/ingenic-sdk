@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/os03b10/sensor_os03b10_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/os03b10/os03b10.o

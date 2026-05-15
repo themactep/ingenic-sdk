@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t41/sc4336p/sensor_sc4336p_t41.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t41/sc4336p/sc4336p.o

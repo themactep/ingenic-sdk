@@ -1,0 +1,1 @@
+cmd_/home_d/zjxu/git/opensource/drivers/sensors-t41/sc5239/sensor_sc5239_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/zjxu/git/opensource/drivers/sensors-t41/sc5239/sensor_sc5239_t41.o /home_d/zjxu/git/opensource/drivers/sensors-t41/sc5239/sc5239.o 

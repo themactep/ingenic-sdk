@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc4023/sensor_gc4023_PRJ007.ko
+/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/gc4023/gc4023.o

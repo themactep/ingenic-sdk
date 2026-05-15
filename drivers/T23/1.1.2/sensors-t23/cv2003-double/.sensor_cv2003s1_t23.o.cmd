@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t23/cv2003-double/sensor_cv2003s1_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t23/cv2003-double/sensor_cv2003s1_t23.o /home_a/jszhang/work/opensource/drivers/sensors-t23/cv2003-double/cv2003s1.o 

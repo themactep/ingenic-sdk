@@ -1,0 +1,7 @@
+This driver is the test code for reading and writing i2c at the application layer, which requires opening the i2c configuration in the kernel.
+This program uses an external read-write at24c02 for verification
+
+compiler:
+mips-linux-gnu-gcc -muclibc i2c_test.c -o i2c_test
+
+

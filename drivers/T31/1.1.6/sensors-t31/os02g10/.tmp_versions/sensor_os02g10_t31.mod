@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/os02g10/sensor_os02g10_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/os02g10/os02g10.o

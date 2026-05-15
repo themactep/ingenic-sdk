@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc830ai/sensor_sc830ai_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc830ai/sc830ai.o

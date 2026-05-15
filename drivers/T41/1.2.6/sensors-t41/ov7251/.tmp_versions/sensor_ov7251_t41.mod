@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/ov7251/sensor_ov7251_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/ov7251/ov7251.o

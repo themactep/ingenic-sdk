@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf23/sensor_jxf23_t23.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf23/jxf23.o

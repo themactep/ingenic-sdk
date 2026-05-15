@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf38p/sensor_jxf38p_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf38p/sensor_jxf38p_t23.o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf38p/jxf38p.o 

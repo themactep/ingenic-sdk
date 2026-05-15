@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/os05a10/sensor_os05a10s1_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/os05a10/sensor_os05a10s1_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/os05a10/os05a10s1.o 

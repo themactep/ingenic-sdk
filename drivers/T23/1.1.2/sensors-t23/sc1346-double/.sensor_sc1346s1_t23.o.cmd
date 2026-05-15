@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t23/sc1346-double/sensor_sc1346s1_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t23/sc1346-double/sensor_sc1346s1_t23.o /home_a/jszhang/work/opensource/drivers/sensors-t23/sc1346-double/sc1346s1.o 

@@ -1,0 +1,1 @@
+cmd_/home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_aes/aes_dev.o := mips-v720s229-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_aes/aes_dev.o /home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_aes/jz-aes.o 

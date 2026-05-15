@@ -1,0 +1,1 @@
+cmd_/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/fuxsc1020/sensor_fuxsc1020_t30.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/fuxsc1020/sensor_fuxsc1020_t30.o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/fuxsc1020/fuxsc1020.o 

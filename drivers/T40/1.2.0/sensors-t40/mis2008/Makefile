@@ -1,0 +1,30 @@
+CROSS_COMPILE ?= mips-linux-gnu-
+
+ifeq (${ISVP_ENV_KERNEL_DIR}, )
+	ISVP_ENV_KERNEL_DIR = $(PWD)/../../../kernel-4.4.94
+endif
+
+KDIR := ${ISVP_ENV_KERNEL_DIR}
+
+ISP_DRIVER_DIR = $(PWD)/../../isp-t40/tx-isp-t40/
+
+############ name define #############
+MODULE_NAME := sensor_mis2008_t40
+############ name end #############
+
+
+KBUILD_EXTRA_SYMBOLS := $(ISP_DRIVER_DIR)/Module.symvers
+EXTRA_CFLAGS += -I$(ISP_DRIVER_DIR)/include
+
+all: modules
+
+.PHONY: modules clean
+
+$(MODULE_NAME)-objs := mis2008.o
+obj-m := $(MODULE_NAME).o
+
+modules:
+	@$(MAKE) -C $(KDIR) M=$(shell pwd) $@
+
+clean:
+	@rm -rf *.o *~ .depend .*.cmd  *.mod.c .tmp_versions *.ko *.symvers modules.order

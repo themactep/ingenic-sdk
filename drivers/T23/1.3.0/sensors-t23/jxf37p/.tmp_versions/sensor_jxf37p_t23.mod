@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf37p/sensor_jxf37p_t23.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/jxf37p/jxf37p.o

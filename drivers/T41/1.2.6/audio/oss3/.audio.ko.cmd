@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t41/opensource/drivers/audio/oss3/audio.ko := mips-linux-gnu-ld -r  -m elf32ltsmip -T ./scripts/module-common.lds --build-id  -o /home_a/ingenic/isvp_t41/opensource/drivers/audio/oss3/audio.ko /home_a/ingenic/isvp_t41/opensource/drivers/audio/oss3/audio.o /home_a/ingenic/isvp_t41/opensource/drivers/audio/oss3/audio.mod.o

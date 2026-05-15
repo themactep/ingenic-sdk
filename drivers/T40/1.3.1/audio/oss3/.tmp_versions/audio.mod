@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/audio/oss3/audio.ko
+/home_a/jszhang/work/opensource/drivers/audio/oss3/audio_dsp.o /home_a/jszhang/work/opensource/drivers/audio/oss3/audio_debug.o /home_a/jszhang/work/opensource/drivers/audio/oss3/host/t40/audio_aic.o /home_a/jszhang/work/opensource/drivers/audio/oss3/host/t40/audio_dmic.o /home_a/jszhang/work/opensource/drivers/audio/oss3/inner_codecs/t40/codec.o /home_a/jszhang/work/opensource/drivers/audio/oss3/boards/t40_platform.o

@@ -1,0 +1,2 @@
+/home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_i2c/samplei2c.ko
+/home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_i2c/sample_i2c.o

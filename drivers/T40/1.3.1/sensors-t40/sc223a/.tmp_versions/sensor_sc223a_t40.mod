@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t40/sc223a/sensor_sc223a_t40.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t40/sc223a/sc223a.o

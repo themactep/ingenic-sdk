@@ -1,0 +1,5 @@
+1、该驱动基于ms32006芯片来驱动电机，驱动需要根据ms32006手册配置相关寄存器
+2、如本sample程序所示，本sample支持驱动的move、pause、stop、reset等操作
+	注意电机的型号、以及驱动的gpio引脚，需要根据板子进行配置
+3、支持应用层配置，应用层程序如motor_test/motor_app_test.c所示
+

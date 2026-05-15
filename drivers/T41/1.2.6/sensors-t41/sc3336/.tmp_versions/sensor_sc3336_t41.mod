@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc3336/sensor_sc3336_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc3336/sc3336.o

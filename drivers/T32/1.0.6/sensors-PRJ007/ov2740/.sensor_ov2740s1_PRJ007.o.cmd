@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/ov2740/sensor_ov2740s1_PRJ007.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/ov2740/sensor_ov2740s1_PRJ007.o /home_a/ingenic/isvp_t32/opensource/drivers/sensors-PRJ007/ov2740/ov2740s1.o 

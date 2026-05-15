@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/ps5260/sensor_ps5260_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/ps5260/ps5260.o

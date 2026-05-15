@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/sc1245a/sensor_sc1245a_t21.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/sc1245a/sc1245a.o

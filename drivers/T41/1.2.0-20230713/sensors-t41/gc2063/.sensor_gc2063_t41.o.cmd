@@ -1,0 +1,1 @@
+cmd_/home_d/zjxu/git/opensource/drivers/sensors-t41/gc2063/sensor_gc2063_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/zjxu/git/opensource/drivers/sensors-t41/gc2063/sensor_gc2063_t41.o /home_d/zjxu/git/opensource/drivers/sensors-t41/gc2063/gc2063.o 

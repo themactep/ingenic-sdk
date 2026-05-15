@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t41/cv2003/sensor_cv2003_t41.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t41/cv2003/cv2003.o

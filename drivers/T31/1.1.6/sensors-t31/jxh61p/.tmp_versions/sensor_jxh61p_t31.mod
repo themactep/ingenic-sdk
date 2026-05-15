@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/jxh61p/sensor_jxh61p_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/jxh61p/jxh61p.o

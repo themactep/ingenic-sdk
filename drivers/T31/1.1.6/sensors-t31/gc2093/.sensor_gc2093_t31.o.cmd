@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/gc2093/sensor_gc2093_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/gc2093/sensor_gc2093_t31.o /home/user/git/opensource/drivers/sensors-t31/gc2093/gc2093.o 

@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/os02b10/sensor_os02b10_t21.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/os02b10/sensor_os02b10_t21.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/os02b10/os02b10.o 

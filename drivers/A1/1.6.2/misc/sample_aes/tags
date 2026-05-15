@@ -1,0 +1,165 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AES_ASCR	jz-aes.h	71;"	d
+AES_ASCR_AESS	jz-aes.h	92;"	d
+AES_ASCR_AES_EN	jz-aes.h	95;"	d
+AES_ASCR_CBC_MODE	jz-aes.h	89;"	d
+AES_ASCR_CLR	jz-aes.h	82;"	d
+AES_ASCR_DMAE	jz-aes.h	84;"	d
+AES_ASCR_DMAS	jz-aes.h	83;"	d
+AES_ASCR_ECB_MODE	jz-aes.h	88;"	d
+AES_ASCR_INDE_DAT	jz-aes.h	91;"	d
+AES_ASCR_INEN_DAT	jz-aes.h	90;"	d
+AES_ASCR_INIT_IV	jz-aes.h	94;"	d
+AES_ASCR_KEYL_128B	jz-aes.h	85;"	d
+AES_ASCR_KEYL_192B	jz-aes.h	86;"	d
+AES_ASCR_KEYL_256B	jz-aes.h	87;"	d
+AES_ASCR_KEYS	jz-aes.h	93;"	d
+AES_ASDA	jz-aes.h	75;"	d
+AES_ASDI	jz-aes.h	77;"	d
+AES_ASDO	jz-aes.h	78;"	d
+AES_ASINTM	jz-aes.h	73;"	d
+AES_ASINTM_AES_INIT_M	jz-aes.h	102;"	d
+AES_ASINTM_DMA_INIT_M	jz-aes.h	101;"	d
+AES_ASINTM_KEY_INIT_M	jz-aes.h	103;"	d
+AES_ASIV	jz-aes.h	80;"	d
+AES_ASKY	jz-aes.h	79;"	d
+AES_ASSA	jz-aes.h	74;"	d
+AES_ASSR	jz-aes.h	72;"	d
+AES_ASSR_AESD	jz-aes.h	98;"	d
+AES_ASSR_DMAD	jz-aes.h	97;"	d
+AES_ASSR_KEYD	jz-aes.h	99;"	d
+AES_ASTC	jz-aes.h	76;"	d
+CROSS_COMPILE	Makefile	/^CROSS_COMPILE ?= mips-v720s229-linux-gnu-$/;"	m
+DEC_ROOTFS_FILE	test/test_aes.c	12;"	d	file:
+IN_UNF_CIPHER_WORK_MODE	jz-aes.h	/^}IN_UNF_CIPHER_WORK_MODE;$/;"	t	typeref:enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE	test/test_aes.h	/^}IN_UNF_CIPHER_WORK_MODE;$/;"	t	typeref:enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_CBC	jz-aes.h	/^	IN_UNF_CIPHER_WORK_MODE_CBC = 0x1,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_CBC	test/test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_CBC = 0x1,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_E	jz-aes.h	/^typedef enum IN_UNF_CIPHER_WORK_MODE_E$/;"	g
+IN_UNF_CIPHER_WORK_MODE_E	test/test_aes.h	/^typedef enum IN_UNF_CIPHER_WORK_MODE_E$/;"	g
+IN_UNF_CIPHER_WORK_MODE_ECB	jz-aes.h	/^	IN_UNF_CIPHER_WORK_MODE_ECB = 0x0,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_ECB	test/test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_ECB = 0x0,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_OTHER	jz-aes.h	/^	IN_UNF_CIPHER_WORK_MODE_OTHER = 0x2$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_OTHER	test/test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_OTHER = 0x2$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IOCTL_AES_GET_PARA	jz-aes.h	7;"	d
+IOCTL_AES_GET_PARA	test/test_aes.h	9;"	d
+IOCTL_AES_START_DE_PROCESSING	jz-aes.h	9;"	d
+IOCTL_AES_START_DE_PROCESSING	test/test_aes.h	11;"	d
+IOCTL_AES_START_EN_PROCESSING	jz-aes.h	8;"	d
+IOCTL_AES_START_EN_PROCESSING	test/test_aes.h	10;"	d
+ISVP_ENV_KERNEL_DIR	Makefile	/^ISVP_ENV_KERNEL_DIR ?= $(PWD)\/..\/..\/..\/kernel$/;"	m
+JZAES_IOC_MAGIC	jz-aes.h	6;"	d
+JZAES_IOC_MAGIC	test/test_aes.h	8;"	d
+JZ_AES_DMA_DATALEN	jz-aes.h	55;"	d
+JZ_AES_STATUS	jz-aes.h	/^} JZ_AES_STATUS;$/;"	t	typeref:enum:jz_aes_status
+JZ_AES_STATUS	test/test_aes.h	/^} JZ_AES_STATUS;$/;"	t	typeref:enum:jz_aes_status
+JZ_AES_STATUS_DONE	jz-aes.h	/^	JZ_AES_STATUS_DONE,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_DONE	test/test_aes.h	/^	JZ_AES_STATUS_DONE,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_PREPARE	jz-aes.h	/^	JZ_AES_STATUS_PREPARE = 0,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_PREPARE	test/test_aes.h	/^	JZ_AES_STATUS_PREPARE = 0,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_WORKING	jz-aes.h	/^	JZ_AES_STATUS_WORKING,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_WORKING	test/test_aes.h	/^	JZ_AES_STATUS_WORKING,$/;"	e	enum:jz_aes_status
+KDIR	Makefile	/^KDIR := $(ISVP_ENV_KERNEL_DIR)$/;"	m
+MODULE_NAME	Makefile	/^MODULE_NAME := aes_dev$/;"	m
+ROOTFS_FILE	test/test_aes.c	11;"	d	file:
+__AES_TEST_H__	test/test_aes.h	2;"	d
+__JZ_AES_H__	jz-aes.h	2;"	d
+__aes_aes_done_clr	jz-aes.h	132;"	d
+__aes_aes_int_en	jz-aes.h	126;"	d
+__aes_aes_int_msk	jz-aes.h	127;"	d
+__aes_aesstart	jz-aes.h	115;"	d
+__aes_aesstop	jz-aes.h	116;"	d
+__aes_cbc_mode	jz-aes.h	112;"	d
+__aes_decrypts_input_data	jz-aes.h	114;"	d
+__aes_disable	jz-aes.h	122;"	d
+__aes_dma_done_clr	jz-aes.h	133;"	d
+__aes_dma_int_en	jz-aes.h	124;"	d
+__aes_dma_int_msk	jz-aes.h	125;"	d
+__aes_dmadisable	jz-aes.h	108;"	d
+__aes_dmaenable	jz-aes.h	107;"	d
+__aes_dmastart	jz-aes.h	109;"	d
+__aes_dmastop	jz-aes.h	110;"	d
+__aes_ecb_mode	jz-aes.h	111;"	d
+__aes_enable	jz-aes.h	121;"	d
+__aes_encrypts_input_data	jz-aes.h	113;"	d
+__aes_iv_init	jz-aes.h	119;"	d
+__aes_iv_uninit	jz-aes.h	120;"	d
+__aes_key_clr	jz-aes.h	106;"	d
+__aes_key_done_clr	jz-aes.h	131;"	d
+__aes_key_exp_start_com	jz-aes.h	117;"	d
+__aes_key_exp_stop_com	jz-aes.h	118;"	d
+__aes_key_int_en	jz-aes.h	128;"	d
+__aes_key_int_msk	jz-aes.h	129;"	d
+__aes_key_length_128b	jz-aes.h	105;"	d
+__this_module	aes_dev.mod.c	/^__visible struct module __this_module$/;"	v	typeref:struct:module
+__used	aes_dev.mod.c	/^__used$/;"	v	file:
+aes_debug	jz-aes.c	44;"	d	file:
+aes_debug	jz-aes.c	46;"	d	file:
+aes_dev	jz-aes.h	/^	struct miscdevice aes_dev;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::miscdevice
+aes_fops	jz-aes.c	/^const struct file_operations aes_fops = {$/;"	v	typeref:struct:file_operations
+aes_ioctl	jz-aes.c	/^static long aes_ioctl(struct file *file, unsigned int cmd, unsigned long arg)$/;"	f	file:
+aes_ope_irq_handler	jz-aes.c	/^static irqreturn_t aes_ope_irq_handler(int irq, void *data)$/;"	f	file:
+aes_open	jz-aes.c	/^static int aes_open(struct inode *inode, struct file *file)$/;"	f	file:
+aes_operation	jz-aes.h	/^struct aes_operation {$/;"	s
+aes_para	jz-aes.h	/^struct aes_para {$/;"	s
+aes_para	test/test_aes.h	/^struct aes_para {$/;"	s
+aes_read	jz-aes.c	/^static ssize_t aes_read(struct file *file, char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+aes_reg_read	jz-aes.h	/^static inline unsigned int aes_reg_read(struct aes_operation *aes_ope, int offset)$/;"	f
+aes_reg_write	jz-aes.h	/^static inline void aes_reg_write(struct aes_operation *aes_ope, int offset, unsigned int val)$/;"	f
+aes_release	jz-aes.c	/^static int aes_release(struct inode *inode, struct file *file)$/;"	f	file:
+aes_start_decrypt_processing	jz-aes.c	/^static int aes_start_decrypt_processing(struct aes_operation *aes)$/;"	f	file:
+aes_start_encrypt_processing	jz-aes.c	/^static int aes_start_encrypt_processing(struct aes_operation *aes)$/;"	f	file:
+aes_write	jz-aes.c	/^static ssize_t aes_write(struct file *file, const char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+aesiv	jz-aes.h	/^	unsigned int aesiv[4]; \/\/ when work mode is cbc, the parameter must be setted.$/;"	m	struct:aes_para
+aesiv	test/test_aes.h	/^	unsigned int aesiv[4]; \/\/ when work mode is cbc, the parameter must be setted.$/;"	m	struct:aes_para
+aeskey	jz-aes.h	/^	unsigned int aeskey[4];$/;"	m	struct:aes_para
+aeskey	test/test_aes.h	/^	unsigned int aeskey[4];$/;"	m	struct:aes_para
+aesmem_v	jz-aes.c	/^void* aesmem_v = NULL;$/;"	v
+clk	jz-aes.h	/^	struct clk *clk;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::clk
+datalen	jz-aes.h	/^	unsigned int datalen; \/\/ it should be 16bytes aligned$/;"	m	struct:aes_para
+datalen	test/test_aes.h	/^	unsigned int datalen; \/\/ it should be 16bytes aligned$/;"	m	struct:aes_para
+debug_regs	jz-aes.c	/^static void debug_regs(struct aes_operation *aes)$/;"	f	file:
+dev	jz-aes.h	/^	struct device *dev;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::device
+dma_datalen	jz-aes.h	/^	unsigned int dma_datalen;$/;"	m	struct:aes_operation
+done_comp	jz-aes.h	/^	struct completion done_comp;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::completion
+donelen	jz-aes.h	/^	unsigned int donelen; \/\/ The length of the processed data.$/;"	m	struct:aes_para
+donelen	test/test_aes.h	/^	unsigned int donelen; \/\/ The length of the processed data.$/;"	m	struct:aes_para
+dst	jz-aes.h	/^	unsigned char *dst;$/;"	m	struct:aes_para
+dst	test/test_aes.h	/^	unsigned char *dst;$/;"	m	struct:aes_para
+dst_addr_p	jz-aes.h	/^	dma_addr_t dst_addr_p;$/;"	m	struct:aes_operation
+dst_addr_v	jz-aes.h	/^	unsigned char *dst_addr_v;$/;"	m	struct:aes_operation
+enworkmode	jz-aes.h	/^	unsigned int enworkmode;$/;"	m	struct:aes_para
+enworkmode	test/test_aes.h	/^	unsigned int enworkmode;$/;"	m	struct:aes_para
+iomem	jz-aes.h	/^	void __iomem *iomem;$/;"	m	struct:aes_operation
+irq	jz-aes.h	/^	int irq;$/;"	m	struct:aes_operation
+jz_aes_device	jz-aes.c	/^struct platform_device jz_aes_device = {$/;"	v	typeref:struct:platform_device
+jz_aes_driver	jz-aes.c	/^static struct platform_driver jz_aes_driver = {$/;"	v	typeref:struct:platform_driver	file:
+jz_aes_mod_exit	jz-aes.c	/^module_exit(jz_aes_mod_exit);$/;"	v
+jz_aes_mod_exit	jz-aes.c	/^static void __exit jz_aes_mod_exit(void)$/;"	f	file:
+jz_aes_mod_init	jz-aes.c	/^module_init(jz_aes_mod_init);$/;"	v
+jz_aes_mod_init	jz-aes.c	/^static int __init jz_aes_mod_init(void)$/;"	f	file:
+jz_aes_probe	jz-aes.c	/^static int jz_aes_probe(struct platform_device *pdev)$/;"	f	file:
+jz_aes_remove	jz-aes.c	/^static int jz_aes_remove(struct platform_device *pdev)$/;"	f	file:
+jz_aes_resources	jz-aes.c	/^static struct resource jz_aes_resources[] = {$/;"	v	typeref:struct:resource	file:
+jz_aes_status	jz-aes.h	/^typedef enum jz_aes_status {$/;"	g
+jz_aes_status	test/test_aes.h	/^typedef enum jz_aes_status {$/;"	g
+key_comp	jz-aes.h	/^	struct completion key_comp;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::completion
+main	test/test_aes.c	/^int main(int argc, const char* argv[])$/;"	f
+miscdev_to_aesops	jz-aes.h	57;"	d
+name	jz-aes.h	/^	char name[16];$/;"	m	struct:aes_operation
+obj-m	Makefile	/^obj-m := $(MODULE_NAME).o$/;"	m
+para	jz-aes.h	/^	struct aes_para para;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::aes_para
+platform_aes_release	jz-aes.c	/^static void  platform_aes_release(struct device *dev)$/;"	f	file:
+res	jz-aes.h	/^	struct resource *res;$/;"	m	struct:aes_operation	typeref:struct:aes_operation::resource
+src	jz-aes.h	/^	unsigned char *src;$/;"	m	struct:aes_para
+src	test/test_aes.h	/^	unsigned char *src;$/;"	m	struct:aes_para
+src_addr_p	jz-aes.h	/^	dma_addr_t src_addr_p;$/;"	m	struct:aes_operation
+src_addr_v	jz-aes.h	/^	unsigned char *src_addr_v;$/;"	m	struct:aes_operation
+state	jz-aes.h	/^	int state;$/;"	m	struct:aes_operation
+status	jz-aes.h	/^	unsigned int status;$/;"	m	struct:aes_para
+status	test/test_aes.h	/^	unsigned int status;$/;"	m	struct:aes_para

@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/audio.ko
+/home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/audio_dsp.o /home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/audio_debug.o /home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/host/T23/audio_aic.o /home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/inner_codecs/T23/codec.o /home_d/jszhang/work/isvp/opensource/drivers/audio/oss3/boards/t23_platform.o

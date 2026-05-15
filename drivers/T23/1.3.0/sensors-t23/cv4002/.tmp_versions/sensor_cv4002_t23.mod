@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/cv4002/sensor_cv4002_t23.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/cv4002/cv4002.o

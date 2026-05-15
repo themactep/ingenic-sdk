@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/jxf352/sensor_jxf352_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/jxf352/jxf352.o

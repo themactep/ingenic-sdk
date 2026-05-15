@@ -1,0 +1,1 @@
+cmd_/home_d/zjxu/git/opensource/drivers/sensors-t41/jxf51/sensor_jxf51_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/zjxu/git/opensource/drivers/sensors-t41/jxf51/sensor_jxf51_t41.o /home_d/zjxu/git/opensource/drivers/sensors-t41/jxf51/jxf51.o 

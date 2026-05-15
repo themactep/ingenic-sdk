@@ -1,0 +1,29 @@
+CROSS_COMPILE ?= mips-linux-gnu-
+
+ISVP_ENV_KERNEL_DIR ?= $(PWD)/../../kernel
+
+KDIR := ${ISVP_ENV_KERNEL_DIR}
+
+ISP_DRIVER_DIR = $(PWD)/../../tx-isp/
+
+############ name define #############
+include $(PWD)/../config.mk
+MODULE_NAME := sensor_gc4c33_$(SOC_TYPE)
+############ name end #############
+
+
+KBUILD_EXTRA_SYMBOLS := $(ISP_DRIVER_DIR)/Module.symvers
+EXTRA_CFLAGS += -I$(ISP_DRIVER_DIR)/include
+
+all: modules
+
+.PHONY: modules clean
+
+$(MODULE_NAME)-objs := gc4c33.o
+obj-m := $(MODULE_NAME).o
+
+modules:
+	@$(MAKE) -C $(KDIR) M=$(shell pwd) $@
+
+clean:
+	@rm -rf *.o *~ .depend .*.cmd  *.mod.c .tmp_versions *.ko *.symvers modules.order

@@ -1,0 +1,11 @@
+================================================================================================================         
+步骤
+1,分次调用buffer进行数据的传输时，在第一次传输buffer需将para结构体中的初始化标志位init_flag置1，传输结束标志位
+final_flag置0，后面传输无需再初始化，直到最后一次buffer传输，将final_flag置1
+
+================================================================================================================
+steps
+1,When calling buffer in batches for data transfer, the init_flag in the para structure must be set to 1 and 
+final_flag should be set to 0 in the first buffer transmission ,later transfers do not need to be initialized,
+until the last buffer transfer, the final_flag will be set to 1
+

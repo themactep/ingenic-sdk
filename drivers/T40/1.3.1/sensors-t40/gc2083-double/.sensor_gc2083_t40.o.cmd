@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/gc2083-double/sensor_gc2083_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc2083-double/sensor_gc2083_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc2083-double/gc2083.o 

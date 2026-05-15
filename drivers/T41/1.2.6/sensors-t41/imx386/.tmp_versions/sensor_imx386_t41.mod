@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/imx386/sensor_imx386_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/imx386/imx386.o

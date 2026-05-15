@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/mis2008/sensor_mis2008_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/mis2008/sensor_mis2008_t40.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t40/mis2008/mis2008.o 

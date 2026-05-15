@@ -1,0 +1,4 @@
+ISP编译方法
+
+make -j
+make install

@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/jxf37p/sensor_jxf37p_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/jxf37p/sensor_jxf37p_t31.o /home/user/git/opensource/drivers/sensors-t31/jxf37p/jxf37p.o 

@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/mis20s1/sensor_mis20s1_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/mis20s1/mis20s1.o

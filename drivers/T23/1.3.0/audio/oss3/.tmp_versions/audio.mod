@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/audio.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/audio_dsp.o /home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/audio_debug.o /home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/host/T23/audio_aic.o /home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/inner_codecs/T23/codec.o /home_a/ingenic/isvp_t23/opensource/drivers/audio/oss3/boards/t23_platform.o

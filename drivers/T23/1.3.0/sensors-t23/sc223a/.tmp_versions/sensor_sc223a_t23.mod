@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/sc223a/sensor_sc223a_t23.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/sc223a/sc223a.o

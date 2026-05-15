@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/imx482/sensor_imx482_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/imx482/sensor_imx482_t41.o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/imx482/imx482.o 

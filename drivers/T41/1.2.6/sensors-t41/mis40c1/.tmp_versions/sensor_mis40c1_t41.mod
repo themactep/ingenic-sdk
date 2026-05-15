@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/mis40c1/sensor_mis40c1_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/mis40c1/mis40c1.o

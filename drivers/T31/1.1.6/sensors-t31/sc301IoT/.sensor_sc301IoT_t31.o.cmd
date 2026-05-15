@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/sc301IoT/sensor_sc301IoT_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/sc301IoT/sensor_sc301IoT_t31.o /home/user/git/opensource/drivers/sensors-t31/sc301IoT/sc301IoT.o 

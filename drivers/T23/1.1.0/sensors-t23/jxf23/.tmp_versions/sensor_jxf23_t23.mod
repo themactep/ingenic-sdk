@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/jxf23/sensor_jxf23_t23.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t23/jxf23/jxf23.o

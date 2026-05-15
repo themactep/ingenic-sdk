@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/gc3003/sensor_gc3003_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc3003/sensor_gc3003_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/gc3003/gc3003.o 

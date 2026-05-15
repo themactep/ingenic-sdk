@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t41/ov9640/sensor_ov9640_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t41/ov9640/sensor_ov9640_t41.o /home_a/jszhang/work/opensource/drivers/sensors-t41/ov9640/ov9640.o 

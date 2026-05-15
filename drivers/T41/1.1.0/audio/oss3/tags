@@ -1,0 +1,1377 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADC_I2S_INTERFACE_I2S_MODE	inner_codecs/T41/codec.h	54;"	d
+ADC_I2S_INTERFACE_LJ_MODE	inner_codecs/T41/codec.h	53;"	d
+ADC_I2S_INTERFACE_PCM_MODE	inner_codecs/T41/codec.h	55;"	d
+ADC_I2S_INTERFACE_RJ_MODE	inner_codecs/T41/codec.h	52;"	d
+ADC_VALID_DATA_LEN_16BIT	inner_codecs/T41/codec.h	47;"	d
+ADC_VALID_DATA_LEN_20BIT	inner_codecs/T41/codec.h	48;"	d
+ADC_VALID_DATA_LEN_24BIT	inner_codecs/T41/codec.h	49;"	d
+ADC_VALID_DATA_LEN_32BIT	inner_codecs/T41/codec.h	50;"	d
+AEER	host/T41/dmic/as-dma/as-dma.h	16;"	d
+AEER_EXP_EN	host/T41/dmic/as-dma/as-dma.h	53;"	d
+AESR	host/T41/dmic/as-dma/as-dma.h	17;"	d
+AESR_EXP	host/T41/dmic/as-dma/as-dma.h	55;"	d
+AFMT_0	host/T41/audio_aic.h	83;"	d
+AFMT_S16BE	host/T41/audio_aic.h	87;"	d
+AFMT_S16LE	host/T41/audio_aic.h	86;"	d
+AICCR	host/T41/audio_aic.h	135;"	d
+AICDR	host/T41/audio_aic.h	140;"	d
+AICFR	host/T41/audio_aic.h	134;"	d
+AICLR	host/T41/audio_aic.h	141;"	d
+AICSR	host/T41/audio_aic.h	137;"	d
+AICTFLR	host/T41/audio_aic.h	142;"	d
+AIC_RX_FIFO_DEPTH	host/T41/audio_aic.h	76;"	d
+AIC_TX_FIFO_DEPTH	host/T41/audio_aic.h	75;"	d
+AIPR	host/T41/dmic/as-dma/as-dma.h	18;"	d
+AIPR_DIMC_INT	host/T41/dmic/as-dma/as-dma.h	59;"	d
+AIPR_DMA_INT	host/T41/dmic/as-dma/as-dma.h	61;"	d
+AIPR_DMA_INT_MSK	host/T41/dmic/as-dma/as-dma.h	60;"	d
+AIPR_EXP_INT	host/T41/dmic/as-dma/as-dma.h	58;"	d
+AIPR_MSK	host/T41/dmic/as-dma/as-dma.h	57;"	d
+AK7755_AUDIO_IF_MODE	ex_codecs/ak7755_codec.h	4;"	d
+AK7755_BCKP_BIT	ex_codecs/ak7755_codec.h	7;"	d
+AK7755_BICK_LRCK	ex_codecs/ak7755_codec.h	77;"	d
+AK7755_C0_CLOCK_SETTING1	ex_codecs/ak7755_codec.h	12;"	d
+AK7755_C1_CLOCK_SETTING2	ex_codecs/ak7755_codec.h	13;"	d
+AK7755_C2_SERIAL_DATA_FORMAT	ex_codecs/ak7755_codec.h	14;"	d
+AK7755_C3_DELAY_RAM_DSP_IO	ex_codecs/ak7755_codec.h	15;"	d
+AK7755_C4_DATARAM_CRAM_SETTING	ex_codecs/ak7755_codec.h	16;"	d
+AK7755_C5_ACCELARETOR_SETTING	ex_codecs/ak7755_codec.h	17;"	d
+AK7755_C6_DAC_DEM_SETTING	ex_codecs/ak7755_codec.h	18;"	d
+AK7755_C7_DSP_OUT_SETTING	ex_codecs/ak7755_codec.h	19;"	d
+AK7755_C8_DAC_IN_SETTING	ex_codecs/ak7755_codec.h	20;"	d
+AK7755_C9_ANALOG_IO_SETTING	ex_codecs/ak7755_codec.h	21;"	d
+AK7755_CA_CLK_SDOUT_SETTING	ex_codecs/ak7755_codec.h	22;"	d
+AK7755_CB_TEST_SETTING	ex_codecs/ak7755_codec.h	23;"	d
+AK7755_CC_VOLUME_TRANSITION	ex_codecs/ak7755_codec.h	24;"	d
+AK7755_CD_STO_DLS_SETTING	ex_codecs/ak7755_codec.h	25;"	d
+AK7755_CE_POWER_MANAGEMENT	ex_codecs/ak7755_codec.h	26;"	d
+AK7755_CF_RESET_POWER_SETTING	ex_codecs/ak7755_codec.h	27;"	d
+AK7755_D0_FUNCTION_SETTING	ex_codecs/ak7755_codec.h	29;"	d
+AK7755_D1_DSPMCLK_SETTING	ex_codecs/ak7755_codec.h	30;"	d
+AK7755_D2_MIC_GAIN_SETTING	ex_codecs/ak7755_codec.h	31;"	d
+AK7755_D3_LIN_LO3_VOLUME_SETTING	ex_codecs/ak7755_codec.h	32;"	d
+AK7755_D4_LO1_LO2_VOLUME_SETTING	ex_codecs/ak7755_codec.h	33;"	d
+AK7755_D5_ADC_DVOLUME_SETTING1	ex_codecs/ak7755_codec.h	34;"	d
+AK7755_D6_ADC_DVOLUME_SETTING2	ex_codecs/ak7755_codec.h	35;"	d
+AK7755_D7_ADC2_DVOLUME_SETTING1	ex_codecs/ak7755_codec.h	36;"	d
+AK7755_D8_DAC_DVOLUME_SETTING1	ex_codecs/ak7755_codec.h	37;"	d
+AK7755_D9_DAC_DVOLUME_SETTING2	ex_codecs/ak7755_codec.h	38;"	d
+AK7755_DA_MUTE_ADRC_ZEROCROSS_SET	ex_codecs/ak7755_codec.h	39;"	d
+AK7755_DB_ADRC_MIC_GAIN_READ	ex_codecs/ak7755_codec.h	40;"	d
+AK7755_DC_TEST_SETTING	ex_codecs/ak7755_codec.h	41;"	d
+AK7755_DD_ADC2_DVOLUME_SETTING2	ex_codecs/ak7755_codec.h	42;"	d
+AK7755_DE_DMIC_IF_SETTING	ex_codecs/ak7755_codec.h	43;"	d
+AK7755_DMCLKP1_BIT	ex_codecs/ak7755_codec.h	9;"	d
+AK7755_DMCLKP2_BIT	ex_codecs/ak7755_codec.h	10;"	d
+AK7755_E6_CONT26	ex_codecs/ak7755_codec.h	44;"	d
+AK7755_EA_CONT2A	ex_codecs/ak7755_codec.h	45;"	d
+AK7755_FS	ex_codecs/ak7755_codec.h	53;"	d
+AK7755_FS_12KHZ	ex_codecs/ak7755_codec.h	55;"	d
+AK7755_FS_16KHZ	ex_codecs/ak7755_codec.h	56;"	d
+AK7755_FS_24KHZ	ex_codecs/ak7755_codec.h	57;"	d
+AK7755_FS_32KHZ	ex_codecs/ak7755_codec.h	58;"	d
+AK7755_FS_48KHZ	ex_codecs/ak7755_codec.h	59;"	d
+AK7755_FS_8KHZ	ex_codecs/ak7755_codec.h	54;"	d
+AK7755_FS_96KHZ	ex_codecs/ak7755_codec.h	60;"	d
+AK7755_LRIF	ex_codecs/ak7755_codec.h	70;"	d
+AK7755_LRIF_I2S_MODE	ex_codecs/ak7755_codec.h	72;"	d
+AK7755_LRIF_MSB_MODE	ex_codecs/ak7755_codec.h	71;"	d
+AK7755_LRIF_PCM_LONG_MODE	ex_codecs/ak7755_codec.h	74;"	d
+AK7755_LRIF_PCM_SHORT_MODE	ex_codecs/ak7755_codec.h	73;"	d
+AK7755_MAX_REGISTERS	ex_codecs/ak7755_codec.h	47;"	d
+AK7755_M_S	ex_codecs/ak7755_codec.h	62;"	d
+AK7755_M_S_0	ex_codecs/ak7755_codec.h	63;"	d
+AK7755_M_S_1	ex_codecs/ak7755_codec.h	64;"	d
+AK7755_M_S_2	ex_codecs/ak7755_codec.h	65;"	d
+AK7755_M_S_3	ex_codecs/ak7755_codec.h	66;"	d
+AK7755_SOCFG_BIT	ex_codecs/ak7755_codec.h	8;"	d
+AK7755_TDM_INPUT_SOURCE	ex_codecs/ak7755_codec.h	5;"	d
+AMIC_AI_DISABLE_STREAM	include/audio_dsp.h	54;"	d
+AMIC_AI_ENABLE_STREAM	include/audio_dsp.h	55;"	d
+AMIC_AI_GET_ALC_GAIN	include/audio_dsp.h	75;"	d
+AMIC_AI_GET_GAIN	include/audio_dsp.h	67;"	d
+AMIC_AI_GET_PARAM	include/audio_dsp.h	40;"	d
+AMIC_AI_GET_STREAM	include/audio_dsp.h	53;"	d
+AMIC_AI_GET_VOLUME	include/audio_dsp.h	66;"	d
+AMIC_AI_HPF_ENABLE	include/audio_dsp.h	71;"	d
+AMIC_AI_SET_ALC_GAIN	include/audio_dsp.h	74;"	d
+AMIC_AI_SET_GAIN	include/audio_dsp.h	62;"	d
+AMIC_AI_SET_MUTE	include/audio_dsp.h	72;"	d
+AMIC_AI_SET_PARAM	include/audio_dsp.h	39;"	d
+AMIC_AI_SET_VOLUME	include/audio_dsp.h	61;"	d
+AMIC_AO_CLEAR_STREAM	include/audio_dsp.h	51;"	d
+AMIC_AO_DISABLE_STREAM	include/audio_dsp.h	56;"	d
+AMIC_AO_ENABLE_STREAM	include/audio_dsp.h	57;"	d
+AMIC_AO_GET_PARAM	include/audio_dsp.h	42;"	d
+AMIC_AO_SET_PARAM	include/audio_dsp.h	41;"	d
+AMIC_AO_SET_STREAM	include/audio_dsp.h	52;"	d
+AMIC_AO_SYNC_STREAM	include/audio_dsp.h	50;"	d
+AMIC_DISABLE_AEC	include/audio_dsp.h	59;"	d
+AMIC_ENABLE_AEC	include/audio_dsp.h	58;"	d
+AMIC_SPK_GET_GAIN	include/audio_dsp.h	69;"	d
+AMIC_SPK_GET_VOLUME	include/audio_dsp.h	68;"	d
+AMIC_SPK_SET_GAIN	include/audio_dsp.h	64;"	d
+AMIC_SPK_SET_MUTE	include/audio_dsp.h	73;"	d
+AMIC_SPK_SET_VOLUME	include/audio_dsp.h	63;"	d
+AUDIO_AIC_H__	host/T41/audio_aic.h	3;"	d
+AUDIO_BUSY_STATE	include/audio_common.h	/^	AUDIO_BUSY_STATE,$/;"	e	enum:audio_state
+AUDIO_CMD_CONFIG_PARAM	include/audio_common.h	/^	AUDIO_CMD_CONFIG_PARAM = 1,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_DISABLE_STREAM	include/audio_common.h	/^	AUDIO_CMD_DISABLE_STREAM,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_ENABLE_ALC_L	include/audio_common.h	/^	AUDIO_CMD_ENABLE_ALC_L,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_ENABLE_ALC_R	include/audio_common.h	/^	AUDIO_CMD_ENABLE_ALC_R,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_ENABLE_STREAM	include/audio_common.h	/^	AUDIO_CMD_ENABLE_STREAM,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_GET_ALC_GAIN	include/audio_common.h	/^	AUDIO_CMD_GET_ALC_GAIN,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_GET_GAIN	include/audio_common.h	/^	AUDIO_CMD_GET_GAIN,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_GET_VOLUME	include/audio_common.h	/^	AUDIO_CMD_GET_VOLUME,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_SET_ALC_GAIN	include/audio_common.h	/^	AUDIO_CMD_SET_ALC_GAIN,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_SET_GAIN	include/audio_common.h	/^	AUDIO_CMD_SET_GAIN,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_SET_MIC_HPF_EN	include/audio_common.h	/^	AUDIO_CMD_SET_MIC_HPF_EN,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_SET_MUTE	include/audio_common.h	/^	AUDIO_CMD_SET_MUTE,$/;"	e	enum:audio_inter_cmd
+AUDIO_CMD_SET_VOLUME	include/audio_common.h	/^	AUDIO_CMD_SET_VOLUME,$/;"	e	enum:audio_inter_cmd
+AUDIO_CONFIG_STATE	include/audio_common.h	/^	AUDIO_CONFIG_STATE,$/;"	e	enum:audio_state
+AUDIO_DRIVER_VERSION	audio_dsp.c	37;"	d	file:
+AUDIO_DRIVER_VERSION	host/T41/audio_aic.c	36;"	d	file:
+AUDIO_EPARAM	include/audio_common.h	/^	AUDIO_EPARAM,$/;"	e	enum:audio_error_value
+AUDIO_EPERM	include/audio_common.h	/^	AUDIO_EPERM,$/;"	e	enum:audio_error_value
+AUDIO_ERROR_LEVEL	include/audio_debug.h	15;"	d
+AUDIO_IDLE_STATE	include/audio_common.h	/^	AUDIO_IDLE_STATE,$/;"	e	enum:audio_state
+AUDIO_INFO_LEVEL	include/audio_debug.h	13;"	d
+AUDIO_IO_LEADING_DMA	audio_dsp.c	35;"	d	file:
+AUDIO_MAX_STATE	include/audio_common.h	/^	AUDIO_MAX_STATE,$/;"	e	enum:audio_state
+AUDIO_OPEN_STATE	include/audio_common.h	/^	AUDIO_OPEN_STATE,$/;"	e	enum:audio_state
+AUDIO_PRINT	include/audio_debug.h	16;"	d
+AUDIO_ROUTE_AEC_ID	include/audio_common.h	/^	AUDIO_ROUTE_AEC_ID,$/;"	e	enum:auido_route_index
+AUDIO_ROUTE_AMIC_ID	include/audio_common.h	/^	AUDIO_ROUTE_AMIC_ID,$/;"	e	enum:auido_route_index
+AUDIO_ROUTE_DMIC_ID	include/audio_common.h	/^	AUDIO_ROUTE_DMIC_ID,$/;"	e	enum:auido_route_index
+AUDIO_ROUTE_MAX_ID	include/audio_common.h	/^	AUDIO_ROUTE_MAX_ID,$/;"	e	enum:auido_route_index
+AUDIO_ROUTE_SPK_ID	include/audio_common.h	/^	AUDIO_ROUTE_SPK_ID,$/;"	e	enum:auido_route_index
+AUDIO_SUCCESS	include/audio_common.h	/^	AUDIO_SUCCESS,$/;"	e	enum:audio_error_value
+AUDIO_WARNING_LEVEL	include/audio_debug.h	14;"	d
+BASE_ADDR_CODEC	inner_codecs/T41/codec.h	13;"	d
+BFCR0	host/T41/dmic/as-dbus/as-dbus.h	10;"	d
+BFCR0_DEV_RF	host/T41/dmic/as-dbus/as-dbus.h	31;"	d
+BFCR0_DEV_RF_MSK	host/T41/dmic/as-dbus/as-dbus.h	30;"	d
+BFCR0_DEV_RF_SFT	host/T41/dmic/as-dbus/as-dbus.h	29;"	d
+BFCR0_DEV_TF	host/T41/dmic/as-dbus/as-dbus.h	28;"	d
+BFCR0_DEV_TF_MSK	host/T41/dmic/as-dbus/as-dbus.h	27;"	d
+BFCR0_DEV_TF_SFT	host/T41/dmic/as-dbus/as-dbus.h	26;"	d
+BFCR1	host/T41/dmic/as-dbus/as-dbus.h	11;"	d
+BFCR1_DEV_DBE_MSK	host/T41/dmic/as-dbus/as-dbus.h	33;"	d
+BFCR1_DEV_LSMP	host/T41/dmic/as-dbus/as-dbus.h	34;"	d
+BFCR2	host/T41/dmic/as-dbus/as-dbus.h	12;"	d
+BFCR2_DEV_DBE	host/T41/dmic/as-dbus/as-dbus.h	37;"	d
+BFCR2_DEV_DBE_MSK	host/T41/dmic/as-dbus/as-dbus.h	36;"	d
+BFSR	host/T41/dmic/as-dbus/as-dbus.h	9;"	d
+BFSR_DEV_ROR	host/T41/dmic/as-dbus/as-dbus.h	24;"	d
+BFSR_DEV_ROR_SFT	host/T41/dmic/as-dbus/as-dbus.h	23;"	d
+BFSR_DEV_TUR	host/T41/dmic/as-dbus/as-dbus.h	22;"	d
+BFSR_DEV_TUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	21;"	d
+BSORTT	host/T41/dmic/as-dbus/as-dbus.h	73;"	d
+BSORTT_MSK	host/T41/dmic/as-dbus/as-dbus.h	72;"	d
+BSORTT_WITDH	host/T41/dmic/as-dbus/as-dbus.h	71;"	d
+BST0	host/T41/dmic/as-dbus/as-dbus.h	13;"	d
+BST0_DEV0_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	39;"	d
+BST0_DEV1_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	40;"	d
+BST0_DEV2_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	41;"	d
+BST0_DEV3_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	42;"	d
+BST0_DEV4_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	43;"	d
+BST0_DEV5_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	44;"	d
+BST1	host/T41/dmic/as-dbus/as-dbus.h	14;"	d
+BST1_DEV10_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	50;"	d
+BST1_DEV6_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	46;"	d
+BST1_DEV7_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	47;"	d
+BST1_DEV8_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	48;"	d
+BST1_DEV9_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	49;"	d
+BST2	host/T41/dmic/as-dbus/as-dbus.h	15;"	d
+BST2_DEV11_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	52;"	d
+BST2_DEV12_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	53;"	d
+BST2_DEV13_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	54;"	d
+BST2_DEV14_SUR_SFT	host/T41/dmic/as-dbus/as-dbus.h	55;"	d
+BTCLR	host/T41/dmic/as-dbus/as-dbus.h	7;"	d
+BTSET	host/T41/dmic/as-dbus/as-dbus.h	6;"	d
+BTSR	host/T41/dmic/as-dbus/as-dbus.h	8;"	d
+BTT0	host/T41/dmic/as-dbus/as-dbus.h	16;"	d
+BTT0_DEV0_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	57;"	d
+BTT0_DEV1_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	58;"	d
+BTT0_DEV2_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	59;"	d
+BTT0_DEV3_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	60;"	d
+BTT0_DEV4_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	61;"	d
+BTT0_DEV5_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	62;"	d
+BTT1	host/T41/dmic/as-dbus/as-dbus.h	17;"	d
+BTT1_DEV10_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	68;"	d
+BTT1_DEV11_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	69;"	d
+BTT1_DEV6_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	64;"	d
+BTT1_DEV7_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	65;"	d
+BTT1_DEV8_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	66;"	d
+BTT1_DEV9_TAR_SFT	host/T41/dmic/as-dbus/as-dbus.h	67;"	d
+BT_TSLOT	host/T41/dmic/as-dbus/as-dbus.h	19;"	d
+CACHED_FRAGMENT	include/audio_common.h	62;"	d
+CHNUM_MASK	host/T41/dmic/as-dmic/as-dmic.h	70;"	d
+CHNUM_SFT	host/T41/dmic/as-dmic/as-dmic.h	69;"	d
+CHOOSE_ADC_CHN_MONO	inner_codecs/T41/codec.h	58;"	d
+CHOOSE_ADC_CHN_STEREO	inner_codecs/T41/codec.h	57;"	d
+CODEC_ANALOG_AUTO	include/codec-common.h	/^	CODEC_ANALOG_AUTO = 1,$/;"	e	enum:codec_analog_mode
+CODEC_ANALOG_MANUAL	include/codec-common.h	/^	CODEC_ANALOG_MANUAL,$/;"	e	enum:codec_analog_mode
+CODEC_CAACR	inner_codecs/T41/codec.h	27;"	d
+CODEC_CACR	inner_codecs/T41/codec.h	17;"	d
+CODEC_CACR1	inner_codecs/T41/codec.h	18;"	d
+CODEC_CAEC	inner_codecs/T41/codec.h	30;"	d
+CODEC_CAFG	inner_codecs/T41/codec.h	45;"	d
+CODEC_CAGCCR	inner_codecs/T41/codec.h	38;"	d
+CODEC_CAHMAXR	inner_codecs/T41/codec.h	42;"	d
+CODEC_CAHMINR	inner_codecs/T41/codec.h	44;"	d
+CODEC_CALCGR	inner_codecs/T41/codec.h	31;"	d
+CODEC_CALMAXR	inner_codecs/T41/codec.h	41;"	d
+CODEC_CALMINR	inner_codecs/T41/codec.h	43;"	d
+CODEC_CANACR	inner_codecs/T41/codec.h	32;"	d
+CODEC_CANACR1	inner_codecs/T41/codec.h	33;"	d
+CODEC_CCR	inner_codecs/T41/codec.h	26;"	d
+CODEC_CDBCR	inner_codecs/T41/codec.h	25;"	d
+CODEC_CDCFGR	inner_codecs/T41/codec.h	16;"	d
+CODEC_CDCR	inner_codecs/T41/codec.h	19;"	d
+CODEC_CDCR1	inner_codecs/T41/codec.h	20;"	d
+CODEC_CDGSR	inner_codecs/T41/codec.h	21;"	d
+CODEC_CDLCBMSR	inner_codecs/T41/codec.h	22;"	d
+CODEC_CGAINR	inner_codecs/T41/codec.h	24;"	d
+CODEC_CGR	inner_codecs/T41/codec.h	15;"	d
+CODEC_CHPOUTLGR	inner_codecs/T41/codec.h	35;"	d
+CODEC_CHR	inner_codecs/T41/codec.h	34;"	d
+CODEC_CLAVR	inner_codecs/T41/codec.h	23;"	d
+CODEC_CMICCR	inner_codecs/T41/codec.h	28;"	d
+CODEC_CMICGAINR	inner_codecs/T41/codec.h	29;"	d
+CODEC_CMR	inner_codecs/T41/codec.h	36;"	d
+CODEC_CPGR	inner_codecs/T41/codec.h	39;"	d
+CODEC_CSRR	inner_codecs/T41/codec.h	40;"	d
+CODEC_CTR	inner_codecs/T41/codec.h	37;"	d
+CODEC_IS_0_LINES	include/codec-common.h	/^	CODEC_IS_0_LINES, \/\/ this is a inner codec.$/;"	e	enum:codec_pins
+CODEC_IS_4_LINES	include/codec-common.h	/^	CODEC_IS_4_LINES,$/;"	e	enum:codec_pins
+CODEC_IS_6_LINES	include/codec-common.h	/^	CODEC_IS_6_LINES,$/;"	e	enum:codec_pins
+CODEC_IS_EXTERN_MODULE	include/codec-common.h	/^	CODEC_IS_EXTERN_MODULE,$/;"	e	enum:codec_type
+CODEC_IS_INNER_MODULE	include/codec-common.h	/^	CODEC_IS_INNER_MODULE,$/;"	e	enum:codec_type
+CODEC_IS_MASTER_MODE	include/codec-common.h	/^	CODEC_IS_MASTER_MODE,$/;"	e	enum:codec_mode
+CODEC_IS_SLAVE_MODE	include/codec-common.h	/^	CODEC_IS_SLAVE_MODE,$/;"	e	enum:codec_mode
+CODEC_MIC_START	host/T41/audio_aic.h	117;"	d
+CODEC_MIC_STOP	host/T41/audio_aic.h	118;"	d
+CODEC_NAME	ex_codecs/Makefile	/^CODEC_NAME=ak7755$/;"	m
+CODEC_POWER_DOWN	host/T41/audio_aic.h	115;"	d
+CODEC_POWER_UP	host/T41/audio_aic.h	114;"	d
+CODEC_SPK_START	host/T41/audio_aic.h	119;"	d
+CODEC_SPK_STOP	host/T41/audio_aic.h	120;"	d
+CROSS_COMPILE	Makefile	/^CROSS_COMPILE ?= mips-linux-gnu-$/;"	m
+CROSS_COMPILE	ex_codecs/Makefile	/^CROSS_COMPILE ?= mips-linux-gnu-$/;"	m
+DATA_I2S_MODE	include/codec-common.h	/^	DATA_I2S_MODE,$/;"	e	enum:codec_data_mode
+DATA_LEFT_JUSTIFIED_MODE	include/codec-common.h	/^	DATA_LEFT_JUSTIFIED_MODE,$/;"	e	enum:codec_data_mode
+DATA_RIGHT_JUSTIFIED_MODE	include/codec-common.h	/^	DATA_RIGHT_JUSTIFIED_MODE,$/;"	e	enum:codec_data_mode
+DBA	host/T41/dmic/as-dma/as-dma.h	8;"	d
+DCM	host/T41/dmic/as-dma/as-dma.h	12;"	d
+DCM_BAI	host/T41/dmic/as-dma/as-dma.h	36;"	d
+DCM_LTIE	host/T41/dmic/as-dma/as-dma.h	47;"	d
+DCM_NDES	host/T41/dmic/as-dma/as-dma.h	35;"	d
+DCM_TIE	host/T41/dmic/as-dma/as-dma.h	46;"	d
+DCM_TSZ_MAX	host/T41/dmic/as-dma/as-dma.h	43;"	d
+DCM_TSZ_MAX_WORD	host/T41/dmic/as-dma/as-dma.h	44;"	d
+DCM_TSZ_MSK	host/T41/dmic/as-dma/as-dma.h	45;"	d
+DCM_TSZ_SFT	host/T41/dmic/as-dma/as-dma.h	37;"	d
+DCR	host/T41/dmic/as-dma/as-dma.h	10;"	d
+DCR_CTE	host/T41/dmic/as-dma/as-dma.h	24;"	d
+DCR_RESET	host/T41/dmic/as-dma/as-dma.h	23;"	d
+DDA	host/T41/dmic/as-dma/as-dma.h	13;"	d
+DEFAULT_AEC_TRIGGER	host/T41/audio_aic.h	95;"	d
+DEFAULT_AGAIN	host/T41/audio_aic.h	104;"	d
+DEFAULT_ALC_EN	host/T41/audio_aic.h	107;"	d
+DEFAULT_ALC_MAXGAIN	host/T41/audio_aic.h	108;"	d
+DEFAULT_ALC_MINGAIN	host/T41/audio_aic.h	109;"	d
+DEFAULT_CHANNEL	host/T41/audio_aic.h	102;"	d
+DEFAULT_CHANNEL	host/T41/dmic/as-dmic/as-dmic.h	40;"	d
+DEFAULT_DGAIN	host/T41/audio_aic.h	105;"	d
+DEFAULT_EXCODEC_ADDR	host/T41/audio_aic.c	37;"	d	file:
+DEFAULT_FORMAT	host/T41/dmic/as-dmic/as-dmic.h	41;"	d
+DEFAULT_FRAME_SIZE	host/T41/audio_aic.h	111;"	d
+DEFAULT_GAIN	host/T41/dmic/as-dmic/as-dmic.h	42;"	d
+DEFAULT_RECORD_CLK	host/T41/audio_aic.h	98;"	d
+DEFAULT_RECORD_TRIGGER	host/T41/audio_aic.h	94;"	d
+DEFAULT_REPLAY_CLK	host/T41/audio_aic.h	99;"	d
+DEFAULT_REPLAY_TRIGGER	host/T41/audio_aic.h	96;"	d
+DEFAULT_SAMPLERATE	host/T41/audio_aic.h	101;"	d
+DEFAULT_SAMPLERATE	host/T41/dmic/as-dmic/as-dmic.h	39;"	d
+DEFAULT_TRIGGER	host/T41/dmic/as-dmic/as-dmic.h	43;"	d
+DEFAULT_VFRAME_SIZE	host/T41/audio_aic.h	112;"	d
+DFCR	host/T41/dmic/as-fmtcov/as-fmtcov.h	19;"	d
+DFCR0	host/T41/dmic/as-fmtcov/as-fmtcov.h	16;"	d
+DFCR_CHNUM	host/T41/dmic/as-fmtcov/as-fmtcov.h	23;"	d
+DFCR_CHNUM_MSK	host/T41/dmic/as-fmtcov/as-fmtcov.h	22;"	d
+DFCR_CHNUM_SFT	host/T41/dmic/as-fmtcov/as-fmtcov.h	21;"	d
+DFCR_ENABLE	host/T41/dmic/as-fmtcov/as-fmtcov.h	36;"	d
+DFCR_PACKEN	host/T41/dmic/as-fmtcov/as-fmtcov.h	35;"	d
+DFCR_SS	host/T41/dmic/as-fmtcov/as-fmtcov.h	34;"	d
+DFCR_SS_12	host/T41/dmic/as-fmtcov/as-fmtcov.h	27;"	d
+DFCR_SS_13	host/T41/dmic/as-fmtcov/as-fmtcov.h	28;"	d
+DFCR_SS_16	host/T41/dmic/as-fmtcov/as-fmtcov.h	29;"	d
+DFCR_SS_18	host/T41/dmic/as-fmtcov/as-fmtcov.h	30;"	d
+DFCR_SS_20	host/T41/dmic/as-fmtcov/as-fmtcov.h	31;"	d
+DFCR_SS_24	host/T41/dmic/as-fmtcov/as-fmtcov.h	32;"	d
+DFCR_SS_32	host/T41/dmic/as-fmtcov/as-fmtcov.h	33;"	d
+DFCR_SS_8	host/T41/dmic/as-fmtcov/as-fmtcov.h	26;"	d
+DFCR_SS_MSK	host/T41/dmic/as-fmtcov/as-fmtcov.h	25;"	d
+DFCR_SS_SFT	host/T41/dmic/as-fmtcov/as-fmtcov.h	24;"	d
+DGAIN_SFT	host/T41/dmic/as-dmic/as-dmic.h	89;"	d
+DGER	host/T41/dmic/as-dma/as-dma.h	15;"	d
+DGER_DMA_EN	host/T41/dmic/as-dma/as-dma.h	51;"	d
+DGRR	host/T41/dmic/as-dma/as-dma.h	14;"	d
+DGRR_RESET	host/T41/dmic/as-dma/as-dma.h	49;"	d
+DMA5_ID	host/T41/dmic/as-dmic/as-dmic.h	46;"	d
+DMA_BURST_16_WORD	host/T41/dmic/as-dma/as-dma.h	41;"	d
+DMA_BURST_32_WORD	host/T41/dmic/as-dma/as-dma.h	42;"	d
+DMA_BURST_4_WORD	host/T41/dmic/as-dma/as-dma.h	39;"	d
+DMA_BURST_8_WORD	host/T41/dmic/as-dma/as-dma.h	40;"	d
+DMA_CH_OFF	host/T41/dmic/as-dma/as-dma.h	7;"	d
+DMIC_AI_DISABLE_STREAM	include/audio_dsp.h	44;"	d
+DMIC_AI_ENABLE_STREAM	include/audio_dsp.h	45;"	d
+DMIC_AI_GET_PARAM	include/audio_dsp.h	38;"	d
+DMIC_AI_GET_STREAM	include/audio_dsp.h	46;"	d
+DMIC_AI_GET_VOLUME	include/audio_dsp.h	70;"	d
+DMIC_AI_SET_PARAM	include/audio_dsp.h	37;"	d
+DMIC_AI_SET_VOLUME	include/audio_dsp.h	65;"	d
+DMIC_CR0	host/T41/dmic/as-dmic/as-dmic.h	55;"	d
+DMIC_DEV_ID	host/T41/dmic/as-dmic/as-dmic.h	47;"	d
+DMIC_DISABLE_AEC	include/audio_dsp.h	48;"	d
+DMIC_DMA_MAX_BURSTSIZE	host/T41/dmic/as-dmic/as-dmic.h	37;"	d
+DMIC_EN	host/T41/dmic/as-dmic/as-dmic.h	86;"	d
+DMIC_ENABLE_AEC	include/audio_dsp.h	47;"	d
+DMIC_GCR	host/T41/dmic/as-dmic/as-dmic.h	56;"	d
+DMIC_ICR	host/T41/dmic/as-dmic/as-dmic.h	58;"	d
+DMIC_IER	host/T41/dmic/as-dmic/as-dmic.h	57;"	d
+DMIC_PORTA_PINS	host/T41/dmic/as-dmic/as-dmic.c	35;"	d	file:
+DMIC_PORTB_PINS	host/T41/dmic/as-dmic/as-dmic.c	36;"	d	file:
+DMIC_RATE_16000	host/T41/dmic/as-dmic/as-dmic.h	/^	DMIC_RATE_16000 = 16000,$/;"	e	enum:dmic_rate
+DMIC_RATE_48000	host/T41/dmic/as-dmic/as-dmic.h	/^	DMIC_RATE_48000 = 48000,$/;"	e	enum:dmic_rate
+DMIC_RATE_8000	host/T41/dmic/as-dmic/as-dmic.h	/^	DMIC_RATE_8000 = 8000,$/;"	e	enum:dmic_rate
+DMIC_RESET	host/T41/dmic/as-dmic/as-dmic.h	62;"	d
+DMIC_SET_AI_VOLUME	include/audio_dsp.h	49;"	d
+DMIC_SET_CHL	host/T41/dmic/as-dmic/as-dmic.h	71;"	d
+DMIC_SET_GAIN	host/T41/dmic/as-dmic/as-dmic.h	90;"	d
+DMIC_SET_OSS	host/T41/dmic/as-dmic/as-dmic.h	76;"	d
+DMIC_SET_SR	host/T41/dmic/as-dmic/as-dmic.h	85;"	d
+DMIC_TCR	host/T41/dmic/as-dmic/as-dmic.h	59;"	d
+DOWNLOAD	ex_codecs/ak7755_codec.h	/^	DOWNLOAD,$/;"	e	enum:ak7755_status
+DSP_NEXT_FRAGMENT	include/audio_common.h	61;"	d
+DSR	host/T41/dmic/as-dma/as-dma.h	11;"	d
+DSR_CDOA	host/T41/dmic/as-dma/as-dma.h	27;"	d
+DSR_CDOA_SFT	host/T41/dmic/as-dma/as-dma.h	26;"	d
+DSR_LINK	host/T41/dmic/as-dma/as-dma.h	33;"	d
+DSR_LTT	host/T41/dmic/as-dma/as-dma.h	31;"	d
+DSR_LTT_INT	host/T41/dmic/as-dma/as-dma.h	29;"	d
+DSR_RST_EN	host/T41/dmic/as-dma/as-dma.h	32;"	d
+DSR_TT	host/T41/dmic/as-dma/as-dma.h	30;"	d
+DSR_TT_INT	host/T41/dmic/as-dma/as-dma.h	28;"	d
+DTC	host/T41/dmic/as-dma/as-dma.h	9;"	d
+DTC_TC	host/T41/dmic/as-dma/as-dma.h	21;"	d
+DTC_TC_SFT	host/T41/dmic/as-dma/as-dma.h	20;"	d
+EXCODEC_ID_REG	ex_codecs/ak7755_codec.c	24;"	d	file:
+EXCODEC_ID_REG	ex_codecs/es8374_codec.c	22;"	d	file:
+EXCODEC_ID_VAL	ex_codecs/ak7755_codec.c	25;"	d	file:
+EXCODEC_ID_VAL	ex_codecs/es8374_codec.c	23;"	d	file:
+EXTERNAL_CODEC	host/T41/audio_aic.c	1904;"	d	file:
+FAS	host/T41/dmic/as-dma/as-dma.h	65;"	d
+FAS_FAD	host/T41/dmic/as-dma/as-dma.h	71;"	d
+FAS_FAD_SFT	host/T41/dmic/as-dma/as-dma.h	70;"	d
+FCR	host/T41/dmic/as-dma/as-dma.h	66;"	d
+FCR_FIFO_EN	host/T41/dmic/as-dma/as-dma.h	75;"	d
+FCR_FLUSH	host/T41/dmic/as-dma/as-dma.h	73;"	d
+FCR_FULL_EN	host/T41/dmic/as-dma/as-dma.h	74;"	d
+FFR	host/T41/dmic/as-dma/as-dma.h	67;"	d
+FFR_FIFO_TD	host/T41/dmic/as-dma/as-dma.h	82;"	d
+FFR_FSE	host/T41/dmic/as-dma/as-dma.h	81;"	d
+FFR_FTH	host/T41/dmic/as-dma/as-dma.h	79;"	d
+FFR_FTH_MSK	host/T41/dmic/as-dma/as-dma.h	78;"	d
+FFR_FTH_SFT	host/T41/dmic/as-dma/as-dma.h	77;"	d
+FFR_TURRORE	host/T41/dmic/as-dma/as-dma.h	80;"	d
+FIFO_CH_OFF	host/T41/dmic/as-dma/as-dma.h	64;"	d
+FILE_NAME	host/T41/audio_aic.c	825;"	d	file:
+FMTCOV_OFFSET	host/T41/dmic/as-fmtcov/as-fmtcov.h	18;"	d
+FRAGMENT_CNT	host/T41/audio_aic.h	80;"	d
+FSR	host/T41/dmic/as-dma/as-dma.h	68;"	d
+FSR_FLEVEL	host/T41/dmic/as-dma/as-dma.h	85;"	d
+FSR_FLEVEL_SFT	host/T41/dmic/as-dma/as-dma.h	84;"	d
+FSR_TFSRFS	host/T41/dmic/as-dma/as-dma.h	89;"	d
+FSR_TFSRFS_INT	host/T41/dmic/as-dma/as-dma.h	87;"	d
+FSR_TURROR	host/T41/dmic/as-dma/as-dma.h	88;"	d
+FSR_TURROR_INT	host/T41/dmic/as-dma/as-dma.h	86;"	d
+HPF1_EN	host/T41/dmic/as-dmic/as-dmic.h	68;"	d
+HPF1_EN_SFT	host/T41/dmic/as-dmic/as-dmic.h	67;"	d
+HPF2_EN	host/T41/dmic/as-dmic/as-dmic.h	64;"	d
+HPF2_EN_SFT	host/T41/dmic/as-dmic/as-dmic.h	63;"	d
+I2SCR	host/T41/audio_aic.h	136;"	d
+I2SDIV	host/T41/audio_aic.h	139;"	d
+I2SSR	host/T41/audio_aic.h	138;"	d
+I2S_AMSL_MASK	host/T41/audio_aic.h	420;"	d
+I2S_AMSL_OFFSET	host/T41/audio_aic.h	419;"	d
+I2S_ASVTSU_MASK	host/T41/audio_aic.h	280;"	d
+I2S_ASVTSU_OFFSET	host/T41/audio_aic.h	279;"	d
+I2S_AUSEL_MASK	host/T41/audio_aic.h	182;"	d
+I2S_AUSEL_OFFSET	host/T41/audio_aic.h	181;"	d
+I2S_BSY_MASK	host/T41/audio_aic.h	474;"	d
+I2S_BSY_OFFSET	host/T41/audio_aic.h	473;"	d
+I2S_CHANNEL_MASK	host/T41/audio_aic.h	311;"	d
+I2S_CHANNEL_OFFSET	host/T41/audio_aic.h	310;"	d
+I2S_CHBSY_MASK	host/T41/audio_aic.h	480;"	d
+I2S_CHBSY_OFFSET	host/T41/audio_aic.h	479;"	d
+I2S_DATA_MASK	host/T41/audio_aic.h	492;"	d
+I2S_DATA_OFFSET	host/T41/audio_aic.h	491;"	d
+I2S_DMODE_MASK	host/T41/audio_aic.h	188;"	d
+I2S_DMODE_OFFSET	host/T41/audio_aic.h	187;"	d
+I2S_DV_MASK	host/T41/audio_aic.h	518;"	d
+I2S_DV_OFFSET	host/T41/audio_aic.h	517;"	d
+I2S_ENB_MASK	host/T41/audio_aic.h	174;"	d
+I2S_ENB_OFFSET	host/T41/audio_aic.h	173;"	d
+I2S_ENDSW_MASK	host/T41/audio_aic.h	282;"	d
+I2S_ENDSW_OFFSET	host/T41/audio_aic.h	281;"	d
+I2S_ENLBF_MASK	host/T41/audio_aic.h	266;"	d
+I2S_ENLBF_OFFSET	host/T41/audio_aic.h	265;"	d
+I2S_EREC_MASK	host/T41/audio_aic.h	262;"	d
+I2S_EREC_OFFSET	host/T41/audio_aic.h	261;"	d
+I2S_ERFS_MASK	host/T41/audio_aic.h	270;"	d
+I2S_ERFS_OFFSET	host/T41/audio_aic.h	269;"	d
+I2S_EROR_MASK	host/T41/audio_aic.h	274;"	d
+I2S_EROR_OFFSET	host/T41/audio_aic.h	273;"	d
+I2S_ERPL_MASK	host/T41/audio_aic.h	264;"	d
+I2S_ERPL_OFFSET	host/T41/audio_aic.h	263;"	d
+I2S_ETFL_MASK	host/T41/audio_aic.h	307;"	d
+I2S_ETFL_OFFSET	host/T41/audio_aic.h	306;"	d
+I2S_ETFS_MASK	host/T41/audio_aic.h	268;"	d
+I2S_ETFS_OFFSET	host/T41/audio_aic.h	267;"	d
+I2S_ETUR_MASK	host/T41/audio_aic.h	272;"	d
+I2S_ETUR_OFFSET	host/T41/audio_aic.h	271;"	d
+I2S_FIFO_RESET_STAT	host/T41/audio_aic.h	199;"	d
+I2S_ICDC_MASK	host/T41/audio_aic.h	184;"	d
+I2S_ICDC_OFFSET	host/T41/audio_aic.h	183;"	d
+I2S_IDV_MASK	host/T41/audio_aic.h	520;"	d
+I2S_IDV_OFFSET	host/T41/audio_aic.h	519;"	d
+I2S_ISS_MASK	host/T41/audio_aic.h	298;"	d
+I2S_ISS_OFFSET	host/T41/audio_aic.h	297;"	d
+I2S_LOOP_DATA_MASK	host/T41/audio_aic.h	502;"	d
+I2S_LOOP_DATA_OFFSET	host/T41/audio_aic.h	501;"	d
+I2S_LSMP_MASK	host/T41/audio_aic.h	186;"	d
+I2S_LSMP_OFFSET	host/T41/audio_aic.h	185;"	d
+I2S_M2S_MASK	host/T41/audio_aic.h	284;"	d
+I2S_M2S_OFFSET	host/T41/audio_aic.h	283;"	d
+I2S_MONOCTR_MASK	host/T41/audio_aic.h	291;"	d
+I2S_MONOCTR_OFFSET	host/T41/audio_aic.h	290;"	d
+I2S_MONOCTR_RIGHT_MASK	host/T41/audio_aic.h	287;"	d
+I2S_MONOCTR_RIGHT_OFFSET	host/T41/audio_aic.h	286;"	d
+I2S_MSB_MASK	host/T41/audio_aic.h	190;"	d
+I2S_MSB_OFFSET	host/T41/audio_aic.h	189;"	d
+I2S_OSS_MASK	host/T41/audio_aic.h	300;"	d
+I2S_OSS_OFFSET	host/T41/audio_aic.h	299;"	d
+I2S_PACK16_MASK	host/T41/audio_aic.h	313;"	d
+I2S_PACK16_OFFSET	host/T41/audio_aic.h	312;"	d
+I2S_RBSY_MASK	host/T41/audio_aic.h	476;"	d
+I2S_RBSY_OFFSET	host/T41/audio_aic.h	475;"	d
+I2S_RDMS_MASK	host/T41/audio_aic.h	296;"	d
+I2S_RDMS_OFFSET	host/T41/audio_aic.h	295;"	d
+I2S_RFIFOS_MASK	host/T41/audio_aic.h	192;"	d
+I2S_RFIFOS_OFFSET	host/T41/audio_aic.h	191;"	d
+I2S_RFIRST_MASK	host/T41/audio_aic.h	424;"	d
+I2S_RFIRST_OFFSET	host/T41/audio_aic.h	423;"	d
+I2S_RFLUSH_MASK	host/T41/audio_aic.h	276;"	d
+I2S_RFLUSH_OFFSET	host/T41/audio_aic.h	275;"	d
+I2S_RFL_MASK	host/T41/audio_aic.h	454;"	d
+I2S_RFL_OFFSET	host/T41/audio_aic.h	453;"	d
+I2S_RFS_MASK	host/T41/audio_aic.h	446;"	d
+I2S_RFS_OFFSET	host/T41/audio_aic.h	445;"	d
+I2S_RFTH_MASK	host/T41/audio_aic.h	198;"	d
+I2S_RFTH_OFFSET	host/T41/audio_aic.h	197;"	d
+I2S_RMASTER_MASK	host/T41/audio_aic.h	176;"	d
+I2S_RMASTER_OFFSET	host/T41/audio_aic.h	175;"	d
+I2S_ROR_MASK	host/T41/audio_aic.h	450;"	d
+I2S_ROR_OFFSET	host/T41/audio_aic.h	449;"	d
+I2S_RST_MASK	host/T41/audio_aic.h	180;"	d
+I2S_RST_OFFSET	host/T41/audio_aic.h	179;"	d
+I2S_STEREOCTR_MASK	host/T41/audio_aic.h	288;"	d
+I2S_SWLH_MASK	host/T41/audio_aic.h	422;"	d
+I2S_SWLH_OFFSET	host/T41/audio_aic.h	421;"	d
+I2S_TBSY_MASK	host/T41/audio_aic.h	478;"	d
+I2S_TBSY_OFFSET	host/T41/audio_aic.h	477;"	d
+I2S_TDMS_MASK	host/T41/audio_aic.h	294;"	d
+I2S_TDMS_OFFSET	host/T41/audio_aic.h	293;"	d
+I2S_TFIFOS_MASK	host/T41/audio_aic.h	194;"	d
+I2S_TFIFOS_OFFSET	host/T41/audio_aic.h	193;"	d
+I2S_TFIFO_LOOP_MASK	host/T41/audio_aic.h	509;"	d
+I2S_TFIFO_LOOP_OFFSET	host/T41/audio_aic.h	508;"	d
+I2S_TFLUSH_MASK	host/T41/audio_aic.h	278;"	d
+I2S_TFLUSH_OFFSET	host/T41/audio_aic.h	277;"	d
+I2S_TFL_MASK	host/T41/audio_aic.h	452;"	d
+I2S_TFL_OFFSET	host/T41/audio_aic.h	451;"	d
+I2S_TFS_MASK	host/T41/audio_aic.h	444;"	d
+I2S_TFS_OFFSET	host/T41/audio_aic.h	443;"	d
+I2S_TFTH_MASK	host/T41/audio_aic.h	196;"	d
+I2S_TFTH_OFFSET	host/T41/audio_aic.h	195;"	d
+I2S_TLDMS_MASK	host/T41/audio_aic.h	303;"	d
+I2S_TLDMS_OFFSET	host/T41/audio_aic.h	302;"	d
+I2S_TMASTER_MASK	host/T41/audio_aic.h	178;"	d
+I2S_TMASTER_OFFSET	host/T41/audio_aic.h	177;"	d
+I2S_TUR_MASK	host/T41/audio_aic.h	448;"	d
+I2S_TUR_OFFSET	host/T41/audio_aic.h	447;"	d
+INCODEC_CHANNEL_MONO_LEFT	inner_codecs/T41/codec.c	363;"	d	file:
+INCODEC_CHANNEL_MONO_RIGHT	inner_codecs/T41/codec.c	364;"	d	file:
+INCODEC_CHANNEL_STEREO	inner_codecs/T41/codec.c	365;"	d	file:
+INCODEC_CODEC_VALID_DATA_SIZE_16BIT	inner_codecs/T41/codec.c	366;"	d	file:
+INCODEC_CODEC_VALID_DATA_SIZE_20BIT	inner_codecs/T41/codec.c	367;"	d	file:
+INCODEC_CODEC_VALID_DATA_SIZE_24BIT	inner_codecs/T41/codec.c	368;"	d	file:
+INCODEC_CODEC_VALID_DATA_SIZE_32BIT	inner_codecs/T41/codec.c	369;"	d	file:
+INGENIC_DEF_FIFO_DEPTH	host/T41/dmic/as-dma/as-dma.h	92;"	d
+INGENIC_DMA_BUFFERSIZE_MAX	host/T41/dmic/as-dma/as-dma.h	95;"	d
+INGENIC_DMA_BUFFERSIZE_PREALLOC	host/T41/dmic/as-dma/as-dma.h	96;"	d
+INGENIC_PERIODS_BYTES_MIN	host/T41/dmic/as-dma/as-dma.h	94;"	d
+INGENIC_PERIODS_MIN	host/T41/dmic/as-dma/as-dma.h	93;"	d
+INNER_CODEC	host/T41/audio_aic.c	1903;"	d	file:
+ISVP_ENV_KERNEL_DIR	Makefile	/^	ISVP_ENV_KERNEL_DIR = $(PWD)\/..\/..\/..\/kernel-4.4.94$/;"	m
+ISVP_ENV_KERNEL_DIR	ex_codecs/Makefile	/^	ISVP_ENV_KERNEL_DIR = $(PWD)\/..\/..\/..\/..\/kernel-4.4.94$/;"	m
+KDIR	Makefile	/^KDIR := ${ISVP_ENV_KERNEL_DIR}$/;"	m
+KDIR	ex_codecs/Makefile	/^KDIR := ${ISVP_ENV_KERNEL_DIR}$/;"	m
+LEFT_FIRST_MODE	include/codec-common.h	/^	LEFT_FIRST_MODE,$/;"	e	enum:codec_sequence_mode
+LEFT_HIGH_RIGHT_LOW	include/codec-common.h	/^	LEFT_HIGH_RIGHT_LOW,$/;"	e	enum:codec_sync_polarity
+LEFT_LOW_RIGHT_HIGH	include/codec-common.h	/^	LEFT_LOW_RIGHT_HIGH,$/;"	e	enum:codec_sync_polarity
+LI_DEVID_TO_IDX	host/T41/dmic/as-dbus/as-dbus.h	125;"	d
+LI_PORT_MAX_NUM	host/T41/dmic/as-dbus/as-dbus.h	114;"	d
+LO_DEVID_TO_IDX	host/T41/dmic/as-dbus/as-dbus.h	126;"	d
+LO_PORT_MAX_NUM	host/T41/dmic/as-dbus/as-dbus.h	115;"	d
+LPF_EN	host/T41/dmic/as-dmic/as-dmic.h	66;"	d
+LPF_EN_SFT	host/T41/dmic/as-dmic/as-dmic.h	65;"	d
+MAX_GAIN	host/T41/dmic/as-dmic/as-dmic.h	45;"	d
+MAX_SAMPLE_BYTES	host/T41/audio_aic.h	78;"	d
+MAX_SAMPLE_CHANNEL	host/T41/audio_aic.h	79;"	d
+MCLK_DIV_TO_SAMPLE	host/T41/audio_aic.h	92;"	d
+MODULE_NAME	Makefile	/^MODULE_NAME := audio$/;"	m
+MODULE_NAME	ex_codecs/Makefile	/^MODULE_NAME := $(CODEC_NAME)$/;"	m
+MONO_LEFT	ex_codecs/ak7755_codec.c	26;"	d	file:
+MONO_LEFT	include/codec-common.h	32;"	d
+MONO_RIGHT	ex_codecs/ak7755_codec.c	27;"	d	file:
+MONO_RIGHT	include/codec-common.h	33;"	d
+MUTE_DISABLE	ex_codecs/ak7755_codec.c	211;"	d	file:
+MUTE_DISEN	host/T41/audio_aic.h	90;"	d
+MUTE_EN	host/T41/audio_aic.h	89;"	d
+MUTE_ENABLE	ex_codecs/ak7755_codec.c	210;"	d	file:
+OSS_16BIT	host/T41/dmic/as-dmic/as-dmic.h	74;"	d
+OSS_24BIT	host/T41/dmic/as-dmic/as-dmic.h	75;"	d
+OSS_MASK	host/T41/dmic/as-dmic/as-dmic.h	73;"	d
+OSS_SFT	host/T41/dmic/as-dmic/as-dmic.h	72;"	d
+PORT_MAX_NUM	host/T41/dmic/as-dbus/as-dbus.h	116;"	d
+POWERDOWN	ex_codecs/ak7755_codec.h	/^	POWERDOWN = 0,$/;"	e	enum:ak7755_status
+RAMTYPE_ACRAM	ex_codecs/ak7755_codec.h	/^	RAMTYPE_ACRAM,$/;"	e	enum:ak7755_ram_type
+RAMTYPE_CRAM	ex_codecs/ak7755_codec.h	/^	RAMTYPE_CRAM,$/;"	e	enum:ak7755_ram_type
+RAMTYPE_OFREG	ex_codecs/ak7755_codec.h	/^	RAMTYPE_OFREG,$/;"	e	enum:ak7755_ram_type
+RAMTYPE_PRAM	ex_codecs/ak7755_codec.h	/^	RAMTYPE_PRAM = 0,$/;"	e	enum:ak7755_ram_type
+RIGHT_FIRST_MODE	include/codec-common.h	/^	RIGHT_FIRST_MODE,$/;"	e	enum:codec_sequence_mode
+RUN	ex_codecs/ak7755_codec.h	/^	RUN,$/;"	e	enum:ak7755_status
+SAMPLE_RATE_12K	inner_codecs/T41/codec.h	61;"	d
+SAMPLE_RATE_16K	inner_codecs/T41/codec.h	62;"	d
+SAMPLE_RATE_24K	inner_codecs/T41/codec.h	63;"	d
+SAMPLE_RATE_32K	inner_codecs/T41/codec.h	64;"	d
+SAMPLE_RATE_44_1K	inner_codecs/T41/codec.h	65;"	d
+SAMPLE_RATE_48K	inner_codecs/T41/codec.h	66;"	d
+SAMPLE_RATE_8K	inner_codecs/T41/codec.h	60;"	d
+SAMPLE_RATE_96K	inner_codecs/T41/codec.h	67;"	d
+SET_DMA_BURST_SZ	host/T41/dmic/as-dma/as-dma.h	38;"	d
+SLOT_NUM	host/T41/dmic/as-dbus/as-dbus.h	123;"	d
+SND_DMIC_DMA_BUFFER_SIZE	host/T41/dmic/as-dmic/as-dmic.h	38;"	d
+SND_DSP_DMA_BUFFER_SIZE	host/T41/audio_aic.h	81;"	d
+SR_16k	host/T41/dmic/as-dmic/as-dmic.h	82;"	d
+SR_48k	host/T41/dmic/as-dmic/as-dmic.h	83;"	d
+SR_8k	host/T41/dmic/as-dmic/as-dmic.h	81;"	d
+SR_96k	host/T41/dmic/as-dmic/as-dmic.h	84;"	d
+SR_MASK	host/T41/dmic/as-dmic/as-dmic.h	80;"	d
+SR_SFT	host/T41/dmic/as-dmic/as-dmic.h	79;"	d
+STANDBY	ex_codecs/ak7755_codec.h	/^	STANDBY,$/;"	e	enum:ak7755_status
+STEREO	include/codec-common.h	34;"	d
+SUSPEND	ex_codecs/ak7755_codec.h	/^	SUSPEND,$/;"	e	enum:ak7755_status
+SW_LR	host/T41/dmic/as-dmic/as-dmic.h	78;"	d
+SW_LR_SFT	host/T41/dmic/as-dmic/as-dmic.h	77;"	d
+TX_HLIST_HEAD	include/tx-list-common.h	567;"	d
+TX_HLIST_HEAD_INIT	include/tx-list-common.h	566;"	d
+TX_INIT_HLIST_HEAD	include/tx-list-common.h	568;"	d
+TX_INIT_HLIST_NODE	include/tx-list-common.h	/^static inline void TX_INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
+TX_INIT_LIST_HEAD	include/tx-list-common.h	/^static inline void TX_INIT_LIST_HEAD(struct list_head *list)$/;"	f
+TX_LIST_HEAD	include/tx-list-common.h	21;"	d
+TX_LIST_HEAD_INIT	include/tx-list-common.h	19;"	d
+VALID_16BIT	host/T41/audio_aic.h	123;"	d
+VALID_20BIT	host/T41/audio_aic.h	124;"	d
+VALID_24BIT	host/T41/audio_aic.h	125;"	d
+VALID_8BIT	host/T41/audio_aic.h	122;"	d
+_AK7755_CODEC_H	ex_codecs/ak7755_codec.h	2;"	d
+_JZ_AUDIO_COMMON_H_	include/audio_common.h	2;"	d
+_JZ_AUDIO_CONTROL_H_	include/audio_control.h	2;"	d
+_JZ_AUDIO_DEBUG_H_	include/audio_debug.h	2;"	d
+_JZ_AUDIO_DEVICE_H_	include/audio_dsp.h	2;"	d
+__AS_DBUS_H__	host/T41/dmic/as-dbus/as-dbus.h	2;"	d
+__AS_DMA_H__	host/T41/dmic/as-dma/as-dma.h	2;"	d
+__AS_DMIC_H__	host/T41/dmic/as-dmic/as-dmic.h	2;"	d
+__AS_fmtcov__	host/T41/dmic/as-fmtcov/as-fmtcov.h	2;"	d
+__TX_CODEC_COMMON_H__	include/codec-common.h	2;"	d
+__TX_CODEC_H__	inner_codecs/T41/codec.h	7;"	d
+__TX_LIST_COMMON_H__	include/tx-list-common.h	2;"	d
+__aic_select_aclink	host/T41/audio_aic.h	203;"	d
+__aic_select_i2s	host/T41/audio_aic.h	201;"	d
+__i2s_channel_is_busy	host/T41/audio_aic.h	488;"	d
+__i2s_clear_ror	host/T41/audio_aic.h	460;"	d
+__i2s_clear_tur	host/T41/audio_aic.h	456;"	d
+__i2s_disable	host/T41/audio_aic.h	257;"	d
+__i2s_disable_24bitmsb	host/T41/audio_aic.h	231;"	d
+__i2s_disable_byteswap	host/T41/audio_aic.h	366;"	d
+__i2s_disable_etfl	host/T41/audio_aic.h	361;"	d
+__i2s_disable_loopback	host/T41/audio_aic.h	405;"	d
+__i2s_disable_mono2stereo	host/T41/audio_aic.h	338;"	d
+__i2s_disable_monoctr_left	host/T41/audio_aic.h	343;"	d
+__i2s_disable_monoctr_right	host/T41/audio_aic.h	348;"	d
+__i2s_disable_overrun_intr	host/T41/audio_aic.h	385;"	d
+__i2s_disable_pack16	host/T41/audio_aic.h	318;"	d
+__i2s_disable_receive_dma	host/T41/audio_aic.h	333;"	d
+__i2s_disable_receive_intr	host/T41/audio_aic.h	400;"	d
+__i2s_disable_record	host/T41/audio_aic.h	415;"	d
+__i2s_disable_replay	host/T41/audio_aic.h	410;"	d
+__i2s_disable_signadj	host/T41/audio_aic.h	371;"	d
+__i2s_disable_tloop	host/T41/audio_aic.h	356;"	d
+__i2s_disable_transmit_dma	host/T41/audio_aic.h	329;"	d
+__i2s_disable_transmit_intr	host/T41/audio_aic.h	395;"	d
+__i2s_disable_underrun_intr	host/T41/audio_aic.h	390;"	d
+__i2s_enable	host/T41/audio_aic.h	255;"	d
+__i2s_enable_24bitmsb	host/T41/audio_aic.h	229;"	d
+__i2s_enable_byteswap	host/T41/audio_aic.h	364;"	d
+__i2s_enable_etfl	host/T41/audio_aic.h	359;"	d
+__i2s_enable_loopback	host/T41/audio_aic.h	403;"	d
+__i2s_enable_mono2stereo	host/T41/audio_aic.h	336;"	d
+__i2s_enable_monoctr_left	host/T41/audio_aic.h	341;"	d
+__i2s_enable_monoctr_right	host/T41/audio_aic.h	346;"	d
+__i2s_enable_overrun_intr	host/T41/audio_aic.h	383;"	d
+__i2s_enable_pack16	host/T41/audio_aic.h	316;"	d
+__i2s_enable_receive_dma	host/T41/audio_aic.h	331;"	d
+__i2s_enable_receive_intr	host/T41/audio_aic.h	398;"	d
+__i2s_enable_record	host/T41/audio_aic.h	413;"	d
+__i2s_enable_replay	host/T41/audio_aic.h	408;"	d
+__i2s_enable_signadj	host/T41/audio_aic.h	369;"	d
+__i2s_enable_stereo	host/T41/audio_aic.h	351;"	d
+__i2s_enable_tloop	host/T41/audio_aic.h	354;"	d
+__i2s_enable_transmit_dma	host/T41/audio_aic.h	327;"	d
+__i2s_enable_transmit_intr	host/T41/audio_aic.h	393;"	d
+__i2s_enable_underrun_intr	host/T41/audio_aic.h	388;"	d
+__i2s_external_codec	host/T41/audio_aic.h	215;"	d
+__i2s_flush_rfifo	host/T41/audio_aic.h	376;"	d
+__i2s_flush_tfifo	host/T41/audio_aic.h	374;"	d
+__i2s_internal_codec	host/T41/audio_aic.h	211;"	d
+__i2s_is_busy	host/T41/audio_aic.h	482;"	d
+__i2s_master_clkset	host/T41/audio_aic.h	240;"	d
+__i2s_out_channel_select	host/T41/audio_aic.h	320;"	d
+__i2s_play_lastsample	host/T41/audio_aic.h	249;"	d
+__i2s_play_zero	host/T41/audio_aic.h	247;"	d
+__i2s_read_loopdata	host/T41/audio_aic.h	504;"	d
+__i2s_read_rfifo	host/T41/audio_aic.h	496;"	d
+__i2s_read_tfifo_loop	host/T41/audio_aic.h	511;"	d
+__i2s_reset	host/T41/audio_aic.h	252;"	d
+__i2s_rx_is_busy	host/T41/audio_aic.h	484;"	d
+__i2s_select_i2s	host/T41/audio_aic.h	436;"	d
+__i2s_select_msbjustified	host/T41/audio_aic.h	438;"	d
+__i2s_select_share_clk	host/T41/audio_aic.h	220;"	d
+__i2s_select_spilt_clk	host/T41/audio_aic.h	224;"	d
+__i2s_send_lfirst	host/T41/audio_aic.h	428;"	d
+__i2s_send_rfirst	host/T41/audio_aic.h	426;"	d
+__i2s_set_iss_sample_size	host/T41/audio_aic.h	324;"	d
+__i2s_set_oss_sample_size	host/T41/audio_aic.h	322;"	d
+__i2s_set_receive_trigger	host/T41/audio_aic.h	208;"	d
+__i2s_set_transmit_trigger	host/T41/audio_aic.h	206;"	d
+__i2s_slave_clkset	host/T41/audio_aic.h	234;"	d
+__i2s_switch_lr	host/T41/audio_aic.h	431;"	d
+__i2s_test_flush_rfifo	host/T41/audio_aic.h	380;"	d
+__i2s_test_flush_tfifo	host/T41/audio_aic.h	378;"	d
+__i2s_test_rfl	host/T41/audio_aic.h	470;"	d
+__i2s_test_rfs	host/T41/audio_aic.h	466;"	d
+__i2s_test_ror	host/T41/audio_aic.h	462;"	d
+__i2s_test_tfl	host/T41/audio_aic.h	468;"	d
+__i2s_test_tfs	host/T41/audio_aic.h	464;"	d
+__i2s_test_tur	host/T41/audio_aic.h	458;"	d
+__i2s_tx_is_busy	host/T41/audio_aic.h	486;"	d
+__i2s_unswitch_lr	host/T41/audio_aic.h	433;"	d
+__i2s_write_tfifo	host/T41/audio_aic.h	494;"	d
+__i2s_write_tfifo_loop	host/T41/audio_aic.h	513;"	d
+__tx_hlist_del	include/tx-list-common.h	/^static inline void __tx_hlist_del(struct hlist_node *n)$/;"	f
+__tx_list_add	include/tx-list-common.h	/^static inline void __tx_list_add(struct list_head *new,$/;"	f
+__tx_list_cut_position	include/tx-list-common.h	/^static inline void __tx_list_cut_position(struct list_head *list,$/;"	f
+__tx_list_del	include/tx-list-common.h	/^static inline void __tx_list_del(struct list_head * prev, struct list_head * next)$/;"	f
+__tx_list_del_entry	include/tx-list-common.h	/^static inline void __tx_list_del_entry(struct list_head *entry)$/;"	f
+__tx_list_for_each	include/tx-list-common.h	379;"	d
+__tx_list_splice	include/tx-list-common.h	/^static inline void __tx_list_splice(const struct list_head *list,$/;"	f
+active_level	include/codec-common.h	/^	int active_level;$/;"	m	struct:codec_spk_gpio
+addr	host/T41/dmic/as-dma/as-dma.h	/^	unsigned int  addr;$/;"	m	struct:ingenic_dmic_dma
+aec	include/audio_dsp.h	/^	void __user *aec;$/;"	m	struct:audio_input_stream
+aec_deinit	host/T41/audio_aic.c	/^static int aec_deinit(void *pipe)$/;"	f	file:
+aec_dma_tracer	include/audio_common.h	/^	unsigned int aec_dma_tracer;			\/* It's valid in amic and dmic *\/$/;"	m	struct:dsp_data_manage
+aec_init	host/T41/audio_aic.c	/^static int aec_init(void *pipe)$/;"	f	file:
+aec_ioctl	host/T41/audio_aic.c	/^static int aec_ioctl(void *pipe, unsigned int cmd, void *data)$/;"	f	file:
+aec_pipe	host/T41/audio_aic.h	/^	struct audio_pipe *aec_pipe;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::audio_pipe
+aec_sample_offset	include/audio_dsp.h	/^	int aec_sample_offset;					\/*When route is AMIC or DMIC, the value is sample offset in case AEC enable.$/;"	m	struct:audio_route
+aec_size	include/audio_dsp.h	/^	unsigned int aec_size;$/;"	m	struct:audio_input_stream
+aic2codec_signs	host/T41/audio_aic.c	/^struct codec_sign_configure aic2codec_signs[4] = {$/;"	v	typeref:struct:codec_sign_configure
+aic_clock	host/T41/audio_aic.h	/^	struct clk *aic_clock;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::clk
+aic_enable	audio_dsp.c	/^static int aic_enable = 1; \/\/ enable aic$/;"	v	file:
+aic_irq	host/T41/audio_aic.h	/^	int aic_irq;$/;"	m	struct:audio_aic_device
+aic_irq_handler	host/T41/audio_aic.c	/^static irqreturn_t aic_irq_handler(int irq, void *dev_id)$/;"	f	file:
+ak7755_adc_mute	ex_codecs/ak7755_codec.c	/^static void ak7755_adc_mute(int mute)$/;"	f	file:
+ak7755_attrs	ex_codecs/ak7755_codec.c	/^static struct codec_attributes ak7755_attrs = {$/;"	v	typeref:struct:codec_attributes	file:
+ak7755_attrs	ex_codecs/ak7755_codec.c	/^static struct codec_attributes ak7755_attrs;$/;"	v	typeref:struct:codec_attributes	file:
+ak7755_codec_sign	ex_codecs/ak7755_codec.c	/^static struct codec_sign_configure ak7755_codec_sign = {$/;"	v	typeref:struct:codec_sign_configure	file:
+ak7755_dac_mute	ex_codecs/ak7755_codec.c	/^static void ak7755_dac_mute(int mute)$/;"	f	file:
+ak7755_data	ex_codecs/ak7755_codec.c	/^struct excodec_driver_data *ak7755_data;$/;"	v	typeref:struct:excodec_driver_data
+ak7755_disable_playback	ex_codecs/ak7755_codec.c	/^static int ak7755_disable_playback(void)$/;"	f	file:
+ak7755_disable_record	ex_codecs/ak7755_codec.c	/^static int ak7755_disable_record(void)$/;"	f	file:
+ak7755_enable_playback	ex_codecs/ak7755_codec.c	/^static int ak7755_enable_playback(void)$/;"	f	file:
+ak7755_enable_record	ex_codecs/ak7755_codec.c	/^static int ak7755_enable_record(void)$/;"	f	file:
+ak7755_gpio_init	ex_codecs/ak7755_codec.c	/^static int ak7755_gpio_init(struct excodec_driver_data *ak7755_data)$/;"	f	file:
+ak7755_i2c_driver	ex_codecs/ak7755_codec.c	/^static struct i2c_driver ak7755_i2c_driver = {$/;"	v	typeref:struct:i2c_driver	file:
+ak7755_i2c_id	ex_codecs/ak7755_codec.c	/^static const struct i2c_device_id ak7755_i2c_id[] = {$/;"	v	typeref:struct:i2c_device_id	file:
+ak7755_i2c_probe	ex_codecs/ak7755_codec.c	/^static int ak7755_i2c_probe(struct i2c_client *i2c,const struct i2c_device_id *id)$/;"	f	file:
+ak7755_i2c_read	ex_codecs/ak7755_codec.c	/^static unsigned int ak7755_i2c_read(u8 *reg, int reglen, u8* data, int datalen)$/;"	f	file:
+ak7755_i2c_remove	ex_codecs/ak7755_codec.c	/^static int ak7755_i2c_remove(struct i2c_client *client)$/;"	f	file:
+ak7755_playback	ex_codecs/ak7755_codec.c	/^static struct codec_endpoint ak7755_playback = {$/;"	v	typeref:struct:codec_endpoint	file:
+ak7755_playback_set_again	ex_codecs/ak7755_codec.c	/^static int ak7755_playback_set_again(int channel ,int again)$/;"	f	file:
+ak7755_playback_set_datatype	ex_codecs/ak7755_codec.c	/^static int ak7755_playback_set_datatype(struct audio_data_type *type)$/;"	f	file:
+ak7755_playback_set_dgain	ex_codecs/ak7755_codec.c	/^static int ak7755_playback_set_dgain(int channel, int dgain)$/;"	f	file:
+ak7755_playback_set_endpoint	ex_codecs/ak7755_codec.c	/^static int ak7755_playback_set_endpoint(int enable)$/;"	f	file:
+ak7755_ram_type	ex_codecs/ak7755_codec.h	/^enum ak7755_ram_type {$/;"	g
+ak7755_reads	ex_codecs/ak7755_codec.c	/^static int ak7755_reads(u8* tx, size_t wlen, u8 *rx, size_t rlen)$/;"	f	file:
+ak7755_record	ex_codecs/ak7755_codec.c	/^static struct codec_endpoint ak7755_record = {$/;"	v	typeref:struct:codec_endpoint	file:
+ak7755_record_set_again	ex_codecs/ak7755_codec.c	/^static int ak7755_record_set_again(int channel,int again)$/;"	f	file:
+ak7755_record_set_datatype	ex_codecs/ak7755_codec.c	/^static int ak7755_record_set_datatype(struct audio_data_type *type)$/;"	f	file:
+ak7755_record_set_dgain	ex_codecs/ak7755_codec.c	/^static int ak7755_record_set_dgain(int channel,int dgain)$/;"	f	file:
+ak7755_record_set_endpoint	ex_codecs/ak7755_codec.c	/^static int ak7755_record_set_endpoint(int enable)$/;"	f	file:
+ak7755_reg_read	ex_codecs/ak7755_codec.c	/^static unsigned int ak7755_reg_read(unsigned int reg)$/;"	f	file:
+ak7755_reg_set	ex_codecs/ak7755_codec.c	/^static int ak7755_reg_set(unsigned char reg, int start, int end, int val)$/;"	f	file:
+ak7755_reg_update_bits	ex_codecs/ak7755_codec.c	/^static int ak7755_reg_update_bits(unsigned char reg, unsigned int mask, unsigned int value)$/;"	f	file:
+ak7755_reg_write	ex_codecs/ak7755_codec.c	/^static int ak7755_reg_write(unsigned int reg, unsigned long value)$/;"	f	file:
+ak7755_set_power	ex_codecs/ak7755_codec.c	/^static int ak7755_set_power(int enable)$/;"	f	file:
+ak7755_set_sample_rate	ex_codecs/ak7755_codec.c	/^static int ak7755_set_sample_rate(unsigned int rate)$/;"	f	file:
+ak7755_set_sign	ex_codecs/ak7755_codec.c	/^static int ak7755_set_sign(struct codec_sign_configure *sign)$/;"	f	file:
+ak7755_set_status	ex_codecs/ak7755_codec.c	/^static int ak7755_set_status(enum ak7755_status status)$/;"	f	file:
+ak7755_status	ex_codecs/ak7755_codec.h	/^enum ak7755_status {$/;"	g
+ak7755_writes	ex_codecs/ak7755_codec.c	/^static int ak7755_writes(const u8* tx, size_t wlen)$/;"	f	file:
+alc_en_l	host/T41/audio_aic.h	/^	int alc_en_l;$/;"	m	struct:codec_info
+alc_en_r	host/T41/audio_aic.h	/^	int alc_en_r;$/;"	m	struct:codec_info
+alc_gain	include/audio_common.h	/^struct alc_gain$/;"	s
+amic_aec	include/audio_dsp.h	/^	bool amic_aec;$/;"	m	struct:audio_dsp_device
+as_fmtcov	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^static struct ingenic_as_fmtcov *as_fmtcov;$/;"	v	typeref:struct:ingenic_as_fmtcov	file:
+attr	inner_codecs/T41/codec.h	/^    struct codec_attributes *attr;$/;"	m	struct:codec_device	typeref:struct:codec_device::codec_attributes
+attrs	ex_codecs/ak7755_codec.c	/^	struct codec_attributes *attrs;$/;"	m	struct:excodec_driver_data	typeref:struct:excodec_driver_data::codec_attributes	file:
+attrs	ex_codecs/es8374_codec.c	/^	struct codec_attributes *attrs;$/;"	m	struct:excodec_driver_data	typeref:struct:excodec_driver_data::codec_attributes	file:
+audio_aic_debug_fops	host/T41/audio_aic.c	/^static struct file_operations audio_aic_debug_fops = {$/;"	v	typeref:struct:file_operations	file:
+audio_aic_device	host/T41/audio_aic.h	/^struct audio_aic_device {$/;"	s
+audio_aic_driver	host/T41/audio_aic.c	/^struct platform_driver audio_aic_driver = {$/;"	v	typeref:struct:platform_driver
+audio_aic_probe	host/T41/audio_aic.c	/^static int audio_aic_probe(struct platform_device *pdev)$/;"	f	file:
+audio_aic_remove	host/T41/audio_aic.c	/^static int __exit audio_aic_remove(struct platform_device *pdev)$/;"	f	file:
+audio_aic_show	host/T41/audio_aic.c	/^static int audio_aic_show(struct seq_file *m, void *v)$/;"	f	file:
+audio_clk	host/T41/dmic/as-dma/as-dma.h	/^	struct clk *audio_clk;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::clk
+audio_codec_driver	inner_codecs/T41/codec.c	/^struct platform_driver audio_codec_driver = {$/;"	v	typeref:struct:platform_driver
+audio_control	include/audio_control.h	/^struct audio_control {$/;"	s
+audio_data_type	include/codec-common.h	/^struct audio_data_type {$/;"	s
+audio_devices	boards/t41_platform.c	/^struct platform_device *audio_devices[] = {$/;"	v	typeref:struct:platform_device
+audio_dsp_device	include/audio_dsp.h	/^struct audio_dsp_device {$/;"	s
+audio_dsp_driver	audio_dsp.c	/^static struct platform_driver audio_dsp_driver = {$/;"	v	typeref:struct:platform_driver	file:
+audio_dsp_exit	audio_dsp.c	/^module_exit(audio_dsp_exit);$/;"	v
+audio_dsp_exit	audio_dsp.c	/^static void __exit audio_dsp_exit(void)$/;"	f	file:
+audio_dsp_fops	audio_dsp.c	/^const struct file_operations audio_dsp_fops = {$/;"	v	typeref:struct:file_operations
+audio_dsp_init	audio_dsp.c	/^module_init(audio_dsp_init);$/;"	v
+audio_dsp_init	audio_dsp.c	/^static int __init audio_dsp_init(void)$/;"	f	file:
+audio_dsp_platform_device	boards/t41_platform.c	/^struct platform_device audio_dsp_platform_device = {$/;"	v	typeref:struct:platform_device
+audio_dsp_pm_ops	audio_dsp.c	/^static struct dev_pm_ops audio_dsp_pm_ops = {$/;"	v	typeref:struct:dev_pm_ops	file:
+audio_dsp_probe	audio_dsp.c	/^static int audio_dsp_probe(struct platform_device *pdev)$/;"	f	file:
+audio_dsp_remove	audio_dsp.c	/^static int __exit audio_dsp_remove(struct platform_device *pdev)$/;"	f	file:
+audio_dsp_resume	audio_dsp.c	/^static int audio_dsp_resume(struct device *dev)$/;"	f	file:
+audio_dsp_suspend	audio_dsp.c	/^static int audio_dsp_suspend(struct device *dev)$/;"	f	file:
+audio_err_print	include/audio_debug.h	20;"	d
+audio_error_value	include/audio_common.h	/^enum audio_error_value {$/;"	g
+audio_info_print	include/audio_debug.h	18;"	d
+audio_input_stream	include/audio_dsp.h	/^struct audio_input_stream {$/;"	s
+audio_inter_cmd	include/audio_common.h	/^enum audio_inter_cmd {$/;"	g
+audio_ouput_stream	include/audio_dsp.h	/^struct audio_ouput_stream {$/;"	s
+audio_parameter	include/audio_dsp.h	/^struct audio_parameter {$/;"	s
+audio_pipe	include/audio_common.h	/^struct audio_pipe {$/;"	s
+audio_release_aic_device	boards/t41_platform.c	/^static void audio_release_aic_device(struct device *dev)$/;"	f	file:
+audio_release_codec_device	boards/t41_platform.c	/^static void audio_release_codec_device(struct device *dev)$/;"	f	file:
+audio_release_device	boards/t41_platform.c	/^static void audio_release_device(struct device *dev)$/;"	f	file:
+audio_release_dmic_dbus_device	boards/t41_platform.c	/^static void audio_release_dmic_dbus_device(struct device *dev)$/;"	f	file:
+audio_release_dmic_device	boards/t41_platform.c	/^static void audio_release_dmic_device(struct device *dev)$/;"	f	file:
+audio_release_dmic_dma_device	boards/t41_platform.c	/^static void audio_release_dmic_dma_device(struct device *dev)$/;"	f	file:
+audio_release_dmic_fmtcov_device	boards/t41_platform.c	/^static void audio_release_dmic_fmtcov_device(struct device *dev)$/;"	f	file:
+audio_route	include/audio_dsp.h	/^struct audio_route {$/;"	s
+audio_set_gpio_function	include/codec-common.h	/^static inline int audio_set_gpio_function(int port, int func, unsigned int gpio)$/;"	f
+audio_state	include/audio_common.h	/^enum audio_state {$/;"	g
+audio_warn_print	include/audio_debug.h	19;"	d
+auido_route_index	include/audio_common.h	/^enum auido_route_index {$/;"	g
+bai	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t bai:1;		\/* Target Address Increment *\/$/;"	m	struct:ingenic_dmic_dma_desc
+base_addr	host/T41/dmic/as-dbus/as-dbus.h	/^	void * __iomem base_addr;$/;"	m	struct:ingenic_dmic_dbus
+buffersize	include/audio_common.h	/^	unsigned int		buffersize;			\/* current using the total size of fragments data *\/$/;"	m	struct:dsp_data_manage
+ce_rclock	host/T41/audio_aic.h	/^	struct clk *ce_rclock;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::clk
+ce_tclock	host/T41/audio_aic.h	/^	struct clk *ce_tclock;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::clk
+channel	host/T41/audio_aic.h	/^	int channel;$/;"	m	struct:codec_info
+channel	include/audio_common.h	/^	unsigned int channel;   \/\/1-left 2-right$/;"	m	struct:volume
+channel	include/audio_common.h	/^	unsigned int channel;$/;"	m	struct:alc_gain
+channel	include/audio_dsp.h	/^	unsigned int channel;$/;"	m	struct:audio_route
+channel	include/audio_dsp.h	/^	unsigned short channel;$/;"	m	struct:audio_parameter
+clk	host/T41/dmic/as-dmic/as-dmic.h	/^	struct clk *clk;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::clk
+clk_gate	host/T41/dmic/as-dmic/as-dmic.h	/^	struct clk *clk_gate;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::clk
+codec_aec_info	host/T41/audio_aic.h	/^	struct codec_info *codec_aec_info;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_info
+codec_analog_mode	include/codec-common.h	/^enum codec_analog_mode {$/;"	g
+codec_attributes	include/codec-common.h	/^struct codec_attributes {$/;"	s
+codec_data_mode	include/codec-common.h	/^enum codec_data_mode {$/;"	g
+codec_deinit	inner_codecs/T41/codec.c	/^int codec_deinit(void)$/;"	f
+codec_device	inner_codecs/T41/codec.h	/^struct codec_device {$/;"	s
+codec_dir	host/T41/audio_aic.h	/^	struct proc_dir_entry *codec_dir;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::proc_dir_entry
+codec_disable_playback	inner_codecs/T41/codec.c	/^static int codec_disable_playback(void)$/;"	f	file:
+codec_disable_record	inner_codecs/T41/codec.c	/^static int codec_disable_record(void)$/;"	f	file:
+codec_enable_playback	inner_codecs/T41/codec.c	/^static int codec_enable_playback(void)$/;"	f	file:
+codec_enable_record	inner_codecs/T41/codec.c	/^static int codec_enable_record(void)$/;"	f	file:
+codec_endpoint	include/codec-common.h	/^struct codec_endpoint {$/;"	s
+codec_file	host/T41/audio_aic.h	/^	struct proc_dir_entry *codec_file;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::proc_dir_entry
+codec_info	host/T41/audio_aic.h	/^struct codec_info {$/;"	s
+codec_init	inner_codecs/T41/codec.c	/^int codec_init(void)$/;"	f
+codec_mic_info	host/T41/audio_aic.h	/^	struct codec_info *codec_mic_info;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_info
+codec_mode	include/codec-common.h	/^enum codec_mode {$/;"	g
+codec_pins	include/codec-common.h	/^enum codec_pins {$/;"	g
+codec_playback	inner_codecs/T41/codec.c	/^static struct codec_endpoint codec_playback = {$/;"	v	typeref:struct:codec_endpoint	file:
+codec_playback_set_again	inner_codecs/T41/codec.c	/^static int codec_playback_set_again(int channel ,int gain)$/;"	f	file:
+codec_playback_set_datatype	inner_codecs/T41/codec.c	/^static int codec_playback_set_datatype(struct audio_data_type *type)$/;"	f	file:
+codec_playback_set_dgain	inner_codecs/T41/codec.c	/^static int codec_playback_set_dgain(int channel, int gain)$/;"	f	file:
+codec_playback_set_endpoint	inner_codecs/T41/codec.c	/^static int codec_playback_set_endpoint(int enable)$/;"	f	file:
+codec_playback_set_mute	inner_codecs/T41/codec.c	/^static int codec_playback_set_mute(int channel)$/;"	f	file:
+codec_probe	inner_codecs/T41/codec.c	/^static int codec_probe(struct platform_device *pdev)$/;"	f	file:
+codec_record	inner_codecs/T41/codec.c	/^static struct codec_endpoint codec_record = {$/;"	v	typeref:struct:codec_endpoint	file:
+codec_record_set_again	inner_codecs/T41/codec.c	/^static int codec_record_set_again(int channel, int gain)$/;"	f	file:
+codec_record_set_alc_threshold	inner_codecs/T41/codec.c	/^static int codec_record_set_alc_threshold(int channel,int min_gain,int max_gain)$/;"	f	file:
+codec_record_set_datatype	inner_codecs/T41/codec.c	/^static int codec_record_set_datatype(struct audio_data_type *type)$/;"	f	file:
+codec_record_set_dgain	inner_codecs/T41/codec.c	/^static int codec_record_set_dgain(int channel, int gain)$/;"	f	file:
+codec_record_set_endpoint	inner_codecs/T41/codec.c	/^static int codec_record_set_endpoint(int enable)$/;"	f	file:
+codec_record_set_hpf_enable	inner_codecs/T41/codec.c	/^static int codec_record_set_hpf_enable(int en)$/;"	f	file:
+codec_record_set_mute	inner_codecs/T41/codec.c	/^static int codec_record_set_mute(int channel)$/;"	f	file:
+codec_reg_read	inner_codecs/T41/codec.c	/^static inline unsigned int codec_reg_read(struct codec_device * ope, int offset)$/;"	f	file:
+codec_reg_set	inner_codecs/T41/codec.c	/^int codec_reg_set(unsigned int reg, int start, int end, int val)$/;"	f
+codec_reg_write	inner_codecs/T41/codec.c	/^static inline void codec_reg_write(struct codec_device * ope, int offset, int data)$/;"	f	file:
+codec_remove	inner_codecs/T41/codec.c	/^static int __exit codec_remove(struct platform_device *pdev)$/;"	f	file:
+codec_sequence_mode	include/codec-common.h	/^enum codec_sequence_mode {$/;"	g
+codec_set_power	inner_codecs/T41/codec.c	/^static int codec_set_power(int enable)$/;"	f	file:
+codec_set_sample_rate	inner_codecs/T41/codec.c	/^static int codec_set_sample_rate(unsigned int rate)$/;"	f	file:
+codec_set_sign	inner_codecs/T41/codec.c	/^static int codec_set_sign(struct codec_sign_configure *sign)$/;"	f	file:
+codec_sign_configure	include/codec-common.h	/^struct codec_sign_configure {$/;"	s
+codec_spk_gpio	include/codec-common.h	/^struct codec_spk_gpio {$/;"	s
+codec_spk_info	host/T41/audio_aic.h	/^	struct codec_info *codec_spk_info;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_info
+codec_sync_polarity	include/codec-common.h	/^enum codec_sync_polarity {$/;"	g
+codec_type	include/codec-common.h	/^enum codec_type {$/;"	g
+data	include/audio_dsp.h	/^	void __user * data;$/;"	m	struct:audio_ouput_stream
+data	include/audio_dsp.h	/^	void __user *data;$/;"	m	struct:audio_input_stream
+data	include/codec-common.h	/^	enum codec_data_mode data;$/;"	m	struct:codec_sign_configure	typeref:enum:codec_sign_configure::codec_data_mode
+data_type	host/T41/audio_aic.h	/^	struct audio_data_type data_type;$/;"	m	struct:codec_info	typeref:struct:codec_info::audio_data_type
+dba	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t dba;		\/* Bus Address (memory address)*\/$/;"	m	struct:ingenic_dmic_dma_desc
+debug_ops	include/codec-common.h	/^	struct file_operations *debug_ops;$/;"	m	struct:codec_attributes	typeref:struct:codec_attributes::file_operations
+deinit	include/audio_common.h	/^	int (*deinit)(void *pipe);$/;"	m	struct:audio_pipe
+deinit_dma_config	host/T41/dmic/as-dmic/as-dmic.c	/^static void deinit_dma_config(struct ingenic_dmic *dmic, struct device *dev)$/;"	f	file:
+desc_cnts	host/T41/dmic/as-dma/as-dma.h	/^	uint8_t desc_cnts;$/;"	m	struct:ingenic_dmic_dma
+desc_pool	host/T41/dmic/as-dma/as-dma.h	/^	struct dma_pool *desc_pool;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::dma_pool
+descs	host/T41/dmic/as-dma/as-dma.h	/^	struct ingenic_dmic_dma_desc *descs[64];$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::ingenic_dmic_dma_desc
+descs_phy	host/T41/dmic/as-dma/as-dma.h	/^	dma_addr_t descs_phy[64];$/;"	m	struct:ingenic_dmic_dma
+detect	include/codec-common.h	/^	int (*detect)(struct codec_attributes *attrs);$/;"	m	struct:codec_attributes
+dev	host/T41/audio_aic.h	/^	struct device *dev;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::device
+dev	host/T41/dmic/as-dbus/as-dbus.h	/^	struct device *dev;$/;"	m	struct:ingenic_dmic_dbus	typeref:struct:ingenic_dmic_dbus::device
+dev	host/T41/dmic/as-dma/as-dma.h	/^	struct device *dev;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::device
+dev	host/T41/dmic/as-dmic/as-dmic.h	/^	struct device   *dev;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::device
+dev	host/T41/dmic/as-fmtcov/as-fmtcov.h	/^	struct device *dev;$/;"	m	struct:ingenic_as_fmtcov	typeref:struct:ingenic_as_fmtcov::device
+dev	inner_codecs/T41/codec.h	/^    struct device *dev;$/;"	m	struct:codec_device	typeref:struct:codec_device::device
+dev_id	host/T41/dmic/as-dbus/as-dbus.h	/^	u8 dev_id;			\/*port id*\/$/;"	m	struct:ingenic_dbus_port
+dev_priv	include/codec-common.h	/^	void *dev_priv;		\/* save device message *\/$/;"	m	struct:codec_attributes
+disable_route_stream	audio_dsp.c	/^static int disable_route_stream(struct audio_route *route)$/;"	f	file:
+dma_base	host/T41/dmic/as-dma/as-dma.h	/^	void __iomem *dma_base;$/;"	m	struct:ingenic_dmic_dma
+dma_chan	include/audio_common.h	/^	struct dma_chan     *dma_chan;$/;"	m	struct:audio_pipe	typeref:struct:audio_pipe::dma_chan
+dma_chan_filter	host/T41/audio_aic.c	/^static bool dma_chan_filter(struct dma_chan *chan, void *filter_param)$/;"	f	file:
+dma_config	include/audio_common.h	/^	struct dma_slave_config dma_config;     \/* define by device *\/$/;"	m	struct:audio_pipe	typeref:struct:audio_pipe::dma_slave_config
+dma_fth_quirk	host/T41/dmic/as-dma/as-dma.h	/^	bool dma_fth_quirk;$/;"	m	struct:ingenic_dmic_dma
+dma_regmap	host/T41/dmic/as-dma/as-dma.h	/^	struct regmap *dma_regmap;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::regmap
+dma_res	host/T41/dmic/as-dma/as-dma.h	/^	struct resource *dma_res;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::resource
+dma_tracer	include/audio_common.h	/^	unsigned int dma_tracer;				\/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+dma_type	include/audio_common.h	/^	int dma_type;$/;"	m	struct:audio_pipe
+dmic_aec	include/audio_dsp.h	/^	bool dmic_aec;$/;"	m	struct:audio_dsp_device
+dmic_as_device	boards/t41_platform.c	/^struct platform_device *dmic_as_device[] = {$/;"	v	typeref:struct:platform_device
+dmic_dbus_device	boards/t41_platform.c	/^struct platform_device dmic_dbus_device = {$/;"	v	typeref:struct:platform_device
+dmic_dbus_resources	boards/t41_platform.c	/^static struct resource dmic_dbus_resources[] = {$/;"	v	typeref:struct:resource	file:
+dmic_deinit	host/T41/dmic/as-dmic/as-dmic.c	/^static int dmic_deinit(void *route)$/;"	f	file:
+dmic_device_info	host/T41/dmic/as-dmic/as-dmic.h	/^struct dmic_device_info {$/;"	s
+dmic_dma_device	boards/t41_platform.c	/^struct platform_device dmic_dma_device = {$/;"	v	typeref:struct:platform_device
+dmic_dma_resources	boards/t41_platform.c	/^static struct resource dmic_dma_resources[] = {$/;"	v	typeref:struct:resource	file:
+dmic_enable	audio_dsp.c	/^static int dmic_enable = 0; \/\/ disable dmic$/;"	v	file:
+dmic_fmtcov_device	boards/t41_platform.c	/^struct platform_device dmic_fmtcov_device = {$/;"	v	typeref:struct:platform_device
+dmic_fmtcov_resources	boards/t41_platform.c	/^static struct resource dmic_fmtcov_resources[] = {$/;"	v	typeref:struct:resource	file:
+dmic_gpio	host/T41/dmic/as-dmic/as-dmic.c	/^static int dmic_gpio = 1;  \/\/GPIO_A:0 GPIO_B:1 GPIO_C:2 GPIO_D:3$/;"	v	file:
+dmic_gpio_func	host/T41/dmic/as-dmic/as-dmic.h	/^	struct jz_gpio_func_def dmic_gpio_func;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::jz_gpio_func_def
+dmic_init	host/T41/dmic/as-dmic/as-dmic.c	/^static int dmic_init(void *route)$/;"	f	file:
+dmic_ioctl	host/T41/dmic/as-dmic/as-dmic.c	/^static int dmic_ioctl(void *pipe, unsigned int cmd, void *data)$/;"	f	file:
+dmic_rate	host/T41/dmic/as-dmic/as-dmic.h	/^enum dmic_rate {$/;"	g
+done_completion	include/audio_dsp.h	/^	struct completion done_completion;$/;"	m	struct:audio_route	typeref:struct:audio_route::completion
+dsp_config_aec_route_param	audio_dsp.c	/^static long dsp_config_aec_route_param(struct audio_dsp_device *dsp, unsigned int cmd, struct audio_parameter *param)$/;"	f	file:
+dsp_config_route_param	audio_dsp.c	/^static long dsp_config_route_param(struct audio_dsp_device *dsp, enum auido_route_index index,$/;"	f	file:
+dsp_create_dma_chan	audio_dsp.c	/^static long dsp_create_dma_chan(struct audio_route *route)$/;"	f	file:
+dsp_data_fragment	include/audio_common.h	/^struct dsp_data_fragment {$/;"	s
+dsp_data_manage	include/audio_common.h	/^struct dsp_data_manage {$/;"	s
+dsp_destroy_dma_chan	audio_dsp.c	/^static int dsp_destroy_dma_chan(struct audio_route *route)$/;"	f	file:
+dsp_disable_amic_aec	audio_dsp.c	/^static long dsp_disable_amic_aec(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_disable_amic_ai_and_aec	audio_dsp.c	/^static long dsp_disable_amic_ai_and_aec(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_disable_amic_ao	audio_dsp.c	/^static long dsp_disable_amic_ao(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_disable_dmic_aec	audio_dsp.c	/^static long dsp_disable_dmic_aec(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_disable_dmic_ai	audio_dsp.c	/^static long dsp_disable_dmic_ai(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_enable_amic_aec	audio_dsp.c	/^static long dsp_enable_amic_aec(struct audio_dsp_device *dsp, unsigned long arg)$/;"	f	file:
+dsp_enable_amic_ai_and_aec	audio_dsp.c	/^static long dsp_enable_amic_ai_and_aec(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_enable_amic_ao	audio_dsp.c	/^static long dsp_enable_amic_ao(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_enable_dmic_aec	audio_dsp.c	/^static long dsp_enable_dmic_aec(struct audio_dsp_device *dsp, unsigned long arg)$/;"	f	file:
+dsp_enable_dmic_ai	audio_dsp.c	/^static long dsp_enable_dmic_ai(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_get_mic_stream	audio_dsp.c	/^static long dsp_get_mic_stream(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned long arg)$/;"	f	file:
+dsp_ioctl	audio_dsp.c	/^static long dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)$/;"	f	file:
+dsp_ioctl_clear_ao_stream	audio_dsp.c	/^static inline long dsp_ioctl_clear_ao_stream(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_ioctl_sync_ao_stream	audio_dsp.c	/^static inline long dsp_ioctl_sync_ao_stream(struct audio_dsp_device *dsp)$/;"	f	file:
+dsp_open	audio_dsp.c	/^static int dsp_open(struct inode *inode, struct file *file)$/;"	f	file:
+dsp_read	audio_dsp.c	/^static ssize_t dsp_read(struct file *file, char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+dsp_release	audio_dsp.c	/^static int dsp_release(struct inode *inode, struct file *file)$/;"	f	file:
+dsp_route_ioctl	audio_dsp.c	/^static long dsp_route_ioctl(struct audio_dsp_device *dsp, enum auido_route_index index,$/;"	f	file:
+dsp_set_spk_stream	audio_dsp.c	/^static long dsp_set_spk_stream(struct audio_dsp_device *dsp, unsigned long arg)$/;"	f	file:
+dsp_workqueue_handle	audio_dsp.c	/^static void dsp_workqueue_handle(struct work_struct *work)$/;"	f	file:
+dsp_write	audio_dsp.c	/^static ssize_t dsp_write(struct file *file, const char __user * buffer, size_t count, loff_t * ppos)$/;"	f	file:
+dtc	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t dtc:24;	\/*Transfer Counter(burst count)*\/$/;"	m	struct:ingenic_dmic_dma_desc
+dump_aic_regs	host/T41/audio_aic.c	/^static void dump_aic_regs(void)$/;"	f	file:
+dump_ak7755_codec_regs	ex_codecs/ak7755_codec.c	/^static int dump_ak7755_codec_regs(void)$/;"	f	file:
+dump_audio_aic_open	host/T41/audio_aic.c	/^static int dump_audio_aic_open(struct inode *inode, struct file *file)$/;"	f	file:
+dump_codec_regs	inner_codecs/T41/codec.c	/^int dump_codec_regs(void)$/;"	f
+dump_inner_codec_open	inner_codecs/T41/codec.c	/^static int dump_inner_codec_open(struct inode *inode, struct file *file)$/;"	f	file:
+es8374_attrs	ex_codecs/es8374_codec.c	/^static struct codec_attributes es8374_attrs = {$/;"	v	typeref:struct:codec_attributes	file:
+es8374_attrs	ex_codecs/es8374_codec.c	/^static struct codec_attributes es8374_attrs;$/;"	v	typeref:struct:codec_attributes	file:
+es8374_codec_sign	ex_codecs/es8374_codec.c	/^static struct codec_sign_configure es8374_codec_sign = {$/;"	v	typeref:struct:codec_sign_configure	file:
+es8374_dac_mute	ex_codecs/es8374_codec.c	/^static void es8374_dac_mute(int mute)$/;"	f	file:
+es8374_data	ex_codecs/es8374_codec.c	/^struct excodec_driver_data *es8374_data;$/;"	v	typeref:struct:excodec_driver_data
+es8374_detect	ex_codecs/es8374_codec.c	/^static int es8374_detect(struct codec_attributes *attrs)$/;"	f	file:
+es8374_disable_playback	ex_codecs/es8374_codec.c	/^static int es8374_disable_playback(void)$/;"	f	file:
+es8374_disable_record	ex_codecs/es8374_codec.c	/^static int es8374_disable_record(void)$/;"	f	file:
+es8374_enable_playback	ex_codecs/es8374_codec.c	/^static int es8374_enable_playback(void)$/;"	f	file:
+es8374_enable_record	ex_codecs/es8374_codec.c	/^static int es8374_enable_record(void)$/;"	f	file:
+es8374_gpio_init	ex_codecs/es8374_codec.c	/^static int es8374_gpio_init(struct excodec_driver_data *es8374_data)$/;"	f	file:
+es8374_i2c_driver	ex_codecs/es8374_codec.c	/^static struct i2c_driver es8374_i2c_driver = {$/;"	v	typeref:struct:i2c_driver	file:
+es8374_i2c_id	ex_codecs/es8374_codec.c	/^static const struct i2c_device_id es8374_i2c_id[] = {$/;"	v	typeref:struct:i2c_device_id	file:
+es8374_i2c_probe	ex_codecs/es8374_codec.c	/^static int es8374_i2c_probe(struct i2c_client *i2c,const struct i2c_device_id *id)$/;"	f	file:
+es8374_i2c_read	ex_codecs/es8374_codec.c	/^static unsigned int es8374_i2c_read(u8 *reg,int reglen,u8 *data,int datalen)$/;"	f	file:
+es8374_i2c_remove	ex_codecs/es8374_codec.c	/^static int es8374_i2c_remove(struct i2c_client *client)$/;"	f	file:
+es8374_i2c_write	ex_codecs/es8374_codec.c	/^static int es8374_i2c_write(unsigned int reg,unsigned int value)$/;"	f	file:
+es8374_init	ex_codecs/es8374_codec.c	/^static int es8374_init(void)$/;"	f	file:
+es8374_playback	ex_codecs/es8374_codec.c	/^static struct codec_endpoint es8374_playback = {$/;"	v	typeref:struct:codec_endpoint	file:
+es8374_playback_set_again	ex_codecs/es8374_codec.c	/^static int es8374_playback_set_again(int channel, int again)$/;"	f	file:
+es8374_playback_set_datatype	ex_codecs/es8374_codec.c	/^static int es8374_playback_set_datatype(struct audio_data_type *type)$/;"	f	file:
+es8374_playback_set_dgain	ex_codecs/es8374_codec.c	/^static int es8374_playback_set_dgain(int channel, int dgain)$/;"	f	file:
+es8374_playback_set_endpoint	ex_codecs/es8374_codec.c	/^static int es8374_playback_set_endpoint(int enable)$/;"	f	file:
+es8374_record	ex_codecs/es8374_codec.c	/^static struct codec_endpoint es8374_record = {$/;"	v	typeref:struct:codec_endpoint	file:
+es8374_record_set_again	ex_codecs/es8374_codec.c	/^static int es8374_record_set_again(int channel, int again)$/;"	f	file:
+es8374_record_set_datatype	ex_codecs/es8374_codec.c	/^static int es8374_record_set_datatype(struct audio_data_type *type)$/;"	f	file:
+es8374_record_set_dgain	ex_codecs/es8374_codec.c	/^static int es8374_record_set_dgain(int channel, int dgain)$/;"	f	file:
+es8374_record_set_endpoint	ex_codecs/es8374_codec.c	/^static int es8374_record_set_endpoint(int enable)$/;"	f	file:
+es8374_reg_read	ex_codecs/es8374_codec.c	/^static int es8374_reg_read(unsigned int reg)$/;"	f	file:
+es8374_reg_set	ex_codecs/es8374_codec.c	/^static int es8374_reg_set(unsigned char reg, int start, int end, int val)$/;"	f	file:
+es8374_reg_write	ex_codecs/es8374_codec.c	/^static int es8374_reg_write(unsigned int reg,unsigned int value)$/;"	f	file:
+es8374_set_power	ex_codecs/es8374_codec.c	/^static int es8374_set_power(int enable)$/;"	f	file:
+es8374_set_sample_rate	ex_codecs/es8374_codec.c	/^static int es8374_set_sample_rate(unsigned int rate)$/;"	f	file:
+es8374_set_sign	ex_codecs/es8374_codec.c	/^static int es8374_set_sign(struct codec_sign_configure *sign)$/;"	f	file:
+excodec	host/T41/audio_aic.h	/^	struct codec_attributes *excodec;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_attributes
+excodec	include/audio_control.h	/^	struct codec_attributes *excodec;$/;"	m	struct:audio_control	typeref:struct:audio_control::codec_attributes
+excodec_addr	host/T41/audio_aic.c	/^static int excodec_addr = DEFAULT_EXCODEC_ADDR;$/;"	v	file:
+excodec_driver_data	ex_codecs/ak7755_codec.c	/^struct excodec_driver_data {$/;"	s	file:
+excodec_driver_data	ex_codecs/es8374_codec.c	/^struct excodec_driver_data {$/;"	s	file:
+excodec_name	host/T41/audio_aic.c	/^static char excodec_name[I2C_NAME_SIZE];$/;"	v	file:
+exit_ak7755	ex_codecs/ak7755_codec.c	/^module_exit(exit_ak7755);$/;"	v
+exit_ak7755	ex_codecs/ak7755_codec.c	/^static void __exit exit_ak7755(void)$/;"	f	file:
+exit_es8374	ex_codecs/es8374_codec.c	/^module_exit(exit_es8374);$/;"	v
+exit_es8374	ex_codecs/es8374_codec.c	/^static void __exit exit_es8374(void)$/;"	f	file:
+expires	include/audio_dsp.h	/^	ktime_t expires;$/;"	m	struct:audio_dsp_device
+extern_codec_register	host/T41/audio_aic.c	/^static int extern_codec_register(struct audio_aic_device *aic, int i2c_adapter, char *name, int i2c_addr)$/;"	f	file:
+extern_codec_release	host/T41/audio_aic.c	/^static int extern_codec_release(struct audio_aic_device *aic)$/;"	f	file:
+fifo_base	host/T41/dmic/as-dma/as-dma.h	/^	void __iomem *fifo_base;$/;"	m	struct:ingenic_dmic_dma
+fifo_depth	host/T41/dmic/as-dma/as-dma.h	/^	u32 fifo_depth;$/;"	m	struct:ingenic_dmic_dma
+fifo_regmap	host/T41/dmic/as-dma/as-dma.h	/^	struct regmap *fifo_regmap;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::regmap
+fifo_res	host/T41/dmic/as-dma/as-dma.h	/^	struct resource *fifo_res;$/;"	m	struct:ingenic_dmic_dma	typeref:struct:ingenic_dmic_dma::resource
+fifo_total_depth	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t fifo_total_depth;$/;"	m	struct:ingenic_dmic_dma
+format	host/T41/audio_aic.h	/^	int format;$/;"	m	struct:codec_info
+format	include/audio_dsp.h	/^	unsigned int format;$/;"	m	struct:audio_route
+format	include/audio_dsp.h	/^	unsigned short format;$/;"	m	struct:audio_parameter
+format_to_bytes	audio_dsp.c	/^static inline unsigned int format_to_bytes(unsigned int format)$/;"	f	file:
+fragment_cnt	include/audio_common.h	/^	unsigned int 		fragment_cnt;$/;"	m	struct:dsp_data_manage
+fragment_size	include/audio_common.h	/^	unsigned int 		fragment_size;$/;"	m	struct:dsp_data_manage
+fragment_time	audio_dsp.c	/^static int fragment_time = 2; \/\/ the unit is 10ms.$/;"	v	file:
+fragments	include/audio_common.h	/^	struct dsp_data_fragment *fragments;$/;"	m	struct:dsp_data_manage	typeref:struct:dsp_data_manage::dsp_data_fragment
+fragments_head	include/audio_common.h	/^	struct list_head    fragments_head;$/;"	m	struct:dsp_data_manage	typeref:struct:dsp_data_manage::list_head
+frame_size	include/codec-common.h	/^	unsigned int frame_size;$/;"	m	struct:audio_data_type
+frame_vsize	include/codec-common.h	/^	unsigned int frame_vsize; \/\/ valid size in a frame size$/;"	m	struct:audio_data_type
+frm_cnt	host/T41/audio_aic.c	/^int frm_cnt = 16*1024*10;$/;"	v
+func	ex_codecs/ak7755_codec.c	/^	int func;$/;"	m	struct:excodec_driver_data	file:
+func	ex_codecs/es8374_codec.c	/^	int func;$/;"	m	struct:excodec_driver_data	file:
+func	host/T41/dmic/as-dmic/as-dmic.h	/^	int func;$/;"	m	struct:jz_gpio_func_def
+g_codec_dev	inner_codecs/T41/codec.c	/^struct codec_device *g_codec_dev = NULL;$/;"	v	typeref:struct:codec_device
+g_dmic_route	host/T41/dmic/as-dmic/as-dmic.c	/^struct audio_route *g_dmic_route = NULL;$/;"	v	typeref:struct:audio_route
+gain	host/T41/dmic/as-dmic/as-dmic.h	/^	unsigned int gain;$/;"	m	struct:dmic_device_info
+gain	include/audio_common.h	/^	unsigned int gain[2];      \/\/0-left 1-right$/;"	m	struct:volume
+get_codec_devdata	include/codec-common.h	/^static inline void *get_codec_devdata(struct codec_attributes *attrs)$/;"	f
+get_codec_hostdata	include/codec-common.h	/^static inline void *get_codec_hostdata(struct codec_attributes *attrs)$/;"	f
+globe_aic	host/T41/audio_aic.c	/^static struct audio_aic_device *globe_aic = NULL;$/;"	v	typeref:struct:audio_aic_device	file:
+globe_dmic_dma	host/T41/dmic/as-dma/as-dma.c	/^struct ingenic_dmic_dma *globe_dmic_dma = NULL;$/;"	v	typeref:struct:ingenic_dmic_dma
+globe_dspdev	audio_dsp.c	/^static struct audio_dsp_device* globe_dspdev = NULL;$/;"	v	typeref:struct:audio_dsp_device	file:
+globle_dmic_dbus	host/T41/dmic/as-dbus/as-dbus.c	/^static struct ingenic_dmic_dbus *globle_dmic_dbus = NULL;$/;"	v	typeref:struct:ingenic_dmic_dbus	file:
+gpio	include/codec-common.h	/^	int gpio;$/;"	m	struct:codec_spk_gpio
+gpio_func	ex_codecs/ak7755_codec.c	/^static char gpio_func[16] = "0,0,0x0";$/;"	v	file:
+gpio_func	ex_codecs/es8374_codec.c	/^static char gpio_func[16] = "0,0,0x0";$/;"	v	file:
+gpios	ex_codecs/ak7755_codec.c	/^	unsigned int gpios;$/;"	m	struct:excodec_driver_data	file:
+gpios	ex_codecs/es8374_codec.c	/^	unsigned int gpios;$/;"	m	struct:excodec_driver_data	file:
+head	host/T41/dmic/as-dbus/as-dbus.h	/^		struct list_head head;	\/* for linein *\/$/;"	m	union:ingenic_dbus_port::__anon1	typeref:struct:ingenic_dbus_port::__anon1::list_head
+host_priv	include/codec-common.h	/^	void *host_priv;	\/* save this module pointer *\/$/;"	m	struct:codec_attributes
+hr_timer	include/audio_dsp.h	/^	struct hrtimer hr_timer;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::hrtimer
+hw_ptr	host/T41/dmic/as-dma/as-dma.h	/^	unsigned int hw_ptr;$/;"	m	struct:ingenic_dmic_dma
+i2c_bus	host/T41/audio_aic.c	/^static int i2c_bus = 0x01;$/;"	v	file:
+i2c_new_subdev_board	host/T41/audio_aic.c	/^static struct codec_attributes *i2c_new_subdev_board(struct i2c_adapter *adapter, struct i2c_board_info *info,$/;"	f	file:
+i2s_clear_reg	host/T41/audio_aic.h	169;"	d
+i2s_get_reg	host/T41/audio_aic.h	166;"	d
+i2s_iomem	host/T41/audio_aic.h	/^	void __iomem *i2s_iomem;$/;"	m	struct:audio_aic_device
+i2s_irq_lock	host/T41/audio_aic.h	/^	spinlock_t i2s_irq_lock;$/;"	m	struct:audio_aic_device
+i2s_lock	host/T41/audio_aic.h	/^	spinlock_t i2s_lock;$/;"	m	struct:audio_aic_device
+i2s_read_reg	host/T41/audio_aic.h	151;"	d
+i2s_set_reg	host/T41/audio_aic.h	/^static void inline i2s_set_reg(struct audio_aic_device *i2s_dev, unsigned int addr, unsigned int val, unsigned int mask, unsigned int offset)$/;"	f
+i2s_write_reg	host/T41/audio_aic.h	148;"	d
+incodec	host/T41/audio_aic.h	/^	struct codec_attributes *incodec;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_attributes
+incodec	include/audio_control.h	/^	struct codec_attributes *incodec;$/;"	m	struct:audio_control	typeref:struct:audio_control::codec_attributes
+index	include/audio_dsp.h	/^	enum auido_route_index index;$/;"	m	struct:audio_route	typeref:enum:audio_route::auido_route_index
+info	host/T41/dmic/as-dmic/as-dmic.h	/^	struct dmic_device_info *info;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::dmic_device_info
+ingenic_as_dma_get_tsz	host/T41/dmic/as-dma/as-dma.h	/^static inline int ingenic_as_dma_get_tsz(int fifo_depth,$/;"	f
+ingenic_as_fmtcov	host/T41/dmic/as-fmtcov/as-fmtcov.h	/^struct ingenic_as_fmtcov {$/;"	s
+ingenic_dbus_flush_fifo	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dbus_flush_fifo(struct ingenic_dmic_dbus *dmic_dbus,int is_out, int id)$/;"	f	file:
+ingenic_dbus_free_timesolt	host/T41/dmic/as-dbus/as-dbus.c	/^static void ingenic_dbus_free_timesolt(struct ingenic_dmic_dbus *dmic_dbus,$/;"	f	file:
+ingenic_dbus_get_port	host/T41/dmic/as-dbus/as-dbus.c	/^static struct ingenic_dbus_port *ingenic_dbus_get_port(struct ingenic_dmic_dbus *dmic_dbus,$/;"	f	file:
+ingenic_dbus_port	host/T41/dmic/as-dbus/as-dbus.h	/^struct ingenic_dbus_port {$/;"	s
+ingenic_dbus_request_timesolt	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dbus_request_timesolt(struct ingenic_dmic_dbus *dmic_dbus,int dma_dev_id, int dmic_dev_id)$/;"	f	file:
+ingenic_dmic	host/T41/dmic/as-dmic/as-dmic.h	/^struct ingenic_dmic {$/;"	s
+ingenic_dmic_dbus	host/T41/dmic/as-dbus/as-dbus.h	/^struct ingenic_dmic_dbus {$/;"	s
+ingenic_dmic_dbus_deinit	host/T41/dmic/as-dbus/as-dbus.c	/^int ingenic_dmic_dbus_deinit(int dma_dev_id)$/;"	f
+ingenic_dmic_dbus_driver	host/T41/dmic/as-dbus/as-dbus.c	/^struct platform_driver ingenic_dmic_dbus_driver = {$/;"	v	typeref:struct:platform_driver
+ingenic_dmic_dbus_init	host/T41/dmic/as-dbus/as-dbus.c	/^ int ingenic_dmic_dbus_init(int dma_dev_id, int dmic_dev_id)$/;"	f
+ingenic_dmic_dbus_pm_ops	host/T41/dmic/as-dbus/as-dbus.c	/^static const struct dev_pm_ops ingenic_dmic_dbus_pm_ops = {$/;"	v	typeref:struct:dev_pm_ops	file:
+ingenic_dmic_dbus_probe	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dmic_dbus_probe(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_dbus_remove	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dmic_dbus_remove(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_dbus_resume	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dmic_dbus_resume(struct device *dev)$/;"	f	file:
+ingenic_dmic_dbus_suspend	host/T41/dmic/as-dbus/as-dbus.c	/^static int ingenic_dmic_dbus_suspend(struct device *dev)$/;"	f	file:
+ingenic_dmic_dma	host/T41/dmic/as-dma/as-dma.h	/^struct ingenic_dmic_dma {$/;"	s
+ingenic_dmic_dma_alloc_descs	host/T41/dmic/as-dma/as-dma.c	/^static int ingenic_dmic_dma_alloc_descs(struct ingenic_dmic_dma *dmic_dma, int cnt)$/;"	f	file:
+ingenic_dmic_dma_cyclic_descs_init	host/T41/dmic/as-dma/as-dma.c	/^static void ingenic_dmic_dma_cyclic_descs_init(struct ingenic_dmic_dma *dmic_dma,dma_addr_t dma_addr, unsigned int fragment_size)$/;"	f	file:
+ingenic_dmic_dma_deinit	host/T41/dmic/as-dma/as-dma.c	/^int ingenic_dmic_dma_deinit(void)$/;"	f
+ingenic_dmic_dma_desc	host/T41/dmic/as-dma/as-dma.h	/^struct ingenic_dmic_dma_desc {$/;"	s
+ingenic_dmic_dma_driver	host/T41/dmic/as-dma/as-dma.c	/^struct platform_driver ingenic_dmic_dma_driver = {$/;"	v	typeref:struct:platform_driver
+ingenic_dmic_dma_free_descs	host/T41/dmic/as-dma/as-dma.c	/^static void ingenic_dmic_dma_free_descs(struct ingenic_dmic_dma *dmic_dma)$/;"	f	file:
+ingenic_dmic_dma_init	host/T41/dmic/as-dma/as-dma.c	/^int ingenic_dmic_dma_init(dma_addr_t dma_addr, unsigned int fragment_size,unsigned int fragment_cnt)$/;"	f
+ingenic_dmic_dma_irq_handler	host/T41/dmic/as-dma/as-dma.c	/^static irqreturn_t ingenic_dmic_dma_irq_handler(int irq, void *dev_id)$/;"	f	file:
+ingenic_dmic_dma_pm_ops	host/T41/dmic/as-dma/as-dma.c	/^static const struct dev_pm_ops ingenic_dmic_dma_pm_ops = {$/;"	v	typeref:struct:dev_pm_ops	file:
+ingenic_dmic_dma_probe	host/T41/dmic/as-dma/as-dma.c	/^static int ingenic_dmic_dma_probe(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_dma_remove	host/T41/dmic/as-dma/as-dma.c	/^static int ingenic_dmic_dma_remove(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_dma_resume	host/T41/dmic/as-dma/as-dma.c	/^static int ingenic_dmic_dma_resume(struct device *dev)$/;"	f	file:
+ingenic_dmic_dma_start	host/T41/dmic/as-dma/as-dma.c	/^int ingenic_dmic_dma_start(void)$/;"	f
+ingenic_dmic_dma_stop	host/T41/dmic/as-dma/as-dma.c	/^int ingenic_dmic_dma_stop(void)$/;"	f
+ingenic_dmic_dma_suspend	host/T41/dmic/as-dma/as-dma.c	/^static int ingenic_dmic_dma_suspend(struct device *dev)$/;"	f	file:
+ingenic_dmic_fmtcov_cfg	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^int ingenic_dmic_fmtcov_cfg(u8 chn_id, int format, int channels)$/;"	f
+ingenic_dmic_fmtcov_driver	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^struct platform_driver ingenic_dmic_fmtcov_driver = {$/;"	v	typeref:struct:platform_driver
+ingenic_dmic_fmtcov_enable	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^void ingenic_dmic_fmtcov_enable(u8 chn_id, bool enable)$/;"	f
+ingenic_dmic_fmtcov_platform_probe	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^static int ingenic_dmic_fmtcov_platform_probe(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_fmtcov_platform_remove	host/T41/dmic/as-fmtcov/as-fmtcov.c	/^static int ingenic_dmic_fmtcov_platform_remove(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_get_dma_current_trans_addr	host/T41/dmic/as-dma/as-dma.c	/^dma_addr_t ingenic_dmic_get_dma_current_trans_addr(void)$/;"	f
+ingenic_dmic_platform_driver	host/T41/dmic/as-dmic/as-dmic.c	/^struct platform_driver ingenic_dmic_platform_driver = {$/;"	v	typeref:struct:platform_driver
+ingenic_dmic_platform_probe	host/T41/dmic/as-dmic/as-dmic.c	/^static int ingenic_dmic_platform_probe(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_platform_remove	host/T41/dmic/as-dmic/as-dmic.c	/^static int ingenic_dmic_platform_remove(struct platform_device *pdev)$/;"	f	file:
+ingenic_dmic_pm_ops	host/T41/dmic/as-dmic/as-dmic.c	/^static const struct dev_pm_ops ingenic_dmic_pm_ops = {$/;"	v	typeref:struct:dev_pm_ops	file:
+ingenic_dmic_resume	host/T41/dmic/as-dmic/as-dmic.c	/^static int ingenic_dmic_resume(struct device *dev)$/;"	f	file:
+ingenic_dmic_suspend	host/T41/dmic/as-dmic/as-dmic.c	/^static int ingenic_dmic_suspend(struct device *dev)$/;"	f	file:
+ingenic_get_dbus_port_register	host/T41/dmic/as-dbus/as-dbus.h	/^static inline unsigned long ingenic_get_dbus_port_register(int dev_id,$/;"	f
+ingenic_timeslot_alloc	host/T41/dmic/as-dbus/as-dbus.c	/^static inline u8 ingenic_timeslot_alloc(struct ingenic_dmic_dbus *dmic_dbus)$/;"	f	file:
+ingenic_timeslot_free	host/T41/dmic/as-dbus/as-dbus.c	/^static inline void ingenic_timeslot_free(struct ingenic_dmic_dbus *dmic_dbus, u8 id)$/;"	f	file:
+init	include/audio_common.h	/^	int (*init)(void *pipe);$/;"	m	struct:audio_pipe
+init_ak7755	ex_codecs/ak7755_codec.c	/^module_init(init_ak7755);$/;"	v
+init_ak7755	ex_codecs/ak7755_codec.c	/^static int __init init_ak7755(void)$/;"	f	file:
+init_dma_config	host/T41/audio_aic.c	/^static int init_dma_config(struct audio_aic_device *aic)$/;"	f	file:
+init_dma_config	host/T41/dmic/as-dmic/as-dmic.c	/^static int init_dma_config(struct audio_pipe *pipe, enum dma_data_direction direction, unsigned long iobase,  struct device *dev)$/;"	f	file:
+init_es8374	ex_codecs/es8374_codec.c	/^module_init(init_es8374);$/;"	v
+init_es8374	ex_codecs/es8374_codec.c	/^static int __init init_es8374(void)$/;"	f	file:
+init_pipe	host/T41/audio_aic.c	/^static int init_pipe(struct audio_pipe *pipe, enum dma_data_direction direction, unsigned long iobase, int dma_type)$/;"	f	file:
+inner_codec_attr	inner_codecs/T41/codec.c	/^static struct codec_attributes inner_codec_attr = {$/;"	v	typeref:struct:codec_attributes	file:
+inner_codec_fops	inner_codecs/T41/codec.c	/^static struct file_operations inner_codec_fops = {$/;"	v	typeref:struct:file_operations	file:
+inner_codec_register	host/T41/audio_aic.c	/^int inner_codec_register(struct codec_attributes *codec_attr)$/;"	f
+inner_codec_release	host/T41/audio_aic.c	/^int inner_codec_release(struct codec_attributes *codec_attr)$/;"	f
+inner_codec_show	inner_codecs/T41/codec.c	/^static int inner_codec_show(struct seq_file *m, void *v)$/;"	f	file:
+inner_codec_sign	inner_codecs/T41/codec.c	/^struct codec_sign_configure inner_codec_sign = {$/;"	v	typeref:struct:codec_sign_configure
+internal_codec	host/T41/audio_aic.c	/^static int internal_codec = 1;$/;"	v	file:
+io_base	host/T41/dmic/as-dmic/as-dmic.h	/^	void __iomem    *io_base;$/;"	m	struct:ingenic_dmic
+io_base	host/T41/dmic/as-fmtcov/as-fmtcov.h	/^	void *__iomem io_base;$/;"	m	struct:ingenic_as_fmtcov
+io_res	host/T41/dmic/as-dmic/as-dmic.h	/^	struct resource *io_res;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::resource
+io_tracer	include/audio_common.h	/^	unsigned int io_tracer;				\/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+ioctl	include/audio_common.h	/^	int (*ioctl)(void *pipe, unsigned int cmd, void *data);$/;"	m	struct:audio_pipe
+iomem	inner_codecs/T41/codec.h	/^    void __iomem *iomem;$/;"	m	struct:codec_device
+irq	host/T41/dmic/as-dma/as-dma.h	/^	int irq;$/;"	m	struct:ingenic_dmic_dma
+is_out	host/T41/dmic/as-dbus/as-dbus.h	/^	bool is_out;$/;"	m	struct:ingenic_dbus_port
+is_trans	include/audio_common.h	/^	volatile bool is_trans;$/;"	m	struct:audio_pipe
+jz_aic_device	boards/t41_platform.c	/^struct platform_device jz_aic_device = {$/;"	v	typeref:struct:platform_device
+jz_aic_dmamask	boards/t41_platform.c	/^static u64 jz_aic_dmamask = ~(u32) 0;$/;"	v	file:
+jz_aic_resources	boards/t41_platform.c	/^static struct resource jz_aic_resources[] = {$/;"	v	typeref:struct:resource	file:
+jz_audio_hrtimer_callback	audio_dsp.c	/^static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) {$/;"	f	file:
+jz_codec_device	boards/t41_platform.c	/^struct platform_device jz_codec_device = {$/;"	v	typeref:struct:platform_device
+jz_codec_resources	boards/t41_platform.c	/^static struct resource jz_codec_resources[] = {$/;"	v	typeref:struct:resource	file:
+jz_dmic_device	boards/t41_platform.c	/^struct platform_device jz_dmic_device = {$/;"	v	typeref:struct:platform_device
+jz_dmic_resource	boards/t41_platform.c	/^static struct resource jz_dmic_resource[] = {$/;"	v	typeref:struct:resource	file:
+jz_gpio_func_def	host/T41/dmic/as-dmic/as-dmic.h	/^struct jz_gpio_func_def {$/;"	s
+lagain	host/T41/audio_aic.h	/^	int lagain;$/;"	m	struct:codec_info
+lalc_maxgain	host/T41/audio_aic.h	/^	int lalc_maxgain;$/;"	m	struct:codec_info
+lalc_mingain	host/T41/audio_aic.h	/^	int lalc_mingain;$/;"	m	struct:codec_info
+lchannel_mute_en	host/T41/audio_aic.h	/^	int lchannel_mute_en;$/;"	m	struct:codec_info
+ldgain	host/T41/audio_aic.h	/^	int ldgain;$/;"	m	struct:codec_info
+len	host/T41/dmic/as-dma/as-dma.h	/^	unsigned int len;$/;"	m	struct:ingenic_dmic_dma
+link	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t link:1;	\/* Enable Descriptor Link Enable *\/$/;"	m	struct:ingenic_dmic_dma_desc
+list	include/audio_common.h	/^	struct list_head	list;$/;"	m	struct:dsp_data_fragment	typeref:struct:dsp_data_fragment::list_head
+livingcodec	host/T41/audio_aic.h	/^	struct codec_attributes *livingcodec;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::codec_attributes
+livingcodec	include/audio_control.h	/^	struct codec_attributes *livingcodec;$/;"	m	struct:audio_control	typeref:struct:audio_control::codec_attributes
+lock	host/T41/dmic/as-dma/as-dma.h	/^	spinlock_t lock;$/;"	m	struct:ingenic_dmic_dma
+lte	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t lte:1;		\/* Last Descriptor Transfer end Status *\/$/;"	m	struct:ingenic_dmic_dma_desc
+ltie	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t ltie:1;	\/* Last Transfer Interrupt Enable *\/$/;"	m	struct:ingenic_dmic_dma_desc
+manage	include/audio_dsp.h	/^	struct dsp_data_manage manage;$/;"	m	struct:audio_route	typeref:struct:audio_route::dsp_data_manage
+max_gain	include/audio_common.h	/^	unsigned int max_gain[2];$/;"	m	struct:alc_gain
+mic_clock	host/T41/audio_aic.h	/^	struct clk *mic_clock;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::clk
+mic_deinit	host/T41/audio_aic.c	/^static int mic_deinit(void *pipe)$/;"	f	file:
+mic_init	host/T41/audio_aic.c	/^static int mic_init(void *pipe)$/;"	f	file:
+mic_ioctl	host/T41/audio_aic.c	/^static int mic_ioctl(void *pipe, unsigned int cmd, void *data)$/;"	f	file:
+mic_mono_channel	host/T41/audio_aic.c	/^static int mic_mono_channel = 1;$/;"	v	file:
+mic_pipe	host/T41/audio_aic.h	/^	struct audio_pipe *mic_pipe;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::audio_pipe
+min_gain	include/audio_common.h	/^	unsigned int min_gain[2];$/;"	m	struct:alc_gain
+misc_get_audiodsp	include/audio_dsp.h	129;"	d
+miscdev	include/audio_dsp.h	/^	struct miscdevice miscdev;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::miscdevice
+mlock	include/audio_control.h	/^	struct mutex mlock;$/;"	m	struct:audio_control	typeref:struct:audio_control::mutex
+mlock	include/audio_dsp.h	/^	struct mutex mlock;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::mutex
+mlock	include/audio_dsp.h	/^	struct mutex mlock;$/;"	m	struct:audio_route	typeref:struct:audio_route::mutex
+mode	include/codec-common.h	/^	enum codec_mode mode;$/;"	m	struct:codec_attributes	typeref:enum:codec_attributes::codec_mode
+name	host/T41/audio_aic.h	/^	char name[20];$/;"	m	struct:codec_info
+name	host/T41/dmic/as-dmic/as-dmic.h	/^	char *name;$/;"	m	struct:jz_gpio_func_def
+name	host/T41/dmic/as-dmic/as-dmic.h	/^	char name[20];$/;"	m	struct:dmic_device_info
+name	include/audio_common.h	/^	char *name;$/;"	m	struct:audio_pipe
+name	include/codec-common.h	/^	char name[16];$/;"	m	struct:codec_attributes
+ndoa	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t ndoa;		\/* Descriptor Next Offset address*\/$/;"	m	struct:ingenic_dmic_dma_desc
+new_dma_tracer	include/audio_common.h	/^	unsigned int new_dma_tracer;			\/* It's offset in buffer *\/$/;"	m	struct:dsp_data_manage
+node	host/T41/dmic/as-dbus/as-dbus.h	/^		struct list_head node;	\/* for lineout*\/$/;"	m	union:ingenic_dbus_port::__anon1	typeref:struct:ingenic_dbus_port::__anon1::list_head
+obj-m	Makefile	/^obj-m := $(MODULE_NAME).o$/;"	m
+obj-m	ex_codecs/Makefile	/^obj-m := $(MODULE_NAME).o$/;"	m
+paddr	include/audio_common.h	/^	dma_addr_t          paddr;$/;"	m	struct:audio_pipe
+paddr	include/audio_common.h	/^	dma_addr_t          paddr;$/;"	m	struct:dsp_data_fragment
+parent	include/audio_dsp.h	/^	void *parent;$/;"	m	struct:audio_route
+pins	host/T41/dmic/as-dmic/as-dmic.h	/^	unsigned long pins;$/;"	m	struct:jz_gpio_func_def
+pins	include/codec-common.h	/^	enum codec_pins pins;$/;"	m	struct:codec_attributes	typeref:enum:codec_attributes::codec_pins
+pipe	host/T41/dmic/as-dmic/as-dmic.h	/^	struct audio_pipe *pipe;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::audio_pipe
+pipe	include/audio_dsp.h	/^	struct audio_pipe *pipe;$/;"	m	struct:audio_route	typeref:struct:audio_route::audio_pipe
+pipe_lock	host/T41/audio_aic.h	/^	spinlock_t pipe_lock;$/;"	m	struct:audio_aic_device
+pipe_lock	host/T41/dmic/as-dmic/as-dmic.h	/^	spinlock_t pipe_lock;$/;"	m	struct:ingenic_dmic
+pipe_lock	include/audio_common.h	/^	spinlock_t pipe_lock;$/;"	m	struct:audio_pipe
+pipe_release_dma	host/T41/audio_aic.c	/^static void pipe_release_dma(struct audio_aic_device *aic, struct device *dev)$/;"	f	file:
+pipe_request_dma	host/T41/audio_aic.c	/^static int pipe_request_dma(struct audio_pipe *pipe, struct device *dev)$/;"	f	file:
+playback	include/codec-common.h	/^	struct codec_endpoint *playback;$/;"	m	struct:codec_attributes	typeref:struct:codec_attributes::codec_endpoint
+playback_type	inner_codecs/T41/codec.h	/^    struct audio_data_type playback_type;$/;"	m	struct:codec_device	typeref:struct:codec_device::audio_data_type
+port	ex_codecs/ak7755_codec.c	/^	int port;$/;"	m	struct:excodec_driver_data	file:
+port	ex_codecs/es8374_codec.c	/^	int port;$/;"	m	struct:excodec_driver_data	file:
+port	host/T41/dmic/as-dbus/as-dbus.h	/^	struct ingenic_dbus_port port[PORT_MAX_NUM];$/;"	m	struct:ingenic_dmic_dbus	typeref:struct:ingenic_dmic_dbus::ingenic_dbus_port
+port	host/T41/dmic/as-dmic/as-dmic.h	/^	int port;$/;"	m	struct:jz_gpio_func_def
+pr_kfree	audio_debug.c	/^void pr_kfree(const void *addr)$/;"	f
+pr_kmalloc	audio_debug.c	/^void *pr_kmalloc(unsigned long size)$/;"	f
+pr_kzalloc	audio_debug.c	/^void *pr_kzalloc(unsigned long size)$/;"	f
+pr_printf	audio_debug.c	/^EXPORT_SYMBOL(pr_printf);$/;"	v
+pr_printf	audio_debug.c	/^int pr_printf(unsigned int level, unsigned char *fmt, ...)$/;"	f
+print_level	audio_debug.c	/^static int print_level = AUDIO_WARNING_LEVEL;$/;"	v	file:
+priv	include/audio_common.h	/^	void *priv;			\/* when enable aec function, it points aec fragment *\/$/;"	m	struct:dsp_data_fragment
+priv	include/audio_common.h	/^	void *priv;$/;"	m	struct:audio_pipe
+priv	include/audio_control.h	/^	void *priv;$/;"	m	struct:audio_control
+priv	include/audio_dsp.h	/^	void *priv;$/;"	m	struct:audio_dsp_device
+priv	include/audio_dsp.h	/^	void *priv;$/;"	m	struct:audio_route
+priv	inner_codecs/T41/codec.h	/^    void *priv;$/;"	m	struct:codec_device
+proc	include/audio_dsp.h	/^	struct proc_dir_entry *proc;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::proc_dir_entry
+ragain	host/T41/audio_aic.h	/^	int ragain;$/;"	m	struct:codec_info
+ralc_maxgain	host/T41/audio_aic.h	/^	int ralc_maxgain;$/;"	m	struct:codec_info
+ralc_mingain	host/T41/audio_aic.h	/^	int ralc_mingain;$/;"	m	struct:codec_info
+rate	host/T41/audio_aic.h	/^	unsigned long rate;$/;"	m	struct:codec_info
+rate	include/audio_dsp.h	/^	unsigned int rate;$/;"	m	struct:audio_parameter
+rate	include/audio_dsp.h	/^	unsigned int rate;$/;"	m	struct:audio_route
+rate2mclk	include/codec-common.h	/^	unsigned int rate2mclk;				\/\/ this is the coefficient rate to mclk, the default value is 256.$/;"	m	struct:codec_sign_configure
+rchannel_mute_en	host/T41/audio_aic.h	/^	int rchannel_mute_en;$/;"	m	struct:codec_info
+rdgain	host/T41/audio_aic.h	/^	int rdgain;$/;"	m	struct:codec_info
+record	include/codec-common.h	/^	struct codec_endpoint *record;$/;"	m	struct:codec_attributes	typeref:struct:codec_attributes::codec_endpoint
+record_channel	host/T41/dmic/as-dmic/as-dmic.h	/^	int record_channel;$/;"	m	struct:dmic_device_info
+record_format	host/T41/dmic/as-dmic/as-dmic.h	/^	int record_format;$/;"	m	struct:dmic_device_info
+record_rate	host/T41/dmic/as-dmic/as-dmic.h	/^	unsigned long record_rate;$/;"	m	struct:dmic_device_info
+record_trigger	host/T41/dmic/as-dmic/as-dmic.h	/^	unsigned int record_trigger;$/;"	m	struct:dmic_device_info
+record_type	inner_codecs/T41/codec.h	/^    struct audio_data_type record_type;$/;"	m	struct:codec_device	typeref:struct:codec_device::audio_data_type
+refcnt	host/T41/dmic/as-dma/as-dma.h	/^	int refcnt;$/;"	m	struct:ingenic_dmic_dma
+refcnt	include/audio_dsp.h	/^	unsigned int refcnt;$/;"	m	struct:audio_dsp_device
+refcnt	include/audio_dsp.h	/^	unsigned int refcnt;$/;"	m	struct:audio_route
+register_audio_debug_ops	audio_dsp.c	/^int register_audio_debug_ops(char *name, struct file_operations *debug_ops, void* data)$/;"	f
+register_audio_pipe	audio_dsp.c	/^int register_audio_pipe(struct audio_pipe *pipe, enum auido_route_index index)$/;"	f
+regmap	host/T41/dmic/as-dbus/as-dbus.h	/^	struct regmap *regmap;$/;"	m	struct:ingenic_dmic_dbus	typeref:struct:ingenic_dmic_dbus::regmap
+regmap	host/T41/dmic/as-dmic/as-dmic.h	/^	struct regmap *regmap;$/;"	m	struct:ingenic_dmic	typeref:struct:ingenic_dmic::regmap
+regmap	host/T41/dmic/as-fmtcov/as-fmtcov.h	/^	struct regmap *regmap;$/;"	m	struct:ingenic_as_fmtcov	typeref:struct:ingenic_as_fmtcov::regmap
+release_audio_pipe	audio_dsp.c	/^int release_audio_pipe(struct audio_pipe *pipe)$/;"	f
+res	host/T41/audio_aic.h	/^	struct resource *res;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::resource
+res	host/T41/dmic/as-dbus/as-dbus.h	/^	struct resource *res;$/;"	m	struct:ingenic_dmic_dbus	typeref:struct:ingenic_dmic_dbus::resource
+res	host/T41/dmic/as-fmtcov/as-fmtcov.h	/^	struct resource *res;$/;"	m	struct:ingenic_as_fmtcov	typeref:struct:ingenic_as_fmtcov::resource
+res	inner_codecs/T41/codec.h	/^    struct resource *res;$/;"	m	struct:codec_device	typeref:struct:codec_device::resource
+reserved0_7	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t reserved0_7:1;$/;"	m	struct:ingenic_dmic_dma_desc
+reserved0_9_31	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t reserved0_9_31:23;$/;"	m	struct:ingenic_dmic_dma_desc
+reserved3_24_31	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t reserved3_24_31:8;$/;"	m	struct:ingenic_dmic_dma_desc
+reservesize	include/audio_common.h	/^	unsigned int		reservesize; 		\/* the size must be setted when initing this driver *\/$/;"	m	struct:audio_pipe
+reset_gpio	ex_codecs/ak7755_codec.c	/^	int reset_gpio;$/;"	m	struct:excodec_driver_data	file:
+reset_gpio	ex_codecs/ak7755_codec.c	/^static int reset_gpio = GPIO_PC(23);$/;"	v	file:
+reset_gpio	ex_codecs/es8374_codec.c	/^	int reset_gpio;$/;"	m	struct:excodec_driver_data	file:
+reset_gpio	ex_codecs/es8374_codec.c	/^static int reset_gpio = -1;$/;"	v	file:
+routes	include/audio_dsp.h	/^	struct audio_route routes[AUDIO_ROUTE_MAX_ID];$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::audio_route
+sample_channel	include/codec-common.h	/^	unsigned int sample_channel;$/;"	m	struct:audio_data_type
+sample_rate	include/codec-common.h	/^	unsigned int sample_rate;$/;"	m	struct:audio_data_type
+sample_size	include/audio_common.h	/^	unsigned int 		sample_size; \/\/ samplesize = channel * format_to_bytes(format) \/ 8;$/;"	m	struct:dsp_data_manage
+samplerate	host/T41/audio_aic.c	/^static int samplerate = 0;$/;"	v	file:
+seq	include/codec-common.h	/^	enum codec_sequence_mode seq;$/;"	m	struct:codec_sign_configure	typeref:enum:codec_sign_configure::codec_sequence_mode
+set_again	include/codec-common.h	/^	int (*set_again)(int channel, int gain);$/;"	m	struct:codec_endpoint
+set_alc_threshold	include/codec-common.h	/^	int (*set_alc_threshold)(int channel,int min_gain,int max_gain);$/;"	m	struct:codec_endpoint
+set_codec_aec_again	host/T41/audio_aic.c	/^static int set_codec_aec_again(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_aec_datatype	host/T41/audio_aic.c	/^static int set_codec_aec_datatype(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_aec_dgain	host/T41/audio_aic.c	/^static int set_codec_aec_dgain(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_aec_protocol	host/T41/audio_aic.c	/^static int set_codec_aec_protocol(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_aec_start	host/T41/audio_aic.c	/^static int set_codec_aec_start(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_aec_stop	host/T41/audio_aic.c	/^static int set_codec_aec_stop(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_devdata	include/codec-common.h	/^static inline void set_codec_devdata(struct codec_attributes *attrs, void *priv)$/;"	f
+set_codec_hostdata	include/codec-common.h	/^static inline void set_codec_hostdata(struct codec_attributes *attrs, void *priv)$/;"	f
+set_codec_mic_again	host/T41/audio_aic.c	/^static int set_codec_mic_again(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_alc_gain	host/T41/audio_aic.c	/^static int set_codec_mic_alc_gain(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_datatype	host/T41/audio_aic.c	/^static int set_codec_mic_datatype(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_dgain	host/T41/audio_aic.c	/^static int set_codec_mic_dgain(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_hpf_enable	host/T41/audio_aic.c	/^static int set_codec_mic_hpf_enable(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_mute	host/T41/audio_aic.c	/^static int set_codec_mic_mute(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_protocol	host/T41/audio_aic.c	/^static int set_codec_mic_protocol(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_start	host/T41/audio_aic.c	/^static int set_codec_mic_start(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_mic_stop	host/T41/audio_aic.c	/^static int set_codec_mic_stop(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_again	host/T41/audio_aic.c	/^static int set_codec_spk_again(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_datatype	host/T41/audio_aic.c	/^static int set_codec_spk_datatype(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_dgain	host/T41/audio_aic.c	/^static int set_codec_spk_dgain(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_mute	host/T41/audio_aic.c	/^static int set_codec_spk_mute(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_protocol	host/T41/audio_aic.c	/^static int set_codec_spk_protocol(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_start	host/T41/audio_aic.c	/^static int set_codec_spk_start(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_codec_spk_stop	host/T41/audio_aic.c	/^static int set_codec_spk_stop(struct audio_aic_device *aic, void *data)$/;"	f	file:
+set_datatype	include/codec-common.h	/^	int (*set_datatype)(struct audio_data_type *type);$/;"	m	struct:codec_endpoint
+set_dgain	include/codec-common.h	/^	int (*set_dgain)(int channel, int gain);$/;"	m	struct:codec_endpoint
+set_dmic_gain	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_gain(struct ingenic_dmic *dmic, void *data)$/;"	f	file:
+set_dmic_gpio_func	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_gpio_func(struct jz_gpio_func_def gpio_func)$/;"	f	file:
+set_dmic_param	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_param(struct ingenic_dmic *dmic, void *data)$/;"	f	file:
+set_dmic_params_check	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_params_check(int channels, int rate, int fmt_width)$/;"	f	file:
+set_dmic_reset	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_reset(struct ingenic_dmic *dmic)$/;"	f	file:
+set_dmic_start	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_start(struct ingenic_dmic *dmic, void *data)$/;"	f	file:
+set_dmic_stop	host/T41/dmic/as-dmic/as-dmic.c	/^static int set_dmic_stop(struct ingenic_dmic *dmic, void *data)$/;"	f	file:
+set_endpoint	include/codec-common.h	/^	int (*set_endpoint)(int enable);$/;"	m	struct:codec_endpoint
+set_mic_hpf_en	include/codec-common.h	/^	int (*set_mic_hpf_en)(int en);$/;"	m	struct:codec_endpoint
+set_mute	include/codec-common.h	/^	int (*set_mute)(int channel);$/;"	m	struct:codec_endpoint
+set_power	include/codec-common.h	/^	int (*set_power)(int enable);$/;"	m	struct:codec_attributes
+set_sign	include/codec-common.h	/^	int (*set_sign)(struct codec_sign_configure *sign);$/;"	m	struct:codec_attributes
+size	include/audio_dsp.h	/^	unsigned int size;$/;"	m	struct:audio_input_stream
+size	include/audio_dsp.h	/^	unsigned int size;$/;"	m	struct:audio_ouput_stream
+slock	include/audio_control.h	/^	spinlock_t slock;$/;"	m	struct:audio_control
+slock	include/audio_dsp.h	/^	spinlock_t slock;$/;"	m	struct:audio_dsp_device
+slot_bitmap	host/T41/dmic/as-dbus/as-dbus.h	/^	unsigned long slot_bitmap[BITS_TO_LONGS(SLOT_NUM)];$/;"	m	struct:ingenic_dmic_dbus
+speaker_en	ex_codecs/ak7755_codec.c	/^	int speaker_en;$/;"	m	struct:excodec_driver_data	file:
+spk_clock	host/T41/audio_aic.h	/^	struct clk *spk_clock;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::clk
+spk_deinit	host/T41/audio_aic.c	/^static int spk_deinit(void *pipe)$/;"	f	file:
+spk_en	inner_codecs/T41/codec.h	/^    struct codec_spk_gpio spk_en;$/;"	m	struct:codec_device	typeref:struct:codec_device::codec_spk_gpio
+spk_gpio	ex_codecs/ak7755_codec.c	/^static int spk_gpio =  GPIO_PB(31);$/;"	v	file:
+spk_gpio	inner_codecs/T41/codec.c	/^static int spk_gpio =  GPIO_PB(31);$/;"	v	file:
+spk_init	host/T41/audio_aic.c	/^static int spk_init(void *pipe)$/;"	f	file:
+spk_ioctl	host/T41/audio_aic.c	/^static int spk_ioctl(void *pipe, unsigned int cmd, void *data)$/;"	f	file:
+spk_level	ex_codecs/ak7755_codec.c	/^static int spk_level = 1;$/;"	v	file:
+spk_level	inner_codecs/T41/codec.c	/^static int spk_level = 1;$/;"	v	file:
+spk_pipe	host/T41/audio_aic.h	/^	struct audio_pipe *spk_pipe;$/;"	m	struct:audio_aic_device	typeref:struct:audio_aic_device::audio_pipe
+state	include/audio_common.h	/^	bool 				state;$/;"	m	struct:dsp_data_fragment
+state	include/audio_dsp.h	/^	enum audio_state state;$/;"	m	struct:audio_dsp_device	typeref:enum:audio_dsp_device::audio_state
+state	include/audio_dsp.h	/^	enum audio_state state;$/;"	m	struct:audio_route	typeref:enum:audio_route::audio_state
+status	ex_codecs/ak7755_codec.c	/^	int status;$/;"	m	struct:excodec_driver_data	file:
+stream_mlock	include/audio_dsp.h	/^	struct mutex stream_mlock;$/;"	m	struct:audio_route	typeref:struct:audio_route::mutex
+subdevs	include/audio_dsp.h	/^	struct platform_device *subdevs;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::platform_device
+sync	include/codec-common.h	/^	enum codec_sync_polarity sync;$/;"	m	struct:codec_sign_configure	typeref:enum:codec_sign_configure::codec_sync_polarity
+tie	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t tie:1;		\/* Transfer Interrupt Enable *\/$/;"	m	struct:ingenic_dmic_dma_desc
+time_stamp	include/audio_common.h	/^	struct timespec		time_stamp;$/;"	m	struct:dsp_data_fragment	typeref:struct:dsp_data_fragment::timespec
+timer_stopped	include/audio_dsp.h	/^	atomic_t	timer_stopped;$/;"	m	struct:audio_dsp_device
+timeslot	host/T41/dmic/as-dbus/as-dbus.h	/^	u8 timeslot;$/;"	m	struct:ingenic_dbus_port
+timestamp	include/audio_dsp.h	/^	struct timespec *timestamp;$/;"	m	struct:audio_input_stream	typeref:struct:audio_input_stream::timespec
+transfer_info	host/T41/audio_aic.h	/^	struct codec_sign_configure transfer_info;$/;"	m	struct:codec_info	typeref:struct:codec_info::codec_sign_configure
+transfer_protocol	include/codec-common.h	/^	enum codec_data_mode transfer_protocol;$/;"	m	struct:codec_attributes	typeref:enum:codec_attributes::codec_data_mode
+trigger	host/T41/audio_aic.h	/^	int trigger;$/;"	m	struct:codec_info
+tsz	host/T41/dmic/as-dma/as-dma.h	/^	uint32_t tsz:3;		\/* Transfer Data Size (burst)*\/$/;"	m	struct:ingenic_dmic_dma_desc
+tx_hlist_add_after	include/tx-list-common.h	/^static inline void tx_hlist_add_after(struct hlist_node *n,$/;"	f
+tx_hlist_add_before	include/tx-list-common.h	/^static inline void tx_hlist_add_before(struct hlist_node *n,$/;"	f
+tx_hlist_add_fake	include/tx-list-common.h	/^static inline void tx_hlist_add_fake(struct hlist_node *n)$/;"	f
+tx_hlist_add_head	include/tx-list-common.h	/^static inline void tx_hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
+tx_hlist_del	include/tx-list-common.h	/^static inline void tx_hlist_del(struct hlist_node *n)$/;"	f
+tx_hlist_del_init	include/tx-list-common.h	/^static inline void tx_hlist_del_init(struct hlist_node *n)$/;"	f
+tx_hlist_empty	include/tx-list-common.h	/^static inline int tx_hlist_empty(const struct hlist_head *h)$/;"	f
+tx_hlist_entry	include/tx-list-common.h	659;"	d
+tx_hlist_entry_safe	include/tx-list-common.h	668;"	d
+tx_hlist_for_each	include/tx-list-common.h	661;"	d
+tx_hlist_for_each_entry	include/tx-list-common.h	679;"	d
+tx_hlist_for_each_entry_continue	include/tx-list-common.h	689;"	d
+tx_hlist_for_each_entry_from	include/tx-list-common.h	699;"	d
+tx_hlist_for_each_entry_safe	include/tx-list-common.h	710;"	d
+tx_hlist_for_each_safe	include/tx-list-common.h	664;"	d
+tx_hlist_move_list	include/tx-list-common.h	/^static inline void tx_hlist_move_list(struct hlist_head *old,$/;"	f
+tx_hlist_unhashed	include/tx-list-common.h	/^static inline int tx_hlist_unhashed(const struct hlist_node *h)$/;"	f
+tx_list_add	include/tx-list-common.h	/^static inline void tx_list_add(struct list_head *new, struct list_head *head)$/;"	f
+tx_list_add_tail	include/tx-list-common.h	/^static inline void tx_list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
+tx_list_cut_position	include/tx-list-common.h	/^static inline void tx_list_cut_position(struct list_head *list,$/;"	f
+tx_list_del	include/tx-list-common.h	/^static inline void tx_list_del(struct list_head *entry)$/;"	f
+tx_list_del_init	include/tx-list-common.h	/^static inline void tx_list_del_init(struct list_head *entry)$/;"	f
+tx_list_empty	include/tx-list-common.h	/^static inline int tx_list_empty(const struct list_head *head)$/;"	f
+tx_list_empty_careful	include/tx-list-common.h	/^static inline int tx_list_empty_careful(const struct list_head *head)$/;"	f
+tx_list_entry	include/tx-list-common.h	338;"	d
+tx_list_first_entry	include/tx-list-common.h	349;"	d
+tx_list_first_entry_or_null	include/tx-list-common.h	360;"	d
+tx_list_for_each	include/tx-list-common.h	368;"	d
+tx_list_for_each_entry	include/tx-list-common.h	417;"	d
+tx_list_for_each_entry_continue	include/tx-list-common.h	453;"	d
+tx_list_for_each_entry_continue_reverse	include/tx-list-common.h	467;"	d
+tx_list_for_each_entry_from	include/tx-list-common.h	480;"	d
+tx_list_for_each_entry_reverse	include/tx-list-common.h	428;"	d
+tx_list_for_each_entry_safe	include/tx-list-common.h	491;"	d
+tx_list_for_each_entry_safe_continue	include/tx-list-common.h	507;"	d
+tx_list_for_each_entry_safe_from	include/tx-list-common.h	523;"	d
+tx_list_for_each_entry_safe_reverse	include/tx-list-common.h	538;"	d
+tx_list_for_each_prev	include/tx-list-common.h	387;"	d
+tx_list_for_each_prev_safe	include/tx-list-common.h	406;"	d
+tx_list_for_each_safe	include/tx-list-common.h	396;"	d
+tx_list_is_last	include/tx-list-common.h	/^static inline int tx_list_is_last(const struct list_head *list,$/;"	f
+tx_list_is_singular	include/tx-list-common.h	/^static inline int tx_list_is_singular(const struct list_head *head)$/;"	f
+tx_list_move	include/tx-list-common.h	/^static inline void tx_list_move(struct list_head *list, struct list_head *head)$/;"	f
+tx_list_move_tail	include/tx-list-common.h	/^static inline void tx_list_move_tail(struct list_head *list,$/;"	f
+tx_list_prepare_entry	include/tx-list-common.h	441;"	d
+tx_list_replace	include/tx-list-common.h	/^static inline void tx_list_replace(struct list_head *old,$/;"	f
+tx_list_replace_init	include/tx-list-common.h	/^static inline void tx_list_replace_init(struct list_head *old,$/;"	f
+tx_list_rotate_left	include/tx-list-common.h	/^static inline void tx_list_rotate_left(struct list_head *head)$/;"	f
+tx_list_safe_reset_next	include/tx-list-common.h	556;"	d
+tx_list_splice	include/tx-list-common.h	/^static inline void tx_list_splice(const struct list_head *list,$/;"	f
+tx_list_splice_init	include/tx-list-common.h	/^static inline void tx_list_splice_init(struct list_head *list,$/;"	f
+tx_list_splice_tail	include/tx-list-common.h	/^static inline void tx_list_splice_tail(struct list_head *list,$/;"	f
+tx_list_splice_tail_init	include/tx-list-common.h	/^static inline void tx_list_splice_tail_init(struct list_head *list,$/;"	f
+type	include/codec-common.h	/^	enum codec_type type;$/;"	m	struct:codec_attributes	typeref:enum:codec_attributes::codec_type
+vaddr	include/audio_common.h	/^	void				*vaddr;$/;"	m	struct:audio_pipe
+vaddr	include/audio_common.h	/^	void 				*vaddr;$/;"	m	struct:dsp_data_fragment
+vaild	host/T41/dmic/as-dbus/as-dbus.h	/^	bool vaild;$/;"	m	struct:ingenic_dbus_port
+version	include/audio_dsp.h	/^	char *version;$/;"	m	struct:audio_dsp_device
+volume	include/audio_common.h	/^struct volume {$/;"	s
+wait_cnt	include/audio_dsp.h	/^	unsigned int wait_cnt;$/;"	m	struct:audio_route
+wait_flag	include/audio_dsp.h	/^	bool wait_flag;$/;"	m	struct:audio_route
+workqueue	include/audio_dsp.h	/^	struct work_struct workqueue;$/;"	m	struct:audio_dsp_device	typeref:struct:audio_dsp_device::work_struct

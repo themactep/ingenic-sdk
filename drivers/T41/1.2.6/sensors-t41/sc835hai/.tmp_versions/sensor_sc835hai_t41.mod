@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc835hai/sensor_sc835hai_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc835hai/sc835hai.o

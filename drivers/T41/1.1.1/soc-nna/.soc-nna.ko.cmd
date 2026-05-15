@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/soc-nna/soc-nna.ko := mips-linux-gnu-ld -r  -m elf32ltsmip -T ./scripts/module-common.lds --build-id  -o /home_d/jszhang/work/isvp/opensource/drivers/soc-nna/soc-nna.ko /home_d/jszhang/work/isvp/opensource/drivers/soc-nna/soc-nna.o /home_d/jszhang/work/isvp/opensource/drivers/soc-nna/soc-nna.mod.o

@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/misc/sample_aes/aes_dev.ko := mips-linux-gnu-ld -r  -m elf32ltsmip -T ./scripts/module-common.lds --build-id  -o /home_d/jszhang/work/isvp/opensource/drivers/misc/sample_aes/aes_dev.ko /home_d/jszhang/work/isvp/opensource/drivers/misc/sample_aes/aes_dev.o /home_d/jszhang/work/isvp/opensource/drivers/misc/sample_aes/aes_dev.mod.o

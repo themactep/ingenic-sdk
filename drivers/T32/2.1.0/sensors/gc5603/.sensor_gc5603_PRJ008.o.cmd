@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t33/opensource/drivers/sensors/gc5603/sensor_gc5603_PRJ008.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/gc5603/sensor_gc5603_PRJ008.o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/gc5603/PRJ008/gc5603.o 

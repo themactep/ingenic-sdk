@@ -1,0 +1,217 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	motor_test/Makefile	/^CC=mips-linux-gnu-gcc$/;"	m
+CROSS_COMPILE	Makefile	/^CROSS_COMPILE ?= mips-linux-gnu-$/;"	m
+HAS_MOTOR_CNT	motor.h	/^	HAS_MOTOR_CNT,$/;"	e	enum:jz_motor_cnt
+HORIZONTAL_MOTOR	motor.h	/^	HORIZONTAL_MOTOR,$/;"	e	enum:jz_motor_cnt
+HRTIMER_SPEED	motor.h	54;"	d
+JZ_MOTOR_DRIVER_VERSION	motor.c	56;"	d	file:
+KDIR	Makefile	/^KDIR := ${ISVP_ENV_KERNEL_DIR}$/;"	m
+MODULE_NAME	Makefile	/^MODULE_NAME := sample_motor$/;"	m
+MOTOR1_MAX_SPEED	motor_test/motortest.h	16;"	d
+MOTOR1_MIN_SPEED	motor_test/motortest.h	17;"	d
+MOTOR_CRUISE	motor.h	51;"	d
+MOTOR_CRUISE	motor_test/motortest.h	26;"	d
+MOTOR_DIRECTIONAL_DOWN	motor_test/motortest.h	12;"	d
+MOTOR_DIRECTIONAL_LEFT	motor_test/motortest.h	13;"	d
+MOTOR_DIRECTIONAL_RIGHT	motor_test/motortest.h	14;"	d
+MOTOR_DIRECTIONAL_UP	motor_test/motortest.h	11;"	d
+MOTOR_DOWN_FORWARD	motor.h	41;"	d
+MOTOR_DOWN_REVERSE	motor.h	42;"	d
+MOTOR_GET_STATUS	motor.h	48;"	d
+MOTOR_GET_STATUS	motor_test/motortest.h	23;"	d
+MOTOR_GOBACK	motor.h	50;"	d
+MOTOR_GOBACK	motor_test/motortest.h	25;"	d
+MOTOR_IS_RUNNING	motor.h	/^	MOTOR_IS_RUNNING,$/;"	e	enum:motor_status
+MOTOR_IS_RUNNING	motor_test/motortest.h	/^	MOTOR_IS_RUNNING,$/;"	e	enum:motor_status
+MOTOR_IS_STOP	motor.h	/^	MOTOR_IS_STOP,$/;"	e	enum:motor_status
+MOTOR_IS_STOP	motor_test/motortest.h	/^	MOTOR_IS_STOP,$/;"	e	enum:motor_status
+MOTOR_LEFT_FORWARD	motor.h	39;"	d
+MOTOR_LEFT_REVERSE	motor.h	40;"	d
+MOTOR_MAX_SPEED	motor.h	55;"	d
+MOTOR_MIN_SPEED	motor.h	56;"	d
+MOTOR_MOVE	motor.h	47;"	d
+MOTOR_MOVE	motor_test/motortest.h	22;"	d
+MOTOR_MOVE_LEFT_DOWN	motor.h	/^	MOTOR_MOVE_LEFT_DOWN = -1,$/;"	e	enum:motor_direction
+MOTOR_MOVE_RIGHT_UP	motor.h	/^	MOTOR_MOVE_RIGHT_UP,$/;"	e	enum:motor_direction
+MOTOR_MOVE_RUN	motor_test/motortest.h	8;"	d
+MOTOR_MOVE_STOP	motor.h	/^	MOTOR_MOVE_STOP,$/;"	e	enum:motor_direction
+MOTOR_MOVE_STOP	motor_test/motortest.h	7;"	d
+MOTOR_OPS_CRUISE	motor.h	/^	MOTOR_OPS_CRUISE,$/;"	e	enum:motor_ops_mode
+MOTOR_OPS_NORMAL	motor.h	/^	MOTOR_OPS_NORMAL,$/;"	e	enum:motor_ops_mode
+MOTOR_RESET	motor.h	46;"	d
+MOTOR_RESET	motor_test/motortest.h	21;"	d
+MOTOR_SPEED	motor.h	49;"	d
+MOTOR_SPEED	motor_test/motortest.h	24;"	d
+MOTOR_STOP	motor.h	45;"	d
+MOTOR_STOP	motor_test/motortest.h	20;"	d
+MS419XX_FORWARD	motor.h	63;"	d
+MS419XX_MAX_PSUM	motor.h	60;"	d
+MS419XX_RESET_GPIO	motor.h	58;"	d
+MS419XX_REVERSE	motor.h	64;"	d
+MS419XX_STOP	motor.h	62;"	d
+MS419XX_VDFZ_GPIO	motor.h	59;"	d
+REGISTER_CHANGE	motor.h	/^	REGISTER_CHANGE,$/;"	e	enum:register_state
+REGISTER_NOCHANGE	motor.h	/^	REGISTER_NOCHANGE,$/;"	e	enum:register_state
+REGISTER_SYNC	motor.h	/^	REGISTER_SYNC,$/;"	e	enum:register_state
+REGISTER_UPDATE	motor.h	/^	REGISTER_UPDATE,$/;"	e	enum:register_state
+VERTICAL_MOTOR	motor.h	/^	VERTICAL_MOTOR,$/;"	e	enum:jz_motor_cnt
+__JZ_SPI_DEV_H__	ms419xx_spi_dev.h	2;"	d
+__MOTOR_H__	motor.h	15;"	d
+__motortest_H__	motor_test/motortest.h	5;"	d
+cell	motor.h	/^	const struct mfd_cell *cell;$/;"	m	struct:motor_device	typeref:struct:motor_device::mfd_cell
+counter	motor.h	/^	unsigned int counter;$/;"	m	struct:motor_device
+cruise_xdir	motor.h	/^	enum motor_direction cruise_xdir;$/;"	m	struct:motor_device	typeref:enum:motor_device::motor_direction
+cruise_ydir	motor.h	/^	enum motor_direction cruise_ydir;$/;"	m	struct:motor_device	typeref:enum:motor_device::motor_direction
+cur_move	motor.h	/^	struct motors_steps cur_move;$/;"	m	struct:motor_device	typeref:struct:motor_device::motors_steps
+cur_position	motor.h	/^	int cur_position;	\/* It is left-bottom point when x is 0 and y is 0.*\/$/;"	m	struct:motor_driver
+cur_speed	motor_test/motortest.h	/^	int cur_speed;$/;"	m	struct:motor_status_st
+cur_steps	motor.h	/^	int cur_steps;$/;"	m	struct:motor_driver
+current_steps	motor_test/motortest.h	/^	int current_steps;$/;"	m	struct:motor_status_st
+dev	motor.h	/^	struct device	 *dev;$/;"	m	struct:motor_device	typeref:struct:motor_device::device
+dev_mutex	motor.h	/^	struct mutex dev_mutex;$/;"	m	struct:motor_device	typeref:struct:motor_device::mutex
+direction_to_motor	motor.c	/^static int direction_to_motor(unsigned int motor, int direction)$/;"	f	file:
+directional_attr	motor_test/motortest.h	/^	int directional_attr;$/;"	m	struct:motor_status_st
+dst_move	motor.h	/^	struct motors_steps dst_move;$/;"	m	struct:motor_device	typeref:struct:motor_device::motors_steps
+dst_steps	motor.h	/^	int dst_steps;$/;"	m	struct:motor_driver
+flag	motor.h	/^	int flag;$/;"	m	struct:motor_device
+g_spi	ms419xx_spi_dev.c	/^static struct spi_device *g_spi = NULL;$/;"	v	typeref:struct:spi_device	file:
+hdir	motor.c	/^static unsigned int hdir = 0;$/;"	v	file:
+hmaxstep	motor.c	/^static unsigned int hmaxstep = 967;$/;"	v	file:
+jb_motor_message	motor_test/motortest.h	/^struct motor_message jb_motor_message;$/;"	v	typeref:struct:motor_message
+jb_motors_steps	motor_test/motortest.h	/^struct motors_steps jb_motors_steps;$/;"	v	typeref:struct:motors_steps
+jz_id_table	ms419xx_spi_dev.c	/^struct spi_device_id jz_id_table[] = {$/;"	v	typeref:struct:spi_device_id
+jz_motor_cnt	motor.h	/^enum jz_motor_cnt {$/;"	g
+jz_spi_board_info	ms419xx_spi_dev.c	/^static struct spi_board_info jz_spi_board_info[] = {$/;"	v	typeref:struct:spi_board_info	file:
+jz_spi_board_info_size	ms419xx_spi_dev.c	/^int jz_spi_board_info_size = sizeof(jz_spi_board_info)\/sizeof(jz_spi_board_info[0]);$/;"	v
+jz_spi_device	ms419xx_spi_dev.c	/^struct spi_device *jz_spi_device;$/;"	v	typeref:struct:spi_device
+jz_spidev_driver	ms419xx_spi_dev.c	/^static struct spi_driver jz_spidev_driver = {$/;"	v	typeref:struct:spi_driver	file:
+jz_spidev_exit	ms419xx_spi_dev.c	/^void __exit jz_spidev_exit(void)$/;"	f
+jz_spidev_init	ms419xx_spi_dev.c	/^int __init jz_spidev_init(void)$/;"	f
+jz_spidev_probe	ms419xx_spi_dev.c	/^static int jz_spidev_probe(struct spi_device *spi)$/;"	f	file:
+jz_spidev_read	ms419xx_spi_dev.c	/^int jz_spidev_read(int addr, char addr_size, int *value, char value_size)$/;"	f
+jz_spidev_remove	ms419xx_spi_dev.c	/^static int jz_spidev_remove(struct spi_device *spi)$/;"	f	file:
+jz_spidev_write	ms419xx_spi_dev.c	/^int jz_spidev_write(int addr, char addr_size, int value, char value_size)$/;"	f
+jz_timer_interrupt	motor.c	/^static irqreturn_t jz_timer_interrupt(int irq, void *dev_id)$/;"	f	file:
+jz_timer_thread_handle	motor.c	/^static irqreturn_t jz_timer_thread_handle(int this_irq, void *dev_id)$/;"	f	file:
+main	motor_test/motortest.c	/^int main(int argc, const char* argv[])$/;"	f
+max_pos_irq	motor.h	/^	int max_pos_irq;$/;"	m	struct:motor_driver
+max_pos_irq_cnt	motor.h	/^	unsigned int max_pos_irq_cnt;$/;"	m	struct:motor_driver
+max_position	motor.h	/^	int max_position;	\/* It is right-top point when x is max and y is max.*\/$/;"	m	struct:motor_driver
+max_speed	motor_test/motortest.h	/^	int max_speed;$/;"	m	struct:motor_status_st
+min_pos_irq	motor.h	/^	int min_pos_irq;$/;"	m	struct:motor_driver
+min_pos_irq_cnt	motor.h	/^	unsigned int min_pos_irq_cnt;$/;"	m	struct:motor_driver
+min_speed	motor_test/motortest.h	/^	int min_speed;$/;"	m	struct:motor_status_st
+misc_dev	motor.h	/^	struct miscdevice misc_dev;$/;"	m	struct:motor_device	typeref:struct:motor_device::miscdevice
+mode	motor.h	/^	enum motor_ops_mode mode;$/;"	m	struct:motor_device	typeref:enum:motor_device::motor_ops_mode
+motor_action	motor_test/motortest.h	/^struct motor_move_st motor_action;$/;"	v	typeref:struct:motor_move_st
+motor_device	motor.h	/^struct motor_device {$/;"	s
+motor_direction	motor.h	/^enum motor_direction {$/;"	g
+motor_directional	motor_test/motortest.h	/^	int motor_directional;$/;"	m	struct:motor_move_st
+motor_driver	motor.c	/^static struct platform_driver motor_driver = {$/;"	v	typeref:struct:platform_driver	file:
+motor_driver	motor.h	/^struct motor_driver {$/;"	s
+motor_exit	motor.c	/^module_exit(motor_exit);$/;"	v
+motor_exit	motor.c	/^static void __exit motor_exit(void)$/;"	f	file:
+motor_fops	motor.c	/^static struct file_operations motor_fops = {$/;"	v	typeref:struct:file_operations	file:
+motor_get_message	motor.c	/^static void motor_get_message(struct motor_device *mdev, struct motor_message *msg)$/;"	f	file:
+motor_gpio_level	motor.h	/^	int motor_gpio_level;$/;"	m	struct:motor_platform_data
+motor_info_fops	motor.c	/^static const struct file_operations motor_info_fops ={$/;"	v	typeref:struct:file_operations	file:
+motor_info_open	motor.c	/^static int motor_info_open(struct inode *inode, struct file *file)$/;"	f	file:
+motor_info_show	motor.c	/^static int motor_info_show(struct seq_file *m, void *v)$/;"	f	file:
+motor_init	motor.c	/^module_init(motor_init);$/;"	v
+motor_init	motor.c	/^static int __init motor_init(void)$/;"	f	file:
+motor_ioctl	motor.c	/^static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)$/;"	f	file:
+motor_match	motor.c	/^static struct of_device_id motor_match[]={$/;"	v	typeref:struct:of_device_id	file:
+motor_max_gpio	motor.h	/^	unsigned int motor_max_gpio;$/;"	m	struct:motor_platform_data
+motor_message	motor.h	/^struct motor_message {$/;"	s
+motor_message	motor_test/motortest.h	/^struct motor_message {$/;"	s
+motor_min_gpio	motor.h	/^	unsigned int motor_min_gpio;$/;"	m	struct:motor_platform_data
+motor_move_speed	motor_test/motortest.h	/^	int motor_move_speed;$/;"	m	struct:motor_move_st
+motor_move_st	motor_test/motortest.h	/^struct motor_move_st {$/;"	s
+motor_move_steps	motor_test/motortest.h	/^	int motor_move_steps;$/;"	m	struct:motor_move_st
+motor_open	motor.c	/^static int motor_open(struct inode *inode, struct file *file)$/;"	f	file:
+motor_ops_cruise	motor.c	/^static long motor_ops_cruise(struct motor_device *mdev)$/;"	f	file:
+motor_ops_goback	motor.c	/^static long motor_ops_goback(struct motor_device *mdev)$/;"	f	file:
+motor_ops_mode	motor.h	/^enum motor_ops_mode {$/;"	g
+motor_ops_move	motor.c	/^static long motor_ops_move(struct motor_device *mdev, int x, int y, int block)$/;"	f	file:
+motor_ops_reset	motor.c	/^static long motor_ops_reset(struct motor_device *mdev, struct motor_reset_data *rdata)$/;"	f	file:
+motor_ops_reset_check_params	motor.c	/^static inline int motor_ops_reset_check_params(struct motor_reset_data *rdata)$/;"	f	file:
+motor_ops_stop	motor.c	/^static long motor_ops_stop(struct motor_device *mdev)$/;"	f	file:
+motor_platform_data	motor.h	/^struct motor_platform_data {$/;"	s
+motor_probe	motor.c	/^static int motor_probe(struct platform_device *pdev)$/;"	f	file:
+motor_release	motor.c	/^static int motor_release(struct inode *inode, struct file *file)$/;"	f	file:
+motor_remove	motor.c	/^static int motor_remove(struct platform_device *pdev)$/;"	f	file:
+motor_reset_data	motor.h	/^struct motor_reset_data {$/;"	s
+motor_reset_data	motor_test/motortest.h	/^struct motor_reset_data motor_reset_data;$/;"	v	typeref:struct:motor_reset_data
+motor_reset_data	motor_test/motortest.h	/^struct motor_reset_data {$/;"	s
+motor_speed	motor.c	/^static int motor_speed(struct motor_device *mdev, int speed)$/;"	f	file:
+motor_st1_gpio	motor.h	/^	unsigned int motor_st1_gpio;$/;"	m	struct:motor_platform_data
+motor_st2_gpio	motor.h	/^	unsigned int motor_st2_gpio;$/;"	m	struct:motor_platform_data
+motor_st3_gpio	motor.h	/^	unsigned int motor_st3_gpio;$/;"	m	struct:motor_platform_data
+motor_st4_gpio	motor.h	/^	unsigned int motor_st4_gpio;$/;"	m	struct:motor_platform_data
+motor_status	motor.h	/^enum motor_status {$/;"	g
+motor_status	motor_test/motortest.h	/^enum motor_status {$/;"	g
+motor_status	motor_test/motortest.h	/^struct motor_status_st motor_status;$/;"	v	typeref:struct:motor_status_st
+motor_status_st	motor_test/motortest.h	/^struct motor_status_st {$/;"	s
+motors	motor.h	/^	struct motor_driver motors[HAS_MOTOR_CNT];$/;"	m	struct:motor_device	typeref:struct:motor_device::motor_driver
+motors_steps	motor.h	/^struct motors_steps{$/;"	s
+motors_steps	motor_test/motortest.h	/^struct motors_steps{$/;"	s
+move_dir	motor.h	/^	enum motor_direction move_dir;$/;"	m	struct:motor_driver	typeref:enum:motor_driver::motor_direction
+move_dir_prebuild	motor.h	/^	enum motor_direction move_dir_prebuild;$/;"	m	struct:motor_driver	typeref:enum:motor_driver::motor_direction
+move_is_max	motor_test/motortest.h	/^	int move_is_max;$/;"	m	struct:motor_status_st
+move_is_min	motor_test/motortest.h	/^	int move_is_min;$/;"	m	struct:motor_status_st
+msg	motor.h	/^	struct motor_message msg;$/;"	m	struct:motor_device	typeref:struct:motor_device::motor_message
+name	motor.h	/^	const char name[32];$/;"	m	struct:motor_platform_data
+obj-m	Makefile	/^obj-m := $(MODULE_NAME).o$/;"	m
+objects	motor_test/Makefile	/^objects = $(patsubst %.c, %.o, $(sources))$/;"	m
+pdata	motor.h	/^	struct motor_platform_data *pdata;$/;"	m	struct:motor_driver	typeref:struct:motor_driver::motor_platform_data
+pdev	motor.h	/^	struct platform_device *pdev;$/;"	m	struct:motor_device	typeref:struct:motor_device::platform_device
+proc	motor.h	/^	struct proc_dir_entry *proc;$/;"	m	struct:motor_device	typeref:struct:motor_device::proc_dir_entry
+reg_state	motor.h	/^	enum register_state reg_state;$/;"	m	struct:motor_device	typeref:enum:motor_device::register_state
+register_state	motor.h	/^enum register_state {$/;"	g
+reset_completion	motor.h	/^	struct completion reset_completion;$/;"	m	struct:motor_driver	typeref:struct:motor_driver::completion
+reset_max_pos	motor.h	/^	char reset_max_pos;$/;"	m	struct:motor_driver
+reset_min_pos	motor.h	/^	char reset_min_pos;$/;"	m	struct:motor_driver
+rtimer_cnt	motor.h	/^	unsigned int rtimer_cnt;$/;"	m	struct:motor_device
+run_step_irq	motor.h	/^	int run_step_irq;$/;"	m	struct:motor_device
+skip_mode	motor.h	/^	char *skip_mode;$/;"	m	struct:motor_device
+slock	motor.h	/^	spinlock_t slock;$/;"	m	struct:motor_device
+sources	motor_test/Makefile	/^sources = $(wildcard *.c)$/;"	m
+speed	motor.h	/^	int speed;$/;"	m	struct:motor_message
+speed	motor_test/motortest.h	/^	int speed;$/;"	m	struct:motor_message
+sport_prebuild	motor.h	/^	unsigned short sport_prebuild;$/;"	m	struct:motor_driver
+sport_real	motor.h	/^	unsigned short sport_real;$/;"	m	struct:motor_driver
+status	motor.h	/^	enum motor_status status;$/;"	m	struct:motor_message	typeref:enum:motor_message::motor_status
+status	motor_test/motortest.h	/^	enum motor_status status;$/;"	m	struct:motor_message	typeref:enum:motor_message::motor_status
+stop_completion	motor.h	/^	struct completion stop_completion;$/;"	m	struct:motor_device	typeref:struct:motor_device::completion
+target	motor_test/Makefile	/^target = motortest$/;"	m
+tcu	motor.h	/^	struct ingenic_tcu_chn *tcu;$/;"	m	struct:motor_device	typeref:struct:motor_device::ingenic_tcu_chn
+tcu	motor.h	/^	struct jz_tcu_chn *tcu;$/;"	m	struct:motor_device	typeref:struct:motor_device::jz_tcu_chn
+tcu_speed	motor.h	/^	int tcu_speed;$/;"	m	struct:motor_device
+total_steps	motor.h	/^	int total_steps;$/;"	m	struct:motor_driver
+total_steps	motor_test/motortest.h	/^	int total_steps;$/;"	m	struct:motor_status_st
+vdfz_state	motor.h	/^	unsigned int vdfz_state; \/\/ high or low$/;"	m	struct:motor_device
+vdfz_valid	motor.h	/^	unsigned int vdfz_valid;$/;"	m	struct:motor_device
+vdir	motor.c	/^static unsigned int vdir = 0;$/;"	v	file:
+vmaxstep	motor.c	/^static unsigned int vmaxstep = 187;$/;"	v	file:
+wait_stop	motor.h	/^	unsigned int wait_stop;$/;"	m	struct:motor_device
+x	motor.h	/^	int x;$/;"	m	struct:motor_message
+x	motor.h	/^	int x;$/;"	m	struct:motors_steps
+x	motor_test/motortest.h	/^	int x;$/;"	m	struct:motor_message
+x	motor_test/motortest.h	/^	int x;$/;"	m	struct:motors_steps
+x_cur_step	motor.h	/^	unsigned int x_cur_step;$/;"	m	struct:motor_reset_data
+x_cur_step	motor_test/motortest.h	/^	unsigned int x_cur_step;$/;"	m	struct:motor_reset_data
+x_max_steps	motor.h	/^	unsigned int x_max_steps;$/;"	m	struct:motor_reset_data
+x_max_steps	motor_test/motortest.h	/^	unsigned int x_max_steps;$/;"	m	struct:motor_reset_data
+y	motor.h	/^	int y;$/;"	m	struct:motor_message
+y	motor.h	/^	int y;$/;"	m	struct:motors_steps
+y	motor_test/motortest.h	/^	int y;$/;"	m	struct:motor_message
+y	motor_test/motortest.h	/^	int y;$/;"	m	struct:motors_steps
+y_cur_step	motor.h	/^	unsigned int y_cur_step;$/;"	m	struct:motor_reset_data
+y_cur_step	motor_test/motortest.h	/^	unsigned int y_cur_step;$/;"	m	struct:motor_reset_data
+y_max_steps	motor.h	/^	unsigned int y_max_steps;$/;"	m	struct:motor_reset_data
+y_max_steps	motor_test/motortest.h	/^	unsigned int y_max_steps;$/;"	m	struct:motor_reset_data

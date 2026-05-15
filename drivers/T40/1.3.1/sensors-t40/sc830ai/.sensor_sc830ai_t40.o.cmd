@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/sc830ai/sensor_sc830ai_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/sc830ai/sensor_sc830ai_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/sc830ai/sc830ai.o 

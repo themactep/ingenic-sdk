@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/sc2310/sensor_sc2310_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/sc2310/sc2310.o

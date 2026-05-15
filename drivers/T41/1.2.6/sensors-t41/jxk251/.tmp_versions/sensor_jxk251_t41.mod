@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/jxk251/sensor_jxk251_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/jxk251/jxk251.o

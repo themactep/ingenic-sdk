@@ -1,0 +1,2 @@
+make 生成测试sample_hash, 使用test.sh脚本循环测试相应的case。默认开发板上的
+文件系统可能没有支持sha1 sha224 sha384,可以自己选配文件系统支持的命令。

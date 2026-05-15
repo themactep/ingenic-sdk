@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t41/imx335/sensor_imx335_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t41/imx335/sensor_imx335_t41.o /home_a/jszhang/work/opensource/drivers/sensors-t41/imx335/imx335.o 

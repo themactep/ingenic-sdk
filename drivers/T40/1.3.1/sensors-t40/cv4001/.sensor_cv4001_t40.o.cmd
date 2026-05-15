@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t40/cv4001/sensor_cv4001_t40.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t40/cv4001/sensor_cv4001_t40.o /home_a/jszhang/work/opensource/drivers/sensors-t40/cv4001/cv4001.o 

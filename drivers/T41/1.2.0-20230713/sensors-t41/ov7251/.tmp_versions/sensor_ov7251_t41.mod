@@ -1,0 +1,2 @@
+/home_d/zjxu/git/opensource/drivers/sensors-t41/ov7251/sensor_ov7251_t41.ko
+/home_d/zjxu/git/opensource/drivers/sensors-t41/ov7251/ov7251.o

@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t41/gc4023/sensor_gc4023_t41.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t41/gc4023/gc4023.o

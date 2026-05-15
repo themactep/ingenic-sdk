@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc235ai/sensor_sc235ai_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc235ai/sc235ai.o

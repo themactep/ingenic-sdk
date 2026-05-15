@@ -1,0 +1,2 @@
+/home_d/zjxu/git/opensource/drivers/sensors-t41/cv5001/sensor_cv5001_t41.ko
+/home_d/zjxu/git/opensource/drivers/sensors-t41/cv5001/cv5001.o

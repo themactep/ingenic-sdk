@@ -1,0 +1,53 @@
+T32/T33:
+1,通过CONFIG_SOC_PRJ007/CONFIG_SOC_PRJ008区分T32/T33
+  测试代码在test文件
+  在test_aes.h中，通过宏TEST_AES_EFUSE和宏TEST_PDMA区分aes efuse直通和分片测试
+  #define TEST_AES_EFUSE
+  #define TEST_PDMA
+
+2,T33 aes pdma分片验证
+	a,jz_aes.h文件打开宏TEST_AES_PDMA	
+		#define TEST_AES_PDMA
+	b,jz_aes.c
+		例如4K数据分8次传输，结果分四次获取，可以在此基础修改
+    struct aes_pdma_para pdma_src[8] = {
+        {aes->src_addr_p, 128},   
+        {aes->src_addr_p + 512, 128},
+        {aes->src_addr_p + 512*2, 128},
+        {aes->src_addr_p + 512*3, 128},
+        {aes->src_addr_p + 512*4, 128},
+        {aes->src_addr_p + 512*5, 128},
+        {aes->src_addr_p + 512*6, 128},
+        {aes->src_addr_p + 512*7, 128}
+    };
+    struct aes_pdma_para pdma_dst[4] = {
+        {aes->dst_addr_p, 256},
+        {aes->dst_addr_p + 1024, 256},
+        {aes->dst_addr_p + 1024*2, 256},
+        {aes->dst_addr_p + 1024*3, 256}
+    };
+
+	c,test目录
+		测试的数据大小需要和jz_aes.c中保持一致，相关宏需要打开
+
+3,T33 efuse直通
+	a,jz_aes.h文件打开宏TEST_AES_EFUSE
+		#define TEST_AES_EFUSE
+	b,jz_aes.c中下面三个参数分别表示获取efuse中key的长度，key的型式，是否加扰；
+    aeskey_len = para->aes_key_len; //0:128bit 2:256bit
+    efuse_key_mood = para->efuse_key_mood; /*if aeskey_len = 0
+                        0:user_key[127:0]
+                        1:user_key[255:128]
+                        2:user_key[127:0]|user_key[255:128]
+                        */
+    fusion = para->fusion; //0:no fusion 1:chipid fusion
+
+	jz_aes.c文件中的上述三个变量可通过test_aes.c配置
+	例如：获取efuse user_key低128bit作为aes key
+    para.efuse_key_mood = 0;
+    para.fusion = 0;
+    para.aes_key_len = 0;
+
+	c,test目录
+		#define TEST_AES_EFUSE，相关宏需要打开
+

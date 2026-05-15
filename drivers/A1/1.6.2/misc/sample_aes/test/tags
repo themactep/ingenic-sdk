@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+IN_UNF_CIPHER_WORK_MODE	test_aes.h	/^}IN_UNF_CIPHER_WORK_MODE;$/;"	t	typeref:enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_CBC	test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_CBC = 0x1,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_E	test_aes.h	/^typedef enum IN_UNF_CIPHER_WORK_MODE_E$/;"	g
+IN_UNF_CIPHER_WORK_MODE_ECB	test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_ECB = 0x0,$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IN_UNF_CIPHER_WORK_MODE_OTHER	test_aes.h	/^	IN_UNF_CIPHER_WORK_MODE_OTHER = 0x2$/;"	e	enum:IN_UNF_CIPHER_WORK_MODE_E
+IOCTL_AES_GET_PARA	test_aes.h	9;"	d
+IOCTL_AES_START_DE_PROCESSING	test_aes.h	11;"	d
+IOCTL_AES_START_EN_PROCESSING	test_aes.h	10;"	d
+JZAES_IOC_MAGIC	test_aes.h	8;"	d
+JZ_AES_STATUS	test_aes.h	/^} JZ_AES_STATUS;$/;"	t	typeref:enum:jz_aes_status
+JZ_AES_STATUS_DONE	test_aes.h	/^	JZ_AES_STATUS_DONE,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_PREPARE	test_aes.h	/^	JZ_AES_STATUS_PREPARE = 0,$/;"	e	enum:jz_aes_status
+JZ_AES_STATUS_WORKING	test_aes.h	/^	JZ_AES_STATUS_WORKING,$/;"	e	enum:jz_aes_status
+__AES_TEST_H__	test_aes.h	2;"	d
+aes_para	test_aes.h	/^struct aes_para {$/;"	s
+aesiv	test_aes.h	/^	unsigned int aesiv[4]; \/\/ when work mode is cbc, the parameter must be setted.$/;"	m	struct:aes_para
+aeskey	test_aes.h	/^	unsigned int aeskey[4];$/;"	m	struct:aes_para
+datalen	test_aes.h	/^	unsigned int datalen; \/\/ it should be 16bytes aligned$/;"	m	struct:aes_para
+donelen	test_aes.h	/^	unsigned int donelen; \/\/ The length of the processed data.$/;"	m	struct:aes_para
+dst	test_aes.h	/^	unsigned char *dst;$/;"	m	struct:aes_para
+enworkmode	test_aes.h	/^	unsigned int enworkmode;$/;"	m	struct:aes_para
+jz_aes_status	test_aes.h	/^typedef enum jz_aes_status {$/;"	g
+main	test_aes.c	/^int main(int argc, const char* argv[])$/;"	f
+src	test_aes.h	/^	unsigned char *src;$/;"	m	struct:aes_para
+status	test_aes.h	/^	unsigned int status;$/;"	m	struct:aes_para

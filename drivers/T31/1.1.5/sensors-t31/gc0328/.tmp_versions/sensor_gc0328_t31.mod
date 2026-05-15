@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/gc0328/sensor_gc0328_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/gc0328/gc0328.o

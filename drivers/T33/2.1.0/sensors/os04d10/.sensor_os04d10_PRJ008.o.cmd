@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t33/opensource/drivers/sensors/os04d10/sensor_os04d10_PRJ008.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/os04d10/sensor_os04d10_PRJ008.o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/os04d10/PRJ008/os04d10.o 

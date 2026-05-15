@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t41/ov2736/sensor_ov2736_t41.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t41/ov2736/ov2736.o

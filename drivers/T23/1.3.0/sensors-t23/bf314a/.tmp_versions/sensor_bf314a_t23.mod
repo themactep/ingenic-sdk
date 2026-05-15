@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/bf314a/sensor_bf314a_t23.ko
+/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/bf314a/bf314a.o

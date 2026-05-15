@@ -1,0 +1,1 @@
+cmd_/home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/gc2033/sensor_gc2033_t30.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/gc2033/sensor_gc2033_t30.o /home_c/xbyu/work/isvp_w/opensource/drivers/sensors-t30/gc2033/gc2033.o 

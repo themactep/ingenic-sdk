@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/bf314a/sensor_bf314a_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/bf314a/sensor_bf314a_t23.o /home_a/ingenic/isvp_t23/opensource/drivers/sensors-t23/bf314a/bf314a.o 

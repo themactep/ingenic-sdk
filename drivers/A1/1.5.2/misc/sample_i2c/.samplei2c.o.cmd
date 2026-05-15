@@ -1,0 +1,1 @@
+cmd_/home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_i2c/samplei2c.o := mips-linux-gnu-v720-229-ld  -m elf32ltsmip   -r -o /home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_i2c/samplei2c.o /home_d/wjxu/work/isvp_a1/opensource/drivers/misc/sample_i2c/sample_i2c.o 

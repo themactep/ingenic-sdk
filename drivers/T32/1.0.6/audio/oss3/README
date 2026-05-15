@@ -1,0 +1,31 @@
+================================================================================================================
+编译步骤
+1,在当前目录下执行 make clean;make 命令可以编译出audio.ko
+2,如果需要编译外部codec驱动，请进入 ex_codecs 目录，然后执行 make CODEC_NAME=xxx 编译出外部codec驱动 xxx_txx.ko
+
+驱动加载
+1, 如果使用外部codec， 请先加载外部codec驱动，后加载audio.ko
+2, 如果不使用外部codec，只需加载audio.ko
+
+以PRJ007外部codec es8389为例，vela板驱动加载命令：
+	insmod es8389.ko gpio_func=1,2,0x000007c0
+	insmod audio.ko excodec_name=es8389 excodec_addr=0x10 i2c_bus=0x2
+================================================================================================================
+Compilation steps
+1. Execute make clean in the current directory; The make command can compile audio.ko
+2. If you need to compile an external codec driver, please enter the ex_comdecs directory and execute make CODEC_NAME=xxx to compile the external codec driver xxx_txx.ko
+
+Driver loading
+1.If using an external codec, please load the external codec driver first, and then load audio.ko
+2. If no external codec is used, simply load audio.ko
+
+Taking PRJ007 external codec es8389 as an example, the command to load the Vela board driver is:
+insmod es8389.ko gpio_func=1,2,0x000007c0
+insmod audio.ko excodec_name=es8389 excodec_addr=0x10 i2c_bus=0x2
+
+================================================================================================================
+针对t32 AOV：
+1.加载驱动，在/sys/devices/platform/jz-dsp/下会生成两个文件：audio_bind、audio_unbind
+2.休眠前，echo suspend > /sys/devices/platform/jz-dsp/audio_bind
+3.唤醒后，echo resume > /sys/devices/platform/jz-dsp/audio_unbind
+

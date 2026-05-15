@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t41/sc3336p-double/sensor_sc3336ps1_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t41/sc3336p-double/sensor_sc3336ps1_t41.o /home_a/jszhang/work/opensource/drivers/sensors-t41/sc3336p-double/sc3336ps1.o 

@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/gc3003/sensor_gc3003_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/gc3003/gc3003.o

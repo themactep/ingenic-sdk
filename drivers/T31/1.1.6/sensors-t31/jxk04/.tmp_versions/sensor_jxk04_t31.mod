@@ -1,0 +1,2 @@
+/home/user/git/opensource/drivers/sensors-t31/jxk04/sensor_jxk04_t31.ko
+/home/user/git/opensource/drivers/sensors-t31/jxk04/jxk04.o

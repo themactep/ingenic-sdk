@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/sc2239/sensor_sc2239_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/sc2239/sensor_sc2239_t31.o /home/user/git/opensource/drivers/sensors-t31/sc2239/sc2239.o 

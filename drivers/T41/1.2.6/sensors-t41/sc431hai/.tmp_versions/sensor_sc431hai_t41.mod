@@ -1,0 +1,2 @@
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc431hai/sensor_sc431hai_t41.ko
+/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc431hai/sc431hai.o

@@ -1,0 +1,35 @@
+T32/T33:
+1,通过CONFIG_SOC_PRJ007/CONFIG_SOC_PRJ008区分T32/T33
+  测试代码在test文件
+  例如测试文件fileone sha256值：
+  ./test_hash sha256 file=fileone
+  例如测试字符串helloworld sha256值
+  ./test_hash sha256 str=helloworld
+2,T33 hash pdma分片验证
+	a,jz_hash.h文件做如下修改
+		#define CONFIG_TEST_PDMA_PRJ008
+		#undef CONFIG_TEST_DMA_PRJ008
+	b,jz_hash.c
+		例如32K分16次传输，可以在此基础修改，需要注意最后一次传输要加上16字节pading，其他地方无需修改
+		struct hash_pdma_para pdma_src[16] = {
+		    {hash->src_addr_p, 512},
+		    {hash->src_addr_p + 2048, 512},
+		    {hash->src_addr_p + 2048*2, 512},
+		    {hash->src_addr_p + 2048*3, 512},
+		    {hash->src_addr_p + 2048*4, 512},
+		    {hash->src_addr_p + 2048*5, 512},
+			{hash->src_addr_p + 2048*6, 512},
+		    {hash->src_addr_p + 2048*7, 512},
+		    {hash->src_addr_p + 2048*8, 512},
+		    {hash->src_addr_p + 2048*9, 512},
+		    {hash->src_addr_p + 2048*10, 512},
+		    {hash->src_addr_p + 2048*11, 512},
+		    {hash->src_addr_p + 2048*12, 512},
+		    {hash->src_addr_p + 2048*13, 512},
+		    {hash->src_addr_p + 2048*14, 512},
+		    {hash->src_addr_p + 2048*15, 512+16}
+		};
+
+	c,test目录
+		测试的数据大小需要和jz_hash.c中保持一致
+		例如32K ./test_hash sha256 file=32K

@@ -1,0 +1,2 @@
+/home_a/jszhang/work/opensource/drivers/sensors-t40/sc830ai/sensor_sc830ai_t40.ko
+/home_a/jszhang/work/opensource/drivers/sensors-t40/sc830ai/sc830ai.o

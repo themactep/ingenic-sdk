@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t23/jxf38p-double/sensor_jxf38ps1_t23.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t23/jxf38p-double/sensor_jxf38ps1_t23.o /home_a/jszhang/work/opensource/drivers/sensors-t23/jxf38p-double/jxf38ps1.o 

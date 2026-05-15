@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/sensors-t31/gc5035/sensor_gc5035_t31.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home/user/git/opensource/drivers/sensors-t31/gc5035/sensor_gc5035_t31.o /home/user/git/opensource/drivers/sensors-t31/gc5035/gc5035.o 

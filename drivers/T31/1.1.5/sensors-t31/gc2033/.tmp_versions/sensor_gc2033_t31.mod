@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/gc2033/sensor_gc2033_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/gc2033/gc2033.o

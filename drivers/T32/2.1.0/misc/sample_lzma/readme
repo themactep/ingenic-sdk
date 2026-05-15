@@ -1,0 +1,12 @@
+usage:
+    1. complier:
+        sh make.sh
+
+    2. insmod driver:
+        insmod ingenic_lzma.ko
+
+    3. single channel:
+        ./sample_lzma face.bin
+
+    4. Dual channel:
+        ./sample_lzma uImage_5M.bin uImage_3M.bin

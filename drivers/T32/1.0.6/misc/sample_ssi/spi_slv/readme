@@ -1,0 +1,5 @@
+spi_slave.c is ssi_slv driver
+1.kernelxx/Documentation/spi/ssi_test.c transfer data,ssi_slv receive data,but only support Standard mode
+2.ssi_test.c transfer data,ssi_slv receive data,for test quad mode
+3.Compilation method:
+	sh make.sh

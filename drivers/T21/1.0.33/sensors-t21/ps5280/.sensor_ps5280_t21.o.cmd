@@ -1,0 +1,1 @@
+cmd_/home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/ps5280/sensor_ps5280_t21.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/ps5280/sensor_ps5280_t21.o /home_d/jszhang/work/isvp/opensource/drivers/sensors-t21/ps5280/ps5280.o 

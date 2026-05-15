@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc5336/sensor_sc5336_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc5336/sensor_sc5336_t41.o /home_a/ingenic/isvp_t41/opensource/drivers/sensors-t41/sc5336/sc5336.o 

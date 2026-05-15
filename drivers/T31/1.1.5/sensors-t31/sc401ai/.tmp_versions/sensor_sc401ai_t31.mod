@@ -1,0 +1,2 @@
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/sc401ai/sensor_sc401ai_t31.ko
+/home_d/jszhang/work/isvp/opensource/drivers/sensors-t31/sc401ai/sc401ai.o

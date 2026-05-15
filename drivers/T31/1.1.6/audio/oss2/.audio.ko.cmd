@@ -1,0 +1,1 @@
+cmd_/home/user/git/opensource/drivers/audio/oss2/audio.ko := mips-linux-gnu-ld -r  -m elf32ltsmip -T /home/user/git/opensource/kernel/scripts/module-common.lds --build-id  -o /home/user/git/opensource/drivers/audio/oss2/audio.ko /home/user/git/opensource/drivers/audio/oss2/audio.o /home/user/git/opensource/drivers/audio/oss2/audio.mod.o

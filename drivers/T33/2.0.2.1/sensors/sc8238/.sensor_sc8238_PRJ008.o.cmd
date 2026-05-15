@@ -1,0 +1,1 @@
+cmd_/home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc8238/sensor_sc8238_PRJ008.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc8238/sensor_sc8238_PRJ008.o /home_a/ingenic/isvp_t33/opensource/drivers/sensors/sc8238/PRJ008/sc8238.o 

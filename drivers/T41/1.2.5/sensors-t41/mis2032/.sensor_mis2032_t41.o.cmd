@@ -1,0 +1,1 @@
+cmd_/home_a/jszhang/work/opensource/drivers/sensors-t41/mis2032/sensor_mis2032_t41.o := mips-linux-gnu-ld  -m elf32ltsmip   -r -o /home_a/jszhang/work/opensource/drivers/sensors-t41/mis2032/sensor_mis2032_t41.o /home_a/jszhang/work/opensource/drivers/sensors-t41/mis2032/mis2032.o 
