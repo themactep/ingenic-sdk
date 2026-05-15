@@ -55,7 +55,7 @@ MODULE_PARM_DESC(print_level, "isp print level");
 
 static char *clk_name = "mpll";
 module_param(clk_name, charp, S_IRUGO);
-MODULE_PARM_DESC(clk_name, "select the isp parent clock");
+MODULE_PARM_DESC(clk_name, "chose parent clk");
 
 static int isp_clk = 200000000;
 module_param(isp_clk, int, S_IRUGO);
@@ -72,7 +72,11 @@ extern int isp_ch0_pre_dequeue_time;
 module_param(isp_ch0_pre_dequeue_time, int, S_IRUGO);
 MODULE_PARM_DESC(isp_ch0_pre_dequeue_time, "isp pre dequeue time, unit ms");
 
-char *sclk_name[4] = {"apll", "mpll", "vpll", "epll"};
+extern uint16_t isp_dual_buf[2];
+module_param_array(isp_dual_buf, ushort, NULL, S_IRUGO);
+MODULE_PARM_DESC(isp_dual_buf, "isp dual buff");
+
+char *sclk_name[4] = {"mpll", "vpll", "epll", "sclka"};
 
 int isp_printf(unsigned int level, unsigned char *fmt, ...)
 {

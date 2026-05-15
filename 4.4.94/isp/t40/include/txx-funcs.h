@@ -50,7 +50,7 @@
 #define ISP_PRINT(level, format, ...)	isp_printf(level, format, ##__VA_ARGS__)
 #define ISP_INFO(...)			ISP_PRINT(ISP_INFO_LEVEL, __VA_ARGS__)
 #define ISP_WARNING(...)		ISP_PRINT(ISP_WARNING_LEVEL, __VA_ARGS__)
-#define ISP_ERROR(...)			ISP_PRINT(ISP_ERROR_LEVEL, __VA_ARGS__)
+#define ISP_ERROR(format, ...) ISP_PRINT(ISP_ERROR_LEVEL, "[%s %d] "format, __func__, __LINE__, ##__VA_ARGS__)
 
 //extern unsigned int isp_print_level;
 /*int isp_debug_init(void);*/

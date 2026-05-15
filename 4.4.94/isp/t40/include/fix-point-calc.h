@@ -32,5 +32,6 @@ uint32_t tisp_log2_fixed_to_fixed_64(uint64_t val, int32_t in_fix_point, uint8_t
 uint32_t tisp_simple_intp(uint32_t x_int, uint32_t x_fra, uint32_t *y_array);
 uint8_t tisp_simple_intp_int8(uint32_t x_int, uint32_t x_fra, uint8_t *y_array);
 uint16_t tisp_simple_intp_int16(uint32_t x_int, uint32_t x_fra, uint16_t *y_array);
+int64_t tisp_round_int64(int64_t val, int32_t p);
 
 #endif
