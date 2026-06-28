@@ -367,6 +367,8 @@ struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode,
 void *private_vmalloc(unsigned long size)
 {
 	void *addr = vmalloc(size);
+	if (!addr)
+		pr_err("%s: vmalloc(%lu) failed\n", __func__, size);
 	return addr;
 }
 
@@ -375,9 +377,11 @@ void private_vfree(const void *addr)
 	vfree(addr);
 }
 
-void * private_kmalloc(size_t s, gfp_t gfp)
+void *private_kmalloc(size_t s, gfp_t gfp)
 {
 	void *addr = kmalloc(s, gfp);
+	if (!addr)
+		pr_err("%s: kmalloc(%zu) failed\n", __func__, s);
 	return addr;
 }
 

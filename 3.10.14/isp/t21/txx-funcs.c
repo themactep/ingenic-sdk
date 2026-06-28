@@ -121,9 +121,12 @@ int  private_kthread_stop(struct task_struct *k)
 	return kthread_stop(k);
 }
 
-void *  private_kmalloc(size_t s, gfp_t gfp)
+void *private_kmalloc(size_t s, gfp_t gfp)
 {
-	return kmalloc(s, gfp);
+	void *addr = kmalloc(s, gfp);
+	if (!addr)
+		pr_err("%s: kmalloc(%zu) failed\n", __func__, s);
+	return addr;
 }
 
 void  private_kfree(void *p)
