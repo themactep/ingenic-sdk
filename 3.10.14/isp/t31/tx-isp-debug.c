@@ -65,6 +65,8 @@ int get_isp_clk(void)
 void *private_vmalloc(unsigned long size)
 {
 	void *addr = vmalloc(size);
+	if (!addr)
+		pr_err("%s: vmalloc(%lu) failed\n", __func__, size);
 	return addr;
 }
 

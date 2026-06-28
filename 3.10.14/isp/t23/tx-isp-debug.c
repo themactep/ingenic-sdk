@@ -124,6 +124,8 @@ int get_mipi_switch_gpio(void)
 void *private_vmalloc(unsigned long size)
 {
     void *addr = vmalloc(size);
+    if (!addr)
+        pr_err("%s: vmalloc(%lu) failed\n", __func__, size);
     return addr;
 }
 
