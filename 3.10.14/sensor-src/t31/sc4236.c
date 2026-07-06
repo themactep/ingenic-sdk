@@ -35,7 +35,7 @@
 // ============================================================================
 // SENSOR CAPABILITIES
 // ============================================================================
-#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_WIDTH 2048 //2304
 #define SENSOR_MAX_HEIGHT 1536
 
 // ============================================================================
@@ -61,7 +61,6 @@ static int pwdn_gpio = -1;
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
-
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
@@ -79,8 +78,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
@@ -196,16 +195,16 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.mipi = {
 		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 500,
+		.clk = 400,
 		.lans = 2,
-		.settle_time_apative_en = 0,
+		.settle_time_apative_en = 1,
 		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 		.mipi_sc.hcrop_diff_en = 0,
 		.mipi_sc.mipi_vcomp_en = 0,
 		.mipi_sc.mipi_hcomp_en = 0,
 		.mipi_sc.line_sync_mode = 0,
 		.mipi_sc.work_start_flag = 0,
-		.image_twidth = 2304,
+		.image_twidth = 2048,
 		.image_theight = 1536,
 		.mipi_sc.mipi_crop_start0x = 0,
 		.mipi_sc.mipi_crop_start0y = 0,
@@ -228,7 +227,7 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.min_integration_time_native = 3,
 	.max_integration_time_native = 1996,
 	.integration_time_limit = 1996,
-	.total_width = 0xa28,
+	.total_width = 2600,
 	.total_height = 2000,
 	.max_integration_time = 1996,
 	.integration_time_apply_delay = 2,
@@ -236,6 +235,11 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
+
+	// to avoid black line:
+	// sensor_attr.mipi.clk = 500,
+	// sensor_attr.mipi.settle_time_apative_en = 0,
+	// sensor_attr.mipi.image_twidth = 2304,
 };
 
 static struct regval_list sensor_init_regs_2048_1536_30fps_mipi_3m[] = {
@@ -702,19 +706,11 @@ static struct regval_list sensor_init_regs_2304_1440_15fps_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},
 };
+
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
-	/* 2304*1536 @25fps */
-	{
-		.width = 2304,
-		.height = 1536,
-		.fps = 25 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = sensor_init_regs_2304_1536_25fps_mipi,
-	},
 	/* 2048*1536 @25fps */
 	{
 		.width = 2048,
@@ -733,6 +729,15 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2304_1440_15fps_mipi,
 	},
+	/* 2304*1536 @25fps */
+	{
+		.width = 2304,
+		.height = 1536,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_2304_1536_25fps_mipi,
+	}
 };
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
@@ -849,8 +854,10 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
+
 	*ident = (*ident << 8) | v;
 
 	return 0;
@@ -867,8 +874,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 	if (value < 160) {
 		ret += sensor_write(sd, 0x3314, 0x14);
-	}
-	else if (value > 320) {
+	} else if (value > 320) {
 		ret += sensor_write(sd, 0x3314, 0x04);
 	}
 	if (ret < 0)
@@ -884,6 +890,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
 	if (ret < 0)
 		return ret;
+
 	/* denoise logic */
 	if (value < 0x110) {
 		sensor_write(sd, 0x3812, 0x00);
@@ -960,6 +967,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
@@ -973,8 +981,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		pr_debug("%s stream on\n", SENSOR_NAME);
-	}
-	else {
+	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		pr_debug("%s stream off\n", SENSOR_NAME);
 	}
@@ -1051,8 +1058,8 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value)
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 25;
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		wsize = &sensor_win_sizes[0];
-		sensor_info.max_fps = 25;
+		wsize = &sensor_win_sizes[1];
+		sensor_info.max_fps = 15;
 	}
 
 	if (wsize) {
