@@ -42,6 +42,23 @@
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = 30,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 2560,
+	.height = 1440,
+	.rst_gpio = GPIO_PA(18),
+	.pwdn_gpio = GPIO_PA(19),
+	.boot = 0,              /* linear */
+	.mclk = 1,              /* MCLK1 */
+	.video_interface = 0,   /* MIPI CSI0 */
+	.i2c_adapter = 0,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
@@ -854,6 +871,24 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->priv = wsize;
 	sensor->video.max_fps = wsize->fps;
 	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
+
+	/* Update sensor_info for /proc/jz/sensor/ with the values the ISP
+	 * framework resolved at probe time. The proc entries read from
+	 * sensor_info at access time, so refreshing the struct here is
+	 * enough — sensor_common_init was already called in init_sensor. */
+	if (info->rst_gpio >= 0)
+		sensor_info.rst_gpio = info->rst_gpio;
+	if (info->pwdn_gpio >= 0)
+		sensor_info.pwdn_gpio = info->pwdn_gpio;
+	/* Cast to int — enum types are unsigned, so -1 wraps to UINT_MAX. */
+	if ((int)info->default_boot >= 0)
+		sensor_info.boot = info->default_boot;
+	if ((int)info->mclk >= 0)
+		sensor_info.mclk = (int)info->mclk;
+	if ((int)info->video_interface >= 0)
+		sensor_info.video_interface = (int)info->video_interface;
+	sensor_info.i2c_adapter = client->adapter->nr;
+
 	return 0;
 }
 
@@ -1090,10 +1125,15 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	/* Create /proc/jz/sensor/ entries with static defaults now; dynamic
+	 * fields (boot/mclk/gpio/i2c_adapter) are refreshed in
+	 * sensor_attr_check once the ISP framework probes the sensor. */
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 
