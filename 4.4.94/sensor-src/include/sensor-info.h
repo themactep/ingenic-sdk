@@ -20,6 +20,9 @@ struct sensor_info {
 };
 
 void sensor_common_init(struct sensor_info *info);
+void sensor_common_update(struct sensor_info *info, int rst_gpio, int pwdn_gpio,
+			  int boot, int mclk, int video_interface,
+			  int i2c_adapter);
 void sensor_common_exit(void);
 
 #endif // SENSOR_INFO_H
