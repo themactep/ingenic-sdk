@@ -42,6 +42,23 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = 20,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 3840,
+	.height = 2160,
+	.rst_gpio = -1,
+	.pwdn_gpio = -1,
+	.boot = 0,
+	.mclk = 1,
+	.video_interface = 0,
+	.i2c_adapter = 0,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
@@ -932,6 +949,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
 
+	sensor_common_update(&sensor_info, info->rst_gpio, info->pwdn_gpio,
+			     (int)info->default_boot, (int)info->mclk,
+			     (int)info->video_interface, client->adapter->nr);
 	return 0;
 
 }
@@ -1206,10 +1226,12 @@ int get_sensor_wdr_mode(void)
 
 int init_sensor(void)
 {
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
 int exit_sensor(void)
 {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
