@@ -238,6 +238,7 @@ SENSOR_INFO_T g_sinfo[] =
 	{"mis2006",  0x30,  "cgu_cim", 24000000, {0x20, 0x06}, 1, {0x3000, 0x3001}, 2, 2, NULL},
 	{"mis2008",  0x30,  "cgu_cim", 24000000, {0x20, 0x08}, 1, {0x3000, 0x3001}, 2, 2, NULL},
 	{"mis2009",  0x30,  "cgu_cim", 24000000, {0x20, 0x08}, 1, {0x3000, 0x3001}, 2, 2, NULL},
+	{"mis20c1",  0x30,  "cgu_cim", 24000000, {0x20, 0xc1}, 1, {0x3000, 0x3001}, 2, 2, NULL},
 	{"mis2031",  0x30,  "cgu_cim", 24000000, {0x20, 0x09}, 1, {0x3000, 0x3001}, 2, 2, NULL},
 	{"mis2032",  0x30,  "cgu_cim", 24000000, {0x20, 0x09}, 1, {0x3000, 0x3001}, 2, 2, NULL},
 	{"mis20s1",  0x30,  "cgu_cim", 27000000, {0x20, 0xe1}, 1, {0x3000, 0x3001}, 2, 2, NULL},
@@ -501,7 +502,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 	struct clk *sclk;
 	struct clk *mclk;
 	struct i2c_adapter *adap;
-	uint8_t scnt = sizeof(g_sinfo)/sizeof(g_sinfo[0]);
+	uint16_t scnt = ARRAY_SIZE(g_sinfo);
 	mutex_lock(&g_mutex);
 	if (dev->type != &i2c_adapter_type) {
 		mutex_unlock(&g_mutex);
@@ -728,7 +729,7 @@ static int32_t process_one_adapter(struct device *dev, void *data)
 	// Mark scan as complete and print diagnostic summary
 	g_last_scan_complete = 1;
 	printk("sinfo: ========== I2C Scan Complete ==========\n");
-	printk("sinfo: Scanned %d sensor definitions\n", scnt);
+	printk("sinfo: Scanned %u sensor definitions\n", (unsigned int)scnt);
 	printk("sinfo: Found %d I2C devices that responded\n", g_num_scan_results);
 	printk("sinfo: Matched %d known sensors\n", g_num_detected_sensors);
 
@@ -1164,7 +1165,7 @@ ssize_t sinfo_proc_write(struct file *filp, const char *buf, size_t len, loff_t 
 			printk("sinfo: [Error] Command parsing error: %s\n", cmd);
 			return len;
 		} else {
-			uint8_t scnt = sizeof(g_sinfo)/sizeof(g_sinfo[0]);
+			uint16_t scnt = ARRAY_SIZE(g_sinfo);
 			for (i = 0; i < scnt; i++) {
 				if (!strcmp(s, g_sinfo[i].name)) {
 					g_sensor_id = i;
