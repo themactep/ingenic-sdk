@@ -15,7 +15,26 @@
  * I2C address 0x10 and chip ID 0x0219 confirmed live on real hardware
  * (this exact board/sensor) before writing this driver.
  *
- * First cut: 1920x1080@30fps only.
+ * Four modes ported from mainline's supported_modes[], selected at load
+ * time via the sensor_resolution module param (this SDK's convention --
+ * see jxf35.c/gc2053.c for the same pattern):
+ *   - 1920x1080@30fps (cropped)    -- default, sensor_resolution=1080
+ *   - 1632x1232@30fps (2x2 binned, full FOV) -- sensor_resolution=1232
+ *   - 3280x2464@15fps (full sensor)          -- sensor_resolution=2464
+ *   - 640x480@30fps                          -- sensor_resolution=480
+ * Pixel rate (182.4MHz) and HTS (0x0d78) are identical across all four
+ * modes -- only VTS and the digital crop/output-size registers change.
+ *
+ * All four confirmed live on real T31 hardware (I2C chip-ID read,
+ * MIPI stream-on, real RTSP video). 1080p/1632x1232/640x480 also
+ * confirmed through the full encoder pipeline (H.264 + JPEG channels
+ * create and deliver real frames). 3280x2464 programs the sensor
+ * correctly but T31's own IMP encoder rejects it outright
+ * ("invalid resolution(3280x2464) to encode", both H.264 and JPEG)
+ * -- it exceeds this SoC's real ISP output-channel ceiling
+ * (TX_ISP_FR_CHANNEL_MAX_WIDTH=2624, MAX_HEIGHT=2048 in
+ * tx-isp-common.h). That's a T31 silicon/ISP limit, not a driver
+ * bug -- kept for mainline fidelity and other SoC tiers.
  */
 
 #include <linux/init.h>
@@ -34,7 +53,7 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "imx219"
-#define SENSOR_VERSION "H20260828a"
+#define SENSOR_VERSION "H20260828c"
 #define SENSOR_CHIP_ID 0x0219
 #define SENSOR_CHIP_ID_H (0x02)
 #define SENSOR_CHIP_ID_L (0x19)
@@ -48,8 +67,8 @@
 // ============================================================================
 // SENSOR CAPABILITIES
 // ============================================================================
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_MAX_WIDTH 3280
+#define SENSOR_MAX_HEIGHT 2464
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -81,6 +100,20 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
+/* Mode select, named/valued to match this SDK's sensor_resolution
+ * convention (see jxf35.c/gc2053.c): value is the mode's height, since
+ * width alone isn't unique here (mainline defines no 5th mode). */
+enum {
+    SENSOR_RES_1080 = 1080,
+    SENSOR_RES_1232 = 1232,
+    SENSOR_RES_2464 = 2464,
+    SENSOR_RES_480 = 480,
+};
+
+static int sensor_resolution = SENSOR_RES_1080;
+module_param(sensor_resolution, int, S_IRUGO);
+MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution setting interface: 1080=1920x1080@30fps (default, cropped), 1232=1632x1232@30fps (2x2 binned, full FOV), 2464=3280x2464@15fps (full sensor), 480=640x480@30fps");
 
 static struct sensor_info sensor_info = {
     .name = SENSOR_NAME,
@@ -496,6 +529,210 @@ static struct regval_list sensor_init_regs_1920_1080_mipi[] = {
     {SENSOR_REG_END, 0x00},
 };
 
+/* 1632x1232@30fps mode regs -- 2x2 binned readout of the full
+ * 3280x2464 array, trimmed from mainline's native 1640-wide binned
+ * output to 1632 (a multiple of 16). T31's IMP encoder rejects
+ * 1640x1232 outright ("invalid resolution(1640x1232) to encode") --
+ * confirmed on real hardware, reproducibly, independent of codec --
+ * because 1640 isn't macroblock-aligned (1640 = 16*102 + 8). Trims
+ * 8px off each side of the analog readout (a multiple of 4, so the
+ * binner's 2x2 Bayer grouping stays aligned): x_addr_start=8,
+ * x_addr_end=3271 (was 0/3279), giving a binned output width of
+ * 1632 instead of 1640. Same HTS (0x0d78) and VTS (0x06e3) as the
+ * 1080p mode; only the x crop/output-size registers change. */
+static struct regval_list sensor_init_regs_1632_1232_mipi[] = {
+    {0x0100, 0x00},
+    {0x30eb, 0x0c},
+    {0x30eb, 0x05},
+    {0x300a, 0xff},
+    {0x300b, 0xff},
+    {0x30eb, 0x05},
+    {0x30eb, 0x09},
+    {0x0114, 0x01},
+    {0x0128, 0x00},
+    {0x012a, 0x18},
+    {0x012b, 0x00},
+    {0x0164, 0x00},
+    {0x0165, 0x08},
+    {0x0166, 0x0c},
+    {0x0167, 0xc7},
+    {0x0168, 0x00},
+    {0x0169, 0x00},
+    {0x016a, 0x09},
+    {0x016b, 0x9f},
+    {0x016c, 0x06},
+    {0x016d, 0x60},
+    {0x016e, 0x04},
+    {0x016f, 0xd0},
+    {0x0170, 0x01},
+    {0x0171, 0x01},
+    {0x0174, 0x01},
+    {0x0175, 0x01},
+    {0x0301, 0x05},
+    {0x0303, 0x01},
+    {0x0304, 0x03},
+    {0x0305, 0x03},
+    {0x0306, 0x00},
+    {0x0307, 0x39},
+    {0x030b, 0x01},
+    {0x030c, 0x00},
+    {0x030d, 0x72},
+    {0x0624, 0x06},
+    {0x0625, 0x60},
+    {0x0626, 0x04},
+    {0x0627, 0xd0},
+    {0x455e, 0x00},
+    {0x471e, 0x4b},
+    {0x4767, 0x0f},
+    {0x4750, 0x14},
+    {0x4540, 0x00},
+    {0x47b4, 0x14},
+    {0x4713, 0x30},
+    {0x478b, 0x10},
+    {0x478f, 0x10},
+    {0x4793, 0x10},
+    {0x4797, 0x0e},
+    {0x479b, 0x0e},
+    {0x0162, 0x0d},
+    {0x0163, 0x78},
+    {0x0160, 0x06},
+    {0x0161, 0xe3},
+    {0x0100, 0x01},
+
+    {SENSOR_REG_END, 0x00},
+};
+
+/* 3280x2464@15fps mode regs (mainline mode_3280x2464_regs verbatim) --
+ * full 8MP sensor array, no binning/cropping. VTS is larger here
+ * (0x0dc6) since this mode runs at 15fps instead of 30fps. */
+static struct regval_list sensor_init_regs_3280_2464_mipi[] = {
+    {0x0100, 0x00},
+    {0x30eb, 0x0c},
+    {0x30eb, 0x05},
+    {0x300a, 0xff},
+    {0x300b, 0xff},
+    {0x30eb, 0x05},
+    {0x30eb, 0x09},
+    {0x0114, 0x01},
+    {0x0128, 0x00},
+    {0x012a, 0x18},
+    {0x012b, 0x00},
+    {0x0164, 0x00},
+    {0x0165, 0x00},
+    {0x0166, 0x0c},
+    {0x0167, 0xcf},
+    {0x0168, 0x00},
+    {0x0169, 0x00},
+    {0x016a, 0x09},
+    {0x016b, 0x9f},
+    {0x016c, 0x0c},
+    {0x016d, 0xd0},
+    {0x016e, 0x09},
+    {0x016f, 0xa0},
+    {0x0170, 0x01},
+    {0x0171, 0x01},
+    {0x0174, 0x00},
+    {0x0175, 0x00},
+    {0x0301, 0x05},
+    {0x0303, 0x01},
+    {0x0304, 0x03},
+    {0x0305, 0x03},
+    {0x0306, 0x00},
+    {0x0307, 0x39},
+    {0x030b, 0x01},
+    {0x030c, 0x00},
+    {0x030d, 0x72},
+    {0x0624, 0x0c},
+    {0x0625, 0xd0},
+    {0x0626, 0x09},
+    {0x0627, 0xa0},
+    {0x455e, 0x00},
+    {0x471e, 0x4b},
+    {0x4767, 0x0f},
+    {0x4750, 0x14},
+    {0x4540, 0x00},
+    {0x47b4, 0x14},
+    {0x4713, 0x30},
+    {0x478b, 0x10},
+    {0x478f, 0x10},
+    {0x4793, 0x10},
+    {0x4797, 0x0e},
+    {0x479b, 0x0e},
+    {0x0162, 0x0d},
+    {0x0163, 0x78},
+    {0x0160, 0x0d},
+    {0x0161, 0xc6},
+    {0x0100, 0x01},
+
+    {SENSOR_REG_END, 0x00},
+};
+
+/* 640x480@30fps mode regs (mainline mode_640_480_regs verbatim). Same
+ * HTS/VTS as the 1080p mode; only the crop/output-size registers
+ * differ (crops to the center 1280x960 of the binned array, then
+ * further reduces to 640x480). */
+static struct regval_list sensor_init_regs_640_480_mipi[] = {
+    {0x0100, 0x00},
+    {0x30eb, 0x05},
+    {0x30eb, 0x0c},
+    {0x300a, 0xff},
+    {0x300b, 0xff},
+    {0x30eb, 0x05},
+    {0x30eb, 0x09},
+    {0x0114, 0x01},
+    {0x0128, 0x00},
+    {0x012a, 0x18},
+    {0x012b, 0x00},
+    {0x0162, 0x0d},
+    {0x0163, 0x78},
+    {0x0164, 0x03},
+    {0x0165, 0xe8},
+    {0x0166, 0x08},
+    {0x0167, 0xe7},
+    {0x0168, 0x02},
+    {0x0169, 0xf0},
+    {0x016a, 0x06},
+    {0x016b, 0xaf},
+    {0x016c, 0x02},
+    {0x016d, 0x80},
+    {0x016e, 0x01},
+    {0x016f, 0xe0},
+    {0x0170, 0x01},
+    {0x0171, 0x01},
+    {0x0174, 0x03},
+    {0x0175, 0x03},
+    {0x0301, 0x05},
+    {0x0303, 0x01},
+    {0x0304, 0x03},
+    {0x0305, 0x03},
+    {0x0306, 0x00},
+    {0x0307, 0x39},
+    {0x030b, 0x01},
+    {0x030c, 0x00},
+    {0x030d, 0x72},
+    {0x0624, 0x06},
+    {0x0625, 0x68},
+    {0x0626, 0x04},
+    {0x0627, 0xd0},
+    {0x455e, 0x00},
+    {0x471e, 0x4b},
+    {0x4767, 0x0f},
+    {0x4750, 0x14},
+    {0x4540, 0x00},
+    {0x47b4, 0x14},
+    {0x4713, 0x30},
+    {0x478b, 0x10},
+    {0x478f, 0x10},
+    {0x4793, 0x10},
+    {0x4797, 0x0e},
+    {0x479b, 0x0e},
+    {0x0160, 0x06},
+    {0x0161, 0xe3},
+    {0x0100, 0x01},
+
+    {SENSOR_REG_END, 0x00},
+};
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
     {
         .width = 1920,
@@ -504,6 +741,30 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
         .mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
         .colorspace = V4L2_COLORSPACE_SRGB,
         .regs = sensor_init_regs_1920_1080_mipi,
+    },
+    {
+        .width = 1632,
+        .height = 1232,
+        .fps = 30 << 16 | 1,
+        .mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+        .colorspace = V4L2_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_1632_1232_mipi,
+    },
+    {
+        .width = 3280,
+        .height = 2464,
+        .fps = 15 << 16 | 1,
+        .mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+        .colorspace = V4L2_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_3280_2464_mipi,
+    },
+    {
+        .width = 640,
+        .height = 480,
+        .fps = 30 << 16 | 1,
+        .mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
+        .colorspace = V4L2_COLORSPACE_SRGB,
+        .regs = sensor_init_regs_640_480_mipi,
     },
 };
 
@@ -1053,6 +1314,36 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
     private_clk_set_rate(sensor->mclk, 24000000);
     private_clk_enable(sensor->mclk);
 
+    /* Select mode per sensor_resolution (this SDK's convention -- see
+     * jxf35.c/gc2053.c). HTS (total_width) and mbus_code are identical
+     * across all four modes so only VTS-derived integration limits and
+     * the mipi image_twidth/theight need overriding here. */
+    switch (sensor_resolution) {
+        case SENSOR_RES_1232:
+            wsize = &sensor_win_sizes[1];
+            sensor_attr.mipi.image_twidth = 1632;
+            sensor_attr.mipi.image_theight = 1232;
+            break;
+        case SENSOR_RES_2464:
+            wsize = &sensor_win_sizes[2];
+            sensor_attr.mipi.image_twidth = 3280;
+            sensor_attr.mipi.image_theight = 2464;
+            sensor_attr.total_height = 0x0dc6;
+            sensor_attr.max_integration_time_native = 0x0dc6 - 4;
+            sensor_attr.integration_time_limit = 0x0dc6 - 4;
+            sensor_attr.max_integration_time = 0x0dc6 - 4;
+            break;
+        case SENSOR_RES_480:
+            wsize = &sensor_win_sizes[3];
+            sensor_attr.mipi.image_twidth = 640;
+            sensor_attr.mipi.image_theight = 480;
+            break;
+        case SENSOR_RES_1080:
+        default:
+            wsize = &sensor_win_sizes[0];
+            break;
+    }
+
     sd = &sensor->sd;
     video = &sensor->video;
     sensor->video.shvflip = shvflip;
@@ -1123,6 +1414,33 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void)
 {
     int ret = 0;
+
+    /* sensor_info.width/height (registered here, at module_init, before
+     * sensor_probe() runs) is what "auto" (0x0) stream resolution
+     * requests resolve against -- it must match whichever mode
+     * sensor_resolution actually selects, not the sensor's absolute
+     * max capability, or downstream would request a size the hardware
+     * isn't actually programmed to output. */
+    switch (sensor_resolution) {
+        case SENSOR_RES_1232:
+            sensor_info.width = 1632;
+            sensor_info.height = 1232;
+            break;
+        case SENSOR_RES_2464:
+            sensor_info.width = 3280;
+            sensor_info.height = 2464;
+            break;
+        case SENSOR_RES_480:
+            sensor_info.width = 640;
+            sensor_info.height = 480;
+            break;
+        case SENSOR_RES_1080:
+        default:
+            sensor_info.width = 1920;
+            sensor_info.height = 1080;
+            break;
+    }
+
     sensor_common_init(&sensor_info);
 
     ret = private_driver_get_interface();
