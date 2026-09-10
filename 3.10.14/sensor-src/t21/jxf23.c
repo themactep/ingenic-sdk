@@ -71,6 +71,29 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
+/* Board-level mount compensation: shvflip=1 means the sensor is physically
+ * mounted rotated 180 deg relative to its housing, so mirror+flip it at the
+ * register level from the first frame, for every IMP client. Default off:
+ * no board changes behaviour unless it sets the param (BR2_SENSOR_1_PARAMS). */
+static int shvflip = 0;
+module_param(shvflip, int, S_IRUGO);
+MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
+/* 0x12 is the mode register: bit6 = soft sleep (stream off), bit5 = H mirror,
+ * bit4 = V flip. The flip bits must ride along on every sleep/wake write or
+ * the next stream on/off write clears them again. */
+#define SENSOR_REG_MODE 0x12
+#define SENSOR_MODE_HMIRROR 0x20
+#define SENSOR_MODE_VFLIP 0x10
+#define SENSOR_MODE_FLIP_MASK (SENSOR_MODE_HMIRROR | SENSOR_MODE_VFLIP)
+/* 0x28 is the vertical window start. With V flip the readout runs in reverse
+ * and the first 12 output lines fall outside the valid array (a band of
+ * saturated/black garbage at the top of the raw frame) unless the window is
+ * moved down by those 12 lines. Measured on JXF23 1080p; JXF37 needs +4. */
+#define SENSOR_REG_VWIN_START 0x28
+#define SENSOR_VWIN_START 0x19
+#define SENSOR_VWIN_START_VFLIP (SENSOR_VWIN_START + 12)
+
 static unsigned char val_99 = 0x0F;
 static unsigned char val_9b = 0x0F;
 
@@ -643,12 +666,77 @@ static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
+static void sensor_patch_flip_regs(struct regval_list *vals, unsigned char flip, unsigned char vstart) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_MODE)
+			vals->value = (vals->value & ~SENSOR_MODE_FLIP_MASK) | flip;
+		else if (vals->reg_num == SENSOR_REG_VWIN_START)
+			vals->value = vstart;
+		vals++;
+	}
+}
+
+/*
+ * enable: bit0 = H mirror, bit1 = V flip (same encoding as the T31/T40 drivers).
+ *
+ * Nothing is written here. Instead every register table that touches the mode
+ * register gets the flip bits folded in (init tables, stream on/off), so the
+ * bits survive the sleep/wake writes, and the window setting comes up right
+ * from the first frame. Bayer phase: the sensor outputs BGGR. A V flip reverses
+ * the row order (BGGR -> GRBG), an H mirror reverses the column order (BGGR ->
+ * GBRG), both together give RGGB. The vertical window shift used for V flip is
+ * even, so it doesn't alter the phase. The ISP learns the new pattern through
+ * the mbus code in the SYNC_SENSOR_ATTR notify that follows in sensor_init().
+ */
+static int sensor_set_hvflip(int enable) {
+	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
+	unsigned char flip = 0;
+	unsigned char vstart = SENSOR_VWIN_START;
+	enum v4l2_mbus_pixelcode code;
+
+	switch (enable) {
+		case 0:
+			code = V4L2_MBUS_FMT_SBGGR10_1X10;
+			break;
+		case 1:
+			flip = SENSOR_MODE_HMIRROR;
+			code = V4L2_MBUS_FMT_SGBRG10_1X10;
+			break;
+		case 2:
+			flip = SENSOR_MODE_VFLIP;
+			vstart = SENSOR_VWIN_START_VFLIP;
+			code = V4L2_MBUS_FMT_SGRBG10_1X10;
+			break;
+		case 3:
+			flip = SENSOR_MODE_HMIRROR | SENSOR_MODE_VFLIP;
+			vstart = SENSOR_VWIN_START_VFLIP;
+			code = V4L2_MBUS_FMT_SRGGB10_1X10;
+			break;
+		default:
+			ISP_ERROR("%s: unsupported hvflip mode %d\n", SENSOR_NAME, enable);
+			return -EINVAL;
+	}
+
+	sensor_patch_flip_regs(sensor_init_regs_1920_1080_25fps_dvp, flip, vstart);
+	sensor_patch_flip_regs(sensor_init_regs_1920_1080_15fps_dvp, flip, vstart);
+	sensor_patch_flip_regs(sensor_stream_on_dvp, flip, vstart);
+	sensor_patch_flip_regs(sensor_stream_off_dvp, flip, vstart);
+	wsize->mbus_code = code;
+
+	printk("%s: hvflip=%d applied at probe, mode bits 0x%02x, vwin start 0x%02x, mbus code 0x%04x\n",
+	       SENSOR_NAME, enable, flip, vstart, code);
+	return 0;
+}
+
 static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 	if (!enable)
 		return ISP_SUCCESS;
+
+	/* shvflip is applied in sensor_probe(): the tables and wsize->mbus_code
+	 * are already patched by the time we get here. */
 
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -1023,6 +1111,16 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
+
+	/* Must run here, before the mbus code is copied into sensor->video below.
+	 * The ISP core samples the Bayer pattern from the copy of sensor->video it
+	 * receives at set_input time (probe-time contents), and hands it to
+	 * tisp_init() before the sensor's own init() runs. A code changed later in
+	 * sensor_init() is re-synced (and shows up in /proc/jz/isp/isp-m0) but
+	 * tisp_init() has already consumed the probe-time value. */
+	if (shvflip)
+		sensor_set_hvflip(3);
+
 	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
