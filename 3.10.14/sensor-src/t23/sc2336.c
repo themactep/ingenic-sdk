@@ -702,6 +702,8 @@ static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value)
     return 0;
 }
 
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable);
+
 static int sensor_init(struct tx_isp_subdev *sd, int enable)
 {
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -723,6 +725,22 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
     ret = sensor_write_array(sd, wsize->regs);
     if (ret) {
         return ret;
+    }
+
+    /* Board-level mount compensation: shvflip=1 (module param, e.g. from
+     * BR2_SENSOR_1_PARAMS) means this sensor is physically mounted
+     * rotated 180 deg relative to its housing. Apply the full H+V flip
+     * directly here so every IMP client gets an already-corrected image
+     * from the first frame, independent of which ISP tuning API (if
+     * any) a given streamer calls. Must run after the mode table above
+     * (register 0x0103 in that table resets the sensor and would wipe
+     * this) and is safe to fail softly - a write error here shouldn't
+     * block streaming, just leave the image un-mirrored.
+     */
+    if (shvflip) {
+        ret = sensor_set_vflip(sd, 3);
+        if (ret)
+            ISP_ERROR("%s: failed to apply shvflip (%d)\n", __func__, ret);
     }
 
     ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -872,15 +890,27 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
-    int ret = -1;
+    int ret = 0;
     struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
     unsigned char val = 0x0;
 
-    ret += sensor_read(sd, 0x3221, &val);
-    if (enable & 0x2) {
-        val |= 0x60;
-    } else {
-        val &= 0x9f;
+    /* 0x3221: 2'b01 (0x06) = mirror, 2'b10 (0x60) = flip */
+    ret = sensor_read(sd, 0x3221, &val);
+    if (ret < 0)
+        return ret;
+    switch (enable) {
+        case 0:
+            val &= 0x99;
+            break;
+        case 1:
+            val = ((val & 0x9f) | 0x06);
+            break;
+        case 2:
+            val = ((val & 0xf9) | 0x60);
+            break;
+        case 3:
+            val |= 0x66;
+            break;
     }
     ret += sensor_write(sd, 0x3221, val);
     if (!ret) {
