@@ -1,7 +1,9 @@
+# Merged SoC NNA driver. One source set serves T40/T41 on both kernels and A1
+# on 4.4.94; the A1 specifics are guarded by CONFIG_SOC_A1 in the sources.
 MODULE_NAME := soc-nna
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/misc/soc-nna
+DIR := common/misc/soc-nna
 
 SRCS := $(DIR)/soc_nna_main.c \
 	$(DIR)/platform.c
