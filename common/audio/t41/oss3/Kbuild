@@ -1,0 +1,25 @@
+MODULE_NAME := audio
+OUT := $(MODULE_NAME)
+
+# t41 audio (oss3) is shared between the 3.10.14 and 4.4.94 kernels; the sources
+# carry the per-kernel differences behind CONFIG_KERNEL_* guards.
+DIR=common/audio/t41/oss3
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := \
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/audio_aic.c \
+  $(DIR)/host/dmic/as-fmtcov/as-fmtcov.c \
+  $(DIR)/host/dmic/as-dbus/as-dbus.c \
+  $(DIR)/host/dmic/as-dma/as-dma.c \
+  $(DIR)/host/dmic/as-dmic/as-dmic.c \
+  $(DIR)/inner_codecs/codec.c \
+  $(DIR)/board/t41_platform.c
+#  $(DIR)/host/audio_dmic.c \
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

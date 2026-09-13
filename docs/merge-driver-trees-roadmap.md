@@ -51,6 +51,7 @@ For each duplicated driver, diff the two trees and classify:
 
 | Driver | Merged source | Came from | In-source guards |
 |--------|---------------|-----------|------------------|
+| audio (t41 oss3) | `common/audio/t41/oss3/` | 3.10.14 (identical to 4.4.94 except the Kbuild) | already used `CONFIG_KERNEL_3_10/4_4_94` |
 | avpu | `common/avpu/` | 3.10.14 `avpu/t31` (superset, handles T31/C100/T40/T41) + 2 guards ported from 4.4.94 | `CONFIG_KERNEL_4_4_94` for `dma_buf_export()` API and T31 AVPU clock (440 vs 550 MHz); `CONFIG_SOC_*` already present |
 | isp/t41 | `common/isp/t41/` | 4.4.94 `isp/t41` (superset) | already used `CONFIG_KERNEL_3_10/4_4_94/6_1`; Kbuild picks firmware blob per kernel |
 | isp/t41zrt (headers) | `common/isp/t41zrt/` | 3.10.14 (identical) | none |
@@ -103,6 +104,17 @@ the filename:
 - All Kbuilds reference the explicit name and carry no `KERNEL_VERSION` path
   component. Verified by rebuilding T31/3.10.14, T31/4.4.94, A1/4.4.94.
 
+### 4.6 Audio driver selection
+
+Two audio drivers exist: `oss2` (old `xb_snd`/`devices` layout) and `oss3`
+(`boards`/`host`/`inner_codecs` layout). Selection is by SoC, not kernel:
+`t41` and `t23` use `oss3`; every other SoC uses `oss2` on 3.10.14 and `oss3`
+on 4.4.94 (4.4.94 has no `oss2`).
+
+The t41 `oss3` sources were duplicated byte-for-byte in both trees (only the
+`Kbuild` differed, and the 4.4.94 one was broken), so they now live once in
+`common/audio/t41/oss3` and the top-level `Kbuild` routes t41 there.
+
 ## 5. Kbuild selection rules (top-level `Kbuild`)
 
 - Merged drivers are included directly from `common/`:
@@ -116,6 +128,10 @@ the filename:
   - 3.10.14 `t31` -> `3.10.14/isp/t31-pp`
   - otherwise `$(KERNEL_VERSION)/isp/$(SOC_FAMILY)`
   and includes `$(src)/$(ISP_DIR)/Kbuild`.
+- Audio is selected by SoC in the top-level `Kbuild`:
+  - `t41` -> `common/audio/t41/oss3`
+  - `t23` -> `$(KERNEL_VERSION)/audio/t23/oss3`
+  - otherwise `oss2` on 3.10.14, `oss3` on 4.4.94.
 - The ISP **include path** used by ISP and sensor-src is computed at the top of
   `Kbuild` as `ISP_INCLUDE` (same mapping as `ISP_DIR`), because the per-SoC
   ISP include dir also holds the sensor headers.
@@ -208,6 +224,7 @@ Structural verification used where a build was not possible:
 | 13 | Docs + build-matrix verification | done |
 | 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
 | 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
+| 16 | Merge the t41 `oss3` audio driver into `common/audio/t41/oss3`; route t41/t23 to oss3 | done |
 
 ## 10. Original inventory (for reference)
 

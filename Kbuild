@@ -85,20 +85,21 @@ endif
 endif
 
 #### PLATFORM ####
-# Check if building for SOC T23, which overrides other conditions
-ifeq ($(CONFIG_SOC_T23),y)
-    $(info Building Audio for SOC T23 using oss)
+# Audio selection: t41 (oss3) is shared by both kernels via common/.
+ifeq ($(SOC_FAMILY),t41)
+    $(info Building Audio for $(SOC_FAMILY) using oss3)
+    include $(src)/common/audio/t41/oss3/Kbuild
+# t23 uses oss3 and is 3.10.14-only
+else ifeq ($(CONFIG_SOC_T23),y)
+    $(info Building Audio for SOC T23 using oss3)
     include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
-
-# Handle other kernel versions and SOC configurations
+# Everything else uses oss2 on 3.10.14 and oss3 on 4.4.94
 else
-    # Check for kernel version 3.10.14
     ifeq ($(KERNEL_VERSION),3.10.14)
-        $(info Building Audio for Kernel $(KERNEL_VERSION) using oss2)
+        $(info Building Audio for $(SOC_FAMILY) using oss2)
         include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild
     else
-        # Default to oss3 for any other kernel version
-        $(info Building Audio for Kernel $(KERNEL_VERSION) using oss3)
+        $(info Building Audio for $(SOC_FAMILY) using oss3)
         include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
     endif
 endif
