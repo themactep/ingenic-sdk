@@ -75,24 +75,27 @@ diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
 ### 4.4 Platform-only trees (untouched)
 
 - 4.4.94 only: `aip/a1`, `fb`, `ipu`, `video/a1`, `audio/a1`, `isp/t40`.
-- 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`, `sdk/t20..t30`.
+- 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`.
 
-### 4.5 `sdk/` is not source (left as-is)
+### 4.5 `sdk/` firmware blobs (single root, flattened)
 
-`sdk/` contains **prebuilt firmware blobs** only (`*.a`), no C/headers, so
-there is nothing to merge in-source. Which blob to link is a build-level
-choice, already handled per kernel:
+`sdk/` holds prebuilt firmware blobs only (`*.a`), no source. They used to live
+in two trees under `<tree>/sdk/<soc>/<version>/lib<soc>-firmware.a`, selected by
+the `$(KERNEL_VERSION)` path component, which duplicated the blobs shared by
+both kernels. Now there is a single `sdk/` root with the version in the
+filename:
 
-- `$(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/<ver>/...` and ISP_FW_VER / `KVERSION`
-  in the ISP and mpsys Kbuilds (see the merged `common/isp/t41/Kbuild`,
-  which picks `1.2.0` + `-310.a` for 3.10.14 and `1.2.6` plain for 4.4.94).
-- Only `t31` and `t41` exist in both trees. A few `t41` blobs are
-  byte-identical copies (`1.0.1`, `1.1.0`, `1.1.1`, `1.2.0`), and
-  `t41/1.2.6/libt41-firmware.a` differs between trees - the one case where the
-  same path holds different bytes.
-- They are deliberately left in place: deduplicating opaque binaries would give
-  no source-level benefit and would require a new naming scheme plus changes to
-  the firmware-version selection logic (regression risk, no readability gain).
+    sdk/<soc>/lib<soc>-firmware-<version>[-<buildtag>].a
+    sdk/t40/libt40-mpsys-firmware-4-4-94.a   (mpsys blobs live here too)
+    sdk/a1/lib{fb,ipu,vde,vdec}-firmware-<version>.a
+
+- `sdk/t10` is a symlink to `t20` (they share firmware).
+- Byte-identical duplicates are one real file plus symlinks for the other
+  names (t23 plain -> `-540-310`, t31 plain -> `-472`, cross-tree t41 blobs).
+- The one genuinely different same-version pair is t41 1.2.6: kept as
+  `libt41-firmware-1.2.6.a` (4.4.94) and `libt41-firmware-1.2.6-310.a` (3.10.14).
+- All Kbuilds reference `sdk/$(SOC_FAMILY)/...` with no `KERNEL_VERSION`
+  component. Verified by rebuilding T31/3.10.14, T31/4.4.94, A1/4.4.94.
 
 ## 5. Kbuild selection rules (top-level `Kbuild`)
 
@@ -200,6 +203,7 @@ Structural verification used where a build was not possible:
 | 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
 | 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
 | 13 | Docs + build-matrix verification | done |
+| 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
 
 ## 10. Original inventory (for reference)
 
