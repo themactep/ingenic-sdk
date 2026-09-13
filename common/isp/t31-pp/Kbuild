@@ -1,8 +1,8 @@
 ISP_FW_VER=1.1.6
+
 COMPILER_VER=540
 
-SRCS := \
-    $(DIR)/tx-isp-debug.c \
+SRCS := $(DIR)/tx-isp-debug.c \
 	$(DIR)/tx-isp-module.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)

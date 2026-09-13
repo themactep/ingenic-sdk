@@ -29,7 +29,7 @@
 #define TX_ISP_DS1_CAHNNEL_MAX_HEIGHT 1080
 
 /*****************************************************
-                        sensor attributes
+        sensor attributes
 *****************************************************/
 #define SENSOR_R_BLACK_LEVEL 0
 #define SENSOR_GR_BLACK_LEVEL 1
@@ -620,8 +620,8 @@ struct isp_buf_info {
 #define VIDIOC_RELEASE_SENSOR _IOW('V', BASE_VIDIOC_PRIVATE + 2, struct tx_isp_sensor_register_info)
 #define VIDIOC_SET_FRAME_FORMAT _IOWR('V', BASE_VIDIOC_PRIVATE + 3, struct frame_image_format)
 #define VIDIOC_GET_FRAME_FORMAT _IOR('V', BASE_VIDIOC_PRIVATE + 4, struct frame_image_format)
-// #define VIDIOC_SET_FRAME_FORMAT			  _IOWR('V', BASE_VIDIOC_PRIVATE + 3, int)
-// #define VIDIOC_GET_FRAME_FORMAT               _IOR('V', BASE_VIDIOC_PRIVATE + 4, int)
+// #define VIDIOC_SET_FRAME_FORMAT _IOWR('V', BASE_VIDIOC_PRIVATE + 3, int)
+// #define VIDIOC_GET_FRAME_FORMAT _IOR('V', BASE_VIDIOC_PRIVATE + 4, int)
 
 #define VIDIOC_DEFAULT_CMD_SET_BANKS _IOW('V', BASE_VIDIOC_PRIVATE + 5, int)
 #define VIDIOC_DEFAULT_CMD_ISP_TUNING _IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct isp_image_tuning_default_ctrl)

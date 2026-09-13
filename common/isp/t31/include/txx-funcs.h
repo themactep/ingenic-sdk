@@ -10,6 +10,10 @@
 #include <linux/sched.h>
 #include <linux/time.h>
 /*#include <linux/delay.h>*/
+#include <asm/cacheflush.h>
+#include <asm/io.h>
+#include <asm/irq.h>
+#include <asm/uaccess.h>
 #include <linux/debugfs.h>
 #include <linux/device.h>
 #include <linux/errno.h>
@@ -24,15 +28,11 @@
 #include <linux/netlink.h>
 #include <linux/platform_device.h>
 #include <linux/spi/spi.h>
+// #include <mach/platform.h>
 #include <net/netlink.h>
-// #include <soc/irq.h>
-#include <asm/cacheflush.h>
-#include <asm/io.h>
-#include <asm/irq.h>
-#include <asm/uaccess.h>
 #include <soc/base.h>
 #include <soc/gpio.h>
-// #include <mach/platform.h>
+// #include <soc/irq.h>
 /*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
 #ifndef U16_MAX
