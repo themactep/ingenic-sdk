@@ -4,9 +4,9 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
+#include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <tx-isp-common.h>
 
 #include <linux/clk.h>
 #include <linux/delay.h>
@@ -398,7 +398,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0xf9, 0x06},
 	{0xfa, 0x80},
 	{0xfc, 0x0e},
-
 	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x03, 0x02},
@@ -446,7 +445,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0xfe, 0x01},
 	{0xe3, 0x01},
 	{0xe6, 0x10},
-
 	/* ISP */
 	{0xfe, 0x01},
 	{0x80, 0x50},
@@ -460,7 +458,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x96, 0x00},
 	{0x97, 0x02},
 	{0x98, 0x00},
-
 	/* BLK */
 	{0xfe, 0x01},
 	{0x40, 0x22},
@@ -469,7 +466,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x4f, 0x00},
 	{0x60, 0x00},
 	{0x61, 0x80},
-
 	/* GAIN */
 	{0xfe, 0x01},
 	{0xb0, 0x48},
@@ -517,7 +513,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0xcd, 0x50},
 	{0xce, 0x00},
 	{0xcf, 0xa1},
-
 	/* DARKSUN */
 	{0xfe, 0x02},
 	{0x54, 0xf7},
@@ -526,11 +521,9 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x57, 0x00},
 	{0x58, 0x00},
 	{0x5a, 0x04},
-
 	/* DD */
 	{0xfe, 0x04},
 	{0x81, 0x8a},
-
 	/* MIPI */
 	{0xfe, 0x03},
 	{0x01, 0x83},
@@ -570,16 +563,16 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}};
 
 static struct regval_list sensor_stream_on[] = {
-	//{ 0xfe, 0x03 },
-	//{ 0x10, 0x90 },
-	//{ 0xfe, 0x00 },
+	//{0xfe, 0x03},
+	//{0x10, 0x90},
+	//{0xfe, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{ 0xfe, 0x03 },
-	//{ 0x10, 0x80 },
-	//{ 0xfe, 0x00 },
+	//{0xfe, 0x03},
+	//{0x10, 0x80},
+	//{0xfe, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -598,7 +591,6 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 			.len = 1,
 			.buf = value,
 		}};
-
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -715,7 +707,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		ISP_ERROR("sensor_write error  %d", __LINE__);
 		return ret;
 	}
-
 	ret = sensor_write(sd, 0xfe, 0x00);
 
 	return 0;
@@ -815,15 +806,14 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x7, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
-	sensor->video.fps = fps;
 
+	sensor->video.fps = fps;
 	sensor_update_actual_fps((fps >> 16) & 0xffff);
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
@@ -844,7 +834,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor_update_actual_fps((wsize->fps >> 16) & 0xffff);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
 	return ret;
 }
 

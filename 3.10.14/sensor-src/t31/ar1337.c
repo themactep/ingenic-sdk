@@ -4,9 +4,9 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
+#include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
-#include <tx-isp-common.h>
 
 #include <linux/clk.h>
 #include <linux/delay.h>
