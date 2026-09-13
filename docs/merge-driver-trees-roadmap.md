@@ -56,7 +56,8 @@ finer-grained kernel revision than the two supported ones.
 | 1 | Finish the `motors-pp` rename for the 3.10 motor driver and split Kbuild selection | done |
 | 2 | Merge `misc/jz-dtrng` into `common/misc/jz-dtrng` | done |
 | 3 | Merge `misc/mpsys-driver` Kbuild into a single per-kernel-aware Kbuild | done |
-| 4 | Merge `misc/pwm` into `common/misc/pwm` | done |
+| 4 | Rename the 3.10.14 PWM driver source set to `pwm-pp` (a different
+|   implementation from 4.4.94, like `motors-pp`); select per-kernel in Kbuild | done |
 | 5 | Merge `avpu/t31` into `common/avpu/t31` | done |
 | 6 | Merge `avpu/c100`, `avpu/t40`, `avpu/t41` into `common/avpu/*` | done |
 | 7 | Merge `isp/t31` into `common/isp/t31` | done |

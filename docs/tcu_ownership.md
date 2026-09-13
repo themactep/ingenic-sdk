@@ -14,7 +14,7 @@ Components
      - const char *tcu_alloc_owner(unsigned int ch);
    - Logs claims, releases, and conflicts.
 
-2) PWM driver (3.10/misc/pwm)
+2) PWM driver (3.10/misc/pwm-pp)
    - New module param: pwm.tcu_channels (charp)
      - Example: pwm.tcu_channels=0,1,3
      - Gating: only the listed channels will register platform drivers (tcu_chnX).

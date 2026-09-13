@@ -2,7 +2,7 @@ Ingenic PWM channel configuration (updated)
 
 1) Channel selection
 - Select channels via Kbuild DEFS or at runtime via the module parameter:
-  - Kbuild: add/remove -DCONFIG_PWMn in 3.10/misc/pwm/Kbuild
+  - Kbuild: add/remove -DCONFIG_PWMn in 3.10.14/misc/pwm-pp/Kbuild
   - Runtime: options pwm_core tcu_channels=0,1,3
 - Do not auto-enable channels inside sources; selection is driven by Kbuild/DT/params.
 - Note: T10/T20 have channels 0..3; T30/T21/T31/T40 have channels 0..7.

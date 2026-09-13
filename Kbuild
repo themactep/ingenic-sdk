@@ -36,8 +36,14 @@ ifeq ($(KERNEL_VERSION),3.10.14)
     include $(src)/$(KERNEL_VERSION)/misc/tcu_alloc/Kbuild
 endif
 
+# PWM: 3.10.14 and 4.4.94 use different PWM driver implementations.
 ifeq ($(KERNEL_VERSION),3.10.14)
     $(info Building PWM for Kernel $(KERNEL_VERSION))
+    # 3.10.14 uses the PP/TCU PWM driver (source set: pwm-pp)
+    include $(src)/3.10.14/misc/pwm-pp/Kbuild
+else
+    $(info Building PWM for Kernel $(KERNEL_VERSION))
+    # 4.4.94 uses the GPIO/TCU PWM driver
     include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
 endif
 

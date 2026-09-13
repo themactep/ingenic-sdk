@@ -1,10 +1,14 @@
+# 3.10.14 PP/TCU based PWM driver. A different implementation from the
+# 4.4.94 PWM driver (tcu_alloc arbitration, runtime channel selection),
+# hence a separate source set. Built modules stay pwm_core/pwm_hal so the
+# /dev/pwm ABI is unaffected.
 DIR := $(KERNEL_VERSION)/misc
 
 PWM_CORE_MODULE := pwm_core
-OBJS1 := $(DIR)/pwm/pwm_core.o
+OBJS1 := $(DIR)/pwm-pp/pwm_core.o
 
 PWM_HAL_MODULE := pwm_hal
-OBJS2 := $(DIR)/pwm/pwm_hal.o
+OBJS2 := $(DIR)/pwm-pp/pwm_hal.o
 
 obj-m += $(PWM_CORE_MODULE).o
 obj-m += $(PWM_HAL_MODULE).o
