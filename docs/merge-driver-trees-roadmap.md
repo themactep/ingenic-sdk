@@ -39,6 +39,15 @@ Rationale: incremental and reviewable. Each task moves one driver at a time from
 "duplicated in two trees" to "one source in `common/` behind a version guard",
 without a flag-day rename of every file at once.
 
+### In-source kernel selector
+
+Use the existing repo convention of the preprocessor symbols
+`CONFIG_KERNEL_3_10`, `CONFIG_KERNEL_4_4_94` (and `CONFIG_KERNEL_6_1` if ever
+needed). These are supplied as `EXTRA_CFLAGS` by the firmware build
+(`package/ingenic-sdk/ingenic-sdk.mk`) and are already used throughout the
+tree. Do not introduce raw `LINUX_VERSION_CODE` checks unless a driver needs a
+finer-grained kernel revision than the two supported ones.
+
 ## Tasks
 
 | # | Task | Status |

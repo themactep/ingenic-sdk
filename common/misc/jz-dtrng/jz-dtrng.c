@@ -27,7 +27,7 @@
 #include <soc/base.h>
 #ifdef CONFIG_SOC_T40
 #include <dt-bindings/interrupt-controller/t40-irq.h>
-#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0)
+#elif defined(CONFIG_KERNEL_4_4_94)
 #include <dt-bindings/interrupt-controller/t41-irq.h>
 #else
 #include <soc/irq.h>
