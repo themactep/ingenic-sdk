@@ -85,23 +85,20 @@ endif
 endif
 
 #### PLATFORM ####
-# Audio selection: t41 (oss3) is shared by both kernels via common/.
+# Audio drivers live under common/audio/<soc>/<driver>.
+# t41 and t23 use oss3; every other SoC uses oss2 on 3.10.14 and oss3 on 4.4.94.
 ifeq ($(SOC_FAMILY),t41)
     $(info Building Audio for $(SOC_FAMILY) using oss3)
-    include $(src)/common/audio/t41/oss3/Kbuild
-# t23 uses oss3 and is 3.10.14-only
-else ifeq ($(CONFIG_SOC_T23),y)
-    $(info Building Audio for SOC T23 using oss3)
-    include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
-# Everything else uses oss2 on 3.10.14 and oss3 on 4.4.94
+    include $(src)/common/audio/$(SOC_FAMILY)/oss3/Kbuild
+else ifeq ($(SOC_FAMILY),t23)
+    $(info Building Audio for $(SOC_FAMILY) using oss3)
+    include $(src)/common/audio/$(SOC_FAMILY)/oss3/Kbuild
+else ifeq ($(KERNEL_VERSION),3.10.14)
+    $(info Building Audio for $(SOC_FAMILY) using oss2)
+    include $(src)/common/audio/$(SOC_FAMILY)/oss2/Kbuild
 else
-    ifeq ($(KERNEL_VERSION),3.10.14)
-        $(info Building Audio for $(SOC_FAMILY) using oss2)
-        include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss2/Kbuild
-    else
-        $(info Building Audio for $(SOC_FAMILY) using oss3)
-        include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/oss3/Kbuild
-    endif
+    $(info Building Audio for $(SOC_FAMILY) using oss3)
+    include $(src)/common/audio/$(SOC_FAMILY)/oss3/Kbuild
 endif
 
 ifeq ($(CONFIG_SOC_T31)$(CONFIG_SOC_C100)$(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
@@ -142,5 +139,5 @@ include $(src)/$(KERNEL_VERSION)/fb/Kbuild
 include $(src)/$(KERNEL_VERSION)/ipu/Kbuild
 include $(src)/$(KERNEL_VERSION)/video/a1/vde/Kbuild
 include $(src)/$(KERNEL_VERSION)/video/a1/vdec/Kbuild
-include $(src)/$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/hdmi_audio/Kbuild
+include $(src)/common/audio/$(SOC_FAMILY)/hdmi_audio/Kbuild
 endif

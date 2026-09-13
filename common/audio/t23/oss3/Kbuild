@@ -1,7 +1,7 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)
+DIR=common/audio/t23
 
 SRCS := \
   $(DIR)/oss3/audio_dsp.c \

@@ -1,7 +1,7 @@
 MODULE_NAME := hdmi_audio
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/audio/$(SOC_FAMILY)/hdmi_audio
+DIR=common/audio/a1/hdmi_audio
 
 ccflags-y += -I$(src)/$(DIR)/include
 

@@ -104,16 +104,20 @@ the filename:
 - All Kbuilds reference the explicit name and carry no `KERNEL_VERSION` path
   component. Verified by rebuilding T31/3.10.14, T31/4.4.94, A1/4.4.94.
 
-### 4.6 Audio driver selection
+### 4.6 Audio drivers
 
-Two audio drivers exist: `oss2` (old `xb_snd`/`devices` layout) and `oss3`
-(`boards`/`host`/`inner_codecs` layout). Selection is by SoC, not kernel:
-`t41` and `t23` use `oss3`; every other SoC uses `oss2` on 3.10.14 and `oss3`
-on 4.4.94 (4.4.94 has no `oss2`).
+All audio lives under one root with a `<soc>/<driver>` layout:
 
-The t41 `oss3` sources were duplicated byte-for-byte in both trees (only the
-`Kbuild` differed, and the 4.4.94 one was broken), so they now live once in
-`common/audio/t41/oss3` and the top-level `Kbuild` routes t41 there.
+    common/audio/<soc>/<driver>/
+
+Two drivers exist: `oss2` (old `xb_snd`/`devices` layout) and `oss3`
+(`boards`/`host`/`inner_codecs` layout). Selection is by SoC: `t41` and `t23`
+use `oss3`; every other SoC uses `oss2` on 3.10.14 and `oss3` on 4.4.94 (4.4.94
+has no `oss2`). SoC aliases are symlinks (`t10,t20,t21,t30,c100 -> t31`).
+
+This is a relocation, not a dedup: the per-SoC trees were path-disjoint (0
+colliding paths), so moving them into `common/audio/` had no conflicts. The
+only previously-duplicated dir was `t41/oss3` (already merged, task 16).
 
 ## 5. Kbuild selection rules (top-level `Kbuild`)
 
@@ -128,10 +132,12 @@ The t41 `oss3` sources were duplicated byte-for-byte in both trees (only the
   - 3.10.14 `t31` -> `3.10.14/isp/t31-pp`
   - otherwise `$(KERNEL_VERSION)/isp/$(SOC_FAMILY)`
   and includes `$(src)/$(ISP_DIR)/Kbuild`.
-- Audio is selected by SoC in the top-level `Kbuild`:
-  - `t41` -> `common/audio/t41/oss3`
-  - `t23` -> `$(KERNEL_VERSION)/audio/t23/oss3`
-  - otherwise `oss2` on 3.10.14, `oss3` on 4.4.94.
+- Audio lives under one root, `common/audio/<soc>/<driver>`, selected by SoC
+  in the top-level `Kbuild`:
+  - `t41`, `t23` -> `common/audio/$(SOC_FAMILY)/oss3`
+  - otherwise `common/audio/$(SOC_FAMILY)/oss2` on 3.10.14, `.../oss3` on 4.4.94.
+  SoC aliases (`t10,t20,t21,t30,c100 -> t31`) are symlinks under `common/audio/`.
+  `a1` also has `common/audio/a1/hdmi_audio`.
 - The ISP **include path** used by ISP and sensor-src is computed at the top of
   `Kbuild` as `ISP_INCLUDE` (same mapping as `ISP_DIR`), because the per-SoC
   ISP include dir also holds the sensor headers.
@@ -225,6 +231,7 @@ Structural verification used where a build was not possible:
 | 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
 | 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
 | 16 | Merge the t41 `oss3` audio driver into `common/audio/t41/oss3`; route t41/t23 to oss3 | done |
+| 17 | Move all audio to `common/audio/<soc>/<driver>` (relocation, no collisions) | done |
 
 ## 10. Original inventory (for reference)
 

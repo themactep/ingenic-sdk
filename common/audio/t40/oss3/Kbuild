@@ -1,7 +1,7 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/$(MODULE_NAME)/$(SOC_FAMILY)/oss3
+DIR=common/audio/t40/oss3
 
 ccflags-y += -I$(src)/$(DIR)/include
 
