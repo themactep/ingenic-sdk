@@ -12,7 +12,7 @@ SRCS := $(DIR)/ipu-module.c \
 
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(FW_VER)/libipu-firmware.a
+OBJS += sdk/$(SOC_FAMILY)/libipu-firmware-$(FW_VER).a
 
 $(OUT)-objs := $(OBJS)
 

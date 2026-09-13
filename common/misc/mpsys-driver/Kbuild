@@ -14,7 +14,7 @@ else
 endif
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(DIR)/$(SOC_FAMILY)-libmpsys-firmware-$(KVERSION).a
+OBJS += sdk/$(SOC_FAMILY)/lib$(SOC_FAMILY)-mpsys-firmware-$(KVERSION).a
 
 $(OUT)-objs := $(OBJS)
 

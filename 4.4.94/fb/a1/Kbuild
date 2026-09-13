@@ -12,7 +12,7 @@ SRCS := $(DIR)/fb-module.c \
 
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(FW_VER)/libfb-firmware.a
+OBJS += sdk/$(SOC_FAMILY)/libfb-firmware-$(FW_VER).a
 
 $(OUT)-objs := $(OBJS)
 

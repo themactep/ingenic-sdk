@@ -12,7 +12,7 @@ SRCS := $(DIR)/vde_module.c \
 
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(FW_VER)/libvde-firmware.a
+OBJS += sdk/$(SOC_FAMILY)/libvde-firmware-$(FW_VER).a
 
 $(OUT)-objs := $(OBJS)
 
