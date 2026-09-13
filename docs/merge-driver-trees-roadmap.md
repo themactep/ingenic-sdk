@@ -64,10 +64,26 @@ finer-grained kernel revision than the two supported ones.
 |   interface generation: vtable vs `private_*` shims); select per-kernel in isp/Kbuild | done |
 | 8 | Merge `isp/t41` (+ `t41zrt` headers) into `common/isp`; select firmware blob per kernel | done |
 | 9 | Merge `sensor-src/common` + `include` into `common/sensor-src` | done |
-| 10 | Merge `sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100` | pending |
+| 10 | Sensor driver sources (`sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100`): **kept separate per kernel** (decision). 3.10.14 drivers use the `private_*` shim calling convention + `actual_fps` API; 4.4.94 drivers use plain kernel calls + `sensor_common_update()`. Only the shared `sensor-info.[ch]` is merged (task 9). | done (not merged, by design) |
 | 11 | Merge `misc/soc-nna` | pending |
 | 12 | Remove now-empty duplicate trees and simplify `Kbuild` | pending |
 | 13 | Final sweep: update docs, verify build matrix | pending |
+
+## Decisions
+
+- **motor, pwm, isp/t31**: the 3.10.14 and 4.4.94 implementations are
+  genuinely different (different peripherals, different internal APIs, or a
+  different driver-interface generation). They stay as separate source sets
+  (`motors-pp`, `pwm-pp`, `isp/t31-pp`) selected per kernel in `Kbuild`. The
+  built module names are unchanged so userspace and the device ABI are stable.
+- **jz-dtrng, mpsys-driver, avpu, isp/t41, sensor-info**: small or
+  platform/kernel-API-only differences. Merged into a single source set with
+  `CONFIG_KERNEL_*` / `CONFIG_SOC_*` guards in the sources.
+- **sensor drivers**: kept separate per kernel (task 10). The 3.10.14 drivers
+  call the vendor `private_*` shim layer and use the `actual_fps` API, while the
+  4.4.94 drivers use plain kernel calls and the `sensor_common_update()` API.
+  This is a different calling convention across hundreds of files, not a small
+  diff, and cannot be safely unified without per-driver review and a build.
 
 ## Verification
 
