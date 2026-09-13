@@ -15,6 +15,7 @@ static ssize_t sensor_chip_id_read(struct file *file, char __user *buf, size_t c
 static ssize_t sensor_version_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_min_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_i2c_addr_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_width_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
 static ssize_t sensor_height_read(struct file *file, char __user *buf, size_t count, loff_t *ppos);
@@ -48,6 +49,11 @@ static const struct file_operations min_fps_fops = {
 
 static const struct file_operations max_fps_fops = {
 	.read = sensor_fps_max_read,
+	.owner = THIS_MODULE,
+};
+
+static const struct file_operations actual_fps_fops = {
+	.read = sensor_actual_fps_read,
 	.owner = THIS_MODULE,
 };
 
@@ -133,6 +139,9 @@ void sensor_common_init(struct sensor_info *info) {
 	snprintf(path, sizeof(path), "%s/max_fps", ctx->dir_path);
 	proc_create_data(path, 0444, NULL, &max_fps_fops, ctx);
 
+	snprintf(path, sizeof(path), "%s/actual_fps", ctx->dir_path);
+	proc_create_data(path, 0444, NULL, &actual_fps_fops, ctx);
+
 	snprintf(path, sizeof(path), "%s/i2c_addr", ctx->dir_path);
 	proc_create_data(path, 0444, NULL, &i2c_addr_fops, ctx);
 
@@ -168,6 +177,7 @@ void sensor_common_init(struct sensor_info *info) {
 		proc_create_data("jz/sensor/version", 0444, NULL, &version_fops, ctx);
 		proc_create_data("jz/sensor/min_fps", 0444, NULL, &min_fps_fops, ctx);
 		proc_create_data("jz/sensor/max_fps", 0444, NULL, &max_fps_fops, ctx);
+		proc_create_data("jz/sensor/actual_fps", 0444, NULL, &actual_fps_fops, ctx);
 		proc_create_data("jz/sensor/i2c_addr", 0444, NULL, &i2c_addr_fops, ctx);
 		proc_create_data("jz/sensor/height", 0444, NULL, &height_fops, ctx);
 		proc_create_data("jz/sensor/width", 0444, NULL, &width_fops, ctx);
@@ -204,6 +214,13 @@ void sensor_common_exit(void) {
 	/* For now, we rely on the proc entries being cleaned up when the module unloads */
 }
 
+void sensor_update_actual_fps(int fps) {
+	/*
+	 * Kept for the 3.10.14 sensor drivers. In the multi-sensor world the
+	 * per-sensor context is authoritative; this legacy call is a no-op.
+	 */
+}
+
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));
 	char buffer[128];
@@ -236,6 +253,13 @@ static ssize_t sensor_fps_max_read(struct file *file, char __user *buf, size_t c
 	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));
 	char buffer[32];
 	int len = snprintf(buffer, sizeof(buffer), "%d\n", ctx->info->max_fps);
+	return simple_read_from_buffer(buf, count, ppos, buffer, len);
+}
+
+static ssize_t sensor_actual_fps_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
+	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));
+	char buffer[32];
+	int len = snprintf(buffer, sizeof(buffer), "%d\n", ctx->info->actual_fps);
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
 

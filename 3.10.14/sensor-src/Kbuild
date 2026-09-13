@@ -1,5 +1,5 @@
 ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/include
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/sensor-src/include
+ccflags-y += -I$(src)/common/sensor-src/include
 DIR=$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
 
 ifneq ($(SENSOR_MODEL),)
@@ -7,7 +7,7 @@ ifneq ($(SENSOR_MODEL),)
 	OUT := $(MODULE_NAME)
 	SRCS := \
 		$(DIR)/$(SENSOR_MODEL).c \
-		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+		common/sensor-src/common/sensor-info.c
 	OBJS := $(SRCS:%.c=%.o) \
 		$(ASM_SRCS:%.S=%.o)
 	$(OUT)-objs := $(OBJS)
@@ -21,7 +21,7 @@ ifneq ($(SENSOR_1_MODEL),)
 	OUT_1 := $(MODULE_1_NAME)
 	SRCS_1 := \
 		$(DIR)/$(SENSOR_1_MODEL).c \
-		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+		common/sensor-src/common/sensor-info.c
 	OBJS_1 := $(SRCS_1:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
 	$(OUT_1)-objs := $(OBJS_1)
@@ -34,7 +34,7 @@ ifneq ($(SENSOR_2_MODEL),)
 	OUT_2 := $(MODULE_2_NAME)
 	SRCS_2 := \
 		$(DIR)/$(SENSOR_2_MODEL).c \
-		$(KERNEL_VERSION)/sensor-src/common/sensor-info.c
+		common/sensor-src/common/sensor-info.c
 	OBJS_2 := $(SRCS_2:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
 	$(OUT_2)-objs := $(OBJS_2)
