@@ -77,6 +77,23 @@ diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
 - 4.4.94 only: `aip/a1`, `fb`, `ipu`, `video/a1`, `audio/a1`, `isp/t40`.
 - 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`, `sdk/t20..t30`.
 
+### 4.5 `sdk/` is not source (left as-is)
+
+`sdk/` contains **prebuilt firmware blobs** only (`*.a`), no C/headers, so
+there is nothing to merge in-source. Which blob to link is a build-level
+choice, already handled per kernel:
+
+- `$(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/<ver>/...` and ISP_FW_VER / `KVERSION`
+  in the ISP and mpsys Kbuilds (see the merged `common/isp/t41/Kbuild`,
+  which picks `1.2.0` + `-310.a` for 3.10.14 and `1.2.6` plain for 4.4.94).
+- Only `t31` and `t41` exist in both trees. A few `t41` blobs are
+  byte-identical copies (`1.0.1`, `1.1.0`, `1.1.1`, `1.2.0`), and
+  `t41/1.2.6/libt41-firmware.a` differs between trees - the one case where the
+  same path holds different bytes.
+- They are deliberately left in place: deduplicating opaque binaries would give
+  no source-level benefit and would require a new naming scheme plus changes to
+  the firmware-version selection logic (regression risk, no readability gain).
+
 ## 5. Kbuild selection rules (top-level `Kbuild`)
 
 - Merged drivers are included directly from `common/`:
