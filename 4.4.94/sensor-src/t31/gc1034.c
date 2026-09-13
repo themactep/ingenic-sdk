@@ -557,10 +557,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720,
 	}};
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on[] = {
 	//{0xfe, 0x03},
 	//{0x10, 0x90},
@@ -788,6 +784,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x2c, &tmp);
 	if (ret < 0)
 		return -1;
+
 	sh_delay = tmp;
 	hts = 2 * (hb + 16) + ((win_width + sh_delay) / 2);
 	ret = sensor_read(sd, 0xd, &tmp);
@@ -802,6 +799,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x7, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -928,8 +926,10 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -948,6 +948,7 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 		return -EPERM;
 
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+
 	return 0;
 }
 
