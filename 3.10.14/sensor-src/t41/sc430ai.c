@@ -1141,7 +1141,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
-
 	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
 	ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
 	ret = sensor_write(sd, 0x02b8, val_lut[value].reg2b8);

@@ -2977,20 +2977,20 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 #if 0
-            if (vals->reg_num == 0x34c || vals->reg_num == 0x34e) {
-                printk(" write reg_num = 0x%x \nv[0] = 0x%x ====== v[1] = 0x%x \n", vals->reg_num, v[0], v[1]);
-                sensor_read(sd, vals->reg_num, &z[0]);
-                sensor_read(sd, vals->reg_num+1, &z[1]);
-                printk(" read reg_num = 0x%x  \nz[0] = 0x%x ====== z[1] = 0x%x \n",vals->reg_num, z[0], z[1]);
-            }
+			if (vals->reg_num == 0x34c || vals->reg_num == 0x34e) {
+				printk(" write reg_num = 0x%x \nv[0] = 0x%x ====== v[1] = 0x%x \n", vals->reg_num, v[0], v[1]);
+				sensor_read(sd, vals->reg_num, &z[0]);
+				sensor_read(sd, vals->reg_num+1, &z[1]);
+				printk(" read reg_num = 0x%x  \nz[0] = 0x%x ====== z[1] = 0x%x \n",vals->reg_num, z[0], z[1]);
+			}
 #endif
 		}
 		vals++;
 	}
 #if 0
-        sensor_read(sd, 0x31AE, &z[0]);
-        sensor_read(sd, 0x31AF, &z[1]);
-        printk(" read reg_num = 0x31AE  \nz[0] = 0x%x ====== z[1] = 0x%x \n", z[0], z[1]);
+	sensor_read(sd, 0x31AE, &z[0]);
+	sensor_read(sd, 0x31AF, &z[1]);
+	printk(" read reg_num = 0x31AE  \nz[0] = 0x%x ====== z[1] = 0x%x \n", z[0], z[1]);
 #endif
 	return 0;
 }
@@ -3003,22 +3003,22 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	char v[2] = {0};
 #if 0
-    struct regval_list id_array = {
-            .reg_num = 0x3000,
-            .value = 0
-    };
+	struct regval_list id_array = {
+		.reg_num = 0x3000,
+		.value = 0
+	};
 
-    ret = sensor_read_array(sd, &id_array);
-    if (ret < 0)
-        return ret;
-    v[0] = (id_array.value >> 8) && 0xff;
-    v[1] = id_array.value && 0xff;
+	ret = sensor_read_array(sd, &id_array);
+	if (ret < 0)
+		return ret;
+	v[0] = (id_array.value >> 8) && 0xff;
+	v[1] = id_array.value && 0xff;
 
-    if (v[0] != SENSOR_CHIP_ID_H)
-        return -ENODEV;
-    if (v[1] != SENSOR_CHIP_ID_L)
-        return -ENODEV;
-    printk("v[0] = 0x%x ---------- v[1] = 0x%x\n",v[0], v[1]);
+	if (v[0] != SENSOR_CHIP_ID_H)
+		return -ENODEV;
+	if (v[1] != SENSOR_CHIP_ID_L)
+		return -ENODEV;
+	printk("v[0] = 0x%x ---------- v[1] = 0x%x\n",v[0], v[1]);
 #else
 	ret = sensor_read(sd, 0x3000, &v[0]);
 	printk("ret = %d &&&&&& v[0] = %d\n", ret, v[0]);
@@ -3039,25 +3039,25 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 #if 0
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
-    int ret = 0;
-    int it = (value & 0xffff);
-    int index = (value & 0xffff0000) >> 16;
-    struct sensor_gain_lut *gain_lut = sensor_gain_lut;
+	int ret = 0;
+	int it = (value & 0xffff);
+	int index = (value & 0xffff0000) >> 16;
+	struct sensor_gain_lut *gain_lut = sensor_gain_lut;
 
-    /*set integration time*/
-    ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-    ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-    ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-    /*set analog gain*/
-    ret = sensor_write(sd, 0x3e09, gain_lut[index].again);
-    /*set coarse dgain*/
-    ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);
-    /*set fine dgain*/
-    ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
-    if (ret < 0)
-            return ret;
+	/*set integration time*/
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	/*set analog gain*/
+	ret = sensor_write(sd, 0x3e09, gain_lut[index].again);
+	/*set coarse dgain*/
+	ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);
+	/*set fine dgain*/
+	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
+	if (ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 #endif
 
@@ -3239,10 +3239,10 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 		/*
-    case TX_ISP_EVENT_SENSOR_EXPO:
-        if (arg)
-            ret = sensor_set_expo(sd, *(int*)arg);
-        break;
+		case TX_ISP_EVENT_SENSOR_EXPO:
+			if (arg)
+				ret = sensor_set_expo(sd, *(int*)arg);
+			break;
 */
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -3285,9 +3285,9 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		/*
-        if (arg)
-            ret = sensor_set_vflip(sd, *(int*)arg);
-        break;
+			if (arg)
+				ret = sensor_set_vflip(sd, *(int*)arg);
+			break;
 */
 	case TX_ISP_EVENT_SENSOR_LOGIC:
 		if (arg)

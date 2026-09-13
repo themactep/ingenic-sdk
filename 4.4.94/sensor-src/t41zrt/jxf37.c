@@ -18,9 +18,12 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "jxf37"
+#define SENSOR_VERSION "H20210729a"
 #define SENSOR_CHIP_ID_H (0x0f)
-
 #define SENSOR_CHIP_ID_L (0x37)
 
 // ============================================================================
@@ -29,16 +32,26 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK_DVP (86400000)
 #define SENSOR_SUPPORT_30FPS_SCLK_MIPI (129600000)
 #define SENSOR_SUPPORT_VGA_70FPS_SCLK_MIPI (71939840)
 #define SENSOR_SUPPORT_13_110FPS_SCLK_MIPI (64768000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_RES_13 13
-#define SENSOR_VERSION "H20210729a"
 
 /* 定义SENSOR_WITHOUT_INIT时表示boot阶段已进行sensor初始化，下sensor初始化配置，可节省初始化sensor时间。*/
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
@@ -1287,10 +1300,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_480x270_110fps_mipi,
 	}};
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x20},

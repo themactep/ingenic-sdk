@@ -24,9 +24,11 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-#define SENSOR_NAME "sc4210"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "sc4210"
+#define SENSOR_VERSION "H20230522a"
 #define SENSOR_CHIP_ID_H (0x42)
 #define SENSOR_CHIP_ID_L (0x10)
 
@@ -36,14 +38,20 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_BINNING_SCLK (144000000)
 #define SENSOR_SUPPORT_25FPS_SCLK (122400000)
 #define SENSOR_SUPPORT_15FPS_SCLK (67478400)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230522a"
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = -1;
@@ -1720,10 +1728,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	// ret = sensor_write(sd,0x3812,0x00);
+	// ret = sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
-	// ret += sensor_write(sd,0x3812,0x30);
+	// ret += sensor_write(sd, 0x3812, 0x30);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;

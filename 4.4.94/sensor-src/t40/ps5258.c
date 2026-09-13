@@ -16,9 +16,11 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "ps5258"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "ps5258"
+#define SENSOR_VERSION "H20201221a"
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x58)
 
@@ -28,13 +30,19 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x48
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_FPS_25 (81000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION "H20201221a"
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
@@ -272,10 +280,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}};
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	//{0x0100, 0x01},

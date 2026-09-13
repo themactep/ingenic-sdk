@@ -18,9 +18,12 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc4023"
+#define SENSOR_VERSION "H20230719"
 #define SENSOR_CHIP_ID_H (0x40)
-
 #define SENSOR_CHIP_ID_L (0x23)
 
 // ============================================================================
@@ -29,13 +32,18 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x29
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108 * 1000 * 1000
-
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230719"
 
 /* CONFIG_SENSOR_SUSPEND:支持Sensor suspend功能
  * SENSOR_POWER_OFF :选择Sensor断电
@@ -73,14 +81,14 @@ static struct sensor_info sensor_info = {
 	.i2c_adapter = 0,
 };
 
+static unsigned char ht_gain = 24;
+static unsigned char gain_flag = 0;
+static unsigned char ag_last = 0;
+
 struct regval_list {
 	uint16_t reg_num;
 	unsigned char value;
 };
-
-static unsigned char ht_gain = 24;
-static unsigned char gain_flag = 0;
-static unsigned char ag_last = 0;
 
 struct again_lut {
 	unsigned int index;
@@ -1200,10 +1208,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},

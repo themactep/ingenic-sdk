@@ -21,9 +21,11 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
-#define SENSOR_NAME "sc501ai"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "sc501ai"
+#define SENSOR_VERSION "H20230704a"
 #define SENSOR_CHIP_ID_H (0xce)
 #define SENSOR_CHIP_ID_L (0x1f)
 
@@ -33,11 +35,17 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230704a"
 #define MCLK 24000000
 
 static int reset_gpio = -1;
@@ -560,8 +568,8 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x59fb, 0x10},
 	{0x59fc, 0x0c},
 	{0x59ff, 0x02},
-	//{0x320c,0x06},//hts 0x640 = 1600
-	//{0x320d,0x40},
+	//{0x320c, 0x06},//hts 0x640 = 1600
+	//{0x320d, 0x40},
 	{0x320e, 0x07}, //vts 0x7bc = 1980
 	{0x320f, 0xbc}, //
 	{0x36e9, 0x20},

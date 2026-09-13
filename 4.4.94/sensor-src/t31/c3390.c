@@ -17,9 +17,11 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "c3390"
-#define SENSOR_MAX_WIDTH 2304
-#define SENSOR_MAX_HEIGHT 1296
+#define SENSOR_VERSION "H20210512a"
 #define SENSOR_CHIP_ID 0x0301
 #define SENSOR_CHIP_ID_H (0x03)
 #define SENSOR_CHIP_ID_L (0x01)
@@ -30,12 +32,24 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
 
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (113600000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20210512a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -139,7 +153,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x0301,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -204,7 +218,7 @@ static struct regval_list sensor_init_regs_2304x1296_30fps_mipi[] = {
 	{0x32ac, 0xff},
 	{0x3291, 0x04},
 	{0x0340, 0x06},
-	{0x0341, 0x3b}, //vts for 25fps,0x530 for 30fps
+	{0x0341, 0x3b}, //vts for 25fps, 0x530 for 30fps
 	{0x0342, 0x0b},
 	{0x0343, 0x20},
 	{0x034b, 0x1f},
@@ -331,10 +345,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

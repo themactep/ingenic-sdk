@@ -3037,29 +3037,29 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-/*
+#if 0
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = (value & 0xffff);
 	int index = (value & 0xffff0000) >> 16;
-	struct sensor_gain_lut *gain_lut = sensor_gain_lut;*/
+	struct sensor_gain_lut *gain_lut = sensor_gain_lut;
 
-/*set integration time*/
-/*ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-	  ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	  ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));*/
-/*set analog gain*/
-/*	ret = sensor_write(sd, 0x3e09, gain_lut[index].again); */
-/*set coarse dgain*/
-/*ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);*/
-/*set fine dgain*/
-/*	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
+	/*set integration time*/
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	/*set analog gain*/
+	ret = sensor_write(sd, 0x3e09, gain_lut[index].again);
+	/*set coarse dgain*/
+	ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);
+	/*set fine dgain*/
+	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
-*/
+#endif
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;

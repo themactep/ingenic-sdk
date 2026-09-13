@@ -19,7 +19,11 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "bf3a03"
+#define SENSOR_VERSION "H20200116a"
 #define SENSOR_CHIP_ID 0x3a03
 #define SENSOR_CHIP_ID_H (0x3a)
 #define SENSOR_CHIP_ID_L (0x03)
@@ -30,14 +34,24 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x6e
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
-#define SENSOR_PAGE_REG 0xfa
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_PCLK (12 * 1000 * 1000)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 10
 #define DRIVE_CAPABILITY_2
-#define SENSOR_VERSION "H20200116a"
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_PAGE_REG 0xfa
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -48,11 +62,6 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
-};
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
 };
 
 static int reset_gpio = GPIO_PA(18);
@@ -66,6 +75,11 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+struct regval_list {
+	unsigned char reg_num;
+	unsigned char value;
+};
 
 struct again_lut {
 	unsigned int value;
@@ -202,7 +216,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_640_480[] = {
-	//	{0x12,0x80},
+	//	{0x12, 0x80},
 	{0x09, 0x55},
 	{0x15, 0x02},
 	{0x1e, 0x40},
@@ -252,10 +266,10 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x01, 0x0b},
 	{0x02, 0x0b},
 	{0x8c, 0x02},
-	//	{0x8d,0x4c},
+	//	{0x8d, 0x4c},
 	{0x8d, 0x64}, //jz
 	{0x87, 0x16},
-	//	{0x87,0xff},//jz
+	//	{0x87, 0xff},//jz
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -270,10 +284,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.colorspace = V4L2_COLORSPACE_SRGB,
 	.regs = sensor_init_regs_640_480,
 }};
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on[] = {
 	{0x12, 0x05},

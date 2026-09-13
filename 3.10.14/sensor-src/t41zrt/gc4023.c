@@ -1406,7 +1406,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
     int ret = 0;
     struct again_lut *val_lut = sensor_again_lut;
 
-
     ret = sensor_write(sd, 0x0614, val_lut[value].reg614);
     ret = sensor_write(sd, 0x0615, val_lut[value].reg615);
 
@@ -1415,7 +1414,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
     ret = sensor_write(sd, 0x1468, val_lut[value].reg1468);
     ret = sensor_write(sd, 0x00b8, val_lut[value].regb8);
     ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
-
 
     if (ret < 0) {
 	ISP_ERROR("sensor_write error  %d" ,__LINE__ );

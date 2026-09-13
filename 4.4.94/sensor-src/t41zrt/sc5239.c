@@ -17,9 +17,12 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "sc5239"
+#define SENSOR_VERSION "H20210915a"
 #define SENSOR_CHIP_ID_H (0x52)
-
 #define SENSOR_CHIP_ID_L (0x35)
 
 // ============================================================================
@@ -28,16 +31,26 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_SCLK_5M_FPS_15 (120000000)
 #define SENSOR_SUPPORT_SCLK_5M_FPS_15_WDR (165600000)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION "H20210915a"
 
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_WITHOUT_INIT
+
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 
@@ -691,10 +704,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_2592_1944_15fps_mipi_dol,
 	}};
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
