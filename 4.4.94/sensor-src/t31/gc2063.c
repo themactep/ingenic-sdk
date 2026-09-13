@@ -19,9 +19,11 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "gc2063"
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_VERSION "H20230726a"
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_MAX_HEIGHT 1080
@@ -35,8 +37,21 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x37
 
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0x00
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_40FPS_MIPI_SCLK (99000000)
 #define SENSOR_SUPPORT_30FPS_MIPI_SCLK (78000000)
 #define SENSOR_SUPPORT_25FPS_MIPI_SCLK (72000000)
@@ -45,7 +60,6 @@
 #define SENSOR_SUPPORT_15FPS_DVP_SCLK (37125000)
 #define SENSOR_OUTPUT_MAX_FPS 40
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230726a"
 
 static unsigned char vts0 = 0x05;
 static unsigned char vts1 = 0x8a;

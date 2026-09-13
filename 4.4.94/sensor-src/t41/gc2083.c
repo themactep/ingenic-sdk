@@ -22,9 +22,11 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-#define SENSOR_NAME "gc2083"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "gc2083"
+#define SENSOR_VERSION "H20230914a-roy"
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x83)
 
@@ -34,10 +36,16 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x37
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230914a-roy"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

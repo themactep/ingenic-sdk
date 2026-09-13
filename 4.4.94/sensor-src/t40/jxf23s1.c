@@ -16,9 +16,11 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "jxf23s1"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "jxf23s1"
+#define SENSOR_VERSION "H20190917a"
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x23)
 
@@ -28,13 +30,19 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (86400000)
 #define SENSOR_SUPPORT_15FPS_SCLK (43200000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20190917a"
 
 static int reset_gpio = GPIO_PB(27);
 module_param(reset_gpio, int, S_IRUGO);

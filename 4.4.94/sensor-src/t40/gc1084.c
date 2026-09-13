@@ -16,9 +16,11 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "gc1084"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "gc1084"
+#define SENSOR_VERSION "H20230614a"
 #define SENSOR_CHIP_ID_H (0x10)
 #define SENSOR_CHIP_ID_L (0x84)
 
@@ -28,11 +30,17 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x37
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (49500000)
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20230614a"
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = GPIO_PA(20);

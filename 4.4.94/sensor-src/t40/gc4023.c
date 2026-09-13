@@ -16,9 +16,11 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "gc4023"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "gc4023"
+#define SENSOR_VERSION "H20220523a"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
 
@@ -28,11 +30,17 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x29
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK 108 * 1000 * 1000
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220523a"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

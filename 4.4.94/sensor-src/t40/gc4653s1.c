@@ -18,9 +18,11 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SENSOR_NAME "gc4653s1"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "gc4653s1"
+#define SENSOR_VERSION "H20220407a"
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
 
@@ -30,14 +32,20 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x29
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (144 * 1000 * 1000)
 #define SENSOR_SUPPORT_15FPS_SCLK_HDR (3000 * 1600 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MAX_FPS_DOL 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20220407a"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

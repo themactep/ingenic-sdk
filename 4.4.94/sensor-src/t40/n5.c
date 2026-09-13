@@ -17,9 +17,11 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SENSOR_NAME "n5"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "n5"
+#define SENSOR_VERSION "H20221025a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x00)
 
@@ -29,11 +31,17 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x32
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xfe
 #define SENSOR_REG_DELAY 0x00
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20221025a"
 
 static int reset_gpio = GPIO_PB(6);
 static int pwr_gpio = GPIO_PA(24);
