@@ -56,7 +56,7 @@ For each duplicated driver, diff the two trees and classify:
 | isp/t41zrt (headers) | `common/isp/t41zrt/` | 3.10.14 (identical) | none |
 | sensor-info | `common/sensor-src/common/sensor-info.c`, `common/sensor-src/include/sensor-info.h` | union of both | union struct + both APIs (`sensor_update_actual_fps` and `sensor_common_update`) |
 | jz-dtrng | `common/misc/jz-dtrng/` | 4.4.94 | `CONFIG_KERNEL_4_4_94` for the IRQ header |
-| mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `sdk/<soc>/lib<soc>-mpsys-firmware-<3-10-14\|4-4-94>.a` by `KERNEL_VERSION` |
+| mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `sdk/<soc>/lib<soc>-mpsys-firmware-720-<31014\|4494>.a` by `KERNEL_VERSION` |
 | soc-nna | `common/misc/soc-nna/` | 4.4.94 (superset, adds A1) | `CONFIG_SOC_A1` (inert on 3.10) |
 
 ### 4.2 Split per kernel (like motor)
@@ -80,24 +80,27 @@ diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
 - 4.4.94 only: `aip/a1`, `fb`, `ipu`, `video/a1`, `audio/a1`, `isp/t40`.
 - 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`.
 
-### 4.5 `sdk/` firmware blobs (single root, flattened)
+### 4.5 `sdk/` firmware blobs (single root, fully explicit names)
 
-`sdk/` holds prebuilt firmware blobs only (`*.a`), no source. They used to live
-in two trees under `<tree>/sdk/<soc>/<version>/lib<soc>-firmware.a`, selected by
-the `$(KERNEL_VERSION)` path component, which duplicated the blobs shared by
-both kernels. Now there is a single `sdk/` root with the version in the
-filename:
+`sdk/` holds prebuilt firmware blobs only, one root, with the full identity in
+the filename:
 
-    sdk/<soc>/lib<soc>-firmware-<version>[-<buildtag>].a
-    sdk/t40/libt40-mpsys-firmware-4-4-94.a   (mpsys blobs live here too)
-    sdk/a1/lib{fb,ipu,vde,vdec}-firmware-<version>.a
+    sdk/<soc>/lib<soc>-<kind>-firmware-<version>-<compiler>-<kernel>[-<variant>].a
 
-- `sdk/t10` is a symlink to `t20` (they share firmware).
-- Byte-identical duplicates are one real file plus symlinks for the other
-  names (t23 plain -> `-540-3-10-14`, t31 plain -> `-472`, cross-tree t41 blobs).
-- The one genuinely different same-version pair is t41 1.2.6: kept as
-  `libt41-firmware-1.2.6.a` (4.4.94) and `libt41-firmware-1.2.6-3-10-14.a` (3.10.14).
-- All Kbuilds reference `sdk/$(SOC_FAMILY)/...` with no `KERNEL_VERSION`
+- `<compiler>`: GCC tag `472` (4.7.2), `540` (5.4.0), `720` (7.2.0).
+- `<kernel>`: `31014` (3.10.14) or `4494` (4.4.94), no dashes.
+- `<variant>`: `double` (multi-sensor) or `unknown`, after the kernel tag.
+- Examples: `sdk/t31/libt31-firmware-1.1.6-540-31014.a`,
+  `sdk/t23/libt23-firmware-1.3.0-540-31014-double.a`,
+  `sdk/t41/libt41-firmware-1.2.6-720-4494.a`,
+  `sdk/a1/libfb-firmware-1.6.2-720-4494.a`,
+  `sdk/t40/libt40-mpsys-firmware-720-4494.a`.
+- `sdk/t10` is a symlink to `t20` (they share firmware). The other old
+  bare-version aliases were dropped: every Kbuild now names the exact file.
+- The one near-duplicate pair (t31 1.1.2, two GCC-4.7.2 builds differing by a
+  single byte in the embedded build date `Oct 20` vs `Oct 21 2020`) kept only
+  the newer build; the older unreferenced rebuild was dropped.
+- All Kbuilds reference the explicit name and carry no `KERNEL_VERSION` path
   component. Verified by rebuilding T31/3.10.14, T31/4.4.94, A1/4.4.94.
 
 ## 5. Kbuild selection rules (top-level `Kbuild`)
@@ -204,6 +207,7 @@ Structural verification used where a build was not possible:
 | 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
 | 13 | Docs + build-matrix verification | done |
 | 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
+| 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
 
 ## 10. Original inventory (for reference)
 

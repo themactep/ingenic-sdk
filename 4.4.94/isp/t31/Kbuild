@@ -10,7 +10,7 @@ SRCS := $(DIR)/tx-isp-debug.c \
 	$(DIR)/tx-isp-module.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += sdk/$(SOC_FAMILY)/lib$(SOC_FAMILY)-firmware-$(ISP_FW_VER)-$(COMPILER_VER).a
+OBJS += sdk/$(SOC_FAMILY)/lib$(SOC_FAMILY)-firmware-$(ISP_FW_VER)-$(COMPILER_VER)-4494.a
 
 $(OUT)-objs := $(OBJS)
 

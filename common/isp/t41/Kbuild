@@ -1,9 +1,9 @@
 # t41 ISP driver. One source set serves both kernels; the only build-level
 # difference is which prebuilt firmware blob is linked.
 ifeq ($(KERNEL_VERSION),3.10.14)
-ISP_FW_FILE := lib$(SOC_FAMILY)-firmware-1.2.0-3-10-14.a
+ISP_FW_FILE := lib$(SOC_FAMILY)-firmware-1.2.0-720-31014.a
 else
-ISP_FW_FILE := lib$(SOC_FAMILY)-firmware-1.2.6.a
+ISP_FW_FILE := lib$(SOC_FAMILY)-firmware-1.2.6-720-4494.a
 ldflags-y += --no-warn-mismatch
 endif
 

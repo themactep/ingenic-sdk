@@ -29,7 +29,7 @@ SRCS := $(DIR)/tx-isp-vic.o \
 	$(DIR)/apical-isp/system_chardev.o \
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
-OBJS += sdk/$(SOC_FAMILY)/libt20-firmware-$(ISP_FW_VER).a
+OBJS += sdk/$(SOC_FAMILY)/libt20-firmware-$(ISP_FW_VER)-472-31014.a
 
 $(OUT)-objs := $(OBJS)
 
