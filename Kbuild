@@ -95,7 +95,7 @@ endif
 
 ifeq ($(CONFIG_SOC_T40)$(CONFIG_SOC_T41),y)
     include $(src)/$(KERNEL_VERSION)/misc/mpsys-driver/Kbuild
-    include $(src)/$(KERNEL_VERSION)/misc/jz-dtrng/Kbuild
+    include $(src)/common/misc/jz-dtrng/Kbuild
 endif
 
 #### SENSORS ####
