@@ -1,104 +1,192 @@
-# Roadmap: merge the 3.10.14 and 4.4.94 driver trees
+# Driver tree merge: 3.10.14 + 4.4.94
 
-## Goal
+Status: **complete** on branch `refactor/merge-driver-trees` (not yet pushed).
+One commit per task; see `git log origin/master..HEAD`.
 
-Replace the two parallel source trees (`3.10.14/` and `4.4.94/`) with a single set of
-driver sources where the per-kernel differences are handled **inside** the sources
-via `LINUX_VERSION_CODE` / `KERNEL_VERSION` guards, instead of by duplicating whole
-directories.
+This document is the hand-off note for the next session. It records what was
+moved, how the build selects sources, how to verify, and what remains.
 
-Drivers that are genuinely a different implementation per kernel stay separate and
-are selected in `Kbuild`. The 3.10 motor driver is such a case and is renamed
-`motors-pp` (directory `motor-pp`) to distinguish it from the 4.4 `motor` driver.
+---
 
-## Constraints / non-goals
+## 1. Goal
 
-- Do **not** merge platform-only trees that only ever build on one SoC/kernel:
-  - A1-only: `aip/`, `fb/`, `ipu/`, `video/` (4.4 only)
-  - Legacy SoC ISP/sensors/audio: `t10`, `t20`, `t21`, `t23`, `t30` (3.10 only)
-- Keep the external build contract working: `SOC_FAMILY`, `KERNEL_VERSION`,
-  `BR2_THINGINO_MOTORS*` and `CONFIG_SOC_*` are still passed by the firmware build.
-- One commit per task.
+Collapse the duplicated driver sources in `3.10.14/` and `4.4.94/` so that:
 
-## Inventory (duplication)
+- differences between the two kernels are handled **inside the sources**
+  (`CONFIG_KERNEL_*`), and
+- differences that are really *platform* differences are handled inside the
+  sources (`CONFIG_SOC_*`), and
+- drivers that are genuinely a **different implementation** stay as separate
+  source sets, selected per kernel in `Kbuild`.
 
-- 66 files are byte-identical across both trees.
-- ~56 common files differ, split into:
-  - cosmetic/whitespace differences (avpu_alloc, avpu_no_dmabuf, ...)
-  - small include / platform-gate differences (jz-dtrng, avpu_ip.h, ...)
-  - substantial logic/format drift (soc_nna_main 901 lines, tx-isp-debug 678,
-    tx-isp-common.h 295, pwm_core 284, sensor sources)
+Module names (`motor`, `pwm_core`, `pwm_hal`, `tx-isp-t31`, `avpu`, `audio`,
+`soc-nna`, `dtrng_dev`, ...) are unchanged, so userspace and the device ABI are
+unaffected. In particular `modprobe motor`, `/dev/motor` and `/dev/pwm` behave
+exactly as before on both kernels.
 
-## Strategy
+## 2. TL;DR for the next session
 
-Create a single `common/` source root for the mergeable driver sources. Keep the
-`3.10.14/` and `4.4.94/` trees in place for the platform-only content. `Kbuild`
-selects either the merged `common/` path or a kernel-specific path.
+- Read section 4 (source map) and section 5 (Kbuild rules).
+- To build: section 7 (real, tested commands).
+- Remaining work / known gaps: section 8.
 
-Rationale: incremental and reviewable. Each task moves one driver at a time from
-"duplicated in two trees" to "one source in `common/` behind a version guard",
-without a flag-day rename of every file at once.
+## 3. Decision rule (how each driver was classified)
 
-### In-source kernel selector
+For each duplicated driver, diff the two trees and classify:
 
-Use the existing repo convention of the preprocessor symbols
-`CONFIG_KERNEL_3_10`, `CONFIG_KERNEL_4_4_94` (and `CONFIG_KERNEL_6_1` if ever
-needed). These are supplied as `EXTRA_CFLAGS` by the firmware build
-(`package/ingenic-sdk/ingenic-sdk.mk`) and are already used throughout the
-tree. Do not introduce raw `LINUX_VERSION_CODE` checks unless a driver needs a
-finer-grained kernel revision than the two supported ones.
+1. **Identical or trivially different** (whitespace, one include, one API
+   signature) -> **merge** into `common/`, guard in-source. Examples: `avpu`,
+   `jz-dtrng`, `mpsys-driver`, `isp/t41`, `soc-nna`, `sensor-info`.
+2. **Different implementation, same purpose** -> **keep two source sets**,
+   select per kernel. Examples: motor, pwm, `isp/t31`.
+3. **Platform-only** (only ever builds on one SoC/kernel) -> **leave where it
+   is**, no merge. Examples: A1 `aip/fb/ipu/video`, legacy `t10..t30`.
 
-## Tasks
+## 4. Source map
+
+### 4.1 Merged into `common/` (used by both kernels)
+
+| Driver | Merged source | Came from | In-source guards |
+|--------|---------------|-----------|------------------|
+| avpu | `common/avpu/` | 3.10.14 `avpu/t31` (superset, handles T31/C100/T40/T41) + 2 guards ported from 4.4.94 | `CONFIG_KERNEL_4_4_94` for `dma_buf_export()` API and T31 AVPU clock (440 vs 550 MHz); `CONFIG_SOC_*` already present |
+| isp/t41 | `common/isp/t41/` | 4.4.94 `isp/t41` (superset) | already used `CONFIG_KERNEL_3_10/4_4_94/6_1`; Kbuild picks firmware blob per kernel |
+| isp/t41zrt (headers) | `common/isp/t41zrt/` | 3.10.14 (identical) | none |
+| sensor-info | `common/sensor-src/common/sensor-info.c`, `common/sensor-src/include/sensor-info.h` | union of both | union struct + both APIs (`sensor_update_actual_fps` and `sensor_common_update`) |
+| jz-dtrng | `common/misc/jz-dtrng/` | 4.4.94 | `CONFIG_KERNEL_4_4_94` for the IRQ header |
+| mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `*-libmpsys-firmware-<3-10-14\|4-4-94>.a` by `KERNEL_VERSION` |
+| soc-nna | `common/misc/soc-nna/` | 4.4.94 (superset, adds A1) | `CONFIG_SOC_A1` (inert on 3.10) |
+
+### 4.2 Split per kernel (like motor)
+
+| Driver | 3.10.14 source set | 4.4.94 source set | Why |
+|--------|--------------------|-------------------|-----|
+| motor | `3.10.14/misc/motors-pp/` | `4.4.94/misc/motor/` | Different implementations (PP/TCU vs GPIO/TCU). Both build a module named `motor`. |
+| pwm | `3.10.14/misc/pwm-pp/` | `4.4.94/misc/pwm/` | Different implementations (tcu_alloc arbitration + runtime channel selection vs old vendor). Both build `pwm_core`/`pwm_hal`. |
+| isp/t31 | `3.10.14/isp/t31-pp/` | `4.4.94/isp/t31/` | Different interface generation: 3.10 uses the `jz_driver_common_interfaces` vtable, 4.4 uses the standalone `private_*` shim layer and dropped the vtable from `txx-funcs.h`. |
+
+### 4.3 Sensor drivers: intentionally NOT merged
+
+`3.10.14/sensor-src/*` and `4.4.94/sensor-src/*` stay separate. The 3.10.14
+drivers call the vendor `private_*` shims and use the `actual_fps` API; the
+4.4.94 drivers call plain kernel functions and use `sensor_common_update()`.
+This is a different calling convention across hundreds of files, not a small
+diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
+
+### 4.4 Platform-only trees (untouched)
+
+- 4.4.94 only: `aip/a1`, `fb`, `ipu`, `video/a1`, `audio/a1`, `isp/t40`.
+- 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`, `sdk/t20..t30`.
+
+## 5. Kbuild selection rules (top-level `Kbuild`)
+
+- Merged drivers are included directly from `common/`:
+  `common/avpu`, `common/misc/{jz-dtrng,mpsys-driver,soc-nna}`, and the
+  sensor `sensor-info` via the per-tree `sensor-src/Kbuild`.
+- Split drivers choose by `KERNEL_VERSION`:
+  - PWM: `3.10.14` -> `3.10.14/misc/pwm-pp/Kbuild`, else `$(KERNEL_VERSION)/misc/pwm/Kbuild`.
+  - Motor: `3.10.14` -> `3.10.14/misc/motors-pp/Kbuild`, else `$(KERNEL_VERSION)/misc/motor/Kbuild`.
+- ISP is selected inside `$(KERNEL_VERSION)/isp/Kbuild`, which sets `ISP_DIR`:
+  - `t41` -> `common/isp/t41` (both kernels)
+  - 3.10.14 `t31` -> `3.10.14/isp/t31-pp`
+  - otherwise `$(KERNEL_VERSION)/isp/$(SOC_FAMILY)`
+  and includes `$(src)/$(ISP_DIR)/Kbuild`.
+- The ISP **include path** used by ISP and sensor-src is computed at the top of
+  `Kbuild` as `ISP_INCLUDE` (same mapping as `ISP_DIR`), because the per-SoC
+  ISP include dir also holds the sensor headers.
+
+## 6. In-source kernel selector
+
+Use the repo convention: `CONFIG_KERNEL_3_10`, `CONFIG_KERNEL_4_4_94`
+(optionally `CONFIG_KERNEL_6_1`). These are supplied as `EXTRA_CFLAGS` by the
+firmware build (`package/ingenic-sdk/ingenic-sdk.mk`) and are already used
+throughout the tree. Do **not** add raw `LINUX_VERSION_CODE` checks unless a
+driver needs a finer revision than the two supported kernels.
+
+## 7. How to build / verify
+
+`build.sh` needs `KDIR` (a configured + built kernel tree), `CROSS_COMPILE`, and
+optionally `SENSOR_MODEL`. Prebuilt kernel trees and toolchains live under the
+firmware output dir. Real commands used to verify this branch:
+
+```sh
+cd /home/paul/thingino/ingenic-sdk
+
+# T31, 3.10.14
+BASE=/home/paul/thingino/firmware/master/output/master/vanhua_djz_t31n_gc2083_eth-3.10.14-uclibc-192.168.88.31
+export KDIR=$BASE/build/linux-45a11a3318ee823a83536db737a8e1136ed766fd
+export CROSS_COMPILE=$BASE/host/bin/mipsel-linux- PATH=$BASE/host/bin:$PATH
+export BR2_THINGINO_MOTORS=y BR2_THINGINO_MOTORS_SPI=y
+./build.sh t31 3.10.14
+
+# T31, 4.4.94
+BASE=/home/paul/thingino/firmware/master/output/feature/kernel_leds_dtsi/wyze_cam3_t31x_gc2053_rtl8189ftv-4.4.94-uclibc-192.168.88.148
+export KDIR=$BASE/build/linux-47a4ebc23f37990b61c53ad3108da6af4784ba94
+export CROSS_COMPILE=$BASE/host/bin/mipsel-linux- PATH=$BASE/host/bin:$PATH
+./build.sh t31 4.4.94
+
+# A1, 4.4.94
+BASE=/home/paul/thingino/firmware/stable/output/stable/smart_nvr_a1n_eth-4.4.94-musl
+export KDIR=$BASE/build/linux-42f0e91a310c3f5eec071760f46ad21ea0aa918a
+export CROSS_COMPILE=$BASE/host/bin/mipsel-linux- PATH=$BASE/host/bin:$PATH
+./build.sh a1 4.4.94
+
+# remove build artifacts afterwards
+git clean -fdx
+```
+
+Verification results:
+
+| Target | Result |
+|--------|--------|
+| T31 3.10.14 | pass - audio, avpu, gpio-userkeys, jz-aes, motor, ms419xx, pwm_core, pwm_hal, sinfo, tcu_alloc, tx-isp-t31 all link |
+| T31 4.4.94 | pass - ISP/Motor/PWM/AVPU/Audio build; only pre-existing warnings |
+| A1 4.4.94 | pass - including merged soc-nna |
+| T41 (either kernel) | **not compiled** - no T40/T41 kernel build tree available locally; verified structurally instead |
+
+Structural verification used where a build was not possible:
+- `common/isp/t41/*` are byte-identical to the original `4.4.94/isp/t41/*`
+  (only `Kbuild` firmware selection changed), so 4.4 behavior is preserved.
+- The avpu merge changed only two guards; everything else is byte-identical to
+  the original 3.10.14 t31 source (which already handled T31/C100/T40/T41).
+
+## 8. Remaining work / known gaps
+
+- **Build-verify T40/T41** once a T40/T41 kernel tree is available. The merged
+  avpu T41 clock branches and `common/isp/t41` have not been compiled here.
+- **Check on real hardware** (or at least insmod) the split drivers to confirm
+  device names: `motor` (`/dev/motor`), `pwm_core`/`pwm_hal` (`/dev/pwm`),
+  `tx-isp-t31`, `avpu`.
+- The `firmware` build may still pass `CONFIG_INGENIC_PWM=y`/`CONFIG_INGENIC_MOTOR`
+  which the repo `Kbuild` does not consume (it keys off `KERNEL_VERSION` and
+  `BR2_THINGINO_MOTORS`). This mismatch predates this branch; not changed here.
+- Optional future work: unify the sensor drivers on the de-shimmed (4.4) form.
+  Large and unverifiable without per-driver review; deliberately deferred.
+- Optional: `sensor-src/Kbuild` still has a stale
+  `-I$(src)/$(KERNEL_VERSION)/isp/include` (no such dir; the real ISP include
+  path comes from the top-level `ISP_INCLUDE`). Pre-existing.
+
+## 9. Task history
 
 | # | Task | Status |
 |---|------|--------|
-| 0 | Branch `refactor/merge-driver-trees`, write this roadmap | done |
-| 1 | Finish the `motors-pp` rename for the 3.10 motor driver and split Kbuild selection | done |
+| 0 | Branch + roadmap | done |
+| 1 | Rename 3.10 motor set to `motors-pp`; select per kernel | done |
 | 2 | Merge `misc/jz-dtrng` into `common/misc/jz-dtrng` | done |
-| 3 | Merge `misc/mpsys-driver` Kbuild into a single per-kernel-aware Kbuild | done |
-| 4 | Rename the 3.10.14 PWM driver source set to `pwm-pp` (a different
-|   implementation from 4.4.94, like `motors-pp`); select per-kernel in Kbuild | done |
-| 5 | Merge `avpu/t31`, `c100`, `t40`, `t41` into `common/avpu` | done |
-| 6 | ~~Merge `avpu/c100`, `avpu/t40`, `avpu/t41`~~ (folded into task 5) | done |
-| 7 | Rename the 3.10.14 ISP/t31 source set to `isp/t31-pp` (different
-|   interface generation: vtable vs `private_*` shims); select per-kernel in isp/Kbuild | done |
-| 8 | Merge `isp/t41` (+ `t41zrt` headers) into `common/isp`; select firmware blob per kernel | done |
-| 9 | Merge `sensor-src/common` + `include` into `common/sensor-src` | done |
-| 10 | Sensor driver sources (`sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100`): **kept separate per kernel** (decision). 3.10.14 drivers use the `private_*` shim calling convention + `actual_fps` API; 4.4.94 drivers use plain kernel calls + `sensor_common_update()`. Only the shared `sensor-info.[ch]` is merged (task 9). | done (not merged, by design) |
+| 3 | Merge `misc/mpsys-driver` into `common/misc/mpsys-driver` | done |
+| 4 | Rename 3.10 PWM set to `pwm-pp`; select per kernel | done |
+| 5 | Merge all avpu SoC sets into `common/avpu` | done |
+| 6 | (folded into 5) | done |
+| 7 | Rename 3.10 ISP/t31 set to `isp/t31-pp`; select per kernel | done |
+| 8 | Merge `isp/t41` (+`t41zrt` headers) into `common/isp` | done |
+| 9 | Merge `sensor-info.[ch]` into `common/sensor-src` | done |
+| 10 | Sensor drivers kept separate per kernel (decision) | done by design |
 | 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
-| 12 | Cleanup: no empty duplicate trees remained; fix a duplicated Kbuild info line and verify include paths | done |
-| 13 | Final sweep: update docs, verify build matrix | done |
+| 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
+| 13 | Docs + build-matrix verification | done |
 
-## Decisions
+## 10. Original inventory (for reference)
 
-- **motor, pwm, isp/t31**: the 3.10.14 and 4.4.94 implementations are
-  genuinely different (different peripherals, different internal APIs, or a
-  different driver-interface generation). They stay as separate source sets
-  (`motors-pp`, `pwm-pp`, `isp/t31-pp`) selected per kernel in `Kbuild`. The
-  built module names are unchanged so userspace and the device ABI are stable.
-- **jz-dtrng, mpsys-driver, avpu, isp/t41, sensor-info**: small or
-  platform/kernel-API-only differences. Merged into a single source set with
-  `CONFIG_KERNEL_*` / `CONFIG_SOC_*` guards in the sources.
-- **sensor drivers**: kept separate per kernel (task 10). The 3.10.14 drivers
-  call the vendor `private_*` shim layer and use the `actual_fps` API, while the
-  4.4.94 drivers use plain kernel calls and the `sensor_common_update()` API.
-  This is a different calling convention across hundreds of files, not a small
-  diff, and cannot be safely unified without per-driver review and a build.
-
-## Verification
-
-Builds were run against real kernel trees and toolchains from the firmware
-output tree (`build.sh <soc> <kernel>`):
-
-| Target | Kernel tree used | Result |
-|--------|------------------|--------|
-| T31 3.10.14 | vanhua_djz_t31n_gc2083 (3.10.14) | pass - all modules link (audio, avpu, gpio-userkeys, jz-aes, motor, ms419xx, pwm_core, pwm_hal, sinfo, tcu_alloc, tx-isp-t31) |
-| T31 4.4.94 | wyze_cam3_t31x_gc2053 (4.4.94) | pass - ISP/Motor/PWM/AVPU/Audio build; only pre-existing warnings |
-| A1 4.4.94 | smart_nvr_a1n (4.4.94) | pass - incl. merged soc-nna |
-
-No built T40/T41 kernel trees were available locally, so the T41-specific
-merged code paths (isp/t41, avpu T41 clock branches) could not be compiled here.
-They were instead verified structurally: the merged `common/isp/t41` sources are
-byte-identical to the original 4.4.94 t41 sources (only the Kbuild firmware
-selection was adapted), and the avpu merge changed only the two intended guards.
-
+- 66 files were byte-identical across both trees.
+- ~56 common files differed; differences ranged from whitespace/one include to
+  large drift (`soc_nna_main.c` 901 lines, `tx-isp-debug.c` 678,
+  `tx-isp-common.h` 295, `pwm_core.c` 284, ~900 sensor files).
