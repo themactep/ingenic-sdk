@@ -10,8 +10,26 @@ else
     $(info Building for Kernel $(KERNEL_VERSION))
 endif
 
+# ISP include directory, which also holds the shared sensor headers used by
+# sensor-src. t41 is shared in common/isp/t41; 3.10.14 t31 uses the t31-pp set.
+ifeq ($(KERNEL_VERSION),3.10.14)
+ifeq ($(SOC_FAMILY),t31)
+ISP_INCLUDE := $(src)/3.10.14/isp/t31-pp/include
+else ifeq ($(SOC_FAMILY),t41)
+ISP_INCLUDE := $(src)/common/isp/t41/include
+else
+ISP_INCLUDE := $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
+endif
+else
+ifeq ($(SOC_FAMILY),t41)
+ISP_INCLUDE := $(src)/common/isp/t41/include
+else
+ISP_INCLUDE := $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
+endif
+endif
+
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
+ccflags-y += -I$(ISP_INCLUDE)
 
 #### ALL #####
 

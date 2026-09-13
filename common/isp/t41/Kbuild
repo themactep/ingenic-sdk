@@ -1,0 +1,20 @@
+# t41 ISP driver. One source set serves both kernels; the only build-level
+# difference is which prebuilt firmware blob is linked.
+ifeq ($(KERNEL_VERSION),3.10.14)
+ISP_FW_VER=1.2.0
+ISP_FW_NAME=lib$(SOC_FAMILY)-firmware-310.a
+else
+ISP_FW_VER=1.2.6
+ISP_FW_NAME=lib$(SOC_FAMILY)-firmware.a
+ldflags-y += --no-warn-mismatch
+endif
+
+SRCS := $(DIR)/tx-isp-funcs.c \
+	$(DIR)/tx-isp-module.c
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += $(KERNEL_VERSION)/sdk/$(SOC_FAMILY)/$(ISP_FW_VER)/$(ISP_FW_NAME)
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o
