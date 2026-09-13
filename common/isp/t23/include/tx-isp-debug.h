@@ -57,6 +57,8 @@ void private_do_gettimeofday(struct timeval *tv);
 void private_dma_sync_single_for_device(struct device *dev,
                                         dma_addr_t addr, size_t size, enum dma_data_direction dir);
 __must_check int private_get_driver_interface(struct jz_driver_common_interfaces **pfaces);
+/* Provided by the ISP firmware blob. */
+void *get_driver_common_interfaces(void);
 #ifdef CONFIG_MULTI_SENSOR
 struct pwm_device *private_pwm_request(int pwm, const char *label);
 void private_pwm_set_period(struct pwm_device *pwm, unsigned int period);

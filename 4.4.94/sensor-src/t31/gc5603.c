@@ -33,6 +33,7 @@
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_VERSION "H20220510a"
 
 static int reset_gpio = GPIO_PA(18);
