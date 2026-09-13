@@ -43,7 +43,7 @@ ifeq ($(KERNEL_VERSION),3.10.14)
 endif
 
 ifeq ($(KERNEL_VERSION),3.10.14)
-    $(info Building GPIO-UserKeys for Kernel $(KERNEL_VERSION))
+    $(info Building JZ-AES for Kernel $(KERNEL_VERSION))
     include $(src)/$(KERNEL_VERSION)/misc/jz-aes/Kbuild
 endif
 

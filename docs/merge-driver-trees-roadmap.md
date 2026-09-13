@@ -65,8 +65,8 @@ finer-grained kernel revision than the two supported ones.
 | 8 | Merge `isp/t41` (+ `t41zrt` headers) into `common/isp`; select firmware blob per kernel | done |
 | 9 | Merge `sensor-src/common` + `include` into `common/sensor-src` | done |
 | 10 | Sensor driver sources (`sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100`): **kept separate per kernel** (decision). 3.10.14 drivers use the `private_*` shim calling convention + `actual_fps` API; 4.4.94 drivers use plain kernel calls + `sensor_common_update()`. Only the shared `sensor-info.[ch]` is merged (task 9). | done (not merged, by design) |
-| 11 | Merge `misc/soc-nna` | pending |
-| 12 | Remove now-empty duplicate trees and simplify `Kbuild` | pending |
+| 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
+| 12 | Cleanup: no empty duplicate trees remained; fix a duplicated Kbuild info line and verify include paths | done |
 | 13 | Final sweep: update docs, verify build matrix | pending |
 
 ## Decisions
