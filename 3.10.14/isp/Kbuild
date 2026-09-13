@@ -2,8 +2,16 @@ MODULE_NAME := tx-isp-$(SOC_FAMILY)
 
 OUT := $(MODULE_NAME)
 
-DIR := $(KERNEL_VERSION)/isp/$(SOC_FAMILY)
+# 3.10.14 uses the PP/vtable ISP sources for t31; the 4.4.94 tree has a
+# different (standalone private_* shim) implementation at isp/t31.
+ifeq ($(SOC_FAMILY),t31)
+ISP_SRC := t31-pp
+else
+ISP_SRC := $(SOC_FAMILY)
+endif
+
+DIR := $(KERNEL_VERSION)/isp/$(ISP_SRC)
 
 ccflags-y += -I$(src)/include
 
-include $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/Kbuild
+include $(src)/$(KERNEL_VERSION)/isp/$(ISP_SRC)/Kbuild

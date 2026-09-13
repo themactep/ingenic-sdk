@@ -60,13 +60,14 @@ finer-grained kernel revision than the two supported ones.
 |   implementation from 4.4.94, like `motors-pp`); select per-kernel in Kbuild | done |
 | 5 | Merge `avpu/t31`, `c100`, `t40`, `t41` into `common/avpu` | done |
 | 6 | ~~Merge `avpu/c100`, `avpu/t40`, `avpu/t41`~~ (folded into task 5) | done |
-| 7 | Merge `isp/t31` into `common/isp/t31` | done |
-| 8 | Merge `isp/t41` (+ `t41zrt`, `t40`) into `common/isp/*` | done |
-| 9 | Merge `sensor-src/common` + `include` | done |
-| 10 | Merge `sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100` | done |
-| 11 | Merge `misc/soc-nna` | done |
-| 12 | Remove now-empty duplicate trees and simplify `Kbuild` | done |
-| 13 | Final sweep: update docs, verify build matrix | done |
+| 7 | Rename the 3.10.14 ISP/t31 source set to `isp/t31-pp` (different
+|   interface generation: vtable vs `private_*` shims); select per-kernel in isp/Kbuild | done |
+| 8 | Merge `isp/t41` (+ `t41zrt`, `t40`, `c100`) into `common/isp/*` | pending |
+| 9 | Merge `sensor-src/common` + `include` | pending |
+| 10 | Merge `sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100` | pending |
+| 11 | Merge `misc/soc-nna` | pending |
+| 12 | Remove now-empty duplicate trees and simplify `Kbuild` | pending |
+| 13 | Final sweep: update docs, verify build matrix | pending |
 
 ## Verification
 
