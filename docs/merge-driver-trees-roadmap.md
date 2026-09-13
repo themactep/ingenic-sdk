@@ -58,8 +58,8 @@ finer-grained kernel revision than the two supported ones.
 | 3 | Merge `misc/mpsys-driver` Kbuild into a single per-kernel-aware Kbuild | done |
 | 4 | Rename the 3.10.14 PWM driver source set to `pwm-pp` (a different
 |   implementation from 4.4.94, like `motors-pp`); select per-kernel in Kbuild | done |
-| 5 | Merge `avpu/t31` into `common/avpu/t31` | done |
-| 6 | Merge `avpu/c100`, `avpu/t40`, `avpu/t41` into `common/avpu/*` | done |
+| 5 | Merge `avpu/t31`, `c100`, `t40`, `t41` into `common/avpu` | done |
+| 6 | ~~Merge `avpu/c100`, `avpu/t40`, `avpu/t41`~~ (folded into task 5) | done |
 | 7 | Merge `isp/t31` into `common/isp/t31` | done |
 | 8 | Merge `isp/t41` (+ `t41zrt`, `t40`) into `common/isp/*` | done |
 | 9 | Merge `sensor-src/common` + `include` | done |
