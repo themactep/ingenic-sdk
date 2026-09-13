@@ -1,10 +1,30 @@
-# .clang-format
-#
-# Generic clang-format configuration.
-# For documentation of the options, see
-# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-#
+AlignAfterOpenBracket: DontAlign
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: false
+AlignOperands: false
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCompoundRequirementOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
 BasedOnStyle: LLVM
-AllowShortFunctionsOnASingleLine: None
-KeepEmptyLinesAtTheStartOfBlocks: false
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Attach
 ColumnLimit: 120
+ContinuationIndentWidth: 8
+Cpp11BracedListStyle: true
+IndentPPDirectives: None
+IndentWidth: 8
+PenaltyBreakBeforeFirstCallParameter: 10000000
+PenaltyBreakOpenParenthesis: 10000000
+ReflowComments: false
+SortIncludes: Never
+TabWidth: 8
+UseTab: Always

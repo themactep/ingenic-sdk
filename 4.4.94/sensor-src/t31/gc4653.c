@@ -61,7 +61,7 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-static int wdr_bufsize = 10077696 * 2;//cache lines corrponding on VPB1
+static int wdr_bufsize = 10077696 * 2; //cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -85,20 +85,20 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	unsigned char value;
 };
 
 struct again_lut {
-    unsigned int index;
-    unsigned char reg2b3;
-    unsigned char reg2b4;
-    unsigned char reg2b8;
-    unsigned char reg2b9;
-    unsigned char reg515;
-    unsigned char reg519;
-    unsigned char reg2d9;
-    unsigned int gain;
+	unsigned int index;
+	unsigned char reg2b3;
+	unsigned char reg2b4;
+	unsigned char reg2b8;
+	unsigned char reg2b9;
+	unsigned char reg515;
+	unsigned char reg519;
+	unsigned char reg2d9;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -365,7 +365,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0544, 0x01},
 	{0x0242, 0x1b},
 	{0x02c0, 0x1b},
-	{0x02c3, 0x40},/*0x20 -> 0x40*/
+	{0x02c3, 0x40}, /*0x20 -> 0x40*/
 	{0x02e4, 0x10},
 	{0x022e, 0x00},
 	{0x027b, 0x3f},
@@ -408,7 +408,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05},//hts
+	{0x0342, 0x05}, //hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -785,7 +785,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x034a, 0x04},
 	{0x034b, 0x48},
 
-	{0x0351, 0x00},//crop
+	{0x0351, 0x00}, //crop
 	{0x0352, 0x08},
 	{0x0353, 0x00},
 	{0x0354, 0x08},
@@ -979,20 +979,19 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr = client->addr,
-			.flags = 0,
-			.len = 2,
-			.buf = buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}
-	};
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1207,17 +1206,17 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	clk = SENSOR_SUPPORT_386RES_30FPS_SCLK;
 	switch (sensor_resolution) {
-		case TX_SENSOR_RES_400:
-			clk = SENSOR_SUPPORT_386RES_30FPS_SCLK;
-			break;
-		case TX_SENSOR_RES_100:
-			clk = SENSOR_SUPPORT_92RES_60FPS_SCLK;
-			break;
-		case TX_SENSOR_RES_300:
-			clk = SENSOR_SUPPORT_207RES_60FPS_SCLK;
-			break;
-		default:
-			break;
+	case TX_SENSOR_RES_400:
+		clk = SENSOR_SUPPORT_386RES_30FPS_SCLK;
+		break;
+	case TX_SENSOR_RES_100:
+		clk = SENSOR_SUPPORT_92RES_60FPS_SCLK;
+		break;
+	case TX_SENSOR_RES_300:
+		clk = SENSOR_SUPPORT_207RES_60FPS_SCLK;
+		break;
+	default:
+		break;
 	}
 	max_fps = sensor_max_fps;
 
@@ -1238,8 +1237,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		hts <<= 1, short_time = 310;
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0340, (unsigned char) ((vts & 0x3f00) >> 8));
-	ret += sensor_write(sd, 0x0341, (unsigned char) (vts & 0xff));
+	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
 
@@ -1319,12 +1318,17 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
-			  client->addr, client->adapter->name, SENSOR_NAME);
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
 
 	ISP_WARNING("%s chip found @ 0x%02x (%s)\n sensor drv version %s\n",
-		    SENSOR_NAME, client->addr, client->adapter->name, SENSOR_VERSION);
+		SENSOR_NAME,
+		client->addr,
+		client->adapter->name,
+		SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1372,53 +1376,53 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	} else if (wdr_en == 0) {
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		switch (sensor_resolution) {
-			case TX_SENSOR_RES_400:
-				wsize = &sensor_win_sizes[0];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_30;
-				sensor_mipi_linear.image_twidth = 2560;
-				sensor_mipi_linear.image_theight = 1440;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.data_type = data_type;
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 3000;
-				sensor_attr.total_height = 1600;
-				sensor_attr.max_integration_time_native = 1600 - 4;
-				sensor_attr.integration_time_limit = 1600 - 4;
-				sensor_attr.max_integration_time = 1600 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			case TX_SENSOR_RES_100:
-				wsize = &sensor_win_sizes[2];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_60;
-				sensor_mipi_linear.image_twidth = 1280;
-				sensor_mipi_linear.image_theight = 720;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.data_type = data_type;
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 0x5dd * 2;
-				sensor_attr.total_height = 0x640;
-				sensor_attr.max_integration_time_native = 0x640 - 4;
-				sensor_attr.integration_time_limit = 0x640 - 4;
-				sensor_attr.max_integration_time = 0x640 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			case TX_SENSOR_RES_300:
-				wsize = &sensor_win_sizes[3];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_60;
-				sensor_attr.data_type = data_type;
-				sensor_mipi_linear.image_twidth = 1920;
-				sensor_mipi_linear.image_theight = 1080;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 0x4e2 * 2;
-				sensor_attr.total_height = 0x4b0;
-				sensor_attr.max_integration_time_native = 0x4b0 - 4;
-				sensor_attr.integration_time_limit = 0x4b0 - 4;
-				sensor_attr.max_integration_time = 0x4b0 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			default:
-				break;
+		case TX_SENSOR_RES_400:
+			wsize = &sensor_win_sizes[0];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_30;
+			sensor_mipi_linear.image_twidth = 2560;
+			sensor_mipi_linear.image_theight = 1440;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.data_type = data_type;
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 3000;
+			sensor_attr.total_height = 1600;
+			sensor_attr.max_integration_time_native = 1600 - 4;
+			sensor_attr.integration_time_limit = 1600 - 4;
+			sensor_attr.max_integration_time = 1600 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		case TX_SENSOR_RES_100:
+			wsize = &sensor_win_sizes[2];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_60;
+			sensor_mipi_linear.image_twidth = 1280;
+			sensor_mipi_linear.image_theight = 720;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.data_type = data_type;
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 0x5dd * 2;
+			sensor_attr.total_height = 0x640;
+			sensor_attr.max_integration_time_native = 0x640 - 4;
+			sensor_attr.integration_time_limit = 0x640 - 4;
+			sensor_attr.max_integration_time = 0x640 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		case TX_SENSOR_RES_300:
+			wsize = &sensor_win_sizes[3];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_60;
+			sensor_attr.data_type = data_type;
+			sensor_mipi_linear.image_twidth = 1920;
+			sensor_mipi_linear.image_theight = 1080;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 0x4e2 * 2;
+			sensor_attr.total_height = 0x4b0;
+			sensor_attr.max_integration_time_native = 0x4b0 - 4;
+			sensor_attr.integration_time_limit = 0x4b0 - 4;
+			sensor_attr.max_integration_time = 0x4b0 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		default:
+			break;
 		}
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
@@ -1452,57 +1456,57 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 				ret = sensor_set_expo(sd, *(int*)arg);
 			break;
 #else
-		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if (arg)
-				ret = sensor_set_integration_time(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if (arg)
-				ret = sensor_set_analog_gain(sd, *(int *) arg);
-			break;
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_AGAIN:
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int *)arg);
+		break;
 #endif
-		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if (arg)
-				ret = sensor_set_digital_gain(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if (arg)
-				ret = sensor_get_black_pedestal(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if (arg)
-				ret = sensor_set_mode(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_off);
-			break;
-		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_on);
-			break;
-		case TX_ISP_EVENT_SENSOR_FPS:
-			if (arg)
-				ret = sensor_set_fps(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-			if (arg)
-				ret = sensor_set_vflip(sd, *(int *) arg);
-			break;
+	case TX_ISP_EVENT_SENSOR_DGAIN:
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_RESIZE:
+		if (arg)
+			ret = sensor_set_mode(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_off);
+		break;
+	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_on);
+		break;
+	case TX_ISP_EVENT_SENSOR_FPS:
+		if (arg)
+			ret = sensor_set_fps(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_VFLIP:
+		if (arg)
+			ret = sensor_set_vflip(sd, *(int *)arg);
+		break;
 #ifdef __WDR__
-		case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-			if (arg)
-				ret = sensor_set_integration_time_short(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_WDR:
-			if (arg)
-				ret = sensor_set_wdr(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_WDR_STOP:
-			if (arg)
-				ret = sensor_set_wdr_stop(sd, *(int *) arg);
-			break;
+	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
+		if (arg)
+			ret = sensor_set_integration_time_short(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_WDR:
+		if (arg)
+			ret = sensor_set_wdr(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_WDR_STOP:
+		if (arg)
+			ret = sensor_set_wdr_stop(sd, *(int *)arg);
+		break;
 #endif
-		default:
-			break;
+	default:
+		break;
 	}
 	return ret;
 }
@@ -1563,16 +1567,17 @@ static struct tx_isp_subdev_ops sensor_ops = {
 };
 
 /* It's the sensor device */
-static u64 tx_isp_module_dma_mask = ~(u64) 0;
+static u64 tx_isp_module_dma_mask = ~(u64)0;
 
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
@@ -1584,7 +1589,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int ret;
 	it_last = -1;
 	ag_last = -1;
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1635,52 +1640,52 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time_short = 310;
 	} else {
 		switch (sensor_resolution) {
-			case TX_SENSOR_RES_400:
-				wsize = &sensor_win_sizes[0];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_30;
-				sensor_attr.data_type = data_type;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 3000;
-				sensor_attr.total_height = 1600;
-				sensor_attr.max_integration_time_native = 1600 - 4;
-				sensor_attr.integration_time_limit = 1600 - 4;
-				sensor_attr.max_integration_time = 1600 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			case TX_SENSOR_RES_100:
-				wsize = &sensor_win_sizes[2];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_60;
-				sensor_attr.data_type = data_type;
-				sensor_mipi_linear.image_twidth = 1280;
-				sensor_mipi_linear.image_theight = 720;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 0x5dd * 2;
-				sensor_attr.total_height = 0x640;
-				sensor_attr.max_integration_time_native = 0x640 - 4;
-				sensor_attr.integration_time_limit = 0x640 - 4;
-				sensor_attr.max_integration_time = 0x640 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			case TX_SENSOR_RES_300:
-				wsize = &sensor_win_sizes[3];
-				sensor_max_fps = TX_SENSOR_MAX_FPS_60;
-				sensor_attr.data_type = data_type;
-				sensor_mipi_linear.image_twidth = 1920;
-				sensor_mipi_linear.image_theight = 1080;
-				memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
-				sensor_attr.one_line_expr_in_us = 30;
-				sensor_attr.total_width = 0x4e2 * 2;
-				sensor_attr.total_height = 0x4b0;
-				sensor_attr.max_integration_time_native = 0x4b0 - 4;
-				sensor_attr.integration_time_limit = 0x4b0 - 4;
-				sensor_attr.max_integration_time = 0x4b0 - 4;
-				sensor_attr.max_integration_time_short = 4;
-				break;
-			default:
-				ISP_WARNING("Sensor selection failed to enable default configuration.\n");
-				break;
+		case TX_SENSOR_RES_400:
+			wsize = &sensor_win_sizes[0];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_30;
+			sensor_attr.data_type = data_type;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 3000;
+			sensor_attr.total_height = 1600;
+			sensor_attr.max_integration_time_native = 1600 - 4;
+			sensor_attr.integration_time_limit = 1600 - 4;
+			sensor_attr.max_integration_time = 1600 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		case TX_SENSOR_RES_100:
+			wsize = &sensor_win_sizes[2];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_60;
+			sensor_attr.data_type = data_type;
+			sensor_mipi_linear.image_twidth = 1280;
+			sensor_mipi_linear.image_theight = 720;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 0x5dd * 2;
+			sensor_attr.total_height = 0x640;
+			sensor_attr.max_integration_time_native = 0x640 - 4;
+			sensor_attr.integration_time_limit = 0x640 - 4;
+			sensor_attr.max_integration_time = 0x640 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		case TX_SENSOR_RES_300:
+			wsize = &sensor_win_sizes[3];
+			sensor_max_fps = TX_SENSOR_MAX_FPS_60;
+			sensor_attr.data_type = data_type;
+			sensor_mipi_linear.image_twidth = 1920;
+			sensor_mipi_linear.image_theight = 1080;
+			memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
+			sensor_attr.one_line_expr_in_us = 30;
+			sensor_attr.total_width = 0x4e2 * 2;
+			sensor_attr.total_height = 0x4b0;
+			sensor_attr.max_integration_time_native = 0x4b0 - 4;
+			sensor_attr.integration_time_limit = 0x4b0 - 4;
+			sensor_attr.max_integration_time = 0x4b0 - 4;
+			sensor_attr.max_integration_time_short = 4;
+			break;
+		default:
+			ISP_WARNING("Sensor selection failed to enable default configuration.\n");
+			break;
 		}
 	}
 	sensor_attr.data_type = data_type;
@@ -1728,18 +1733,16 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {
-	{SENSOR_NAME, 0},
-	{}
-};
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
@@ -1765,5 +1768,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

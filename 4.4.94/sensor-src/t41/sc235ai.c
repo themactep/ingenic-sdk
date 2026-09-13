@@ -29,18 +29,18 @@
 #include <txx-funcs.h>
 
 #define TVERSION "V20231226a"
-#define SENSOR_VERSION	"H20241218a"
+#define SENSOR_VERSION "H20241218a"
 
 // #define SENSOR_TEST
 
 //#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
-#define SENSOR_AGAIN_TABLE	  /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
 // #define SENSOR_WDR_2_FRAME	 /**< WDR两帧融合 */
 #define SENSOR_EXPO
-#define SENSOR_MIR_FLIP			/**< 镜像翻转功能开关 */
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 
-#define SENSOR_CHIP_ID_H	(0xcb)
-#define SENSOR_CHIP_ID_L	(0x6a)
+#define SENSOR_CHIP_ID_H (0xcb)
+#define SENSOR_CHIP_ID_L (0x6a)
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_MCLK 24000000
 
@@ -52,12 +52,12 @@ static int wdr_line = xxx;
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
 #ifdef SENSOR_I2C_REG_8BIT
-#define SENSOR_REG_END	  0xff
-#define SENSOR_REG_DELAY  0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
 #endif /* SENSOR_I2C_REG_8BIT */
 #ifdef SENSOR_I2C_REG_16BIT
-#define SENSOR_REG_END	  0xffff
-#define SENSOR_REG_DELAY  0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
 struct regval_list {
@@ -306,8 +306,7 @@ struct again_lut sc235ai_again_lut[] = {
 };
 #endif /* SENSOR_AGAIN_TABLE */
 
-unsigned int sc235ai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sc235ai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
@@ -332,30 +331,27 @@ unsigned int sc235ai_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 #else
 	/* Non analog gain table */
 	...;
-#endif	/* SENSOR_AGAIN_TABLE */
+#endif /* SENSOR_AGAIN_TABLE */
 #endif /* SENSOR_TEST */
 
 	return isp_gain;
 }
 
 #ifdef SENSOR_WDR_2_FRAME
-unsigned int sc235ai_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sc235ai_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
 	struct again_lut *lut = sc235ai_again_lut;
-	while(lut->gain <= sc235ai_attr.max_again_short) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sc235ai_attr.max_again_short) {
+		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
-		}
-		else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
-		}
-		else{
-			if((lut->gain == sc235ai_attr.max_again_short) && (isp_gain >= lut->gain)) {
+		} else {
+			if ((lut->gain == sc235ai_attr.max_again_short) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -376,8 +372,7 @@ unsigned int sc235ai_alloc_again_short(unsigned int isp_gain, unsigned char shif
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-unsigned int sc235ai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sc235ai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
@@ -440,15 +435,17 @@ struct tx_isp_mipi_bus sc235ai_mipi_1920_1080_30fps_linear = {
 struct tx_isp_dvp_bus sc235ai_dvp = {
 	.gpio = DVP_PA_LOW_10BIT,
 	.mode = SENSOR_DVP_HREF_MODE,
-	.blanking = {
-		.hblanking = 0,
-		.vblanking = 0,
-	},
-	.polar = {
-		.hsync_polar = 0,
-		.vsync_polar = 0,
-		.pclk_polar = 0, /**< reserved */
-	},
+	.blanking =
+		{
+			.hblanking = 0,
+			.vblanking = 0,
+		},
+	.polar =
+		{
+			.hsync_polar = 0,
+			.vsync_polar = 0,
+			.pclk_polar = 0, /**< reserved */
+		},
 	.dvp_hcomp_en = 0,
 };
 
@@ -466,303 +463,303 @@ struct tx_isp_sensor_attribute sc235ai_attr = {
 };
 
 static struct regval_list sc235ai_init_regs_1920_1056_30fps_mipi[] = {
-	{0x0103,0x01},
-	{0x36e9,0x80},
-	{0x37f9,0x80},
-	{0x301f,0x14},
-	{0x3058,0x21},
-	{0x3059,0x53},
-	{0x305a,0x40},
-	{0x320e,0x04},
-	{0x320f,0xb0},
-	{0x3210,0x00},
-	{0x3211,0x04},
-	{0x3212,0x00},
-	{0x3213,0x04},
-	{0x3250,0x00},
-	{0x3301,0x0a},
-	{0x3302,0x20},
-	{0x3304,0x90},
-	{0x3305,0x00},
-	{0x3306,0x68},
-	{0x3309,0xd0},
-	{0x330b,0xd8},
-	{0x330d,0x08},
-	{0x331c,0x04},
-	{0x331e,0x81},
-	{0x331f,0xc1},
-	{0x3323,0x06},
-	{0x3333,0x10},
-	{0x3334,0x40},
-	{0x3364,0x5e},
-	{0x336c,0x8e},
-	{0x337f,0x13},
-	{0x338f,0x80},
-	{0x3390,0x08},
-	{0x3391,0x18},
-	{0x3392,0xb8},
-	{0x3393,0x0e},
-	{0x3394,0x14},
-	{0x3395,0x10},
-	{0x3396,0x88},
-	{0x3397,0x98},
-	{0x3398,0xf8},
-	{0x3399,0x0a},
-	{0x339a,0x0e},
-	{0x339b,0x10},
-	{0x339c,0x3c},
-	{0x33ae,0x80},
-	{0x33af,0xc0},
-	{0x33b2,0x50},
-	{0x33b3,0x14},
-	{0x33f8,0x00},
-	{0x33f9,0x68},
-	{0x33fa,0x00},
-	{0x33fb,0x68},
-	{0x33fc,0x48},
-	{0x33fd,0x78},
-	{0x349f,0x03},
-	{0x34a6,0x40},
-	{0x34a7,0x58},
-	{0x34a8,0x10},
-	{0x34a9,0x10},
-	{0x34f8,0x78},
-	{0x34f9,0x10},
-	{0x3619,0x20},
-	{0x361a,0x90},
-	{0x3633,0x44},
-	{0x3637,0x5c},
-	{0x363c,0xc0},
-	{0x363d,0x02},
-	{0x3660,0x80},
-	{0x3661,0x81},
-	{0x3662,0x8f},
-	{0x3663,0x81},
-	{0x3664,0x81},
-	{0x3665,0x82},
-	{0x3666,0x8f},
-	{0x3667,0x08},
-	{0x3668,0x80},
-	{0x3669,0x88},
-	{0x366a,0x98},
-	{0x366b,0xb8},
-	{0x366c,0xf8},
-	{0x3670,0xb2},
-	{0x3671,0xa2},
-	{0x3672,0x88},
-	{0x3680,0x33},
-	{0x3681,0x33},
-	{0x3682,0x43},
-	{0x36c0,0x80},
-	{0x36c1,0x88},
-	{0x36c8,0x88},
-	{0x36c9,0xb8},
-	{0x36ea,0x0b},
-	{0x36eb,0x0c},
-	{0x36ec,0x5c},
-	{0x36ed,0x04},
-	{0x3718,0x04},
-	{0x3722,0x8b},
-	{0x3724,0xd1},
-	{0x3741,0x08},
-	{0x3770,0x17},
-	{0x3771,0x9b},
-	{0x3772,0x9b},
-	{0x37c0,0x88},
-	{0x37c1,0xb8},
-	{0x37fa,0x0b},
-	{0x37fc,0x10},
-	{0x37fd,0x04},
-	{0x3902,0xc0},
-	{0x3903,0x40},
-	{0x3909,0x00},
-	{0x391f,0x41},
-	{0x3926,0xe0},
-	{0x3933,0x80},
-	{0x3934,0x02},
-	{0x3937,0x6f},
-	{0x3e00,0x00},
-	{0x3e01,0x95},
-	{0x3e02,0x50},
-	{0x3e08,0x00},
-	{0x4509,0x20},
-	{0x450d,0x07},
-	{0x4837,0x33},
-	{0x5780,0x76},
-	{0x5784,0x10},
-	{0x5787,0x0a},
-	{0x5788,0x0a},
-	{0x5789,0x08},
-	{0x578a,0x0a},
-	{0x578b,0x0a},
-	{0x578c,0x08},
-	{0x578d,0x40},
-	{0x5792,0x04},
-	{0x5795,0x04},
-	{0x57ac,0x00},
-	{0x57ad,0x00},
-	{0x3200,0x00},
-	{0x3201,0x00},
-	{0x3202,0x00},
-	{0x3203,0x0c},
-	{0x3204,0x07},
-	{0x3205,0x87},
-	{0x3206,0x04},
-	{0x3207,0x33},
-	{0x3208,0x07},
-	{0x3209,0x80},
-	{0x320a,0x04},
-	{0x320b,0x20},
-	{0x3210,0x00},
-	{0x3211,0x04},
-	{0x3212,0x00},
-	{0x3213,0x04},
-	{0x36e9,0x27},
-	{0x37f9,0x27},
-	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{0x0103, 0x01},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x301f, 0x14},
+	{0x3058, 0x21},
+	{0x3059, 0x53},
+	{0x305a, 0x40},
+	{0x320e, 0x04},
+	{0x320f, 0xb0},
+	{0x3210, 0x00},
+	{0x3211, 0x04},
+	{0x3212, 0x00},
+	{0x3213, 0x04},
+	{0x3250, 0x00},
+	{0x3301, 0x0a},
+	{0x3302, 0x20},
+	{0x3304, 0x90},
+	{0x3305, 0x00},
+	{0x3306, 0x68},
+	{0x3309, 0xd0},
+	{0x330b, 0xd8},
+	{0x330d, 0x08},
+	{0x331c, 0x04},
+	{0x331e, 0x81},
+	{0x331f, 0xc1},
+	{0x3323, 0x06},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x3364, 0x5e},
+	{0x336c, 0x8e},
+	{0x337f, 0x13},
+	{0x338f, 0x80},
+	{0x3390, 0x08},
+	{0x3391, 0x18},
+	{0x3392, 0xb8},
+	{0x3393, 0x0e},
+	{0x3394, 0x14},
+	{0x3395, 0x10},
+	{0x3396, 0x88},
+	{0x3397, 0x98},
+	{0x3398, 0xf8},
+	{0x3399, 0x0a},
+	{0x339a, 0x0e},
+	{0x339b, 0x10},
+	{0x339c, 0x3c},
+	{0x33ae, 0x80},
+	{0x33af, 0xc0},
+	{0x33b2, 0x50},
+	{0x33b3, 0x14},
+	{0x33f8, 0x00},
+	{0x33f9, 0x68},
+	{0x33fa, 0x00},
+	{0x33fb, 0x68},
+	{0x33fc, 0x48},
+	{0x33fd, 0x78},
+	{0x349f, 0x03},
+	{0x34a6, 0x40},
+	{0x34a7, 0x58},
+	{0x34a8, 0x10},
+	{0x34a9, 0x10},
+	{0x34f8, 0x78},
+	{0x34f9, 0x10},
+	{0x3619, 0x20},
+	{0x361a, 0x90},
+	{0x3633, 0x44},
+	{0x3637, 0x5c},
+	{0x363c, 0xc0},
+	{0x363d, 0x02},
+	{0x3660, 0x80},
+	{0x3661, 0x81},
+	{0x3662, 0x8f},
+	{0x3663, 0x81},
+	{0x3664, 0x81},
+	{0x3665, 0x82},
+	{0x3666, 0x8f},
+	{0x3667, 0x08},
+	{0x3668, 0x80},
+	{0x3669, 0x88},
+	{0x366a, 0x98},
+	{0x366b, 0xb8},
+	{0x366c, 0xf8},
+	{0x3670, 0xb2},
+	{0x3671, 0xa2},
+	{0x3672, 0x88},
+	{0x3680, 0x33},
+	{0x3681, 0x33},
+	{0x3682, 0x43},
+	{0x36c0, 0x80},
+	{0x36c1, 0x88},
+	{0x36c8, 0x88},
+	{0x36c9, 0xb8},
+	{0x36ea, 0x0b},
+	{0x36eb, 0x0c},
+	{0x36ec, 0x5c},
+	{0x36ed, 0x04},
+	{0x3718, 0x04},
+	{0x3722, 0x8b},
+	{0x3724, 0xd1},
+	{0x3741, 0x08},
+	{0x3770, 0x17},
+	{0x3771, 0x9b},
+	{0x3772, 0x9b},
+	{0x37c0, 0x88},
+	{0x37c1, 0xb8},
+	{0x37fa, 0x0b},
+	{0x37fc, 0x10},
+	{0x37fd, 0x04},
+	{0x3902, 0xc0},
+	{0x3903, 0x40},
+	{0x3909, 0x00},
+	{0x391f, 0x41},
+	{0x3926, 0xe0},
+	{0x3933, 0x80},
+	{0x3934, 0x02},
+	{0x3937, 0x6f},
+	{0x3e00, 0x00},
+	{0x3e01, 0x95},
+	{0x3e02, 0x50},
+	{0x3e08, 0x00},
+	{0x4509, 0x20},
+	{0x450d, 0x07},
+	{0x4837, 0x33},
+	{0x5780, 0x76},
+	{0x5784, 0x10},
+	{0x5787, 0x0a},
+	{0x5788, 0x0a},
+	{0x5789, 0x08},
+	{0x578a, 0x0a},
+	{0x578b, 0x0a},
+	{0x578c, 0x08},
+	{0x578d, 0x40},
+	{0x5792, 0x04},
+	{0x5795, 0x04},
+	{0x57ac, 0x00},
+	{0x57ad, 0x00},
+	{0x3200, 0x00},
+	{0x3201, 0x00},
+	{0x3202, 0x00},
+	{0x3203, 0x0c},
+	{0x3204, 0x07},
+	{0x3205, 0x87},
+	{0x3206, 0x04},
+	{0x3207, 0x33},
+	{0x3208, 0x07},
+	{0x3209, 0x80},
+	{0x320a, 0x04},
+	{0x320b, 0x20},
+	{0x3210, 0x00},
+	{0x3211, 0x04},
+	{0x3212, 0x00},
+	{0x3213, 0x04},
+	{0x36e9, 0x27},
+	{0x37f9, 0x27},
+	{0x0100, 0x01},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc235ai_init_regs_1920_1080_30fps_mipi[] = {
-	{0x0103,0x01},
-	{0x36e9,0x80},
-	{0x37f9,0x80},
-	{0x301f,0x14},
-	{0x3058,0x21},
-	{0x3059,0x53},
-	{0x305a,0x40},
-	{0x320e,0x04},
-	{0x320f,0xb0},
-	{0x3210,0x00},
-	{0x3211,0x04},
-	{0x3212,0x00},
-	{0x3213,0x04},
-	{0x3250,0x00},
-	{0x3301,0x0a},
-	{0x3302,0x20},
-	{0x3304,0x90},
-	{0x3305,0x00},
-	{0x3306,0x68},
-	{0x3309,0xd0},
-	{0x330b,0xd8},
-	{0x330d,0x08},
-	{0x331c,0x04},
-	{0x331e,0x81},
-	{0x331f,0xc1},
-	{0x3323,0x06},
-	{0x3333,0x10},
-	{0x3334,0x40},
-	{0x3364,0x5e},
-	{0x336c,0x8e},
-	{0x337f,0x13},
-	{0x338f,0x80},
-	{0x3390,0x08},
-	{0x3391,0x18},
-	{0x3392,0xb8},
-	{0x3393,0x0e},
-	{0x3394,0x14},
-	{0x3395,0x10},
-	{0x3396,0x88},
-	{0x3397,0x98},
-	{0x3398,0xf8},
-	{0x3399,0x0a},
-	{0x339a,0x0e},
-	{0x339b,0x10},
-	{0x339c,0x3c},
-	{0x33ae,0x80},
-	{0x33af,0xc0},
-	{0x33b2,0x50},
-	{0x33b3,0x14},
-	{0x33f8,0x00},
-	{0x33f9,0x68},
-	{0x33fa,0x00},
-	{0x33fb,0x68},
-	{0x33fc,0x48},
-	{0x33fd,0x78},
-	{0x349f,0x03},
-	{0x34a6,0x40},
-	{0x34a7,0x58},
-	{0x34a8,0x10},
-	{0x34a9,0x10},
-	{0x34f8,0x78},
-	{0x34f9,0x10},
-	{0x3619,0x20},
-	{0x361a,0x90},
-	{0x3633,0x44},
-	{0x3637,0x5c},
-	{0x363c,0xc0},
-	{0x363d,0x02},
-	{0x3660,0x80},
-	{0x3661,0x81},
-	{0x3662,0x8f},
-	{0x3663,0x81},
-	{0x3664,0x81},
-	{0x3665,0x82},
-	{0x3666,0x8f},
-	{0x3667,0x08},
-	{0x3668,0x80},
-	{0x3669,0x88},
-	{0x366a,0x98},
-	{0x366b,0xb8},
-	{0x366c,0xf8},
-	{0x3670,0xb2},
-	{0x3671,0xa2},
-	{0x3672,0x88},
-	{0x3680,0x33},
-	{0x3681,0x33},
-	{0x3682,0x43},
-	{0x36c0,0x80},
-	{0x36c1,0x88},
-	{0x36c8,0x88},
-	{0x36c9,0xb8},
-	{0x36ea,0x0b},
-	{0x36eb,0x0c},
-	{0x36ec,0x5c},
-	{0x36ed,0x04},
-	{0x3718,0x04},
-	{0x3722,0x8b},
-	{0x3724,0xd1},
-	{0x3741,0x08},
-	{0x3770,0x17},
-	{0x3771,0x9b},
-	{0x3772,0x9b},
-	{0x37c0,0x88},
-	{0x37c1,0xb8},
-	{0x37fa,0x0b},
-	{0x37fc,0x10},
-	{0x37fd,0x04},
-	{0x3902,0xc0},
-	{0x3903,0x40},
-	{0x3909,0x00},
-	{0x391f,0x41},
-	{0x3926,0xe0},
-	{0x3933,0x80},
-	{0x3934,0x02},
-	{0x3937,0x6f},
-	{0x3e00,0x00},
-	{0x3e01,0x95},
-	{0x3e02,0x50},
-	{0x3e08,0x00},
-	{0x4509,0x20},
-	{0x450d,0x07},
-	{0x4837,0x33},
-	{0x5780,0x76},
-	{0x5784,0x10},
-	{0x5787,0x0a},
-	{0x5788,0x0a},
-	{0x5789,0x08},
-	{0x578a,0x0a},
-	{0x578b,0x0a},
-	{0x578c,0x08},
-	{0x578d,0x40},
-	{0x5792,0x04},
-	{0x5795,0x04},
-	{0x57ac,0x00},
-	{0x57ad,0x00},
-	{0x36e9,0x27},
-	{0x37f9,0x27},
-	{0x0100,0x01},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{0x0103, 0x01},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x301f, 0x14},
+	{0x3058, 0x21},
+	{0x3059, 0x53},
+	{0x305a, 0x40},
+	{0x320e, 0x04},
+	{0x320f, 0xb0},
+	{0x3210, 0x00},
+	{0x3211, 0x04},
+	{0x3212, 0x00},
+	{0x3213, 0x04},
+	{0x3250, 0x00},
+	{0x3301, 0x0a},
+	{0x3302, 0x20},
+	{0x3304, 0x90},
+	{0x3305, 0x00},
+	{0x3306, 0x68},
+	{0x3309, 0xd0},
+	{0x330b, 0xd8},
+	{0x330d, 0x08},
+	{0x331c, 0x04},
+	{0x331e, 0x81},
+	{0x331f, 0xc1},
+	{0x3323, 0x06},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x3364, 0x5e},
+	{0x336c, 0x8e},
+	{0x337f, 0x13},
+	{0x338f, 0x80},
+	{0x3390, 0x08},
+	{0x3391, 0x18},
+	{0x3392, 0xb8},
+	{0x3393, 0x0e},
+	{0x3394, 0x14},
+	{0x3395, 0x10},
+	{0x3396, 0x88},
+	{0x3397, 0x98},
+	{0x3398, 0xf8},
+	{0x3399, 0x0a},
+	{0x339a, 0x0e},
+	{0x339b, 0x10},
+	{0x339c, 0x3c},
+	{0x33ae, 0x80},
+	{0x33af, 0xc0},
+	{0x33b2, 0x50},
+	{0x33b3, 0x14},
+	{0x33f8, 0x00},
+	{0x33f9, 0x68},
+	{0x33fa, 0x00},
+	{0x33fb, 0x68},
+	{0x33fc, 0x48},
+	{0x33fd, 0x78},
+	{0x349f, 0x03},
+	{0x34a6, 0x40},
+	{0x34a7, 0x58},
+	{0x34a8, 0x10},
+	{0x34a9, 0x10},
+	{0x34f8, 0x78},
+	{0x34f9, 0x10},
+	{0x3619, 0x20},
+	{0x361a, 0x90},
+	{0x3633, 0x44},
+	{0x3637, 0x5c},
+	{0x363c, 0xc0},
+	{0x363d, 0x02},
+	{0x3660, 0x80},
+	{0x3661, 0x81},
+	{0x3662, 0x8f},
+	{0x3663, 0x81},
+	{0x3664, 0x81},
+	{0x3665, 0x82},
+	{0x3666, 0x8f},
+	{0x3667, 0x08},
+	{0x3668, 0x80},
+	{0x3669, 0x88},
+	{0x366a, 0x98},
+	{0x366b, 0xb8},
+	{0x366c, 0xf8},
+	{0x3670, 0xb2},
+	{0x3671, 0xa2},
+	{0x3672, 0x88},
+	{0x3680, 0x33},
+	{0x3681, 0x33},
+	{0x3682, 0x43},
+	{0x36c0, 0x80},
+	{0x36c1, 0x88},
+	{0x36c8, 0x88},
+	{0x36c9, 0xb8},
+	{0x36ea, 0x0b},
+	{0x36eb, 0x0c},
+	{0x36ec, 0x5c},
+	{0x36ed, 0x04},
+	{0x3718, 0x04},
+	{0x3722, 0x8b},
+	{0x3724, 0xd1},
+	{0x3741, 0x08},
+	{0x3770, 0x17},
+	{0x3771, 0x9b},
+	{0x3772, 0x9b},
+	{0x37c0, 0x88},
+	{0x37c1, 0xb8},
+	{0x37fa, 0x0b},
+	{0x37fc, 0x10},
+	{0x37fd, 0x04},
+	{0x3902, 0xc0},
+	{0x3903, 0x40},
+	{0x3909, 0x00},
+	{0x391f, 0x41},
+	{0x3926, 0xe0},
+	{0x3933, 0x80},
+	{0x3934, 0x02},
+	{0x3937, 0x6f},
+	{0x3e00, 0x00},
+	{0x3e01, 0x95},
+	{0x3e02, 0x50},
+	{0x3e08, 0x00},
+	{0x4509, 0x20},
+	{0x450d, 0x07},
+	{0x4837, 0x33},
+	{0x5780, 0x76},
+	{0x5784, 0x10},
+	{0x5787, 0x0a},
+	{0x5788, 0x0a},
+	{0x5789, 0x08},
+	{0x578a, 0x0a},
+	{0x578b, 0x0a},
+	{0x578c, 0x08},
+	{0x578d, 0x40},
+	{0x5792, 0x04},
+	{0x5795, 0x04},
+	{0x57ac, 0x00},
+	{0x57ad, 0x00},
+	{0x36e9, 0x27},
+	{0x37f9, 0x27},
+	{0x0100, 0x01},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -770,20 +767,20 @@ static struct regval_list sc235ai_init_regs_1920_1080_30fps_mipi[] = {
  */
 static struct tx_isp_sensor_win_setting sc235ai_win_sizes[] = {
 	{
-		.width			= 1920,
-		.height			= 1056,
-		.fps			= 30 << 16 | 1,
-		.mbus_code		= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace		= TISP_COLORSPACE_SRGB,
-		.regs			= sc235ai_init_regs_1920_1056_30fps_mipi,
+		.width = 1920,
+		.height = 1056,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sc235ai_init_regs_1920_1056_30fps_mipi,
 	},
 	{
-		.width			= 1920,
-		.height			= 1080,
-		.fps			= 30 << 16 | 1,
-		.mbus_code		= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace		= TISP_COLORSPACE_SRGB,
-		.regs			= sc235ai_init_regs_1920_1080_30fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sc235ai_init_regs_1920_1080_30fps_mipi,
 	},
 };
 
@@ -794,32 +791,29 @@ static struct tx_isp_sensor_win_setting *wsize = &sc235ai_win_sizes[0];
  */
 
 static struct regval_list sc235ai_stream_on_mipi[] = {
-	{ SENSOR_REG_END, 0x00 }, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc235ai_stream_off_mipi[] = {
-	{ SENSOR_REG_END, 0x00 }, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 #ifdef SENSOR_I2C_REG_8BIT
-int sc235ai_read(struct tx_isp_subdev *sd, unsigned char reg,
-				 unsigned char *value)
-{
+int sc235ai_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 1,
+						 .buf = &reg,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -828,16 +822,14 @@ int sc235ai_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int sc235ai_write(struct tx_isp_subdev *sd, unsigned char reg,
-				  unsigned char value)
-{
+int sc235ai_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -868,8 +860,7 @@ static int sc235ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -884,29 +875,27 @@ static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 
 	return 0;
 }
-#endif	/* SENSOR_I2C_REG_8BIT */
+#endif /* SENSOR_I2C_REG_8BIT */
 
 #ifdef SENSOR_I2C_REG_16BIT
 
-int sc235ai_read(struct tx_isp_subdev *sd, uint16_t reg,
-				 unsigned char *value) {
+int sc235ai_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -915,16 +904,14 @@ int sc235ai_read(struct tx_isp_subdev *sd, uint16_t reg,
 	return ret;
 }
 
-int sc235ai_write(struct tx_isp_subdev *sd, uint16_t reg,
-				  unsigned char value)
-{
+int sc235ai_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -953,8 +940,7 @@ static int sc235ai_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -969,25 +955,24 @@ static int sc235ai_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 
 	return 0;
 }
-#endif	/* SENSOR_I2C_REG_16BIT */
+#endif /* SENSOR_I2C_REG_16BIT */
 
-static int sc235ai_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk)
-{
+static int sc235ai_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned long rate;
 	int ret = ISP_SUCCESS;
 
 	rate = private_clk_get_rate(sensor->mclk);
-	if(((rate / 1000) % mclk) != 0) {
+	if (((rate / 1000) % mclk) != 0) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
 			pr_err("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
-			if(((rate / 1000) % mclk) != 0) {
-				switch(mclk) {
+			if (((rate / 1000) % mclk) != 0) {
+				switch (mclk) {
 				case 24000000:
 					private_clk_set_rate(sclka, 1200000000);
 					break;
@@ -1015,8 +1000,7 @@ error:
 	return ret;
 }
 
-static int sc235ai_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
-{
+static int sc235ai_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1042,8 +1026,7 @@ static int sc235ai_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_s
 	return ret;
 }
 
-static int sc235ai_setting_select(struct tx_isp_subdev *sd, int deboot)
-{
+static int sc235ai_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	int ret = ISP_SUCCESS;
 
 	switch (deboot) {
@@ -1069,7 +1052,9 @@ static int sc235ai_setting_select(struct tx_isp_subdev *sd, int deboot)
 		sc235ai_attr.max_integration_time_short = xx;
 		sc235ai_attr.wdr_cache = wdr_line * sc235ai_attr.total_width;
 #endif /* SENSOR_WDR_2_FRAME */
-		memcpy((void *)(&(sc235ai_attr.mipi)), (void *)(&sc235ai_mipi_1920_1056_30fps_linear), sizeof(sc235ai_attr.mipi));
+		memcpy((void *)(&(sc235ai_attr.mipi)),
+			(void *)(&sc235ai_mipi_1920_1056_30fps_linear),
+			sizeof(sc235ai_attr.mipi));
 		break;
 	case 1:
 		wsize = &sc235ai_win_sizes[1];
@@ -1093,7 +1078,9 @@ static int sc235ai_setting_select(struct tx_isp_subdev *sd, int deboot)
 		sc235ai_attr.max_integration_time_short = xx;
 		sc235ai_attr.wdr_cache = wdr_line * sc235ai_attr.total_width;
 #endif /* SENSOR_WDR_2_FRAME */
-		memcpy((void *)(&(sc235ai_attr.mipi)), (void *)(&sc235ai_mipi_1920_1080_30fps_linear), sizeof(sc235ai_attr.mipi));
+		memcpy((void *)(&(sc235ai_attr.mipi)),
+			(void *)(&sc235ai_mipi_1920_1080_30fps_linear),
+			sizeof(sc235ai_attr.mipi));
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
@@ -1102,8 +1089,7 @@ static int sc235ai_setting_select(struct tx_isp_subdev *sd, int deboot)
 	return ret;
 }
 
-static int sc235ai_attr_check(struct tx_isp_subdev *sd)
-{
+static int sc235ai_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -1156,8 +1142,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc235ai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int sc235ai_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
@@ -1180,9 +1165,7 @@ static int sc235ai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int sc235ai_g_chip_ident(struct tx_isp_subdev *sd,
-								struct tx_isp_chip_ident *chip)
-{
+static int sc235ai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -1218,8 +1201,7 @@ static int sc235ai_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = sc235ai_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an sc235ai chip.\n",
-				  client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an sc235ai chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 
@@ -1230,7 +1212,11 @@ static int sc235ai_g_chip_ident(struct tx_isp_subdev *sd,
 	ISP_WARNING("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("Sensor video interface is %d\n", info->video_interface);
 	ISP_WARNING("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
-				info->default_boot, wsize->width, wsize->height, wsize->fps >> 16, wsize->fps&0xffff);
+		info->default_boot,
+		wsize->width,
+		wsize->height,
+		wsize->fps >> 16,
+		wsize->fps & 0xffff);
 	ISP_WARNING("===================================================\n");
 
 	if (chip) {
@@ -1242,13 +1228,11 @@ static int sc235ai_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc235ai_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc235ai_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int sc235ai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc235ai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1263,8 +1247,7 @@ static int sc235ai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return ret;
 }
 
-static int sc235ai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int sc235ai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = ISP_SUCCESS;
@@ -1282,8 +1265,7 @@ static int sc235ai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regist
 	return ret;
 }
 
-static int sc235ai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int sc235ai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1297,8 +1279,7 @@ static int sc235ai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_
 	return 0;
 }
 
-static int sc235ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc235ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1326,18 +1307,16 @@ static int sc235ai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 
 #ifndef SENSOR_TEST
 #ifdef SENSOR_EXPO
-static int sc235ai_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
 	it <<= 1;
 
-	ret = sc235ai_write(sd,  0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret = sc235ai_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sc235ai_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sc235ai_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-
 
 	ret += sc235ai_write(sd, 0x3e08, (unsigned char)((again >> 8) & 0xff));
 	ret += sc235ai_write(sd, 0x3e09, (unsigned char)(again & 0xff));
@@ -1345,8 +1324,7 @@ static int sc235ai_set_expo(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 #else
-static int sc235ai_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -1354,8 +1332,7 @@ static int sc235ai_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc235ai_set_analog_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -1364,18 +1341,15 @@ static int sc235ai_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif /* SENSOR_EXPO */
 
-static int sc235ai_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc235ai_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc235ai_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_mode(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	if (wsize) {
@@ -1385,8 +1359,7 @@ static int sc235ai_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc235ai_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int sc235ai_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int sclk = 0;
@@ -1400,7 +1373,7 @@ static int sc235ai_set_fps(struct tx_isp_subdev *sd, int fps)
 	switch (info->default_boot) {
 	case 0:
 	case 1:
-		sclk = 2200 * 1200 * 30;  /**< HTS * VTS * FPS */
+		sclk = 2200 * 1200 * 30; /**< HTS * VTS * FPS */
 		break;
 	default:
 		ret = -1;
@@ -1427,8 +1400,8 @@ static int sc235ai_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	sc235ai_write(sd, 0x320f, (unsigned char) (vts & 0xff));
-	sc235ai_write(sd, 0x320e, (unsigned char) (vts >> 8));
+	sc235ai_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	sc235ai_write(sd, 0x320e, (unsigned char)(vts >> 8));
 
 	if (0 != ret) {
 		ISP_ERROR("err: sc235ai_write err\n");
@@ -1459,14 +1432,13 @@ static int sc235ai_set_fps(struct tx_isp_subdev *sd, int fps)
 }
 
 #ifdef SENSOR_MIR_FLIP
-static int sc235ai_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int sc235ai_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = ISP_SUCCESS;
 	uint8_t val = 0;
 
 	/* 2'b01:mirror,2'b10:filp */
 	val = sc235ai_read(sd, 0x3221, &val);
-	switch(enable) {
+	switch (enable) {
 	case 0:
 		val &= 0x99;
 		break;
@@ -1488,8 +1460,7 @@ static int sc235ai_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 #ifdef SENSOR_WDR_2_FRAME
 #ifdef SENSOR_EXPO
-static int sc235ai_set_expo_short(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_expo_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -1497,8 +1468,7 @@ static int sc235ai_set_expo_short(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 #else
-static int sc235ai_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -1506,8 +1476,7 @@ static int sc235ai_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc235ai_set_integration_time_short(struct tx_isp_subdev *sd, int value)
-{
+static int sc235ai_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -1516,8 +1485,7 @@ static int sc235ai_set_integration_time_short(struct tx_isp_subdev *sd, int valu
 }
 #endif /* SENSOR_EXPO */
 
-static int sc235ai_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
-{
+static int sc235ai_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1536,8 +1504,7 @@ static int sc235ai_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	return 0;
 }
 
-static int sc235ai_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
-{
+static int sc235ai_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = ISP_SUCCESS;
@@ -1554,8 +1521,7 @@ static int sc235ai_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-static int sc235ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int sc235ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	/* struct tx_isp_initarg *init = arg; */
@@ -1607,7 +1573,7 @@ static int sc235ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		break;
 #ifdef SENSOR_MIR_FLIP
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = sc235ai_set_vflip(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_MIR_FLIP */
@@ -1619,20 +1585,20 @@ static int sc235ai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		if(arg)
+		if (arg)
 			ret = sc235ai_set_integration_time_short(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-		if(arg)
+		if (arg)
 			ret = sc235ai_set_analog_gain_short(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_WDR:
-		if(arg)
+		if (arg)
 			ret = sc235ai_set_wdr(sd, init->enable);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
-		if(arg)
+		if (arg)
 			ret = sc235ai_set_wdr_stop(sd, init->enable);
 		break;
 #endif /* SENSOR_WDR_2_FRAME */
@@ -1658,7 +1624,7 @@ static struct tx_isp_subdev_video_ops sc235ai_video_ops = {
 
 static struct tx_isp_subdev_sensor_ops sc235ai_sensor_ops = {
 #ifndef SENSOR_TEST
-	.ioctl	= sc235ai_sensor_ops_ioctl,
+	.ioctl = sc235ai_sensor_ops_ioctl,
 #endif /* SENSOR_TEST */
 };
 
@@ -1669,26 +1635,25 @@ static struct tx_isp_subdev_ops sc235ai_ops = {
 };
 
 /* It's the sensor device */
-static u64 tx_isp_module_dma_mask = ~(u64) 0;
+static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "sc235ai",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int sc235ai_probe(struct i2c_client *client,
-						 const struct i2c_device_id *id)
-{
+static int sc235ai_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1709,8 +1674,7 @@ static int sc235ai_probe(struct i2c_client *client,
 	return 0;
 }
 
-static int sc235ai_remove(struct i2c_client *client)
-{
+static int sc235ai_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -1728,21 +1692,18 @@ static int sc235ai_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc235ai_id[] = {
-	{"sc235ai", 0},
-	{}
-};
-MODULE_DEVICE_TABLE(i2c, sc235ai_id
-				   );
+static const struct i2c_device_id sc235ai_id[] = {{"sc235ai", 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sc235ai_id);
 
 static struct i2c_driver sc235ai_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc235ai",
-	},
-	.probe			= sc235ai_probe,
-	.remove			= sc235ai_remove,
-	.id_table		= sc235ai_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "sc235ai",
+		},
+	.probe = sc235ai_probe,
+	.remove = sc235ai_remove,
+	.id_table = sc235ai_id,
 };
 
 static __init int init_sc235ai(void) {

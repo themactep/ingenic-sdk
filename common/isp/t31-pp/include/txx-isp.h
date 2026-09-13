@@ -74,9 +74,9 @@
 
 /* Video pad Descriptor */
 struct tx_isp_pad_descriptor {
-  unsigned char type;
-  unsigned char links_type;
-  /*unsigned char  links_type[TX_ISP_LINKS_PER_PADS];*/
+	unsigned char type;
+	unsigned char links_type;
+	/*unsigned char  links_type[TX_ISP_LINKS_PER_PADS];*/
 };
 
 /*
@@ -84,48 +84,48 @@ struct tx_isp_pad_descriptor {
   @ rate: the rate of the clock.
 */
 struct tx_isp_device_clk {
-  const char *name;
-  unsigned long rate;
+	const char *name;
+	unsigned long rate;
 };
 
 /* All TX descriptors have these 2 fields at the beginning */
 struct tx_isp_descriptor {
-  unsigned char type;
-  unsigned char subtype;
-  unsigned char parentid;
-  unsigned char unitid;
+	unsigned char type;
+	unsigned char subtype;
+	unsigned char parentid;
+	unsigned char unitid;
 };
 
 /* Video device entity Descriptor */
 struct tx_isp_device_descriptor {
-  unsigned char type;
-  unsigned char subtype;
-  unsigned char parentid;
-  unsigned char unitid;
-  unsigned char entity_num;
-  struct platform_device **entities;
+	unsigned char type;
+	unsigned char subtype;
+	unsigned char parentid;
+	unsigned char unitid;
+	unsigned char entity_num;
+	struct platform_device **entities;
 };
 
 /* Video subdev entity Descriptor */
 struct tx_isp_subdev_descriptor {
-  unsigned char type;
-  unsigned char subtype;
-  unsigned char parentid;
-  unsigned char unitid;
-  unsigned char clks_num;
-  struct tx_isp_device_clk *clks;
-  unsigned char pads_num;
-  struct tx_isp_pad_descriptor *pads;
+	unsigned char type;
+	unsigned char subtype;
+	unsigned char parentid;
+	unsigned char unitid;
+	unsigned char clks_num;
+	struct tx_isp_device_clk *clks;
+	unsigned char pads_num;
+	struct tx_isp_pad_descriptor *pads;
 };
 
 /* Video widget entity Descriptor */
 struct tx_isp_widget_descriptor {
-  unsigned char type;
-  unsigned char subtype;
-  unsigned char parentid;
-  unsigned char unitid;
-  unsigned char clks_num;
-  struct tx_isp_device_clk *clks;
+	unsigned char type;
+	unsigned char subtype;
+	unsigned char parentid;
+	unsigned char unitid;
+	unsigned char clks_num;
+	struct tx_isp_device_clk *clks;
 };
 
 #endif /*__TX_ISP_H__*/

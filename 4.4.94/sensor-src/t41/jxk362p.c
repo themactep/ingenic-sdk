@@ -41,8 +41,7 @@ static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-struct regval_list
-{
+struct regval_list {
 	uint8_t reg_num;
 	unsigned char value;
 };
@@ -50,8 +49,7 @@ struct regval_list
 /*
 * the part of driver maybe modify about different sensor and different board.
 */
-struct again_lut
-{
+struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
@@ -141,26 +139,18 @@ struct again_lut jxk362p_again_lut[] = {
 
 struct tx_isp_sensor_attribute jxk362p_attr;
 
-unsigned int jxk362p_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int jxk362p_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = jxk362p_again_lut;
 
-	while (lut->gain <= jxk362p_attr.max_again)
-	{
-		if (isp_gain == 0)
-		{
+	while (lut->gain <= jxk362p_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return lut[0].gain;
-		}
-		else if (isp_gain < lut->gain)
-		{
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
-		}
-		else
-		{
-			if ((lut->gain == jxk362p_attr.max_again) && (isp_gain >= lut->gain))
-			{
+		} else {
+			if ((lut->gain == jxk362p_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -171,11 +161,9 @@ unsigned int jxk362p_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 	return isp_gain;
 }
 
-unsigned int jxk362p_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int jxk362p_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
-
 
 struct tx_isp_mipi_bus jxk362p_mipi_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -245,10 +233,10 @@ static struct regval_list jxk362p_init_regs_3200_1800_30fps_mipi[] = {
 	{0x58, 0x18},
 	{0x5F, 0x41},
 	{0x60, 0x20},
-	{0x20, 0x84},//hts = 0x384 = 900
-	{0x21, 0x03},//
-	{0x22, 0x80},//vts = 0x780 = 1920
-	{0x23, 0x07},//
+	{0x20, 0x84}, //hts = 0x384 = 900
+	{0x21, 0x03}, //
+	{0x22, 0x80}, //vts = 0x780 = 1920
+	{0x23, 0x07}, //
 	{0x24, 0x20},
 	{0x25, 0x08},
 	{0x26, 0x73},
@@ -349,18 +337,17 @@ static struct regval_list jxk362p_init_regs_3200_1800_30fps_mipi[] = {
 	{JXK362P_REG_END, 0x00}, /* END MARKER */
 };
 
-
 /*
 * the order of the jxk362p_win_sizes is [full_resolution, preview_resolution].
 */
 static struct tx_isp_sensor_win_setting jxk362p_win_sizes[] = {
 	{
-		.width          = 3200,
-		.height         = 1800,
-		.fps            = 25 << 16 | 1,
-		.mbus_code      = TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace     = TISP_COLORSPACE_SRGB,
-		.regs           = jxk362p_init_regs_3200_1800_30fps_mipi,
+		.width = 3200,
+		.height = 1800,
+		.fps = 25 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = jxk362p_init_regs_3200_1800_30fps_mipi,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &jxk362p_win_sizes[0];
@@ -374,17 +361,15 @@ static struct regval_list jxk362p_stream_on_mipi[] = {
 static struct regval_list jxk362p_stream_off_mipi[] = {
 	{JXK362P_REG_END, 0x00}, /* END MARKER */
 };
-int jxk362p_read(struct tx_isp_subdev *sd, unsigned char reg,
-				unsigned char *value)
-{
+int jxk362p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr = client->addr,
-			.flags = 0,
-			.len = 1,
-			.buf = &reg,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 1,
+						 .buf = &reg,
+					 },
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
@@ -398,9 +383,7 @@ int jxk362p_read(struct tx_isp_subdev *sd, unsigned char reg,
 
 	return ret;
 }
-int jxk362p_write(struct tx_isp_subdev *sd, unsigned char reg,
-				unsigned char value)
-{
+int jxk362p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -417,18 +400,13 @@ int jxk362p_write(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-static int jxk362p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int jxk362p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val = 0;
-	while (vals->reg_num != JXK362P_REG_END)
-	{
-		if (vals->reg_num == JXK362P_REG_DELAY)
-		{
+	while (vals->reg_num != JXK362P_REG_END) {
+		if (vals->reg_num == JXK362P_REG_DELAY) {
 			private_msleep(vals->value);
-		}
-		else
-		{
+		} else {
 			ret = jxk362p_write(sd, vals->reg_num, vals->value);
 			ret = jxk362p_read(sd, vals->reg_num, &val);
 			if (ret < 0)
@@ -440,19 +418,16 @@ static int jxk362p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 	return 0;
 }
 
-static int jxk362p_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk362p_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = jxk362p_read(sd, 0x0a, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
-	if (ret < 0)
-	{
+	if (ret < 0) {
 		return ret;
 	}
 	if (v != JXK362P_CHIP_ID_H)
@@ -461,8 +436,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 
 	ret = jxk362p_read(sd, 0x0b, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
-	if (ret < 0)
-	{
+	if (ret < 0) {
 		return ret;
 	}
 	if (v != JXK362P_CHIP_ID_L)
@@ -471,8 +445,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int jxk362p_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int jxk362p_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int expo = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
@@ -513,18 +486,15 @@ return ret;
 return 0;
 }
 */
-static int jxk362p_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int jxk362p_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int jxk362p_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int jxk362p_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
-{
+static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	sensor->video.vi_max_width = wsize->width;
@@ -541,8 +511,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int jxk362p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk362p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -557,30 +526,24 @@ static int jxk362p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int jxk362p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk362p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if (init->enable)
-	{
-		if (sensor->video.state == TX_ISP_MODULE_INIT)
-		{
+	if (init->enable) {
+		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = jxk362p_write_array(sd, wsize->regs);
 			// ret = jxk362p_read(sd, 0x27, &dismode);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
-		if (sensor->video.state == TX_ISP_MODULE_RUNNING)
-		{
+		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = jxk362p_write_array(sd, jxk362p_stream_on_mipi);
 			ISP_WARNING("jxk362p stream on\n");
 		}
-	}
-	else
-	{
+	} else {
 		ret = jxk362p_write_array(sd, jxk362p_stream_off_mipi);
 		ISP_WARNING("jxk362p stream off\n");
 	}
@@ -588,8 +551,7 @@ static int jxk362p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 	return ret;
 }
 
-static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -600,8 +562,7 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
 	int ret = 0;
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 
-	switch (info->default_boot)
-	{
+	switch (info->default_boot) {
 	case 0:
 		sclk = 900 * 1920 * 25 * 4;
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
@@ -610,8 +571,7 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_WARNING("warn: fps(%d) no in range\n", fps);
 	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
-	{
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_WARNING("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
@@ -620,8 +580,7 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
 	hts = val;
 	ret += jxk362p_read(sd, 0x20, &val);
 	hts = ((hts << 8) + val) << 2; /* frame width = hts*8 */
-	if (0 != ret)
-	{
+	if (0 != ret) {
 		ISP_ERROR("err: jxk362p read err\n");
 		return ret;
 	}
@@ -644,8 +603,7 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = jxk362p_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += jxk362p_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif
-	if (0 != ret)
-	{
+	if (0 != ret) {
 		ISP_ERROR("err: jxk362p_write err\n");
 		return ret;
 	}
@@ -659,13 +617,11 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-static int jxk362p_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int jxk362p_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if (wsize)
-	{
+	if (wsize) {
 		sensor_set_attr(sd, wsize);
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
@@ -673,16 +629,14 @@ static int jxk362p_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int jxk362p_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int jxk362p_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val = 0;
 
 	/* 2'b01: mirror; 2'b10:flip*/
 	enable &= 0x3;
-	switch (enable)
-	{
+	switch (enable) {
 	case 0: /*normal*/
 		val &= 0xCF;
 		break;
@@ -700,8 +654,7 @@ static int jxk362p_set_vflip(struct tx_isp_subdev *sd, int enable)
 	}
 
 	ret = jxk362p_write(sd, 0x12, val);
-	if (0 != ret)
-	{
+	if (0 != ret) {
 		ISP_ERROR("%s:%d, jxk362p_write err!!\n", __func__, __LINE__);
 		return ret;
 	}
@@ -712,27 +665,24 @@ static int jxk362p_set_vflip(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int sensor_attr_check(struct tx_isp_subdev *sd)
-{
+static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct clk *sclka;
 	unsigned long rate;
 
-	switch (info->default_boot)
-	{
+	switch (info->default_boot) {
 	case 0:
 		wsize = &jxk362p_win_sizes[0];
-		memcpy((void*)(&(jxk362p_attr.mipi)),(void*)(&jxk362p_mipi_linear),sizeof(jxk362p_mipi_linear));
+		memcpy((void *)(&(jxk362p_attr.mipi)), (void *)(&jxk362p_mipi_linear), sizeof(jxk362p_mipi_linear));
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 		break;
 	}
 
-	switch (info->video_interface)
-	{
+	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 		jxk362p_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		jxk362p_attr.mipi.index = 0;
@@ -748,8 +698,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch (info->mclk)
-	{
+	switch (info->mclk) {
 	case TISP_SENSOR_MCLK0:
 	case TISP_SENSOR_MCLK1:
 	case TISP_SENSOR_MCLK2:
@@ -762,8 +711,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-	if (IS_ERR(sensor->mclk))
-	{
+	if (IS_ERR(sensor->mclk)) {
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
@@ -781,9 +729,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int jxk362p_g_chip_ident(struct tx_isp_subdev *sd,
-								struct tx_isp_chip_ident *chip)
-{
+static int jxk362p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -791,49 +737,38 @@ static int jxk362p_g_chip_ident(struct tx_isp_subdev *sd,
 	int ret = ISP_SUCCESS;
 	sensor_attr_check(sd);
 	info->rst_gpio = rst_gpio;
-	if (1)
-	{
+	if (1) {
 		ret = private_gpio_request(info->rst_gpio, "jxk362p_reset");
-		if (!ret)
-		{
+		if (!ret) {
 			private_gpio_direction_output(info->rst_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(info->rst_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(info->rst_gpio, 1);
 			private_msleep(5);
-		}
-		else
-		{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n", info->rst_gpio);
 		}
 	}
-	if (info->pwdn_gpio != -1)
-	{
+	if (info->pwdn_gpio != -1) {
 		ret = private_gpio_request(info->pwdn_gpio, "jxk362p_pwdn");
-		if (!ret)
-		{
+		if (!ret) {
 			private_gpio_direction_output(info->pwdn_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(info->pwdn_gpio, 0);
 			private_msleep(5);
-		}
-		else
-		{
+		} else {
 			ISP_ERROR("gpio requrest fail %d\n", info->pwdn_gpio);
 		}
 	}
 	ret = jxk362p_detect(sd, &ident);
-	if (ret)
-	{
-		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk362p chip.\n",
-				client->addr, client->adapter->name);
+	if (ret) {
+		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk362p chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_WARNING("jxk362p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
-	if (chip)
-	{
+	if (chip) {
 		memcpy(chip->name, "jxk362p", sizeof("jxk362p"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -841,18 +776,15 @@ static int jxk362p_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int jxk362p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int jxk362p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	if (IS_ERR_OR_NULL(sd))
-	{
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch (cmd)
-	{
+	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			ret = jxk362p_set_expo(sd, sensor_val->value);
@@ -900,15 +832,13 @@ static int jxk362p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 	return ret;
 }
 
-static int jxk362p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int jxk362p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
-	{
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -920,13 +850,11 @@ static int jxk362p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regist
 	return ret;
 }
 
-static int jxk362p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int jxk362p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len))
-	{
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -964,22 +892,21 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "jxk362p",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int jxk362p_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int jxk362p_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if (!sensor)
-	{
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
@@ -1004,8 +931,7 @@ static int jxk362p_probe(struct i2c_client *client, const struct i2c_device_id *
 	return 0;
 }
 
-static int jxk362p_remove(struct i2c_client *client)
-{
+static int jxk362p_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -1021,23 +947,21 @@ static int jxk362p_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id jxk362p_id[] = {
-	{"jxk362p", 0},
-	{}};
+static const struct i2c_device_id jxk362p_id[] = {{"jxk362p", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, jxk362p_id);
 
 static struct i2c_driver jxk362p_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = "jxk362p",
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "jxk362p",
+		},
 	.probe = jxk362p_probe,
 	.remove = jxk362p_remove,
 	.id_table = jxk362p_id,
 };
 
-static __init int init_jxk362p(void)
-{
+static __init int init_jxk362p(void) {
 	/* ret = private_driver_get_interface(); */
 	/* if(ret){ */
 	/*	ISP_ERROR("Failed to init jxk362p dirver.\n"); */
@@ -1046,8 +970,7 @@ static __init int init_jxk362p(void)
 	return private_i2c_add_driver(&jxk362p_driver);
 }
 
-static __exit void exit_jxk362p(void)
-{
+static __exit void exit_jxk362p(void) {
 	private_i2c_del_driver(&jxk362p_driver);
 }
 
@@ -1056,4 +979,3 @@ module_exit(exit_jxk362p);
 
 MODULE_DESCRIPTION("A low-level driver for SOI jxk362p sensors");
 MODULE_LICENSE("GPL");
-

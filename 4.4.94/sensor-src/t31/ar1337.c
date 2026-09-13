@@ -18,10 +18,12 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_NAME "ar1337"
+#define SENSOR_VERSION "H20211008a"
 #define SENSOR_CHIP_ID 0x0253
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x02)
 #define SENSOR_CHIP_ID_L (0x53)
 
@@ -31,12 +33,24 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
 
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_25FPS_SCLK (441567840)
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20211008a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -70,13 +84,13 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    uint16_t value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
-    unsigned int value;
-    unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sensor_again_lut[] = {
@@ -129,34 +143,35 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.mipi ={
-		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 510,
-		.lans = 2,
-		.settle_time_apative_en = 0,
-		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
-		.mipi_sc.hcrop_diff_en = 0,
-		.mipi_sc.mipi_vcomp_en = 1,
-		.mipi_sc.mipi_hcomp_en = 1,
-		.mipi_sc.line_sync_mode = 0,
-		.mipi_sc.work_start_flag = 0,
-		.image_twidth = 1920,
-		.image_theight = 1080,
-		.mipi_sc.mipi_crop_start0x = 0,
-		.mipi_sc.mipi_crop_start0y = 0,
-		.mipi_sc.mipi_crop_start1x = 0,
-		.mipi_sc.mipi_crop_start1y = 0,
-		.mipi_sc.mipi_crop_start2x = 0,
-		.mipi_sc.mipi_crop_start2y = 0,
-		.mipi_sc.mipi_crop_start3x = 0,
-		.mipi_sc.mipi_crop_start3y = 0,
-		.mipi_sc.data_type_en = 0,
-		.mipi_sc.data_type_value = RAW10,
-		.mipi_sc.del_start = 0,
-		.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
-		.mipi_sc.sensor_fid_mode = 0,
-		.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-	},
+	.mipi =
+		{
+			.mode = SENSOR_MIPI_OTHER_MODE,
+			.clk = 510,
+			.lans = 2,
+			.settle_time_apative_en = 0,
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
+			.mipi_sc.hcrop_diff_en = 0,
+			.mipi_sc.mipi_vcomp_en = 1,
+			.mipi_sc.mipi_hcomp_en = 1,
+			.mipi_sc.line_sync_mode = 0,
+			.mipi_sc.work_start_flag = 0,
+			.image_twidth = 1920,
+			.image_theight = 1080,
+			.mipi_sc.mipi_crop_start0x = 0,
+			.mipi_sc.mipi_crop_start0y = 0,
+			.mipi_sc.mipi_crop_start1x = 0,
+			.mipi_sc.mipi_crop_start1y = 0,
+			.mipi_sc.mipi_crop_start2x = 0,
+			.mipi_sc.mipi_crop_start2y = 0,
+			.mipi_sc.mipi_crop_start3x = 0,
+			.mipi_sc.mipi_crop_start3y = 0,
+			.mipi_sc.data_type_en = 0,
+			.mipi_sc.data_type_value = RAW10,
+			.mipi_sc.del_start = 0,
+			.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+			.mipi_sc.sensor_fid_mode = 0,
+			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+		},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 190505,
 	.max_dgain = 0,
@@ -509,22 +524,22 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3172, 0x0206}, // ANALOG_CONTROL2
 	{0x317A, 0x516E}, // ANALOG_CONTROL6
 	{0x3F3C, 0x0003}, // ANALOG_CONTROL9
-	{0x0400, 0x1}, //Scaling Enabling: 0= disable, = x-dir
-	{0x0404, 0x20}, //Scale_M = 32
+	{0x0400, 0x1},	  //Scaling Enabling: 0= disable, = x-dir
+	{0x0404, 0x20},	  //Scale_M = 32
 	{0x32C8, 0x030C}, // PDAF_SEQ_START
 	{0x32CA, 0x08A6}, // PDAF_ODP_LLENGTH
 	{0x0342, 0x22F4}, // LINE_LENGTH_PCK
 	{0x0340, 0x066D}, // FRAME_LENGTH_LINES
 	{0x0202, 0x066C}, // COARSE_INTEGRATION_TIME
-	{0x30EC, 0xFB08},        // CTX_RD_DATA
-	{0x31D6, 0x336B},     //MIPI_JPEG_PN9_DATA_TYPE
+	{0x30EC, 0xFB08}, // CTX_RD_DATA
+	{0x31D6, 0x336B}, //MIPI_JPEG_PN9_DATA_TYPE
 	{0x32C2, 0x03FC}, //pdaf_dma_start=PDAF_ZONE_PER_LINE*(PDAF_NUMBER_OF_CC + 1)*4 = 1020 = 0x03FC
-	{0x32C4, 0x0F30},        // PDAF_DMA_SIZE
-	{0x32C6, 0x0A00},        // PDAF_DMA_Y
-	{0x32C8, 0x0342},        // PDAF_SEQ_START
-	{0x32D0, 0x0001},        // PE_PARAM_ADDR
-	{0x32D4, 0x0000},        // PE_PARAM_VALUE
-	{0x034E, 0x0442},     // Y_OUTPUT_SIZE
+	{0x32C4, 0x0F30}, // PDAF_DMA_SIZE
+	{0x32C6, 0x0A00}, // PDAF_DMA_Y
+	{0x32C8, 0x0342}, // PDAF_SEQ_START
+	{0x32D0, 0x0001}, // PE_PARAM_ADDR
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x034E, 0x0442}, // Y_OUTPUT_SIZE
 	{0x32D0, 0x6000}, // PE_PARAM_ADDR
 	{0x32D4, 0x000E}, // PE_PARAM_VALUE
 	{0x32D4, 0xA030}, // PE_PARAM_VALUE
@@ -1947,72 +1962,72 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x32D4, 0x0201}, // PE_PARAM_VALUE
 	{0x32D4, 0xFFA3}, // PE_PARAM_VALUE
 	{0x32D4, 0x0000}, // PE_PARAM_VALUE
-	{0x32D4, 0x3040},// PE_PARAM_VALUE
-	{0x32D4, 0x005E},// PE_PARAM_VALUE
-	{0x32D4, 0xA9B8},// PE_PARAM_VALUE
-	{0x32D4, 0x03A1},// PE_PARAM_VALUE
-	{0x32D4, 0x700D},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x2218},// PE_PARAM_VALUE
-	{0x32D4, 0x010E},// PE_PARAM_VALUE
-	{0x32D4, 0xA000},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x801E},// PE_PARAM_VALUE
-	{0x32D4, 0xA925},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x7005},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x2218},// PE_PARAM_VALUE
-	{0x32D4, 0x010E},// PE_PARAM_VALUE
-	{0x32D4, 0xA000},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x601E},// PE_PARAM_VALUE
-	{0x32D4, 0xA924},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0xFE2F},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x3600},// PE_PARAM_VALUE
-	{0x32D4, 0x000E},// PE_PARAM_VALUE
-	{0x32D4, 0xA030},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x700D},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x2618},// PE_PARAM_VALUE
-	{0x32D4, 0x001E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x001E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
-	{0x32D4, 0x0E0F},// PE_PARAM_VALUE
-	{0x32D4, 0x005E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x700E},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x2218},// PE_PARAM_VALUE
-	{0x32D4, 0x010E},// PE_PARAM_VALUE
-	{0x32D4, 0xA000},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x801E},// PE_PARAM_VALUE
-	{0x32D4, 0xA925},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0xFE26},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x3600},// PE_PARAM_VALUE
-	{0x32D4, 0x000E},// PE_PARAM_VALUE
-	{0x32D4, 0xA030},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x700E},// PE_PARAM_VALUE
-	{0x32D4, 0x0000},// PE_PARAM_VALUE
-	{0x32D4, 0x2618},// PE_PARAM_VALUE
-	{0x32D4, 0x001E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
-	{0x32D4, 0x0FAF},// PE_PARAM_VALUE
-	{0x32D4, 0x001E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
-	{0x32D4, 0x0E0F},// PE_PARAM_VALUE
-	{0x32D4, 0x005E},// PE_PARAM_VALUE
-	{0x32D4, 0xB224},// PE_PARAM_VALUE
+	{0x32D4, 0x3040}, // PE_PARAM_VALUE
+	{0x32D4, 0x005E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA9B8}, // PE_PARAM_VALUE
+	{0x32D4, 0x03A1}, // PE_PARAM_VALUE
+	{0x32D4, 0x700D}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x2218}, // PE_PARAM_VALUE
+	{0x32D4, 0x010E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA000}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x801E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA925}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x7005}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x2218}, // PE_PARAM_VALUE
+	{0x32D4, 0x010E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA000}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x601E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA924}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0xFE2F}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x3600}, // PE_PARAM_VALUE
+	{0x32D4, 0x000E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA030}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x700D}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x2618}, // PE_PARAM_VALUE
+	{0x32D4, 0x001E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x001E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
+	{0x32D4, 0x0E0F}, // PE_PARAM_VALUE
+	{0x32D4, 0x005E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x700E}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x2218}, // PE_PARAM_VALUE
+	{0x32D4, 0x010E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA000}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x801E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA925}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0xFE26}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x3600}, // PE_PARAM_VALUE
+	{0x32D4, 0x000E}, // PE_PARAM_VALUE
+	{0x32D4, 0xA030}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x700E}, // PE_PARAM_VALUE
+	{0x32D4, 0x0000}, // PE_PARAM_VALUE
+	{0x32D4, 0x2618}, // PE_PARAM_VALUE
+	{0x32D4, 0x001E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
+	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
+	{0x32D4, 0x001E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
+	{0x32D4, 0x0E0F}, // PE_PARAM_VALUE
+	{0x32D4, 0x005E}, // PE_PARAM_VALUE
+	{0x32D4, 0xB224}, // PE_PARAM_VALUE
 	{0x32D4, 0x0FAF}, // PE_PARAM_VALUE
 	{0x32D4, 0x700D}, // PE_PARAM_VALUE
 	{0x32D4, 0x0000}, // PE_PARAM_VALUE
@@ -2879,32 +2894,31 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-//	{0x301A, 0x021c},
+	//	{0x301A, 0x021c},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-//	{0x301A, 0x0218},
+	//	{0x301A, 0x0218},
 	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {
-		[0] ={
-			.addr = client->addr,
-			.flags = 0,
-			.len = 2,
-			.buf = buf,
-		},
-		[1] ={
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
+		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}
-	};
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -3030,16 +3044,16 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int index = (value & 0xffff0000) >> 16;
 	struct sensor_gain_lut *gain_lut = sensor_gain_lut;*/
 
-	/*set integration time*/
-	/*ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+/*set integration time*/
+/*ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
 	  ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	  ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));*/
-	/*set analog gain*/
-	/*	ret = sensor_write(sd, 0x3e09, gain_lut[index].again); */
-	/*set coarse dgain*/
-	/*ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);*/
-	/*set fine dgain*/
-	/*	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
+/*set analog gain*/
+/*	ret = sensor_write(sd, 0x3e09, gain_lut[index].again); */
+/*set coarse dgain*/
+/*ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);*/
+/*set fine dgain*/
+/*	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
 	if (ret < 0)
 		return ret;
 
@@ -3194,12 +3208,14 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
-		    SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
@@ -3216,62 +3232,62 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		return -EINVAL;
 	}
 	switch (cmd) {
-/*
+		/*
 		case TX_ISP_EVENT_SENSOR_EXPO:
 			if (arg)
 				ret = sensor_set_expo(sd, *(int*)arg);
 			break;
 */
-		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if (arg)
-				ret = sensor_set_integration_time(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if (arg)
-				ret = sensor_set_analog_gain(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_DGAIN:
-			if (arg)
-				ret = sensor_set_digital_gain(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-			if (arg)
-				ret = sensor_get_black_pedestal(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_RESIZE:
-			if (arg)
-				ret = sensor_set_mode(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-				ret = sensor_write_array(sd, sensor_stream_off_mipi);
-			} else {
-				ISP_ERROR("Don't support this Sensor Data interface\n");
-			}
-			break;
-		case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-				ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			} else {
-				ISP_ERROR("Don't support this Sensor Data interface\n");
-				ret = -1;
-			}
-			break;
-		case TX_ISP_EVENT_SENSOR_FPS:
-			if (arg)
-				ret = sensor_set_fps(sd, *(int *) arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_VFLIP:
-/*
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_AGAIN:
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_DGAIN:
+		if (arg)
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
+		if (arg)
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_RESIZE:
+		if (arg)
+			ret = sensor_set_mode(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
+		} else {
+			ISP_ERROR("Don't support this Sensor Data interface\n");
+		}
+		break;
+	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
+		} else {
+			ISP_ERROR("Don't support this Sensor Data interface\n");
+			ret = -1;
+		}
+		break;
+	case TX_ISP_EVENT_SENSOR_FPS:
+		if (arg)
+			ret = sensor_set_fps(sd, *(int *)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_VFLIP:
+		/*
 			if (arg)
 				ret = sensor_set_vflip(sd, *(int*)arg);
 			break;
 */
-		case TX_ISP_EVENT_SENSOR_LOGIC:
-			if (arg)
-				ret = sensor_set_logic(sd, *(int *) arg);
-		default:
-			break;
+	case TX_ISP_EVENT_SENSOR_LOGIC:
+		if (arg)
+			ret = sensor_set_logic(sd, *(int *)arg);
+	default:
+		break;
 	}
 	return ret;
 }
@@ -3333,15 +3349,16 @@ static struct tx_isp_subdev_ops sensor_ops = {
 };
 
 /* It's the sensor device */
-static u64 tx_isp_module_dma_mask = ~(u64) 0;
+static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
@@ -3350,7 +3367,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -3407,17 +3424,15 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {
-	{SENSOR_NAME, 0},
-	{}
-};
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
@@ -3443,5 +3458,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

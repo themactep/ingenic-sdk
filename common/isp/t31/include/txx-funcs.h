@@ -1,38 +1,38 @@
 #ifndef __TXX_DRV_FUNCS_H__
 #define __TXX_DRV_FUNCS_H__
-#include <linux/clk.h>
-#include <linux/file.h>
-#include <linux/fs.h>
 #include <linux/mm.h>
+#include <linux/fs.h>
+#include <linux/clk.h>
 #include <linux/pwm.h>
+#include <linux/file.h>
 /*#include <linux/list.h>*/
 #include <linux/gpio.h>
-#include <linux/sched.h>
 #include <linux/time.h>
+#include <linux/sched.h>
 /*#include <linux/delay.h>*/
-#include <asm/cacheflush.h>
+#include <linux/module.h>
+#include <linux/debugfs.h>
+#include <linux/kthread.h>
+#include <linux/mfd/core.h>
+#include <linux/mempolicy.h>
+#include <linux/interrupt.h>
+#include <linux/device.h>
+#include <linux/miscdevice.h>
+#include <linux/platform_device.h>
+#include <linux/errno.h>
+#include <linux/i2c.h>
+#include <linux/mutex.h>
+#include <linux/netlink.h>
+#include <net/netlink.h>
+#include <linux/spi/spi.h>
+//#include <soc/irq.h>
+#include <soc/base.h>
 #include <asm/io.h>
 #include <asm/irq.h>
 #include <asm/uaccess.h>
-#include <linux/debugfs.h>
-#include <linux/device.h>
-#include <linux/errno.h>
-#include <linux/i2c.h>
-#include <linux/interrupt.h>
-#include <linux/kthread.h>
-#include <linux/mempolicy.h>
-#include <linux/mfd/core.h>
-#include <linux/miscdevice.h>
-#include <linux/module.h>
-#include <linux/mutex.h>
-#include <linux/netlink.h>
-#include <linux/platform_device.h>
-#include <linux/spi/spi.h>
-// #include <mach/platform.h>
-#include <net/netlink.h>
-#include <soc/base.h>
+#include <asm/cacheflush.h>
 #include <soc/gpio.h>
-// #include <soc/irq.h>
+//#include <mach/platform.h>
 /*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
 #ifndef U16_MAX
@@ -64,8 +64,12 @@ void private_release_mem_region(resource_size_t start, resource_size_t n);
 void __iomem *private_ioremap(phys_addr_t offset, unsigned long size);
 void private_iounmap(const volatile void __iomem *addr);
 /* interrupt interfaces */
-int private_request_threaded_irq(unsigned int irq, irq_handler_t handler, irq_handler_t thread_fn,
-                                 unsigned long irqflags, const char *devname, void *dev_id);
+int private_request_threaded_irq(unsigned int irq,
+	irq_handler_t handler,
+	irq_handler_t thread_fn,
+	unsigned long irqflags,
+	const char *devname,
+	void *dev_id);
 void private_enable_irq(unsigned int irq);
 void private_disable_irq(unsigned int irq);
 void private_free_irq(unsigned int irq, void *dev_id);
@@ -80,11 +84,11 @@ void private_mutex_unlock(struct mutex *lock);
 void private_raw_mutex_init(struct mutex *lock, const char *name, struct lock_class_key *key);
 
 #define private_mutex_init(mutex)                                                                                      \
-  do {                                                                                                                 \
-    static struct lock_class_key __key;                                                                                \
+	do {                                                                                                           \
+		static struct lock_class_key __key;                                                                    \
                                                                                                                        \
-    private_raw_mutex_init((mutex), #mutex, &__key);                                                                   \
-  } while (0)
+		private_raw_mutex_init((mutex), #mutex, &__key);                                                       \
+	} while (0)
 
 /* clock interfaces */
 struct clk *private_clk_get(struct device *dev, const char *id);
@@ -141,8 +145,11 @@ unsigned long private_wait_for_completion_timeout(struct completion *x, unsigned
 int private_misc_register(struct miscdevice *mdev);
 void private_misc_deregister(struct miscdevice *mdev);
 
-struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode, struct proc_dir_entry *parent,
-                                                const struct file_operations *proc_fops, void *data);
+struct proc_dir_entry *private_proc_create_data(const char *name,
+	umode_t mode,
+	struct proc_dir_entry *parent,
+	const struct file_operations *proc_fops,
+	void *data);
 /* proc file interfaces */
 ssize_t private_seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos);
 loff_t private_seq_lseek(struct file *file, loff_t offset, int whence);

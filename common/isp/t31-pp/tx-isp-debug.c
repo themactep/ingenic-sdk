@@ -1,7 +1,7 @@
 #include <linux/debugfs.h>
 #include <linux/module.h>
-#include <linux/vmalloc.h>
 #include <tx-isp-debug.h>
+#include <linux/vmalloc.h>
 
 /* -------------------debugfs interface------------------- */
 static int print_level = ISP_WARNING_LEVEL;
@@ -37,75 +37,75 @@ module_param(isp_memopt, int, S_IRUGO);
 MODULE_PARM_DESC(isp_memopt, "isp memory optimize");
 
 int isp_printf(unsigned int level, unsigned char *fmt, ...) {
-  struct va_format vaf;
-  va_list args;
-  int r = 0;
+	struct va_format vaf;
+	va_list args;
+	int r = 0;
 
-  if (level >= print_level) {
-    va_start(args, fmt);
+	if (level >= print_level) {
+		va_start(args, fmt);
 
-    vaf.fmt = fmt;
-    vaf.va = &args;
+		vaf.fmt = fmt;
+		vaf.va = &args;
 
-    r = printk("%pV", &vaf);
-    va_end(args);
-    if (level >= ISP_ERROR_LEVEL)
-      dump_stack();
-  }
-  return r;
+		r = printk("%pV", &vaf);
+		va_end(args);
+		if (level >= ISP_ERROR_LEVEL)
+			dump_stack();
+	}
+	return r;
 }
 EXPORT_SYMBOL(isp_printf);
 
 int get_isp_clk(void) {
-  return isp_clk;
+	return isp_clk;
 }
 
 void *private_vmalloc(unsigned long size) {
-  void *addr = vmalloc(size);
-  if (!addr)
-    pr_err("%s: vmalloc(%lu) failed\n", __func__, size);
-  return addr;
+	void *addr = vmalloc(size);
+	if (!addr)
+		pr_err("%s: vmalloc(%lu) failed\n", __func__, size);
+	return addr;
 }
 
 void private_vfree(const void *addr) {
-  vfree(addr);
+	vfree(addr);
 }
 
 ktime_t private_ktime_set(const long secs, const unsigned long nsecs) {
-  return ktime_set(secs, nsecs);
+	return ktime_set(secs, nsecs);
 }
 
 void private_set_current_state(unsigned int state) {
-  __set_current_state(state);
-  return;
+	__set_current_state(state);
+	return;
 }
 
 int private_schedule_hrtimeout(ktime_t *ex, const enum hrtimer_mode mode) {
-  return schedule_hrtimeout(ex, mode);
+	return schedule_hrtimeout(ex, mode);
 }
 
 bool private_schedule_work(struct work_struct *work) {
-  return schedule_work(work);
+	return schedule_work(work);
 }
 
 void private_do_gettimeofday(struct timeval *tv) {
-  do_gettimeofday(tv);
-  return;
+	do_gettimeofday(tv);
+	return;
 }
 
 void private_dma_sync_single_for_device(struct device *dev, dma_addr_t addr, size_t size, enum dma_data_direction dir) {
-  dma_sync_single_for_device(dev, addr, size, dir);
-  return;
+	dma_sync_single_for_device(dev, addr, size, dir);
+	return;
 }
 
 /* Must be check the return value */
 __must_check int private_get_driver_interface(struct jz_driver_common_interfaces **pfaces) {
-  if (pfaces == NULL)
-    return -1;
-  *pfaces = get_driver_common_interfaces();
-  if (*pfaces && ((*pfaces)->flags_0 != (unsigned int)printk || (*pfaces)->flags_0 != (*pfaces)->flags_1)) {
-    ISP_ERROR("flags = 0x%08x, jzflags = %p,0x%08x", (*pfaces)->flags_0, printk, (*pfaces)->flags_1);
-    return -1;
-  } else
-    return 0;
+	if (pfaces == NULL)
+		return -1;
+	*pfaces = get_driver_common_interfaces();
+	if (*pfaces && ((*pfaces)->flags_0 != (unsigned int)printk || (*pfaces)->flags_0 != (*pfaces)->flags_1)) {
+		ISP_ERROR("flags = 0x%08x, jzflags = %p,0x%08x", (*pfaces)->flags_0, printk, (*pfaces)->flags_1);
+		return -1;
+	} else
+		return 0;
 }

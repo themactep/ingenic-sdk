@@ -25,20 +25,19 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC431HAI_CHIP_ID_H	(0xcd)
-#define SC431HAI_CHIP_ID_L	(0x6b)
-#define SC431HAI_REG_END	0xffff
-#define SC431HAI_REG_DELAY	0xfffe
+#define SC431HAI_CHIP_ID_H (0xcd)
+#define SC431HAI_CHIP_ID_L (0x6b)
+#define SC431HAI_REG_END 0xffff
+#define SC431HAI_REG_DELAY 0xfffe
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MAX_FPS_DOL 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20250319a"
+#define SENSOR_VERSION "H20250319a"
 #define MCLK 24000000
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
-
 
 struct regval_list {
 	uint16_t reg_num;
@@ -49,8 +48,8 @@ struct regval_list {
 * the part of driver maybe modify about different sensor and different board.
 */
 struct again_lut {
-		unsigned int value;
-		unsigned int gain;
+	unsigned int value;
+	unsigned int gain;
 };
 
 struct again_lut sc431hai_again_lut[] = {
@@ -236,8 +235,7 @@ struct again_lut sc431hai_again_lut[] = {
 
 struct tx_isp_sensor_attribute sc431hai_attr;
 
-unsigned int sc431hai_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
-{
+unsigned int sc431hai_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;
@@ -245,36 +243,34 @@ unsigned int sc431hai_alloc_integration_time(unsigned int it, unsigned char shif
 	return isp_it;
 }
 
-unsigned int sc431hai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
-		struct again_lut *lut = sc431hai_again_lut;
+unsigned int sc431hai_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sc431hai_again_lut;
 
-		while(lut->gain <= sc431hai_attr.max_again) {
-				if(isp_gain == 0) {
-						*sensor_again = lut->value;
-						return 0;
-				} else if(isp_gain < lut->gain) {
-						*sensor_again = (lut - 1)->value;
-						return (lut - 1)->gain;
-				} else {
-						if((lut->gain == sc431hai_attr.max_again) && (isp_gain >= lut->gain)) {
-								*sensor_again = lut->value;
-								return lut->gain;
-						}
-				}
-
-				lut++;
+	while (lut->gain <= sc431hai_attr.max_again) {
+		if (isp_gain == 0) {
+			*sensor_again = lut->value;
+			return 0;
+		} else if (isp_gain < lut->gain) {
+			*sensor_again = (lut - 1)->value;
+			return (lut - 1)->gain;
+		} else {
+			if ((lut->gain == sc431hai_attr.max_again) && (isp_gain >= lut->gain)) {
+				*sensor_again = lut->value;
+				return lut->gain;
+			}
 		}
 
-		return isp_gain;
+		lut++;
+	}
+
+	return isp_gain;
 }
 
-unsigned int sc431hai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sc431hai_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus sc431hai_mipi_linear={
+struct tx_isp_mipi_bus sc431hai_mipi_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 630,
 	.lans = 2,
@@ -302,7 +298,7 @@ struct tx_isp_mipi_bus sc431hai_mipi_linear={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute sc431hai_attr={
+struct tx_isp_sensor_attribute sc431hai_attr = {
 	.name = "sc431hai",
 	.chip_id = 0xcd6b,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
@@ -320,179 +316,179 @@ struct tx_isp_sensor_attribute sc431hai_attr={
 };
 
 static struct regval_list sc431hai_init_regs_2560_1440_30fps_mipi[] = {
-	{0x0100,0x00},
-	{0x36e9,0x80},
-	{0x37f9,0x80},
-	{0x3018,0x3a},
-	{0x3019,0x0c},
-	{0x301f,0x07},
-	{0x3058,0x21},
-	{0x3059,0x53},
-	{0x305a,0x40},
-	{0x320c,0x05},//hts = 0x578 = 1400
-	{0x320d,0x78},//
-	{0x320e,0x05},//vts = 0x5dc = 1500
-	{0x320f,0xdc},//
-	{0x3250,0x00},
-	{0x3301,0x0c},
-	{0x3304,0x50},
-	{0x3305,0x00},
-	{0x3306,0x50},
-	{0x3307,0x04},
-	{0x3308,0x0a},
-	{0x3309,0x60},
-	{0x330b,0xc8},
-	{0x330d,0x08},
-	{0x330e,0x38},
-	{0x331e,0x41},
-	{0x331f,0x51},
-	{0x3333,0x10},
-	{0x3334,0x40},
-	{0x3364,0x5e},
-	{0x338e,0xe2},
-	{0x338f,0x80},
-	{0x3390,0x08},
-	{0x3391,0x18},
-	{0x3392,0xb8},
-	{0x3393,0x12},
-	{0x3394,0x14},
-	{0x3395,0x10},
-	{0x3396,0x88},
-	{0x3397,0x98},
-	{0x3398,0xb8},
-	{0x3399,0x10},
-	{0x339a,0x16},
-	{0x339b,0x1c},
-	{0x339c,0x40},
-	{0x33ac,0x0a},
-	{0x33ad,0x10},
-	{0x33ae,0x4f},
-	{0x33af,0x5e},
-	{0x33b2,0x50},
-	{0x33b3,0x10},
-	{0x33f8,0x00},
-	{0x33f9,0x50},
-	{0x33fa,0x00},
-	{0x33fb,0x50},
-	{0x33fc,0x48},
-	{0x33fd,0x78},
-	{0x349f,0x03},
-	{0x34a6,0x40},
-	{0x34a7,0x58},
-	{0x34a8,0x10},
-	{0x34a9,0x10},
-	{0x34f8,0x78},
-	{0x34f9,0x10},
-	{0x3633,0x44},
-	{0x363b,0x8f},
-	{0x363c,0x02},
-	{0x3641,0x08},
-	{0x3654,0x20},
-	{0x3674,0xc2},
-	{0x3675,0xb4},
-	{0x3676,0x88},
-	{0x367c,0x88},
-	{0x367d,0xb8},
-	{0x3690,0x34},
-	{0x3691,0x44},
-	{0x3692,0x54},
-	{0x3693,0x88},
-	{0x3694,0x98},
-	{0x3696,0x80},
-	{0x3697,0x83},
-	{0x3698,0x81},
-	{0x3699,0x81},
-	{0x369a,0x84},
-	{0x369b,0x82},
-	{0x36a2,0x80},
-	{0x36a3,0x88},
-	{0x36a4,0xf8},
-	{0x36a5,0xb8},
-	{0x36a6,0x98},
-	{0x36d0,0x15},
-	{0x36ea,0x23},
-	{0x36eb,0x0d},
-	{0x36ec,0x55},
-	{0x36ed,0x18},
-	{0x370f,0x01},
-	{0x3722,0x03},
-	{0x3724,0x92},
-	{0x3727,0x14},
-	{0x37b0,0x17},
-	{0x37b1,0x9b},
-	{0x37b2,0x9b},
-	{0x37b3,0x88},
-	{0x37b4,0xb8},
-	{0x37fa,0x23},
-	{0x37fb,0x54},
-	{0x37fc,0x21},
-	{0x37fd,0x1c},
-	{0x391f,0x41},
-	{0x3926,0xe0},
-	{0x3933,0x80},
-	{0x3934,0xf8},
-	{0x3935,0x00},
-	{0x3936,0x45},
-	{0x3937,0x66},
-	{0x3938,0x66},
-	{0x3939,0x00},
-	{0x393a,0x03},
-	{0x393b,0x00},
-	{0x393c,0x00},
-	{0x393d,0x02},
-	{0x393e,0x80},
-	{0x3e00,0x00},
-	{0x3e01,0xba},
-	{0x3e02,0xd0},
-	{0x3e16,0x00},
-	{0x3e17,0xc5},
-	{0x3e18,0x00},
-	{0x3e19,0xc5},
-	{0x4509,0x20},
-	{0x450d,0x0b},
-	{0x4819,0x08},
-	{0x481b,0x05},
-	{0x481d,0x11},
-	{0x481f,0x04},
-	{0x4821,0x09},
-	{0x4823,0x05},
-	{0x4825,0x04},
-	{0x4827,0x04},
-	{0x4829,0x07},
-	{0x5780,0x76},
-	{0x5784,0x0a},
-	{0x5785,0x04},
-	{0x5787,0x0a},
-	{0x5788,0x0a},
-	{0x5789,0x08},
-	{0x578a,0x0a},
-	{0x578b,0x0a},
-	{0x578c,0x08},
-	{0x578d,0x40},
-	{0x5790,0x08},
-	{0x5791,0x04},
-	{0x5792,0x04},
-	{0x5793,0x08},
-	{0x5794,0x04},
-	{0x5795,0x04},
-	{0x57ac,0x00},
-	{0x57ad,0x00},
-	{0x36e9,0x53},
-	{0x37f9,0x53},
-	{0x0100,0x01},
-	{SC431HAI_REG_END, 0x00},/* END MARKER */
+	{0x0100, 0x00},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x3018, 0x3a},
+	{0x3019, 0x0c},
+	{0x301f, 0x07},
+	{0x3058, 0x21},
+	{0x3059, 0x53},
+	{0x305a, 0x40},
+	{0x320c, 0x05}, //hts = 0x578 = 1400
+	{0x320d, 0x78}, //
+	{0x320e, 0x05}, //vts = 0x5dc = 1500
+	{0x320f, 0xdc}, //
+	{0x3250, 0x00},
+	{0x3301, 0x0c},
+	{0x3304, 0x50},
+	{0x3305, 0x00},
+	{0x3306, 0x50},
+	{0x3307, 0x04},
+	{0x3308, 0x0a},
+	{0x3309, 0x60},
+	{0x330b, 0xc8},
+	{0x330d, 0x08},
+	{0x330e, 0x38},
+	{0x331e, 0x41},
+	{0x331f, 0x51},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x3364, 0x5e},
+	{0x338e, 0xe2},
+	{0x338f, 0x80},
+	{0x3390, 0x08},
+	{0x3391, 0x18},
+	{0x3392, 0xb8},
+	{0x3393, 0x12},
+	{0x3394, 0x14},
+	{0x3395, 0x10},
+	{0x3396, 0x88},
+	{0x3397, 0x98},
+	{0x3398, 0xb8},
+	{0x3399, 0x10},
+	{0x339a, 0x16},
+	{0x339b, 0x1c},
+	{0x339c, 0x40},
+	{0x33ac, 0x0a},
+	{0x33ad, 0x10},
+	{0x33ae, 0x4f},
+	{0x33af, 0x5e},
+	{0x33b2, 0x50},
+	{0x33b3, 0x10},
+	{0x33f8, 0x00},
+	{0x33f9, 0x50},
+	{0x33fa, 0x00},
+	{0x33fb, 0x50},
+	{0x33fc, 0x48},
+	{0x33fd, 0x78},
+	{0x349f, 0x03},
+	{0x34a6, 0x40},
+	{0x34a7, 0x58},
+	{0x34a8, 0x10},
+	{0x34a9, 0x10},
+	{0x34f8, 0x78},
+	{0x34f9, 0x10},
+	{0x3633, 0x44},
+	{0x363b, 0x8f},
+	{0x363c, 0x02},
+	{0x3641, 0x08},
+	{0x3654, 0x20},
+	{0x3674, 0xc2},
+	{0x3675, 0xb4},
+	{0x3676, 0x88},
+	{0x367c, 0x88},
+	{0x367d, 0xb8},
+	{0x3690, 0x34},
+	{0x3691, 0x44},
+	{0x3692, 0x54},
+	{0x3693, 0x88},
+	{0x3694, 0x98},
+	{0x3696, 0x80},
+	{0x3697, 0x83},
+	{0x3698, 0x81},
+	{0x3699, 0x81},
+	{0x369a, 0x84},
+	{0x369b, 0x82},
+	{0x36a2, 0x80},
+	{0x36a3, 0x88},
+	{0x36a4, 0xf8},
+	{0x36a5, 0xb8},
+	{0x36a6, 0x98},
+	{0x36d0, 0x15},
+	{0x36ea, 0x23},
+	{0x36eb, 0x0d},
+	{0x36ec, 0x55},
+	{0x36ed, 0x18},
+	{0x370f, 0x01},
+	{0x3722, 0x03},
+	{0x3724, 0x92},
+	{0x3727, 0x14},
+	{0x37b0, 0x17},
+	{0x37b1, 0x9b},
+	{0x37b2, 0x9b},
+	{0x37b3, 0x88},
+	{0x37b4, 0xb8},
+	{0x37fa, 0x23},
+	{0x37fb, 0x54},
+	{0x37fc, 0x21},
+	{0x37fd, 0x1c},
+	{0x391f, 0x41},
+	{0x3926, 0xe0},
+	{0x3933, 0x80},
+	{0x3934, 0xf8},
+	{0x3935, 0x00},
+	{0x3936, 0x45},
+	{0x3937, 0x66},
+	{0x3938, 0x66},
+	{0x3939, 0x00},
+	{0x393a, 0x03},
+	{0x393b, 0x00},
+	{0x393c, 0x00},
+	{0x393d, 0x02},
+	{0x393e, 0x80},
+	{0x3e00, 0x00},
+	{0x3e01, 0xba},
+	{0x3e02, 0xd0},
+	{0x3e16, 0x00},
+	{0x3e17, 0xc5},
+	{0x3e18, 0x00},
+	{0x3e19, 0xc5},
+	{0x4509, 0x20},
+	{0x450d, 0x0b},
+	{0x4819, 0x08},
+	{0x481b, 0x05},
+	{0x481d, 0x11},
+	{0x481f, 0x04},
+	{0x4821, 0x09},
+	{0x4823, 0x05},
+	{0x4825, 0x04},
+	{0x4827, 0x04},
+	{0x4829, 0x07},
+	{0x5780, 0x76},
+	{0x5784, 0x0a},
+	{0x5785, 0x04},
+	{0x5787, 0x0a},
+	{0x5788, 0x0a},
+	{0x5789, 0x08},
+	{0x578a, 0x0a},
+	{0x578b, 0x0a},
+	{0x578c, 0x08},
+	{0x578d, 0x40},
+	{0x5790, 0x08},
+	{0x5791, 0x04},
+	{0x5792, 0x04},
+	{0x5793, 0x08},
+	{0x5794, 0x04},
+	{0x5795, 0x04},
+	{0x57ac, 0x00},
+	{0x57ad, 0x00},
+	{0x36e9, 0x53},
+	{0x37f9, 0x53},
+	{0x0100, 0x01},
+	{SC431HAI_REG_END, 0x00}, /* END MARKER */
 };
 /*
 * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
 */
 static struct tx_isp_sensor_win_setting sc431hai_win_sizes[] = {
 	{
-		.width		= 2560,
-		.height		= 1440,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,
-		.colorspace	= TISP_COLORSPACE_SRGB,
-		.regs 		= sc431hai_init_regs_2560_1440_30fps_mipi,
+		.width = 2560,
+		.height = 1440,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sc431hai_init_regs_2560_1440_30fps_mipi,
 	},
 };
 
@@ -504,33 +500,30 @@ struct tx_isp_sensor_win_setting *wsize = &sc431hai_win_sizes[0];
 
 static struct regval_list sc431hai_stream_on[] = {
 	{0x0100, 0x01},
-	{SC431HAI_REG_END, 0x00},	/* END MARKER */
+	{SC431HAI_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc431hai_stream_off[] = {
 	{0x0100, 0x00},
-	{SC431HAI_REG_END, 0x00},	/* END MARKER */
+	{SC431HAI_REG_END, 0x00}, /* END MARKER */
 };
 
-int sc431hai_read(struct tx_isp_subdev *sd,  uint16_t reg,
-		unsigned char *value)
-{
+int sc431hai_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	uint8_t buf[2] = {(reg>>8)&0xff, reg&0xff};
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
-		},
+	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -539,16 +532,14 @@ int sc431hai_read(struct tx_isp_subdev *sd,  uint16_t reg,
 	return ret;
 }
 
-int sc431hai_write(struct tx_isp_subdev *sd, uint16_t reg,
-		unsigned char value)
-{
+int sc431hai_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -578,8 +569,7 @@ static int sc431hai_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 }
 #endif
 
-static int sc431hai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sc431hai_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SC431HAI_REG_END) {
 		if (vals->reg_num == SC431HAI_REG_DELAY) {
@@ -595,19 +585,17 @@ static int sc431hai_write_array(struct tx_isp_subdev *sd, struct regval_list *va
 	return 0;
 }
 
-static int sc431hai_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc431hai_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
 #if 1
-static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
 	ret = sc431hai_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SC431HAI_CHIP_ID_H)
@@ -615,7 +603,7 @@ static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc431hai_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SC431HAI_CHIP_ID_L)
@@ -626,17 +614,15 @@ static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 }
 #endif
 
-static int sc431hai_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sc431hai_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	int it = (value & 0xffff );
+	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 	it = it << 1;
 
-	ret = sc431hai_write(sd,  0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret = sc431hai_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sc431hai_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sc431hai_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-
 
 	ret += sc431hai_write(sd, 0x3e08, (unsigned char)((again >> 8) & 0xff));
 	ret += sc431hai_write(sd, 0x3e09, (unsigned char)(again & 0xff));
@@ -669,7 +655,6 @@ static int sc431hai_set_integration_time(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-
 #if 0
 static int sc431hai_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
@@ -694,22 +679,19 @@ static int sc431hai_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc431hai_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sc431hai_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc431hai_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int sc431hai_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc431hai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc431hai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!init->enable)
+	if (!init->enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -725,13 +707,12 @@ static int sc431hai_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return 0;
 }
 
-static int sc431hai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int sc431hai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
-		if (sensor->video.state == TX_ISP_MODULE_DEINIT){
+		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
 			ret = sc431hai_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
@@ -751,21 +732,21 @@ static int sc431hai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *in
 	return ret;
 }
 
-static int sc431hai_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int sc431hai_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int vts = 0;
-	unsigned int hts=0;
+	unsigned int hts = 0;
 	unsigned int sensor_max_fps;
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 	unsigned char val;
 
-	switch(sensor->info.default_boot){
+	switch (sensor->info.default_boot) {
 	case 0:
-		sclk = 1400 * 1500 * 30;  /**< HTS * VTS * FPS */
-		sensor_max_fps = wsize->fps;;
+		sclk = 1400 * 1500 * 30; /**< HTS * VTS * FPS */
+		sensor_max_fps = wsize->fps;
+		;
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
@@ -773,14 +754,14 @@ static int sc431hai_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	/* the format of fps is 16/16. for example 30 << 16 | 2, the value is 30/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)){
+	if (newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
 
 	val = 0;
 	ret += sc431hai_read(sd, 0x320c, &val);
-	hts = val<<8;
+	hts = val << 8;
 	val = 0;
 	ret += sc431hai_read(sd, 0x320d, &val);
 	hts |= val;
@@ -814,16 +795,14 @@ static int sc431hai_set_fps(struct tx_isp_subdev *sd, int fps)
 	return ret;
 }
 
-
-static int sc431hai_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int sc431hai_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sc431hai_read(sd, 0x3221, &val);
-	switch(enable) {
+	switch (enable) {
 	case 0:
 		val &= 0x99;
 		break;
@@ -838,18 +817,16 @@ static int sc431hai_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	}
 	sc431hai_write(sd, 0x3221, val);
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
 
-
-static int sc431hai_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int sc431hai_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -862,15 +839,14 @@ static int sc431hai_set_mode(struct tx_isp_subdev *sd, int value)
 }
 
 struct clk *sclka;
-static int sensor_attr_check(struct tx_isp_subdev *sd)
-{
+static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned long rate;
 	int ret = 0;
 
-	switch(info->default_boot){
+	switch (info->default_boot) {
 	case 0:
 		wsize = &sc431hai_win_sizes[0];
 		memcpy(&sc431hai_attr.mipi, &sc431hai_mipi_linear, sizeof(sc431hai_mipi_linear));
@@ -888,7 +864,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this setting!!!\n");
 	}
 
-	switch(info->video_interface){
+	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 		sc431hai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		sc431hai_attr.mipi.index = 0;
@@ -904,12 +880,12 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		ISP_ERROR("Have no this interface!!!\n");
 	}
 
-	switch(info->mclk){
+	switch (info->mclk) {
 	case TISP_SENSOR_MCLK0:
 	case TISP_SENSOR_MCLK1:
 	case TISP_SENSOR_MCLK2:
-				sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
-				sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
+		sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
+		sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
 		set_sensor_mclk_function(0);
 		break;
 	default:
@@ -923,8 +899,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 	rate = private_clk_get_rate(sensor->mclk);
 
 	if (((rate / 1000) % 24000) != 0) {
-				ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
-				sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
+		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
 			pr_err("get sclka failed\n");
 		} else {
@@ -935,12 +911,12 @@ static int sensor_attr_check(struct tx_isp_subdev *sd)
 		}
 	}
 
-		private_clk_set_rate(sensor->mclk, MCLK);
-		private_clk_prepare_enable(sensor->mclk);
+	private_clk_set_rate(sensor->mclk, MCLK);
+	private_clk_prepare_enable(sensor->mclk);
 
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
-		sensor->video.max_fps = wsize->fps;
+	sensor->video.max_fps = wsize->fps;
 	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 	return 0;
 
@@ -948,48 +924,48 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc431hai_g_chip_ident(struct tx_isp_subdev *sd,
-				struct tx_isp_chip_ident *chip)
-{
+static int sc431hai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc431hai_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio, "sc431hai_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(20);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc431hai_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio, "sc431hai_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sc431hai_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an sc431hai chip.\n",
-			client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an sc431hai chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc431hai chip found @ 0x%02x (%s)\n sensor drv version %s", client->addr, client->adapter->name, SENSOR_VERSION);
-	if(chip){
+	ISP_WARNING("sc431hai chip found @ 0x%02x (%s)\n sensor drv version %s",
+		client->addr,
+		client->adapter->name,
+		SENSOR_VERSION);
+	if (chip) {
 		memcpy(chip->name, "sc431hai", sizeof("sc431hai"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -997,39 +973,38 @@ static int sc431hai_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc431hai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int sc431hai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	// struct tx_isp_initarg *init = arg;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
+		if (arg)
 			ret = sc431hai_set_expo(sd, sensor_val->value);
 		break;
-	// case TX_ISP_EVENT_SENSOR_INT_TIME:
-	//	if(arg)
-	//		ret = sc431hai_set_integration_time(sd, sensor_val->value);
+		// case TX_ISP_EVENT_SENSOR_INT_TIME:
+		//	if(arg)
+		//		ret = sc431hai_set_integration_time(sd, sensor_val->value);
 		break;
-	// case TX_ISP_EVENT_SENSOR_AGAIN:
-	//	if(arg)
-	//		ret = sc431hai_set_analog_gain(sd, sensor_val->value);
+		// case TX_ISP_EVENT_SENSOR_AGAIN:
+		//	if(arg)
+		//		ret = sc431hai_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
+		if (arg)
 			ret = sc431hai_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
+		if (arg)
 			ret = sc431hai_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
+		if (arg)
 			ret = sc431hai_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
@@ -1039,7 +1014,7 @@ static int sc431hai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		ret = sc431hai_write_array(sd, sc431hai_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
+		if (arg)
 			ret = sc431hai_set_fps(sd, sensor_val->value);
 		break;
 	// case TX_ISP_EVENT_SENSOR_WDR:
@@ -1051,7 +1026,7 @@ static int sc431hai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 	// 		ret = sc431hai_set_wdr_stop(sd, init->enable);
 	// 	break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = sc431hai_set_vflip(sd, sensor_val->value);
 		break;
 	default:
@@ -1061,14 +1036,13 @@ static int sc431hai_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 	return ret;
 }
 
-static int sc431hai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int sc431hai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1080,12 +1054,11 @@ static int sc431hai_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regis
 	return ret;
 }
 
-static int sc431hai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int sc431hai_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1108,8 +1081,8 @@ static struct tx_isp_subdev_video_ops sc431hai_video_ops = {
 	.s_stream = sc431hai_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc431hai_sensor_ops = {
-	.ioctl	= sc431hai_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sc431hai_sensor_ops = {
+	.ioctl = sc431hai_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops sc431hai_ops = {
@@ -1123,26 +1096,26 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "sc431hai",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int sc431hai_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int sc431hai_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1167,14 +1140,13 @@ static int sc431hai_probe(struct i2c_client *client, const struct i2c_device_id 
 	return 0;
 }
 
-static int sc431hai_remove(struct i2c_client *client)
-{
+static int sc431hai_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
@@ -1184,29 +1156,25 @@ static int sc431hai_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc431hai_id[] = {
-	{ "sc431hai", 0 },
-	{ }
-};
+static const struct i2c_device_id sc431hai_id[] = {{"sc431hai", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sc431hai_id);
 
 static struct i2c_driver sc431hai_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc431hai",
-	},
-	.probe		= sc431hai_probe,
-	.remove		= sc431hai_remove,
-	.id_table	= sc431hai_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "sc431hai",
+		},
+	.probe = sc431hai_probe,
+	.remove = sc431hai_remove,
+	.id_table = sc431hai_id,
 };
 
-static __init int init_sc431hai(void)
-{
+static __init int init_sc431hai(void) {
 	return private_i2c_add_driver(&sc431hai_driver);
 }
 
-static __exit void exit_sc431hai(void)
-{
+static __exit void exit_sc431hai(void) {
 	private_i2c_del_driver(&sc431hai_driver);
 }
 

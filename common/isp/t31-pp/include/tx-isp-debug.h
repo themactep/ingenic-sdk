@@ -1,8 +1,8 @@
 #ifndef _TX_ISP_DEBUG_H_
 #define _TX_ISP_DEBUG_H_
 
-#include <linux/dma-mapping.h>
 #include <linux/hrtimer.h>
+#include <linux/dma-mapping.h>
 #include <txx-funcs.h>
 
 /* =================== switchs ================== */
@@ -22,7 +22,7 @@
 #define ISP_WARNING(...) ISP_PRINT(ISP_WARNING_LEVEL, __VA_ARGS__)
 #define ISP_ERROR(...) ISP_PRINT(ISP_ERROR_LEVEL, __VA_ARGS__)
 
-// extern unsigned int isp_print_level;
+//extern unsigned int isp_print_level;
 /*int isp_debug_init(void);*/
 /*int isp_debug_deinit(void);*/
 int isp_printf(unsigned int level, unsigned char *fmt, ...);

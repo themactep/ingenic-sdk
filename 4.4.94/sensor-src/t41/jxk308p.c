@@ -28,18 +28,18 @@
 #include <txx-funcs.h>
 
 #define TVERSION "V20231226a"
-#define SENSOR_VERSION  "H20250218a"
+#define SENSOR_VERSION "H20250218a"
 
 // #define SENSOR_TEST
 
-#define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
-#define SENSOR_AGAIN_TABLE    /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_I2C_REG_8BIT /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+#define SENSOR_AGAIN_TABLE  /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
 //#define SENSOR_WDR_2_FRAME    /**< WDR两帧融合 */
 #define SENSOR_EXPO
-#define SENSOR_MIR_FLIP         /**< 镜像翻转功能开关 */
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 
-#define SENSOR_CHIP_ID_H    (0x08)
-#define SENSOR_CHIP_ID_L    (0x47)
+#define SENSOR_CHIP_ID_H (0x08)
+#define SENSOR_CHIP_ID_L (0x47)
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_MCLK 27000000
 
@@ -51,12 +51,12 @@ static int wdr_line = xxx;
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
 #ifdef SENSOR_I2C_REG_8BIT
-#define SENSOR_REG_END    0xff
-#define SENSOR_REG_DELAY  0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
 #endif /* SENSOR_I2C_REG_8BIT */
 #ifdef SENSOR_I2C_REG_16BIT
-#define SENSOR_REG_END    0xffff
-#define SENSOR_REG_DELAY  0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
 struct regval_list {
@@ -64,7 +64,7 @@ struct regval_list {
 	uint8_t reg_num;
 #endif /* SENSOR_I2C_REG_8BIT */
 #ifdef SENSOR_I2C_REG_16BIT
-		uint16_t reg_num;
+	uint16_t reg_num;
 #endif /* SENSOR_I2C_REG_16BIT */
 	uint8_t value;
 };
@@ -164,8 +164,7 @@ struct again_lut jxk308p_again_lut[] = {
 };
 #endif /* SENSOR_AGAIN_TABLE */
 
-unsigned int jxk308p_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int jxk308p_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
@@ -179,63 +178,59 @@ unsigned int jxk308p_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 			return (lut - 1)->gain;
 		} else {
 			if ((lut->gain == jxk308p_attr.max_again) && (isp_gain >= lut->gain)) {
-					*sensor_again = lut->value;
-					return lut->gain;
+				*sensor_again = lut->value;
+				return lut->gain;
 			}
 		}
 
 		lut++;
 	}
 #else
-		/* Non analog gain table */
-		...;
-#endif  /* SENSOR_AGAIN_TABLE */
+	/* Non analog gain table */
+	...;
+#endif /* SENSOR_AGAIN_TABLE */
 #endif /* SENSOR_TEST */
 
 	return isp_gain;
 }
 
 #ifdef SENSOR_WDR_2_FRAME
-unsigned int jxk308p_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int jxk308p_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
-		/* Analog gain table */
-		struct again_lut *lut = jxk308p_again_lut;
-		while(lut->gain <= jxk308p_attr.max_again_short) {
-				if(isp_gain == 0) {
-						*sensor_again = 0;
-						return 0;
-				}
-				else if(isp_gain < lut->gain) {
-						*sensor_again = (lut - 1)->value;
-						return (lut - 1)->gain;
-				}
-				else{
-						if((lut->gain == jxk308p_attr.max_again_short) && (isp_gain >= lut->gain)) {
-								*sensor_again = lut->value;
-								return lut->gain;
-						}
-				}
-
-				lut++;
+	/* Analog gain table */
+	struct again_lut *lut = jxk308p_again_lut;
+	while (lut->gain <= jxk308p_attr.max_again_short) {
+		if (isp_gain == 0) {
+			*sensor_again = 0;
+			return 0;
+		} else if (isp_gain < lut->gain) {
+			*sensor_again = (lut - 1)->value;
+			return (lut - 1)->gain;
+		} else {
+			if ((lut->gain == jxk308p_attr.max_again_short) && (isp_gain >= lut->gain)) {
+				*sensor_again = lut->value;
+				return lut->gain;
+			}
 		}
 
-		...;
-#else
-		/* Non analog gain table */
+		lut++;
+	}
 
-		...;
+	...;
+#else
+	/* Non analog gain table */
+
+	...;
 #endif /* SENSOR_AGAIN_TABLE */
 #endif /* SENSOR_TEST */
 
-		return isp_gain;
+	return isp_gain;
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-unsigned int jxk308p_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
-		return 0;
+unsigned int jxk308p_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+	return 0;
 }
 
 struct tx_isp_mipi_bus jxk308p_mipi_linear = {
@@ -269,15 +264,17 @@ struct tx_isp_mipi_bus jxk308p_mipi_linear = {
 struct tx_isp_dvp_bus jxk308p_dvp = {
 	.gpio = DVP_PA_LOW_10BIT,
 	.mode = SENSOR_DVP_HREF_MODE,
-	.blanking = {
+	.blanking =
+		{
 			.hblanking = 0,
 			.vblanking = 0,
-	},
-	.polar = {
+		},
+	.polar =
+		{
 			.hsync_polar = 0,
 			.vsync_polar = 0,
 			.pclk_polar = 0, /**< reserved */
-	},
+		},
 	.dvp_hcomp_en = 0,
 };
 
@@ -295,123 +292,123 @@ struct tx_isp_sensor_attribute jxk308p_attr = {
 };
 
 static struct regval_list jxk308p_init_regs_3840_2160_15fps_mipi[] = {
-	{0x12,0x40},
-	{0x48,0x8A},
-	{0x48,0x0A},
-	{0x0E,0x11},
-	{0x0F,0x04},
-	{0x10,0x40},
-	{0x11,0x80},
-	{0x0D,0xA0},
-	{0x57,0x60},
-	{0x58,0x18},
-	{0x5F,0x42},
-	{0x60,0x2B},
-	{0xBF,0x01},
-	{0x59,0x04},
-	{0xBF,0x00},
-	{0x20,0xB0},
-	{0x21,0x04},
-	{0x22,0x60},
-	{0x23,0x09},
-	{0x24,0xC0},
-	{0x25,0x70},
-	{0x26,0x83},
-	{0x27,0xAE},
-	{0x28,0x15},
-	{0x29,0x04},
-	{0x2A,0xA0},
-	{0x2B,0x14},
-	{0x2C,0x00},
-	{0x2D,0x01},
-	{0x2E,0x23},
-	{0x2F,0x08},
-	{0x41,0xC4},
-	{0x42,0x23},
-	{0x46,0x18},
-	{0x47,0x43},
-	{0x80,0x03},
-	{0xAF,0x32},
-	{0xBD,0x00},
-	{0xBE,0x0F},
-	{0x82,0x30},
-	{0x8A,0x04},
-	{0xA7,0x00},
-	{0x1D,0x00},
-	{0x1E,0x04},
-	{0x6C,0x40},
-	{0x70,0xD5},
-	{0x71,0x9B},
-	{0x72,0x6D},
-	{0x73,0x49},
-	{0x75,0x96},
-	{0x74,0x12},
-	{0x89,0x0F},
-	{0x0C,0xE0},
-	{0x6B,0x20},
-	{0x86,0x00},
-	{0x78,0x44},
-	{0xAA,0x80},
-	{0xA1,0x1D},
-	{0x31,0x10},
-	{0x32,0x44},
-	{0x33,0x60},
-	{0x35,0x56},
-	{0x3A,0xAF},
-	{0x56,0x0A},
-	{0x59,0xFF},
-	{0x61,0x20},
-	{0x85,0xB0},
-	{0x8C,0x02},
-	{0x8D,0x00},
-	{0x91,0x12},
-	{0x9F,0x50},
-	{0xBA,0x60},
-	{0xBF,0x01},
-	{0x57,0x26},
-	{0xBF,0x00},
-	{0x5A,0x01},
-	{0x5B,0xB9},
-	{0x5C,0x32},
-	{0x5D,0x21},
-	{0x5E,0x84},
-	{0x64,0xC0},
-	{0x65,0x02},
-	{0x66,0x80},
-	{0x67,0x43},
-	{0x68,0x30},
-	{0x69,0x74},
-	{0x6A,0x2A},
-	{0x7A,0x00},
-	{0x8F,0x90},
-	{0x9B,0x9F},
-	{0x9D,0x79},
-	{0xBF,0x01},
-	{0x4D,0x00},
-	{0xBF,0x00},
-	{0x97,0x7A},
-	{0x13,0x01},
-	{0x96,0x04},
-	{0x4A,0xF5},
-	{0x50,0x02},
-	{0x49,0x10},
-	{0xBF,0x01},
-	{0x4E,0x11},
-	{0x50,0x00},
-	{0x51,0x8F},
-	{0x55,0x00},
-	{0x58,0x00},
-	{0x66,0x15},
-	{0x67,0x80},
-	{0x68,0x32},
-	{0xBF,0x00},
-	{0x7E,0x4C},
-	{0x19,0x20},
-	{0xC0,0x4A},
-	{0xC1,0x01},
-	{0x12,0x00},
-	{0x1F,0xA0},
-	{SENSOR_REG_END, 0x00},/* END MARKER */
+	{0x12, 0x40},
+	{0x48, 0x8A},
+	{0x48, 0x0A},
+	{0x0E, 0x11},
+	{0x0F, 0x04},
+	{0x10, 0x40},
+	{0x11, 0x80},
+	{0x0D, 0xA0},
+	{0x57, 0x60},
+	{0x58, 0x18},
+	{0x5F, 0x42},
+	{0x60, 0x2B},
+	{0xBF, 0x01},
+	{0x59, 0x04},
+	{0xBF, 0x00},
+	{0x20, 0xB0},
+	{0x21, 0x04},
+	{0x22, 0x60},
+	{0x23, 0x09},
+	{0x24, 0xC0},
+	{0x25, 0x70},
+	{0x26, 0x83},
+	{0x27, 0xAE},
+	{0x28, 0x15},
+	{0x29, 0x04},
+	{0x2A, 0xA0},
+	{0x2B, 0x14},
+	{0x2C, 0x00},
+	{0x2D, 0x01},
+	{0x2E, 0x23},
+	{0x2F, 0x08},
+	{0x41, 0xC4},
+	{0x42, 0x23},
+	{0x46, 0x18},
+	{0x47, 0x43},
+	{0x80, 0x03},
+	{0xAF, 0x32},
+	{0xBD, 0x00},
+	{0xBE, 0x0F},
+	{0x82, 0x30},
+	{0x8A, 0x04},
+	{0xA7, 0x00},
+	{0x1D, 0x00},
+	{0x1E, 0x04},
+	{0x6C, 0x40},
+	{0x70, 0xD5},
+	{0x71, 0x9B},
+	{0x72, 0x6D},
+	{0x73, 0x49},
+	{0x75, 0x96},
+	{0x74, 0x12},
+	{0x89, 0x0F},
+	{0x0C, 0xE0},
+	{0x6B, 0x20},
+	{0x86, 0x00},
+	{0x78, 0x44},
+	{0xAA, 0x80},
+	{0xA1, 0x1D},
+	{0x31, 0x10},
+	{0x32, 0x44},
+	{0x33, 0x60},
+	{0x35, 0x56},
+	{0x3A, 0xAF},
+	{0x56, 0x0A},
+	{0x59, 0xFF},
+	{0x61, 0x20},
+	{0x85, 0xB0},
+	{0x8C, 0x02},
+	{0x8D, 0x00},
+	{0x91, 0x12},
+	{0x9F, 0x50},
+	{0xBA, 0x60},
+	{0xBF, 0x01},
+	{0x57, 0x26},
+	{0xBF, 0x00},
+	{0x5A, 0x01},
+	{0x5B, 0xB9},
+	{0x5C, 0x32},
+	{0x5D, 0x21},
+	{0x5E, 0x84},
+	{0x64, 0xC0},
+	{0x65, 0x02},
+	{0x66, 0x80},
+	{0x67, 0x43},
+	{0x68, 0x30},
+	{0x69, 0x74},
+	{0x6A, 0x2A},
+	{0x7A, 0x00},
+	{0x8F, 0x90},
+	{0x9B, 0x9F},
+	{0x9D, 0x79},
+	{0xBF, 0x01},
+	{0x4D, 0x00},
+	{0xBF, 0x00},
+	{0x97, 0x7A},
+	{0x13, 0x01},
+	{0x96, 0x04},
+	{0x4A, 0xF5},
+	{0x50, 0x02},
+	{0x49, 0x10},
+	{0xBF, 0x01},
+	{0x4E, 0x11},
+	{0x50, 0x00},
+	{0x51, 0x8F},
+	{0x55, 0x00},
+	{0x58, 0x00},
+	{0x66, 0x15},
+	{0x67, 0x80},
+	{0x68, 0x32},
+	{0xBF, 0x00},
+	{0x7E, 0x4C},
+	{0x19, 0x20},
+	{0xC0, 0x4A},
+	{0xC1, 0x01},
+	{0x12, 0x00},
+	{0x1F, 0xA0},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -420,12 +417,12 @@ static struct regval_list jxk308p_init_regs_3840_2160_15fps_mipi[] = {
 static struct tx_isp_sensor_win_setting jxk308p_win_sizes[] = {
 	/* 3840*2160 [0] */
 	{
-			.width          = 3840,
-			.height         = 2160,
-			.fps            = 15 << 16 | 1,
-			.mbus_code      = TISP_VI_FMT_SBGGR10_1X10,
-			.colorspace     = TISP_COLORSPACE_SRGB,
-			.regs           = jxk308p_init_regs_3840_2160_15fps_mipi,
+		.width = 3840,
+		.height = 2160,
+		.fps = 15 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = jxk308p_init_regs_3840_2160_15fps_mipi,
 	},
 };
 
@@ -436,34 +433,31 @@ static struct tx_isp_sensor_win_setting *wsize = &jxk308p_win_sizes[0];
 */
 
 static struct regval_list jxk308p_stream_on_mipi[] = {
-	{0x12,0x00},
-	{ SENSOR_REG_END, 0x00 }, /* END MARKER */
+	{0x12, 0x00},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list jxk308p_stream_off_mipi[] = {
-	{0x12,0x40},
-	{ SENSOR_REG_END, 0x00 }, /* END MARKER */
+	{0x12, 0x40},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 #ifdef SENSOR_I2C_REG_8BIT
-int jxk308p_read(struct tx_isp_subdev *sd, unsigned char reg,
-				unsigned char *value)
-{
+int jxk308p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 1,
+						 .buf = &reg,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -472,16 +466,14 @@ int jxk308p_read(struct tx_isp_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-int jxk308p_write(struct tx_isp_subdev *sd, unsigned char reg,
-				unsigned char value)
-{
+int jxk308p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -512,8 +504,7 @@ static int jxk308p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int jxk308p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int jxk308p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -528,54 +519,50 @@ static int jxk308p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 
 	return 0;
 }
-#endif  /* SENSOR_I2C_REG_8BIT */
+#endif /* SENSOR_I2C_REG_8BIT */
 
 #ifdef SENSOR_I2C_REG_16BIT
 
-int jxk308p_read(struct tx_isp_subdev *sd, uint16_t reg,
-				unsigned char *value) {
-		int ret;
-		struct i2c_client *client = tx_isp_get_subdevdata(sd);
-		uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-		struct i2c_msg msg[2] = {
-				[0] = {
-						.addr   = client->addr,
-						.flags  = 0,
-						.len    = 2,
-						.buf    = buf,
-				},
-				[1] = {
-						.addr   = client->addr,
-						.flags  = I2C_M_RD,
-						.len    = 1,
-						.buf    = value,
-				}
-		};
+int jxk308p_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+	int ret;
+	struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
+		[1] = {
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 
-		ret = private_i2c_transfer(client->adapter, msg, 2);
-		if (ret > 0)
-				ret = 0;
+	ret = private_i2c_transfer(client->adapter, msg, 2);
+	if (ret > 0)
+		ret = 0;
 
-		return ret;
+	return ret;
 }
 
-int jxk308p_write(struct tx_isp_subdev *sd, uint16_t reg,
-				unsigned char value)
-{
-		struct i2c_client *client = tx_isp_get_subdevdata(sd);
-		uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
-		struct i2c_msg msg = {
-				.addr   = client->addr,
-				.flags  = 0,
-				.len    = 3,
-				.buf    = buf,
-		};
-		int ret;
-		ret = private_i2c_transfer(client->adapter, &msg, 1);
-		if (ret > 0)
-				ret = 0;
+int jxk308p_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+	struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
+	struct i2c_msg msg = {
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
+	};
+	int ret;
+	ret = private_i2c_transfer(client->adapter, &msg, 1);
+	if (ret > 0)
+		ret = 0;
 
-		return ret;
+	return ret;
 }
 
 #if 0
@@ -597,41 +584,39 @@ static int jxk308p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int jxk308p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
-		int ret;
-		while (vals->reg_num != SENSOR_REG_END) {
-				if (vals->reg_num == SENSOR_REG_DELAY) {
-						private_msleep(vals->value);
-				} else {
-						ret = jxk308p_write(sd, vals->reg_num, vals->value);
-						if (ret < 0)
-								return ret;
-				}
-				vals++;
+static int jxk308p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+	int ret;
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
+			private_msleep(vals->value);
+		} else {
+			ret = jxk308p_write(sd, vals->reg_num, vals->value);
+			if (ret < 0)
+				return ret;
 		}
+		vals++;
+	}
 
-		return 0;
+	return 0;
 }
-#endif  /* SENSOR_I2C_REG_16BIT */
+#endif /* SENSOR_I2C_REG_16BIT */
 
-static int jxk308p_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk)
-{
+static int jxk308p_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned long rate;
 	int ret = ISP_SUCCESS;
 
 	rate = private_clk_get_rate(sensor->mclk);
-	if(((rate / 1000) % mclk) != 0) {
+	if (((rate / 1000) % mclk) != 0) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+			pr_err("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
-			if(((rate / 1000) % mclk) != 0) {
-				switch(mclk) {
+			if (((rate / 1000) % mclk) != 0) {
+				switch (mclk) {
 				case 24000000:
 					private_clk_set_rate(sclka, 1200000000);
 					break;
@@ -660,8 +645,7 @@ error:
 	return ret;
 }
 
-static int jxk308p_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
-{
+static int jxk308p_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -687,8 +671,7 @@ static int jxk308p_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_s
 	return ret;
 }
 
-static int jxk308p_setting_select(struct tx_isp_subdev *sd, int deboot)
-{
+static int jxk308p_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	int ret = ISP_SUCCESS;
 
 	switch (deboot) {
@@ -718,13 +701,12 @@ static int jxk308p_setting_select(struct tx_isp_subdev *sd, int deboot)
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
-		}
+	}
 
 	return ret;
 }
 
-static int jxk308p_attr_check(struct tx_isp_subdev *sd)
-{
+static int jxk308p_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -774,11 +756,10 @@ static int jxk308p_attr_check(struct tx_isp_subdev *sd)
 	return 0;
 
 err_get_mclk:
-		return -1;
+	return -1;
 }
 
-static int jxk308p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int jxk308p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
@@ -801,9 +782,7 @@ static int jxk308p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int jxk308p_g_chip_ident(struct tx_isp_subdev *sd,
-								struct tx_isp_chip_ident *chip)
-{
+static int jxk308p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -835,8 +814,7 @@ static int jxk308p_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	ret = jxk308p_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk308p chip.\n",
-			client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk308p chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 
@@ -847,7 +825,11 @@ static int jxk308p_g_chip_ident(struct tx_isp_subdev *sd,
 	ISP_WARNING("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_WARNING("Sensor video interface is %d\n", info->video_interface);
 	ISP_WARNING("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
-				info->default_boot, wsize->width, wsize->height, wsize->fps >> 16, wsize->fps&0xffff);
+		info->default_boot,
+		wsize->width,
+		wsize->height,
+		wsize->fps >> 16,
+		wsize->fps & 0xffff);
 	ISP_WARNING("===================================================\n");
 
 	if (chip) {
@@ -859,13 +841,11 @@ static int jxk308p_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int jxk308p_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk308p_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int jxk308p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk308p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -880,8 +860,7 @@ static int jxk308p_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 	return ret;
 }
 
-static int jxk308p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int jxk308p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = ISP_SUCCESS;
@@ -899,8 +878,7 @@ static int jxk308p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regist
 	return ret;
 }
 
-static int jxk308p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int jxk308p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -914,8 +892,7 @@ static int jxk308p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_
 	return 0;
 }
 
-static int jxk308p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
-{
+static int jxk308p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -943,8 +920,7 @@ static int jxk308p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 
 #ifndef SENSOR_TEST
 #ifdef SENSOR_EXPO
-static int jxk308p_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int jxk308p_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
@@ -962,48 +938,42 @@ static int jxk308p_set_expo(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 #else
-static int jxk308p_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_integration_time(struct tx_isp_subdev *sd, int value) {
+	int ret = ISP_SUCCESS;
 
-		...;
+	...;
 
-		return ret;
+	return ret;
 }
 
-static int jxk308p_set_analog_gain(struct tx_isp_subdev *sd, int value)
-{
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_analog_gain(struct tx_isp_subdev *sd, int value) {
+	int ret = ISP_SUCCESS;
 
-		...;
+	...;
 
-		return ret;
+	return ret;
 }
 #endif /* SENSOR_EXPO */
 
-static int jxk308p_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int jxk308p_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int jxk308p_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int jxk308p_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int jxk308p_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int jxk308p_set_mode(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	if (wsize) {
-			ret = jxk308p_attr_set(sd, wsize);
+		ret = jxk308p_attr_set(sd, wsize);
 	}
 
 	return ret;
 }
 
-static int jxk308p_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int jxk308p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int sclk = 0;
@@ -1016,7 +986,7 @@ static int jxk308p_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch (info->default_boot) {
 	case 0:
-		sclk = 4800 * 2400 * 15;  /**< HTS * VTS * FPS */
+		sclk = 4800 * 2400 * 15; /**< HTS * VTS * FPS */
 		break;
 	default:
 		ret = -1;
@@ -1043,8 +1013,8 @@ static int jxk308p_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	jxk308p_write(sd, 0x22, (unsigned char) (vts & 0xff));
-	jxk308p_write(sd, 0x23, (unsigned char) (vts >> 8));
+	jxk308p_write(sd, 0x22, (unsigned char)(vts & 0xff));
+	jxk308p_write(sd, 0x23, (unsigned char)(vts >> 8));
 
 	if (0 != ret) {
 		ISP_ERROR("err: jxk308p_write err\n");
@@ -1068,15 +1038,14 @@ static int jxk308p_set_fps(struct tx_isp_subdev *sd, int fps)
 #endif /* SENSOR_WDR_2_FRAME */
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	if (ret) {
-			ISP_WARNING("Description Failed to synchronize the attributes of sensor!!!");
+		ISP_WARNING("Description Failed to synchronize the attributes of sensor!!!");
 	}
 
 	return ret;
 }
 
 #ifdef SENSOR_MIR_FLIP
-static int jxk308p_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int jxk308p_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 	unsigned char val;
@@ -1084,7 +1053,7 @@ static int jxk308p_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += jxk308p_read(sd, 0x12, &val);
 
 	/* 2'b01:mirror,2'b10:filp */
-	switch(enable) {
+	switch (enable) {
 	case 0:
 		val &= 0xCF;
 		break;
@@ -1103,8 +1072,7 @@ static int jxk308p_set_vflip(struct tx_isp_subdev *sd, int enable)
 	}
 
 	ret = jxk308p_write(sd, 0x12, val);
-	if (0 != ret)
-	{
+	if (0 != ret) {
 		ISP_ERROR("%s:%d, jxk308p_write err!!\n", __func__, __LINE__);
 		return ret;
 	}
@@ -1118,74 +1086,68 @@ static int jxk308p_set_vflip(struct tx_isp_subdev *sd, int enable)
 
 #ifdef SENSOR_WDR_2_FRAME
 #ifdef SENSOR_EXPO
-static int jxk308p_set_expo_short(struct tx_isp_subdev *sd, int value)
-{
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_expo_short(struct tx_isp_subdev *sd, int value) {
+	int ret = ISP_SUCCESS;
 
-		...;
+	...;
 
-		return ret;
+	return ret;
 }
 #else
-static int jxk308p_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
-{
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
+	int ret = ISP_SUCCESS;
 
-		...;
+	...;
 
-		return ret;
+	return ret;
 }
 
-static int jxk308p_set_integration_time_short(struct tx_isp_subdev *sd, int value)
-{
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
+	int ret = ISP_SUCCESS;
 
-		...;
+	...;
 
-		return ret;
+	return ret;
 }
 #endif /* SENSOR_EXPO */
 
-static int jxk308p_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
-{
-		struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
+	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+	int ret = ISP_SUCCESS;
 
-		ret = jxk308p_write_array(sd, jxk308p_stream_off_mipi);
-		if (wdr_en == 1) {
-				jxk308p_setting_select(sd, 1);
-				jxk308p_attr_set(sd, wsize);
-		} else if (wdr_en == 0) {
-				jxk308p_setting_select(sd, 0);
-				jxk308p_attr_set(sd, wsize);
-		} else {
-				ISP_ERROR("Can not support this data type!!!");
-				return -1;
-		}
+	ret = jxk308p_write_array(sd, jxk308p_stream_off_mipi);
+	if (wdr_en == 1) {
+		jxk308p_setting_select(sd, 1);
+		jxk308p_attr_set(sd, wsize);
+	} else if (wdr_en == 0) {
+		jxk308p_setting_select(sd, 0);
+		jxk308p_attr_set(sd, wsize);
+	} else {
+		ISP_ERROR("Can not support this data type!!!");
+		return -1;
+	}
 
-		return 0;
+	return 0;
 }
 
-static int jxk308p_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
-{
-		struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-		struct tx_isp_sensor_register_info *info = &sensor->info;
-		int ret = ISP_SUCCESS;
+static int jxk308p_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	struct tx_isp_sensor_register_info *info = &sensor->info;
+	int ret = ISP_SUCCESS;
 
-		private_gpio_direction_output(info->rst_gpio, 0);
-		private_msleep(1);
-		private_gpio_direction_output(info->rst_gpio, 1);
-		private_msleep(1);
+	private_gpio_direction_output(info->rst_gpio, 0);
+	private_msleep(1);
+	private_gpio_direction_output(info->rst_gpio, 1);
+	private_msleep(1);
 
-		ret = jxk308p_write_array(sd, wsize->regs);
-		ret = jxk308p_write_array(sd, jxk308p_stream_on_mipi);
+	ret = jxk308p_write_array(sd, wsize->regs);
+	ret = jxk308p_write_array(sd, jxk308p_stream_on_mipi);
 
-		return 0;
+	return 0;
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-static int jxk308p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int jxk308p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	// struct tx_isp_initarg *init = arg;
@@ -1206,7 +1168,7 @@ static int jxk308p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 		if (arg)
 			ret = jxk308p_set_integration_time(sd, sensor_val->value);
 		break;
-case TX_ISP_EVENT_SENSOR_AGAIN:
+	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
 			ret = jxk308p_set_analog_gain(sd, sensor_val->value);
 		break;
@@ -1237,37 +1199,37 @@ case TX_ISP_EVENT_SENSOR_AGAIN:
 		break;
 #ifdef SENSOR_MIR_FLIP
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
+		if (arg)
 			ret = jxk308p_set_vflip(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_MIR_FLIP */
 #ifdef SENSOR_WDR_2_FRAME
 #ifdef SENSOR_EXPO
 	case TX_ISP_EVENT_SENSOR_EXPO_SHORT:
-			if (arg)
-					ret = jxk308p_set_expo_short(sd, sensor_val->value);
-			break;
+		if (arg)
+			ret = jxk308p_set_expo_short(sd, sensor_val->value);
+		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-			if(arg)
-					ret = jxk308p_set_integration_time_short(sd, sensor_val->value);
-			break;
+		if (arg)
+			ret = jxk308p_set_integration_time_short(sd, sensor_val->value);
+		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-			if(arg)
-					ret = jxk308p_set_analog_gain_short(sd, sensor_val->value);
-			break;
+		if (arg)
+			ret = jxk308p_set_analog_gain_short(sd, sensor_val->value);
+		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_WDR:
-			if(arg)
-					ret = jxk308p_set_wdr(sd, init->enable);
-			break;
+		if (arg)
+			ret = jxk308p_set_wdr(sd, init->enable);
+		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
-			if(arg)
-					ret = jxk308p_set_wdr_stop(sd, init->enable);
-			break;
+		if (arg)
+			ret = jxk308p_set_wdr_stop(sd, init->enable);
+		break;
 #endif /* SENSOR_WDR_2_FRAME */
 	default:
-			break;
+		break;
 	}
 
 	return 0;
@@ -1288,7 +1250,7 @@ static struct tx_isp_subdev_video_ops jxk308p_video_ops = {
 
 static struct tx_isp_subdev_sensor_ops jxk308p_sensor_ops = {
 #ifndef SENSOR_TEST
-	.ioctl  = jxk308p_sensor_ops_ioctl,
+	.ioctl = jxk308p_sensor_ops_ioctl,
 #endif /* SENSOR_TEST */
 };
 
@@ -1299,26 +1261,25 @@ static struct tx_isp_subdev_ops jxk308p_ops = {
 };
 
 /* It's the sensor device */
-static u64 tx_isp_module_dma_mask = ~(u64) 0;
+static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "jxk308p",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int jxk308p_probe(struct i2c_client *client,
-						const struct i2c_device_id *id)
-{
+static int jxk308p_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1339,16 +1300,15 @@ static int jxk308p_probe(struct i2c_client *client,
 	return 0;
 }
 
-static int jxk308p_remove(struct i2c_client *client)
-{
+static int jxk308p_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 
 	if (info->rst_gpio != -1)
-			private_gpio_free(info->rst_gpio);
+		private_gpio_free(info->rst_gpio);
 	if (info->pwdn_gpio != -1)
-			private_gpio_free(info->pwdn_gpio);
+		private_gpio_free(info->pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
@@ -1358,20 +1318,18 @@ static int jxk308p_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id jxk308p_id[] = {
-	{"jxk308p", 0},
-	{}
-};
+static const struct i2c_device_id jxk308p_id[] = {{"jxk308p", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, jxk308p_id);
 
 static struct i2c_driver jxk308p_driver = {
-	.driver = {
-			.owner  = THIS_MODULE,
-			.name   = "jxk308p",
-	},
-	.probe          = jxk308p_probe,
-	.remove         = jxk308p_remove,
-	.id_table       = jxk308p_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "jxk308p",
+		},
+	.probe = jxk308p_probe,
+	.remove = jxk308p_remove,
+	.id_table = jxk308p_id,
 };
 
 static __init int init_jxk308p(void) {
