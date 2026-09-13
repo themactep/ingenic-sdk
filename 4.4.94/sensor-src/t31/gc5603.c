@@ -373,7 +373,7 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0182, 0x05},
 	{0x0185, 0x01},
 	{0x0180, 0x46},
-	{0x0100, 0x08}, //0x010c,0x0c
+	{0x0100, 0x08}, //0x010c, 0x0c
 	{0x010d, 0x80}, //LWC set
 	{0x010e, 0x0c},
 	{0x0113, 0x02},
@@ -527,7 +527,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret = sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
 	/*set sensor analog gain*/
-	ret += sensor_write(sd, 0x031d ,0x2d);
+	ret += sensor_write(sd, 0x031d , 0x2d);
 	ret += sensor_write(sd, 0x0614, val_lut[again].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
 	ret += sensor_write(sd, 0x0225, val_lut[again].reg225);

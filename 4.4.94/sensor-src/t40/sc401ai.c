@@ -678,9 +678,9 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	/* cut off logic when 0x363a==0x12*/
 	/*
 	if (again < 0x2740) {
-		ret += sensor_write(sd,0x363a,0x0b);
+		ret += sensor_write(sd, 0x363a, 0x0b);
 	} else {
-		ret += sensor_write(sd,0x363a,0x17);
+		ret += sensor_write(sd, 0x363a, 0x17);
 	}
 	*/
 

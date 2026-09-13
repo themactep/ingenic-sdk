@@ -984,7 +984,7 @@ static int gc08a8_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = gc08a8_again_lut;
 
-	ret += gc08a8_write(sd, 0x031d ,0x2d);
+	ret += gc08a8_write(sd, 0x031d , 0x2d);
 	ret += gc08a8_write(sd, 0x0614, val_lut[value].reg614);
 	ret += gc08a8_write(sd, 0x0615, val_lut[value].reg615);
 	ret += gc08a8_write(sd, 0x031d, 0x28);

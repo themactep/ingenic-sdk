@@ -954,7 +954,7 @@ static struct regval_list cv8001_init_regs_mipi[] = {
 	{0x3B19, 0x0A},
 	{0x3B1C, 0x2B},
 	//	//mirror+flip
-	//      {0x3034,0x03},
+	//      {0x3034, 0x03},
 
 	//split Again & Dgain
 	{0x3162, 0x01},

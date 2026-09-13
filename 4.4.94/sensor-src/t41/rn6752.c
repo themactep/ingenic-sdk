@@ -888,9 +888,9 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 #if 0 /*读取sensor的制式*/
 	sensor_write(sd, 0xff, 0x00);
 	sensor_read(sd, 0xff, &val);
-	printk("[0x%x, 0x%x]\n",0xff, val);
+	printk("[0x%x, 0x%x]\n", 0xff, val);
 	sensor_read(sd, 0x00, &val);
-	printk("[0x%x, 0x%x]\n",0x00, val);
+	printk("[0x%x, 0x%x]\n", 0x00, val);
 #endif
 	return 0;
 }
@@ -1042,19 +1042,19 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 #if 0
 		unsigned char val;
 		sensor_read(sd, 0x28, &val);
-		printk("[0x%x, 0x%x]\n",0x28, val);
+		printk("[0x%x, 0x%x]\n", 0x28, val);
 		sensor_read(sd, 0x20, &val);
-		printk("[0x%x, 0x%x]\n",0x20, val);
+		printk("[0x%x, 0x%x]\n", 0x20, val);
 		sensor_read(sd, 0x23, &val);
-		printk("[0x%x, 0x%x]\n",0x23, val);
+		printk("[0x%x, 0x%x]\n", 0x23, val);
 		sensor_read(sd, 0x24, &val);
-		printk("[0x%x, 0x%x]\n",0x24, val);
+		printk("[0x%x, 0x%x]\n", 0x24, val);
 		sensor_read(sd, 0x25, &val);
-		printk("[0x%x, 0x%x]\n",0x25, val);
+		printk("[0x%x, 0x%x]\n", 0x25, val);
 		sensor_read(sd, 0x26, &val);
-		printk("[0x%x, 0x%x]\n",0x26, val);
+		printk("[0x%x, 0x%x]\n", 0x26, val);
 		sensor_read(sd, 0x42, &val);
-		printk("[0x%x, 0x%x]\n",0x42, val);
+		printk("[0x%x, 0x%x]\n", 0x42, val);
 #endif
 	} else {
 		sensor->video.state = TX_ISP_MODULE_DEINIT;

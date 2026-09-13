@@ -240,8 +240,8 @@ struct tx_isp_sensor_attribute os02h10_attr = {
 };
 
 static struct regval_list os02h10_init_regs_1920_1080_30fps_mipi[] = {
-	//{0xfd ,0x00},
-	//{0x20 ,0x00},
+	//{0xfd , 0x00},
+	//{0x20 , 0x00},
 	//{0x20, 0x00},//
 	{0x53, 0xfe}, //
 	{0x54, 0x7f}, //
@@ -410,8 +410,8 @@ static struct regval_list os02h10_init_regs_1920_1080_30fps_mipi[] = {
 };
 
 static struct regval_list os02h10_init_regs_1920_1088_30fps_mipi[] = {
-	//{0xfd ,0x00},//
-	//{0x20 ,0x00},//
+	//{0xfd , 0x00},//
+	//{0x20 , 0x00},//
 	//{OS02H10_REG_DELAY, 0x05}, /* END MARKER */
 	{0x53, 0xfe},		   //
 	{0x54, 0x7f},		   //

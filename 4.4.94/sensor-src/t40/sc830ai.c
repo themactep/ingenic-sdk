@@ -633,7 +633,7 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x5f00, 0x05},
 	{0x36e9, 0x53},
 	{0x37f9, 0x27},
-	//{0x0100,0x01},
+	//{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -807,7 +807,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 	{0x5f00, 0x05},
 	{0x36e9, 0x53},
 	{0x37f9, 0x27},
-	//{0x0100,0x01},
+	//{0x0100, 0x01},
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -962,39 +962,39 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 #if 0
-		ret += sensor_write(sd,0x3812,0x00);
+		ret += sensor_write(sd, 0x3812, 0x00);
 		if (again < 0x720) {
-			ret += sensor_write(sd,0x3301,0x1c);
-			ret += sensor_write(sd,0x3630,0x30);
-			ret += sensor_write(sd,0x3633,0x23);
-			ret += sensor_write(sd,0x3622,0xf6);
-			ret += sensor_write(sd,0x363a,0x83);
+			ret += sensor_write(sd, 0x3301, 0x1c);
+			ret += sensor_write(sd, 0x3630, 0x30);
+			ret += sensor_write(sd, 0x3633, 0x23);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x83);
 		} else if (again < 0xf20) {
-			ret += sensor_write(sd,0x3301,0x26);
-			ret += sensor_write(sd,0x3630,0x23);
-			ret += sensor_write(sd,0x3633,0x33);
-			ret += sensor_write(sd,0x3622,0xf6);
-			ret += sensor_write(sd,0x363a,0x87);
+			ret += sensor_write(sd, 0x3301, 0x26);
+			ret += sensor_write(sd, 0x3630, 0x23);
+			ret += sensor_write(sd, 0x3633, 0x33);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x87);
 		} else if (again < 0x1f20) {
-			ret += sensor_write(sd,0x3301,0x2c);
-			ret += sensor_write(sd,0x3630,0x24);
-			ret += sensor_write(sd,0x3633,0x43);
-			ret += sensor_write(sd,0x3622,0xf6);
-			ret += sensor_write(sd,0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x2c);
+			ret += sensor_write(sd, 0x3630, 0x24);
+			ret += sensor_write(sd, 0x3633, 0x43);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 		} else if (again < 0x1f3f) {
-			ret += sensor_write(sd,0x3301,0x38);
-			ret += sensor_write(sd,0x3630,0x28);
-			ret += sensor_write(sd,0x3633,0x43);
-			ret += sensor_write(sd,0x3622,0xf6);
-			ret += sensor_write(sd,0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x38);
+			ret += sensor_write(sd, 0x3630, 0x28);
+			ret += sensor_write(sd, 0x3633, 0x43);
+			ret += sensor_write(sd, 0x3622, 0xf6);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 		} else {
-			ret += sensor_write(sd,0x3301,0x44);
-			ret += sensor_write(sd,0x3630,0x19);
-			ret += sensor_write(sd,0x3633,0x55);
-			ret += sensor_write(sd,0x3622,0x16);
-			ret += sensor_write(sd,0x363a,0x9f);
+			ret += sensor_write(sd, 0x3301, 0x44);
+			ret += sensor_write(sd, 0x3630, 0x19);
+			ret += sensor_write(sd, 0x3633, 0x55);
+			ret += sensor_write(sd, 0x3622, 0x16);
+			ret += sensor_write(sd, 0x363a, 0x9f);
 		}
-		ret += sensor_write(sd,0x3812,0x30);
+		ret += sensor_write(sd, 0x3812, 0x30);
 		if (ret < 0)
 			return ret;
 #endif

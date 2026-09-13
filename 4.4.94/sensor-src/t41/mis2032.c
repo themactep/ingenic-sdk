@@ -741,7 +741,7 @@ static struct regval_list mis2032_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3a1a, 0x08},
 	{0x3a36, 0x01},
 	{0x3006, 0x00},
-	//{SENSOR_REG_DELAY,0x10},
+	//{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 

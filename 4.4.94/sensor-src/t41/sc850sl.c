@@ -1396,8 +1396,8 @@ static struct regval_list sc850sl_init_regs_1920_1080_30fps_mipi_binning_sum[] =
 
 static struct regval_list sc850sl_init_regs_3840_2160_15fps_mipi_raw12[] = {
 	//Cleaned_0x8e_SC850SL_MIPI_24Minput_1C2D_1080Mbps_12bit_3840x2160_15fps_one_expo
-	//[gain<2x]  {0x363c,0x05},
-	//[gain>=2x] {0x363c,0x07},
+	//[gain<2x]  {0x363c, 0x05},
+	//[gain>=2x] {0x363c, 0x07},
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -1794,8 +1794,8 @@ static int sc850sl_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	ret += sc850sl_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sc850sl_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
-	if (again < 0x740) ret += sc850sl_write(sd,0x363c,0x05);
-	else ret += sc850sl_write(sd,0x363c,0x07);
+	if (again < 0x740) ret += sc850sl_write(sd, 0x363c, 0x05);
+	else ret += sc850sl_write(sd, 0x363c, 0x07);
 	if (ret < 0)
 		return ret;
 

@@ -835,7 +835,7 @@ static struct regval_list mis20s1_init_regs_1920_1080_dol2_mipi[] = {
 	{0x3a1c, 0x00},
 	{0x3a1d, 0x7f},
 	{0x3a1e, 0xdf},
-	//0x3a0e,0x06  //
+	//0x3a0e, 0x06  //
 	{0x311c, 0x01}, //RD1_ST_PNT, when wdr, expo1 < RD1_ST_PNT-2 , wg lpf
 	{0x311d, 0x95},
 
@@ -1046,7 +1046,7 @@ static struct regval_list mis20s1_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3a1c, 0x00},
 	{0x3a1d, 0x7f},
 	{0x3a1e, 0xdf},
-	//0x3a0e,0x06  //90C高温满井不饱和 20250114 hql    需评估影响是否使用逻辑控制
+	//0x3a0e, 0x06  //90C高温满井不饱和 20250114 hql    需评估影响是否使用逻辑控制
 	{0x3031, 0x0C},
 
 	{0x3008, 0x01},

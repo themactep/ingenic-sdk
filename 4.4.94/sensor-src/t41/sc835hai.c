@@ -515,7 +515,7 @@ static struct regval_list sc835hai_init_regs_3840_2160_25fps_mipi[] = {
 	{0x5000, 0x0e},
 	{0x36e9, 0x47},
 	{0x37f9, 0x57},
-	/* {0x0100,0x01}, */
+	/* {0x0100, 0x01}, */
 	{SC835HAI_REG_END, 0x00},
 };
 
@@ -695,7 +695,7 @@ static struct regval_list sc835hai_init_regs_1920_1080_25fps_mipi[] = {
 	{0x5901, 0x04},
 	{0x36e9, 0x24},
 	{0x37f9, 0x53},
-	/* {0x0100,0x01}, */
+	/* {0x0100, 0x01}, */
 	{SC835HAI_REG_END, 0x00},
 };
 
@@ -870,7 +870,7 @@ static struct regval_list sc835hai_init_regs_1920_2160_25fps_mipi[] = {
 	{0x5901, 0x04},
 	{0x36e9, 0x24},
 	{0x37f9, 0x53},
-	/* {0x0100,0x01}, */
+	/* {0x0100, 0x01}, */
 	{SC835HAI_REG_END, 0x00},
 };
 
@@ -1045,7 +1045,7 @@ static struct regval_list sc835hai_init_regs_3840_2160_30fps_mipi[] = {
 	{0x57ad, 0x00},
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
-	/* {0x0100,0x01}, */
+	/* {0x0100, 0x01}, */
 	{SC835HAI_REG_END, 0x00},
 };
 /*
