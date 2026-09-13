@@ -1,42 +1,42 @@
 #ifndef __TXX_DRV_FUNCS_H__
 #define __TXX_DRV_FUNCS_H__
-#include <linux/mm.h>
-#include <linux/fs.h>
 #include <linux/clk.h>
-#include <linux/pwm.h>
 #include <linux/file.h>
+#include <linux/fs.h>
+#include <linux/mm.h>
+#include <linux/pwm.h>
 /*#include <linux/list.h>*/
 #include <linux/gpio.h>
-#include <linux/time.h>
 #include <linux/sched.h>
+#include <linux/time.h>
 /*#include <linux/delay.h>*/
-#include <linux/module.h>
 #include <linux/debugfs.h>
-#include <linux/kthread.h>
-#include <linux/mfd/core.h>
-#include <linux/mempolicy.h>
-#include <linux/interrupt.h>
 #include <linux/device.h>
-#include <linux/miscdevice.h>
-#include <linux/platform_device.h>
 #include <linux/errno.h>
 #include <linux/i2c.h>
+#include <linux/interrupt.h>
+#include <linux/kthread.h>
+#include <linux/mempolicy.h>
+#include <linux/mfd/core.h>
+#include <linux/miscdevice.h>
+#include <linux/module.h>
 #include <linux/mutex.h>
 #include <linux/netlink.h>
-#include <net/netlink.h>
+#include <linux/platform_device.h>
 #include <linux/spi/spi.h>
-//#include <soc/irq.h>
-#include <soc/base.h>
+#include <net/netlink.h>
+// #include <soc/irq.h>
+#include <asm/cacheflush.h>
 #include <asm/io.h>
 #include <asm/irq.h>
 #include <asm/uaccess.h>
-#include <asm/cacheflush.h>
+#include <soc/base.h>
 #include <soc/gpio.h>
-//#include <mach/platform.h>
+// #include <mach/platform.h>
 /*#include <linux/seq_file.h>*/
 #include <jz_proc.h>
 #ifndef U16_MAX
-#define U16_MAX 					0xFFFF
+#define U16_MAX 0xFFFF
 #endif
 
 #define paddr2vaddr(phyaddr) ((void *)((phyaddr) + PAGE_OFFSET - PHYS_OFFSET))
@@ -54,44 +54,40 @@ void private_platform_set_drvdata(struct platform_device *pdev, void *data);
 void *private_platform_get_drvdata(struct platform_device *pdev);
 int private_platform_device_register(struct platform_device *pdev);
 void private_platform_device_unregister(struct platform_device *pdev);
-struct resource *private_platform_get_resource(struct platform_device *dev,
-					       unsigned int type, unsigned int num);
+struct resource *private_platform_get_resource(struct platform_device *dev, unsigned int type, unsigned int num);
 void private_dev_set_drvdata(struct device *dev, void *data);
-void* private_dev_get_drvdata(const struct device *dev);
+void *private_dev_get_drvdata(const struct device *dev);
 int private_platform_get_irq(struct platform_device *dev, unsigned int num);
-struct resource * private_request_mem_region(resource_size_t start, resource_size_t n,
-					     const char *name);
+struct resource *private_request_mem_region(resource_size_t start, resource_size_t n, const char *name);
 void private_release_mem_region(resource_size_t start, resource_size_t n);
 
-void __iomem * private_ioremap(phys_addr_t offset, unsigned long size);
+void __iomem *private_ioremap(phys_addr_t offset, unsigned long size);
 void private_iounmap(const volatile void __iomem *addr);
 /* interrupt interfaces */
-int private_request_threaded_irq(unsigned int irq, irq_handler_t handler,
-				 irq_handler_t thread_fn, unsigned long irqflags,
-				 const char *devname, void *dev_id);
+int private_request_threaded_irq(unsigned int irq, irq_handler_t handler, irq_handler_t thread_fn,
+                                 unsigned long irqflags, const char *devname, void *dev_id);
 void private_enable_irq(unsigned int irq);
 void private_disable_irq(unsigned int irq);
 void private_free_irq(unsigned int irq, void *dev_id);
 
 /* lock and mutex interfaces */
 void __private_spin_lock_irqsave(spinlock_t *lock, unsigned long *flags);
-#define private_spin_lock_irqsave(lock, flags) \
-			__private_spin_lock_irqsave(lock, (&flags));
+#define private_spin_lock_irqsave(lock, flags) __private_spin_lock_irqsave(lock, (&flags));
 void private_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags);
 void private_spin_lock_init(spinlock_t *lock);
 void private_mutex_lock(struct mutex *lock);
 void private_mutex_unlock(struct mutex *lock);
 void private_raw_mutex_init(struct mutex *lock, const char *name, struct lock_class_key *key);
 
-#define private_mutex_init(mutex) \
-	do {								\
-	static struct lock_class_key __key;		\
-							\
-	private_raw_mutex_init((mutex), #mutex, &__key);		\
-} while (0)
+#define private_mutex_init(mutex)                                                                                      \
+  do {                                                                                                                 \
+    static struct lock_class_key __key;                                                                                \
+                                                                                                                       \
+    private_raw_mutex_init((mutex), #mutex, &__key);                                                                   \
+  } while (0)
 
 /* clock interfaces */
-struct clk * private_clk_get(struct device *dev, const char *id);
+struct clk *private_clk_get(struct device *dev, const char *id);
 int private_clk_enable(struct clk *clk);
 int private_clk_is_enabled(struct clk *clk);
 void private_clk_disable(struct clk *clk);
@@ -103,7 +99,7 @@ int private_clk_prepare_enable(struct clk *clk);
 void private_clk_disable_unprepare(struct clk *clk);
 
 /* i2c interfaces */
-struct i2c_adapter* private_i2c_get_adapter(int nr);
+struct i2c_adapter *private_i2c_get_adapter(int nr);
 void private_i2c_put_adapter(struct i2c_adapter *adap);
 int private_i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num);
 int private_i2c_register_driver(struct module *, struct i2c_driver *);
@@ -120,8 +116,8 @@ void private_gpio_free(unsigned gpio);
 int private_gpio_direction_output(unsigned gpio, int value);
 int private_gpio_direction_input(unsigned gpio);
 int private_gpio_set_debounce(unsigned gpio, unsigned debounce);
-int private_jzgpio_set_func(enum gpio_port port, enum gpio_function func,unsigned long pins);
-int private_jzgpio_ctrl_pull(enum gpio_port port, int enable_pull,unsigned long pins);
+int private_jzgpio_set_func(enum gpio_port port, enum gpio_function func, unsigned long pins);
+int private_jzgpio_ctrl_pull(enum gpio_port port, int enable_pull, unsigned long pins);
 
 /* system interfaces */
 void private_msleep(unsigned int msecs);
@@ -145,37 +141,32 @@ unsigned long private_wait_for_completion_timeout(struct completion *x, unsigned
 int private_misc_register(struct miscdevice *mdev);
 void private_misc_deregister(struct miscdevice *mdev);
 
-struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode,
-						struct proc_dir_entry *parent,
-						const struct file_operations *proc_fops,
-						void *data);
+struct proc_dir_entry *private_proc_create_data(const char *name, umode_t mode, struct proc_dir_entry *parent,
+                                                const struct file_operations *proc_fops, void *data);
 /* proc file interfaces */
 ssize_t private_seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos);
 loff_t private_seq_lseek(struct file *file, loff_t offset, int whence);
 int private_single_release(struct inode *inode, struct file *file);
-int private_single_open_size(struct file *file, int (*show)(struct seq_file *, void *),
-			     void *data, size_t size);
-struct proc_dir_entry* private_jz_proc_mkdir(char *s);
+int private_single_open_size(struct file *file, int (*show)(struct seq_file *, void *), void *data, size_t size);
+struct proc_dir_entry *private_jz_proc_mkdir(char *s);
 void private_proc_remove(struct proc_dir_entry *de);
 void private_seq_printf(struct seq_file *m, const char *f, ...);
 unsigned long long private_simple_strtoull(const char *cp, char **endp, unsigned int base);
 
 /* kthread interfaces */
 bool private_kthread_should_stop(void);
-struct task_struct* private_kthread_run(int (*threadfn)(void *data), void *data, const char namefmt[]);
+struct task_struct *private_kthread_run(int (*threadfn)(void *data), void *data, const char namefmt[]);
 int private_kthread_stop(struct task_struct *k);
 
-void* private_kmalloc(size_t s, gfp_t gfp);
+void *private_kmalloc(size_t s, gfp_t gfp);
 void private_kfree(void *p);
 long private_copy_from_user(void *to, const void __user *from, long size);
 long private_copy_to_user(void __user *to, const void *from, long size);
 
 /* netlink */
-struct sk_buff* private_nlmsg_new(size_t payload, gfp_t flags);
-struct nlmsghdr *private_nlmsg_put(struct sk_buff *skb, u32 portid, u32 seq,
-					 int type, int payload, int flags);
-int private_netlink_unicast(struct sock *ssk, struct sk_buff *skb,
-		    u32 portid, int nonblock);
+struct sk_buff *private_nlmsg_new(size_t payload, gfp_t flags);
+struct nlmsghdr *private_nlmsg_put(struct sk_buff *skb, u32 portid, u32 seq, int type, int payload, int flags);
+int private_netlink_unicast(struct sock *ssk, struct sk_buff *skb, u32 portid, int nonblock);
 struct sock *private_netlink_kernel_create(struct net *net, int unit, struct netlink_kernel_cfg *cfg);
 void private_sock_release(struct socket *sock);
 
@@ -187,8 +178,7 @@ ssize_t private_vfs_write(struct file *file, const char __user *buf, size_t coun
 loff_t private_vfs_llseek(struct file *file, loff_t offset, int whence);
 mm_segment_t private_get_fs(void);
 void private_set_fs(mm_segment_t val);
-void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
-			 enum dma_data_direction direction);
+void private_dma_cache_sync(struct device *dev, void *vaddr, size_t size, enum dma_data_direction direction);
 void private_getrawmonotonic(struct timespec *ts);
 struct net *private_get_init_net(void);
 
