@@ -94,9 +94,9 @@ filename:
 
 - `sdk/t10` is a symlink to `t20` (they share firmware).
 - Byte-identical duplicates are one real file plus symlinks for the other
-  names (t23 plain -> `-540-310`, t31 plain -> `-472`, cross-tree t41 blobs).
+  names (t23 plain -> `-540-3-10-14`, t31 plain -> `-472`, cross-tree t41 blobs).
 - The one genuinely different same-version pair is t41 1.2.6: kept as
-  `libt41-firmware-1.2.6.a` (4.4.94) and `libt41-firmware-1.2.6-310.a` (3.10.14).
+  `libt41-firmware-1.2.6.a` (4.4.94) and `libt41-firmware-1.2.6-3-10-14.a` (3.10.14).
 - All Kbuilds reference `sdk/$(SOC_FAMILY)/...` with no `KERNEL_VERSION`
   component. Verified by rebuilding T31/3.10.14, T31/4.4.94, A1/4.4.94.
 
