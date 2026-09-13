@@ -3,6 +3,9 @@
 Status: **complete** on branch `refactor/merge-driver-trees` (not yet pushed).
 One commit per task; see `git log origin/master..HEAD`.
 
+Scope: merge the duplicated `3.10.14/` and `4.4.94/` driver **sources**, and
+collapse the duplicated prebuilt firmware blobs under a single `sdk/` root.
+
 This document is the hand-off note for the next session. It records what was
 moved, how the build selects sources, how to verify, and what remains.
 
@@ -53,7 +56,7 @@ For each duplicated driver, diff the two trees and classify:
 | isp/t41zrt (headers) | `common/isp/t41zrt/` | 3.10.14 (identical) | none |
 | sensor-info | `common/sensor-src/common/sensor-info.c`, `common/sensor-src/include/sensor-info.h` | union of both | union struct + both APIs (`sensor_update_actual_fps` and `sensor_common_update`) |
 | jz-dtrng | `common/misc/jz-dtrng/` | 4.4.94 | `CONFIG_KERNEL_4_4_94` for the IRQ header |
-| mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `*-libmpsys-firmware-<3-10-14\|4-4-94>.a` by `KERNEL_VERSION` |
+| mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `sdk/<soc>/lib<soc>-mpsys-firmware-<3-10-14\|4-4-94>.a` by `KERNEL_VERSION` |
 | soc-nna | `common/misc/soc-nna/` | 4.4.94 (superset, adds A1) | `CONFIG_SOC_A1` (inert on 3.10) |
 
 ### 4.2 Split per kernel (like motor)
@@ -181,9 +184,6 @@ Structural verification used where a build was not possible:
   `BR2_THINGINO_MOTORS`). This mismatch predates this branch; not changed here.
 - Optional future work: unify the sensor drivers on the de-shimmed (4.4) form.
   Large and unverifiable without per-driver review; deliberately deferred.
-- Optional: `sensor-src/Kbuild` still has a stale
-  `-I$(src)/$(KERNEL_VERSION)/isp/include` (no such dir; the real ISP include
-  path comes from the top-level `ISP_INCLUDE`). Pre-existing.
 
 ## 9. Task history
 

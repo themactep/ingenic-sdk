@@ -1,4 +1,3 @@
-ccflags-y += -I$(src)/$(KERNEL_VERSION)/isp/include
 ccflags-y += -I$(src)/common/sensor-src/include
 DIR=$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
 
