@@ -62,7 +62,7 @@ finer-grained kernel revision than the two supported ones.
 | 6 | ~~Merge `avpu/c100`, `avpu/t40`, `avpu/t41`~~ (folded into task 5) | done |
 | 7 | Rename the 3.10.14 ISP/t31 source set to `isp/t31-pp` (different
 |   interface generation: vtable vs `private_*` shims); select per-kernel in isp/Kbuild | done |
-| 8 | Merge `isp/t41` (+ `t41zrt`, `t40`, `c100`) into `common/isp/*` | pending |
+| 8 | Merge `isp/t41` (+ `t41zrt` headers) into `common/isp`; select firmware blob per kernel | done |
 | 9 | Merge `sensor-src/common` + `include` | pending |
 | 10 | Merge `sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100` | pending |
 | 11 | Merge `misc/soc-nna` | pending |
