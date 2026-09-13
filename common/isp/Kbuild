@@ -1,0 +1,23 @@
+MODULE_NAME := tx-isp-$(SOC_FAMILY)
+
+OUT := $(MODULE_NAME)
+
+# ISP source sets now all live under common/isp/<soc>.
+#  - t31 has two implementations: 3.10.14 uses the PP/vtable one (t31-pp),
+#    4.4.94 uses the standalone shim implementation (t31).
+#  - every other SoC has a single source set.
+ifeq ($(SOC_FAMILY),t31)
+ifeq ($(KERNEL_VERSION),3.10.14)
+ISP_DIR := common/isp/t31-pp
+else
+ISP_DIR := common/isp/t31
+endif
+else
+ISP_DIR := common/isp/$(SOC_FAMILY)
+endif
+
+DIR := $(ISP_DIR)
+
+ccflags-y += -I$(src)/include
+
+include $(src)/$(ISP_DIR)/Kbuild

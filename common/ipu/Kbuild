@@ -1,0 +1,9 @@
+MODULE_NAME := ipu-$(SOC_FAMILY)
+
+OUT := $(MODULE_NAME)
+
+DIR := common/ipu/$(SOC_FAMILY)
+
+ccflags-y += -I$(src)/include
+
+include $(src)/common/ipu/$(SOC_FAMILY)/Kbuild

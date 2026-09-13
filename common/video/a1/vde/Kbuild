@@ -1,0 +1,19 @@
+FW_VER=1.6.2
+
+MODULE_NAME := vde_module
+OUT := $(MODULE_NAME)
+
+DIR=common/video/a1/vde
+
+ccflags-y += -I$(src)/$(DIR)/include
+
+SRCS := $(DIR)/vde_module.c \
+	$(DIR)/vde_funcs.c
+
+
+OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
+OBJS += sdk/$(SOC_FAMILY)/libvde-firmware-$(FW_VER)-720-4494.a
+
+$(OUT)-objs := $(OBJS)
+
+obj-m += $(OUT).o

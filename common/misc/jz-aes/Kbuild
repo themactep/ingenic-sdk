@@ -1,0 +1,4 @@
+DIR := common/misc
+
+obj-m += jz-aes.o
+jz-aes-objs := $(DIR)/jz-aes/jz-aes.o

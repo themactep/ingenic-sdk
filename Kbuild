@@ -11,21 +11,16 @@ else
 endif
 
 # ISP include directory, which also holds the shared sensor headers used by
-# sensor-src. t41 is shared in common/isp/t41; 3.10.14 t31 uses the t31-pp set.
+# sensor-src. All ISP sources live under common/isp/<soc>; 3.10.14 t31 uses the
+# t31-pp source set, 4.4.94 uses t31.
 ifeq ($(KERNEL_VERSION),3.10.14)
 ifeq ($(SOC_FAMILY),t31)
-ISP_INCLUDE := $(src)/3.10.14/isp/t31-pp/include
-else ifeq ($(SOC_FAMILY),t41)
-ISP_INCLUDE := $(src)/common/isp/t41/include
+ISP_INCLUDE := $(src)/common/isp/t31-pp/include
 else
-ISP_INCLUDE := $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
+ISP_INCLUDE := $(src)/common/isp/$(SOC_FAMILY)/include
 endif
 else
-ifeq ($(SOC_FAMILY),t41)
-ISP_INCLUDE := $(src)/common/isp/t41/include
-else
-ISP_INCLUDE := $(src)/$(KERNEL_VERSION)/isp/$(SOC_FAMILY)/include
-endif
+ISP_INCLUDE := $(src)/common/isp/$(SOC_FAMILY)/include
 endif
 
 ccflags-y := -DRELEASE -DUSER_BIT_32 -DKERNEL_BIT_32 -Wno-date-time -D_GNU_SOURCE
@@ -35,49 +30,49 @@ ccflags-y += -I$(ISP_INCLUDE)
 
 ifneq ($(CONFIG_SOC_A1),y)
 $(info Building ISP for Kernel $(KERNEL_VERSION))
-include $(src)/$(KERNEL_VERSION)/isp/Kbuild
+include $(src)/common/isp/Kbuild
 
 ifeq ($(KERNEL_VERSION),3.10.14)
     $(info Building GPIO-UserKeys for Kernel $(KERNEL_VERSION))
-    include $(src)/$(KERNEL_VERSION)/misc/gpio-userkeys/Kbuild
+    include $(src)/common/misc/gpio-userkeys/Kbuild
 endif
 
 ifeq ($(KERNEL_VERSION),3.10.14)
     $(info Building JZ-AES for Kernel $(KERNEL_VERSION))
-    include $(src)/$(KERNEL_VERSION)/misc/jz-aes/Kbuild
+    include $(src)/common/misc/jz-aes/Kbuild
 endif
 
 
 # Build TCU allocator (central ownership registry) for 3.10.14
 ifeq ($(KERNEL_VERSION),3.10.14)
     $(info Building TCU allocator for Kernel $(KERNEL_VERSION))
-    include $(src)/$(KERNEL_VERSION)/misc/tcu_alloc/Kbuild
+    include $(src)/common/misc/tcu_alloc/Kbuild
 endif
 
 # PWM: 3.10.14 and 4.4.94 use different PWM driver implementations.
 ifeq ($(KERNEL_VERSION),3.10.14)
     $(info Building PWM for Kernel $(KERNEL_VERSION))
     # 3.10.14 uses the PP/TCU PWM driver (source set: pwm-pp)
-    include $(src)/3.10.14/misc/pwm-pp/Kbuild
+    include $(src)/common/misc/pwm-pp/Kbuild
 else
     $(info Building PWM for Kernel $(KERNEL_VERSION))
     # 4.4.94 uses the GPIO/TCU PWM driver
-    include $(src)/$(KERNEL_VERSION)/misc/pwm/Kbuild
+    include $(src)/common/misc/pwm/Kbuild
 endif
 
 ifeq ($(BR2_THINGINO_MOTORS),y)
     $(info Building Motor for Kernel $(KERNEL_VERSION))
     ifeq ($(KERNEL_VERSION),3.10.14)
         # 3.10.14 uses the PP/TCU motor driver (source set: motors-pp)
-        include $(src)/3.10.14/misc/motors-pp/Kbuild
+        include $(src)/common/misc/motors-pp/Kbuild
     else
         # 4.4.94 uses the GPIO/TCU motor driver
-        include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
+        include $(src)/common/misc/motor/Kbuild
     endif
     ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
         ifeq ($(KERNEL_VERSION),3.10.14)
             $(info Building Motor SPI for Kernel $(KERNEL_VERSION))
-            include $(src)/$(KERNEL_VERSION)/misc/ms419xx/Kbuild
+            include $(src)/common/misc/ms419xx/Kbuild
         endif
     endif
 endif
@@ -134,10 +129,10 @@ endif
 
 #### A1 ######
 ifeq ($(CONFIG_SOC_A1),y)
-include $(src)/$(KERNEL_VERSION)/aip/a1/Kbuild
-include $(src)/$(KERNEL_VERSION)/fb/Kbuild
-include $(src)/$(KERNEL_VERSION)/ipu/Kbuild
-include $(src)/$(KERNEL_VERSION)/video/a1/vde/Kbuild
-include $(src)/$(KERNEL_VERSION)/video/a1/vdec/Kbuild
+include $(src)/common/aip/a1/Kbuild
+include $(src)/common/fb/Kbuild
+include $(src)/common/ipu/Kbuild
+include $(src)/common/video/a1/vde/Kbuild
+include $(src)/common/video/a1/vdec/Kbuild
 include $(src)/common/audio/$(SOC_FAMILY)/hdmi_audio/Kbuild
 endif

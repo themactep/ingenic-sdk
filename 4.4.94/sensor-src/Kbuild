@@ -1,5 +1,11 @@
 ccflags-y += -I$(src)/common/sensor-src/include
-DIR=$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
+# Single-kernel sensor dirs live in common/; t31/t40/t41/t41zrt are still
+# kept per kernel (different calling conventions), so they stay under the tree.
+ifneq ($(filter $(SOC_FAMILY),t31 t40 t41 t41zrt),)
+DIR := $(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
+else
+DIR := common/sensor-src/$(SOC_FAMILY)
+endif
 
 ifneq ($(SENSOR_MODEL),)
 	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)

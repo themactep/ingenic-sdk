@@ -76,10 +76,14 @@ drivers call the vendor `private_*` shims and use the `actual_fps` API; the
 This is a different calling convention across hundreds of files, not a small
 diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
 
-### 4.4 Platform-only trees (untouched)
+### 4.4 Platform-only trees
 
-- 4.4.94 only: `aip/a1`, `fb`, `ipu`, `video/a1`, `audio/a1`, `isp/t40`.
-- 3.10.14 only: `isp/t20..t30`, `sensor-src/t20..t30`.
+All single-kernel content now lives under `common/` (relocated, no conflicts):
+`common/aip` (a1), `common/fb` (a1), `common/ipu` (a1), `common/video` (a1).
+
+The only content still tree-split is the sensor drivers that exist for both
+kernels (task 10): `3.10.14/sensor-src/{t31,t40,t41,t41zrt}` and
+`4.4.94/sensor-src/{t31,t40,t41,t41zrt}`. Everything else is under `common/`.
 
 ### 4.5 `sdk/` firmware blobs (single root, fully explicit names)
 
@@ -120,6 +124,21 @@ colliding paths), so moving them into `common/audio/` had no conflicts. The
 only previously-duplicated dir was `t41/oss3` (already merged, task 16).
 
 ## 5. Kbuild selection rules (top-level `Kbuild`)
+
+Everything is under `common/` except the split sensor drivers. Selection:
+- ISP: `common/isp/Kbuild` sets `ISP_DIR` (`t31-pp` on 3.10.14, `t31` on
+  4.4.94, else `common/isp/$(SOC_FAMILY)`).
+- Audio: `common/audio/<soc>/<driver>` (see 4.6).
+- misc: all under `common/misc/<name>` (split drivers `motor`/`motors-pp`,
+  `pwm`/`pwm-pp` selected by `KERNEL_VERSION`).
+- sensor-src: `DIR` is `common/sensor-src/$(SOC_FAMILY)` for the single-kernel
+  SoCs (t10,t20,t21,t23,t30,c100) and `$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)`
+  for the split ones (t31,t40,t41,t41zrt).
+- a1-only: `common/aip/a1`, `common/fb`, `common/ipu`, `common/video/a1`.
+- `ISP_INCLUDE` (top of `Kbuild`) is `common/isp/<soc>/include`
+  (`t31-pp` on 3.10.14), because that dir also holds the sensor headers.
+
+## 5b. Legacy note: former Kbuild selection details
 
 - Merged drivers are included directly from `common/`:
   `common/avpu`, `common/misc/{jz-dtrng,mpsys-driver,soc-nna}`, and the
@@ -232,6 +251,7 @@ Structural verification used where a build was not possible:
 | 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
 | 16 | Merge the t41 `oss3` audio driver into `common/audio/t41/oss3`; route t41/t23 to oss3 | done |
 | 17 | Move all audio to `common/audio/<soc>/<driver>` (relocation, no collisions) | done |
+| 18 | Relocate all single-kernel `misc`, `isp`, `sensor-src` (t10..t30, c100) and a1-only `aip/fb/ipu/video` to `common/` | done |
 
 ## 10. Original inventory (for reference)
 
