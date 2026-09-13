@@ -1,19 +1,15 @@
 MODULE_NAME := mpsys_driver
 OUT := $(MODULE_NAME)
 
-DIR=$(KERNEL_VERSION)/misc/mpsys-driver
+DIR := common/misc/mpsys-driver
 
 SRCS := $(DIR)/mpsys_module.c \
 	$(DIR)/private-funcs.c
 
-# Determine the kernel version based on SOC type and KDIR
-ifeq ($(SOC_FAMILY),t41)
-	ifneq ($(findstring 4.4,$(KERNEL_VERSION)),)
-		KVERSION := 4-4-94
-	else
-		KVERSION := 3-10-14
-	endif
-else ifeq ($(SOC_FAMILY),t40)
+# Firmware blob is selected per kernel version
+ifeq ($(KERNEL_VERSION),3.10.14)
+	KVERSION := 3-10-14
+else
 	KVERSION := 4-4-94
 endif
 
