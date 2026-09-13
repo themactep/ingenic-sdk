@@ -44,6 +44,8 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_MIN_FPS 5
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 // ============================================================================
 // SPECIAL FEATURES
