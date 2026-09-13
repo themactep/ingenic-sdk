@@ -67,7 +67,7 @@ finer-grained kernel revision than the two supported ones.
 | 10 | Sensor driver sources (`sensor-src/t31`, `t40`, `t41`, `t41zrt`, `c100`): **kept separate per kernel** (decision). 3.10.14 drivers use the `private_*` shim calling convention + `actual_fps` API; 4.4.94 drivers use plain kernel calls + `sensor_common_update()`. Only the shared `sensor-info.[ch]` is merged (task 9). | done (not merged, by design) |
 | 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
 | 12 | Cleanup: no empty duplicate trees remained; fix a duplicated Kbuild info line and verify include paths | done |
-| 13 | Final sweep: update docs, verify build matrix | pending |
+| 13 | Final sweep: update docs, verify build matrix | done |
 
 ## Decisions
 
@@ -87,7 +87,18 @@ finer-grained kernel revision than the two supported ones.
 
 ## Verification
 
-Each task is verified by rebuilding the affected driver for its kernel(s) where a
-toolchain/kernel tree is available; otherwise by a structural diff review showing
-the merged source is a superset guarded by version checks. The final task must
-build the supported SoC/kernel matrix.
+Builds were run against real kernel trees and toolchains from the firmware
+output tree (`build.sh <soc> <kernel>`):
+
+| Target | Kernel tree used | Result |
+|--------|------------------|--------|
+| T31 3.10.14 | vanhua_djz_t31n_gc2083 (3.10.14) | pass - all modules link (audio, avpu, gpio-userkeys, jz-aes, motor, ms419xx, pwm_core, pwm_hal, sinfo, tcu_alloc, tx-isp-t31) |
+| T31 4.4.94 | wyze_cam3_t31x_gc2053 (4.4.94) | pass - ISP/Motor/PWM/AVPU/Audio build; only pre-existing warnings |
+| A1 4.4.94 | smart_nvr_a1n (4.4.94) | pass - incl. merged soc-nna |
+
+No built T40/T41 kernel trees were available locally, so the T41-specific
+merged code paths (isp/t41, avpu T41 clock branches) could not be compiled here.
+They were instead verified structurally: the merged `common/isp/t41` sources are
+byte-identical to the original 4.4.94 t41 sources (only the Kbuild firmware
+selection was adapted), and the avpu merge changed only the two intended guards.
+

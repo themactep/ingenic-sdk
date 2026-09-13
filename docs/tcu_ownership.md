@@ -5,7 +5,7 @@ Overview
 - Goal: per-board configurable, conflict-free allocation without source edits; clear error handling when misconfigured.
 
 Components
-1) tcu_alloc (3.10/misc/tcu_alloc)
+1) tcu_alloc (3.10.14/misc/tcu_alloc)
    - API (exported):
      - int tcu_alloc_set_max_channels(unsigned int n);
      - int tcu_alloc_claim(unsigned int ch, const char *owner); // returns 0 or -EBUSY
@@ -14,14 +14,14 @@ Components
      - const char *tcu_alloc_owner(unsigned int ch);
    - Logs claims, releases, and conflicts.
 
-2) PWM driver (3.10/misc/pwm-pp)
+2) PWM driver (3.10.14/misc/pwm-pp)
    - New module param: pwm.tcu_channels (charp)
      - Example: pwm.tcu_channels=0,1,3
      - Gating: only the listed channels will register platform drivers (tcu_chnX).
    - Probe-time arbitration: claims the TCU channel via tcu_alloc; on conflict prints owner and returns -EBUSY.
    - Backward-compat: if the param is not set, compiled CONFIG_PWMn macros decide which channels are registered (as before).
 
-3) Motor driver (3.10/misc/motors-pp)
+3) Motor driver (3.10.14/misc/motors-pp)
    - New module param: motor.tcu_channels (CSV string, e.g., "2" or "2,3")
    - Binding: the driver binds to the first valid channel listed; additional channels are reserved for future multi-channel support.
    - Dynamic binding: .driver.name (and T40+ .of_match) are built from the first channel.
