@@ -23,3 +23,14 @@ SENSOR_MODEL=gc2053 ./build.sh t31 3.10
 - `<make_args>`: Additional make arguments as required.
 
 Ensure you provide the correct `SOC` environment variable corresponding to your sensor and SoC setup before executing the build command.
+
+### Source layout
+
+Drivers shared by both kernels live in `common/`; per-kernel or per-SoC
+differences are handled in the sources via `CONFIG_KERNEL_*` / `CONFIG_SOC_*`
+guards. Drivers that are genuinely a different implementation per kernel
+(e.g. motor, pwm, t31 ISP) keep separate source sets and are selected per
+kernel in the top-level `Kbuild`.
+
+See `docs/merge-driver-trees-roadmap.md` for the full source map, Kbuild
+selection rules and build/verification notes.
