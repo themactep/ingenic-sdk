@@ -1454,7 +1454,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1320 - 8;
 	} else if (sensor_resolution == TX_SENSOR_RES_200) {
 		wsize = &sensor_win_sizes[2];
-		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_2), sizeof(sensor_mipi_2));
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_), sizeof(sensor_mipi_));
 		sensor_attr.max_integration_time_native = 1360 - 8;
 		sensor_attr.integration_time_limit = 1360 - 8;
 		sensor_attr.total_width = 2500;
