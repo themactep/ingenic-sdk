@@ -21,7 +21,7 @@ Components
    - Probe-time arbitration: claims the TCU channel via tcu_alloc; on conflict prints owner and returns -EBUSY.
    - Backward-compat: if the param is not set, compiled CONFIG_PWMn macros decide which channels are registered (as before).
 
-3) Motor driver (3.10/misc/motor)
+3) Motor driver (3.10/misc/motors-pp)
    - New module param: motor.tcu_channels (CSV string, e.g., "2" or "2,3")
    - Binding: the driver binds to the first valid channel listed; additional channels are reserved for future multi-channel support.
    - Dynamic binding: .driver.name (and T40+ .of_match) are built from the first channel.

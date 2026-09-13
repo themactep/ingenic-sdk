@@ -43,7 +43,13 @@ endif
 
 ifeq ($(BR2_THINGINO_MOTORS),y)
     $(info Building Motor for Kernel $(KERNEL_VERSION))
-    include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
+    ifeq ($(KERNEL_VERSION),3.10.14)
+        # 3.10.14 uses the PP/TCU motor driver (source set: motors-pp)
+        include $(src)/3.10.14/misc/motors-pp/Kbuild
+    else
+        # 4.4.94 uses the GPIO/TCU motor driver
+        include $(src)/$(KERNEL_VERSION)/misc/motor/Kbuild
+    endif
     ifeq ($(BR2_THINGINO_MOTORS_SPI),y)
         ifeq ($(KERNEL_VERSION),3.10.14)
             $(info Building Motor SPI for Kernel $(KERNEL_VERSION))
