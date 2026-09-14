@@ -1376,7 +1376,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 		if (value > 1505) value = 1504;
 	}
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
@@ -1532,7 +1532,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	if ((sensor->info.default_boot == 0) || (sensor->info.default_boot == 1)) {
-		ret = sensor_read(sd, 0x3511, &val);
+		ret += sensor_read(sd, 0x3511, &val);
 		short_time = val << 8;
 		ret += sensor_read(sd, 0x3512, &val);
 		short_time |= val;

@@ -687,7 +687,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0xfe, 0x01);
+	ret += sensor_write(sd, 0xfe, 0x01);
 	ret += sensor_write(sd, 0xb6, (value >> 12) & 0xf);
 	ret += sensor_write(sd, 0xb1, (value >> 8) & 0xf);
 	ret += sensor_write(sd, 0xb2, (value << 2) & 0xff);
@@ -695,7 +695,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		ISP_ERROR("sensor_write error  %d" ,__LINE__ );
 		return ret;
 	}
-	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xfe, 0x00);
 
 	return 0;
 }
@@ -774,7 +774,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x5, &tmp);
+	ret += sensor_read(sd, 0x5, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x6, &tmp);
 	hb = (hb << 8) + tmp;
@@ -787,7 +787,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return -1;
 	sh_delay = tmp;
 	hts=2*(hb+16)+((win_width+sh_delay)/2);
-	ret = sensor_read(sd, 0xd, &tmp);
+	ret += sensor_read(sd, 0xd, &tmp);
 	win_high = tmp;
 	ret += sensor_read(sd, 0xe, &tmp);
 	if (ret < 0)
@@ -795,7 +795,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret = sensor_write(sd, 0x8, (unsigned char)(vb & 0xff));
+	ret += sensor_write(sd, 0x8, (unsigned char)(vb & 0xff));
 	ret += sensor_write(sd, 0x7, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;

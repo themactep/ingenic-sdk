@@ -1025,11 +1025,11 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	vmax = sensor_attr.total_height;
 	shr0 = it;
-	ret = sensor_write(sd, 0x0104, 0x01);
-	ret = sensor_write(sd, 0x0350, 0x01);
-	ret = sensor_write(sd, 0x0203, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x0104, 0x01);
+	ret += sensor_write(sd, 0x0350, 0x01);
+	ret += sensor_write(sd, 0x0203, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x0202, (unsigned char)((shr0 >> 8) & 0xff));
-	ret = sensor_write(sd, 0x0104, 0x00);
+	ret += sensor_write(sd, 0x0104, 0x00);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
@@ -1041,11 +1041,11 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int again = (value & 0xffff0000) >> 16;
-	ret = sensor_write(sd, 0x0104, 0x01);
+	ret += sensor_write(sd, 0x0104, 0x01);
 
 	ret += sensor_write(sd, 0x0205, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x0204, (unsigned char)(((again >> 8) & 0xff)));
-	ret = sensor_write(sd, 0x0104, 0x00);
+	ret += sensor_write(sd, 0x0104, 0x00);
 	if (ret < 0)
 		return ret;
 	return 0;

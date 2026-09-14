@@ -448,7 +448,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	unsigned int expo = value;
 	int again = (value & 0xffff0000) >> 16;
 	/*expo*/
-	ret = sensor_write(sd, 0x3e01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)(expo >> 8) & 0xff);
 	ISP_INFO("\n------------->expo: 0x%x\n", expo);
 	/*gain*/
@@ -469,7 +469,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x3630, 0x4c);
 	}
 
-	ret = sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
@@ -513,7 +513,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	unsigned int ret = 0;
 
 	/* analog gain setting logic */
-	ret = sensor_read(sd, 0x3040, &reg0);
+	ret += sensor_read(sd, 0x3040, &reg0);
 	if (0x40 == reg0) {
 		if (gain_val < 0x740) {
 			ret += sensor_write(sd, 0x363c, 0x0e);
@@ -617,7 +617,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 	sclk = SENSOR_SUPPORT_60FPS_SCLK;
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
@@ -628,7 +628,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	//ret = sensor_write(sd, 0x3812, 0x00);
+	//ret += sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	//ret += sensor_write(sd, 0x3812, 0x30);

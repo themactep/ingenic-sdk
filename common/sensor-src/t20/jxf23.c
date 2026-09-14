@@ -661,7 +661,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;
-	ret = sensor_write(sd, 0x01, (unsigned char) (expo & 0xff));
+	ret += sensor_write(sd, 0x01, (unsigned char) (expo & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char) ((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
@@ -816,7 +816,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	sensor_write(sd, 0xc1, (unsigned char) (vts & 0xff));
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char) (vts >> 8));
-	ret = sensor_read(sd, 0x1f, &val);
+	ret += sensor_read(sd, 0x1f, &val);
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;

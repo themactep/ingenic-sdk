@@ -612,7 +612,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	else
 		sclk = SENSOR_SUPPORT_30FPS_SCLK_DVP;
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
@@ -622,7 +622,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x3812, 0x00);
+	ret += sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x3812, 0x30);

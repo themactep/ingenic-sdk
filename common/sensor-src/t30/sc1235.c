@@ -746,7 +746,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	hts = (hts << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
 	if (ret < 0)
 		return -1;

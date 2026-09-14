@@ -547,7 +547,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd, 0xf0, 0x00);
+	ret += sensor_write(sd, 0xf0, 0x00);
 	ret += sensor_write(sd, 0x8d, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x8e, (unsigned char)((it & 0xff)));
 
@@ -569,7 +569,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 //	ISP_INFO("---------[%s]:%d--------------\n",__func__,__LINE__);
 	value *= 1;
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
@@ -672,7 +672,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 	sclk = SENSOR_SUPPORT_15FPS_SCLK;
 
-	ret = sensor_write(sd, 0xf0, 0x32);
+	ret += sensor_write(sd, 0xf0, 0x32);
 	ret += sensor_read(sd, 0x0c, &val);
 	hts = val << 8;
 	ret += sensor_read(sd, 0x0d, &val);

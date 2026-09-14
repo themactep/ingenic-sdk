@@ -609,7 +609,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret = 0;
 	unsigned char v;
 
-        ret = sensor_write(sd, 0x301a, 0xf8);
+        ret += sensor_write(sd, 0x301a, 0xf8);
         ret += sensor_write(sd, 0x0100, 0x01);
         private_msleep(1);
 
@@ -641,7 +641,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	int again = (value & 0xffff0000) >> 16;
 
 	//integration time
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -768,7 +768,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {

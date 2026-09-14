@@ -479,8 +479,8 @@ static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
-	int ret;
-	ret = sensor_read(sd, 0x03f0, &v);
+	int ret = 0;
+	ret += sensor_read(sd, 0x03f0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -488,7 +488,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = sensor_read(sd, 0x03f1, &v);
+	ret += sensor_read(sd, 0x03f1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -647,7 +647,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	/*calculate and set vts for given fps*/
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0d41, (unsigned char)((vts & 0xff00) >> 8));
+	ret += sensor_write(sd, 0x0d41, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x0d42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return ret;
@@ -837,7 +837,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val0 = 0x00;
 		val1 = 0x00;
 	}
-	ret = sensor_write(sd, 0x0d15, val0);
+	ret += sensor_write(sd, 0x0d15, val0);
 	ret += sensor_write(sd, 0x0015, val1);
 	if (0 != ret)
 		ISP_ERROR("%s reg write err!!\n");

@@ -1552,7 +1552,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	/* ISP_INFO("it is %d, again is %d\n",expo,again); */
 	/*expo*/
-	ret = sensor_write(sd, 0x0203, expo & 0xff);
+	ret += sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1563,7 +1563,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	if (again > ht_gain)
 		again = ht_gain;
 
-	ret = sensor_write(sd, 0x02cd, val_lut[again].reg2cd);
+	ret += sensor_write(sd, 0x02cd, val_lut[again].reg2cd);
 	ret += sensor_write(sd, 0x0614, val_lut[again].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
 	ret += sensor_write(sd, 0x0218, val_lut[again].reg218);
@@ -1589,7 +1589,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n",__LINE__ );
@@ -1627,7 +1627,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned char reg_410 = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-	ret = sensor_read(sd, 0x0410, &reg_410);
+	ret += sensor_read(sd, 0x0410, &reg_410);
 	if (ret < 0)
 		return ret;
 	if (reg_410 > 0x1a)
@@ -1654,7 +1654,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	}
 	if (ag_last > ht_gain) {
 		ag_last = ht_gain;
-		ret = sensor_write(sd, 0x02cd, val_lut[ag_last].reg2cd);
+		ret += sensor_write(sd, 0x02cd, val_lut[ag_last].reg2cd);
 		ret += sensor_write(sd, 0x0614, val_lut[ag_last].reg614);
 		ret += sensor_write(sd, 0x0615, val_lut[ag_last].reg615);
 		ret += sensor_write(sd, 0x0218, val_lut[ag_last].reg218);
@@ -1781,7 +1781,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp) << 1;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;

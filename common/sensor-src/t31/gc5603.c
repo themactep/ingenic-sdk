@@ -535,7 +535,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	struct again_lut *val_lut = sensor_again_lut;
 
 	/*set integration time*/
-	ret = sensor_write(sd, 0x0203, expo & 0xff);
+	ret += sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
 	/*set sensor analog gain*/
 	ret += sensor_write(sd, 0x031d , 0x2d);
@@ -558,7 +558,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0)
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -659,7 +659,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp) << 1;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
@@ -678,7 +678,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret = sensor_read(sd, 0x022c, &val);
+	ret += sensor_read(sd, 0x022c, &val);
 
 	if (enable & 0x2)
 		val |= 0x02;

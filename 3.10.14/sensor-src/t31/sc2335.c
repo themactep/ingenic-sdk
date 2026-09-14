@@ -642,7 +642,7 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 }
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
+	int ret = 0;
 	unsigned char v;
 
 	ret += sensor_read(sd, 0x3107, &v);
@@ -718,7 +718,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	unsigned int ret = 0;
 
 	/* analog gain setting logic */
-	ret = sensor_read(sd, 0x3040, &reg0);
+	ret += sensor_read(sd, 0x3040, &reg0);
 	if (0x40 == reg0) {
 		if (gain_val < 0x740) {
 			ret += sensor_write(sd, 0x363c, 0x0e);
@@ -816,7 +816,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	clk = SENSOR_SUPPORT_30FPS_SCLK;
-	ret = sensor_read(sd, 0x320c, &val);
+	ret += sensor_read(sd, 0x320c, &val);
 	hts = val;
 	ret += sensor_read(sd, 0x320d, &val);
 	if (0 != ret) {

@@ -958,7 +958,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(value >> 8 & 0x3f));
 	//	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
 	if (ret < 0)
@@ -974,7 +974,7 @@ static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3e13, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e13, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e12, (unsigned char)(value >> 8 & 0x3f));
 
 	return 0;
@@ -1064,7 +1064,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 	sclk = SENSOR_SUPPORT_SCLK;
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (ret < 0)
@@ -1077,7 +1077,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 
 	if (ret < 0)

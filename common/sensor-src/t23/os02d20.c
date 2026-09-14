@@ -632,7 +632,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	unsigned int expo = value;
 
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x04, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x03, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x01, 0x01);
@@ -651,7 +651,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x24, value);
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0)
@@ -758,7 +758,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return -1;
 	}
 	/* get hts */
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_read(sd, 0x8c, &val);
 	hts = val<<8;
 	ret += sensor_read(sd, 0x8d, &val);

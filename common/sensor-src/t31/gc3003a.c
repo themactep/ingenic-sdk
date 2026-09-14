@@ -469,10 +469,10 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 }
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
+	int ret = 0;
 	unsigned char v;
 
-	ret = sensor_read(sd, 0x03f0, &v);
+	ret += sensor_read(sd, 0x03f0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -480,7 +480,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = sensor_read(sd, 0x03f1, &v);
+	ret += sensor_read(sd, 0x03f1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 
 	if (ret < 0)
@@ -710,7 +710,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val0 = 0x00;
 		val1 = 0x00;
 	}
-	ret = sensor_write(sd, 0x031d, 0x2d);
+	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0d15, val0);
 	ret += sensor_write(sd, 0x0015, val1);
 	ret += sensor_write(sd, 0x031d, 0x28);

@@ -307,10 +307,10 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 }
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
+	int ret = 0;
 	unsigned char v;
 
-	ret = sensor_read(sd, 0x3002, &v);
+	ret += sensor_read(sd, 0x3002, &v);
 	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -464,7 +464,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3029, (unsigned char)((vts >> 8) & 0xff));
 	ret += sensor_write(sd, 0x302a, (unsigned char)((vts >> 16) & 0x0f));
 

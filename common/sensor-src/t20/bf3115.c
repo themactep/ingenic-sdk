@@ -526,13 +526,13 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		return -1;
 	}
 
-	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	if (ret < 0) {
 		ISP_INFO("sensor_write error\n");
 		return ret;
 	}
 
-	ret = sensor_read(sd, 0x09, &tmp);
+	ret += sensor_read(sd, 0x09, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x0a, &tmp);
 	if (ret < 0)
@@ -543,7 +543,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - frame_length_df;
 	vb_bf = vb - vb_af;
-	ret = sensor_write(sd, 0x0b, (unsigned char) (vb_bf & 0xff));
+	ret += sensor_write(sd, 0x0b, (unsigned char) (vb_bf & 0xff));
 	ret += sensor_write(sd, 0x0c, (unsigned char) (vb_bf >> 8));
 	if (ret < 0) {
 		ISP_INFO("err: sensor_write err\n");

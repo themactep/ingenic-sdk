@@ -1084,7 +1084,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integration time*/
-	ret = sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((it >> 16) & 0xf));
 	/*set analog gain*/
@@ -1101,7 +1101,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int it = value << 4;
 
-	ret = sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((it >> 16) & 0xf));
 	if (ret < 0)

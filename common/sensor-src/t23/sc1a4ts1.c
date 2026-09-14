@@ -767,7 +767,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	clk = SENSOR_SUPPORT_15FPS_SCLK;
-	ret = sensor_read(sd, 0x320c, &val);
+	ret += sensor_read(sd, 0x320c, &val);
 	hts = val;
 	ret += sensor_read(sd, 0x320d, &val);
 	if (0 != ret) {

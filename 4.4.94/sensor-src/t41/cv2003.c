@@ -609,7 +609,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	it = sensor_attr.total_height - it;
-	ret = sensor_write(sd, 0x304a, (unsigned char)((it >> 16) & 0x0f));
+	ret += sensor_write(sd, 0x304a, (unsigned char)((it >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3049, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3048, (unsigned char)(it & 0xff));
 
@@ -626,7 +626,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd,  0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd,  0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 

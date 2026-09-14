@@ -635,16 +635,16 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 }
 
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
-	int ret;
+	int ret = 0;
 #if 0
 	if (again_mode == LCG) {
-		ret = sensor_write(sd, 0x3202, 0x0080);
+		ret += sensor_write(sd, 0x3202, 0x0080);
 		ret += sensor_write(sd, 0x3206, 0x0B08);
 		ret += sensor_write(sd, 0x3208, 0x1E13);
 		ret += sensor_write(sd, 0x3100, 0x00);
 
 	} else if (again_mode == HCG) {
-		ret = sensor_write(sd, 0x3202, 0x00B0);
+		ret += sensor_write(sd, 0x3202, 0x00B0);
 		ret += sensor_write(sd, 0x3206, 0x1C0E);
 		ret += sensor_write(sd, 0x3208, 0x4E39);
 		ret += sensor_write(sd, 0x3100, 0x04);
@@ -652,7 +652,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		ISP_INFO("Do not support this Again mode!\n");
 	}
 #endif
-	ret = sensor_write(sd, 0x3060, value);
+	ret += sensor_write(sd, 0x3060, value);
 	if (ret < 0)
 		return ret;
 
@@ -744,7 +744,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 
 	hts = (hts << 8) + tmp[1];
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x300A, vts);
+	ret += sensor_write(sd, 0x300A, vts);
 	if (ret < 0)
 		return -1;
 

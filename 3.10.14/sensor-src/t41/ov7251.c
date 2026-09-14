@@ -669,7 +669,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)(it & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((it >> 16) & 0x0f));
 
@@ -687,7 +687,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	unsigned int expo = value<<4;
 
-	ret = sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0x0f));
 	if (ret < 0)
@@ -809,7 +809,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x380f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x380f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x380e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);

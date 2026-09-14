@@ -430,10 +430,10 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	/* low 4 bits are fraction bits */
 	unsigned int expo = value;
-	ret = sensor_write(sd, 0x000c, (unsigned char)((expo >> 8) & 0xff));
+	ret += sensor_write(sd, 0x000c, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
-	ret = sensor_write(sd, 0x000d, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x000d, (unsigned char)(expo & 0xff));
 	if (ret < 0)
 		return ret;
 #if 0
@@ -441,13 +441,13 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 		ISP_INFO("sensor_set_integration_time:expo = %d\n",expo);
 		if (expo > 2400 ) {
 			// low fps
-			ret = sensor_write(sd, 0x0082, 0x04);
+			ret += sensor_write(sd, 0x0082, 0x04);
 			// ret += sensor_write(sd, 0x007f, 0x01);
 			ret += sensor_write(sd, 0x0052, 0x07);
 			ret += sensor_write(sd, 0x00f2, 0x07);
 			ret += sensor_write(sd, 0x00fb, 0x02);
 		} else {
-			ret = sensor_write(sd, 0x0082, 0x08);
+			ret += sensor_write(sd, 0x0082, 0x08);
 			// ret += sensor_write(sd, 0x007f, 0x01);
 			ret += sensor_write(sd, 0x0052, 0x06);
 			ret += sensor_write(sd, 0x00f2, 0x06);
@@ -456,7 +456,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	}
 	else {
 			//normal
-		ret = sensor_write(sd, 0x0082, 0x0b);
+		ret += sensor_write(sd, 0x0082, 0x0b);
 		// ret += sensor_write(sd, 0x007f, 0x01);
 		ret += sensor_write(sd, 0x0052, 0x06);
 		ret += sensor_write(sd, 0x00f2, 0x06);
@@ -464,7 +464,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	}
 #endif
 
-	ret = sensor_write(sd, 0x001d, 0x02);
+	ret += sensor_write(sd, 0x001d, 0x02);
 
 	return 0;
 }
@@ -495,7 +495,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 //	temp = (128<<6)%(total_gain+1);
 
 	if ((vrefh>Vrefh_min_tlb)&&(vrefh<=0x7f)) {
-		ret = sensor_write(sd, 0x0030, 0x00);
+		ret += sensor_write(sd, 0x0030, 0x00);
 		ret += sensor_write(sd, 0x0031, 0xc0);
 		ret += sensor_write(sd, 0x0034, 0x00);
 		ret += sensor_write(sd, 0x0035, 0xc0);
@@ -507,7 +507,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		if (ret < 0)
 			return ret;
 	} else if (vrefh==Vrefh_min_tlb)	{
-		ret = sensor_write(sd, 0x0030, 0x01);
+		ret += sensor_write(sd, 0x0030, 0x01);
 		ret += sensor_write(sd, 0x0031, 0xb0);
 		ret += sensor_write(sd, 0x0034, 0x01);
 		ret += sensor_write(sd, 0x0035, 0xb0);
@@ -528,7 +528,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x014a, 0x01);
 	if (ret < 0)
 		return ret;
-	ret = sensor_write(sd, 0x001D, 0x02);
+	ret += sensor_write(sd, 0x001D, 0x02);
 	if (ret < 0)
 		return ret;
 	return 0;
@@ -673,7 +673,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return ret;
 	}
 	ret += sensor_write(sd, 0x0021, ((vts-height) >> 8) & 0xff);
-	ret = sensor_write(sd, 0x0022, (vts-height) & 0xff);
+	ret += sensor_write(sd, 0x0022, (vts-height) & 0xff);
 	ret += sensor_write(sd, 0x001d, 0x02);
 	if (0 != ret) {
 		ISP_INFO("err: sensor_write err\n");

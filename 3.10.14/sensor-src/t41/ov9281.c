@@ -643,7 +643,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	int ret = 0;
 	unsigned int expo = value;
-	ret = sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff) << 4);
+	ret += sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff) << 4);
 	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 12) & 0xf));
 	if (ret < 0)
@@ -935,25 +935,25 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	//struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	ret = sensor_read(sd, 0x3821, &val_m);
-	ret = sensor_read(sd, 0x3820, &val_f);
+	ret += sensor_read(sd, 0x3821, &val_m);
+	ret += sensor_read(sd, 0x3820, &val_f);
 
 	switch (enable) {
 	case 0:
-		ret = sensor_write(sd, 0x3821, 0x00);
-		ret = sensor_write(sd, 0x3820, 0x40);
+		ret += sensor_write(sd, 0x3821, 0x00);
+		ret += sensor_write(sd, 0x3820, 0x40);
 		break;
 	case 1:
-		ret = sensor_write(sd, 0x3821, (val_m | 0x04));
+		ret += sensor_write(sd, 0x3821, (val_m | 0x04));
 		//ret=sensor_write(sd, 0x3820, val_f);
 		break;
 	case 2:
 		//ret=sensor_write(sd, 0x3821,val_m);
-		ret = sensor_write(sd, 0x3820, (val_f | 0x04));
+		ret += sensor_write(sd, 0x3820, (val_f | 0x04));
 		break;
 	case 3:
-		ret = sensor_write(sd, 0x3821, (val_m | 0x04));
-		ret = sensor_write(sd, 0x3820, (val_f | 0x04));
+		ret += sensor_write(sd, 0x3821, (val_m | 0x04));
+		ret += sensor_write(sd, 0x3820, (val_f | 0x04));
 		break;
 	}
 	//ret += sensor_write(sd, 0x00eb, 0x01);

@@ -620,7 +620,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int expo = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd, 0x3100, (unsigned char)((expo >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3100, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3102, (unsigned char)(again));
 	if ((expo > 200) && (expo < 600))
@@ -645,7 +645,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd,  0x3100, (unsigned char)((value >> 8)& 0xff));
+	ret += sensor_write(sd,  0x3100, (unsigned char)((value >> 8)& 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(value & 0xff));
 
 	if (ret < 0)
@@ -681,7 +681,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	unsigned char h_end = 0;
 
 	if (trig_logic == true) {
-		ret = sensor_read(sd, 0x3007, &flip);
+		ret += sensor_read(sd, 0x3007, &flip);
 		if (1 == sv_state) {
 			flip |= 0x02;
 			h_start = 0xfd;
@@ -800,7 +800,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x310c, &tmp);
+	ret += sensor_read(sd, 0x310c, &tmp);
 	vts = tmp;
 	ret += sensor_read(sd, 0x310d, &tmp);
 	if (ret < 0)
@@ -808,7 +808,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts = ((vts << 8) + tmp);
 	hts = pclk * (fps & 0xffff) / vts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x300b, 0x00);
+	ret += sensor_write(sd, 0x300b, 0x00);
 	ret += sensor_write(sd, 0x310f, (unsigned char)(hts & 0xff));
 	ret += sensor_write(sd, 0x310e, (unsigned char)(hts >> 8));
 	ret += sensor_write(sd, 0x300b, 0x01);

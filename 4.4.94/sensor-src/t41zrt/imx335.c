@@ -635,7 +635,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	vmax = sensor_attr.total_height;
 	shr0 = vmax - value;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shr0 >> 16) & 0x0f));
 	if (0 != ret) {
@@ -649,7 +649,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x30e9, (unsigned char)((value >> 8) & 0x07));
 	if (ret < 0)
 		return ret;
@@ -761,7 +761,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts << 8) + tmp; //////
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3001, 0x01);
-	ret = sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3001, 0x00);
@@ -805,7 +805,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	 * 2'b01:mirror,2'b10:filp
 	 * 0x3081 0x3082 must be changed as blow in all-pixel scan mode
 	 */
-	ret = sensor_read(sd, 0x304e, &val_h);
+	ret += sensor_read(sd, 0x304e, &val_h);
 	ret += sensor_read(sd, 0x304f, &val_v);
 	switch (enable) {
 	case 0: // normal
@@ -837,7 +837,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		reg_st_adr = 0x1000;
 		break;
 	}
-	ret = sensor_write(sd, 0x304e, val_h);
+	ret += sensor_write(sd, 0x304e, val_h);
 	ret += sensor_write(sd, 0x304f, val_v);
 	ret += sensor_write(sd, 0x3081, reg_3081);
 	ret += sensor_write(sd, 0x3083, reg_3083);

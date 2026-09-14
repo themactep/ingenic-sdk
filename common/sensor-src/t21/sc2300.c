@@ -688,7 +688,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 	sclk = SENSOR_SUPPORT_SCLK;
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	hts = ((hts << 8) + tmp);
@@ -698,7 +698,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
 	if (0 != ret) {
 		ISP_INFO("err: sensor_write err\n");

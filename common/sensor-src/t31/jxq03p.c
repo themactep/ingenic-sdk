@@ -622,7 +622,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x01, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 
 	return 0;
@@ -761,7 +761,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0xc2, 0x23);
 	ret += sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	/*quick launch*/
-	ret = sensor_read(sd, 0x1f, &val);
+	ret += sensor_read(sd, 0x1f, &val);
 	val |= 0xc0; /*set bit[7],  register group write function,  auto clean*/
 	ret += sensor_write(sd, 0x1f, val);
 #else
@@ -862,7 +862,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_write(sd, 0xc1, val);
 	ret += sensor_write(sd, 0xc2, 0x28);
 	ret += sensor_write(sd, 0xc3, vwinSt);
-	ret = sensor_read(sd, 0x1f, &valg);
+	ret += sensor_read(sd, 0x1f, &valg);
 	if (ret < 0)
 		return -1;
 	valg |= 0xc0; /*bit[7], register group write function,auto clean.bit[6] lanch immediately*/

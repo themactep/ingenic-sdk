@@ -963,7 +963,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int Cmd_OffNy = 0;
 	Cmd_OffNy = sensor_attr.total_height - value;
-	ret = sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0xef, 0x01);
 	/*Exp Line Control not set*/
 	/*ret += sensor_write(sd, 0x0e, 0x00);*/
 	/*ret += sensor_write(sd, 0x0f, 0x00);*/
@@ -992,14 +992,14 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 
 #if 1
 	/*high temperature control*/
-	ret = sensor_write(sd, 0xef, 0x02);
+	ret += sensor_write(sd, 0xef, 0x02);
 	ret += sensor_read(sd, 0x1c, &tmp);
 	Temp_reg = tmp;
 	ret += sensor_read(sd, 0x1b, &tmp);
 	if (ret < 0)
 		return ret;
 	Temp_reg = (Temp_reg | ((tmp & 0x07) << 8));
-	ret = sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0xef, 0x01);
 	if (ret < 0)
 		return ret;
 	if ((Temp_reg > 0x001c) || (GDAC < 0x400)) {
@@ -1099,10 +1099,10 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_INFO("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	ret = sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0xef, 0x01);
 	if (ret < 0)
 		return -1;
-	ret = sensor_read(sd, 0x27, &tmp);
+	ret += sensor_read(sd, 0x27, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x28, &tmp);
 	if (ret < 0)
@@ -1111,7 +1111,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 
 	vts = (pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16));
 	Cmd_Lpf = vts - 1;
-	ret = sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0xef, 0x01);
 	ret += sensor_write(sd, 0x0b, (unsigned char) (Cmd_Lpf & 0xff));
 	ret += sensor_write(sd, 0x0a, (unsigned char) (Cmd_Lpf >> 8));
 	ret += sensor_write(sd, 0x09, 0x01);
@@ -1119,7 +1119,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
-	ret = sensor_read(sd, 0x0c, &tmp);
+	ret += sensor_read(sd, 0x0c, &tmp);
 	Cur_OffNy = tmp;
 	ret += sensor_read(sd, 0x0d, &tmp);
 	if (ret < 0)

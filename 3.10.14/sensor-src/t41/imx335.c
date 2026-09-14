@@ -534,7 +534,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int rhs1 = 626;
 
 	shs1 = rhs1 - (value << 2);
-	ret = sensor_write(sd, 0x305C, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x305C, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x305D, (unsigned char)((shs1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305E, (unsigned char)((shs1 >> 16) & 0x3));
 	return 0;
@@ -548,14 +548,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		vmax = sensor_attr.total_height;
 		shs = vmax - value;
-		ret = sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3059, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x305A, (unsigned char)((shs >> 16) & 0x0f));
 	}
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		vmax = sensor_attr.total_height;
 		shs = (vmax << 1) - (value << 2);
-		ret = sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3059, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x305A, (unsigned char)((shs >> 16) & 0x0f));
 	}
@@ -679,7 +679,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	if (0 != ret) {
@@ -706,7 +706,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char reg_3074 = 0xC4;
 	unsigned char reg_3075 = 0x00;
 
-	ret = sensor_read(sd, 0x304E, &hreverse);
+	ret += sensor_read(sd, 0x304E, &hreverse);
 	ret += sensor_read(sd, 0x304F, &vreverse);
 	switch (enable) {
 	case 0:

@@ -740,7 +740,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 
 	//short frame use shs1
 	shs1 = rhs1 - value - 1;
-	ret = sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x3));
 
@@ -755,14 +755,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		vmax = sensor_attr.total_height;
 		shs = vmax - value;
-		ret = sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3051, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3052, (unsigned char)((shs >> 16) & 0x3));
 	} else {
 		//long frame use shs2
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
-		ret = sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3025, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x3));
 	}
@@ -886,7 +886,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	pclk = SENSOR_SUPPORT_SCLK;
 
 	/*method 2 change vts*/
-	ret = sensor_read(sd, 0x302c, &value);
+	ret += sensor_read(sd, 0x302c, &value);
 	hmax = value;
 	ret += sensor_read(sd, 0x302d, &value);
 	hmax = (value << 8) | hmax;
@@ -899,7 +899,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("hmax is 0x%x, vmax is 0x%x\n", hmax, vmax);
 
 	/*record current integration time*/
-	ret = sensor_read(sd, 0x3050, &value);
+	ret += sensor_read(sd, 0x3050, &value);
 	shs = value;
 	ret += sensor_read(sd, 0x3051, &value);
 	shs = (value << 8) | shs;

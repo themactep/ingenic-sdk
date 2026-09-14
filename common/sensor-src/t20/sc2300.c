@@ -672,7 +672,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_INFO("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (ret < 0)
@@ -681,7 +681,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
 	if (ret < 0) {
 		ISP_INFO("err: sensor_write err\n");

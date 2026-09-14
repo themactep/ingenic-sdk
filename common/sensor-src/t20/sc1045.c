@@ -432,9 +432,9 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 
 	/* if ((value & 0x80) != 0) */
-	/* 	ret = sensor_write(sd, 0x3610, 0x1b); */
+	/* 	ret += sensor_write(sd, 0x3610, 0x1b); */
 	/* else  */
-	/* 	ret = sensor_write(sd, 0x3610, 0x03); */
+	/* 	ret += sensor_write(sd, 0x3610, 0x03); */
 
 	ret += sensor_write(sd, 0x3e09, (unsigned char) (value & 0x7f));
 	if (ret < 0)
@@ -524,11 +524,11 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hts = (hts << 8) + tmp;
 	/*vts = (pclk << 4) / (hts * (newformat >> 4));*/
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
-	ret = sensor_write(sd, 0x3339, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x3339, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x3338, (unsigned char) (vts >> 8));
-	ret = sensor_write(sd, 0x3337, (unsigned char) ((vts - 0x2ee) & 0xff));
+	ret += sensor_write(sd, 0x3337, (unsigned char) ((vts - 0x2ee) & 0xff));
 	ret += sensor_write(sd, 0x3336, (unsigned char) ((vts - 0x2ee) >> 8));
 	if (ret < 0)
 		return -1;

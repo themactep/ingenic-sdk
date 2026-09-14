@@ -587,7 +587,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x0d05, &tmp);
+	ret += sensor_read(sd, 0x0d05, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x0d06, &tmp);
 	if (0 != ret) {

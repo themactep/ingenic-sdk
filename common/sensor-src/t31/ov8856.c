@@ -798,11 +798,11 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 }
 
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
-	int ret;
+	int ret = 0;
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd, 0x3502, (unsigned char)((it & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3502, (unsigned char)((it & 0x0f) << 4));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((it >> 12) & 0xf));
 
@@ -814,7 +814,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3502, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3502, (unsigned char)((value & 0x0f) << 4));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((value >> 12) & 0xf));
 	if (ret < 0)

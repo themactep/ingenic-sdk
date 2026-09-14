@@ -619,7 +619,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	if (it_last != expo) {
-		ret = sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
+		ret += sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
 		ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	}
 	if (ag_last != again) {

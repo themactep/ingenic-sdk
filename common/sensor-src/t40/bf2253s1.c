@@ -385,7 +385,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	}
 
 	//ISP_INFO("bf2253s1--%s:%d- Not_implemented  value =%d \n", __func__, __LINE__ , expo);
-	ret = sensor_write(sd, 0x6c, expo & 0xff);
+	ret += sensor_write(sd, 0x6c, expo & 0xff);
 	ret += sensor_write(sd, 0x6b, (expo & 0x3f00) >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -393,7 +393,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	}
 
 	ISP_INFO("bf2253s1--%s:%d-   again = %d  ,should be (15, 79) \n", __func__, __LINE__, again);
-	ret = sensor_write(sd, 0x6a, again);
+	ret += sensor_write(sd, 0x6a, again);
 
 	return 0;
 }
@@ -517,7 +517,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
-	ret = sensor_read(sd, 0x26, &tmp);
+	ret += sensor_read(sd, 0x26, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x25, &tmp);
 	if (0 != ret) {
@@ -527,7 +527,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_read(sd, 0x23, &tmp);
+	ret += sensor_read(sd, 0x23, &tmp);
 	vts_diff = tmp;
 	ret += sensor_read(sd, 0x22, &tmp);
 	if (0 != ret) {

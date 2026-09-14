@@ -2292,7 +2292,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int expo = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = sensor_write(sd, 0x3208, 0x00);
+	ret += sensor_write(sd, 0x3208, 0x00);
 	/*expo*/
 	ret += sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
@@ -2471,7 +2471,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x3208, 0x02);
+	ret += sensor_write(sd, 0x3208, 0x02);
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x3208, 0x12);

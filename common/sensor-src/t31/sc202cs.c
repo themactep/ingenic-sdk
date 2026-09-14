@@ -583,7 +583,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	/*set analog gain*/
-	ret = sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
@@ -610,7 +610,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
@@ -693,7 +693,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {

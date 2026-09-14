@@ -620,7 +620,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 	vmax = sensor_attr.total_height;
 	shr0 = vmax - value;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shr0 >> 16) & 0x0f));
 	if (0 != ret) {
@@ -635,7 +635,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x30e9, (unsigned char)((value >> 8) & 0x07));
 	if (ret < 0)
 		return ret;
@@ -653,7 +653,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	vmax = sensor_attr.total_height;
 	shr0 = vmax - it;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shr0 >> 16) & 0x0f));
 
@@ -737,7 +737,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3001, 0x01);
-	ret = sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3001, 0x00);

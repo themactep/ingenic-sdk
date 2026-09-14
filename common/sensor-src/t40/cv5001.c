@@ -310,7 +310,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	exp = vmax - it;
 	it = ((it >> 1) << 1);
 	exp = ((exp >> 1) << 1);
-	ret = sensor_write(sd, 0x3060, (unsigned char)(exp & 0xff));
+	ret += sensor_write(sd, 0x3060, (unsigned char)(exp & 0xff));
 	ret += sensor_write(sd, 0x3061, (unsigned char)((exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3164, (unsigned char)(again & 0xff));
 
@@ -329,7 +329,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	vmax = sensor_attr.total_height;
 	exp0 = vmax - it;
 	exp0 = (exp0 >> 1) << 1;
-	ret = sensor_write(sd, 0x3060, (unsigned char)(exp0 & 0xff));
+	ret += sensor_write(sd, 0x3060, (unsigned char)(exp0 & 0xff));
 	ret += sensor_write(sd, 0x3061, (unsigned char)((exp0 >> 8) & 0xff));
 
 	//ISP_INFO("cv5001 set exp=0x%04x(%4d line)\n", exp0, it);
@@ -478,7 +478,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3029, (unsigned char)((vts >> 8) & 0xff));
 	ret += sensor_write(sd, 0x302A, (unsigned char)((vts >> 16) & 0x0f));
 

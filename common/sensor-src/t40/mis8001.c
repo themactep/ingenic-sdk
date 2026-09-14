@@ -2184,7 +2184,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_read(sd, 0x024B, &SensorVOB_LSB);
 	ret += sensor_read(sd, 0x024C, &SensorVOB_MSB);
 	SensorVOB = (SensorVOB_MSB << 8) + SensorVOB_LSB;
-	ret = sensor_read(sd, 0x0212, &SensorGain);
+	ret += sensor_read(sd, 0x0212, &SensorGain);
 
 	if (SensorVOB_MSB >= 2) {
 		SensorVOB = SensorVOB - 767;
@@ -2235,7 +2235,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x000b, (unsigned char)((it >> 16) & 0x3));
 	ret += sensor_write(sd, 0x000a, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x0009, (unsigned char)(it & 0xff));
-	ret = sensor_write(sd, 0x0212, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x0212, (unsigned char)(again & 0xff));
 
 	if (ret < 0)
 		return ret;
@@ -2248,7 +2248,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 
 	//value *= 2;
-	ret = sensor_write(sd, 0x000b, (unsigned char)((value >> 16) & 0x0f));
+	ret += sensor_write(sd, 0x000b, (unsigned char)((value >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x000a, (unsigned char)((value >> 8) & 0xff));
 	ret += sensor_write(sd, 0x0009, (unsigned char)( value       & 0x0f));
 	if (ret < 0)
@@ -2263,7 +2263,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	//ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	//ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
-        ret = sensor_write(sd, 0x0212, (unsigned char)(value & 0xdc));
+        ret += sensor_write(sd, 0x0212, (unsigned char)(value & 0xdc));
 	if (ret < 0)
 		return ret;
 
@@ -2363,7 +2363,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0008, (unsigned char)(vts >> 16));
+	ret += sensor_write(sd, 0x0008, (unsigned char)(vts >> 16));
 	ret += sensor_write(sd, 0x0007, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x0006, (unsigned char)(vts & 0xff));
 	//expo_val = vts-10;

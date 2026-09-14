@@ -588,7 +588,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	value *= 1;
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
@@ -697,7 +697,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return ret;
 	}
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	hts = ((hts << 8) | tmp);
@@ -734,7 +734,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	} else {
 		val &= 0x9f;
 	}
-	ret = sensor_write(sd, 0x3221, val);
+	ret += sensor_write(sd, 0x3221, val);
 	if (ret < 0)
 		return -1;
 

@@ -693,7 +693,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_INFO("set_fps error ,should be %d  ~ %d \n", SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
 		return -1;
 	}
-	ret = sensor_read(sd, 0x5, &tmp);
+	ret += sensor_read(sd, 0x5, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x6, &tmp);
 	hb = (hb << 8) + tmp;
@@ -707,7 +707,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	sh_delay = tmp;
 	hts = win_width + 2 * (hb + sh_delay + 4);
 
-	ret = sensor_read(sd, 0xd, &tmp);
+	ret += sensor_read(sd, 0xd, &tmp);
 	win_high = tmp;
 	ret += sensor_read(sd, 0xe, &tmp);
 	if (ret < 0)
@@ -715,7 +715,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret = sensor_write(sd, 0x8, (unsigned char) (vb & 0xff));
+	ret += sensor_write(sd, 0x8, (unsigned char) (vb & 0xff));
 	ret += sensor_write(sd, 0x7, (unsigned char) (vb >> 8));
 	if (ret < 0)
 		return -1;

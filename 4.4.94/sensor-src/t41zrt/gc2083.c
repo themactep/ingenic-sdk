@@ -503,7 +503,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0)
 		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
@@ -631,7 +631,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp) << 1;
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0d41, (unsigned char)((vts >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0d41, (unsigned char)((vts >> 8) & 0xff));
 	ret += sensor_write(sd, 0x0d42, (unsigned char)(vts & 0xff));
 
 	sensor->video.fps = fps;

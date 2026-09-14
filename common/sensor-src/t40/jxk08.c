@@ -616,7 +616,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x01, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		ISP_ERROR("%s %d, sensor reg write err!!\n", __func__, __LINE__);
@@ -771,7 +771,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0xc2, 0x23);
 	ret += sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	/*quick launch*/
-	ret = sensor_read(sd, 0x1f, &val);
+	ret += sensor_read(sd, 0x1f, &val);
 	val |= 0xc0; /*set bit[7],  register group write function,  auto clean*/
 	ret += sensor_write(sd, 0x1f, val);
 #else

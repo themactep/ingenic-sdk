@@ -383,7 +383,7 @@ static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) 
 
 static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	struct v4l2_subdev *sd = &sensor->sd;
-	int ret;
+	int ret = 0;
 	unsigned int vts = 0;
 	struct tx_isp_notify_argument arg;
 

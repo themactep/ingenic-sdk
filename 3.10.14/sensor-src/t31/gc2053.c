@@ -1356,7 +1356,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	struct again_lut *val_lut = sensor_again_lut;
 
 	/* sensor reg page */
-	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xfe, 0x00);
 
 	/* vts */
 	if (vtsn0 != vts0) {
@@ -1388,7 +1388,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 1
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x04, value & 0xff);
+	ret += sensor_write(sd, 0x04, value & 0xff);
 	ret += sensor_write(sd, 0x03, (value & 0x3f00) >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1400,7 +1400,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_write(sd, 0xb4, val_lut[value].regb4);
 	ret += sensor_write(sd, 0xb3, val_lut[value].regb3);
 	//	ret += sensor_write(sd, 0xb2, val_lut[value].regb2);
@@ -1503,7 +1503,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x0);
 	ret += sensor_read(sd, 0x05, &val);
 	hts = val;
 	ret += sensor_read(sd, 0x06, &val);
@@ -1514,7 +1514,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	//	vtsn0 = (unsigned char) ((vts & 0x3f00) >> 8);
 	//	vtsn1 = (unsigned char) (vts & 0xff);
-	ret = sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
@@ -1547,7 +1547,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
-	ret = sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x0);
 	ret += sensor_read(sd, 0x17, &val);
 	if (enable & 0x2)
 		val |= 0x02;

@@ -529,7 +529,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		shr0 = vmax - value - 1;
 	else
 		shr0 = (vmax - value - 1) << 1;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305A, (unsigned char)((shr0 >> 16) & 0xf));
 	if (0 != ret) {
@@ -546,7 +546,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	unsigned short rhs1 = 201;
 
 	shr1 = rhs1 - (value << 1);
-	ret = sensor_write(sd, 0x305c, (unsigned char)(shr1 & 0xff));
+	ret += sensor_write(sd, 0x305c, (unsigned char)(shr1 & 0xff));
 	ret += sensor_write(sd, 0x305d, (unsigned char)((shr1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305e, (unsigned char)((shr1 >> 16) & 0xf));
 
@@ -661,7 +661,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	/*method 2 change vts*/
-	ret = sensor_read(sd, 0x3035, &value);
+	ret += sensor_read(sd, 0x3035, &value);
 	hmax = value;
 	value = 0;
 	ret += sensor_read(sd, 0x3034, &value);
@@ -961,8 +961,8 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	unsigned char hReverse = 0;
 	unsigned char vReverse = 0;
-	ret = sensor_read(sd, 0x304e, &hReverse);
-	ret = sensor_read(sd, 0x304f, &vReverse);
+	ret += sensor_read(sd, 0x304e, &hReverse);
+	ret += sensor_read(sd, 0x304f, &vReverse);
 	switch (enable) {
 	case 0:
 		hReverse &= 0xFE;

@@ -1428,7 +1428,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
@@ -1467,7 +1467,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
 	/*black sun cancellation strategy*/
-	ret = sensor_write(sd, 0x2f, tmp1);
+	ret += sensor_write(sd, 0x2f, tmp1);
 	ret += sensor_write(sd, 0x0c, tmp2);
 	ret += sensor_write(sd, 0x82, tmp3);
 
@@ -1623,7 +1623,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor_write(sd, 0xc1, (unsigned char)(vts & 0xff));
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
-	ret = sensor_read(sd, 0x1f, &val);
+	ret += sensor_read(sd, 0x1f, &val);
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;

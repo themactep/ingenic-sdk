@@ -648,7 +648,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	if (ret < 0)
 		return ret;
 	tmp |= (1 << 7); /*set bit[7],  register group write function,  auto clean*/
-	ret = sensor_write(sd, 0x1f, tmp);
+	ret += sensor_write(sd, 0x1f, tmp);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", tmp);
 	if (ret < 0) {
 		ISP_INFO("err:sc2135_write err\n");

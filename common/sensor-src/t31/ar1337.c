@@ -3049,11 +3049,11 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	/*set analog gain*/
-	ret = sensor_write(sd, 0x3e09, gain_lut[index].again);
+	ret += sensor_write(sd, 0x3e09, gain_lut[index].again);
 	/*set coarse dgain*/
-	ret = sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);
+	ret += sensor_write(sd, 0x3e06, gain_lut[index].coarse_dgain);
 	/*set fine dgain*/
-	ret = sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
+	ret += sensor_write(sd, 0x3e07, gain_lut[index].fine_dgain);
 	if (ret < 0)
 		return ret;
 
@@ -3152,7 +3152,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	hts = (hts << 8) + tmp[1];
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x300A, vts);
+	ret += sensor_write(sd, 0x300A, vts);
 
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 5;

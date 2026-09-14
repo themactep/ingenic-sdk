@@ -620,7 +620,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 
 	int ret = 0;
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x4, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3, (unsigned char)((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x01, 0x01);
@@ -635,7 +635,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x24, (unsigned char)value);
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
@@ -734,10 +734,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 		return -1;
 	}
 
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	if (ret < 0)
 		return ret;
-	ret = sensor_read(sd, 0x8c, &tmp);
+	ret += sensor_read(sd, 0x8c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x8d, &tmp);
 	if (0 != ret) {
@@ -796,7 +796,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	int ret = 0;
 	unsigned char val = 0;
 
-	ret = sensor_write(sd, 0xfd, 0x01);
+	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_read(sd, 0x3f, &val);
 	if (enable) {
 		val = val | 0x02;

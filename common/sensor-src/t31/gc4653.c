@@ -1102,7 +1102,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	/* expo */
 	if (it_last != expo) {
-		ret = sensor_write(sd, 0x0203, value & 0xff);
+		ret += sensor_write(sd, 0x0203, value & 0xff);
 		ret += sensor_write(sd, 0x0202, value >> 8);
 		if (ret < 0) {
 			ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
@@ -1113,13 +1113,13 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	/* gain */
 	if (ag_last != again) {
 		struct again_lut *val_lut = sensor_again_lut;
-		ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
-		ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
-		ret = sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
-		ret = sensor_write(sd, 0x02b9, val_lut[value].reg2b9);
-		ret = sensor_write(sd, 0x0515, val_lut[value].reg515);
-		ret = sensor_write(sd, 0x0519, val_lut[value].reg519);
-		ret = sensor_write(sd, 0x02d9, val_lut[value].reg2d9);
+		ret += sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
+		ret += sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
+		ret += sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
+		ret += sensor_write(sd, 0x02b9, val_lut[value].reg2b9);
+		ret += sensor_write(sd, 0x0515, val_lut[value].reg515);
+		ret += sensor_write(sd, 0x0519, val_lut[value].reg519);
+		ret += sensor_write(sd, 0x02d9, val_lut[value].reg2d9);
 		if (ret < 0) {
 			ISP_ERROR("sensor_write error  %d" ,__LINE__ );
 			return ret;
@@ -1136,7 +1136,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1148,7 +1148,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
+	ret += sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
 	ret += sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
 	ret += sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
 	ret += sensor_write(sd, 0x02b9, val_lut[value].reg2b9);
@@ -1248,7 +1248,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		hts <<= 1, short_time = 310;
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
@@ -1281,7 +1281,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 	unsigned char val = 0x0;
-	ret = sensor_read(sd, 0x0101, &val);
+	ret += sensor_read(sd, 0x0101, &val);
 	if (enable & 0x2)
 		val |= 0x02;
 	else
@@ -1348,7 +1348,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 #ifdef __WDR__
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x0201, value & 0xff);
+	ret += sensor_write(sd, 0x0201, value & 0xff);
 	ret += sensor_write(sd, 0x0200, (value >> 8) & 0x3f);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);

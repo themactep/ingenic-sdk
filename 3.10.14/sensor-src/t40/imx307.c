@@ -644,7 +644,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 
 	//short frame use shs1
 	shs1 = rhs1 - value - 1;
-	ret = sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x3));
 
@@ -659,14 +659,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
-		ret = sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
 	} else {
 		//long frame use shs2
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
-		ret = sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3025, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x3));
 	}
@@ -776,7 +776,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 #if 0
 	/*method 1 change hts*/
-	ret = sensor_read(sd, 0x3018, &value);
+	ret += sensor_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += sensor_read(sd, 0x3019, &value);
 	vmax |= value << 8;
@@ -794,7 +794,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 #endif
 
 	/*method 2 change vts*/
-	ret = sensor_read(sd, 0x301c, &value);
+	ret += sensor_read(sd, 0x301c, &value);
 	hmax = value;
 	ret += sensor_read(sd, 0x301d, &value);
 	if (0 == info->default_boot) {
@@ -814,7 +814,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x301a, (vmax >> 16) & 0x03);
 
 	/*record current integration time*/
-	ret = sensor_read(sd, 0x3020, &value);
+	ret += sensor_read(sd, 0x3020, &value);
 	shs = value;
 	ret += sensor_read(sd, 0x3021, &value);
 	shs = (value << 8) | shs;
@@ -1127,7 +1127,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 
 	enable &= 0x03;
-	ret = sensor_read(sd, 0x3007, &val);
+	ret += sensor_read(sd, 0x3007, &val);
 	switch (enable) {
 	case 0: //normal
 		winpv = 0x08;

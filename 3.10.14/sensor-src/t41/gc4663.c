@@ -919,7 +919,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/*set integration time*/
-	ret = sensor_write(sd, 0x0203, it & 0xff);
+	ret += sensor_write(sd, 0x0203, it & 0xff);
 	ret += sensor_write(sd, 0x0202, it >> 8);
 
 	switch (sensor->info.default_boot) {
@@ -959,7 +959,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
@@ -973,7 +973,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0201, value & 0xff);
+	ret += sensor_write(sd, 0x0201, value & 0xff);
 	ret += sensor_write(sd, 0x0200, (value >> 8) & 0x3f);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1089,7 +1089,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp) << 1;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
@@ -1130,10 +1130,10 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		start_pos = 0x10;
 		break;
 	}
-	ret = sensor_write(sd, 0x031d, 0x2d);
+	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0101, val);
 	ret += sensor_write(sd, 0x000f, start_pos);
-	ret = sensor_write(sd, 0x031d, 0x28);
+	ret += sensor_write(sd, 0x031d, 0x28);
 	if (ret != 0)
 		ISP_ERROR("%d: gc4653 write err!!\n", __LINE__);
 

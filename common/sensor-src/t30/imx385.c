@@ -925,7 +925,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 	vmax = sensor_attr.total_height;
 	shs = vmax - value - 1;
-	ret = sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
+	ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x01));
 	if (0 != ret) {
@@ -940,7 +940,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3014, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3014, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3015, (unsigned char)((value >> 8) & 0x03));
 	if (ret < 0)
 		return ret;
@@ -1020,7 +1020,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 
 #if 0
 	/*method 1 change hts*/
-	ret = sensor_read(sd, 0x3018, &value);
+	ret += sensor_read(sd, 0x3018, &value);
 	vmax = value;
 	ret += sensor_read(sd, 0x3019, &value);
 	vmax |= value << 8;
@@ -1038,7 +1038,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 #endif
 
 	/*method 2 change vts*/
-	ret = sensor_read(sd, 0x301b, &value);
+	ret += sensor_read(sd, 0x301b, &value);
 	hmax = value;
 	ret += sensor_read(sd, 0x301c, &value);
 	hmax = (((value & 0x3f) << 8) | hmax) >> 1;
@@ -1049,7 +1049,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret += sensor_write(sd, 0x301a, (vmax >> 16) & 0x01);
 
 	/*record current integration time*/
-	ret = sensor_read(sd, 0x3020, &value);
+	ret += sensor_read(sd, 0x3020, &value);
 	shs = value;
 	ret += sensor_read(sd, 0x3021, &value);
 	shs = (value << 8) | shs;

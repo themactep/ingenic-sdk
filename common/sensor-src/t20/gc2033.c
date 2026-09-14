@@ -770,7 +770,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	int tmp = 0;
-	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_write(sd, 0xb6, (value >> 12) & 0xf);
 	ret += sensor_write(sd, 0xb1, (value >> 8) & 0xf);
 	ret += sensor_write(sd, 0xb2, (value << 2) & 0xff);
@@ -779,16 +779,16 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		return ret;
 	}
 	/*** dark sun ***/
-	ret = sensor_read(sd, 0xb6, &tmp);
+	ret += sensor_read(sd, 0xb6, &tmp);
 	if (ret < 0) {
 		return ret;
 	}
 	if (tmp >= 0x08) {
-		ret = sensor_write(sd, 0x21, 0x2c);
+		ret += sensor_write(sd, 0x21, 0x2c);
 		if (ret < 0)
 			return ret;
 	} else {
-		ret = sensor_write(sd, 0x21, 0x28);
+		ret += sensor_write(sd, 0x21, 0x28);
 		if (ret < 0)
 			return ret;
 	}
@@ -866,7 +866,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_INFO("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	ret = sensor_read(sd, 0x05, &tmp);
+	ret += sensor_read(sd, 0x05, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x06, &tmp);
 	if (ret < 0)
@@ -874,7 +874,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hb = (hb << 8) + tmp;
 	hts = hb * 4;
 
-	ret = sensor_read(sd, 0x0d, &tmp);
+	ret += sensor_read(sd, 0x0d, &tmp);
 	win_high = tmp;
 	ret += sensor_read(sd, 0x0e, &tmp);
 	if (ret < 0)
@@ -882,7 +882,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret = sensor_write(sd, 0x08, (unsigned char) (vb & 0xff));
+	ret += sensor_write(sd, 0x08, (unsigned char) (vb & 0xff));
 	ret += sensor_write(sd, 0x07, (unsigned char) (vb >> 8));
 	if (ret < 0)
 		return -1;

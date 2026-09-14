@@ -1056,7 +1056,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x04, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x04, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x03, (unsigned char)(value >> 8) & 0x3f);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1142,7 +1142,7 @@ static int sensor_set_analog_gain_ae(struct tx_isp_subdev *sd, unsigned int *ide
 	unsigned char dgain = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 	unsigned long long again;
-	ret = sensor_read(sd, 0x00b1, &dgain);
+	ret += sensor_read(sd, 0x00b1, &dgain);
 	again = dgain;
 	ret += sensor_read(sd, 0x00b2, &dgain);
 	again = ((again & 0x0f) << 6) | (dgain >> 2);
@@ -1156,10 +1156,10 @@ static int sensor_set_analog_gain_ae(struct tx_isp_subdev *sd, unsigned int *ide
 }
 
 static int sensor_read_integration_time(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
+	int ret = 0;
 	unsigned char expt = 0;
 	unsigned long long sGain;
-	ret = sensor_read(sd, 0x0003, &expt);
+	ret += sensor_read(sd, 0x0003, &expt);
 	sGain = expt;
 	ret += sensor_read(sd, 0x0004, &expt);
 	sGain = (sGain << 8) | expt;
@@ -1171,8 +1171,8 @@ static int sensor_read_integration_time(struct tx_isp_subdev *sd, unsigned int *
 }
 
 static int fast_ae_set_reg(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
-	ret = sensor_write(sd, 0x0140, 0x23);
+	int ret = 0;
+	ret += sensor_write(sd, 0x0140, 0x23);
 	ret += sensor_read_integration_time(sd, NULL);
 	ret += sensor_set_integration_time(sd, time_reg);
 	ret += sensor_write(sd, 0x01af, 0x09);
@@ -1190,7 +1190,7 @@ static int fast_ae_set_reg(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int fast_ae_set_reg_default(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x0140, 0x23);
+	ret += sensor_write(sd, 0x0140, 0x23);
 	ret += sensor_write(sd, 0x04, 0x10);
 	ret += sensor_write(sd, 0x03, 0x00);
 	ret += sensor_write(sd, 0x01af, 0x09);
@@ -1291,7 +1291,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
-	ret = sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x0);
 	ret += sensor_read(sd, 0x05, &val);
 	hts = val & 0x0f;
 	ret += sensor_read(sd, 0x06, &val);
@@ -1305,7 +1305,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	//vts = vb + 20 +win_width;win_width = 1108
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
@@ -1330,7 +1330,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x02, value & 0xff);
+	ret += sensor_write(sd, 0x02, value & 0xff);
 	ret += sensor_write(sd, 0x01, (value >> 8) & 0x3f);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d\n", __LINE__);
@@ -1343,9 +1343,9 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x03fe, 0xf0);
-	ret = sensor_write(sd, 0x03fe, 0xf0), ret = sensor_write(sd, 0x03fe, 0xf0),
-	ret = sensor_write(sd, 0x03fe, 0x00), private_msleep(5);
+	ret += sensor_write(sd, 0x03fe, 0xf0);
+	ret += sensor_write(sd, 0x03fe, 0xf0), ret += sensor_write(sd, 0x03fe, 0xf0),
+	ret += sensor_write(sd, 0x03fe, 0x00), private_msleep(5);
 
 	ret = sensor_write_array(sd, wsize->regs);
 	ret += sensor_write_array(sd, sensor_stream_on);

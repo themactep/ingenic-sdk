@@ -790,7 +790,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int rhs1 = 310;
 
 	shs1 = rhs1 - (value << 2);
-	ret = sensor_write(sd, 0x3054, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x3054, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3055, (unsigned char)((shs1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3056, (unsigned char)((shs1 >> 16) & 0x3));
 
@@ -805,14 +805,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		vmax = sensor_attr.total_height;
 		shs = vmax - value;
-		ret = sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3051, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3052, (unsigned char)((shs >> 16) & 0x0f));
 	}
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		vmax = sensor_attr.total_height;
 		shs = 2 * vmax - (value << 2);
-		ret = sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
+		ret += sensor_write(sd, 0x3050, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3051, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3052, (unsigned char)((shs >> 16) & 0x0f));
 	}
@@ -956,7 +956,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3001, 0x01);
-	ret = sensor_write(sd, 0x302A, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x302A, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3029, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3001, 0x00);

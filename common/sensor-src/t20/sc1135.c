@@ -570,13 +570,13 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hts = (hts << 8) + tmp;
 	/*vts = (pclk << 4) / (hts * (newformat >> 4));*/
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x320f, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char) (vts >> 8));
-	ret = sensor_write(sd, 0x3339, (unsigned char) (vts & 0xff));
+	ret += sensor_write(sd, 0x3339, (unsigned char) (vts & 0xff));
 	ret += sensor_write(sd, 0x3338, (unsigned char) (vts >> 8));
-	ret = sensor_write(sd, 0x3337, (unsigned char) ((vts - 0x2e8) & 0xff));
+	ret += sensor_write(sd, 0x3337, (unsigned char) ((vts - 0x2e8) & 0xff));
 	ret += sensor_write(sd, 0x3336, (unsigned char) ((vts - 0x2e8) >> 8));
-	ret = sensor_write(sd, 0x3321, (unsigned char) ((hts - 0x30) & 0xff));
+	ret += sensor_write(sd, 0x3321, (unsigned char) ((hts - 0x30) & 0xff));
 	ret += sensor_write(sd, 0x3320, (unsigned char) ((hts - 0x30) >> 8));
 	if (ret < 0)
 		return -1;

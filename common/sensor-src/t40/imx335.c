@@ -1085,7 +1085,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
 	vmax = sensor_attr.total_height;
 	shr0 = vmax - value;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shr0 >> 16) & 0x0f));
 	if (0 != ret) {
@@ -1100,7 +1100,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x30e9, (unsigned char)((value >> 8) & 0x07));
 	if (ret < 0)
 		return ret;
@@ -1125,7 +1125,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		shr0 = vmax - it;
 	}
 
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shr0 >> 16) & 0x0f));
 
@@ -1142,7 +1142,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	unsigned short shr1;
 	shr1 = 290 - value;
 
-	ret = sensor_write(sd, 0x305c, (unsigned char)(shr1 & 0xff));
+	ret += sensor_write(sd, 0x305c, (unsigned char)(shr1 & 0xff));
 	ret += sensor_write(sd, 0x305d, (unsigned char)((shr1 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305e, (unsigned char)((shr1 >> 16) & 0x0f));
 
@@ -1333,7 +1333,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3001, 0x01);
-	ret = sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3001, 0x00);
@@ -1380,7 +1380,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	 * 2'b01:mirror,2'b10:filp
 	 * 0x3081 0x3082 must be changed as blow in all-pixel scan mode
 	 */
-	ret = sensor_read(sd, 0x304e, &val_h);
+	ret += sensor_read(sd, 0x304e, &val_h);
 	ret += sensor_read(sd, 0x304f, &val_v);
 	switch (enable) {
 	case 0: //normal
@@ -1408,7 +1408,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		reg_3083 = 0xfe;
 		break;
 	}
-	ret = sensor_write(sd, 0x304e, val_h);
+	ret += sensor_write(sd, 0x304e, val_h);
 	ret += sensor_write(sd, 0x304f, val_v);
 	ret += sensor_write(sd, 0x3081, reg_3081);
 	ret += sensor_write(sd, 0x3083, reg_3083);

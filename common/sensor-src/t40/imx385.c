@@ -1066,7 +1066,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	unsigned short vmax = 0;
 	vmax = sensor_attr.total_height;
 	shs = vmax - value;
-	ret = sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
+	ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x01));
 	if (ret < 0)
@@ -1180,7 +1180,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts << 8) + tmp;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x301A, (unsigned char)((vts & 0x10000) >> 16));
+	ret += sensor_write(sd, 0x301A, (unsigned char)((vts & 0x10000) >> 16));
 	ret += sensor_write(sd, 0x3019, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3018, (unsigned char)(vts & 0xff));
 	if (ret < 0)

@@ -1691,7 +1691,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		it = (it << 2) + 3;
 
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -1711,7 +1711,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	ret = sensor_write(sd,  0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd,  0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	if (ret < 0) {

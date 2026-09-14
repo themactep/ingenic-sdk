@@ -462,7 +462,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	struct again_lut *val_lut = sensor_again_lut;
 
 	/*set analog gain*/
-	ret = sensor_write(sd, 0x00d1, val_lut[again].reg0d1);
+	ret += sensor_write(sd, 0x00d1, val_lut[again].reg0d1);
 	ret += sensor_write(sd, 0x00d0, val_lut[again].reg0d0);
 	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0dc1, val_lut[again].regdc1);
@@ -483,7 +483,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
-	ret = sensor_write(sd, 0x0d04, value & 0xff);
+	ret += sensor_write(sd, 0x0d04, value & 0xff);
 	ret += sensor_write(sd, 0x0d03, value >> 8);
 
 	return 0;
@@ -493,7 +493,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	struct again_lut *val_lut = sensor_again_lut;
 
-	ret = sensor_write(sd, 0x00d1, val_lut[value].reg0d1);
+	ret += sensor_write(sd, 0x00d1, val_lut[value].reg0d1);
 	ret += sensor_write(sd, 0x00d0, val_lut[value].reg0d0);
 	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0dc1, val_lut[value].regdc1);
@@ -676,7 +676,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char val = 0x0;
 	unsigned char col_start = 0x0;
 
-	ret = sensor_read(sd, 0x0d15, &val);
+	ret += sensor_read(sd, 0x0d15, &val);
 	if (enable & 0x2) {
 		val |= 0x02;
 		col_start = 0x01;

@@ -558,7 +558,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	vmax = sensor_attr.total_height;
 	shs = vmax - value;
-	ret = sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
+	ret += sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shs >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305a, (unsigned char)((shs >> 16) & 0x0f));
 	if (ret < 0)
@@ -678,7 +678,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3001, 0x01);
-	ret = sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
+	ret += sensor_write(sd, 0x3032, (unsigned char)((vts & 0xf0000) >> 16));
 	ret += sensor_write(sd, 0x3031, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3030, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3001, 0x00);
@@ -718,7 +718,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	 * 2'b01:mirror,2'b10:filp
 	 * 0x3081 0x3082 must be changed as blow in all-pixel scan mode
 	 */
-	ret = sensor_read(sd, 0x304e, &val_h);
+	ret += sensor_read(sd, 0x304e, &val_h);
 	ret += sensor_read(sd, 0x304f, &val_v);
 	switch (enable) {
 	case 0: //normal
@@ -746,7 +746,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		reg_309b = 0xfe;
 		break;
 	}
-	ret = sensor_write(sd, 0x304e, val_h);
+	ret += sensor_write(sd, 0x304e, val_h);
 	ret += sensor_write(sd, 0x304f, val_v);
 	ret += sensor_write(sd, 0x3080, reg_3080);
 	ret += sensor_write(sd, 0x309b, reg_309b);

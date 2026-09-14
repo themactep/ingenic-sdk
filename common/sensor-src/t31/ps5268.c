@@ -466,7 +466,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	if (it_last != expo) {
 		Cmd_OffNy = sensor_attr.total_height - expo - 1;
-		ret = sensor_write(sd, 0x0118, (unsigned char)(Cmd_OffNy >> 8));
+		ret += sensor_write(sd, 0x0118, (unsigned char)(Cmd_OffNy >> 8));
 		ret += sensor_write(sd, 0x0119, (unsigned char)(Cmd_OffNy & 0xff));
 		ret += sensor_write(sd, 0x0111, 0x01);
 		if (ret < 0)
@@ -480,7 +480,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 			mode = 1;
 		if (mode == 0)
 			again -= 16; // For 2x ratio
-		ret = sensor_write(sd, 0x0128, (unsigned char)(mode & 0x01));
+		ret += sensor_write(sd, 0x0128, (unsigned char)(mode & 0x01));
 		ret += sensor_write(sd, 0x012b, (unsigned char)(again & 0xff));
 		ret += sensor_write(sd, 0x0111, 0x01);
 		if (ret < 0)
@@ -497,7 +497,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	Cmd_OffNy = sensor_attr.total_height - value - 1;
 
-	ret = sensor_write(sd, 0x0118, (unsigned char)(Cmd_OffNy >> 8));
+	ret += sensor_write(sd, 0x0118, (unsigned char)(Cmd_OffNy >> 8));
 	ret += sensor_write(sd, 0x0119, (unsigned char)(Cmd_OffNy & 0xff));
 	ret += sensor_write(sd, 0x0111, 0x01);
 	if (ret < 0)
@@ -518,7 +518,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	}
 	if (mode == 0)
 		gain -= 16; // For 2x ratio
-	ret = sensor_write(sd, 0x0128, (unsigned char)(mode & 0x01));
+	ret += sensor_write(sd, 0x0128, (unsigned char)(mode & 0x01));
 	ret += sensor_write(sd, 0x012b, (unsigned char)(gain & 0xff));
 	ret += sensor_write(sd, 0x0111, 0x01);
 	if (ret < 0)
@@ -594,7 +594,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x0114, &val);
+	ret += sensor_read(sd, 0x0114, &val);
 	hts = (val & 0x1f) << 8;
 	ret += sensor_read(sd, 0x0115, &val);
 	hts = (hts | val);
@@ -605,7 +605,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x0117, (unsigned char)((vts - 1) & 0xff));
+	ret += sensor_write(sd, 0x0117, (unsigned char)((vts - 1) & 0xff));
 	ret += sensor_write(sd, 0x0116, (unsigned char)((vts - 1) >> 8));
 	ret += sensor_write(sd, 0x0111, 0x01);
 	if (0 != ret) {
@@ -613,7 +613,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return ret;
 	}
 
-	ret = sensor_read(sd, 0x0118, &val);
+	ret += sensor_read(sd, 0x0118, &val);
 	Cur_OffNy = val << 8;
 	ret += sensor_read(sd, 0x0119, &val);
 	Cur_OffNy = (Cur_OffNy | val);

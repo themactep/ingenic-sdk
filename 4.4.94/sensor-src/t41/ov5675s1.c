@@ -685,7 +685,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x380f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x380f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x380e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);

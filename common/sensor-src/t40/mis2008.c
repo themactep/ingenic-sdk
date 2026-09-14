@@ -753,7 +753,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3100, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3100, (unsigned char)((value >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(value & 0xff));
 	if (ret < 0)
 		return ret;
@@ -763,7 +763,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x3102, (unsigned char)(value));
+	ret += sensor_write(sd, 0x3102, (unsigned char)(value));
 
 	if (value <= 0)
 		ret += sensor_write(sd, 0x3a02, 0x0b);
@@ -857,7 +857,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	ret = sensor_read(sd, 0x3202, &tmp);
+	ret += sensor_read(sd, 0x3202, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x3203, &tmp);
 	if (ret < 0)
@@ -865,7 +865,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp);
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret = sensor_write(sd, 0x3201, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x3201, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3200, (unsigned char)(vts >> 8));
 	if (ret < 0) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);

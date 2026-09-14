@@ -790,7 +790,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 	unsigned char logic_trig;
 
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -800,7 +800,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		return ret;
 
 	if (gain_val != again) {
-		ret = sensor_read(sd, 0x3109, &logic_trig);
+		ret += sensor_read(sd, 0x3109, &logic_trig);
 		if (ret < 0)
 			return ret;
 		if (1 == logic_trig) {
@@ -973,7 +973,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x320c, &tmp);
+	ret += sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
@@ -1068,7 +1068,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 	unsigned char val = 0x0;
 
-	ret = sensor_read(sd, 0x3221, &val);
+	ret += sensor_read(sd, 0x3221, &val);
 	if (enable & 0x2)
 		val |= 0x60;
 	else

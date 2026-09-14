@@ -773,7 +773,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sensor_read(sd, 0x05, &tmp);
+	ret += sensor_read(sd, 0x05, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x06, &tmp);
 	hb = (hb << 8) + tmp;
@@ -781,7 +781,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	hts = hb * 4;
 
-	ret = sensor_read(sd, 0x0d, &tmp);
+	ret += sensor_read(sd, 0x0d, &tmp);
 	win_high = tmp;
 	ret += sensor_read(sd, 0x0e, &tmp);
 	win_high = (win_high << 8) + tmp;
@@ -790,7 +790,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret = sensor_write(sd, 0x08, (unsigned char)(vb & 0xff));
+	ret += sensor_write(sd, 0x08, (unsigned char)(vb & 0xff));
 	ret += sensor_write(sd, 0x07, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;

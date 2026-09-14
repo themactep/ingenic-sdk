@@ -232,11 +232,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-
-	// to avoid black line:
-	// sensor_attr.mipi.clk = 500,
-	// sensor_attr.mipi.settle_time_apative_en = 0,
-	// sensor_attr.mipi.image_twidth = 2304,
 };
 
 static struct regval_list sensor_init_regs_2048_1536_30fps_mipi_3m[] = {
@@ -855,7 +850,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	value *= 2;
-	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
@@ -1004,7 +999,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = sensor_write(sd, 0x3812, 0x00);
+	ret += sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x3812, 0x30);

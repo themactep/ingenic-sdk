@@ -688,7 +688,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
-	ret = sensor_write(sd, 0x0203, (unsigned char) (value & 0xff));
+	ret += sensor_write(sd, 0x0203, (unsigned char) (value & 0xff));
 	ret += sensor_write(sd, 0x0202, (unsigned char) ((value >> 8) & 0xff));
 	ret += sensor_write(sd, 0x0104, 0x01);
 
@@ -701,7 +701,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0205, (unsigned char) (value & 0xff));
+	ret += sensor_write(sd, 0x0205, (unsigned char) (value & 0xff));
 	ret += sensor_write(sd, 0x0104, 0x01);
 	if (ret < 0)
 		return ret;

@@ -521,7 +521,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	/* ISP_INFO("it is %d, again is %d\n",expo,again); */
 	/*expo*/
-	ret = sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 
 	/*gain*/
@@ -724,7 +724,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 	}
 	sensor->video.mbus_change = 1;
-	ret = sensor_write(sd, 0x12, val);
+	ret += sensor_write(sd, 0x12, val);
 	if (ret < 0)
 		return -1;
 	if (!ret)

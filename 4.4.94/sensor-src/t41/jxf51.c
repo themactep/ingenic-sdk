@@ -497,7 +497,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
@@ -526,7 +526,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	/*black sun cancellation strategy*/
 	if ((((ag_last < 0x10) && (value >= 0x10)) || ((ag_last >= 0x10) && (value < 0x10))) || (ag_last == -1)) {
-		ret = sensor_write(sd, 0x2f, tmp1);
+		ret += sensor_write(sd, 0x2f, tmp1);
 		ret += sensor_write(sd, 0x0c, tmp2);
 		ret += sensor_write(sd, 0x82, tmp3);
 	}
@@ -544,7 +544,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	/*expo*/
-	ret = sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 
 	/*gain*/
@@ -874,7 +874,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	ret += sensor_write(sd, 0xc1, val);
 	ret += sensor_write(sd, 0xc2, 0x28);
 	ret += sensor_write(sd, 0xc3, vwinSt);
-	ret = sensor_read(sd, 0x1f, &valg);
+	ret += sensor_read(sd, 0x1f, &valg);
 	if (ret < 0)
 		return -1;
 	valg |= 0xc0; /*bit[7], register group write function,auto clean.bit[6] lanch immediately*/

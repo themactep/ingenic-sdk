@@ -514,7 +514,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0)
 		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
@@ -665,7 +665,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char val = 0x0;
 	unsigned char col_start = 0x0;
 
-	ret = sensor_read(sd, 0x0d15, &val);
+	ret += sensor_read(sd, 0x0d15, &val);
 	if (enable & 0x2) {
 		val |= 0x02;
 		col_start = 0x01;

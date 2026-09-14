@@ -9579,7 +9579,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	unsigned int expo = value;
 
-	ret = sensor_write(sd, 0x3467, 0x00);
+	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x04);
 	/* ret += sensor_write(sd, 0xb0b6, 0x2); */
 	ret += sensor_write(sd, 0xb0b7, (unsigned char)(expo & 0xff));
@@ -9771,7 +9771,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	}
 
 	sensor->video.mbus_change = 0;
-	ret = sensor_write(sd, 0x3467, 0x00);
+	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x0c);
 	/* ret += sensor_write(sd, 0xb0b6, 0x4); */
 	ret += sensor_write(sd, 0xb0c0, val);

@@ -238,13 +238,13 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals, unsigned char cnt)
 {
-	int ret;
+	int ret = 0;
 	unsigned char val;
 	while (cnt--) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = sensor_write(sd, vals->reg_num, vals->value);
+			ret += sensor_write(sd, vals->reg_num, vals->value);
 			ret += sensor_read(sd, vals->reg_num, &val);
 			ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		}

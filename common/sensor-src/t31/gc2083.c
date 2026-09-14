@@ -707,7 +707,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 	unsigned char val = 0x0;
 	unsigned char col_start = 0x0;
-	ret = sensor_read(sd, 0x0d15, &val);
+	ret += sensor_read(sd, 0x0d15, &val);
 	if (enable & 0x2) {
 		val |= 0x02;
 		col_start = 0x01;

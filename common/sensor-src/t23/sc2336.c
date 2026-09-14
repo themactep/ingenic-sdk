@@ -786,7 +786,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
     }
 
     clk = SENSOR_SUPPORT_30FPS_SCLK;
-    ret = sensor_read(sd, 0x320c, &val);
+    ret += sensor_read(sd, 0x320c, &val);
     hts = val;
     ret += sensor_read(sd, 0x320d, &val);
     if (0 != ret) {
@@ -888,7 +888,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
     unsigned char val = 0x0;
 
     /* 0x3221: 2'b01 (0x06) = mirror, 2'b10 (0x60) = flip */
-    ret = sensor_read(sd, 0x3221, &val);
+    ret += sensor_read(sd, 0x3221, &val);
     if (ret < 0)
         return ret;
     switch (enable) {

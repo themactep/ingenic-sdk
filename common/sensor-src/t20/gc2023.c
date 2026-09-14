@@ -886,7 +886,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	}
 	switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_25:
-			ret = sensor_read(sd, 0x05, &tmp);
+			ret += sensor_read(sd, 0x05, &tmp);
 			hb = tmp;
 			ret += sensor_read(sd, 0x06, &tmp);
 			if (ret < 0)
@@ -901,7 +901,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 
-	ret = sensor_read(sd, 0x0d, &tmp);
+	ret += sensor_read(sd, 0x0d, &tmp);
 	win_high = tmp;
 	ret += sensor_read(sd, 0x0e, &tmp);
 	if (ret < 0)
@@ -909,7 +909,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret = sensor_write(sd, 0x08, (unsigned char) (vb & 0xff));
+	ret += sensor_write(sd, 0x08, (unsigned char) (vb & 0xff));
 	ret += sensor_write(sd, 0x07, (unsigned char) (vb >> 8));
 	if (ret < 0)
 		return -1;
