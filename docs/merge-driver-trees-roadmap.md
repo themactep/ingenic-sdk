@@ -240,27 +240,38 @@ Goal: every sensor driver uses the same define-section layout:
     TIMING AND PERFORMANCE  SENSOR_SUPPORT_*_SCLK, SENSOR_OUTPUT_*_FPS, MCLK
     SPECIAL FEATURES        feature toggles (SENSOR_EXPO, MIR_FLIP, ...)
 
-Done: `.clang-format` (from pending PR #36) applied to shrink variant drift;
-`3.10.14/sensor-src` and `4.4.94/sensor-src` are now **fully canonical
-(0 files left)**. The 4.4.94 pass also renamed driver-prefixed macros
-(`CV2001_MCLK`, `OS04D10_CHIP_ID_H`, `jxf35_REG_END`, ...) to the `SENSOR_*`
-vocabulary, bannerized ~320 files, and fixed several pre-existing build bugs.
+Done: `.clang-format` (from pending PR #36) applied to shrink variant drift.
+**All three sensor trees are now fully canonical (0 non-canonical files):**
+`3.10.14/sensor-src`, `4.4.94/sensor-src`, `common/sensor-src/t23`. Every
+driver uses the section layout below with the `SENSOR_*` define vocabulary;
+no driver-prefixed standard macros remain.
 
-Remaining: `common/sensor-src/t23`: **50 files** (bf314a, gc2063, sc3336p,
-sc1346, sc202cs, jxq03p, ... and ~20 with no prefixed defines that just need
-banners). These use `BF314A_CHIP_ID_H` / `<name>_REG_END` etc. and need the same
-rename-to-`SENSOR_*` + banner treatment as the 4.4.94 t41 set. NOT yet done;
-not yet build-verified.
+Remaining / not done: T40/T41/t23 sensor drivers cannot be compiled here (no
+kernel build tree for those SoCs), so the renames/banner moves in those trees
+are **not build-verified** — only the t23 drivers that build on the t23/3.10.14
+tree were checked (bf314a, gc2063, sc1346, cv4002, os02n10, os02n10? , s5k3p3).
 
-Layout decision for TVERSION/feature shapes (see commits 01629b62, 835590e5):
-feature toggles + `SENSOR_I2C_REG_*` selection go in SPECIAL FEATURES, the
-`SENSOR_REG_END/DELAY` `#ifdef` pair in REGISTER DEFINITIONS.
+Pre-existing sensor bugs still open (NOT caused by this work, present in
+`origin/master`):
+- `common/sensor-src/t23/sc301iot.c`: uses `sensor_attr.max_fps` which the t23
+  `struct tx_isp_sensor_attribute` lacks.
+- `common/sensor-src/t23/os02n10s0.c`, `os02n10s1.c`: use `.fsync_attr`, not
+  in the t23 `tx_isp_sensor_attribute`.
+- Imbalanced preprocessor in `t40/mis2031.c` (1 `#if` / 2 `#endif`),
+  `t41/mis5011.c` (0/1), `t41/mis20s1.c` (29/30).
+
+Layout decision for TVERSION/feature shapes (see commits 01629b62, 835590e5,
+2c62121e): feature toggles + the `SENSOR_I2C_REG_*` width selection go in
+SPECIAL FEATURES *before* REGISTER DEFINITIONS (the `#ifndef
+SENSOR_I2C_REG_8BIT` guard must see the toggle), the `SENSOR_REG_END/DELAY`
+`#ifdef` pair in REGISTER DEFINITIONS, `SENSOR_MCLK` in TIMING.
 
 Pre-existing build bugs fixed along the way: `gc5603`, `cv2001/cv3001/cv4001`,
 `bf3a03`, `gc0328`, `gc032a`, `sc2235` (undefined macros); `sc3336` t31
 (`sensor_mipi_2`); t23 ISP (`get_driver_common_interfaces`); t31 3.10
 include order (`ar1337`, `gc1034`, `gc1084`); t40 `imx662` (malformed
-`SENSOR_VERSION`).
+`SENSOR_VERSION`); `sensor_REG_*` uses in t40 bf20a1/bf2253/bf2253s1 and
+t41 gc4653/mis2032/os03a10/os04e10/os08c10/ov04c10/sc231hai.
 
 ## 9. Task history
 
@@ -281,7 +292,7 @@ include order (`ar1337`, `gc1034`, `gc1084`); t40 `imx662` (malformed
 | 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
 | 19 | clang-format pass over sensor drivers (`.clang-format` from PR #36) | done |
 | 20 | Bannerize `3.10.14` + ~300 of `4.4.94` sensor drivers; fix undefined macros / include order | done |
-| 21 | Rename file-prefixed defines to `SENSOR_*` + bannerize remaining sensor drivers | done for `4.4.94` (24 files) and `3.10.14`; **pending** for `common/sensor-src/t23` (50 files) |
+| 21 | Rename file-prefixed defines to `SENSOR_*` + bannerize remaining sensor drivers | done (all three trees canonical; t40/t41 not build-verified) |
 | 13 | Docs + build-matrix verification | done |
 | 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
 | 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
