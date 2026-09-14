@@ -324,6 +324,7 @@ than guessing.
 | 23 | Add explicit `<soc/gpio.h>` / `<txx-funcs.h>` includes to the 3.10.14 sensor drivers so both trees carry the same include set | done |
 | 24 | Fix `SENSOR_MAX_WIDTH/HEIGHT` to match the default output window instead of the MIPI crop / raw size / 0 | done (19 files; imx219 left as intentional) |
 | 25 | Fix hardcoded `sensor_attr.chip_id` to match the detected id; flag unverifiable ones with a header note | done (41 files fixed; imx662/n5/cv5003/cv4002 marked) |
+| 26 | Remove dead `actual_fps` plumbing (write-only field, helper, proc node, and all driver calls/inits) | done (214 files, 1060 deletions) |
 
 ## 10. Original inventory (for reference)
 
