@@ -324,7 +324,7 @@ static enum hrtimer_restart jz_audio_hrtimer_callback(struct hrtimer *hr_timer) 
 						tv.tv_usec = do_div(time_usec_2, 1000000);
 						tv.tv_sec = time_usec_2;
 						route->manage.fragments[0].time_stamp = tv;
-					} else if(index == 0) {
+					} else if (index == 0) {
 						time_usec_1 = time_usec - 20000;
 						tv.tv_usec = do_div(time_usec_1, 1000000);
 						tv.tv_sec = time_usec_1;
@@ -577,7 +577,7 @@ static long dsp_create_dma_chan(struct audio_route *route) {
 		manage->sample_size = route->channel*format_to_bytes(route->format);
 	}
 	manage->fragment_size = (route->rate / 100) * manage->sample_size * fragment_time;
-//	printk("manage->fragment_size=%d\n",manage->fragment_size);
+	// printk("manage->fragment_size=%d\n",manage->fragment_size);
 	if (route->index == AUDIO_ROUTE_AEC_ID) {
 		parent = route->parent;
 		manage->fragment_cnt = parent->manage.fragment_cnt;
@@ -587,7 +587,7 @@ static long dsp_create_dma_chan(struct audio_route *route) {
 	if (manage->fragment_cnt >= CACHED_FRAGMENT)
 		manage->fragment_cnt = CACHED_FRAGMENT;
 
-//	printk("manage->fragment_cnt=%d\n",manage->fragment_cnt);
+	// printk("manage->fragment_cnt=%d\n",manage->fragment_cnt);
 	manage->fragments = pr_kzalloc(sizeof(struct dsp_data_fragment) * manage->fragment_cnt);
 	if (manage->fragments == NULL) {
 		audio_warn_print("%d, Can't malloc manage!\n",__LINE__);
@@ -598,7 +598,7 @@ static long dsp_create_dma_chan(struct audio_route *route) {
 	for (index = 0; index < manage->fragment_cnt; index++) {
 		manage->fragments[index].vaddr = pipe->vaddr + manage->fragment_size * index;
 		manage->fragments[index].paddr = pipe->paddr + manage->fragment_size * index;
-//		printk("manage->fragments[index].paddr = 0x%08x\n",manage->fragments[index].paddr);
+		// printk("manage->fragments[index].paddr = 0x%08x\n",manage->fragments[index].paddr);
 		manage->fragments[index].priv = NULL;
 		manage->fragments[index].state = false;
 		list_add_tail(&manage->fragments[index].list, &manage->fragments_head);
@@ -606,7 +606,7 @@ static long dsp_create_dma_chan(struct audio_route *route) {
 	manage->buffersize = manage->fragment_cnt * manage->fragment_size;
 	memset(pipe->vaddr, 0, manage->buffersize);
 	dma_sync_single_for_device(NULL, pipe->paddr, manage->buffersize, DMA_TO_DEVICE);
-	if (route->index == AUDIO_ROUTE_DMIC_ID){
+	if (route->index == AUDIO_ROUTE_DMIC_ID) {
 		//配置dma参数
 		ingenic_dmic_dma_init(pipe->paddr, manage->fragment_size,manage->fragment_cnt);
 	} else {
@@ -635,7 +635,6 @@ static long dsp_create_dma_chan(struct audio_route *route) {
 		}
 
 		dmaengine_submit(desc);
-
 	}
 
 out:
@@ -1094,7 +1093,6 @@ exit:
 	return ret;
 }
 
-
 static long dsp_enable_amic_aec(struct audio_dsp_device *dsp, unsigned long arg) {
 	unsigned long lock_flags;
 	struct audio_route *ai_route = NULL;
@@ -1298,7 +1296,7 @@ static long dsp_get_mic_stream(struct audio_dsp_device *dsp, enum auido_route_in
 	}
 	manage = &(ai_route->manage);
 	cnt = stream.size / manage->fragment_size;
-//	printk("cnt = %d,stream.size = %d, manage->fragment_size = %d\n",cnt, stream.size,manage->fragment_size);
+	// printk("cnt = %d,stream.size = %d, manage->fragment_size = %d\n",cnt, stream.size,manage->fragment_size);
 	if (dsp->amic_aec && (stream.aec != NULL)) {
 		aec_cnt = stream.aec_size / aec_route->manage.fragment_size;
 		if (cnt != aec_cnt) {
@@ -1315,6 +1313,7 @@ again:
 	dma_tracer = manage->dma_tracer;
 	io_tracer = manage->io_tracer;
 //	printk("dsp_get_mic_stream：cnt = %d,dma_tracer = %u, io_tracer = %u\n",cnt,dma_tracer,io_tracer);
+
 	/* first copy */
 	while (i < cnt) {
 		if (io_tracer+1 == dma_tracer || (dma_tracer==0 && io_tracer==ai_route->manage.fragment_cnt-1))
@@ -1480,7 +1479,6 @@ static int disable_route_stream(struct audio_route *route) {
 	return ret;
 }
 
-
 static int dsp_open(struct inode *inode, struct file *file) {
 	struct miscdevice *dev = file->private_data;
 	struct audio_dsp_device *dsp = misc_get_audiodsp(dev);
@@ -1586,10 +1584,9 @@ static ssize_t dsp_read(struct file *file, char __user *buffer, size_t count, lo
 	return 0;
 }
 
-static ssize_t dsp_write(struct file *file, const char __user *buffer, size_t count, loff_t* ppos) {
+static ssize_t dsp_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos) {
 	return 0;
 }
-
 
 static long dsp_route_ioctl(struct audio_dsp_device *dsp, enum auido_route_index index, unsigned int cmd, void *arg) {
 	struct audio_route *route = NULL;

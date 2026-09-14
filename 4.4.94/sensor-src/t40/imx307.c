@@ -31,6 +31,7 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x1a
+#define SENSOR_RESET_GPIO GPIO_PC(27)
 
 // ============================================================================
 // SENSOR CAPABILITIES
@@ -38,7 +39,6 @@
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
 
-#define SENSOR_RESET_GPIO GPIO_PC(27)
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================

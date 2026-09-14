@@ -1,14 +1,14 @@
 MODULE_NAME := audio
 OUT := $(MODULE_NAME)
 
-DIR=common/audio/t23
+DIR=common/audio/t23/oss3
 
 SRCS := \
-  $(DIR)/oss3/audio_dsp.c \
-  $(DIR)/oss3/audio_debug.c \
-  $(DIR)/oss3/host/audio_aic.c \
-  $(DIR)/oss3/inner_codecs/codec.c \
-  $(DIR)/oss3/board/t23_platform.c
+  $(DIR)/audio_dsp.c \
+  $(DIR)/audio_debug.c \
+  $(DIR)/host/audio_aic.c \
+  $(DIR)/inner_codecs/codec.c \
+  $(DIR)/board/t23_platform.c
 
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 

@@ -80,11 +80,11 @@ struct audio_aic_device {
 #define FRAGMENT_CNT 64
 #define SND_DSP_DMA_BUFFER_SIZE (960*2*2*FRAGMENT_CNT)
 
-#define AFMT_0     0x00000000
-//#define AFMT_U8    0x00000001
-//#define AFMT_S8    0x00000002
-#define AFMT_S16LE 0x00000010
-#define AFMT_S16BE 0x00000011
+#define AFMT_0		0x00000000
+//#define AFMT_U8	0x00000001
+//#define AFMT_S8	0x00000002
+#define AFMT_S16LE	0x00000010
+#define AFMT_S16BE	0x00000011
 
 #define MUTE_EN 1
 #define MUTE_DISEN 0
@@ -92,7 +92,7 @@ struct audio_aic_device {
 #define MCLK_DIV_TO_SAMPLE 256
 
 #define DEFAULT_RECORD_TRIGGER 8
-#define DEFAULT_AEC_TRIGGER    8
+#define DEFAULT_AEC_TRIGGER 8
 #define DEFAULT_REPLAY_TRIGGER 16
 
 #define DEFAULT_RECORD_CLK (8000*256)
@@ -172,10 +172,10 @@ static void inline i2s_set_reg(struct audio_aic_device *i2s_dev, unsigned int ad
 /* AICFR */
 #define I2S_ENB_OFFSET         (0)
 #define I2S_ENB_MASK           (0x1 << I2S_ENB_OFFSET)
-#define I2S_RMASTER_OFFSET       (1)
-#define I2S_RMASTER_MASK         (0x1 << I2S_RMASTER_OFFSET)
-#define I2S_TMASTER_OFFSET        (2)
-#define I2S_TMASTER_MASK          (0x1 << I2S_TMASTER_OFFSET)
+#define I2S_RMASTER_OFFSET     (1)
+#define I2S_RMASTER_MASK       (0x1 << I2S_RMASTER_OFFSET)
+#define I2S_TMASTER_OFFSET     (2)
+#define I2S_TMASTER_MASK       (0x1 << I2S_TMASTER_OFFSET)
 #define I2S_RST_OFFSET         (3)
 #define I2S_RST_MASK           (0x1 << I2S_RST_OFFSET)
 #define I2S_AUSEL_OFFSET       (4)
@@ -188,15 +188,15 @@ static void inline i2s_set_reg(struct audio_aic_device *i2s_dev, unsigned int ad
 #define I2S_DMODE_MASK         (0x1 << I2S_DMODE_OFFSET)
 #define I2S_MSB_OFFSET         (12)
 #define I2S_MSB_MASK           (0x1 << I2S_MSB_OFFSET)
-#define I2S_RFIFOS_OFFSET         (13)	//receive fifo status after reset aic module
-#define I2S_RFIFOS_MASK           (0x1 << I2S_RFIFOS_OFFSET)
-#define I2S_TFIFOS_OFFSET         (14)	//transmit fifo status after reset aic module
-#define I2S_TFIFOS_MASK           (0x1 << I2S_TFIFOS_OFFSET)
+#define I2S_RFIFOS_OFFSET      (13)	//receive fifo status after reset aic module
+#define I2S_RFIFOS_MASK        (0x1 << I2S_RFIFOS_OFFSET)
+#define I2S_TFIFOS_OFFSET      (14)	//transmit fifo status after reset aic module
+#define I2S_TFIFOS_MASK        (0x1 << I2S_TFIFOS_OFFSET)
 #define I2S_TFTH_OFFSET        (16)
 #define I2S_TFTH_MASK          (0x1f << I2S_TFTH_OFFSET)
 #define I2S_RFTH_OFFSET        (24)
 #define I2S_RFTH_MASK          (0xf << I2S_RFTH_OFFSET)
-#define I2S_FIFO_RESET_STAT		(I2S_RFIFOS_MASK | I2S_TFIFOS_MASK)
+#define I2S_FIFO_RESET_STAT    (I2S_RFIFOS_MASK | I2S_TFIFOS_MASK)
 
 #define __aic_select_i2s(i2s_dev)             \
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_AUSEL_MASK,I2S_AUSEL_OFFSET)
@@ -212,6 +212,7 @@ static void inline i2s_set_reg(struct audio_aic_device *i2s_dev, unsigned int ad
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_ICDC_MASK,I2S_ICDC_OFFSET);	\
 } while (0)
+
 #define __i2s_external_codec(i2s_dev)               \
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_ICDC_MASK,I2S_ICDC_OFFSET);	\
@@ -221,6 +222,7 @@ do {	\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,0,I2S_DMODE_MASK,I2S_DMODE_OFFSET);\
 } while (0)
+
 #define __i2s_select_spilt_clk(i2s_dev)		\
 do {	\
 	i2s_set_reg(i2s_dev, AICFR,1,I2S_DMODE_MASK,I2S_DMODE_OFFSET);\

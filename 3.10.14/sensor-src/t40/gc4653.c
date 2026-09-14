@@ -32,6 +32,13 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x29
+#define SENSOR_RESET_GPIO GPIO_PC(27)
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -48,7 +55,7 @@
 #define SENSOR_OUTPUT_MAX_FPS_DOL 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 
-static int reset_gpio = GPIO_PC(27);
+static int reset_gpio = SENSOR_RESET_GPIO;
 static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 3000 * 188; //cache lines corrponding on VPB1
 static int shvflip = 1;

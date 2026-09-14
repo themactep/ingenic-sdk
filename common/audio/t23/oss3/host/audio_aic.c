@@ -143,9 +143,7 @@ static int extern_codec_register(struct audio_aic_device *aic, int i2c_adapter, 
 	memset(&board_info, 0 , sizeof(board_info));
 	memcpy(&board_info.type, name, I2C_NAME_SIZE);
 	board_info.addr = i2c_addr;
-
 	printk("excodec addr = 0x%x, excodec_name = %s\n", board_info.addr, board_info.type);
-
 	attrs = i2c_new_subdev_board(adapter, &board_info, NULL);
 	if (IS_ERR_OR_NULL(attrs)) {
 		i2c_put_adapter(adapter);
@@ -168,9 +166,7 @@ static int extern_codec_register(struct audio_aic_device *aic, int i2c_adapter, 
 
 	aic->excodec = attrs;
 	aic->livingcodec = attrs;
-
 	printk("Registered extern codec %s\n", name);
-
 	return AUDIO_SUCCESS;
 }
 
@@ -327,7 +323,6 @@ static int init_pipe(struct audio_pipe *pipe, enum dma_data_direction direction,
 	pipe->dma_type = dma_type;
 	pipe->dma_config.src_addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
 	pipe->dma_config.dst_addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
-
 	if (DMA_FROM_DEVICE == direction) {
 		pipe->dma_config.direction = DMA_DEV_TO_MEM;
 		pipe->dma_config.src_maxburst = AIC_RX_FIFO_DEPTH/2;
@@ -340,12 +335,11 @@ static int init_pipe(struct audio_pipe *pipe, enum dma_data_direction direction,
 		pipe->dma_config.dst_addr = 0;
 #endif
 
-	if (JZDMA_REQ_I2S0 == dma_type)
-		pipe->dma_config.src_addr = iobase + AICDR;
-	else if (JZDMA_REQ_AEC == dma_type)
-		pipe->dma_config.src_addr = iobase + AICLR;
-	pipe->dma_config.dst_addr = 0;
-
+		if (JZDMA_REQ_I2S0 == dma_type)
+			pipe->dma_config.src_addr = iobase + AICDR;
+		else if (JZDMA_REQ_AEC == dma_type)
+			pipe->dma_config.src_addr = iobase + AICLR;
+		pipe->dma_config.dst_addr = 0;
 	} else {
 		pipe->dma_config.direction = DMA_MEM_TO_DEV;
 		pipe->dma_config.src_maxburst = AIC_TX_FIFO_DEPTH/2;
@@ -663,10 +657,10 @@ static int set_codec_mic_again(struct audio_aic_device *aic, void *data)
 	}
 	ret = aic->livingcodec->record->set_again(again.channel,again.gain);
 
-	if (again.channel == MONO_LEFT){
+	if (again.channel == MONO_LEFT) {
 		aic->codec_mic_info->alc_en_l = 0;
 		aic->codec_mic_info->lagain = again.gain;
-	}else if (again.channel == MONO_RIGHT){
+	} else if (again.channel == MONO_RIGHT) {
 		aic->codec_mic_info->alc_en_r = 0;
 		aic->codec_mic_info->ragain = again.gain;
 	}

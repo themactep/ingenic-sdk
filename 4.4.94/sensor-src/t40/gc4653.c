@@ -24,7 +24,6 @@
 // ============================================================================
 #define SENSOR_NAME "gc4653"
 #define SENSOR_VERSION "H20220426a"
-#define SENSOR_RESET_GPIO GPIO_PC(27)
 #define SENSOR_CHIP_ID 0x4653
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
@@ -34,6 +33,7 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x29
+#define SENSOR_RESET_GPIO GPIO_PC(27)
 
 // ============================================================================
 // SENSOR CAPABILITIES

@@ -101,7 +101,6 @@ static struct codec_attributes *i2c_new_subdev_board(struct i2c_adapter *adapter
 	struct i2c_client *client;
 	request_module(I2C_MODULE_PREFIX "%s", info->type);
 	/* Create the i2c client */
-
 	if (info->addr == 0)
 		return NULL;
 	else
@@ -570,6 +569,7 @@ static int set_codec_mic_datatype(struct audio_aic_device *aic, void *data)
 		audio_err_print("channel error.\n");
 		return -EINVAL;
 	}
+
 	//set samplerate
 	if (CODEC_IS_0_LINES == aic->livingcodec->pins || CODEC_IS_6_LINES == aic->livingcodec->pins) {
 		clk_set_rate(aic->mic_clock, data_type.sample_rate*256);
@@ -682,10 +682,10 @@ static int set_codec_mic_again(struct audio_aic_device *aic, void *data)
 		audio_err_print("aic is null or livingcodec is null.\n");
 		return -1;
 	}
-	if(again.channel == 2){
+	if (again.channel == 2) {
 		again.channel = STEREO;
-	}else{
-		if(1 == mic_mono_channel)
+	} else {
+		if (1 == mic_mono_channel)
 			again.channel = MONO_LEFT;
 		else if (2 == mic_mono_channel)
 			again.channel = MONO_RIGHT;
@@ -693,13 +693,13 @@ static int set_codec_mic_again(struct audio_aic_device *aic, void *data)
 
 	aic->livingcodec->record->set_again(again.channel,again.gain[0]);
 
-	if (again.channel == MONO_LEFT){
+	if (again.channel == MONO_LEFT) {
 		aic->codec_mic_info->alc_en_l = 0;
 		aic->codec_mic_info->lagain = again.gain[0];
-	}else if (again.channel == MONO_RIGHT){
+	} else if (again.channel == MONO_RIGHT) {
 		aic->codec_mic_info->alc_en_r = 0;
 		aic->codec_mic_info->ragain = again.gain[1];
-	}else {
+	} else {
 		aic->codec_mic_info->alc_en_l = 0;
 		aic->codec_mic_info->lagain = again.gain[0];
 		aic->codec_mic_info->alc_en_r = 0;
