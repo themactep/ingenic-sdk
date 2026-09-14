@@ -50,6 +50,23 @@
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = 30,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 2304,
+	.height = 1296,
+	.rst_gpio = GPIO_PA(18),
+	.pwdn_gpio = GPIO_PA(19),
+	.boot = 0,
+	.mclk = 1,
+	.video_interface = 0,
+	.i2c_adapter = 0,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
@@ -1087,10 +1104,12 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 
