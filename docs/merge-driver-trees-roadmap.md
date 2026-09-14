@@ -343,6 +343,7 @@ than guessing.
 | 29 | Align driver include blocks to one canonical order, drop duplicate includes and dead `again_lut` structs | done (141 files; code-identical pairs 138 -> 163) |
 | 30 | Restore `common/audio/{t10,t20,t21,t30,c100}` -> t31 symlinks lost in the audio relocation (blocked t20/t21/t30 builds) | done |
 | 31 | Merge byte-identical t31/t40 sensor drivers into `common/sensor-src/<soc>`; per-file resolution in the Kbuild | done (176 files: 120 t40, 56 t31) |
+| 32 | Move single-kernel sensor drivers into `common/sensor-src/<soc>` (no counterpart to conflict with) | done (41 files: 4 3.10-only, 37 4.4-only) |
 
 ## 10. Original inventory (for reference)
 
