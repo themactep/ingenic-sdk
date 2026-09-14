@@ -363,6 +363,7 @@ than guessing.
 | 49 | Add sensor_common_update() to 67 t41 drivers and merge to common | done (67 merges) |
 | 50 | Merge six more t41 drivers (rn6752, sc3332p, sc4336p, sc5336, gc4023, gc4023s1) | done (6 merges) |
 | 51 | Merge all 20 t41zrt drivers (sensor_common_update) - t41zrt fully merged | done (20 merges) |
+| 52 | Adopt the enhanced sc4236 (3 sup3.10 modes + PREVIEW fix) - t31 fully merged | done (1 merge) |
 
 ## 10. Original inventory (for reference)
 
