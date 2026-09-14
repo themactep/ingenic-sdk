@@ -11,11 +11,10 @@
 #include <linux/delay.h>
 #include <linux/gpio.h>
 #include <linux/clk.h>
-#include <linux/delay.h>
+#include <linux/proc_fs.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <linux/proc_fs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
@@ -94,11 +93,6 @@ const unsigned int ANALOG_GAIN_6 = (5 << TX_ISP_GAIN_FIXED_POINT) | (unsigned in
 const unsigned int ANALOG_GAIN_7 = (6 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.7 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_8 = (10 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.7 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_9 = (15 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.8 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
-};
 
 struct tx_isp_sensor_attribute sensor_attr;
 

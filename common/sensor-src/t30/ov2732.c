@@ -12,10 +12,10 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <apical-isp/apical_math.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
+#include <apical-isp/apical_math.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
@@ -64,11 +64,6 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
-};
-
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
 };
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {

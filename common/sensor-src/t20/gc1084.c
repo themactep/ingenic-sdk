@@ -8,18 +8,17 @@
  *   0         1920*720       30       mipi_1lane      linear
  */
 
-#include <sensor-common.h>
-#include <sensor-info.h>
-
-#include <apical-isp/apical_math.h>
-#include <linux/clk.h>
-#include <linux/delay.h>
-#include <linux/gpio.h>
-#include <linux/i2c.h>
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/proc_fs.h>
 #include <linux/slab.h>
+#include <linux/i2c.h>
+#include <linux/delay.h>
+#include <linux/gpio.h>
+#include <linux/clk.h>
+#include <linux/proc_fs.h>
+#include <sensor-common.h>
+#include <sensor-info.h>
+#include <apical-isp/apical_math.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION

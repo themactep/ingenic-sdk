@@ -34,6 +34,7 @@
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xff
+#define SENSOR_REG_PAGE 0xf0
 #define SENSOR_REG_DELAY 0x04
 
 // ============================================================================
@@ -43,11 +44,6 @@
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 12000000
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_REG_PAGE 0xf0
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

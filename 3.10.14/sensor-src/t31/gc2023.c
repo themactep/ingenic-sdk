@@ -100,11 +100,6 @@ const unsigned int ANALOG_GAIN_9 =
 const unsigned int ANALOG_GAIN_10 =
 	(22 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.68 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int fix_point_mult2(unsigned int a, unsigned int b) {

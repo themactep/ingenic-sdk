@@ -82,11 +82,6 @@ struct regval_list {
 	uint16_t value;
 };
 
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int fix_point_mult2(unsigned int a, unsigned int b)

@@ -85,11 +85,6 @@ struct regval_list {
 	uint16_t value;
 };
 
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 static int g_vrefh = 0x7f;

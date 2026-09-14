@@ -39,6 +39,7 @@
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xff
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
 
 // ============================================================================
@@ -48,11 +49,6 @@
 #define SENSOR_VTS_30_FPS 0x455
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_REG_PAGE 0xfd
 
 static int reset_gpio = GPIO_PC(27);
 

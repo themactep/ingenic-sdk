@@ -11,11 +11,10 @@
 #include <linux/delay.h>
 #include <linux/gpio.h>
 #include <linux/clk.h>
-#include <linux/delay.h>
+#include <linux/proc_fs.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
-#include <linux/proc_fs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
@@ -24,6 +23,7 @@
 #define SENSOR_CHIP_ID 0xa0b2
 #define SENSOR_CHIP_ID_H (0xA0)
 #define SENSOR_CHIP_ID_L (0xB2)
+#define SENSOR_VERSION "H20180416a"
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -78,11 +78,6 @@ static struct sensor_info sensor_info = {
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
-};
-
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
 };
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {

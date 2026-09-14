@@ -52,8 +52,6 @@ static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-static bool dpc_flag = true;
-
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;

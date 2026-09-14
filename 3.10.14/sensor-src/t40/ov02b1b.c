@@ -38,6 +38,7 @@
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xff
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_REG_DELAY 0xfe
 
 // ============================================================================
@@ -46,11 +47,6 @@
 #define SENSOR_SUPPORT_SCLK_FPS_15 (16490880)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_REG_PAGE 0xfd
 
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);

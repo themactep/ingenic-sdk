@@ -81,11 +81,6 @@ struct regval_list {
 	uint16_t value;
 };
 
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
-
 struct tx_isp_sensor_attribute imx415_attr;
 
 unsigned int imx415_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {

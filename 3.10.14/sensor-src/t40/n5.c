@@ -60,11 +60,6 @@ struct regval_list {
 	uint16_t value;
 };
 
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
-
 #if 1
 struct tx_isp_dvp_bus sensor_dvp = {
 	.mode = SENSOR_DVP_HREF_MODE,

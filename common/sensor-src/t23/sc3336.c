@@ -88,11 +88,6 @@ struct regval_list {
 	uint16_t value;
 };
 
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
-};
-
 struct sensor_gain_lut {
 	unsigned int index;
 	unsigned char again;

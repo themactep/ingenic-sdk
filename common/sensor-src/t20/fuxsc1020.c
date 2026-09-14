@@ -69,11 +69,6 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-struct again_lut {
-    unsigned int value;
-    unsigned int gain;
-};
-
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {

@@ -4,20 +4,19 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/slab.h>
+#include <linux/i2c.h>
+#include <linux/delay.h>
+#include <linux/gpio.h>
+#include <linux/clk.h>
+#include <linux/proc_fs.h>
 #include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <txx-funcs.h>
-
-#include <linux/clk.h>
-#include <linux/delay.h>
-#include <linux/gpio.h>
-#include <linux/i2c.h>
-#include <linux/init.h>
-#include <linux/module.h>
-#include <linux/proc_fs.h>
-#include <linux/slab.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
@@ -101,11 +100,6 @@ const unsigned int ANALOG_GAIN_8 =
 	(11 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.53 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_9 =
 	(16 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.12 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-
-struct again_lut {
-	unsigned int value;
-	unsigned int gain;
-};
 
 struct tx_isp_sensor_attribute sensor_attr;
 

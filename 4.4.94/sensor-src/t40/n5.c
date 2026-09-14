@@ -53,7 +53,6 @@ static int pwr_gpio = GPIO_PA(24);
 static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 static int sensor_max_fps = 5; //TX_SENSOR_MAX_FPS_20;
-
 static int shvflip = 0;
 
 #if 1
@@ -348,7 +347,7 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	if (ret > 0)
 		ret = 0;
 
-	//	printk("	{0x%x,0x%x}\n",*(msg[0].buf), *(msg[1].buf));
+	//	printk("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
 	//	private_msleep(5);
 	return ret;
 }
@@ -366,7 +365,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-	//	printk("	{0x%x,0x%x}\n",buf[0], buf[1]);
+	//	printk("	{0x%x, 0x%x}\n",buf[0], buf[1]);
 	//	private_msleep(5);
 	return ret;
 }
@@ -396,7 +395,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	while (len--) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
 		//		ret = sensor_read(sd, vals->reg_num, &val);
-		//		printk("	{0x%x,0x%x}\n", vals->reg_num, val);
+		//		printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		if (ret < 0)
 			return ret;
 		vals++;
