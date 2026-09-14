@@ -1360,6 +1360,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	if (wdr_en == 1) {
 		sensor_max_fps = TX_SENSOR_MAX_FPS_15;
 		wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 15;
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_wdr, sizeof(sensor_mipi_wdr));
 		sensor_attr.data_type = data_type;
@@ -1374,6 +1375,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	} else if (wdr_en == 0) {
 		sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 25;
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
 		sensor_attr.data_type = data_type;
@@ -1646,6 +1648,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 #ifdef __WDR__
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 15;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_wdr, sizeof(sensor_mipi_wdr));
 		sensor_attr.data_type = data_type;
 		sensor_attr.wdr_cache = wdr_bufsize;
@@ -1659,6 +1662,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	} else {
 #ifdef FAST_AE
 		wsize = &sensor_win_sizes[2];
+	sensor_info.max_fps = 25;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
 		sensor_attr.one_line_expr_in_us = 30;
 		sensor_attr.max_integration_time_native = 1350 - 4;
@@ -1669,6 +1673,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		pr_debug("probe in fast ae------->%s\n", SENSOR_NAME);
 #else
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 25;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
 		sensor_attr.one_line_expr_in_us = 30;
 		sensor_attr.max_integration_time_native = 1350 - 4;

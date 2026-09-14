@@ -569,9 +569,11 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 15;
 		break;
 	case TX_SENSOR_MAX_FPS_30:
 		wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 30;
 		break;
 	default:
 		ISP_WARNING("Do not support this max fps now.\n");
@@ -683,9 +685,11 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 15;
 		break;
 	case TX_SENSOR_MAX_FPS_30:
 		wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 30;
 		break;
 	default:
 		ISP_WARNING("Do not support this max fps now.\n");
@@ -915,9 +919,11 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 15;
 		break;
 	case TX_SENSOR_MAX_FPS_30:
 		wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 30;
 #if 0
 		sensor_attr.max_integration_time_native = 2400 - 4;
 		sensor_attr.integration_time_limit = 2400 - 4;

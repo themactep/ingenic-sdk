@@ -1827,6 +1827,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == PS5270_SENSOR_MAX_FPS_30) &&
 			(sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 25;
 			sensor_attr.total_width = 0x500 * 2; //2560
 			sensor_attr.total_height = 0x546;    //1350
 			sensor_attr.max_integration_time_native = 0x465 - 4;
@@ -1837,6 +1838,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[3];
+	sensor_info.max_fps = 60;
 			sensor_attr.total_width = 0x253 * 4; //2380
 			sensor_attr.total_height = 0x455;    //1109
 			sensor_attr.max_integration_time_native = 0x455 - 4;
@@ -1847,6 +1849,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[5];
+	sensor_info.max_fps = 15;
 			sensor_attr.total_width = 0xA00;  //2560
 			sensor_attr.total_height = 0x465; //1350
 			sensor_attr.max_integration_time_native = 0x465 - 4;
@@ -1859,6 +1862,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[4];
+	sensor_info.max_fps = 55;
 			sensor_attr.total_width = 0x280 * 4; //2560
 			sensor_attr.total_height = 0x465;    //1125
 			sensor_attr.max_integration_time_native = 0x465 - 4;
@@ -1871,6 +1875,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_186)) {
 			wsize = &sensor_win_sizes[6];
+	sensor_info.max_fps = 15;
 			sensor_attr.total_width = 0x280 * 4;
 			sensor_attr.total_height = 0x465;
 			sensor_attr.max_integration_time_native = 0x465 - 4;
@@ -1883,6 +1888,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_186)) {
 			wsize = &sensor_win_sizes[7];
+	sensor_info.max_fps = 55;
 			sensor_attr.total_width = 0x280 * 4;
 			sensor_attr.total_height = 0x465;
 			sensor_attr.max_integration_time_native = 0x465 - 4;
@@ -1894,6 +1900,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_30)) {
 			wsize = &sensor_win_sizes[2];
+	sensor_info.max_fps = 120;
 			sensor_attr.total_width = 0x2a2;  //674
 			sensor_attr.total_height = 0x216; //534
 			sensor_attr.max_integration_time_native = 0x216 - 4;
@@ -1903,6 +1910,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) &&
 			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_30)) {
 			wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 25;
 			memcpy((void *)(&(sensor_attr.dvp)), (void *)(&sensor_dvp), sizeof(sensor_dvp));
 			ret = set_sensor_gpio_function(sensor_gpio_func);
 			if (ret < 0)

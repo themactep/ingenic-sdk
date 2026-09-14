@@ -1348,6 +1348,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	switch (sensor_resolution) {
 	case TX_SENSOR_RES_200:
 		wsize = &sensor_win_sizes[0];
+	sensor_info.max_fps = 30;
 		sensor_attr.max_integration_time_native = 0x7d0 - 4;
 		sensor_attr.integration_time_limit = 0x7d0 - 4;
 		sensor_attr.total_width = 0x2da * 2;
@@ -1360,6 +1361,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_15:
 			wsize = &sensor_win_sizes[1];
+	sensor_info.max_fps = 15;
 			sensor_attr.max_integration_time_native = 0x7cc - 4;
 			sensor_attr.integration_time_limit = 0x7cc - 4;
 			sensor_attr.total_width = 0x2da * 2;
@@ -1370,6 +1372,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			break;
 		case TX_SENSOR_MAX_FPS_25:
 			wsize = &sensor_win_sizes[2];
+	sensor_info.max_fps = 25;
 			sensor_attr.max_integration_time_native = 0x960 - 4;
 			sensor_attr.integration_time_limit = 0x960 - 4;
 			sensor_attr.total_width = 0x2da * 2;
