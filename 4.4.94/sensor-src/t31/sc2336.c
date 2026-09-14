@@ -1027,17 +1027,25 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	memset(sensor, 0, sizeof(*sensor));
 
+#ifdef CONFIG_KERNEL_4_4_94
 	sensor->mclk = private_clk_get(NULL, "div_cim");
+#else
+	sensor->mclk = clk_get(NULL, "cgu_cim");
+#endif
 	if (IS_ERR(sensor->mclk)) {
+#ifdef CONFIG_KERNEL_4_4_94
 		ISP_ERROR("Cannot get sensor input clock div_cim\n");
+#else
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+#endif
 		goto err_get_mclk;
 	}
+
 	private_clk_set_rate(sensor->mclk, 24000000);
 	clk_prepare_enable(sensor->mclk);
 	private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
+
+	/* Convert sensor-gain into isp-gain, */
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
@@ -1077,7 +1085,6 @@ static int sensor_remove(struct i2c_client *client) {
 	if (pwdn_gpio != -1) {
 		private_gpio_free(pwdn_gpio);
 	}
-
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);

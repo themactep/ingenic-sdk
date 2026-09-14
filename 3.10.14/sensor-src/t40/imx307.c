@@ -32,6 +32,13 @@
 #define SENSOR_I2C_ADDRESS 0x1a
 
 // ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+#define SENSOR_RESET_GPIO GPIO_PA(18)
+// ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xffff
@@ -47,7 +54,7 @@
 #define DGAIN_MAX_DB 0x3c
 #define LOG2_GAIN_SHIFT 16
 
-static int reset_gpio = GPIO_PA(18);
+static int reset_gpio = SENSOR_RESET_GPIO;
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
