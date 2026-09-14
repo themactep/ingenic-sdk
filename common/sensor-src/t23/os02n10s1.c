@@ -33,6 +33,10 @@
 // ============================================================================
 #define TVERSION "V20231121a"
 #define SENSOR_VERSION  "H20240219a"
+#define SENSOR_CHIP_ID_HH    (0x53)
+#define SENSOR_CHIP_ID_HL    (0x02)
+#define SENSOR_CHIP_ID_LH    (0x4e)
+#define SENSOR_CHIP_ID_LL    (0x10)
 
 // ============================================================================
 // SPECIAL FEATURES
@@ -40,6 +44,27 @@
 #define SENSOR_I2C_REG_8BIT
 #define SENSOR_AGAIN_TABLE
 #define SENSOR_EXPO
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#ifndef SENSOR_I2C_REG_8BIT
+#define SENSOR_I2C_REG_16BIT
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_8BIT
+#define SENSOR_REG_END    0xff
+#define SENSOR_REG_DELAY  0xfe
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_16BIT
+#define SENSOR_REG_END    0xffff
+#define SENSOR_REG_DELAY  0xfffe
+#endif /* SENSOR_I2C_REG_16BIT */
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_MCLK 27000000
 
 static int rst_gpio = -1;
 module_param(rst_gpio, int, S_IRUGO);
@@ -60,25 +85,6 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
-
-#define SENSOR_CHIP_ID_HH    (0x53)
-#define SENSOR_CHIP_ID_HL    (0x02)
-#define SENSOR_CHIP_ID_LH    (0x4e)
-#define SENSOR_CHIP_ID_LL    (0x10)
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_MCLK 27000000
-
-#ifndef SENSOR_I2C_REG_8BIT
-#define SENSOR_I2C_REG_16BIT
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_8BIT
-#define SENSOR_REG_END    0xff
-#define SENSOR_REG_DELAY  0xfe
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_16BIT
-#define SENSOR_REG_END    0xffff
-#define SENSOR_REG_DELAY  0xfffe
-#endif /* SENSOR_I2C_REG_16BIT */
 
 struct regval_list {
 #ifdef SENSOR_I2C_REG_8BIT

@@ -31,6 +31,29 @@
 // ============================================================================
 #define TVERSION "V20230103a"
 #define SENSOR_VERSION  "H20240926a"
+#define SENSOR_CHIP_ID_H    (0x31)
+#define SENSOR_CHIP_ID_L    (0x03)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#ifndef SENSOR_I2C_REG_8BIT
+#define SENSOR_I2C_REG_16BIT
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_8BIT
+#define SENSOR_REG_END    0xff
+#define SENSOR_REG_DELAY  0xfe
+#endif /* SENSOR_I2C_REG_8BIT */
+#ifdef SENSOR_I2C_REG_16BIT
+#define SENSOR_REG_END    0xffff
+#define SENSOR_REG_DELAY  0xfffe
+#endif /* SENSOR_I2C_REG_16BIT */
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS   5
+#define SENSOR_MCLK 24000000
 
 // ============================================================================
 // SPECIAL FEATURES
@@ -54,25 +77,6 @@ MODULE_PARM_DESC(default_boot, "Sensor default boot");
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
-
-#define SENSOR_CHIP_ID_H    (0x31)
-#define SENSOR_CHIP_ID_L    (0x03)
-#define SENSOR_REG_END	    0xffff
-#define SENSOR_REG_DELAY	0xfffe
-#define SENSOR_OUTPUT_MIN_FPS   5
-#define SENSOR_MCLK 24000000
-
-#ifndef SENSOR_I2C_REG_8BIT
-#define SENSOR_I2C_REG_16BIT
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_8BIT
-#define SENSOR_REG_END    0xff
-#define SENSOR_REG_DELAY  0xfe
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_16BIT
-#define SENSOR_REG_END    0xffff
-#define SENSOR_REG_DELAY  0xfffe
-#endif /* SENSOR_I2C_REG_16BIT */
 
 struct regval_list {
 #ifdef SENSOR_I2C_REG_8BIT
