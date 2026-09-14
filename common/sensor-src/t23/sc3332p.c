@@ -293,7 +293,7 @@ unsigned int sc3332p_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 
 struct tx_isp_sensor_attribute sc3332p_attr={
 	.name = "sc3332p",
-	.chip_id = 0xcb1c,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,

@@ -2,6 +2,11 @@
 /*
  * n5.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
+ *
+ * NOTE: SENSOR_CHIP_ID_H/_L are 0x00/0x00 placeholders and sensor_detect()
+ *       only checks that the two raw bytes match them. The real N5 id
+ *       (SENSOR_ATTR chip_id below = 0x2145) and the correct id registers
+ *       are NOT verified against a datasheet.
  */
 
 #include <linux/init.h>

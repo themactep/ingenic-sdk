@@ -459,7 +459,7 @@ struct tx_isp_dvp_bus sc485sl_dvp = {
 
 struct tx_isp_sensor_attribute sc485sl_attr = {
 	.name = "sc485sl",
-	.chip_id = 0xce78,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
