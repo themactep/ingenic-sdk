@@ -364,6 +364,7 @@ than guessing.
 | 50 | Merge six more t41 drivers (rn6752, sc3332p, sc4336p, sc5336, gc4023, gc4023s1) | done (6 merges) |
 | 51 | Merge all 20 t41zrt drivers (sensor_common_update) - t41zrt fully merged | done (20 merges) |
 | 52 | Adopt the enhanced sc4236 (3 sup3.10 modes + PREVIEW fix) - t31 fully merged | done (1 merge) |
+| 53 | gc5603 not mergeable: keep both tunings, 4.4 H20220714a as gc5603s0 (bin-resolving suffix) - t41 fully merged | done |
 
 ## 10. Original inventory (for reference)
 
