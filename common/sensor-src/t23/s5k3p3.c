@@ -812,9 +812,6 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},/* END MARKER */	/* END MARKER *//* END MARKER */
 };
 
-/*
-* the order of the s5k3p3_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting s5k3p3_win_sizes[] = {
 	/* 1920*1080 [0] */
 	{

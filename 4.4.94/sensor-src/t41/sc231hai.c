@@ -779,9 +779,7 @@ static struct regval_list sc231hai_init_regs_1920_1080_60fps_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
-/*
- * the order of the sc231hai_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting sc231hai_win_sizes[] = {{
 									.width = 1920,
 									.height = 1080,

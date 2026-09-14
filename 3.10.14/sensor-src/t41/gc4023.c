@@ -1153,8 +1153,7 @@ static struct regval_list sensor_init_regs_1280_360_120fps_mipi[] = {
 	{0x0a67, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
-/*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 2560*1440 @max 30fps*/
 	{
@@ -1372,7 +1371,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
-
 	ret = sensor_write(sd, 0x0614, val_lut[value].reg614);
 	ret = sensor_write(sd, 0x0615, val_lut[value].reg615);
 
@@ -1381,7 +1379,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret = sensor_write(sd, 0x1468, val_lut[value].reg1468);
 	ret = sensor_write(sd, 0x00b8, val_lut[value].regb8);
 	ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
-
 
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error  %d", __LINE__);

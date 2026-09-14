@@ -512,9 +512,6 @@ static struct regval_list jxk351p_init_regs_2000_2000_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the jxk351p_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting jxk351p_win_sizes[] = {
 	/* resolution 1984*1984 2line @30fps*/
 	{

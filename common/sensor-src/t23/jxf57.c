@@ -357,9 +357,6 @@ static struct regval_list jxf57_init_regs_1920_1080_30fps_mipi_linear[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-/*
-* the order of the jxf57_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting jxf57_win_sizes[] = {
 	{
 		.width		= 1920,

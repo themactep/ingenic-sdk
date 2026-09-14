@@ -1071,9 +1071,6 @@ static struct regval_list mis20s1_init_regs_1920_1080_60fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the mis20s1_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting mis20s1_win_sizes[] = {
 	{
 		.width = SENSOR_WIDTH,

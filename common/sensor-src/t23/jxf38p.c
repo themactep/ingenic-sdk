@@ -350,9 +350,6 @@ static struct regval_list jxf38p_init_regs_1920_1080_12fps_mipi_sync3[] = {
     {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-/*
- * the order of the jxf38p_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting jxf38p_win_sizes[] = {
 	{
 		.width		= 1920,

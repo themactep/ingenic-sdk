@@ -1580,9 +1580,6 @@ static struct regval_list og05b10_init_regs_2560_1440_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the og05b10_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting og05b10_win_sizes[] = {
 	{
 		.width = 2560,

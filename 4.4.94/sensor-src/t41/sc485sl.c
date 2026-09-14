@@ -1039,9 +1039,6 @@ static struct regval_list sc485sl_init_regs_2560_1440_30fps_mipi_wdr[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the sc485sl_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting sc485sl_win_sizes[] = {
 	/* 2592*1944 [0] */
 	{

@@ -602,9 +602,6 @@ static struct regval_list jxk251_init_regs_1984_1984_15fps_mipi_dol[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the jxk251_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting jxk251_win_sizes[] = {
 	/* 1984*1984 [0] */
 	{

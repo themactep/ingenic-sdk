@@ -1123,9 +1123,7 @@ static struct regval_list gc2063_init_regs_1920_1080_40fps_mipi[] = {
         {0x3e, 0x91},
         {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
-/*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting gc2063_win_sizes[] = {
 	/* 1920*1080 @ max 30fps dvp*/
 	{

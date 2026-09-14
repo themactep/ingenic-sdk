@@ -485,9 +485,7 @@ static struct regval_list jxf51_init_regs_1008_1008_30fps_mipi[] = {
 	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
-/*
- * the order of the jxf51_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting jxf51_win_sizes[] = {
 	{
 		.width		= 1536,

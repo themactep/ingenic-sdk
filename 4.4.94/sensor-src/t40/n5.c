@@ -309,9 +309,6 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	sensor_write(sd, 0xCA, reg_1xCA);
 }
 
-/*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 1920*1080 @ max 25fps dvp*/
 	{

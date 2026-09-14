@@ -744,9 +744,6 @@ static struct regval_list mis40c1_init_regs_2560_1440_30fps[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the mis40c1_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting mis40c1_win_sizes[] = {
 	/* [0] 2M @max 30fps, default 30fps*/
 	{

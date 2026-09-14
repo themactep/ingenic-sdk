@@ -483,9 +483,6 @@ static struct regval_list imx585_init_regs_3840_2160_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the imx585_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting imx585_win_sizes[] = {
 	{
 		.width = 3840,

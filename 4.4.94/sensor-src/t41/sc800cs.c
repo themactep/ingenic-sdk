@@ -543,9 +543,6 @@ static struct regval_list sc800cs_init_regs_3264_2448_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the sc800cs_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sc800cs_win_sizes[] = {
 	/* xxxx*xxxx [0] */
 	{

@@ -592,9 +592,6 @@ static struct regval_list imx662_init_regs_1920_1080_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the imx662_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting imx662_win_sizes[] = {
 	/* 1948*1109 [0]*/
 	{

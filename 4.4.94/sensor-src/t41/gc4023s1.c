@@ -1375,8 +1375,7 @@ static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
 	{0x0203, 0x08},
 	{SENSOR_REG_END, 0x00},
 };
-/*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution]. */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 2560*1440 @max 30fps*/
 	{

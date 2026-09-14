@@ -1237,9 +1237,6 @@ static struct regval_list mis2032_init_regs_1920_1080_90fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the mis2032_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting mis2032_win_sizes[] = {
 	/* 1920*1080 [0] */
 	{

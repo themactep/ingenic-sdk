@@ -423,9 +423,6 @@ static struct regval_list os02n10_init_regs_1920_1080_15fps_mipi[] = {
         {SENSOR_REG_END, 0x00},/* END MARKER */
 };
 
-/*
- * the order of the os02n10_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting os02n10_win_sizes[] = {
         /* 1920*1080 [0] */
         {

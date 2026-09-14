@@ -419,9 +419,6 @@ static struct regval_list jxk308p_init_regs_3840_2160_15fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the jxk308p_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting jxk308p_win_sizes[] = {
 	/* 3840*2160 [0] */
 	{

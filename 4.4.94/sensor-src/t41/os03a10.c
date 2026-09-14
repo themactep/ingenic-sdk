@@ -599,9 +599,6 @@ static struct regval_list os03a10_init_regs_2560_1440_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
- * the order of the os03a10_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting os03a10_win_sizes[] = {
 	/* 2560*1440 [0] */
 	{

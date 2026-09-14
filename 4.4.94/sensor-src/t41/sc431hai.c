@@ -486,9 +486,7 @@ static struct regval_list sc431hai_init_regs_2560_1440_30fps_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
-/*
-* the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
-*/
+
 static struct tx_isp_sensor_win_setting sc431hai_win_sizes[] = {
 	{
 		.width = 2560,

@@ -239,7 +239,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list sensor_init_regs_1080p_30fps_mipi[] = {
 	{0x0103, 0x01},
 
@@ -726,9 +725,7 @@ static struct regval_list sensor_init_regs_1080p_2to1_30fps_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},
 };
-/*
- * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
@@ -751,7 +748,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

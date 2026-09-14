@@ -344,9 +344,6 @@ static struct regval_list jxk362p_init_regs_3200_1800_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-/*
-* the order of the jxk362p_win_sizes is [full_resolution, preview_resolution].
-*/
 static struct tx_isp_sensor_win_setting jxk362p_win_sizes[] = {
 	{
 		.width = 3200,

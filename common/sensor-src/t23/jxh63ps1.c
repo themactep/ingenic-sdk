@@ -497,9 +497,6 @@ static struct regval_list jxh63ps1_init_regs_1280_720_15fps_mipi[] = {
         {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
-/*
- * the order of the jxh63ps1_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting jxh63ps1_win_sizes[] = {
         {
                 .width		= 1280,
