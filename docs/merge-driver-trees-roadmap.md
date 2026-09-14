@@ -351,6 +351,7 @@ than guessing.
 | 37 | Accumulate `sensor_read/write()` error codes (`ret +=`) instead of overwriting, and zero-init the accumulating `ret` | done (599 files) |
 | 38 | Adopt accumulated `ret` in `sensor_detect`; merge `sc2239`, `sc2335`, `os03b10` to common | done (3 merges) |
 | 39 | Audit the `private_*` shim split: it exists in both kernels (no guards needed); align `gc2053`/`sc2336` 4.4 to call the shim | done (2 files; not the pervasive split it looked like) |
+| 40 | Adopt gc1084's extended again-LUT (128x) and `.max_again` on 4.4.94; merge to common | done (1 merge) |
 
 ## 10. Original inventory (for reference)
 
