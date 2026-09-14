@@ -485,6 +485,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	ret = sensor_write(sd, 0x0d04, value & 0xff);
 	ret += sensor_write(sd, 0x0d03, value >> 8);
+
 	return 0;
 }
 
@@ -500,6 +501,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00b8, val_lut[value].reg0b8);
 	ret += sensor_write(sd, 0x00b9, val_lut[value].reg0b9);
 	ret += sensor_write(sd, 0x0155, val_lut[value].reg155);
+
 	return 0;
 }
 #endif
