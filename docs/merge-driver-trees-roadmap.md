@@ -405,3 +405,47 @@ classified by hand; the main categories are:
 
 Categories 1-3 are mechanical and could be merged with `CONFIG_KERNEL_*`
 guards (a later pass); 4-6 need per-driver decisions.
+
+### 8f. Full recompile results
+
+All sensor drivers now build from `common/sensor-src/<soc>`. Recompiled
+every driver for every available tree:
+
+| tree | result |
+|------|--------|
+| T31/3.10.14 | 112/112 |
+| T31/4.4.94  | 112/112 |
+| t23/3.10.14 | 46/107 |
+| t20/3.10.14 | (imx322 etc.) ok |
+
+Three bugs surfaced immediately (only compiled now) and were fixed:
+`os04b10` (unbraced if/else-if/else chain in `sensor_set_mode`), `sp1405`
+(stray `)` in an `ISP_INFO`), `sc450ai` (two structs named `sensor_mipi`,
+used as `sensor_mipi1`/`2`).
+
+The t23 failures are pre-existing and fall into:
+
+- **34 CONFIG_MULTI_SENSOR**: `fsync_attr` / `TX_ISP_SENSOR_FSYNC_*` /
+  `fsync_attr.mode` are only present when the kernel is built with
+  `CONFIG_MULTI_SENSOR` (the t23 `tx_isp_sensor_attribute` guards
+  `fsync_attr` with `#ifdef CONFIG_MULTI_SENSOR`). No build tree here
+  enables it, so these cannot be verified. Covers the `*s0`/`*s1`/`-double`
+  multi-sensor drivers (cv2003s0/s1, gc2053s0/s1, gc2063s0/s1, gc1084s0/s1,
+  gc2083s0/s1, jxf37pas0/1, jxf38ps0/1, jxh63ps0/1/2, sc1346s0/s1,
+  sc1a4ts0/s1, sc2331s0/s1, sc2336ps0/s1, sc2336s0/s1, sc301iots0/s1,
+  sc2331s0/s1, os02n10s0/s1, os9734s0/s1, ...).
+- **17 sensor_info undeclared**: t23 drivers that call
+  `sensor_common_init(&sensor_info)` / `sensor_info.max_fps = ...` without
+  declaring the `sensor_info` struct or including `sensor-info.h`
+  (gc2093, imx307, imx327, jxf35, jxf37, jxh62, jxk03/04/05, jxq03,
+  os02d20, os02k10, os04c10, os05a10, ps5270, sc200ai, gc2053s1). Real
+  missing declarations, never compiled before.
+- **7 `max_fps` member**: t23 `tx_isp_sensor_attribute` has no `.max_fps`
+  (os04b10, ov5648, ps5260, sc2232h, sc2310, sc301iot, sc4238). The t23
+  struct genuinely lacks it.
+- **3 SENSOR_CHIP_ID undeclared** (imx307, imx327, imx335), **1 gc4653**
+  (unterminated ISP_ERROR macro arg), **1 ov9732** (stray `)`),
+  **1 sc2315e** (duplicate sensor_mipi).
+
+t10 (== t20), t20, t21 have complete sensor_info declarations; t30 uses
+sensor_info in only 4 drivers. So the work item is **t23 only**.
