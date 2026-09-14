@@ -30,9 +30,17 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define TVERSION "V20231226a"
 #define SENSOR_VERSION "H20241011a"
+#define SENSOR_CHIP_ID_H (0xce)
+#define SENSOR_CHIP_ID_L (0x78)
 
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 //#define SENSOR_TEST
 
 //#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
@@ -40,19 +48,13 @@
 #define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
 #define SENSOR_EXPO
 #define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
-
-#define SENSOR_CHIP_ID_H (0xce)
-#define SENSOR_CHIP_ID_L (0x78)
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_MCLK 24000000
-
-#define SENSOR_SUPPORT_SCLK 1500 * 2000 * 30
-#define SENSOR_SUPPORT_wdr_SCLK 1875 * 3200 * 24
-
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = 699 * 2;
 #endif
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -64,6 +66,15 @@ static int wdr_line = 699 * 2;
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_MCLK 24000000
+
+#define SENSOR_SUPPORT_SCLK 1500 * 2000 * 30
+#define SENSOR_SUPPORT_wdr_SCLK 1875 * 3200 * 24
 
 // static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 
