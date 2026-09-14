@@ -356,6 +356,7 @@ than guessing.
 | 42 | Merge imx327 (kernel-guarded MCLK name `cgu_cim`/`div_cim`) and os02g10 (Bayer order/shvflip) to common | done (2 merges) |
 | 43 | Fix the common sensor-src Kbuild resolution (bare `$(wildcard)` never matched under KBUILD, so common drivers were not compiled); re-verify all merges | done (19 modules now contain the driver) |
 | 44 | Adopt explicit includes in tp2850 (replaced the non-existent `t31-common.h`); merge to common | done (1 merge) |
+| 45 | Adopt c23a98 per-profile `wsize`/`sensor_info.max_fps` selection (the dead `sensor_max_fps` param); merge to common | done (1 merge) |
 
 ## 10. Original inventory (for reference)
 
