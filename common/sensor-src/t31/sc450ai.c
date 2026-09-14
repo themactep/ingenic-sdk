@@ -493,7 +493,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
-struct tx_isp_mipi_bus sensor_mipi = {
+struct tx_isp_mipi_bus sensor_mipi1 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 720,
 	.lans = 2,
@@ -522,7 +522,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_mipi = {
+struct tx_isp_mipi_bus sensor_mipi2 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 360,
 	.lans = 4,
@@ -1387,12 +1387,12 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	case TX_SENSOR_MAX_FPS_25:
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 25;
-		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
+		memcpy(&(sensor_attr.mipi), &sensor_mipi1, sizeof(sensor_mipi1));
 		break;
 	case TX_SENSOR_MAX_FPS_30:
 		wsize = &sensor_win_sizes[1];
 		sensor_info.max_fps = 30;
-		memcpy(&(sensor_attr.mipi), &sensor_mipi1, sizeof(sensor_mipi1));
+		memcpy(&(sensor_attr.mipi), &sensor_mipi2, sizeof(sensor_mipi2));
 		break;
 	default:
 		ISP_ERROR("do not support max framerate %d in mipi mode\n", sensor_max_fps);

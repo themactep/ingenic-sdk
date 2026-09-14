@@ -1073,23 +1073,25 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
-		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
+		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25) {
 			wsize = &sensor_win_sizes[0];
 			sensor_info.max_fps = 25;
-		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20)
+		} else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20) {
 			wsize = &sensor_win_sizes[1];
 			sensor_info.max_fps = 20;
-		else
+		} else {
 			ISP_ERROR("Do not support this resolution.\n");
+		}
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
-		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
+		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25) {
 			wsize = &sensor_win_sizes[0];
 			sensor_info.max_fps = 25;
-		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20)
+		} else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20) {
 			wsize = &sensor_win_sizes[1];
 			sensor_info.max_fps = 20;
-		else
+		} else {
 			ISP_ERROR("Do not support this resolution.\n");
+		}
 	}
 
 	if (wsize) {
