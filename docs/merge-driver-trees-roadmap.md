@@ -331,6 +331,8 @@ than guessing.
 | 26 | Remove dead `actual_fps` plumbing (write-only field, helper, proc node, and all driver calls/inits) | done (214 files, 1060 deletions) |
 | 27 | Fix pre-existing t31 build breaks: ov9732, sc1346, sc202cs, sc2210, sc2315e | done (10 files, both kernels) |
 | 28 | Unify `struct regval_list` layout (`uint16_t reg_num; uint16_t value;`) and placement (after `sensor_info`, before `again_lut`) | done (923 files) |
+| 29 | Align driver include blocks to one canonical order, drop duplicate includes and dead `again_lut` structs | done (141 files; code-identical pairs 138 -> 163) |
+| 30 | Restore `common/audio/{t10,t20,t21,t30,c100}` -> t31 symlinks lost in the audio relocation (blocked t20/t21/t30 builds) | done |
 
 ## 10. Original inventory (for reference)
 
