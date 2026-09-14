@@ -8,9 +8,11 @@
  *   0         1920*720       30       mipi_1lane      linear
  */
 
+#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
+#include <txx-funcs.h>
 
 #include <linux/clk.h>
 #include <linux/delay.h>

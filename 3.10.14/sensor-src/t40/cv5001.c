@@ -8,8 +8,10 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
+#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION

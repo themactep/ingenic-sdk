@@ -4,9 +4,11 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
+#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
+#include <txx-funcs.h>
 
 #include <linux/clk.h>
 #include <linux/delay.h>
