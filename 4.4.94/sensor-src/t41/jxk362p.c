@@ -361,9 +361,7 @@ static struct tx_isp_sensor_win_setting jxk362p_win_sizes[] = {
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &jxk362p_win_sizes[0];
-/*
-* the part of driver was fixed.
-*/
+
 static struct regval_list jxk362p_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };

@@ -468,10 +468,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.regs = sensor_init_regs_640_480,
 }};
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x00},
 	{0x44, 0xb8},

@@ -365,10 +365,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}};
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[1];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},

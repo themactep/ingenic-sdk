@@ -370,9 +370,6 @@ static struct tx_isp_sensor_win_setting jxf28p_win_sizes[] = {
 		.regs 		= jxf28p_init_regs_1920_1080_15fps_mipi,
 	},
 };
-/*
- * the part of driver was fixed.
- */
 
 static struct regval_list jxf28p_stream_on_mipi[] = {
 	{0x12, 0x00},

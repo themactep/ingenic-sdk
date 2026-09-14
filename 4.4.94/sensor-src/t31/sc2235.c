@@ -442,10 +442,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},

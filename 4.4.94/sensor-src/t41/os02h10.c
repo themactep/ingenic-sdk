@@ -613,9 +613,7 @@ static struct tx_isp_sensor_win_setting os02h10_win_sizes[] = {
 
 };
 struct tx_isp_sensor_win_setting *wsize = &os02h10_win_sizes[0];
-/*
- * the part of driver was fixed.
- */
+
 static struct regval_list os02h10_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };

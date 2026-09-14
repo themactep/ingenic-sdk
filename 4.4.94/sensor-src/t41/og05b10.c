@@ -1599,10 +1599,6 @@ static struct tx_isp_sensor_win_setting og05b10_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &og05b10_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list og05b10_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };

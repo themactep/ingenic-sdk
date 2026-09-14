@@ -364,10 +364,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_2304_1296_25fps,
 	}};
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
 };

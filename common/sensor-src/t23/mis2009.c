@@ -874,10 +874,6 @@ struct tx_isp_sensor_win_setting *wsize = &mis2009_win_sizes[2];
 	V4L2_MBUS_FMT_SGRBG10_1X10,
 };*/
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list mis2009_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };

@@ -1106,10 +1106,6 @@ static struct tx_isp_sensor_win_setting mis20s1_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &mis20s1_win_sizes[0];
 
-/*
-* the part of driver was fixed.
-*/
-
 static struct regval_list mis20s1_stream_on[] = {
 	{0x300c, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */

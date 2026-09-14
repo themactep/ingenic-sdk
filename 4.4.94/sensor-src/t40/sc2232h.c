@@ -816,10 +816,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 #endif
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},

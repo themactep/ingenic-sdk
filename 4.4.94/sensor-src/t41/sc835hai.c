@@ -1098,10 +1098,6 @@ static struct tx_isp_sensor_win_setting sc835hai_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &sc835hai_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sc835hai_stream_on[] = {
 	{SENSOR_REG_DELAY, 0x10},
 	{0x0100, 0x01},

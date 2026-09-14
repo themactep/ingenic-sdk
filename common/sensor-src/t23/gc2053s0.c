@@ -1188,10 +1188,6 @@ static struct tx_isp_sensor_win_setting gc2053_win_sizes[] = {
 
 struct tx_isp_sensor_win_setting *wsize = &gc2053_win_sizes[5];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list gc2053_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };

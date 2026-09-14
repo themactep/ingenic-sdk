@@ -511,9 +511,6 @@ static struct tx_isp_sensor_win_setting jxf51_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxf51_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 static struct regval_list jxf51_stream_on_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},	/* END MARKER */

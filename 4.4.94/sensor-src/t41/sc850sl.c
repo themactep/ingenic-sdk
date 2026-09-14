@@ -1652,10 +1652,6 @@ static struct tx_isp_sensor_win_setting sc850sl_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sc850sl_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list sc850sl_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */

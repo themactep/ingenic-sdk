@@ -377,9 +377,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	}};
-/*
- * the part of driver was fixed.
-*/
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x12, 0x00},

@@ -409,9 +409,6 @@ static struct tx_isp_sensor_win_setting jxf35_win_sizes[] = {
 };
 static struct tx_isp_sensor_win_setting *wsize = &jxf35_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
 static struct regval_list jxf35_stream_on_mipi[] = {
 	{0x12, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
@@ -545,7 +542,6 @@ static int jxf35_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-
 static int jxf35_set_integration_time_short(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
@@ -556,7 +552,6 @@ static int jxf35_set_integration_time_short(struct tx_isp_subdev *sd, int value)
 
 	return 0;
 }
-
 
 static int jxf35_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {

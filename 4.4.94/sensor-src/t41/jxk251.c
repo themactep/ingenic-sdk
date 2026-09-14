@@ -631,10 +631,6 @@ static struct tx_isp_sensor_win_setting jxk251_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &jxk251_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list jxk251_stream_on_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };

@@ -435,10 +435,6 @@ static struct tx_isp_sensor_win_setting os02n10s1_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &os02n10s1_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list os02n10s1_stream_on_mipi[] = {
         {0xfd, 0x00},
         {0x23, 0x01},

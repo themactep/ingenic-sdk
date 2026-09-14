@@ -389,10 +389,6 @@ static struct tx_isp_sensor_win_setting jxf37pa_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxf37pa_win_sizes[0];
 
-/*
- * the part of driver was fixed.
- */
-
 static struct regval_list jxf37pa_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
