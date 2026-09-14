@@ -273,6 +273,18 @@ include order (`ar1337`, `gc1034`, `gc1084`); t40 `imx662` (malformed
 `SENSOR_VERSION`); `sensor_REG_*` uses in t40 bf20a1/bf2253/bf2253s1 and
 t41 gc4653/mis2032/os03a10/os04e10/os08c10/ov04c10/sc231hai.
 
+`SENSOR_MAX_WIDTH/HEIGHT` (task 24): these feed only the informational
+`/proc/jz/sensor/width|height`. Many drivers had them set to the MIPI crop
+size (`image_twidth/theight`), the raw array size, or `0`; they now equal
+`sensor_win_sizes[0]` (the default output mode), matching the convention used
+by the large majority of drivers. `imx219` is deliberately left at its true
+sensor max (3280x2464) - it is a custom driver that overrides `image_twidth`
+per mode.
+
+Also fixed: `jxf23` defined two structs both named `sensor_mipi` (renamed
+`sensor_mipi1`/`sensor_mipi2`); `jxf32`/`jxf355p` have a pre-existing stray
+`)` in a `printk("%s stream on\n", SENSOR_NAME));` (still open).
+
 ## 9. Task history
 
 | # | Task | Status |
@@ -299,6 +311,9 @@ t41 gc4653/mis2032/os03a10/os04e10/os08c10/ov04c10/sc231hai.
 | 16 | Merge the t41 `oss3` audio driver into `common/audio/t41/oss3`; route t41/t23 to oss3 | done |
 | 17 | Move all audio to `common/audio/<soc>/<driver>` (relocation, no collisions) | done |
 | 18 | Relocate all single-kernel `misc`, `isp`, `sensor-src` (t10..t30, c100) and a1-only `aip/fb/ipu/video` to `common/` | done |
+| 22 | Remove vendor copy-paste garbage comment blocks; `.chip_id` -> `SENSOR_CHIP_ID`; stale `<name>_win_sizes` comments | done |
+| 23 | Add explicit `<soc/gpio.h>` / `<txx-funcs.h>` includes to the 3.10.14 sensor drivers so both trees carry the same include set | done |
+| 24 | Fix `SENSOR_MAX_WIDTH/HEIGHT` to match the default output window instead of the MIPI crop / raw size / 0 | done (19 files; imx219 left as intentional) |
 
 ## 10. Original inventory (for reference)
 
