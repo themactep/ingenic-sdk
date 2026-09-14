@@ -23,7 +23,6 @@
 #define SENSOR_NAME "jxh63"
 #define SENSOR_VERSION "H20210412a"
 #define SENSOR_CHIP_ID_H (0x0a)
-
 #define SENSOR_CHIP_ID_L (0x63)
 
 // ============================================================================

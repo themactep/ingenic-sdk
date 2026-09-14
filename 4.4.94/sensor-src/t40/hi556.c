@@ -57,6 +57,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {};
 
 struct tx_isp_sensor_attribute sensor_attr;

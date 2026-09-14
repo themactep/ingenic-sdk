@@ -12,8 +12,8 @@
 #include <linux/gpio.h>
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
-#include <soc/gpio.h>
 
+#include <soc/gpio.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
@@ -41,7 +41,6 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_SUPPORT_25FPS_SCLK (82462500)
-
 #define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PC(27);

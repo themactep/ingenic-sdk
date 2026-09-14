@@ -1038,8 +1038,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//			ret = sensor_read(sd, vals->reg_num, &val);
-			//			printk("	{0x%x,0x%x}\n", vals->reg_num, val);
+			//ret = sensor_read(sd, vals->reg_num, &val);
+			//printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1804,5 +1804,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sony imx335 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -17,10 +17,10 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SENDOR_NAME "sc2331s1"
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "sc2331s1"
 #define SENSOR_VERSION "H20230328a"
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x5c)
@@ -539,7 +539,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			// printk("Write:{0x%4x, 0x%2x}\n",vals->reg_num, vals->value);
+			// printk("Write:{0x%4x, 0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}

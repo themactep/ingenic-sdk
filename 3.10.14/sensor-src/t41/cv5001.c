@@ -18,9 +18,9 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "cv5001"
-#define SENSOR_VERSION "H20230505a"
 #define SENSOR_CHIP_ID_L 0x01
 #define SENSOR_CHIP_ID_H 0x50
+#define SENSOR_VERSION "H20230505a"
 
 // ============================================================================
 // HARDWARE INTERFACE

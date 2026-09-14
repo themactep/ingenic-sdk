@@ -23,7 +23,6 @@
 #define SENSOR_NAME "sc8238"
 #define SENSOR_VERSION "H20220711a"
 #define SENSOR_CHIP_ID_H (0x82)
-
 #define SENSOR_CHIP_ID_L (0x35)
 
 // ============================================================================
@@ -2164,8 +2163,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//			ret = sensor_read(sd, vals->reg_num, &val);
-			//			printk("	{0x%x,0x%x}\n", vals->reg_num, val);
+			//ret = sensor_read(sd, vals->reg_num, &val);
+			//printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}

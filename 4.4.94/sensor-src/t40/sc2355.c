@@ -42,6 +42,10 @@
 #define SENSOR_SUPPORT_60FPS_SCLK (72000000)
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define DRIVE_CAPABILITY_1
 #define MCLK 24000000
 #define DUAL_CAMERA_MODE 1

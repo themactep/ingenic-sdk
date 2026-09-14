@@ -54,6 +54,10 @@
 #define SENSOR_SUPPORT_SCLK (74250000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x8c
 #define LOG2_GAIN_SHIFT 16
@@ -593,9 +597,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1948*1109 [0]*/
 	{

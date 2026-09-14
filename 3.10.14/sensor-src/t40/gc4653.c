@@ -23,6 +23,7 @@
 // ============================================================================
 #define SENSOR_NAME "gc4653"
 #define SENSOR_VERSION "H20220426a"
+#define SENSOR_CHIP_ID 0x4653
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
 

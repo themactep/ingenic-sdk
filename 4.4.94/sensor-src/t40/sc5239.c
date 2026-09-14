@@ -59,6 +59,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {{0x320, 0},
 	{0x321, 2886},
 	{0x322, 5776},
