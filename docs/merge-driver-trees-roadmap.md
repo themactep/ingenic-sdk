@@ -353,6 +353,7 @@ than guessing.
 | 39 | Audit the `private_*` shim split: it exists in both kernels (no guards needed); align `gc2053`/`sc2336` 4.4 to call the shim | done (2 files; not the pervasive split it looked like) |
 | 40 | Adopt gc1084's extended again-LUT (128x) and `.max_again` on 4.4.94; merge to common | done (1 merge) |
 | 41 | Align redundant parens in sc2239p and merge to common | done (1 merge) |
+| 42 | Merge imx327 (kernel-guarded MCLK name `cgu_cim`/`div_cim`) and os02g10 (Bayer order/shvflip) to common | done (2 merges) |
 
 ## 10. Original inventory (for reference)
 
