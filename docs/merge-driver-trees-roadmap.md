@@ -350,6 +350,7 @@ than guessing.
 | 36 | Unify sensor logging on the ISP_* macros: drop the `ISP_PRINT` overrides, `pr_err`->`ISP_ERROR`, `pr_debug`/`printk`->`ISP_INFO`, demote trace-level `ISP_WARNING`->`ISP_INFO` | done (710 files) |
 | 37 | Accumulate `sensor_read/write()` error codes (`ret +=`) instead of overwriting, and zero-init the accumulating `ret` | done (599 files) |
 | 38 | Adopt accumulated `ret` in `sensor_detect`; merge `sc2239`, `sc2335`, `os03b10` to common | done (3 merges) |
+| 39 | Audit the `private_*` shim split: it exists in both kernels (no guards needed); align `gc2053`/`sc2336` 4.4 to call the shim | done (2 files; not the pervasive split it looked like) |
 
 ## 10. Original inventory (for reference)
 
@@ -363,17 +364,15 @@ than guessing.
 After all merge passes, 119 pairs still differ. The t31 set (13) was
 classified by hand; the main categories are:
 
-1. **`private_*` shim vs plain kernel calls** - the intended 3.10/4.4 split
-   (`private_i2c_transfer` -> `i2c_transfer`, `private_msleep` -> `msleep`,
-   `private_gpio_*` -> `gpio_*`). Mergeable with `CONFIG_KERNEL_*` guards, but
-   touches nearly every call site. Examples: `gc2053`, `sc2336`.
-2. **`ISP_PRINT` override** - 4.4 adds
-   `#undef ISP_PRINT` / `#define ISP_PRINT(...) pr_err(...)` (with an
-   "ugly hack" comment). Same class as (1).
-3. **`ISP_WARNING`/`pr_debug` logging** - e.g. `sc2239` uses `ISP_WARNING`
-   on 3.10 and `pr_debug` on 4.4.
-4. **`ret +=` vs `ret =`** accumulation in `sensor_detect`/`sensor_set_fps`
-   (`sc2239`, `sc2335`). Behavioural (error accumulation), needs a decision.
+1. ~~`private_*` shim vs plain kernel calls~~ - **resolved / not pervasive**.
+   The `private_*` wrappers exist and are `EXPORT_SYMBOL`'d in **both** the
+   3.10.14 and 4.4.94 t31 ISP (`tx-isp-debug.c`), so no `#ifdef` guard is
+   needed - a driver can call `private_*` on either kernel. A per-call audit
+   shows only `gc2053` and `sc2336` actually differed; both now call the shim
+   on 4.4.94 too. `gc5603` (t41) differs in `devm_clk_get` wrapper counts.
+2. ~~`ISP_PRINT` override~~ - **resolved** (removed; see 8f).
+3. ~~`ISP_WARNING`/`pr_debug` logging~~ - **resolved** (unified on ISP_*; 8f).
+4. ~~`ret +=` vs `ret =`~~ - **resolved** (unified on accumulation; 8f).
 5. **Real value differences** (not formatting):
    - `os02g10`: `shvflip` default 0 vs 1; Bayer order
      `SBGGR10`/`SGBRG10` swapped between trees.
@@ -382,6 +381,8 @@ classified by hand; the main categories are:
    - `sc4236`: `sensor_set_mode` PREVIEW branch selects `wsize[1]`@15 (3.10)
      vs `wsize[0]`@25 (4.4); 340-line structural drift.
    - `imx327`: MCLK name `cgu_cim` vs `div_cim`.
+   - `gc2053`/`sc2336`: MCLK `cgu_cim` vs `div_cim`, `private_clk_enable` vs
+     `clk_prepare_enable`, `reset_gpio` default, `init_sensor` guard.
    - `gc1084`: different `max_again` clamp.
 6. **Structurally different drivers** (cannot be merged mechanically):
    `c23a98` (3.10 probe has `switch (sensor_max_fps)`, 4.4 has none),
