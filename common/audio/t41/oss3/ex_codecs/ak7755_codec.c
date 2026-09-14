@@ -23,8 +23,10 @@
 
 #define EXCODEC_ID_REG 0x00
 #define EXCODEC_ID_VAL 0x03
+
 #define MONO_LEFT 1
 #define MONO_RIGHT 2
+
 /*example:
  * PA(n) = 0*32 + n
  * PB(n) = 1*32 + n
@@ -415,7 +417,6 @@ static int ak7755_record_set_again(int channel,int again)
 		ak7755_reg_set(AK7755_D2_MIC_GAIN_SETTING, 0, 3, again);
 		ak7755_reg_set(AK7755_D2_MIC_GAIN_SETTING, 4, 7, again);
 	}
-
 	return AUDIO_SUCCESS;
 }
 

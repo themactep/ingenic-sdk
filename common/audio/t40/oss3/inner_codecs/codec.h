@@ -3,7 +3,6 @@
  *
  * Copyright (c) Ingenic Semiconductor Co., Ltd.
  */
-
 #ifndef __TX_CODEC_H__
 #define __TX_CODEC_H__
 

@@ -1,7 +1,6 @@
 /**
  *
  */
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/delay.h>
@@ -536,6 +535,7 @@ static int set_codec_mic_datatype(struct audio_aic_device *aic, void *data)
 		audio_err_print("T40 only support record mono , stereo channel now.\n");
 		return -EINVAL;
 	}
+
 	//set samplerate
 	if (CODEC_IS_0_LINES == aic->livingcodec->pins || CODEC_IS_6_LINES == aic->livingcodec->pins) {
 		clk_set_rate(aic->mic_clock, data_type.sample_rate*256);
@@ -639,10 +639,10 @@ static int set_codec_mic_again(struct audio_aic_device *aic, void *data)
 		audio_err_print("aic is null or livingcodec is null.\n");
 		return -1;
 	}
-	if(gain.channel == 2){
+	if (gain.channel == 2) {
 		gain.channel = STEREO;
-	}else{
-		if(1 == mono_channel)
+	} else {
+		if (1 == mono_channel)
 			gain.channel = MONO_LEFT;
 		else if (2 == mono_channel)
 			gain.channel = MONO_RIGHT;
@@ -682,10 +682,10 @@ static int set_codec_mic_dgain(struct audio_aic_device *aic, void *data)
 		audio_err_print("aic is null or livingcodec is null.\n");
 		return -1;
 	}
-	if(dgain.channel == 2){
+	if (dgain.channel == 2) {
 		dgain.channel = STEREO;
-	}else{
-		if(1 == mono_channel)
+	} else {
+		if (1 == mono_channel)
 			dgain.channel = MONO_LEFT;
 		else if (2 == mono_channel)
 			dgain.channel = MONO_RIGHT;
@@ -719,10 +719,10 @@ static int set_codec_mic_alc_gain(struct audio_aic_device *aic, void *data)
 		audio_err_print("mute channel param is invalid %ld.\n", alc.channel);
 		return -1;
 	}
-	if(alc.channel == 2){
+	if (alc.channel == 2) {
 		alc.channel = STEREO;
-	}else{
-		if(1 == mono_channel)
+	} else {
+		if (1 == mono_channel)
 			alc.channel = MONO_LEFT;
 		else if (2 == mono_channel)
 			alc.channel = MONO_RIGHT;
@@ -766,7 +766,7 @@ static int set_codec_mic_mute(struct audio_aic_device *aic, void *data)
 		aic->codec_mic_info->lchannel_mute_en = mute.mute_en;
 		if (aic->livingcodec->record->set_mute)
 			ret = aic->livingcodec->record->set_mute(mute.channel, mute.mute_en, aic->codec_mic_info->ldgain);
-	} else if (mute.channel == MONO_RIGHT){
+	} else if (mute.channel == MONO_RIGHT) {
 		aic->codec_mic_info->rchannel_mute_en = mute.mute_en;
 		if (aic->livingcodec->record->set_mute)
 			ret = aic->livingcodec->record->set_mute(mute.channel, mute.mute_en, aic->codec_mic_info->rdgain);
@@ -854,7 +854,6 @@ static int set_codec_mic_start(struct audio_aic_device *aic, void *data)
 		if(cnt >= frm_cnt)
 			break;
 	}
-
 
 	vfs_write(fp, pdata, frm_cnt * 2, pos);
 	filp_close(fp, NULL);

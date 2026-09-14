@@ -32,7 +32,6 @@
 #include "../include/audio_dsp.h"
 #include "../include/audio_debug.h"
 
-
 #define AUDIO_DRIVER_VERSION "V30-20201030a"
 #define DEFAULT_EXCODEC_ADDR 0xff
 
@@ -99,6 +98,7 @@ static struct codec_attributes *i2c_new_subdev_board(struct i2c_adapter *adapter
 {
 	struct codec_attributes * attrs = NULL;
 	struct i2c_client *client;
+
 	request_module(I2C_MODULE_PREFIX "%s", info->type);
 	/* Create the i2c client */
 	if (info->addr == 0)
@@ -345,6 +345,7 @@ static int init_pipe(struct audio_pipe *pipe, enum dma_data_direction direction,
 	pipe->dma_type = dma_type;
 	pipe->dma_config.src_addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
 	pipe->dma_config.dst_addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
+
 	if (DMA_FROM_DEVICE == direction) {
 		pipe->dma_config.direction = DMA_DEV_TO_MEM;
 		pipe->dma_config.src_maxburst = AIC_RX_FIFO_DEPTH/2;
@@ -774,20 +775,21 @@ static int set_codec_mic_mute(struct audio_aic_device *aic, void *data)
 		audio_err_print("mute channel param is invalid %ld.\n", channel);
 		return -1;
 	}
-	if(channel == MONO_LEFT){
-		if(aic->codec_mic_info->lchannel_mute_en){
+
+	if (channel == MONO_LEFT) {
+		if (aic->codec_mic_info->lchannel_mute_en) {
 			ret = aic->livingcodec->record->set_dgain(channel,aic->codec_mic_info->ldgain);
 			aic->codec_mic_info->lchannel_mute_en = 0;
-		}else{
+		} else {
 			if (aic->livingcodec->record->set_mute)
 				ret = aic->livingcodec->record->set_mute(channel);
 			aic->codec_mic_info->lchannel_mute_en = 1;
 		}
-	}else{
-		if(aic->codec_mic_info->rchannel_mute_en){
+	} else {
+		if (aic->codec_mic_info->rchannel_mute_en) {
 			ret = aic->livingcodec->record->set_dgain(channel,aic->codec_mic_info->rdgain);
 			aic->codec_mic_info->rchannel_mute_en = 0;
-		}else{
+		} else {
 			if (aic->livingcodec->record->set_mute)
 				ret = aic->livingcodec->record->set_mute(channel);
 			aic->codec_mic_info->rchannel_mute_en = 1;

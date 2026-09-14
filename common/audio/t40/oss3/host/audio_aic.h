@@ -80,11 +80,11 @@ struct audio_aic_device {
 #define FRAGMENT_CNT 64
 #define SND_DSP_DMA_BUFFER_SIZE (160*2*2*FRAGMENT_CNT)
 
-#define AFMT_0     0x00000000
-//#define AFMT_U8    0x00000001
-//#define AFMT_S8    0x00000002
-#define AFMT_S16LE 0x00000010
-#define AFMT_S16BE 0x00000011
+#define AFMT_0		0x00000000
+//#define AFMT_U8	0x00000001
+//#define AFMT_S8	0x00000002
+#define AFMT_S16LE	0x00000010
+#define AFMT_S16BE	0x00000011
 
 #define MUTE_EN 1
 #define MUTE_DISEN 0
@@ -96,7 +96,7 @@ struct audio_aic_device {
 #define MCLK_DIV_TO_SAMPLE 256
 
 #define DEFAULT_RECORD_TRIGGER 8
-#define DEFAULT_AEC_TRIGGER    8
+#define DEFAULT_AEC_TRIGGER 8
 #define DEFAULT_REPLAY_TRIGGER 16
 
 #define DEFAULT_RECORD_CLK (8000*256)
