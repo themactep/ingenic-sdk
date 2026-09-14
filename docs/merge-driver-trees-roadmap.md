@@ -282,8 +282,12 @@ sensor max (3280x2464) - it is a custom driver that overrides `image_twidth`
 per mode.
 
 Also fixed: `jxf23` defined two structs both named `sensor_mipi` (renamed
-`sensor_mipi1`/`sensor_mipi2`); `jxf32`/`jxf355p` have a pre-existing stray
-`)` in a `printk("%s stream on\n", SENSOR_NAME));` (still open).
+`sensor_mipi1`/`sensor_mipi2`). The same duplicate-name bug was then fixed in
+`sc2210` and `sc2315e`, and three other pre-existing t31 build breaks:
+`ov9732` (stray `)` in a `printk`), `sc1346` (`.probe = snsor_probe` typo) and
+`sc202cs` (`memcpy` from `sensor_mipi1` when the struct is `sensor_mipi`).
+`jxf32`/`jxf355p` still have a pre-existing stray `)` in a
+`printk("%s stream on\n", SENSOR_NAME));` (open).
 
 Hardcoded `sensor_attr.chip_id` (task 25): the t40/t41/t41zrt/t23/t30 drivers
 define only `SENSOR_CHIP_ID_H`/`_M`/`_L` and hardcode the combined value. Most
@@ -325,6 +329,7 @@ than guessing.
 | 24 | Fix `SENSOR_MAX_WIDTH/HEIGHT` to match the default output window instead of the MIPI crop / raw size / 0 | done (19 files; imx219 left as intentional) |
 | 25 | Fix hardcoded `sensor_attr.chip_id` to match the detected id; flag unverifiable ones with a header note | done (41 files fixed; imx662/n5/cv5003/cv4002 marked) |
 | 26 | Remove dead `actual_fps` plumbing (write-only field, helper, proc node, and all driver calls/inits) | done (214 files, 1060 deletions) |
+| 27 | Fix pre-existing t31 build breaks: ov9732, sc1346, sc202cs, sc2210, sc2315e | done (10 files, both kernels) |
 
 ## 10. Original inventory (for reference)
 
