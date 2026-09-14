@@ -44,7 +44,7 @@
 // ============================================================================
 // SPECIAL FEATURES
 // ============================================================================
-//#define CV8001_AGAIN_MAX	0xB4
+//#define SENSOR_AGAIN_MAX	0xB4
 //#define CV8001_HDR_FRT		1630
 //#define CV8001_HDR_VMAX		6840
 //#define CV8001_HDR_RS_MAX	318  //(CV8001_HDR_VMAX - 4 * CV8001_HDR_FRT)
@@ -854,7 +854,7 @@ unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 //unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 //{
 //	uint16_t again=(isp_gain*20)>>shift;
-//	if(again>CV8001_AGAIN_MAX) again=CV8001_AGAIN_MAX;
+//	if(again>SENSOR_AGAIN_MAX) again=SENSOR_AGAIN_MAX;
 //	*sensor_again = again;
 //	isp_gain= (((int32_t)again)<<shift)/20;
 //

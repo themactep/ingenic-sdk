@@ -314,8 +314,8 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != sensor_REG_END) {
-		if (vals->reg_num == sensor_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);

@@ -31,8 +31,16 @@
 // ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
-#define CV2001_MCLK 24000000 //24M
-#define CV2001_AGAIN_MAX 0xB4
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_MCLK 24000000 //24M
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_AGAIN_MAX 0xB4
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -51,8 +59,8 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again = (isp_gain * 20) >> shift;
-	if (again > CV2001_AGAIN_MAX)
-		again = CV2001_AGAIN_MAX;
+	if (again > SENSOR_AGAIN_MAX)
+		again = SENSOR_AGAIN_MAX;
 	*sensor_again = again;
 	isp_gain = (((int32_t)again) << shift) / 20;
 
@@ -533,7 +541,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
-	private_clk_set_rate(sensor->mclk, CV2001_MCLK);
+	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
 	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",

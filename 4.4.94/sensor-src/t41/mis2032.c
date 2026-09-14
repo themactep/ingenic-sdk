@@ -1335,8 +1335,8 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
         int ret;
         unsigned char val;
-        while (vals->reg_num != MIS2032_REG_END) {
-                if (vals->reg_num == MIS2032_REG_DELAY) {
+        while (vals->reg_num != SENSOR_REG_END) {
+                if (vals->reg_num == SENSOR_REG_DELAY) {
                         private_msleep(vals->value);
                 } else {
                         ret = mis2032_read(sd, vals->reg_num, &val);
@@ -1353,8 +1353,8 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 
 static int mis2032_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != MIS2032_REG_END) {
-		if (vals->reg_num == MIS2032_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = mis2032_write(sd, vals->reg_num, vals->value);
