@@ -358,6 +358,7 @@ than guessing.
 | 44 | Adopt explicit includes in tp2850 (replaced the non-existent `t31-common.h`); merge to common | done (1 merge) |
 | 45 | Adopt c23a98 per-profile `wsize`/`sensor_info.max_fps` selection (the dead `sensor_max_fps` param); merge to common | done (1 merge) |
 | 46 | Align sc401ai shvflip (1) / sensor_resolution (RES_400) defaults; merge to common | done (1 merge) |
+| 47 | Merge gc2053/sc2336 with kernel-guarded MCLK name + clk enable (private_clk_enable vs clk_prepare_enable) | done (2 merges) |
 
 ## 10. Original inventory (for reference)
 
