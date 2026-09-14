@@ -1,17 +1,16 @@
 ccflags-y += -I$(src)/common/sensor-src/include
-# Single-kernel sensor dirs live in common/; t31/t40/t41/t41zrt are still
-# kept per kernel (different calling conventions), so they stay under the tree.
-ifneq ($(filter $(SOC_FAMILY),t31 t40 t41 t41zrt),)
-DIR := $(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)
-else
-DIR := common/sensor-src/$(SOC_FAMILY)
-endif
+# Sensor drivers that are byte-identical in both kernel trees live in
+# common/sensor-src/<soc>; drivers that still differ stay under the per-kernel
+# tree. Resolve each model to whichever location actually holds it.
+sensor_src = $(firstword $(wildcard \
+	common/sensor-src/$(SOC_FAMILY)/$(1).c \
+	$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(1).c))
 
 ifneq ($(SENSOR_MODEL),)
 	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
 	OUT := $(MODULE_NAME)
 	SRCS := \
-		$(DIR)/$(SENSOR_MODEL).c \
+		$(call sensor_src,$(SENSOR_MODEL)) \
 		common/sensor-src/common/sensor-info.c
 	OBJS := $(SRCS:%.c=%.o) \
 		$(ASM_SRCS:%.S=%.o)
@@ -25,7 +24,7 @@ ifneq ($(SENSOR_1_MODEL),)
 	MODULE_1_NAME := sensor_$(SENSOR_1_MODEL)_$(SOC_FAMILY)
 	OUT_1 := $(MODULE_1_NAME)
 	SRCS_1 := \
-		$(DIR)/$(SENSOR_1_MODEL).c \
+		$(call sensor_src,$(SENSOR_1_MODEL)) \
 		common/sensor-src/common/sensor-info.c
 	OBJS_1 := $(SRCS_1:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
@@ -38,7 +37,7 @@ ifneq ($(SENSOR_2_MODEL),)
 	MODULE_2_NAME := sensor_$(SENSOR_2_MODEL)_$(SOC_FAMILY)
 	OUT_2 := $(MODULE_2_NAME)
 	SRCS_2 := \
-		$(DIR)/$(SENSOR_2_MODEL).c \
+		$(call sensor_src,$(SENSOR_2_MODEL)) \
 		common/sensor-src/common/sensor-info.c
 	OBJS_2 := $(SRCS_2:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
