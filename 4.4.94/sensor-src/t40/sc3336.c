@@ -17,9 +17,11 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SENSOR_NAME "sc3336"
 // ============================================================================
-
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_NAME "sc3336"
+#define SENSOR_VERSION "H20220609a"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x41)
 
@@ -29,12 +31,18 @@
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_SUPPORT_30FPS_SCLK (51000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 2
-#define SENSOR_VERSION "H20220609a"
 #define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(28);
