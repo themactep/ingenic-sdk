@@ -354,3 +354,36 @@ than guessing.
 - ~56 common files differed; differences ranged from whitespace/one include to
   large drift (`soc_nna_main.c` 901 lines, `tx-isp-debug.c` 678,
   `tx-isp-common.h` 295, `pwm_core.c` 284, ~900 sensor files).
+
+### 8e. Second-run classification of the remaining differing pairs
+
+After all merge passes, 119 pairs still differ. The t31 set (13) was
+classified by hand; the main categories are:
+
+1. **`private_*` shim vs plain kernel calls** - the intended 3.10/4.4 split
+   (`private_i2c_transfer` -> `i2c_transfer`, `private_msleep` -> `msleep`,
+   `private_gpio_*` -> `gpio_*`). Mergeable with `CONFIG_KERNEL_*` guards, but
+   touches nearly every call site. Examples: `gc2053`, `sc2336`.
+2. **`ISP_PRINT` override** - 4.4 adds
+   `#undef ISP_PRINT` / `#define ISP_PRINT(...) pr_err(...)` (with an
+   "ugly hack" comment). Same class as (1).
+3. **`ISP_WARNING`/`pr_debug` logging** - e.g. `sc2239` uses `ISP_WARNING`
+   on 3.10 and `pr_debug` on 4.4.
+4. **`ret +=` vs `ret =`** accumulation in `sensor_detect`/`sensor_set_fps`
+   (`sc2239`, `sc2335`). Behavioural (error accumulation), needs a decision.
+5. **Real value differences** (not formatting):
+   - `os02g10`: `shvflip` default 0 vs 1; Bayer order
+     `SBGGR10`/`SGBRG10` swapped between trees.
+   - `sc401ai`: `shvflip` 0 vs 1; `sensor_resolution` default
+     `TX_SENSOR_RES_400` vs `TX_SENSOR_RES_100`.
+   - `sc4236`: `sensor_set_mode` PREVIEW branch selects `wsize[1]`@15 (3.10)
+     vs `wsize[0]`@25 (4.4); 340-line structural drift.
+   - `imx327`: MCLK name `cgu_cim` vs `div_cim`.
+   - `gc1084`: different `max_again` clamp.
+6. **Structurally different drivers** (cannot be merged mechanically):
+   `c23a98` (3.10 probe has `switch (sensor_max_fps)`, 4.4 has none),
+   `tp2850` (3.10 includes `"t31-common.h"`, 4.4 includes the standard set),
+   `os03b10`, `sc2239p` (tiny logging/layout diffs).
+
+Categories 1-3 are mechanical and could be merged with `CONFIG_KERNEL_*`
+guards (a later pass); 4-6 need per-driver decisions.
