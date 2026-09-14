@@ -68,21 +68,30 @@ For each duplicated driver, diff the two trees and classify:
 | pwm | `3.10.14/misc/pwm-pp/` | `4.4.94/misc/pwm/` | Different implementations (tcu_alloc arbitration + runtime channel selection vs old vendor). Both build `pwm_core`/`pwm_hal`. |
 | isp/t31 | `3.10.14/isp/t31-pp/` | `4.4.94/isp/t31/` | Different interface generation: 3.10 uses the `jz_driver_common_interfaces` vtable, 4.4 uses the standalone `private_*` shim layer and dropped the vtable from `txx-funcs.h`. |
 
-### 4.3 Sensor drivers: intentionally NOT merged
+### 4.3 Sensor drivers: partially merged
 
-`3.10.14/sensor-src/*` and `4.4.94/sensor-src/*` stay separate. The 3.10.14
-drivers call the vendor `private_*` shims and use the `actual_fps` API; the
-4.4.94 drivers call plain kernel functions and use `sensor_common_update()`.
-This is a different calling convention across hundreds of files, not a small
-diff. Only the shared `sensor-info.[ch]` is merged (section 4.1).
+Sensor drivers now live in **three** places:
+
+- `common/sensor-src/<soc>` for drivers that are byte-identical in both
+  kernels (task 31: all 120 t40 drivers, 56 of the t31 drivers) and for the
+  single-kernel SoCs (t10, t20, t21, t23, t30, c100).
+- `3.10.14/sensor-src/<soc>` and `4.4.94/sensor-src/<soc>` for the drivers
+  that still differ: all of t41/t41zrt, the remaining t31 drivers, and a few
+  t40 drivers that differ or exist in one tree only.
+
+The remaining per-kernel files call the vendor `private_*` shims and use the
+`actual_fps` API on 3.10.14, versus plain kernel functions and
+`sensor_common_update()` on 4.4.94 - a different calling convention, to be
+analysed in a second pass. The shared `sensor-info.[ch]` is merged (4.1).
+The reactor `Kbuild` resolves each model per file (see 5).
 
 ### 4.4 Platform-only trees
 
 All single-kernel content now lives under `common/` (relocated, no conflicts):
 `common/aip` (a1), `common/fb` (a1), `common/ipu` (a1), `common/video` (a1).
 
-The only content still tree-split is the sensor drivers that exist for both
-kernels (task 10): `3.10.14/sensor-src/{t31,t40,t41,t41zrt}` and
+The only content still tree-split is the sensor drivers that differ between
+kernels: `3.10.14/sensor-src/{t31,t40,t41,t41zrt}` and
 `4.4.94/sensor-src/{t31,t40,t41,t41zrt}`. Everything else is under `common/`.
 
 ### 4.5 `sdk/` firmware blobs (single root, fully explicit names)
@@ -131,9 +140,10 @@ Everything is under `common/` except the split sensor drivers. Selection:
 - Audio: `common/audio/<soc>/<driver>` (see 4.6).
 - misc: all under `common/misc/<name>` (split drivers `motor`/`motors-pp`,
   `pwm`/`pwm-pp` selected by `KERNEL_VERSION`).
-- sensor-src: `DIR` is `common/sensor-src/$(SOC_FAMILY)` for the single-kernel
-  SoCs (t10,t20,t21,t23,t30,c100) and `$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)`
-  for the split ones (t31,t40,t41,t41zrt).
+- sensor-src: the `Kbuild` resolves each sensor model per file - it prefers
+  `common/sensor-src/$(SOC_FAMILY)/$(SENSOR_MODEL).c` and falls back to
+  `$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(SENSOR_MODEL).c`, so a SoC can
+  mix merged (common) and per-kernel drivers.
 - a1-only: `common/aip/a1`, `common/fb`, `common/ipu`, `common/video/a1`.
 - `ISP_INCLUDE` (top of `Kbuild`) is `common/isp/<soc>/include`
   (`t31-pp` on 3.10.14), because that dir also holds the sensor headers.
@@ -332,6 +342,7 @@ than guessing.
 | 28 | Unify `struct regval_list` layout (`uint16_t reg_num; uint16_t value;`) and placement (after `sensor_info`, before `again_lut`) | done (923 files) |
 | 29 | Align driver include blocks to one canonical order, drop duplicate includes and dead `again_lut` structs | done (141 files; code-identical pairs 138 -> 163) |
 | 30 | Restore `common/audio/{t10,t20,t21,t30,c100}` -> t31 symlinks lost in the audio relocation (blocked t20/t21/t30 builds) | done |
+| 31 | Merge byte-identical t31/t40 sensor drivers into `common/sensor-src/<soc>`; per-file resolution in the Kbuild | done (176 files: 120 t40, 56 t31) |
 
 ## 10. Original inventory (for reference)
 
