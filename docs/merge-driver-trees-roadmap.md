@@ -345,6 +345,7 @@ than guessing.
 | 31 | Merge byte-identical t31/t40 sensor drivers into `common/sensor-src/<soc>`; per-file resolution in the Kbuild | done (176 files: 120 t40, 56 t31) |
 | 32 | Move single-kernel sensor drivers into `common/sensor-src/<soc>` (no counterpart to conflict with) | done (41 files: 4 3.10-only, 37 4.4-only) |
 | 33 | Add `sensor_info` + `sensor_common_init()/exit()` registration to the 95 3.10.14 t40/t41/t41zrt drivers that lacked it (port the 4.4 `/proc/jz/sensor/*` exposure down) | done (95 files; t40/t41 not build-verified) |
+| 34 | Restore per-profile `sensor_info.max_fps` updates in the t31 4.4.94 drivers (prudynt caps the pipeline to `/proc/jz/sensor/max_fps`) | done (42 files, 178 assignments) |
 
 ## 10. Original inventory (for reference)
 
