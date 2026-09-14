@@ -283,11 +283,10 @@ per mode.
 
 Also fixed: `jxf23` defined two structs both named `sensor_mipi` (renamed
 `sensor_mipi1`/`sensor_mipi2`). The same duplicate-name bug was then fixed in
-`sc2210` and `sc2315e`, and three other pre-existing t31 build breaks:
-`ov9732` (stray `)` in a `printk`), `sc1346` (`.probe = snsor_probe` typo) and
-`sc202cs` (`memcpy` from `sensor_mipi1` when the struct is `sensor_mipi`).
-`jxf32`/`jxf355p` still have a pre-existing stray `)` in a
-`printk("%s stream on\n", SENSOR_NAME));` (open).
+`sc2210`, `sc2315e`, `sc3336` and `sc3338`, and the pre-existing t31 build
+breaks: `ov9732`, `jxf32` and `jxf355p` (stray `)` in a `printk`), `sc1346`
+(`.probe = snsor_probe` typo) and `sc202cs` (`memcpy` from `sensor_mipi1`
+when the struct is `sensor_mipi`).
 
 Hardcoded `sensor_attr.chip_id` (task 25): the t40/t41/t41zrt/t23/t30 drivers
 define only `SENSOR_CHIP_ID_H`/`_M`/`_L` and hardcode the combined value. Most
