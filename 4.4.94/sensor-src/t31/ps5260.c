@@ -1238,7 +1238,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 15;
+		sensor_info.max_fps = 15;
 		memcpy((void *)(&(sensor_attr.dvp)), (void *)(&sensor_dvp), sizeof(sensor_dvp));
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
@@ -1246,7 +1246,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		sensor_attr.max_integration_time_native = 1347;
 		sensor_attr.integration_time_limit = 1347;
