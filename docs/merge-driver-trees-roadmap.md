@@ -354,6 +354,7 @@ than guessing.
 | 40 | Adopt gc1084's extended again-LUT (128x) and `.max_again` on 4.4.94; merge to common | done (1 merge) |
 | 41 | Align redundant parens in sc2239p and merge to common | done (1 merge) |
 | 42 | Merge imx327 (kernel-guarded MCLK name `cgu_cim`/`div_cim`) and os02g10 (Bayer order/shvflip) to common | done (2 merges) |
+| 43 | Fix the common sensor-src Kbuild resolution (bare `$(wildcard)` never matched under KBUILD, so common drivers were not compiled); re-verify all merges | done (19 modules now contain the driver) |
 
 ## 10. Original inventory (for reference)
 
