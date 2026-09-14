@@ -14,24 +14,41 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define CV8001_CHIP_ID_L 0x01
-#define CV8001_CHIP_ID_H 0x80
-#define CV8001_REG_END 0xffff
-#define CV8001_REG_DELAY 0xfffe
-#define CV8001_MCLK 24000000 //24M
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_VERSION "CVSENS.CV8001.forxunmei.30fps.V01.20250805"
+#define SENSOR_CHIP_ID_H 0x80
+#define SENSOR_CHIP_ID_L 0x01
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define CV8001_W_SIZE 3840
 #define CV8001_H_SIZE 2160
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_MCLK 24000000 //24M
+#define CV8001_30FPS_VTS 0x1324
+#define CV8001_MAX_FPS 30
+#define CV8001_MIN_FPS 10
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 //#define CV8001_AGAIN_MAX	0xB4
 //#define CV8001_HDR_FRT		1630
 //#define CV8001_HDR_VMAX		6840
 //#define CV8001_HDR_RS_MAX	318  //(CV8001_HDR_VMAX - 4 * CV8001_HDR_FRT)
 //#define CV8001_HDR_IT_MAX	(CV8001_HDR_VMAX - CV8001_HDR_RS_MAX - 18)
-#define SENSOR_VERSION "CVSENS.CV8001.forxunmei.30fps.V01.20250805"
-
-#define CV8001_30FPS_VTS 0x1324
-#define CV8001_MAX_FPS 30
-#define CV8001_MIN_FPS 10
 
 #define CV8001_EXP0_REG_H 0x3062
 #define CV8001_EXP0_REG_M 0x3061
@@ -959,7 +976,7 @@ static struct regval_list cv8001_init_regs_mipi[] = {
 	//split Again & Dgain
 	{0x3162, 0x01},
 
-	{CV8001_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting cv8001_win_sizes[] = {{
@@ -975,12 +992,12 @@ struct tx_isp_sensor_win_setting *wsize = &cv8001_win_sizes[0];
 
 static struct regval_list cv8001_stream_on_mipi[] = {
 	{0x3000, 0x00},
-	{CV8001_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list cv8001_stream_off_mipi[] = {
 	{0x3000, 0x01},
-	{CV8001_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int cv8001_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -1029,8 +1046,8 @@ static int cv8001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != CV8001_REG_END) {
-		if (vals->reg_num == CV8001_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv8001_read(sd, vals->reg_num, &val);
@@ -1047,8 +1064,8 @@ static int cv8001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int cv8001_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 
-	while (vals->reg_num != CV8001_REG_END) {
-		if (vals->reg_num == CV8001_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv8001_write(sd, vals->reg_num, vals->value);
@@ -1073,7 +1090,7 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV8001_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = v;
 
@@ -1081,7 +1098,7 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV8001_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -1372,7 +1389,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
-	private_clk_set_rate(sensor->mclk, CV8001_MCLK);
+	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
 	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
