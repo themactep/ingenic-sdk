@@ -330,6 +330,7 @@ than guessing.
 | 25 | Fix hardcoded `sensor_attr.chip_id` to match the detected id; flag unverifiable ones with a header note | done (41 files fixed; imx662/n5/cv5003/cv4002 marked) |
 | 26 | Remove dead `actual_fps` plumbing (write-only field, helper, proc node, and all driver calls/inits) | done (214 files, 1060 deletions) |
 | 27 | Fix pre-existing t31 build breaks: ov9732, sc1346, sc202cs, sc2210, sc2315e | done (10 files, both kernels) |
+| 28 | Unify `struct regval_list` layout (`uint16_t reg_num; uint16_t value;`) and placement (after `sensor_info`, before `again_lut`) | done (923 files) |
 
 ## 10. Original inventory (for reference)
 
