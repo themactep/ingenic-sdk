@@ -35,8 +35,8 @@
 // ============================================================================
 // SENSOR CAPABILITIES
 // ============================================================================
-#define SENSOR_MAX_WIDTH 0
-#define SENSOR_MAX_HEIGHT 0
+#define SENSOR_MAX_WIDTH 640
+#define SENSOR_MAX_HEIGHT 480
 
 // ============================================================================
 // REGISTER DEFINITIONS
