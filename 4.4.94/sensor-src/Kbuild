@@ -1,10 +1,10 @@
 ccflags-y += -I$(src)/common/sensor-src/include
-# Sensor drivers that are byte-identical in both kernel trees live in
-# common/sensor-src/<soc>; drivers that still differ stay under the per-kernel
-# tree. Resolve each model to whichever location actually holds it.
-sensor_src = $(firstword $(wildcard \
-	common/sensor-src/$(SOC_FAMILY)/$(1).c \
-	$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(1).c))
+# Sensor sources shared by both kernels live in common/sensor-src/<soc>
+# (SENSOR_COMMON_SRCS, computed by the top-level Kbuild). Everything else is
+# under <kernel>/sensor-src/<soc>. Pick the common copy when it exists.
+sensor_src = $(if $(filter %/common/sensor-src/$(SOC_FAMILY)/$(1).c,$(SENSOR_COMMON_SRCS)), \
+	common/sensor-src/$(SOC_FAMILY)/$(1).c, \
+	$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(1).c)
 
 ifneq ($(SENSOR_MODEL),)
 	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)

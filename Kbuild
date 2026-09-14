@@ -116,6 +116,10 @@ ifeq ($(strip $(SENSOR_1_MODEL)$(SENSOR_2_MODEL)),)
     $(info Sensor models missing, building sinfo module)
     include $(src)/sinfo/Kbuild
 else
+# Sensor drivers shared by both kernels live in common/sensor-src/<soc>
+# (picked up automatically when present); the rest stay per kernel under
+# <kernel>/sensor-src/<soc>. The two object lists below drive that choice.
+SENSOR_COMMON_SRCS := $(wildcard $(src)/common/sensor-src/$(SOC_FAMILY)/*.c)
 ifneq ($(SENSOR_1_MODEL),)
     $(info Building for sensor $(SENSOR_2_MODEL))
     include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
