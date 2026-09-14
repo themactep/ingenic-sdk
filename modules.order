@@ -1,10 +1,7 @@
-kernel//home/paul/thingino/ingenic-sdk/tx-isp-t23.ko
-kernel//home/paul/thingino/ingenic-sdk/gpio-userkeys.ko
-kernel//home/paul/thingino/ingenic-sdk/jz-aes.ko
-kernel//home/paul/thingino/ingenic-sdk/tcu_alloc.ko
+kernel//home/paul/thingino/ingenic-sdk/tx-isp-t31.ko
 kernel//home/paul/thingino/ingenic-sdk/pwm_core.ko
 kernel//home/paul/thingino/ingenic-sdk/pwm_hal.ko
 kernel//home/paul/thingino/ingenic-sdk/motor.ko
-kernel//home/paul/thingino/ingenic-sdk/ms419xx.ko
 kernel//home/paul/thingino/ingenic-sdk/audio.ko
-kernel//home/paul/thingino/ingenic-sdk/sensor_bf314a_t23.ko
+kernel//home/paul/thingino/ingenic-sdk/avpu.ko
+kernel//home/paul/thingino/ingenic-sdk/sensor_sc2336_t31.ko
