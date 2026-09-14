@@ -1042,7 +1042,11 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	private_clk_set_rate(sensor->mclk, 24000000);
+#ifdef CONFIG_KERNEL_4_4_94
 	clk_prepare_enable(sensor->mclk);
+#else
+	private_clk_enable(sensor->mclk);
+#endif
 	private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
 
 	/* Convert sensor-gain into isp-gain, */
