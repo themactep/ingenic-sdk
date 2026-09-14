@@ -1,16 +1,13 @@
 ccflags-y += -I$(src)/common/sensor-src/include
-# Sensor sources shared by both kernels live in common/sensor-src/<soc>
-# (SENSOR_COMMON_SRCS, computed by the top-level Kbuild). Everything else is
-# under <kernel>/sensor-src/<soc>. Pick the common copy when it exists.
-sensor_src = $(if $(filter %/common/sensor-src/$(SOC_FAMILY)/$(1).c,$(SENSOR_COMMON_SRCS)), \
-	common/sensor-src/$(SOC_FAMILY)/$(1).c, \
-	$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(1).c)
+# All sensor drivers now live in common/sensor-src/<soc> (kernel-shared); the
+# per-kernel sensor-src trees only contain this Kbuild.
+SENSOR_DIR := common/sensor-src/$(SOC_FAMILY)
 
 ifneq ($(SENSOR_MODEL),)
 	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
 	OUT := $(MODULE_NAME)
 	SRCS := \
-		$(call sensor_src,$(SENSOR_MODEL)) \
+		$(SENSOR_DIR)/$(SENSOR_MODEL).c \
 		common/sensor-src/common/sensor-info.c
 	OBJS := $(SRCS:%.c=%.o) \
 		$(ASM_SRCS:%.S=%.o)
@@ -24,7 +21,7 @@ ifneq ($(SENSOR_1_MODEL),)
 	MODULE_1_NAME := sensor_$(SENSOR_1_MODEL)_$(SOC_FAMILY)
 	OUT_1 := $(MODULE_1_NAME)
 	SRCS_1 := \
-		$(call sensor_src,$(SENSOR_1_MODEL)) \
+		$(SENSOR_DIR)/$(SENSOR_1_MODEL).c \
 		common/sensor-src/common/sensor-info.c
 	OBJS_1 := $(SRCS_1:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
@@ -37,7 +34,7 @@ ifneq ($(SENSOR_2_MODEL),)
 	MODULE_2_NAME := sensor_$(SENSOR_2_MODEL)_$(SOC_FAMILY)
 	OUT_2 := $(MODULE_2_NAME)
 	SRCS_2 := \
-		$(call sensor_src,$(SENSOR_2_MODEL)) \
+		$(SENSOR_DIR)/$(SENSOR_2_MODEL).c \
 		common/sensor-src/common/sensor-info.c
 	OBJS_2 := $(SRCS_2:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
