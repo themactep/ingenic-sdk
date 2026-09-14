@@ -91,8 +91,8 @@ struct again_lut sensor_again_lut[] = {
 	{0x16, 0x12, 0x46, 0x01, 0x2c, 0x33, 0x12, 359485}, //44.796875
 	{0x17, 0x19, 0x66, 0x01, 0x35, 0x06, 0x14, 375551}, //53.093750
 	{0x18, 0x20, 0x06, 0x01, 0x3f, 0x3f, 0x15, 393216}, //64.000000
-
 };
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {

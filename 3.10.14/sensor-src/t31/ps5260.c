@@ -43,6 +43,7 @@
 // ============================================================================
 #define SENSOR_REG_END 0xff
 #define SENSOR_REG_DELAY 0xfe
+#define SENSOR_BANK_REG 0xef
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -52,6 +53,9 @@
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
 
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define AG_HS_MODE (32) // 4.0x
 #define AG_LS_MODE (24) // 3.0x
 #define NEPLS_LB (25)
@@ -59,10 +63,6 @@
 #define NEPLS_SCALE (38)
 #define NE_NEP_CONST_LINEAR (0x868 + 0x19)
 #define NE_NEP_CONST_HDR (0x1134 + 0x50)
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_BANK_REG 0xef
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -893,7 +893,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -990,7 +989,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	Cur_ExpLine = sensor_attr.total_height - Cur_OffNy - 1;
 
 	sensor->video.fps = fps;
-
 	sensor->video.attr->max_integration_time_native = vts - 3;
 	sensor->video.attr->integration_time_limit = vts - 3;
 	sensor->video.attr->total_height = vts;
@@ -1015,7 +1013,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
@@ -1274,7 +1271,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);

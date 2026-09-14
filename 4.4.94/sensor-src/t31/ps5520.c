@@ -679,9 +679,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-
-			//			printk("  {0x%x,0x%x}\n",vals->reg_num,vals->value);
-
+			//printk("  {0x%x, 0x%x}\n",vals->reg_num,vals->value);
 			if (ret < 0) {
 				printk("sensor_write error  %d\n", __LINE__);
 				return ret;

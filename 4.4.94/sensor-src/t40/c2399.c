@@ -23,7 +23,6 @@
 #define SENSOR_NAME "c2399"
 #define SENSOR_VERSION "H20210922a"
 #define SENSOR_CHIP_ID_H (0x02)
-
 #define SENSOR_CHIP_ID_L (0x0b)
 
 // ============================================================================
