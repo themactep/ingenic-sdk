@@ -980,7 +980,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (sensor_max_fps == TX_SENSOR_MAX_FPS_30) {
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 		sensor_attr.total_width = 550;
 		sensor_attr.total_height = 5400;
 		sensor_attr.max_integration_time = 5400 - 9;
@@ -988,7 +988,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time_native = 5400 - 9;
 	} else if (sensor_max_fps == TX_SENSOR_MAX_FPS_15) {
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 15;
+		sensor_info.max_fps = 15;
 		sensor_attr.total_width = 1200;
 		sensor_attr.total_height = 4125;
 		sensor_attr.max_integration_time = 4125 - 9;

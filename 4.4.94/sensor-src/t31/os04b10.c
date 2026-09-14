@@ -1084,10 +1084,10 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
 		if (sensor_max_fps == TX_SENSOR_MAX_FPS_25)
 			wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 25;
+			sensor_info.max_fps = 25;
 		else if (sensor_max_fps == TX_SENSOR_MAX_FPS_20)
 			wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 20;
+			sensor_info.max_fps = 20;
 		else
 			ISP_ERROR("Do not support this resolution.\n");
 	}
@@ -1369,11 +1369,11 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 		break;
 	case TX_SENSOR_MAX_FPS_20:
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 20;
+		sensor_info.max_fps = 20;
 		sensor_attr.max_integration_time_native = 0xa5b - 21;
 		sensor_attr.integration_time_limit = 0xa5b - 21;
 		sensor_attr.total_width = 1584;

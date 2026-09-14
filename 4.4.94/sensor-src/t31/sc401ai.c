@@ -949,10 +949,10 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	if (sensor_resolution == TX_SENSOR_RES_400) {
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 	} else if (sensor_resolution == TX_SENSOR_RES_100) {
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 30;
+		sensor_info.max_fps = 30;
 	}
 
 	sensor->video.mbus.width = wsize->width;
@@ -1034,10 +1034,10 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 
 	if (sensor_resolution == TX_SENSOR_RES_400) {
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 	} else if (sensor_resolution == TX_SENSOR_RES_100) {
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 30;
+		sensor_info.max_fps = 30;
 	}
 
 	if (wsize) {
@@ -1259,7 +1259,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	if (sensor_resolution == TX_SENSOR_RES_400) {
 		wsize = &sensor_win_sizes[0];
-	sensor_info.max_fps = 25;
+		sensor_info.max_fps = 25;
 		memcpy(&sensor_attr.mipi, &sensor_2560_1440_mipi, sizeof(sensor_2560_1440_mipi));
 		sensor_attr.max_integration_time_native = 1796;
 		sensor_attr.integration_time_limit = 1796;
@@ -1268,7 +1268,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1796;
 	} else if (sensor_resolution == TX_SENSOR_RES_100) {
 		wsize = &sensor_win_sizes[1];
-	sensor_info.max_fps = 30;
+		sensor_info.max_fps = 30;
 		memcpy(&sensor_attr.mipi, &sensor_1280_720_mipi, sizeof(sensor_1280_720_mipi));
 		sensor_attr.max_integration_time_native = 1496;
 		sensor_attr.integration_time_limit = 1496;
