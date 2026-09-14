@@ -360,6 +360,8 @@ than guessing.
 | 46 | Align sc401ai shvflip (1) / sensor_resolution (RES_400) defaults; merge to common | done (1 merge) |
 | 47 | Merge gc2053/sc2336 with kernel-guarded MCLK name + clk enable (private_clk_enable vs clk_prepare_enable) | done (2 merges) |
 | 48 | Merge the four t40 drivers (gc1084 extended LUT, gc4653/imx307 include+exit order+reset gpio, jxk04 includes) - t40 fully merged | done (4 merges) |
+| 49 | Add sensor_common_update() to 67 t41 drivers and merge to common | done (67 merges) |
+| 50 | Merge six more t41 drivers (rn6752, sc3332p, sc4336p, sc5336, gc4023, gc4023s1) | done (6 merges) |
 
 ## 10. Original inventory (for reference)
 
