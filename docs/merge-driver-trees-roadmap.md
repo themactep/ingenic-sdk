@@ -348,6 +348,7 @@ than guessing.
 | 34 | Restore per-profile `sensor_info.max_fps` updates in the t31 4.4.94 drivers (prudynt caps the pipeline to `/proc/jz/sensor/max_fps`) | done (42 files, 178 assignments) |
 | 35 | Merge the 31 t31 drivers that became byte-identical into `common/sensor-src/t31` | done (31 files; 62 builds) |
 | 36 | Unify sensor logging on the ISP_* macros: drop the `ISP_PRINT` overrides, `pr_err`->`ISP_ERROR`, `pr_debug`/`printk`->`ISP_INFO`, demote trace-level `ISP_WARNING`->`ISP_INFO` | done (710 files) |
+| 37 | Accumulate `sensor_read/write()` error codes (`ret +=`) instead of overwriting, and zero-init the accumulating `ret` | done (599 files) |
 
 ## 10. Original inventory (for reference)
 
