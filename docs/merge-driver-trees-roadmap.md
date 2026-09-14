@@ -285,6 +285,15 @@ Also fixed: `jxf23` defined two structs both named `sensor_mipi` (renamed
 `sensor_mipi1`/`sensor_mipi2`); `jxf32`/`jxf355p` have a pre-existing stray
 `)` in a `printk("%s stream on\n", SENSOR_NAME));` (still open).
 
+Hardcoded `sensor_attr.chip_id` (task 25): the t40/t41/t41zrt/t23/t30 drivers
+define only `SENSOR_CHIP_ID_H`/`_M`/`_L` and hardcode the combined value. Most
+matched `(H<<n)|M|L`; 41 files did not and were bugs (wrong/truncated id, or a
+sibling sensor's id - e.g. `ov9281` reported `0x9732`, `imx334` `0x2003`).
+Those now use the `(H<<n)|M|L` expression. For `imx662` (H/L = 0x00/0x00
+placeholders), `n5` (same), `cv5003` and `cv4002` the correct id cannot be
+determined without a datasheet, so a NOTE was added to the file header rather
+than guessing.
+
 ## 9. Task history
 
 | # | Task | Status |
@@ -314,6 +323,7 @@ Also fixed: `jxf23` defined two structs both named `sensor_mipi` (renamed
 | 22 | Remove vendor copy-paste garbage comment blocks; `.chip_id` -> `SENSOR_CHIP_ID`; stale `<name>_win_sizes` comments | done |
 | 23 | Add explicit `<soc/gpio.h>` / `<txx-funcs.h>` includes to the 3.10.14 sensor drivers so both trees carry the same include set | done |
 | 24 | Fix `SENSOR_MAX_WIDTH/HEIGHT` to match the default output window instead of the MIPI crop / raw size / 0 | done (19 files; imx219 left as intentional) |
+| 25 | Fix hardcoded `sensor_attr.chip_id` to match the detected id; flag unverifiable ones with a header note | done (41 files fixed; imx662/n5/cv5003/cv4002 marked) |
 
 ## 10. Original inventory (for reference)
 
