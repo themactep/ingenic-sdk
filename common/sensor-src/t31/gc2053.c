@@ -1289,6 +1289,22 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	return ret;
 }
 
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+	int ret;
+	unsigned char val;
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
+			private_msleep(vals->value);
+		} else {
+			ret = sensor_read(sd, vals->reg_num, &val);
+			if (ret < 0)
+				return ret;
+		}
+		vals++;
+	}
+	return 0;
+}
+
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -1395,6 +1411,10 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 #endif
+
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
+	return 0;
+}
 
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
@@ -1743,7 +1763,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	memset(sensor, 0, sizeof(*sensor));
 #ifdef CONFIG_KERNEL_4_4_94
-	sensor->mclk = clk_get(NULL, "div_cim");
+	sensor->mclk = private_clk_get(NULL, "div_cim");
 #else
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 #endif
@@ -1757,7 +1777,12 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	private_clk_set_rate(sensor->mclk, 24000000);
+#ifdef CONFIG_KERNEL_4_4_94
+	private_clk_prepare_enable(sensor->mclk);
+#else
 	private_clk_enable(sensor->mclk);
+#endif
+	private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
 	sensor_attr.dbus_type = data_interface;
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		ret = set_sensor_gpio_function(sensor_gpio_func);
@@ -1889,6 +1914,8 @@ err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 err_get_mclk:
+	private_clk_disable(sensor->mclk);
+	private_clk_put(sensor->mclk);
 	kfree(sensor);
 
 	return -1;
@@ -1928,14 +1955,7 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
-	int ret = 0;
 	sensor_common_init(&sensor_info);
-	ret = private_driver_get_interface();
-	if (ret) {
-		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
-		return -1;
-	}
-
 	return private_i2c_add_driver(&sensor_driver);
 }
 
