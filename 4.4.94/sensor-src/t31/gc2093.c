@@ -55,6 +55,7 @@
 #define SENSOR_SUPPORT_30FPS_SCLK (58725000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
 #ifdef FAST_AE
 #define SENSOR_FAST_AE 0xfffe
 unsigned long long time_reg = 0;

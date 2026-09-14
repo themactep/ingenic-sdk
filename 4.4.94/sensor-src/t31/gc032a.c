@@ -73,6 +73,7 @@ struct regval_list {
 	unsigned char reg_num;
 	unsigned char value;
 };
+
 static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");

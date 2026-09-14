@@ -1316,9 +1316,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			if (ret < 0) {
+			if (ret < 0)
 				return ret;
-			}
 		}
 		vals++;
 	}
@@ -1767,7 +1766,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	memset(sensor, 0, sizeof(*sensor));
-
 	sensor->mclk = clk_get(NULL, "div_cim");
 	if (IS_ERR(sensor->mclk)) {
 		ISP_ERROR("Cannot get sensor input clock div_cim\n");
@@ -1776,7 +1774,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	clk_set_rate(sensor->mclk, 24000000);
 	clk_prepare_enable(sensor->mclk);
-
 	private_jzgpio_set_func(GPIO_PORT_A, GPIO_FUNC_1, 0x8000);
 	sensor_attr.dbus_type = data_interface;
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
@@ -1894,7 +1891,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	i2c_set_clientdata(client, sd);
-
 	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
