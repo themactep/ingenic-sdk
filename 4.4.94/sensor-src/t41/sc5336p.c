@@ -28,12 +28,23 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SC5336P_CHIP_ID_H (0xce)
-#define SC5336P_CHIP_ID_L (0x50)
-#define SC5336P_REG_END 0xffff
-#define SC5336P_REG_DELAY 0xfffe
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0xce)
+#define SENSOR_CHIP_ID_L (0x50)
 #define SENSOR_VERSION "H20240913a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
@@ -482,7 +493,7 @@ static struct regval_list sc5336p_init_regs_2880_1620_30fps_mipi_2lane[] = {
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
 	{0x0100, 0x01},
-	{SC5336P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc5336p_win_sizes[] = {{
@@ -497,12 +508,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc5336p_win_sizes[0];
 
 static struct regval_list sc5336p_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SC5336P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc5336p_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SC5336P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int sc5336p_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -551,8 +562,8 @@ static int sc5336p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC5336P_REG_END) {
-		if (vals->reg_num == SC5336P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sc5336p_read(sd, vals->reg_num, &val);
@@ -568,8 +579,8 @@ static int sc5336p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 
 static int sc5336p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != SC5336P_REG_END) {
-		if (vals->reg_num == SC5336P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sc5336p_write(sd, vals->reg_num, vals->value);
@@ -593,7 +604,7 @@ static int sc5336p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != SC5336P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -601,7 +612,7 @@ static int sc5336p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != SC5336P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 

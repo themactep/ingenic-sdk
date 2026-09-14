@@ -27,17 +27,26 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define OV2740_CHIP_ID_H (0x27)
-#define OV2740_CHIP_ID_L (0x40)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x27)
+#define SENSOR_CHIP_ID_L (0x40)
+#define SENSOR_VERSION "H20231214a"
 
-#define OV2740_REG_END 0xffff
-#define OV2740_REG_DELAY 0xfffe
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
-#define OV2740_SUPPORT_SCLK_MIPI (0x870 * 0x460 * 30)
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_SCLK_MIPI (0x870 * 0x460 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
-#define SENSOR_VERSION "H20231214a"
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -450,7 +459,7 @@ static struct regval_list ov2740_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5040, 0x00},
 	{0x5901, 0x00},
 	{0x0100, 0x01},
-	{OV2740_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list ov2740_init_regs_1920_1080_60fps_mipi[] = {
@@ -594,7 +603,7 @@ static struct regval_list ov2740_init_regs_1920_1080_60fps_mipi[] = {
 	{0x5040, 0x00},
 	{0x5901, 0x00},
 	{0x100, 0x01},
-	{OV2740_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -621,11 +630,11 @@ static struct tx_isp_sensor_win_setting ov2740_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &ov2740_win_sizes[0];
 
 static struct regval_list ov2740_stream_on_mipi[] = {
-	{OV2740_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list ov2740_stream_off_mipi[] = {
-	{OV2740_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int ov2740_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -676,8 +685,8 @@ static int ov2740_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OV2740_REG_END) {
-		if (vals->reg_num == OV2740_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = ov2740_read(sd, vals->reg_num, &val);
@@ -693,8 +702,8 @@ static int ov2740_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int ov2740_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != OV2740_REG_END) {
-		if (vals->reg_num == OV2740_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = ov2740_write(sd, vals->reg_num, vals->value);
@@ -717,7 +726,7 @@ static int ov2740_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2740_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -725,7 +734,7 @@ static int ov2740_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OV2740_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -832,7 +841,7 @@ static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int newformat = 0; //the format is 24.8
 	switch (info->default_boot) {
 	case 0:
-		sclk = OV2740_SUPPORT_SCLK_MIPI;
+		sclk = SENSOR_SUPPORT_SCLK_MIPI;
 		sensor_max_fps = 30;
 		break;
 	case 1:
@@ -851,7 +860,7 @@ static int ov2740_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	switch (info->default_boot) {
 	case 0:
-		sclk = OV2740_SUPPORT_SCLK_MIPI;
+		sclk = SENSOR_SUPPORT_SCLK_MIPI;
 		break;
 	case 1:
 		sclk = 0x540 * 0x438 * 30;

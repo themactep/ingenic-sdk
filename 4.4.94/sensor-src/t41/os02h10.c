@@ -26,16 +26,27 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define OS02H10_CHIP_ID_H (0x53)
-#define OS02H10_CHIP_ID_M0 (0x02)
-#define OS02H10_CHIP_ID_M1 (0x48)
-#define OS02H10_CHIP_ID_L (0x10)
-#define OS02H10_REG_END 0xff
-#define OS02H10_REG_DELAY 0xfe
-#define OS02H10_SUPPORT_30FPS_SCLK 4000 * 2250 * 15
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_M0 (0x02)
+#define SENSOR_CHIP_ID_M1 (0x48)
+#define SENSOR_CHIP_ID_L (0x10)
+#define SENSOR_VERSION "H20240223a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK 4000 * 2250 * 15
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20240223a"
 
 uint8_t dismode;
 static int rst_gpio = GPIO_PA(18);
@@ -405,14 +416,14 @@ static struct regval_list os02h10_init_regs_1920_1080_30fps_mipi[] = {
 
 	{0xb1, 0x02},		   // ;[1]mipi_en
 	{0xfd, 0x01},		   //
-	{OS02H10_REG_DELAY, 0x20}, /* END MARKER */
-	{OS02H10_REG_END, 0x00},   /* END MARKER */
+	{SENSOR_REG_DELAY, 0x20}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},   /* END MARKER */
 };
 
 static struct regval_list os02h10_init_regs_1920_1088_30fps_mipi[] = {
 	//{0xfd , 0x00},//
 	//{0x20 , 0x00},//
-	//{OS02H10_REG_DELAY, 0x05}, /* END MARKER */
+	//{SENSOR_REG_DELAY, 0x05}, /* END MARKER */
 	{0x53, 0xfe},		   //
 	{0x54, 0x7f},		   //
 	{0x61, 0xa8},		   //  ;mpll_divp_8lsb
@@ -574,8 +585,8 @@ static struct regval_list os02h10_init_regs_1920_1088_30fps_mipi[] = {
 	{0xfd, 0x00},		   //
 	{0xb1, 0x02},		   // ;[1]mipi_en
 	{0xfd, 0x01},		   //
-	{OS02H10_REG_DELAY, 0x20}, /* END MARKER */
-	{OS02H10_REG_END, 0x00},   /* END MARKER */
+	{SENSOR_REG_DELAY, 0x20}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},   /* END MARKER */
 };
 
 /*
@@ -606,11 +617,11 @@ struct tx_isp_sensor_win_setting *wsize = &os02h10_win_sizes[0];
  * the part of driver was fixed.
  */
 static struct regval_list os02h10_stream_on_mipi[] = {
-	{OS02H10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os02h10_stream_off_mipi[] = {
-	{OS02H10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 int os02h10_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -655,8 +666,8 @@ static int os02h10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OS02H10_REG_END) {
-		if (vals->reg_num == OS02H10_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = os02h10_read(sd, vals->reg_num, &val);
@@ -673,8 +684,8 @@ static int os02h10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 static int os02h10_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 
 	int ret;
-	while (vals->reg_num != OS02H10_REG_END) {
-		if (vals->reg_num == OS02H10_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = os02h10_write(sd, vals->reg_num, vals->value);
@@ -698,7 +709,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS02H10_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -706,7 +717,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS02H10_CHIP_ID_M0)
+	if (v != SENSOR_CHIP_ID_M0)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -714,7 +725,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS02H10_CHIP_ID_M1)
+	if (v != SENSOR_CHIP_ID_M1)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -722,7 +733,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS02H10_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 16) | v;
 	return 0;

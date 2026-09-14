@@ -25,15 +25,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXK362P_CHIP_ID_H (0x08)
-#define JXK362P_CHIP_ID_L (0x47)
-#define JXK362P_REG_END 0xff
-#define JXK362P_REG_DELAY 0xfe
-#define SENSOR_OUTPUT_MAX_FPS 25
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x08)
+#define SENSOR_CHIP_ID_L (0x47)
 #define SENSOR_VERSION "H20250513a"
 
-// uint8_t dismode;
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MAX_FPS 25
+#define SENSOR_OUTPUT_MIN_FPS 5
+
 static int rst_gpio = GPIO_PA(18);
 //static int pwdn_gpio = -1;
 
@@ -334,7 +344,7 @@ static struct regval_list jxk362p_init_regs_3200_1800_30fps_mipi[] = {
 	{0xC1, 0x01},
 	{0x12, 0x00},
 	{0x1F, 0xA0},
-	{JXK362P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -355,11 +365,11 @@ struct tx_isp_sensor_win_setting *wsize = &jxk362p_win_sizes[0];
 * the part of driver was fixed.
 */
 static struct regval_list jxk362p_stream_on_mipi[] = {
-	{JXK362P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list jxk362p_stream_off_mipi[] = {
-	{JXK362P_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 int jxk362p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
@@ -403,8 +413,8 @@ int jxk362p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char val
 static int jxk362p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val = 0;
-	while (vals->reg_num != JXK362P_REG_END) {
-		if (vals->reg_num == JXK362P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxk362p_write(sd, vals->reg_num, vals->value);
@@ -430,7 +440,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	if (ret < 0) {
 		return ret;
 	}
-	if (v != JXK362P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		// return -ENODEV;
 		*ident = v;
 
@@ -439,7 +449,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	if (ret < 0) {
 		return ret;
 	}
-	if (v != JXK362P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		// return -ENODEV;
 		*ident = (*ident << 8) | v;
 	return 0;

@@ -27,13 +27,24 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define OS04J10_CHIP_ID_H (0x53)
-#define OS04J10_CHIP_ID_M (0x04)
-#define OS04J10_CHIP_ID_L (0x4a)
-#define OS04J10_REG_END 0xffff
-#define OS04J10_REG_DELAY 0xfffe
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_M (0x04)
+#define SENSOR_CHIP_ID_L (0x4a)
 #define SENSOR_VERSION "H20240729a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -405,7 +416,7 @@ static struct regval_list os04j10_init_regs_2560_1440_30fps_mipi[] = {
 	{0x2c, 0x01},
 	{0x57, 0x10},
 	{0xfb, 0x03},
-	{OS04J10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting os04j10_win_sizes[] = {
@@ -421,11 +432,11 @@ static struct tx_isp_sensor_win_setting os04j10_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &os04j10_win_sizes[0];
 
 static struct regval_list os04j10_stream_on_mipi[] = {
-	{OS04J10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os04j10_stream_off_mipi[] = {
-	{OS04J10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int os04j10_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -474,8 +485,8 @@ static int os04j10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OS04J10_REG_END) {
-		if (vals->reg_num == OS04J10_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = os04j10_read(sd, vals->reg_num, &val);
@@ -492,8 +503,8 @@ static int os04j10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 static int os04j10_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 
-	while (vals->reg_num != OS04J10_REG_END) {
-		if (vals->reg_num == OS04J10_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = os04j10_write(sd, vals->reg_num, vals->value);
@@ -518,7 +529,7 @@ static int os04j10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04J10_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -526,7 +537,7 @@ static int os04j10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04J10_CHIP_ID_M)
+	if (v != SENSOR_CHIP_ID_M)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -534,7 +545,7 @@ static int os04j10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04J10_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 16) | v;
 

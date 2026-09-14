@@ -27,14 +27,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define OS04D10_CHIP_ID_H (0x53)
-#define OS04D10_CHIP_ID_M (0x04)
-#define OS04D10_CHIP_ID_L (0x44)
-#define OS04D10_REG_END 0xffff
-#define OS04D10_REG_DELAY 0xfffe
-#define OS04D10_REG_PAGE 0xfd
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_M (0x04)
+#define SENSOR_CHIP_ID_L (0x44)
 #define SENSOR_VERSION "H20240401a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_PAGE 0xfd
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -338,7 +349,7 @@ static struct regval_list os04d10_init_regs_2560_1440_25fps_mipi[] = {
 	{0xb1, 0x01},
 	{0xfd, 0x00},
 	{0x20, 0x03},
-	{OS04D10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting os04d10_win_sizes[] = {{
@@ -352,11 +363,11 @@ static struct tx_isp_sensor_win_setting os04d10_win_sizes[] = {{
 struct tx_isp_sensor_win_setting *wsize = &os04d10_win_sizes[0];
 
 static struct regval_list os04d10_stream_on_mipi[] = {
-	{OS04D10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list os04d10_stream_off_mipi[] = {
-	{OS04D10_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int os04d10_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -405,11 +416,11 @@ static int os04d10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
         int ret;
         unsigned char val;
 
-        while (vals->reg_num != OS04D10_REG_END) {
-                if (vals->reg_num == OS04D10_REG_DELAY) {
+        while (vals->reg_num != SENSOR_REG_END) {
+                if (vals->reg_num == SENSOR_REG_DELAY) {
                         msleep(vals->value);
                 } else {
-                        if (vals->reg_num == OS04D10_REG_PAGE)
+                        if (vals->reg_num == SENSOR_REG_PAGE)
                                 ret = os04d10_write(sd, vals->reg_num, vals->value);
                         ret = os04d10_read(sd, vals->reg_num, &val);
                         ISP_WARNING("## reg 0x%x = 0x%x\n",vals->reg_num,val);
@@ -426,8 +437,8 @@ static int os04d10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 static int os04d10_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 
-	while (vals->reg_num != OS04D10_REG_END) {
-		if (vals->reg_num == OS04D10_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = os04d10_write(sd, vals->reg_num, vals->value);
@@ -452,7 +463,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04D10_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -460,7 +471,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04D10_CHIP_ID_M)
+	if (v != SENSOR_CHIP_ID_M)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -468,7 +479,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != OS04D10_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 16) | v;
 	return 0;

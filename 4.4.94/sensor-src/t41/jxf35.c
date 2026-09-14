@@ -23,14 +23,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define jxf35_CHIP_ID_H (0x0f)
-#define jxf35_CHIP_ID_L (0x35)
-#define jxf35_REG_END 0xff
-#define jxf35_REG_DELAY 0xfe
-#define jxf35_SUPPORT_30FPS_SCLK_MIPI (86400000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_VERSION "H20240829a"
+#define SENSOR_CHIP_ID_H (0x0f)
+#define SENSOR_CHIP_ID_L (0x35)
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK_MIPI (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION "H20240829a"
 
 /* 1080p@30fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
 
@@ -379,7 +390,7 @@ static struct regval_list jxf35_init_regs_1920_1080_30fps_mipi[] = {
 	{0x81, 0x74},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{jxf35_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -403,12 +414,12 @@ static struct tx_isp_sensor_win_setting *wsize = &jxf35_win_sizes[0];
  */
 static struct regval_list jxf35_stream_on_mipi[] = {
 	{0x12, 0x00},
-	{jxf35_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list jxf35_stream_off_mipi[] = {
 	{0x12, 0x40},
-	{jxf35_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int jxf35_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -457,8 +468,8 @@ static int jxf35_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	int ret;
 	unsigned char val;
 
-	while (vals->reg_num != jxf35_REG_END) {
-		if (vals->reg_num == jxf35_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf35_read(sd, vals->reg_num, &val);
@@ -475,8 +486,8 @@ static int jxf35_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int jxf35_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	// unsigned char val;
-	while (vals->reg_num != jxf35_REG_END) {
-		if (vals->reg_num == jxf35_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf35_write(sd, vals->reg_num, vals->value);
@@ -503,7 +514,7 @@ static int jxf35_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != jxf35_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -512,7 +523,7 @@ static int jxf35_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	if (ret < 0)
 		return ret;
 
-	if (v != jxf35_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -685,7 +696,7 @@ static int jxf35_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 static int jxf35_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = jxf35_SUPPORT_30FPS_SCLK_MIPI;
+	unsigned int sclk = SENSOR_SUPPORT_30FPS_SCLK_MIPI;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;

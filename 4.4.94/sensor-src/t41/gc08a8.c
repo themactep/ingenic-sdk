@@ -27,12 +27,23 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC08A8_CHIP_ID_H (0x08)
-#define GC08A8_CHIP_ID_L (0xa8)
-#define GC08A8_REG_END 0xffff
-#define GC08A8_REG_DELAY 0x0000
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x08)
+#define SENSOR_CHIP_ID_L (0xa8)
 #define SENSOR_VERSION "H20250304a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0x0000
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = -1; //GPIO_PA(18);
 static int pwdn_gpio = -1;
@@ -821,7 +832,7 @@ static struct regval_list gc08a8_init_regs_3264_2448_30fps_mipi[] = {
 	{0x0084, 0x10},
 	{0x0102, 0x09},
 	{0x0100, 0x01},
-	{GC08A8_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 /*
@@ -843,12 +854,12 @@ struct tx_isp_sensor_win_setting *wsize = &gc08a8_win_sizes[0];
 
 static struct regval_list gc08a8_stream_on[] = {
 	// {0x0100,  0x01},
-	{GC08A8_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list gc08a8_stream_off[] = {
 	// {0x0100,  0x00},
-	{GC08A8_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int gc08a8_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -897,8 +908,8 @@ static int gc08a8_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC08A8_REG_END) {
-		if (vals->reg_num == GC08A8_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc08a8_read(sd, vals->reg_num, &val);
@@ -913,8 +924,8 @@ static int gc08a8_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int gc08a8_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != GC08A8_REG_END) {
-		if (vals->reg_num == GC08A8_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc08a8_write(sd, vals->reg_num, vals->value);
@@ -939,13 +950,13 @@ static int gc08a8_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != GC08A8_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc08a8_read(sd, 0x03f1, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != GC08A8_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 

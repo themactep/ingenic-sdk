@@ -29,49 +29,26 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define TVERSION "H20250116a"
 #define SENSOR_VERSION "H20250430a"
+#define SENSOR_CHIP_ID_H (0x20)
+#define SENSOR_CHIP_ID_L (0xe1)
+#define SENSOR_CHIP_ID 0x20e1
 
-#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
-#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
-#define MIS20S1_CHIP_ID_H (0x20)
-#define MIS20S1_CHIP_ID_L (0xe1)
-#define MIS20S1_CHIP_ID 0x20e1
-
-#define SENSOR_MCLK 27000000
-// define 30fps linear setting
-#define MIS20S1_SUPPORT_RES_PCLK (74250000)
-#define MIS20S1_SUPPORT_RES_BITCLCK 371
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_INIT_FPS 30
-#define SENSOR_INIT_30FPS_VTS 0x465
-#define SENSOR_INIT_30FPS_HTS 0x898
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define SENSOR_WIDTH 1920
 #define SENSOR_HEIGHT 1080
-//end define
-
-#define MIS20S1_60FPS_SUPPORT_RES_PCLK (165000000)
-#define MIS20S1_60FPPS_SUPPORT_RES_BITCLCK 990
-#define SENSOR_60FPS_OUTPUT_MIN_FPS 5
-#define SENSOR_60FPS_OUTPUT_INIT_FPS 60
-#define SENSOR_INIT_60FPS_VTS 0x4e2
-#define SENSOR_INIT_60FPS_HTS 0x898
-
-#ifdef SENSOR_WDR_2_FRAME
-#define SENSOR_WDR_MCLK 27000000
-#define MIS20S1_WDR_SUPPORT_RES_PCLK (165000000)
-#define MIS20S1_WDR_SUPPORT_RES_BITCLCK 990
-#define SENSOR_WDR_OUTPUT_MIN_FPS 5
-#define SENSOR_WDR_OUTPUT_INIT_FPS 30
-#define SENSOR_WDR_INIT_30FPS_VTS 0x4e2
-#define SENSOR_WDR_INIT_30FPS_HTS 0x898
 #define SENSOR_WDR_WIDTH 1920
 #define SENSOR_WDR_HEIGHT 1080
-static int wdr_line = 1000;
-#endif
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -83,6 +60,45 @@ static int wdr_line = 1000;
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_MCLK 27000000
+// define 30fps linear setting
+#define SENSOR_SUPPORT_RES_PCLK (74250000)
+#define SENSOR_SUPPORT_RES_BITCLCK 371
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_INIT_FPS 30
+#define SENSOR_INIT_30FPS_VTS 0x465
+#define SENSOR_INIT_30FPS_HTS 0x898
+//end define
+
+#define SENSOR_60FPS_SUPPORT_RES_PCLK (165000000)
+#define SENSOR_60FPPS_SUPPORT_RES_BITCLCK 990
+#define SENSOR_60FPS_OUTPUT_MIN_FPS 5
+#define SENSOR_60FPS_OUTPUT_INIT_FPS 60
+#define SENSOR_INIT_60FPS_VTS 0x4e2
+#define SENSOR_INIT_60FPS_HTS 0x898
+
+#ifdef SENSOR_WDR_2_FRAME
+#define SENSOR_WDR_MCLK 27000000
+#define SENSOR_WDR_SUPPORT_RES_PCLK (165000000)
+#define SENSOR_WDR_SUPPORT_RES_BITCLCK 990
+#define SENSOR_WDR_OUTPUT_MIN_FPS 5
+#define SENSOR_WDR_OUTPUT_INIT_FPS 30
+#define SENSOR_WDR_INIT_30FPS_VTS 0x4e2
+#define SENSOR_WDR_INIT_30FPS_HTS 0x898
+static int wdr_line = 1000;
+#endif
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
+#define SENSOR_EXPO
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 
 struct regval_list {
 #ifdef SENSOR_I2C_REG_8BIT
@@ -358,7 +374,7 @@ unsigned int mis20s1_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 
 struct tx_isp_mipi_bus mis20s1_mipi_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
-	.clk = MIS20S1_SUPPORT_RES_BITCLCK,
+	.clk = SENSOR_SUPPORT_RES_BITCLCK,
 	.lans = 2,
 	.image_twidth = SENSOR_WIDTH,
 	.image_theight = SENSOR_HEIGHT,
@@ -386,7 +402,7 @@ struct tx_isp_mipi_bus mis20s1_mipi_linear = {
 
 struct tx_isp_mipi_bus mis20s1_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
-	.clk = MIS20S1_WDR_SUPPORT_RES_BITCLCK,
+	.clk = SENSOR_WDR_SUPPORT_RES_BITCLCK,
 	.lans = 2,
 	.image_twidth = SENSOR_WDR_WIDTH,
 	.image_theight = SENSOR_WDR_HEIGHT,
@@ -414,7 +430,7 @@ struct tx_isp_mipi_bus mis20s1_mipi_dol = {
 
 struct tx_isp_mipi_bus mis20s1_mipi_linear_60fps = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
-	.clk = MIS20S1_60FPPS_SUPPORT_RES_BITCLCK,
+	.clk = SENSOR_60FPPS_SUPPORT_RES_BITCLCK,
 	.lans = 2,
 	.image_twidth = SENSOR_WIDTH,
 	.image_theight = SENSOR_HEIGHT,
@@ -442,7 +458,7 @@ struct tx_isp_mipi_bus mis20s1_mipi_linear_60fps = {
 
 struct tx_isp_sensor_attribute mis20s1_attr = {
 	.name = "mis20s1",
-	.chip_id = MIS20S1_CHIP_ID,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
@@ -1150,8 +1166,8 @@ static int mis20s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 		int ret;
 		unsigned char val;
-		while (vals->reg_num != MIS20S1_REG_END) {
-				if (vals->reg_num == MIS20S1_REG_DELAY) {
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
 						private_msleep(vals->value);
 				} else {
 						ret = mis20s1_read(sd, vals->reg_num, &val);
@@ -1168,8 +1184,8 @@ static int mis20s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 
 static int mis20s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != MIS20S1_REG_END) {
-		if (vals->reg_num == MIS20S1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = mis20s1_write(sd, vals->reg_num, vals->value);
@@ -1232,8 +1248,8 @@ static int mis20s1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != MIS20S1_REG_END) {
-		if (vals->reg_num == MIS20S1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = mis20s1_read(sd, vals->reg_num, &val);
@@ -1459,7 +1475,7 @@ static int mis20s1_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != MIS20S1_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -1467,7 +1483,7 @@ static int mis20s1_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != MIS20S1_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -1750,7 +1766,7 @@ static int mis20s1_set_fps(struct tx_isp_subdev *sd, int fps) {
 		max_fps = SENSOR_WDR_OUTPUT_INIT_FPS;
 		break;
 	case 2:
-		sclk = MIS20S1_60FPS_SUPPORT_RES_PCLK; /**< HTS * VTS * FPS */
+		sclk = SENSOR_60FPS_SUPPORT_RES_PCLK; /**< HTS * VTS * FPS */
 		max_fps = SENSOR_60FPS_OUTPUT_INIT_FPS;
 		break;
 	default:

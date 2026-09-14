@@ -50,6 +50,10 @@
 #define SENSOR_SUPPORT_SCLK (74250000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x8c
 #define LOG2_GAIN_SHIFT 16

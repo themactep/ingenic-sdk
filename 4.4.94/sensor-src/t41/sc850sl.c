@@ -31,15 +31,31 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SC850SL_CHIP_ID_H (0x9d)
-#define SC850SL_CHIP_ID_L (0x1e)
-#define SC850SL_REG_END 0xffff
-#define SC850SL_REG_DELAY 0xfffe
-#define SC850SL_SUPPORT_SCLK_25FPS (37125000) /* 1100*2250*25 */
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H (0x9d)
+#define SENSOR_CHIP_ID_L (0x1e)
+#define SENSOR_VERSION "H20250712a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_SCLK_25FPS (37125000) /* 1100*2250*25 */
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define DRIVE_CAPABILITY_1
-#define SENSOR_VERSION "H20250712a"
+
 static int reset_gpio = GPIO_PC(27);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -779,8 +795,8 @@ static struct regval_list sc850sl_init_regs_3840_2160_25fps_mipi[] = {
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
-	{SC850SL_REG_DELAY, 0x10},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc850sl_init_regs_3840_2160_25fps_mipi_raw12[] = {
@@ -971,8 +987,8 @@ static struct regval_list sc850sl_init_regs_3840_2160_25fps_mipi_raw12[] = {
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
-	{SC850SL_REG_DELAY, 0x10},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 static struct regval_list sc850sl_init_regs_1920_1080_30fps_mipi_binning[] = {
 	{0x0103, 0x01},
@@ -1179,8 +1195,8 @@ static struct regval_list sc850sl_init_regs_1920_1080_30fps_mipi_binning[] = {
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
-	{SC850SL_REG_DELAY, 0x10},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc850sl_init_regs_1920_1080_30fps_mipi_binning_sum[] = {
@@ -1390,8 +1406,8 @@ static struct regval_list sc850sl_init_regs_1920_1080_30fps_mipi_binning_sum[] =
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
-	{SC850SL_REG_DELAY, 0x10},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc850sl_init_regs_3840_2160_15fps_mipi_raw12[] = {
@@ -1589,8 +1605,8 @@ static struct regval_list sc850sl_init_regs_3840_2160_15fps_mipi_raw12[] = {
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
-	{SC850SL_REG_DELAY, 0x10},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 static struct tx_isp_sensor_win_setting sc850sl_win_sizes[] = {
 	{
@@ -1642,12 +1658,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc850sl_win_sizes[0];
 
 static struct regval_list sc850sl_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc850sl_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SC850SL_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int sc850sl_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -1696,8 +1712,8 @@ static int sc850sl_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC850SL_REG_END) {
-		if (vals->reg_num == SC850SL_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sc850sl_read(sd, vals->reg_num, &val);
@@ -1713,8 +1729,8 @@ static int sc850sl_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 
 static int sc850sl_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != SC850SL_REG_END) {
-		if (vals->reg_num == SC850SL_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sc850sl_write(sd, vals->reg_num, vals->value);
@@ -1739,7 +1755,7 @@ static int sc850sl_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != SC850SL_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -1747,7 +1763,7 @@ static int sc850sl_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != SC850SL_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 

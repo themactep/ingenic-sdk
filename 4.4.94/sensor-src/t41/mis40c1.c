@@ -28,29 +28,24 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define TVERSION "V20231127a"
 #define SENSOR_VERSION "H20240926a"
+#define SENSOR_CHIP_ID_H (0x00)
+#define SENSOR_CHIP_ID_L (0x04)
+#define SENSOR_CHIP_ID 0x0004
 
-#define SENSOR_AGAIN_TABLE /**Sensor AGain */
-
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP
-#define MIS40C1_CHIP_ID_H (0x00)
-#define MIS40C1_CHIP_ID_L (0x04)
-#define MIS40C1_CHIP_ID 0x0004
-
-#define SENSOR_MCLK 24000000
-// define 30fps setting
-#define MIS40C1_SUPPORT_RES_PCLK (144000000)
-#define MIS40C1_SUPPORT_RES_BITCLCK 720
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_INIT_FPS 30
-#define SENSOR_INIT_30FPS_VTS 0x5DC
-#define SENSOR_INIT_30FPS_HTS 0xC80
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define SENSOR_WIDTH 2560
 #define SENSOR_HEIGHT 1440
-//end define
 
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -62,6 +57,26 @@
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_MCLK 24000000
+// define 30fps setting
+#define SENSOR_SUPPORT_RES_PCLK (144000000)
+#define SENSOR_SUPPORT_RES_BITCLCK 720
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_INIT_FPS 30
+#define SENSOR_INIT_30FPS_VTS 0x5DC
+#define SENSOR_INIT_30FPS_HTS 0xC80
+//end define
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_AGAIN_TABLE /**Sensor AGain */
+#define SENSOR_EXPO
+#define SENSOR_MIR_FLIP
 
 struct regval_list {
 #ifdef SENSOR_I2C_REG_8BIT
@@ -395,7 +410,7 @@ unsigned int mis40c1_alloc_dgain(unsigned int isp_gain, unsigned char shift, uns
 
 struct tx_isp_mipi_bus mis40c1_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
-	.clk = MIS40C1_SUPPORT_RES_BITCLCK,
+	.clk = SENSOR_SUPPORT_RES_BITCLCK,
 	.lans = 2,
 	.image_twidth = SENSOR_WIDTH,
 	.image_theight = SENSOR_HEIGHT,
@@ -423,7 +438,7 @@ struct tx_isp_mipi_bus mis40c1_mipi = {
 
 struct tx_isp_sensor_attribute mis40c1_attr = {
 	.name = "mis40c1",
-	.chip_id = MIS40C1_CHIP_ID,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = 0x30,
@@ -807,8 +822,8 @@ static int mis40c1_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 		int ret;
 		unsigned char val;
-		while (vals->reg_num != mis40c1_REG_END) {
-				if (vals->reg_num == mis40c1_REG_DELAY) {
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
 						private_msleep(vals->value);
 				} else {
 						ret = mis40c1_read(sd, vals->reg_num, &val);
@@ -1076,7 +1091,7 @@ static int mis40c1_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != MIS40C1_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -1084,7 +1099,7 @@ static int mis40c1_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != MIS40C1_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 

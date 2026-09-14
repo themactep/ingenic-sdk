@@ -27,13 +27,23 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define CV5003_CHIP_ID_L 0x50
-#define CV5003_CHIP_ID_H 0x02
-#define CV5003_REG_END 0xffff
-#define CV5003_REG_DELAY 0xfffe
-#define CV5003_MCLK 24000000 //24M
-
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_L 0x50
+#define SENSOR_CHIP_ID_H 0x02
 #define SENSOR_VERSION "H20250624a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_MCLK 24000000 //24M
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -922,7 +932,7 @@ static struct regval_list cv5003_init_regs_2880_1620_30fps_mipi[] = {
 	{0x3036, 0x54},
 	{0x3037, 0x06},
 	{0x3000, 0x00},		//Streaming
-	{CV5003_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting cv5003_win_sizes[] = {{
@@ -937,12 +947,12 @@ struct tx_isp_sensor_win_setting *wsize = &cv5003_win_sizes[0];
 
 static struct regval_list cv5003_stream_on_mipi[] = {
 	{0x3000, 0x00},
-	{CV5003_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list cv5003_stream_off_mipi[] = {
 	{0x3000, 0x01},
-	{CV5003_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 int cv5003_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
@@ -991,8 +1001,8 @@ static int cv5003_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != CV5003_REG_END) {
-		if (vals->reg_num == CV5003_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv5003_read(sd, vals->reg_num, &val);
@@ -1008,8 +1018,8 @@ static int cv5003_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int cv5003_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	while (vals->reg_num != CV5003_REG_END) {
-		if (vals->reg_num == CV5003_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = cv5003_write(sd, vals->reg_num, vals->value);
@@ -1034,14 +1044,14 @@ static int cv5003_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV5003_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 	ret += cv5003_read(sd, 0x3002, &v);
 	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
-	if (v != CV5003_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 
 	*ident = v;
@@ -1305,7 +1315,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
-	private_clk_set_rate(sensor->mclk, CV5003_MCLK);
+	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
 	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
