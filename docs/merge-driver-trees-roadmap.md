@@ -349,6 +349,7 @@ than guessing.
 | 35 | Merge the 31 t31 drivers that became byte-identical into `common/sensor-src/t31` | done (31 files; 62 builds) |
 | 36 | Unify sensor logging on the ISP_* macros: drop the `ISP_PRINT` overrides, `pr_err`->`ISP_ERROR`, `pr_debug`/`printk`->`ISP_INFO`, demote trace-level `ISP_WARNING`->`ISP_INFO` | done (710 files) |
 | 37 | Accumulate `sensor_read/write()` error codes (`ret +=`) instead of overwriting, and zero-init the accumulating `ret` | done (599 files) |
+| 38 | Adopt accumulated `ret` in `sensor_detect`; merge `sc2239`, `sc2335`, `os03b10` to common | done (3 merges) |
 
 ## 10. Original inventory (for reference)
 
