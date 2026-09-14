@@ -493,7 +493,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
-struct tx_isp_mipi_bus sensor_mipi = {
+struct tx_isp_mipi_bus sensor_mipi1 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 720,
 	.lans = 1,
@@ -522,7 +522,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_mipi = {
+struct tx_isp_mipi_bus sensor_mipi2 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 371,
 	.lans = 2,

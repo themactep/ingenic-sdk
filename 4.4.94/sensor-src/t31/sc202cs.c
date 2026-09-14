@@ -966,7 +966,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	wsize = &sensor_win_sizes[0];
-	memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi1), sizeof(sensor_mipi1));
+	memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 	sensor_attr.max_integration_time_native = 1250 - 6;
 	sensor_attr.integration_time_limit = 1250 - 6;
 	sensor_attr.total_width = 1920;

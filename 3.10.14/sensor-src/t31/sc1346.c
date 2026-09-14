@@ -1060,7 +1060,7 @@ static struct i2c_driver sensor_driver = {
 			.owner = THIS_MODULE,
 			.name = SENSOR_NAME,
 		},
-	.probe = snsor_probe,
+	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
 };
