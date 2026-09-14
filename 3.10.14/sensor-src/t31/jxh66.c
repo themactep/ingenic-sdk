@@ -65,6 +65,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -84,11 +89,6 @@ MODULE_PARM_DESC(data_interface, "Sensor Data interface");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

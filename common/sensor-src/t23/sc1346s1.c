@@ -57,13 +57,13 @@ static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 //static unsigned short int dpc_flag = 1;
 //static unsigned int gain_val = 0x37e;
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
 
 struct again_lut {
 	unsigned int value;

@@ -66,7 +66,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

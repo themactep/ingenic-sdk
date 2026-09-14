@@ -71,15 +71,15 @@ static struct sensor_info sensor_info = {
 	.i2c_adapter = 0,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 struct proc_dir_entry *g_sinfo_proc;
 
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;

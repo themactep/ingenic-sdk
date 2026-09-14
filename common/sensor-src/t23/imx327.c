@@ -69,8 +69,8 @@ MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 static int rhs1 = 101;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -553,7 +553,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
@@ -1072,7 +1071,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

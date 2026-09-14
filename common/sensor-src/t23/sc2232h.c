@@ -71,8 +71,8 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -815,7 +815,6 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x0100, 0x01},

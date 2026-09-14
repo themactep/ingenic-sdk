@@ -69,8 +69,8 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
 struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

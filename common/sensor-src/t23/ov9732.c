@@ -62,8 +62,8 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor data interface GPIO function");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -344,7 +344,6 @@ static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct regval_list sensor_stream_off_dvp[] = {
 	{0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -354,7 +353,6 @@ static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
-
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},

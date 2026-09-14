@@ -74,8 +74,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -275,7 +275,6 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 {
 	return 0;
 }
-
 
 struct tx_isp_mipi_bus sensor_mipi={
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -671,7 +670,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-
 	ret = sensor_write_array(sd, wsize->regs);
 
 	if (ret)
@@ -738,7 +736,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = 2*vts - 13;
 	sensor->video.attr->integration_time_limit = 2*vts - 13;
@@ -1020,7 +1017,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.total_height = 1130;
 	sensor_attr.max_integration_time = 2247;
 	memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
-
 
 	sd = &sensor->sd;
 	video = &sensor->video;

@@ -130,7 +130,7 @@ static struct sensor_info sensor_info = {
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -943,7 +943,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret) {

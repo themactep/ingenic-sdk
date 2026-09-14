@@ -70,6 +70,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -81,11 +86,6 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

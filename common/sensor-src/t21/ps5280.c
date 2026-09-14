@@ -94,8 +94,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -280,7 +280,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_linear_25fps[] = {
 	{0xEF, 0x00},
@@ -624,7 +623,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
 };
@@ -923,7 +921,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	sensor->video.fps = fps;
 
-
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
@@ -1130,7 +1127,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

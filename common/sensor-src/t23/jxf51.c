@@ -57,8 +57,8 @@ module_param(sboot, int, S_IRUGO);
 MODULE_PARM_DESC(sboot, "Select the sensor setting");
 
 struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

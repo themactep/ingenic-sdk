@@ -74,6 +74,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 const unsigned int ANALOG_GAIN_1 =
 	(1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.0 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_2 =
@@ -94,11 +99,6 @@ const unsigned int ANALOG_GAIN_9 =
 	(16 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.55 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_10 =
 	(22 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.68 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;

@@ -60,12 +60,12 @@ static int shvflip = 1;
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
 
+struct tx_isp_sensor_attribute sensor_attr;
+
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
-
-struct tx_isp_sensor_attribute sensor_attr;
 
 struct again_lut {
 	unsigned char value;

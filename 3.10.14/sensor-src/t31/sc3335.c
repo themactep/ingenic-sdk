@@ -84,15 +84,15 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static unsigned int gain_val = 0x340;
 static unsigned char temp_val = 0x0;
 static unsigned char cur_lut_node = 255;
 static unsigned char node_change = 0;
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int value;
@@ -918,7 +918,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 
 	ret = sensor_write_array(sd, wsize->regs);
 

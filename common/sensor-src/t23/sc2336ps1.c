@@ -69,7 +69,7 @@ MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

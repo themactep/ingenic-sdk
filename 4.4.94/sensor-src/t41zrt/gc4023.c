@@ -81,14 +81,14 @@ static struct sensor_info sensor_info = {
 	.i2c_adapter = 0,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
 static unsigned char ag_last = 0;
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
 
 struct again_lut {
 	unsigned int index;

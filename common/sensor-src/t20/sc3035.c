@@ -86,8 +86,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -863,7 +863,6 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
@@ -892,7 +891,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 
@@ -1184,7 +1182,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	}
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;

@@ -68,8 +68,8 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 static bool dpc_flag = true;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

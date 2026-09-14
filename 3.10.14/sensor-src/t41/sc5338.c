@@ -57,7 +57,7 @@ static unsigned char switch_wdr = 1;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -923,7 +923,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 
        return 0;
 }
-
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {

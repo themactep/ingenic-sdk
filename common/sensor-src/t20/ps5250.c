@@ -80,8 +80,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -232,7 +232,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 
@@ -1041,7 +1040,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 	{0xEF, 0x01},
 	{0x05, 0x01},    /*sw pwdn off*/
@@ -1224,7 +1222,6 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -1303,7 +1300,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	Cur_ExpLine = sensor_attr.total_height - Cur_OffNy;
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = vts - 2;
 	sensor->video.attr->integration_time_limit = vts - 2;

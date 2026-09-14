@@ -58,8 +58,8 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -407,7 +407,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0103, 0x01},
@@ -1142,7 +1141,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
-
 
 	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;

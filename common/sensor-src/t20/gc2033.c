@@ -67,6 +67,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -89,11 +94,6 @@ const unsigned int ANALOG_GAIN_7 = (8 << TX_ISP_GAIN_FIXED_POINT) | (unsigned in
 const unsigned int ANALOG_GAIN_8 = (11 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.72 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_9 = (16 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.55 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_10 = (22 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.68 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-
-struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
-};
 
 struct again_lut {
     unsigned int value;
@@ -646,7 +646,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 	{0xf2, 0x8f},
 	{SENSOR_REG_END, 0x00},
@@ -698,7 +697,6 @@ static int sensor_write(struct v4l2_subdev *sd, unsigned char reg, unsigned char
 
 	return ret;
 }
-
 
 static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;

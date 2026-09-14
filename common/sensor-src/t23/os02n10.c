@@ -81,19 +81,15 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
-struct regval_list {
-#ifdef SENSOR_I2C_REG_8BIT
-	uint8_t reg_num;
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_16BIT
-	uint16_t reg_num;
-#endif /* SENSOR_I2C_REG_16BIT */
-	uint8_t value;
-};
-
 struct tx_isp_sensor_attribute os02n10_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

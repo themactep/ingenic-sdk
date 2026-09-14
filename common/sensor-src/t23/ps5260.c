@@ -73,8 +73,8 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -263,7 +263,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0xEF, 0x00},
@@ -645,7 +644,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},
@@ -1195,7 +1193,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

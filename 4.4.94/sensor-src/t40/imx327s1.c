@@ -67,7 +67,7 @@ static int rhs1 = 101;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct tx_isp_sensor_attribute sensor_attr;

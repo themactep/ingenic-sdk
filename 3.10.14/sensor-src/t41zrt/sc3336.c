@@ -62,7 +62,7 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

@@ -54,7 +54,7 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

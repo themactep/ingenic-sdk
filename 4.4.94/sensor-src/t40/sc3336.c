@@ -52,11 +52,6 @@ static int shvflip = 0;
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 char *__attribute__((weak)) sclk_name[4];
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 struct sensor_gain_lut {
 	unsigned int index;
 	unsigned char again;
@@ -277,6 +272,11 @@ struct sensor_gain_lut sensor_gain_lut[] = {
 	{0xcf, 0x5f, 0x0, 0xf8, 429799}, // 94.239998
 	{0xd0, 0x5f, 0x0, 0xfc, 431313}, // 95.760002
 	{0xd1, 0x5f, 0x1, 0x80, 432803}, // 97.279999
+};
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct tx_isp_sensor_attribute sensor_attr;

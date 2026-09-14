@@ -73,8 +73,8 @@ module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -382,7 +382,6 @@ struct tx_isp_mipi_bus sensor_mipi_dol={
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
-
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
@@ -1142,7 +1141,6 @@ static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 
 	return ret;
 }
-
 
 static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 {

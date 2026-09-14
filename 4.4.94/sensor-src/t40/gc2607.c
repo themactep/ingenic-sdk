@@ -51,8 +51,8 @@ static int pwdn_gpio = -1;
 static int shvflip = 0;
 
 struct regval_list {
-	unsigned int reg_num;
-	unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

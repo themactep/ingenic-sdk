@@ -56,7 +56,7 @@ static unsigned int gain_val = 0x340;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

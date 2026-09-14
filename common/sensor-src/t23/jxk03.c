@@ -60,8 +60,8 @@ module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -251,7 +251,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x12, 0x40},
 	{0x39, 0x41},
@@ -368,7 +367,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},

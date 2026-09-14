@@ -63,7 +63,7 @@ MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

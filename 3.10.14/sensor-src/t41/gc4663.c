@@ -56,7 +56,7 @@ static int wdr_bufsize = 2 * 3000 * 188;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -971,7 +971,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
-
 
 	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
 	ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);

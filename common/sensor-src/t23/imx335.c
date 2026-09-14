@@ -63,8 +63,8 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -333,12 +333,10 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
 {
 	return 0;
 }
-
 
 struct tx_isp_sensor_attribute sensor_attr={
 	.name = SENSOR_NAME,
@@ -735,7 +733,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -835,7 +832,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 {
 	unsigned char v;
 	int ret;
-
 
 	ret = sensor_read(sd, 0x3112, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
@@ -1192,7 +1188,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

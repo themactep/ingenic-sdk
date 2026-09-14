@@ -81,8 +81,8 @@ static unsigned char evs1 = 0;
 static unsigned char evs2 = 0;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -1725,7 +1725,6 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
  */
@@ -1778,7 +1777,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

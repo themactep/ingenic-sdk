@@ -80,8 +80,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -378,7 +378,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
 
-
 static struct regval_list sensor_gain_init2[] = {
 	{0x3303, 0x20},
 	{0x3309, 0xa0},
@@ -645,7 +644,6 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-
 	ret = sensor_write_array(sd, wsize->regs);
 	ret += sensor_read(sd, 0x3020, &val);
 	if (0x03 == val) {
@@ -732,7 +730,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	}
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = vts * 2 - 4;
 	sensor->video.attr->integration_time_limit = vts * 2 - 4;

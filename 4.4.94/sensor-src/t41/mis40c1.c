@@ -78,19 +78,15 @@
 #define SENSOR_EXPO
 #define SENSOR_MIR_FLIP
 
-struct regval_list {
-#ifdef SENSOR_I2C_REG_8BIT
-	uint8_t reg_num;
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_16BIT
-	uint16_t reg_num;
-#endif /* SENSOR_I2C_REG_16BIT */
-	uint8_t value;
-};
-
 struct tx_isp_sensor_attribute mis40c1_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

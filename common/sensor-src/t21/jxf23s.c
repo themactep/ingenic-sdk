@@ -86,8 +86,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -252,7 +252,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
@@ -473,7 +472,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGI10_1X10,
 };
 
-
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -664,7 +662,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	if (!enable)
 		return ISP_SUCCESS;
 
-
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize->fps = 25 << 16 | 1;
@@ -750,7 +747,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	default:
 		printk("Now we do not support this framerate!!!\n");
 	}
-
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

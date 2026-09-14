@@ -61,11 +61,6 @@ static int pwdn_gpio = -1;
 static int wdr_bufsize = 2 * 3000 * 188; //cache lines corrponding on VPB1
 static int shvflip = 1;
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
@@ -76,6 +71,11 @@ static struct sensor_info sensor_info = {
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
 	.rst_gpio = SENSOR_RESET_GPIO,
+};
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

@@ -84,8 +84,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -638,7 +638,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-
 static struct regval_list sensor_stream_on_dvp[] = {
 	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
@@ -883,7 +882,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor_write(sd, 0x1f, tmp);
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = vts-1;
 	sensor->video.attr->integration_time_limit = vts-1;

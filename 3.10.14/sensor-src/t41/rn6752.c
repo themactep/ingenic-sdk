@@ -54,6 +54,11 @@
 static int reset_gpio = GPIO_PA(18);
 //static int pwdn_gpio = -1;
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static struct regval_list cvbs_ntsc_video[] = {
 	{0xff, 0x08},
 	{0x6c, 0x00},
@@ -586,11 +591,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = FHD_1080P25_video,
 	},
-};
-
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
 };
 
 struct again_lut {

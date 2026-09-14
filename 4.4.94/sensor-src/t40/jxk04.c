@@ -55,8 +55,8 @@ static int wdr_bufsize = 55296000; //cache lines corrponding on VPB1
 char *__attribute__((weak)) sclk_name[4];
 
 struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

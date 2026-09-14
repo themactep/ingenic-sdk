@@ -76,8 +76,8 @@ static unsigned char r0c_val = 0x40;
 static unsigned char r82_val = 0x02;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -607,7 +607,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-
 static struct regval_list sensor_stream_on_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},
@@ -765,7 +764,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		ret += sensor_write(sd, 0x0c, r0c_val & 0xbf);
 		ret += sensor_write(sd, 0x82, r82_val & 0xfd);
 	}
-
 
 #if 0
 	if (value < 0x10) {
@@ -1058,7 +1056,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable)
 	unsigned char val = 0x01;
 	unsigned char valg = 0x0;
 	unsigned char vwinSt = 0x15;
-
 
 	ret += sensor_read(sd, 0x12, &val);
 	if (enable & 0x02) {

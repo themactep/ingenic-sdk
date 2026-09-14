@@ -65,8 +65,8 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -235,7 +235,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
@@ -444,7 +443,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR8_1X8,
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x00},
@@ -999,7 +997,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	default:
 		printk("Now we do not support this framerate!!!\n");
 	}
-
 
 	sensor_attr.dbus_type = data_interface;
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {

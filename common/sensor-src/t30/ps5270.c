@@ -79,8 +79,8 @@ module_param(sensor_raw_mode, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_raw_mode, "Sensor Raw Mode");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -985,7 +985,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 #if 0
 	{0xEF, 0x01},
@@ -1549,7 +1548,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

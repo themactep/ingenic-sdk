@@ -63,8 +63,8 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -199,7 +199,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x0103, 0x01},
@@ -421,7 +420,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},
@@ -934,7 +932,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
-
 
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)

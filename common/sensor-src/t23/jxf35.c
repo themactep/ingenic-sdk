@@ -93,8 +93,8 @@ static unsigned char r0c_val = 0x40;
 static unsigned char r80_val = 0x02;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {

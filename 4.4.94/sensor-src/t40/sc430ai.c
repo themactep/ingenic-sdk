@@ -59,7 +59,7 @@ static unsigned char switch_wdr = 0;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

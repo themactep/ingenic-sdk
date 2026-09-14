@@ -79,12 +79,12 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
-static unsigned int gain_val = 0x37e;
-
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
+
+static unsigned int gain_val = 0x37e;
 
 struct again_lut {
 	unsigned int value;

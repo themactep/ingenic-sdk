@@ -65,8 +65,8 @@ static unsigned short int dpc_flag = 1;
 static unsigned int gain_val = 0x37e;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -266,7 +266,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
@@ -409,7 +408,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

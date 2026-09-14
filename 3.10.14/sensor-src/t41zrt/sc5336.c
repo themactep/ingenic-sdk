@@ -57,7 +57,7 @@ static int pwdn_gpio = GPIO_PA(19);
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

@@ -63,13 +63,13 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-struct regval_list {
-	uint16_t reg_num;
-	unsigned char value;
-};
-
 //static unsigned short int dpc_flag = 1;
 //static unsigned int gain_val = 0x37e;
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
 
 struct again_lut {
 	unsigned int value;

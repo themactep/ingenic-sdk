@@ -70,8 +70,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 static int reset_gpio = -1;

@@ -52,6 +52,11 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define MCLK 24000000
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;
@@ -138,11 +143,6 @@ struct again_lut sensor_again_lut[] = {
 	{0x4d, 318372},
 	{0x4e, 321577},
 	{0x4f, 324678},
-};
-
-struct regval_list {
-	unsigned char reg_num;
-	unsigned char value;
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {

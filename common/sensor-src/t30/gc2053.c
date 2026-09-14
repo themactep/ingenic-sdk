@@ -74,8 +74,8 @@ MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 struct tx_isp_sensor_attribute sensor_attr;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -618,7 +618,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR12_1X12,
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 	//{ 0xf2, 0x8f},
 	{SENSOR_REG_END, 0x00},
@@ -1109,7 +1108,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

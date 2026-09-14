@@ -66,11 +66,6 @@ static int sensor_gpio_func = DVP_PA_12BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
-};
-
 struct again_lut {
     unsigned int value;
     unsigned int gain;
@@ -85,6 +80,11 @@ static struct sensor_info sensor_info = {
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
@@ -131,7 +131,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 /* inclk 37.135M clk*/
@@ -195,7 +194,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SRGGB10_1X10,
 	V4L2_MBUS_FMT_SRGGB12_1X12,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0x0100, 0x01},

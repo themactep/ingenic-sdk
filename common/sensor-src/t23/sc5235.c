@@ -54,8 +54,8 @@ module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -276,7 +276,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-
 static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
@@ -423,7 +422,6 @@ static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 2560*1920 */
 	{
@@ -440,7 +438,6 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
@@ -901,7 +898,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

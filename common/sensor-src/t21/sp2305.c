@@ -83,8 +83,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -514,7 +514,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 //	V4L2_MBUS_FMT_SBGGR10_1X10,//V4L2_MBUS_FMT_SGBRG10_1X10,
 //};
 
-
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
@@ -641,7 +640,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-
 
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;

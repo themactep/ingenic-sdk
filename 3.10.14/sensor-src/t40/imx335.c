@@ -64,7 +64,7 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct again_lut {

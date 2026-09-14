@@ -79,8 +79,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -231,7 +231,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
 	{SENSOR_REG_END, 0x00},
@@ -342,7 +341,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x00},

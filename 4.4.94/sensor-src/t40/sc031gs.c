@@ -48,12 +48,12 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
+char *__attribute__((weak)) sclk_name[4];
+
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
-
-char *__attribute__((weak)) sclk_name[4];
 
 struct again_lut {
 	unsigned int value;

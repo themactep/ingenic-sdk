@@ -91,7 +91,7 @@ static struct sensor_info sensor_info = {
 
 struct regval_list {
 	uint16_t reg_num;
-	unsigned char value;
+	uint16_t value;
 };
 
 struct sensor_gain_lut {

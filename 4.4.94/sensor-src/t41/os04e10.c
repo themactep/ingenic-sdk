@@ -72,19 +72,15 @@ static int wdr_line = xxx;
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_MCLK 24000000
 
-struct regval_list {
-#ifdef SENSOR_I2C_REG_8BIT
-	uint8_t reg_num;
-#endif /* SENSOR_I2C_REG_8BIT */
-#ifdef SENSOR_I2C_REG_16BIT
-	uint16_t reg_num;
-#endif /* SENSOR_I2C_REG_16BIT */
-	uint8_t value;
-};
-
 struct tx_isp_sensor_attribute os04e10_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 struct again_lut {
 	unsigned int value;
 	unsigned int gain;

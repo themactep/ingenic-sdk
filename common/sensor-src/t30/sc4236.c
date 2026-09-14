@@ -86,8 +86,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -248,7 +248,6 @@ struct tx_isp_sensor_attribute sensor_attr_3m={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list sensor_init_regs_2048_1536_30fps_mipi_3m[] = {
 	{0x0103, 0x01},
@@ -750,7 +749,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
@@ -1299,7 +1297,6 @@ struct platform_device sensor_platform_device = {
 	},
 	.num_resources = 0,
 };
-
 
 static int sensor_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

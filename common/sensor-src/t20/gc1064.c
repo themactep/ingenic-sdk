@@ -68,6 +68,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -91,11 +96,6 @@ const unsigned int ANALOG_GAIN_8 = (10 << TX_ISP_GAIN_FIXED_POINT) | (unsigned i
 const unsigned int ANALOG_GAIN_9 = (15 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.8 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_10 = (21 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.4 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 const unsigned int ANALOG_GAIN_11 = (30 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.8 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-
-struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
-};
 
 struct again_lut {
     unsigned int value;

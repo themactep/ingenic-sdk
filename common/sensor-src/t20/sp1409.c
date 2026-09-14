@@ -61,6 +61,11 @@ static struct sensor_info sensor_info = {
 	.height = SENSOR_MAX_HEIGHT,
 };
 
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
+
 static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -72,11 +77,6 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
-
-struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
-};
 
 struct again_lut {
 	unsigned int rpc;
@@ -247,7 +247,6 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	//{0x38, 0x00},
 	//{0x55, 0x00},
 
-
 	{0xfd, 0x01},
 	{0x15, 0x00},
 	{0x0a, 0x00},
@@ -366,7 +365,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720_25fps,
 	}
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x01},
@@ -598,7 +596,6 @@ static int sensor_g_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) 
 static int sensor_s_parm(struct v4l2_subdev *sd, struct v4l2_streamparm *parms) {
 	return 0;
 }
-
 
 static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	struct tx_isp_notify_argument arg;

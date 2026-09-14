@@ -89,8 +89,8 @@ static unsigned char reg_0c = 0x00;
 static unsigned char reg_82 = 0x21;
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -1292,7 +1292,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
-
 
 static struct regval_list sensor_stream_on_dvp[] = {
 	{0x12, 0x20},

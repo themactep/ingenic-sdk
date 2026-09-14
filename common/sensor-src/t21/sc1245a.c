@@ -81,8 +81,8 @@ static struct sensor_info sensor_info = {
 };
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -219,7 +219,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
-
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
     {0x0103, 0x01},
@@ -372,7 +371,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
     {0x0100, 0x01},
@@ -608,7 +606,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -680,7 +677,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	sensor->video.fps = fps;
-
 
 	sensor->video.attr->max_integration_time_native = vts - 2;
 	sensor->video.attr->integration_time_limit = vts - 2;
@@ -896,7 +892,6 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-
 static int sensor_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
@@ -916,7 +911,6 @@ static int sensor_probe(struct i2c_client *client,
 
 //	*(volatile unsigned int*)(0xB0010100) = 0x1;
 //	*(volatile unsigned int*)(0xB0010130) = 0xCAAAAAAA;
-
 
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {

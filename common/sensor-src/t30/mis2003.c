@@ -54,8 +54,8 @@ module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct regval_list {
-    uint16_t reg_num;
-    unsigned char value;
+	uint16_t reg_num;
+	uint16_t value;
 };
 
 struct again_lut {
@@ -261,7 +261,6 @@ struct tx_isp_sensor_attribute sensor_attr={
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3006, 0x04},
 	{0x3700, 0xD9}, // BLC = 仅反馈，全局
@@ -334,7 +333,6 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG10_1X10,
 	V4L2_MBUS_FMT_SGRBG12_1X12,
 };
-
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
