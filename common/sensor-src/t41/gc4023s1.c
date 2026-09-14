@@ -65,28 +65,6 @@ struct proc_dir_entry *g_sinfo_proc;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-static struct sensor_info sensor_info = {
-	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
-	.version = SENSOR_VERSION,
-	.min_fps = SENSOR_OUTPUT_MIN_FPS,
-	.max_fps = 30,
-	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
-	.width = 2560,
-	.height = 1440,
-	.rst_gpio = GPIO_PC(27),
-	.pwdn_gpio = -1,
-	.boot = 0,
-	.mclk = 1,
-	.video_interface = 0,
-	.i2c_adapter = 0,
-};
-
-struct regval_list {
-	uint16_t reg_num;
-	uint16_t value;
-};
-
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
 static unsigned char ag_last = 0;
@@ -108,6 +86,28 @@ static int sinfo_proc_show(struct seq_file *m, void *v) {
 static int sinfo_proc_open(struct inode *inode, struct file *file) {
 	return single_open(file, sinfo_proc_show, NULL);
 }
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = 30,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 2560,
+	.height = 1440,
+	.rst_gpio = GPIO_PC(27),
+	.pwdn_gpio = -1,
+	.boot = 0,
+	.mclk = 1,
+	.video_interface = 0,
+	.i2c_adapter = 0,
+};
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
 
 struct again_lut {
 	unsigned int index;
@@ -2026,6 +2026,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		(int)info->mclk,
 		(int)info->video_interface,
 		client->adapter->nr);
+
 	return 0;
 }
 
