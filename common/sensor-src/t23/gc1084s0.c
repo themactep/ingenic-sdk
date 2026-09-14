@@ -25,14 +25,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC1084_CHIP_ID_H	(0x10)
-#define GC1084_CHIP_ID_L	(0x84)
-#define GC1084_REG_END		0xffff
-#define GC1084_REG_DELAY	0xfffe
-#define GC1084_SUPPORT_50FPS_SCLK (81000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x10)
+#define SENSOR_CHIP_ID_L	(0x84)
+#define SENSOR_VERSION	"H20241226a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_50FPS_SCLK (81000000)
 #define SENSOR_OUTPUT_MAX_FPS 50
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20241226a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -309,7 +320,7 @@ static struct regval_list gc1084_init_regs_1280_720_50fps_mipi[] = {
 	{0x0229, 0x05},
 	{0x023e, 0x98},
 	{0x031e, 0x3e},
-	{GC1084_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting gc1084_win_sizes[] = {
@@ -325,11 +336,11 @@ static struct tx_isp_sensor_win_setting gc1084_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &gc1084_win_sizes[0];
 
 static struct regval_list gc1084_stream_on_mipi[] = {
-	{GC1084_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc1084_stream_off_mipi[] = {
-	{GC1084_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int gc1084_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -382,8 +393,8 @@ static int gc1084_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC1084_REG_END) {
-		if (vals->reg_num == GC1084_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc1084_read(sd, vals->reg_num, &val);
@@ -400,8 +411,8 @@ static int gc1084_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int gc1084_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC1084_REG_END) {
-		if (vals->reg_num == GC1084_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc1084_write(sd, vals->reg_num, vals->value);
@@ -427,13 +438,13 @@ static int gc1084_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1084_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc1084_read(sd, 0x03f1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC1084_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 

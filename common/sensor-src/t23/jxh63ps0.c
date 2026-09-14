@@ -24,14 +24,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXH63P_CHIP_ID_H	(0x08)
-#define JXH63P_CHIP_ID_L	(0x48)
-#define JXH63P_REG_END		0xff
-#define JXH63P_REG_DELAY	0xfe
-#define JXH63P_SUPPORT_15FPS_SCLK (85104000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x48)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (85104000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -214,7 +225,6 @@ struct tx_isp_mipi_bus jxh63p_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_sensor_attribute jxh63p_attr={
 	.name = "jxh63p",
 	.chip_id = 0x848,
@@ -252,7 +262,6 @@ struct tx_isp_sensor_attribute jxh63p_attr={
                 .sdelay = 1000,
         }
 };
-
 
 static struct regval_list jxh63p_init_regs_1280_720_15fps_mipi[] = {
 #if 0
@@ -480,7 +489,7 @@ static struct regval_list jxh63p_init_regs_1280_720_15fps_mipi[] = {
         {0x47, 0x42},
         {0x1E, 0x0C},
         {0x12, 0x00},
-        {JXH63P_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -498,26 +507,25 @@ static struct tx_isp_sensor_win_setting jxh63p_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxh63p_win_sizes[0];
 
-
 /*
  * the part of driver was fixed.
  */
 
 static struct regval_list jxh63p_stream_on_dvp[] = {
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63p_stream_off_dvp[] = {
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63p_stream_on_mipi[] = {
 
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63p_stream_off_mipi[] = {
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxh63p_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -570,8 +578,8 @@ static int jxh63p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXH63P_REG_END) {
-		if (vals->reg_num == JXH63P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxh63p_read(sd, vals->reg_num, &val);
@@ -587,8 +595,8 @@ static int jxh63p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int jxh63p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXH63P_REG_END) {
-		if (vals->reg_num == JXH63P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxh63p_write(sd, vals->reg_num, vals->value);
@@ -615,7 +623,7 @@ static int jxh63p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXH63P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -624,7 +632,7 @@ static int jxh63p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXH63P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -731,14 +739,13 @@ static int jxh63p_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
-		sclk = JXH63P_SUPPORT_15FPS_SCLK;
+		sclk = SENSOR_SUPPORT_15FPS_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
 		ret = -1;
 		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
-
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

@@ -22,14 +22,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXQ03P_CHIP_ID_H	(0x08)
-#define JXQ03P_CHIP_ID_L	(0x43)
-#define JXQ03P_REG_END	0xff
-#define JXQ03P_REG_DELAY	0xfe
-#define JXQ03P_SUPPORT_SCLK (144000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x43)
+#define SENSOR_VERSION	"H20240408a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END	0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_SCLK (144000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240408a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -342,7 +353,7 @@ static struct regval_list jxq03p_init_2304_1296_mipi_25fps[] = {
 	{0x12, 0x00},
 	{0x48, 0x96},
 	{0x48, 0x16},
-	{JXQ03P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxq03p_init_2304_1296_mipi_20fps[] = {
@@ -456,7 +467,7 @@ static struct regval_list jxq03p_init_2304_1296_mipi_20fps[] = {
 	{0x12, 0x00},
 	{0x48, 0x96},
 	{0x48, 0x16},
-	{JXQ03P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 /*
  * the order of the jxq03p_win_sizes is [full_resolution, preview_resolution].
@@ -488,11 +499,11 @@ struct tx_isp_sensor_win_setting *wsize = &jxq03p_win_sizes[0];
 
 static struct regval_list jxq03p_stream_on_mipi[] = {
 
-	{JXQ03P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxq03p_stream_off_mipi[] = {
-	{JXQ03P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxq03p_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -544,8 +555,8 @@ static int jxq03p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXQ03P_REG_END) {
-		if (vals->reg_num == JXQ03P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxq03p_read(sd, vals->reg_num, &val);
@@ -561,8 +572,8 @@ static int jxq03p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int jxq03p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXQ03P_REG_END) {
-		if (vals->reg_num == JXQ03P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxq03p_write(sd, vals->reg_num, vals->value);
@@ -589,7 +600,7 @@ static int jxq03p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXQ03P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -598,7 +609,7 @@ static int jxq03p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXQ03P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -727,7 +738,7 @@ static int jxq03p_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	unsigned int max_fps = 0;
 
-	sclk = JXQ03P_SUPPORT_SCLK;
+	sclk = SENSOR_SUPPORT_SCLK;
 	max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -846,7 +857,6 @@ static int jxq03p_set_vflip(struct tx_isp_subdev *sd, int enable)
 	unsigned char val = 0x01;
 	unsigned char valg = 0x0;
 	unsigned char vwinSt = 0x15;
-
 
 	ret += jxq03p_read(sd, 0x12, &val);
 	if(enable & 0x02){

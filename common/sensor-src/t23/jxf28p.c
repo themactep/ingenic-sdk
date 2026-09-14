@@ -23,19 +23,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define JXF28P_CHIP_ID_H	(0x08)
-#define JXF28P_CHIP_ID_L	(0x50)
-#define JXF28P_REG_END		0xff
-#define JXF28P_REG_DELAY	0xfe
-#define JXF28P_SUPPORT_30FPS_SCLK_MIPI (2560 * 1125 * 30)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x50)
 #define SENSOR_VERSION	"H20240408a"
 
-/* VGA@70fps: insmod sensor_jxf28p_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
-/* 480x270@110fps: insmod sensor_jxf28p_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
-/* 1080p@25fps: insmod sensor_jxf28p_t31.ko data_type=0 data_interface=1 sensor_resolution=200  */
-/* DOL 1080p@15fps: insmod sensor_jxf28p_t31.ko data_interface=1 data_type=2  */
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK_MIPI (2560 * 1125 * 30)
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -347,7 +353,7 @@ static struct regval_list jxf28p_init_regs_1920_1080_15fps_mipi[] = {
 {0x79, 0x00},
 {0x12, 0x00},
 
-	{JXF28P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -368,15 +374,14 @@ static struct tx_isp_sensor_win_setting jxf28p_win_sizes[] = {
  * the part of driver was fixed.
  */
 
-
 static struct regval_list jxf28p_stream_on_mipi[] = {
 	{0x12, 0x00},
-	{JXF28P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf28p_stream_off_mipi[] = {
 	{0x12, 0x40},
-	{JXF28P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxf28p_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -430,8 +435,8 @@ static int jxf28p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	int ret;
 	unsigned char val;
 
-	while (vals->reg_num != JXF28P_REG_END) {
-		if (vals->reg_num == JXF28P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf28p_read(sd, vals->reg_num, &val);
@@ -449,8 +454,8 @@ static int jxf28p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
     	unsigned char val;
-	while (vals->reg_num != JXF28P_REG_END) {
-		if (vals->reg_num == JXF28P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf28p_write(sd, vals->reg_num, vals->value);
@@ -478,7 +483,7 @@ static int jxf28p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXF28P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -487,7 +492,7 @@ static int jxf28p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXF28P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -559,7 +564,6 @@ static int jxf28p_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 
-
 			ret = jxf28p_write_array(sd, jxf28p_stream_on_mipi);
 	}
 	else {
@@ -574,7 +578,7 @@ static int jxf28p_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = JXF28P_SUPPORT_30FPS_SCLK_MIPI;
+	unsigned int sclk = SENSOR_SUPPORT_30FPS_SCLK_MIPI;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
@@ -713,7 +717,6 @@ static int jxf28p_set_vflip(struct tx_isp_subdev *sd, int enable)
 static int jxf28p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {
 	long ret = 0;
-
 
 	if(IS_ERR_OR_NULL(sd)){
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);

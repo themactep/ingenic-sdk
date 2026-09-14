@@ -22,15 +22,26 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define MIS2009_CHIP_ID_H	(0x20)
-#define MIS2009_CHIP_ID_L	(0x08)
-#define MIS2009_REG_END		0xffff
-#define MIS2009_REG_DELAY	0xfffe
-#define MIS2009_SUPPORT_PCLK_60 (148800000)
-#define MIS2009_SUPPORT_PCLK_30 (75600000) /*  2240*1125*30   */
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x20)
+#define SENSOR_CHIP_ID_L	(0x08)
+#define SENSOR_VERSION	"H20240511b"  //H20240508a
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_PCLK_60 (148800000)
+#define SENSOR_SUPPORT_PCLK_30 (75600000) /*  2240*1125*30   */
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240511b"  //H20240508a
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -331,7 +342,6 @@ struct tx_isp_sensor_attribute mis2009_attr={
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list mis2009_init_regs_1920_1080_30fps_mipi[] = {
 	//Mis2009_NO50_V1_Mclk24_fps30_fw2240_fh1125_aw1920_ah1080_mipi2lanRaw10_378_aclk252.ini
 	{0x300a, 0x01},
@@ -498,7 +508,7 @@ static struct regval_list mis2009_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3a10, 0x20},
 	{0x3a11, 0x3c},
 	{0x3006, 0x00},
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list mis2009_init_regs_1920_1080_25fps_dvp[] = {
@@ -654,9 +664,8 @@ static struct regval_list mis2009_init_regs_1920_1080_25fps_dvp[] = {
 	{0x320b, 0x88},
 	{0x320a, 0x07},
 	{0x3006, 0x00},
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
-
 
 static struct regval_list mis2009_init_regs_1920_1080_60fps_mipi[] = {
 	//Mclk24_fps60_fw2204_fh1125_aw1920_ah1080_mipi2lanRaw10_744_aclk297
@@ -825,7 +834,7 @@ static struct regval_list mis2009_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3a10, 0x20},
 	{0x3a11, 0x3c},
 	{0x3006, 0x00},
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -870,19 +879,19 @@ struct tx_isp_sensor_win_setting *wsize = &mis2009_win_sizes[2];
  */
 
 static struct regval_list mis2009_stream_on_dvp[] = {
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list mis2009_stream_off_dvp[] = {
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list mis2009_stream_on_mipi[] = {
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list mis2009_stream_off_mipi[] = {
-	{MIS2009_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int mis2009_read(struct tx_isp_subdev *sd, uint16_t reg,
@@ -935,8 +944,8 @@ static int mis2009_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != MIS2009_REG_END) {
-		if (vals->reg_num == MIS2009_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = mis2009_read(sd, vals->reg_num, &val);
@@ -952,8 +961,8 @@ static int mis2009_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	// unsigned char val;
-	while (vals->reg_num != MIS2009_REG_END) {
-		if (vals->reg_num == MIS2009_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = mis2009_write(sd, vals->reg_num, vals->value);
@@ -981,7 +990,7 @@ static int mis2009_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != MIS2009_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -990,7 +999,7 @@ static int mis2009_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != MIS2009_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 	return 0;
@@ -1111,11 +1120,11 @@ static int mis2009_set_fps(struct tx_isp_subdev *sd, int fps)
 	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
 		switch (sensor_max_fps) {
 		case TX_SENSOR_MAX_FPS_60:
-			pclk = MIS2009_SUPPORT_PCLK_60;
+			pclk = SENSOR_SUPPORT_PCLK_60;
 			max_fps =TX_SENSOR_MAX_FPS_60;
 			break;
 		case TX_SENSOR_MAX_FPS_30:
-			pclk = MIS2009_SUPPORT_PCLK_30;
+			pclk = SENSOR_SUPPORT_PCLK_30;
 			max_fps = TX_SENSOR_MAX_FPS_30;
 			break;
 		default:

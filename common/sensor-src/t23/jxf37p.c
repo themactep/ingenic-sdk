@@ -22,13 +22,24 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define SENSOR_CHIP_ID_H	(0x08)
 #define SENSOR_CHIP_ID_L	(0x41)
+#define SENSOR_VERSION	"H20241227a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
 #define SENSOR_REG_END		0xff
 #define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20241227a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -549,7 +560,6 @@ static struct tx_isp_sensor_win_setting jxf37p_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxf37p_win_sizes[0];
 
-
 /*
  * the part of driver was fixed.
  */
@@ -621,8 +631,8 @@ static int jxf37p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != jxf37p_REG_END) {
-		if (vals->reg_num == jxf37p_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf37p_read(sd, vals->reg_num, &val);
@@ -932,7 +942,6 @@ static int jxf37p_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	return 0;
 }
-
 
 static int jxf37p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {

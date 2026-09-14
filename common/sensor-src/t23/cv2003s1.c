@@ -28,14 +28,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define CV2003S1_CHIP_ID_H	(0x20)
-#define CV2003S1_CHIP_ID_L	(0x03)
-#define cv2003s1_REG_END		0xffff
-#define cv2003s1_REG_DELAY	0xfffe
-#define cv2003s1_SUPPORT_30FPS_SCLK (2124 * 1130 * 30)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x20)
+#define SENSOR_CHIP_ID_L	(0x03)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK (2124 * 1130 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = -1;
 module_param(reset_gpio, int, S_IRUGO);
@@ -471,7 +482,7 @@ static struct regval_list cv2003s1_init_regs_1920_1080_30fps_mipi[] = {
     {0x3078, 0x04},
     {0x3000, 0x00},
 */
-        {cv2003s1_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting cv2003s1_win_sizes[] = {
@@ -488,12 +499,12 @@ struct tx_isp_sensor_win_setting *wsize = &cv2003s1_win_sizes[0];
 
 static struct regval_list cv2003s1_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{cv2003s1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list cv2003s1_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{cv2003s1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int cv2003s1_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -545,8 +556,8 @@ static int cv2003s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != cv2003s1_REG_END) {
-		if (vals->reg_num == cv2003s1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = cv2003s1_read(sd, vals->reg_num, &val);
@@ -563,8 +574,8 @@ static int cv2003s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int cv2003s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != cv2003s1_REG_END) {
-		if (vals->reg_num == cv2003s1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = cv2003s1_write(sd, vals->reg_num, vals->value);
@@ -591,7 +602,7 @@ static int cv2003s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != CV2003S1_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -599,7 +610,7 @@ static int cv2003s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != CV2003S1_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -721,7 +732,6 @@ static int cv2003s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-
 	sclk = 0x1429*0x26c*15;
 	max_fps = 15;
 
@@ -820,7 +830,6 @@ static int cv2003s1_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	return 0;
 }
-
 
 static int cv2003s1_set_vflip(struct tx_isp_subdev *sd, int enable)
 {
@@ -1009,7 +1018,6 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-
 static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate)
 {
         unsigned long rate = 0;
@@ -1093,7 +1101,6 @@ error:
                   __func__, __LINE__, want_rate);
         return ret;
 }
-
 
 static int cv2003s1_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {

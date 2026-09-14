@@ -24,19 +24,30 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define GC2063_CHIP_ID_H	(0x20)
-#define GC2063_CHIP_ID_L	(0x53)
-#define GC2063_REG_END		0xff
-#define GC2063_REG_DELAY	0x00
-#define GC2063_SUPPORT_40FPS_MIPI_SCLK (99000000)
-#define GC2063_SUPPORT_30FPS_MIPI_SCLK (78000000)
-#define GC2063_SUPPORT_25FPS_MIPI_SCLK (72000000)
-#define GC2063_SUPPORT_15FPS_MIPI_SCLK (39000000)
-#define GC2063_SUPPORT_30FPS_DVP_SCLK (74250000)
-#define GC2063_SUPPORT_15FPS_DVP_SCLK (37125000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x20)
+#define SENSOR_CHIP_ID_L	(0x53)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0x00
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_40FPS_MIPI_SCLK (99000000)
+#define SENSOR_SUPPORT_30FPS_MIPI_SCLK (78000000)
+#define SENSOR_SUPPORT_25FPS_MIPI_SCLK (72000000)
+#define SENSOR_SUPPORT_15FPS_MIPI_SCLK (39000000)
+#define SENSOR_SUPPORT_30FPS_DVP_SCLK (74250000)
+#define SENSOR_SUPPORT_15FPS_DVP_SCLK (37125000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static unsigned char vts0 = 0x05;
 static unsigned char vts1 = 0x8a;
@@ -229,7 +240,6 @@ struct tx_isp_sensor_attribute gc2063s1_attr={
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-
 static struct regval_list gc2063s1_init_regs_1920_1080_30fps_mipi[] = {
 	//mclk=24mhz,mipi data rate=624mbps/lane
 	//wpclk=156mhz,row_time=28.2us frame length=1418,25fps
@@ -378,7 +388,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_30fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_init_regs_1920_1080_25fps_mipi[] = {
@@ -527,7 +537,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_25fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_init_regs_1920_1080_15fps_mipi[] = {
@@ -678,7 +688,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_15fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_init_regs_1920_1080_30fps_dvp[] = {
@@ -826,7 +836,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_30fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x40},
 
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_init_regs_1920_1080_15fps_dvp[] = {
@@ -972,7 +982,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_15fps_dvp[] = {
 	{0x13, 0x07},
 	{0xfe, 0x00},
 	{0x3e, 0x40},
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_init_regs_1920_1080_40fps_mipi[] = {
@@ -1113,7 +1123,7 @@ static struct regval_list gc2063s1_init_regs_1920_1080_40fps_mipi[] = {
         {0x15, 0x10},
         {0xfe, 0x00},
         {0x3e, 0x91},
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 /*
  * the order of the jxf23_win_sizes is [full_resolution, preview_resolution].
@@ -1181,19 +1191,19 @@ struct tx_isp_sensor_win_setting *wsize = &gc2063s1_win_sizes[0];
  */
 
 static struct regval_list gc2063s1_stream_on_dvp[] = {
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_stream_off_dvp[] = {
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_stream_on_mipi[] = {
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2063s1_stream_off_mipi[] = {
-	{GC2063_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int gc2063s1_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -1246,8 +1256,8 @@ static int gc2063s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC2063_REG_END) {
-		if (vals->reg_num == GC2063_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc2063s1_read(sd, vals->reg_num, &val);
@@ -1263,8 +1273,8 @@ static int gc2063s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int gc2063s1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC2063_REG_END) {
-		if (vals->reg_num == GC2063_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc2063s1_write(sd, vals->reg_num, vals->value);
@@ -1290,13 +1300,13 @@ static int gc2063s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2063_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2063s1_read(sd, 0xf1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2063_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -1450,22 +1460,22 @@ static int gc2063s1_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
-		wpclk = GC2063_SUPPORT_30FPS_DVP_SCLK;
+		wpclk = SENSOR_SUPPORT_30FPS_DVP_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
 		max_fps = TX_SENSOR_MAX_FPS_15;
-		wpclk = GC2063_SUPPORT_15FPS_DVP_SCLK;
+		wpclk = SENSOR_SUPPORT_15FPS_DVP_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
-		wpclk = GC2063_SUPPORT_30FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_30FPS_MIPI_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)){
 		max_fps = TX_SENSOR_MAX_FPS_25;
-		wpclk = GC2063_SUPPORT_25FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_25FPS_MIPI_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
 		max_fps = TX_SENSOR_MAX_FPS_15;
-		wpclk = GC2063_SUPPORT_15FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_15FPS_MIPI_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_40)){
 		max_fps = TX_SENSOR_MAX_FPS_40;
-		wpclk = GC2063_SUPPORT_40FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_40FPS_MIPI_SCLK;
 	} else {
 		ISP_ERROR("Can not support this data interface and fps!!!\n");
 	}

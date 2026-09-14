@@ -24,14 +24,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXF38PS1_CHIP_ID_H	(0x08)
-#define JXF38PS1_CHIP_ID_L	(0x44)
-#define JXF38PS1_REG_END		0xff
-#define JXF38PS1_REG_DELAY	0xfe
-#define JXF38PS1_SUPPORT_15FPS_SCLK (86400000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x44)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = -1;//GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -210,7 +221,6 @@ struct tx_isp_mipi_bus jxf38ps1_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_sensor_attribute jxf38ps1_attr={
 	.name = "jxf38ps1",
 	.chip_id = 0x844,
@@ -371,7 +381,7 @@ static struct regval_list jxf38ps1_init_regs_1920_1080_12fps_mipi_sync3[] = {
     {0x12, 0x00},
     {0x48, 0x8A},
     {0x48, 0x0A},
-    {JXF38PS1_REG_END, 0x00},	/* END MARKER */
+    {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -389,26 +399,25 @@ static struct tx_isp_sensor_win_setting jxf38ps1_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxf38ps1_win_sizes[0];
 
-
 /*
  * the part of driver was fixed.
  */
 
 static struct regval_list jxf38ps1_stream_on_dvp[] = {
-        {JXF38PS1_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf38ps1_stream_off_dvp[] = {
-	{JXF38PS1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf38ps1_stream_on_mipi[] = {
 
-	{JXF38PS1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf38ps1_stream_off_mipi[] = {
-	{JXF38PS1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxf38ps1_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -461,8 +470,8 @@ static int jxf38ps1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXF38PS1_REG_END) {
-		if (vals->reg_num == JXF38PS1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf38ps1_read(sd, vals->reg_num, &val);
@@ -478,8 +487,8 @@ static int jxf38ps1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int jxf38ps1_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXF38PS1_REG_END) {
-		if (vals->reg_num == JXF38PS1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf38ps1_write(sd, vals->reg_num, vals->value);
@@ -506,7 +515,7 @@ static int jxf38ps1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXF38PS1_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -515,7 +524,7 @@ static int jxf38ps1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXF38PS1_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -613,7 +622,7 @@ static int jxf38ps1_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = JXF38PS1_SUPPORT_15FPS_SCLK;
+	unsigned int sclk = SENSOR_SUPPORT_15FPS_SCLK;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;

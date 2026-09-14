@@ -28,14 +28,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define BF314A_CHIP_ID_H	(0x31)
-#define BF314A_CHIP_ID_L	(0x4a)
-#define BF314A_REG_END		0xff
-#define BF314A_REG_DELAY	0xfffe
-#define BF314A_SUPPORT_30FPS_SCLK (36000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x31)
+#define SENSOR_CHIP_ID_L	(0x4a)
+#define SENSOR_VERSION	"H20240801a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK (36000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240801a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -418,7 +429,7 @@ static struct regval_list bf314a_init_regs_1280_720_30fps_mipi[] = {
 	{0x6b, 0x02},
 	{0x6c, 0xd0},
 	{0x6f, 0x10},
-	{BF314A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting bf314a_win_sizes[] = {
@@ -435,12 +446,12 @@ struct tx_isp_sensor_win_setting *wsize = &bf314a_win_sizes[0];
 
 static struct regval_list bf314a_stream_on_mipi[] = {
 	{0xf3, 0x00},
-	{BF314A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list bf314a_stream_off_mipi[] = {
 	{0xf3, 0x01},
-	{BF314A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int bf314a_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
@@ -491,8 +502,8 @@ static int bf314a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != BF314A_REG_END) {
-		if (vals->reg_num == BF314A_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = bf314a_read(sd, vals->reg_num, &val);
@@ -509,8 +520,8 @@ static int bf314a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int bf314a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != BF314A_REG_END) {
-		if (vals->reg_num == BF314A_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = bf314a_write(sd, vals->reg_num, vals->value);
@@ -537,7 +548,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != BF314A_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -545,7 +556,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != BF314A_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -562,7 +573,6 @@ static int bf314a_set_expo(struct tx_isp_subdev *sd, int value)
 	//integration time
 	ret = bf314a_write(sd, 0x6b, (unsigned char)((it >> 8) & 0xff));
 	ret += bf314a_write(sd, 0x6c, (unsigned char)((it & 0xff)));
-
 
 	//sensor analog gain
 	// ret += bf314a_write(sd, 0x6a, (unsigned char)(((again >> 8) & 0xff)));
@@ -652,7 +662,7 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int vb = 0;
 	int ret = 0;
 
-	sclk = BF314A_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	vts_base = 738;
 
 	printk("-------fps=%d\n",((fps >> 16) / (fps & 0xff)));

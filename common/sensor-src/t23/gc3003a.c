@@ -29,15 +29,26 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC3003A_CHIP_ID_H	(0x30)
-#define GC3003A_CHIP_ID_M	(0x03)
-#define GC3003A_CHIP_ID_L	(0x10)
-#define GC3003A_REG_END		0xffff
-#define GC3003A_REG_DELAY	0xfffe
-#define GC3003A_SUPPORT_30FPS_SCLK (108057600)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x30)
+#define SENSOR_CHIP_ID_M	(0x03)
+#define SENSOR_CHIP_ID_L	(0x10)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK (108057600)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -166,7 +177,6 @@ struct tx_isp_mipi_bus gc3003a_mipi_3MP={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_mipi_bus gc3003a_mipi_1296={
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 632,
@@ -195,8 +205,6 @@ struct tx_isp_mipi_bus gc3003a_mipi_1296={
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
-
-
 
 struct tx_isp_mipi_bus gc3003a_mipi_2MP={
 	.mode = SENSOR_MIPI_OTHER_MODE,
@@ -399,7 +407,7 @@ static struct regval_list gc3003a_init_regs_2304_1296_30fps_mipi[] = {
 	{0x0d04, 0x28},
 	{0x0d23, 0x0e},
 	{0x03fe, 0x00},
-	{GC3003A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc3003a_init_regs_1920_1080_30fps_mipi[] = {
@@ -559,7 +567,7 @@ static struct regval_list gc3003a_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0d04, 0x28},
 	{0x0d23, 0x0e},
 	{0x03fe, 0x00},
-	{GC3003A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc3003a_init_regs_1296_1296_30fps_mipi[] = {
@@ -724,7 +732,7 @@ static struct regval_list gc3003a_init_regs_1296_1296_30fps_mipi[] = {
     { 0x0d04, 0x28 },
     { 0x0d23, 0x0e },
     { 0x03fe, 0x00 },
-    { GC3003A_REG_END, 0x00 },	/* END MARKER */
+    { SENSOR_REG_END, 0x00 },	/* END MARKER */
 };
 static struct tx_isp_sensor_win_setting gc3003a_win_sizes[] = {
 	{
@@ -756,12 +764,12 @@ struct tx_isp_sensor_win_setting *wsize = &gc3003a_win_sizes[0];
 
 static struct regval_list gc3003a_stream_on_mipi[] = {
 	{0x023e, 0x99},
-	{GC3003A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc3003a_stream_off_mipi[] = {
 	{0x023e, 0x00},
-	{GC3003A_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int gc3003a_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -812,8 +820,8 @@ static int gc3003a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC3003A_REG_END) {
-		if (vals->reg_num == GC3003A_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc3003a_read(sd, vals->reg_num, &val);
@@ -829,8 +837,8 @@ static int gc3003a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 static int gc3003a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC3003A_REG_END) {
-		if (vals->reg_num == GC3003A_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc3003a_write(sd, vals->reg_num, vals->value);
@@ -857,7 +865,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC3003A_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -866,7 +874,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 
 	if (ret < 0)
 		return ret;
-	if (v != GC3003A_CHIP_ID_M)
+	if (v != SENSOR_CHIP_ID_M)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -880,7 +888,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 
 	if (ret < 0)
 		return ret;
-	if (v != GC3003A_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 	return 0;

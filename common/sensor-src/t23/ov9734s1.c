@@ -22,14 +22,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define OV9734S1_CHIP_ID_H	(0x97)
-#define OV9734S1_CHIP_ID_L	(0x34)
-#define OV9734S1_REG_END        0xffff
-#define OV9734S1_REG_DELAY	0xfffe
-#define OV9734S1_SUPPORT_PCLK_FPS_30 (1478 * 810 *30)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x97)
+#define SENSOR_CHIP_ID_L	(0x34)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END        0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_PCLK_FPS_30 (1478 * 810 *30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -442,8 +453,8 @@ static struct regval_list ov9734s1_init_regs_1920_1080_30fps_mipi[] = {
         //{0x3824, 0x06},
         //{0x3825, 0x50},
         {0x0100, 0x01},
- 	{OV9734S1_REG_DELAY, 0x10},
-	{OV9734S1_REG_END, 0x00},	/* END MARKER */
+ 	{SENSOR_REG_DELAY, 0x10},
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting ov9734s1_win_sizes[] = {
@@ -461,12 +472,12 @@ struct tx_isp_sensor_win_setting *wsize = &ov9734s1_win_sizes[0];
 
 static struct regval_list ov9734s1_stream_on[] = {
 	{0x0100, 0x01},
-	{OV9734S1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list ov9734s1_stream_off[] = {
 	{0x0100, 0x00},
-	{OV9734S1_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int ov9734s1_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -518,8 +529,8 @@ static int ov9734s1_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != OV9734S1_REG_END) {
-		if (vals->reg_num == OV9734S1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = ov9734s1_read(sd, vals->reg_num, &val);
@@ -537,8 +548,8 @@ static int ov9734s1_write_array(struct tx_isp_subdev *sd, struct regval_list *va
 {
 	int ret;
 
-	while (vals->reg_num != OV9734S1_REG_END) {
-		if (vals->reg_num == OV9734S1_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = ov9734s1_write(sd, vals->reg_num, vals->value);
@@ -565,7 +576,7 @@ static int ov9734s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV9734S1_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -573,7 +584,7 @@ static int ov9734s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != OV9734S1_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -692,7 +703,7 @@ static int ov9734s1_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	sclk = OV9734S1_SUPPORT_PCLK_FPS_30;
+	sclk = SENSOR_SUPPORT_PCLK_FPS_30;
 	max_fps = TX_SENSOR_MAX_FPS_30;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

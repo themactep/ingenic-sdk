@@ -750,7 +750,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	sclk = sensor_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	max_fps = TX_SENSOR_MAX_FPS_50;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

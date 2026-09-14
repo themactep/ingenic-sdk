@@ -23,14 +23,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define sc1346_CHIP_ID_H	(0xda)
-#define sc1346_CHIP_ID_L	(0x4d)
-#define sc1346_REG_END		0xffff
-#define sc1346_REG_DELAY	0xfffe
-#define sc1346_SUPPORT_15FPS_SCLK (22500000)
-#define sc1346_SUPPORT_30FPS_SCLK (40500000)
-#define SENSOR_OUTPUT_MIN_FPS 5
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0xda)
+#define SENSOR_CHIP_ID_L	(0x4d)
 #define SENSOR_VERSION	"H20241213a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (22500000)
+#define SENSOR_SUPPORT_30FPS_SCLK (40500000)
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -529,7 +540,7 @@ static struct regval_list sc1346_init_regs_1280_720_15fps_mipi[] = {
 	{0x36e9, 0x28},
 	{0x37f9, 0x20},
 	{0x0100, 0x01},
-	{sc1346_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc1346_init_regs_1280_720_30fps_mipi[] = {
@@ -661,7 +672,7 @@ static struct regval_list sc1346_init_regs_1280_720_30fps_mipi[] = {
 	{0x36e9, 0x28},
 	{0x37f9, 0x20},
 	{0x0100, 0x01},
-	{sc1346_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc1346_win_sizes[] = {
@@ -686,12 +697,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc1346_win_sizes[0];
 
 static struct regval_list sc1346_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{sc1346_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc1346_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{sc1346_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc1346_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -742,8 +753,8 @@ int sc1346_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 // {
 // 	int ret;
 // 	unsigned char val;
-// 	while (vals->reg_num != sc1346_REG_END) {
-// 		if (vals->reg_num == sc1346_REG_DELAY) {
+// 	while (vals->reg_num != SENSOR_REG_END) {
+// 		if (vals->reg_num == SENSOR_REG_DELAY) {
 // 			private_msleep(vals->value);
 // 		} else {
 // 			ret = sc1346_read(sd, vals->reg_num, &val);
@@ -759,8 +770,8 @@ int sc1346_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 static int sc1346_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != sc1346_REG_END) {
-		if (vals->reg_num == sc1346_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc1346_write(sd, vals->reg_num, vals->value);
@@ -787,7 +798,7 @@ static int sc1346_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != sc1346_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -795,7 +806,7 @@ static int sc1346_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != sc1346_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -923,10 +934,10 @@ static int sc1346_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)){
 		max_fps = 30;
-		sclk = sc1346_SUPPORT_30FPS_SCLK;
+		sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	} else if((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)){
 		max_fps = 15;
-		sclk = sc1346_SUPPORT_15FPS_SCLK;
+		sclk = SENSOR_SUPPORT_15FPS_SCLK;
 	} else {
 		ISP_ERROR("Can not support this data interface and fps!!!\n");
 	}
@@ -1053,8 +1064,6 @@ static int sc1346_g_chip_ident(struct tx_isp_subdev *sd,
 
 	return 0;
 }
-
-
 
 static int sc1346_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {

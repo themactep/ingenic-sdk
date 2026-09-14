@@ -28,13 +28,24 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define CV4002_CHIP_ID_H	(0x02)
-#define CV4002_CHIP_ID_L	(0x40)
-#define cv4002_REG_END		0xffff
-#define cv4002_REG_DELAY	0xfffe
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x02)
+#define SENSOR_CHIP_ID_L	(0x40)
+#define SENSOR_VERSION	"H20241113b"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20241113b"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -493,7 +504,7 @@ static struct regval_list cv4002_init_regs_2304_1296_25fps_mipi[] = {
 	{0x3036, 0x10},
 	{0x3037, 0x05},
 	{0x3000, 0x00},
-	{cv4002_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting cv4002_win_sizes[] = {
@@ -510,12 +521,12 @@ struct tx_isp_sensor_win_setting *wsize = &cv4002_win_sizes[0];
 
 static struct regval_list cv4002_stream_on_mipi[] = {
 	{0x3000, 0x00},
-	{cv4002_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list cv4002_stream_off_mipi[] = {
 	{0x3000, 0x01},
-	{cv4002_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int cv4002_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -567,8 +578,8 @@ static int cv4002_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != cv4002_REG_END) {
-		if (vals->reg_num == cv4002_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = cv4002_read(sd, vals->reg_num, &val);
@@ -585,8 +596,8 @@ static int cv4002_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int cv4002_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != cv4002_REG_END) {
-		if (vals->reg_num == cv4002_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = cv4002_write(sd, vals->reg_num, vals->value);
@@ -613,7 +624,7 @@ static int cv4002_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != CV4002_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -621,7 +632,7 @@ static int cv4002_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != CV4002_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -841,7 +852,6 @@ static int cv4002_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	return 0;
 }
-
 
 static int cv4002_set_vflip(struct tx_isp_subdev *sd, int enable)
 {

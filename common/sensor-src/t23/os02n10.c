@@ -26,20 +26,18 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define TVERSION "V20230103a"
 #define SENSOR_VERSION  "H20241125a"
 
-/* #define SENSOR_TEST */
-
-/* 选择Sensor寄存器地址位宽(8bit/16bit) */
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_I2C_REG_8BIT
-
-/* 选择Sensor AGain匹配方式(AGain表/非AGain表) */
 #define SENSOR_AGAIN_TABLE
-
 #define SENSOR_EXPO
-
-/* 镜像翻转功能开关 */
 #define SENSOR_MIR_FLIP
 
 static int rst_gpio = GPIO_PA(18);

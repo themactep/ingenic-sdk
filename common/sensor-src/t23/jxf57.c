@@ -22,14 +22,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXF57_CHIP_ID_H	(0x08)
-#define JXF57_CHIP_ID_L	(0x75)
-#define JXF57_REG_END		0xff
-#define JXF57_REG_DELAY	0xfe
-#define JXF57_SUPPORT_15FPS_SCLK (86400000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x75)
+#define SENSOR_VERSION	"H20241111a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20241111a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -204,7 +215,6 @@ struct tx_isp_mipi_bus jxf57_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_sensor_attribute jxf57_attr={
 	.name = "jxf57",
 	.chip_id = 0x844,
@@ -347,7 +357,7 @@ static struct regval_list jxf57_init_regs_1920_1080_30fps_mipi_linear[] = {
 	{0x82, 0x00},
 	{0x19, 0x20},
 	{0x12, 0x00},
-	{JXF57_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -365,26 +375,25 @@ static struct tx_isp_sensor_win_setting jxf57_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxf57_win_sizes[0];
 
-
 /*
 * the part of driver was fixed.
 */
 
 static struct regval_list jxf57_stream_on_dvp[] = {
-	{JXF57_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf57_stream_off_dvp[] = {
-	{JXF57_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf57_stream_on_mipi[] = {
 
-	{JXF57_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxf57_stream_off_mipi[] = {
-	{JXF57_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxf57_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -437,8 +446,8 @@ static int jxf57_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXF57_REG_END) {
-		if (vals->reg_num == JXF57_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf57_read(sd, vals->reg_num, &val);
@@ -454,8 +463,8 @@ static int jxf57_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int jxf57_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXF57_REG_END) {
-		if (vals->reg_num == JXF57_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxf57_write(sd, vals->reg_num, vals->value);
@@ -482,7 +491,7 @@ static int jxf57_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXF57_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -491,7 +500,7 @@ static int jxf57_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXF57_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -588,7 +597,7 @@ static int jxf57_set_fps(struct tx_isp_subdev *sd, int fps)
 {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	unsigned int sclk = JXF57_SUPPORT_15FPS_SCLK;
+	unsigned int sclk = SENSOR_SUPPORT_15FPS_SCLK;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
@@ -726,7 +735,6 @@ static int jxf57_g_chip_ident(struct tx_isp_subdev *sd,
 	}
 	return 0;
 }
-
 
 static int jxf57_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
 {

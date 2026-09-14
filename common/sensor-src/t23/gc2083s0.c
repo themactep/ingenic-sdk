@@ -25,14 +25,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define GC2083_CHIP_ID_H	(0x20)
-#define GC2083_CHIP_ID_L	(0x83)
-#define GC2083_REG_END		0xffff
-#define GC2083_REG_DELAY	0xfffe
-#define GC2083_SUPPORT_30FPS_SCLK (99993600)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x20)
+#define SENSOR_CHIP_ID_L	(0x83)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK (99993600)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -337,7 +348,7 @@ static struct regval_list gc2083_init_regs_1920_1080_30fps_mipi[] = {
 		{0x0229, 0x05},
 		{0x0237, 0x03},
 		{0x023e, 0x99},
-        {GC2083_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting gc2083_win_sizes[] = {
@@ -353,11 +364,11 @@ static struct tx_isp_sensor_win_setting gc2083_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &gc2083_win_sizes[0];
 
 static struct regval_list gc2083_stream_on_mipi[] = {
-	{GC2083_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list gc2083_stream_off_mipi[] = {
-	{GC2083_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int gc2083_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -410,8 +421,8 @@ static int gc2083_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != GC2083_REG_END) {
-		if (vals->reg_num == GC2083_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc2083_read(sd, vals->reg_num, &val);
@@ -428,8 +439,8 @@ static int gc2083_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int gc2083_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != GC2083_REG_END) {
-		if (vals->reg_num == GC2083_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = gc2083_write(sd, vals->reg_num, vals->value);
@@ -455,13 +466,13 @@ static int gc2083_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2083_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2083_read(sd, 0x03f1, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != GC2083_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -627,7 +638,7 @@ static int gc2083_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	sclk = GC2083_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
 	ret = gc2083_read(sd, 0x0d05, &tmp);
 	hts = tmp;

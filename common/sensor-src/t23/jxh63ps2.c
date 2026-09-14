@@ -24,14 +24,25 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define JXH63P_CHIP_ID_H	(0x08)
-#define JXH63P_CHIP_ID_L	(0x48)
-#define JXH63P_REG_END		0xff
-#define JXH63P_REG_DELAY	0xfe
-#define JXH63P_SUPPORT_15FPS_SCLK (86400000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x08)
+#define SENSOR_CHIP_ID_L	(0x48)
+#define SENSOR_VERSION	"H20250728a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xff
+#define SENSOR_REG_DELAY	0xfe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20250728a"
 
 static int reset_gpio = -1;//GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -214,7 +225,6 @@ struct tx_isp_mipi_bus jxh63ps2_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-
 struct tx_isp_sensor_attribute jxh63ps2_attr={
 	.name = "jxh63ps2",
 	.chip_id = 0x848,
@@ -253,7 +263,6 @@ struct tx_isp_sensor_attribute jxh63ps2_attr={
         }
 	//	void priv; /* point to struct tx_isp_sensor_board_info */
 };
-
 
 static struct regval_list jxh63ps2_init_regs_1280_720_15fps_mipi[] = {
         {0x12, 0x40},
@@ -371,7 +380,7 @@ static struct regval_list jxh63ps2_init_regs_1280_720_15fps_mipi[] = {
         {0x43, 0xed},
         {0x80, 0x81},
         {0x12, 0x00},
-        {JXH63P_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 /*
@@ -389,26 +398,25 @@ static struct tx_isp_sensor_win_setting jxh63ps2_win_sizes[] = {
 };
 struct tx_isp_sensor_win_setting *wsize = &jxh63ps2_win_sizes[0];
 
-
 /*
  * the part of driver was fixed.
  */
 
 static struct regval_list jxh63ps2_stream_on_dvp[] = {
-        {JXH63P_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63ps2_stream_off_dvp[] = {
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63ps2_stream_on_mipi[] = {
 
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list jxh63ps2_stream_off_mipi[] = {
-	{JXH63P_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int jxh63ps2_read(struct tx_isp_subdev *sd, unsigned char reg,
@@ -461,8 +469,8 @@ static int jxh63ps2_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != JXH63P_REG_END) {
-		if (vals->reg_num == JXH63P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxh63ps2_read(sd, vals->reg_num, &val);
@@ -478,8 +486,8 @@ static int jxh63ps2_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int jxh63ps2_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != JXH63P_REG_END) {
-		if (vals->reg_num == JXH63P_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = jxh63ps2_write(sd, vals->reg_num, vals->value);
@@ -506,7 +514,7 @@ static int jxh63ps2_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != JXH63P_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -515,7 +523,7 @@ static int jxh63ps2_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	if (ret < 0)
 		return ret;
 
-	if (v != JXH63P_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -623,7 +631,7 @@ static int jxh63ps2_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
-		sclk = JXH63P_SUPPORT_15FPS_SCLK;
+		sclk = SENSOR_SUPPORT_15FPS_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:

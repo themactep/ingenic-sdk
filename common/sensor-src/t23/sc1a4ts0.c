@@ -25,14 +25,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define sc1a4t_CHIP_ID_H	(0x9a)
-#define sc1a4t_CHIP_ID_L	(0x4d)
-#define sc1a4t_REG_END		0xffff
-#define sc1a4t_REG_DELAY	0xfffe
-#define sc1a4t_SUPPORT_15FPS_SCLK (72000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0x9a)
+#define SENSOR_CHIP_ID_L	(0x4d)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_15FPS_SCLK (72000000)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio1 = GPIO_PA(16);
 module_param(reset_gpio1, int, S_IRUGO);
@@ -478,7 +489,7 @@ static struct regval_list sc1a4t_init_regs_1280_720_15fps_mipi[] = {
         {0x36e9, 0x24},
         {0x37f9, 0x20},
         {0x0100, 0x01},
-        {sc1a4t_REG_END, 0x00},	/* END MARKER */
+        {SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc1a4t_win_sizes[] = {
@@ -495,12 +506,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc1a4t_win_sizes[0];
 
 static struct regval_list sc1a4t_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{sc1a4t_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc1a4t_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{sc1a4t_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc1a4t_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -552,8 +563,8 @@ static int sc1a4t_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != sc1a4t_REG_END) {
-		if (vals->reg_num == sc1a4t_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc1a4t_read(sd, vals->reg_num, &val);
@@ -570,8 +581,8 @@ static int sc1a4t_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sc1a4t_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != sc1a4t_REG_END) {
-		if (vals->reg_num == sc1a4t_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc1a4t_write(sd, vals->reg_num, vals->value);
@@ -598,7 +609,7 @@ static int sc1a4t_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != sc1a4t_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -606,7 +617,7 @@ static int sc1a4t_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != sc1a4t_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -739,7 +750,7 @@ static int sc1a4t_set_fps(struct tx_isp_subdev *sd, int fps)
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	sclk = sc1a4t_SUPPORT_15FPS_SCLK;
+	sclk = SENSOR_SUPPORT_15FPS_SCLK;
 	ret = sc1a4t_read(sd, 0x320c, &tmp);
 	hts = tmp;
 	ret += sc1a4t_read(sd, 0x320d, &tmp);

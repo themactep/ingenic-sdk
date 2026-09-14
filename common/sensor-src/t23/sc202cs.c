@@ -26,14 +26,25 @@
 #include <sensor-common.h>
 #include <txx-funcs.h>
 
-#define SC202CS_CHIP_ID_H	(0xeb)
-#define SC202CS_CHIP_ID_L	(0x52)
-#define SC202CS_REG_END		0xffff
-#define SC202CS_REG_DELAY	0xfffe
-#define SC202CS_SUPPORT_30FPS_SCLK (1920 * 1250 * 30)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0xeb)
+#define SENSOR_CHIP_ID_L	(0x52)
+#define SENSOR_VERSION	"H20240219a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY	0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_30FPS_SCLK (1920 * 1250 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240219a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -421,7 +432,7 @@ static struct regval_list sc202cs_init_regs_1600_1200_30fps_mipi[] = {
 	{0x450d, 0x61},
 	{0x0100, 0x01},
 
-	{SC202CS_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc202cs_win_sizes[] = {
@@ -438,12 +449,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc202cs_win_sizes[0];
 
 static struct regval_list sc202cs_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SC202CS_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc202cs_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SC202CS_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc202cs_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -495,8 +506,8 @@ static int sc202cs_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != SC202CS_REG_END) {
-		if (vals->reg_num == SC202CS_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc202cs_read(sd, vals->reg_num, &val);
@@ -513,8 +524,8 @@ static int sc202cs_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 static int sc202cs_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != SC202CS_REG_END) {
-		if (vals->reg_num == SC202CS_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc202cs_write(sd, vals->reg_num, vals->value);
@@ -541,7 +552,7 @@ static int sc202cs_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC202CS_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -549,7 +560,7 @@ static int sc202cs_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC202CS_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -598,7 +609,6 @@ static int sc202cs_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sc202cs_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
-
 
 	return 0;
 }
@@ -678,7 +688,7 @@ static int sc202cs_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	sclk = SC202CS_SUPPORT_30FPS_SCLK;
+	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

@@ -22,15 +22,26 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
-#define SC301IoT_CHIP_ID_H	(0xcc)
-#define SC301IoT_CHIP_ID_L	(0x40)
-#define sc301IoT_REG_END		0xffff
-#define sc301IoT_REG_DELAY		0xfffe
-#define sc301IoT_SUPPORT_25FPS_SCLK (54000000)
-#define sc301IoT_SUPPORT_WDR_15FPS_SCLK (108000000)
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
+#define SENSOR_CHIP_ID_H	(0xcc)
+#define SENSOR_CHIP_ID_L	(0x40)
+#define SENSOR_VERSION	"H20240408a"
+
+// ============================================================================
+// REGISTER DEFINITIONS
+// ============================================================================
+#define SENSOR_REG_END		0xffff
+#define SENSOR_REG_DELAY		0xfffe
+
+// ============================================================================
+// TIMING AND PERFORMANCE
+// ============================================================================
+#define SENSOR_SUPPORT_25FPS_SCLK (54000000)
+#define SENSOR_SUPPORT_WDR_15FPS_SCLK (108000000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_VERSION	"H20240408a"
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -403,7 +414,6 @@ struct tx_isp_mipi_bus sc301IoT_mipi_dol={
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-
 struct tx_isp_sensor_attribute sc301IoT_attr={
 	.name = "sc301IoT",
 	.chip_id = 0xcc40,
@@ -581,7 +591,7 @@ static struct regval_list sc301IoT_init_regs_2048_1536_25fps_mipi[] = {
 	{0x36e9, 0x24},
 	{0x37f9, 0x24},
 	{0x0100, 0x01},
-	{sc301IoT_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc301IoT_init_regs_dol_2048_1536_15fps_mipi[] = {
@@ -736,7 +746,7 @@ static struct regval_list sc301IoT_init_regs_dol_2048_1536_15fps_mipi[] = {
 	{0x36e9, 0x24},
 	{0x37f9, 0x24},
 	{0x0100, 0x01},
-	{sc301IoT_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc301IoT_init_regs_2048_1536_30fps_mipi[] = {
@@ -882,7 +892,7 @@ static struct regval_list sc301IoT_init_regs_2048_1536_30fps_mipi[] = {
 {0x36e9, 0x24},
 {0x37f9, 0x24},
 {0x0100, 0x01},
-{sc301IoT_REG_END, 0x00},	/* END MARKER */
+{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc301IoT_win_sizes[] = {
@@ -917,12 +927,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc301IoT_win_sizes[0];
 
 static struct regval_list sc301IoT_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{sc301IoT_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 static struct regval_list sc301IoT_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{sc301IoT_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00},	/* END MARKER */
 };
 
 int sc301IoT_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
@@ -974,8 +984,8 @@ static int sc301IoT_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 {
 	int ret;
 	unsigned char val;
-	while (vals->reg_num != sc301IoT_REG_END) {
-		if (vals->reg_num == sc301IoT_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc301IoT_read(sd, vals->reg_num, &val);
@@ -992,8 +1002,8 @@ static int sc301IoT_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 static int sc301IoT_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
-	while (vals->reg_num != sc301IoT_REG_END) {
-		if (vals->reg_num == sc301IoT_REG_DELAY) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
 			ret = sc301IoT_write(sd, vals->reg_num, vals->value);
@@ -1020,7 +1030,7 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC301IoT_CHIP_ID_H)
+	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
 
@@ -1028,7 +1038,7 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
-	if (v != SC301IoT_CHIP_ID_L)
+	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
@@ -1181,14 +1191,14 @@ static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
                 if(sensor_max_fps==25){
-		sclk = sc301IoT_SUPPORT_25FPS_SCLK;
+		sclk = SENSOR_SUPPORT_25FPS_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_25;
                 }else{
         sclk = 0x640*0x465*30;
 		max_fps = TX_SENSOR_MAX_FPS_30;
                 }
 	}else if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
-		sclk = sc301IoT_SUPPORT_WDR_15FPS_SCLK;
+		sclk = SENSOR_SUPPORT_WDR_15FPS_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 	}else{
 		ISP_ERROR("do not support max framerate %d in mipi mode\n",sensor_max_fps);
@@ -1337,7 +1347,6 @@ static int sc301IoT_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 
 	return ret;
 }
-
 
 static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 {
@@ -1531,7 +1540,6 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-
 static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate)
 {
         unsigned long rate = 0;
@@ -1615,7 +1623,6 @@ error:
                   __func__, __LINE__, want_rate);
         return ret;
 }
-
 
 static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {

@@ -26,20 +26,17 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 
+// ============================================================================
+// SENSOR IDENTIFICATION
+// ============================================================================
 #define TVERSION "V20230103a"
 #define SENSOR_VERSION  "H20240926a"
 
-/* #define SENSOR_TEST */
-
-/* 选择Sensor寄存器地址位宽(8bit/16bit) */
-// #define SENSOR_I2C_REG_8BIT
-
-/* 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_AGAIN_TABLE
-
 #define SENSOR_EXPO
-
-/* 镜像翻转功能开关 */
 #define SENSOR_MIR_FLIP
 
 static int rst_gpio = GPIO_PA(18);
@@ -60,8 +57,8 @@ MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
 #define SENSOR_CHIP_ID_H    (0x31)
 #define SENSOR_CHIP_ID_L    (0x03)
-#define s5k3p3_REG_END	    0xffff
-#define s5k3p3_REG_DELAY	0xfffe
+#define SENSOR_REG_END	    0xffff
+#define SENSOR_REG_DELAY	0xfffe
 #define SENSOR_OUTPUT_MIN_FPS   5
 #define SENSOR_MCLK 24000000
 
@@ -656,7 +653,6 @@ struct tx_isp_sensor_attribute s5k3p3_attr = {
 	.sensor_ctrl.alloc_dgain = s5k3p3_alloc_dgain,
 };
 
-
 static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x6028, 0x4000},
 	{0x602A, 0x6010},
@@ -676,7 +672,7 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x602A, 0xF4AA},
 	{0x6F12, 0x0060},
 	{0x602A, 0xF442},
-	{s5k3p3_REG_DELAY, 0x05},
+	{SENSOR_REG_DELAY, 0x05},
 	{0x6F12, 0x0800},
 	{0x602A, 0xF43E},
 	{0x6F12, 0x0400},
@@ -692,13 +688,13 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x602A, 0x3E58},
 	{0x6F12, 0x0056},
 	{0x602A, 0x39EE},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6F12, 0x0206},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x602A, 0x39E8},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6F12, 0x0205},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6028, 0x2000},
 	{0x602A, 0x14B0},
 	{0x6F12, 0xF412},
@@ -712,9 +708,9 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x602A, 0x3552},
 	{0x6F12, 0x00D0},
 	{0x602A, 0x3195},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6F12, 0x0101},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6028, 0x2000},
 	{0x602A, 0x13EC},
 	{0x6F12, 0x8011},
@@ -722,7 +718,7 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x6028, 0x4000},
 	{0x602A, 0x3002},
 	{0x6F12, 0x0001},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x602A, 0x0136},
 	{0x6F12, 0x1800},
 	{0x602A, 0x0304},
@@ -769,7 +765,7 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x6F12, 0x0801},
 	{0x602A, 0x39AB},
 	{0x6F12, 0x0001},
-	{s5k3p3_REG_DELAY, 0x02},
+	{SENSOR_REG_DELAY, 0x02},
 	{0x6028, 0x2000},
 	{0x602A, 0x026C},
 	{0x6F12, 0x41F0},
@@ -809,10 +805,10 @@ static struct regval_list s5k3p3_init_regs_2320_1744_30fps_mipi[] = {
 	{0x6F12, 0x7970},
 	{0x602A, 0x0100},
 	{0x6F12, 0x0100},
-	{s5k3p3_REG_DELAY, 0xC8},
+	{SENSOR_REG_DELAY, 0xC8},
 	{0x0202, 0x0400},
 	{0x0204, 0x0080},
-	{s5k3p3_REG_END, 0x00},/* END MARKER */	/* END MARKER *//* END MARKER */
+	{SENSOR_REG_END, 0x00},/* END MARKER */	/* END MARKER *//* END MARKER */
 };
 
 /*
@@ -1208,7 +1204,6 @@ static int s5k3p3_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 	ret = s5k3p3_write(sd, 0x6028, 0x4000);
 
-
 	ret += s5k3p3_read(sd, 0x0000, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -1499,7 +1494,6 @@ static int s5k3p3_set_vflip(struct tx_isp_subdev *sd, int enable)
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 	uint16_t val = 0;
-
 
 	/* 2'b01:filp,2'b10:mirror */
 	switch(enable) {
