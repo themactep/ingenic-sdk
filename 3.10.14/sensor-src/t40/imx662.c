@@ -25,9 +25,7 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "imx662"
-#define SENSOR_VERSION                                                                                                 \
-	"H20230928a"                                                                                                   \
-	"
+#define SENSOR_VERSION "H20230928a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x00)
 
