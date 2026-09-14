@@ -75,7 +75,6 @@ static struct sensor_info sensor_info = {
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
-	.actual_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
@@ -1090,7 +1089,6 @@ static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->integration_time_limit = vts - 1;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 1;
-	sensor_info.actual_fps = numerator / denominator;
 
 	return tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR,
 		&sensor->video);
@@ -1342,7 +1340,6 @@ static int mis20c1_probe(struct i2c_client *client,
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	sensor_info.actual_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	tx_isp_subdev_init(&sensor_platform_device, sd, &mis20c1_ops);
 	tx_isp_set_subdevdata(sd, client);
