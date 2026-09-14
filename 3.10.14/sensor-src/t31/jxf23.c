@@ -199,6 +199,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 		}
 		lut++;
 	}
+
 	return isp_gain;
 }
 
@@ -219,6 +220,7 @@ unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift
 		}
 		lut++;
 	}
+
 	return isp_gain;
 }
 
@@ -1346,6 +1348,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
+
 	return 0;
 }
 
@@ -1361,6 +1364,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
+
 	return 0;
 }
 
@@ -1390,6 +1394,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	*ident = (*ident << 8) | v;
+
 	return 0;
 }
 

@@ -51,6 +51,10 @@
 #define SENSOR_SUPPORT_30FPS_SCLK_MIPI (86400000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_RES_13 13
 
 /* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */

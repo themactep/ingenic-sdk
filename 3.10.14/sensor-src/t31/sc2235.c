@@ -21,10 +21,10 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc2235"
-#define SENSOR_VERSION "H20180627a"
 #define SENSOR_CHIP_ID 0x2235
 #define SENSOR_CHIP_ID_H (0x22)
 #define SENSOR_CHIP_ID_L (0x35)
+#define SENSOR_VERSION "H20180627a"
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -41,7 +41,6 @@
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
-// ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
 
@@ -52,6 +51,10 @@
 #define SENSOR_SUPPORT_PCLK_FPS_15 (45000 * 1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define DRIVE_CAPABILITY_1
 
 static int reset_gpio = GPIO_PA(18);

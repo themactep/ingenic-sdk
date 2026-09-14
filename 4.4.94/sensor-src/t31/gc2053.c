@@ -1433,9 +1433,8 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if (!enable) {
+	if (!enable)
 		return ISP_SUCCESS;
-	}
 
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -1572,6 +1571,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
+
 	if (reset_gpio != -1) {
 		ret = gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
@@ -1691,9 +1691,10 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
-	if (!capable(CAP_SYS_ADMIN)) {
+
+	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	}
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -1708,9 +1709,9 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
-	if (!capable(CAP_SYS_ADMIN)) {
+
+	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	}
 
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
@@ -1914,12 +1915,11 @@ static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if (reset_gpio != -1) {
+	if (reset_gpio != -1)
 		gpio_free(reset_gpio);
-	}
-	if (pwdn_gpio != -1) {
+
+	if (pwdn_gpio != -1)
 		gpio_free(pwdn_gpio);
-	}
 
 	clk_disable(sensor->mclk);
 	clk_put(sensor->mclk);
@@ -1930,6 +1930,7 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

@@ -1088,11 +1088,13 @@ static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
 
-	/*ret = private_driver_get_interface();
+/*
+	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
-	}*/
+	}
+*/
 
 	return private_i2c_add_driver(&sensor_driver);
 }
@@ -1105,5 +1107,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sony imx327 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

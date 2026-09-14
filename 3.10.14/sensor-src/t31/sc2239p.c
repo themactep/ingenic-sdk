@@ -328,6 +328,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 		}
 		lut++;
 	}
+
 	return isp_gain;
 }
 
@@ -693,6 +694,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	*ident = (*ident << 8) | v;
+
 	return 0;
 }
 
@@ -717,10 +719,11 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
+
 	value *= 2;
-	ret += sensor_write(sd, 0x3e00, (unsigned char) ((value >> 12) & 0x0f));
-	ret += sensor_write(sd, 0x3e01, (unsigned char) ((value >> 4) & 0xff));
-	ret += sensor_write(sd, 0x3e02, (unsigned char) ((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	if (ret < 0)
 		return ret;
@@ -731,12 +734,13 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret += sensor_write(sd, 0x3e09, (unsigned char) (value & 0xff));
-	ret += sensor_write(sd, 0x3e08, (unsigned char) ((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
 	gain_val = value;
+
 	return 0;
 }
 #endif
@@ -775,6 +779,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
+
 	return 0;
 }
 
@@ -796,6 +801,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		}
 		ISP_WARNING("%s stream off\n", SENSOR_NAME);
 	}
+
 	return ret;
 }
 
@@ -907,6 +913,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
+
 	return 0;
 }
 
@@ -914,6 +921,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
+
 	ret += sensor_read(sd, 0x3221, &val);
 	if (enable & 0x2)
 		val |= 0x60;
@@ -989,6 +997,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	default:
 		break;
 	}
+
 	return ret;
 }
 
@@ -1022,6 +1031,7 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 		return -EPERM;
 
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+
 	return 0;
 }
 
@@ -1102,6 +1112,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
+
 	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
@@ -1109,20 +1120,25 @@ err_get_mclk:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	kfree(sensor);
+
 	return -1;
 }
 
 static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+
 	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
+
 	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
+
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
+
 	return 0;
 }
 

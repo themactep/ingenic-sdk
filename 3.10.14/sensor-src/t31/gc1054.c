@@ -42,6 +42,7 @@
 // ============================================================================
 #define SENSOR_REG_END 0x00
 #define SENSOR_REG_DELAY 0xff
+#define SENSOR_PAGE_REG 0xfe
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -51,11 +52,6 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define DRIVE_CAPABILITY_2
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_PAGE_REG 0xfe
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

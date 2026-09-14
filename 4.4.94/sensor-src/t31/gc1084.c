@@ -101,31 +101,30 @@ struct again_lut {
 
 struct again_lut sensor_again_lut[] = {
 	{0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0},	    //1.000000
-	{0x01, 0x0A, 0x00, 0x00, 0x01, 0x0c, 0x00, 16208},  //1.187500
+	{0x01, 0x0a, 0x00, 0x00, 0x01, 0x0c, 0x00, 16208},  //1.187500
 	{0x02, 0x00, 0x01, 0x00, 0x01, 0x1a, 0x00, 32217},  //1.406250
-	{0x03, 0x0A, 0x01, 0x00, 0x01, 0x2a, 0x00, 47690},  //1.656250
+	{0x03, 0x0a, 0x01, 0x00, 0x01, 0x2a, 0x00, 47690},  //1.656250
 	{0x04, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 65536},  //2.000000
-	{0x05, 0x0A, 0x02, 0x00, 0x02, 0x18, 0x00, 81784},  //2.375000
+	{0x05, 0x0a, 0x02, 0x00, 0x02, 0x18, 0x00, 81784},  //2.375000
 	{0x06, 0x00, 0x03, 0x00, 0x02, 0x33, 0x00, 97213},  //2.796875
-	{0x07, 0x0A, 0x03, 0x00, 0x03, 0x14, 0x00, 113226}, //3.312500
+	{0x07, 0x0a, 0x03, 0x00, 0x03, 0x14, 0x00, 113226}, //3.312500
 	{0x08, 0x00, 0x04, 0x00, 0x04, 0x00, 0x02, 131072}, //4.000000
-	{0x09, 0x0A, 0x04, 0x00, 0x04, 0x2f, 0x02, 147001}, //4.734375
+	{0x09, 0x0a, 0x04, 0x00, 0x04, 0x2f, 0x02, 147001}, //4.734375
 	{0x0a, 0x00, 0x05, 0x00, 0x05, 0x26, 0x02, 162766}, //5.593750
-	{0x0b, 0x0A, 0x05, 0x00, 0x06, 0x29, 0x02, 178990}, //6.640625
+	{0x0b, 0x0a, 0x05, 0x00, 0x06, 0x29, 0x02, 178990}, //6.640625
 	{0x0c, 0x00, 0x06, 0x00, 0x08, 0x00, 0x02, 196608}, //8.000000
-	{0x0d, 0x0A, 0x06, 0x00, 0x09, 0x1f, 0x04, 212696}, //9.484375
+	{0x0d, 0x0a, 0x06, 0x00, 0x09, 0x1f, 0x04, 212696}, //9.484375
 	{0x0e, 0x12, 0x46, 0x00, 0x0b, 0x0d, 0x04, 228311}, //11.203125
 	{0x0f, 0x19, 0x66, 0x00, 0x0d, 0x12, 0x06, 244312}, //13.265625
 	{0x10, 0x00, 0x04, 0x01, 0x10, 0x00, 0x06, 262144}, //16.000000
-	{0x11, 0x0A, 0x04, 0x01, 0x12, 0x3e, 0x08, 278232}, //18.953125
+	{0x11, 0x0a, 0x04, 0x01, 0x12, 0x3e, 0x08, 278232}, //18.953125
 	{0x12, 0x00, 0x05, 0x01, 0x16, 0x1a, 0x0a, 293982}, //22.406250
-	{0x13, 0x0A, 0x05, 0x01, 0x1a, 0x23, 0x0c, 310012}, //26.546875
+	{0x13, 0x0a, 0x05, 0x01, 0x1a, 0x23, 0x0c, 310012}, //26.546875
 	{0x14, 0x00, 0x06, 0x01, 0x20, 0x00, 0x0c, 327680}, //32.000000
-	{0x15, 0x0A, 0x06, 0x01, 0x25, 0x3b, 0x0f, 343731}, //37.921875
+	{0x15, 0x0a, 0x06, 0x01, 0x25, 0x3b, 0x0f, 343731}, //37.921875
 	{0x16, 0x12, 0x46, 0x01, 0x2c, 0x33, 0x12, 359419}, //44.796875
 	{0x17, 0x19, 0x66, 0x01, 0x35, 0x06, 0x14, 375411}, //53.093750
 	{0x18, 0x20, 0x06, 0x01, 0x3f, 0x3f, 0x15, 393216}, //64.000000
-
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -337,6 +336,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720_30fps_mipi,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -436,16 +436,20 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
+
 	*ident = v;
 
 	ret = sensor_read(sd, 0x03f1, &v);
 	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
+
 	*ident = (*ident << 8) | v;
 
 	return 0;
@@ -492,7 +496,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00d0, val_lut[value].reg0d0);
 	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0dc1, val_lut[value].regdc1);
-        ret += sensor_write(sd, 0x031d, 0x28);
+	ret += sensor_write(sd, 0x031d, 0x28);
 	ret += sensor_write(sd, 0x00b8, val_lut[value].reg0b8);
 	ret += sensor_write(sd, 0x00b9, val_lut[value].reg0b9);
 	ret += sensor_write(sd, 0x0155, val_lut[value].reg155);
@@ -529,6 +533,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
@@ -545,7 +550,6 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_WARNING("%s stream on\n", SENSOR_NAME);
-
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
@@ -572,11 +576,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
+
 	ret += sensor_read(sd, 0xd05, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0xd06, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hts = ((hts << 8) + tmp);
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
@@ -618,6 +624,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
+
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
@@ -650,6 +657,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
+
 	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
@@ -714,7 +722,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
-
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -722,7 +729,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
@@ -755,8 +761,10 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -771,6 +779,7 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
@@ -804,6 +813,7 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
+
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -828,6 +838,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 
 	sensor->mclk = clk_get(NULL, "cgu_cim");
@@ -929,6 +940,7 @@ static __init int init_sensor(void) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
+
 	return private_i2c_add_driver(&sensor_driver);
 }
 

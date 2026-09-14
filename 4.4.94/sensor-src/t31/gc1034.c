@@ -1009,11 +1009,9 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	/*
-		convert sensor-gain into isp-gain,
-	 */
-	sensor_attr.max_again =
-		262850; //private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	/* convert sensor-gain into isp-gain, */
+	sensor_attr.max_again = 262850;
+	//private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1052,8 +1050,10 @@ static int sensor_remove(struct i2c_client *client) {
 
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
+
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
+
 	return 0;
 }
 

@@ -196,8 +196,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 		},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	//	.max_again = 393216,    // - 64x
-	//	.max_again = 456839,
+	//.max_again = 393216,    // - 64x
+	//.max_again = 456839,
 	.max_again = 744532, // - 128x
 	.max_dgain = 0,
 	.min_integration_time = 2,
