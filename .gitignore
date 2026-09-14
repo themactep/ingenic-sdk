@@ -1,8 +1,32 @@
+# SPDX-License-Identifier: GPL-2.0
+# Kernel module build artifacts
 *.o
+*.ko
 *.cmd
 *.mod
 *.mod.c
-lib/**/*.txt
+.*.cmd
+.*.o.d
+*.o.d
+*.d
+*.symvers
+*.order
+Module.symvers
+modules.order
+built-in.o
+
+# kbuild working dirs / generated headers
+.tmp_versions/
+*.mod.o
+*.ko.cmd
+
+# editor / IDE
 .idea/
 .vscode/
+*.bak
+*.orig
+*.rej
+*~
 
+# misc
+lib/**/*.txt
