@@ -52,8 +52,8 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 static int shvflip = 1;
-
 static int fsync_mode = 3;
+
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 

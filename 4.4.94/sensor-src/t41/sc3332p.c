@@ -27,6 +27,7 @@
 // ============================================================================
 #define SENSOR_NAME "sc3332p"
 #define SENSOR_VERSION "H20231115a"
+#define SENSOR_CHIP_ID 0xcc44
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x44)
 
@@ -301,7 +302,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xcc44,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -531,6 +532,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
+
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
@@ -607,26 +609,27 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
-       int ret = 0;
-       ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-       ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-       ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
-       if (ret < 0)
-	       return ret;
+	int ret = 0;
 
-       return 0;
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	if (ret < 0)
+		return ret;
+
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
-       int ret = 0;
+	int ret = 0;
 
-       ret += sensor_write(sd, 0x3e07, (unsigned char)(value & 0xff));
-       ret += sensor_write(sd, 0x3e09, (unsigned char)((value & 0xff00) >> 8));
-       if (ret < 0)
-	       return ret;
+	ret += sensor_write(sd, 0x3e07, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)((value & 0xff00) >> 8));
+	if (ret < 0)
+		return ret;
 
-       return 0;
+	return 0;
 }
 #endif
 
@@ -673,15 +676,16 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
+
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
+
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
-
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			ISP_WARNING("%s stream on\n", SENSOR_NAME);
 		}
@@ -702,9 +706,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char val = 0;
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
+
 	switch (sensor->info.default_boot) {
 	case 0:
-		sclk = 0xa8c * 15 * 2500; /* 1250 * 0XA8C * 30 * 2 */
+		sclk = 0xa8c * 15 * 2500; /* 1250 * 0xa8c * 30 * 2 */
 		max_fps = 15;
 		break;
 	default:
@@ -798,11 +803,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0XA8C - 8;
-		sensor_attr.integration_time_limit = 0XA8C - 8;
+		sensor_attr.max_integration_time_native = 0xa8c - 8;
+		sensor_attr.integration_time_limit = 0xa8c - 8;
 		sensor_attr.total_width = 2500;
-		sensor_attr.total_height = 0XA8C;
-		sensor_attr.max_integration_time = 0XA8C - 8;
+		sensor_attr.total_height = 0xa8c;
+		sensor_attr.max_integration_time = 0xa8c - 8;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x700;
 		break;
@@ -929,6 +934,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
+
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;

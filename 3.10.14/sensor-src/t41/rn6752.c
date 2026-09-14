@@ -48,6 +48,10 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define USE_BLUE_SCREEN 1
 #define USE_CVBS_ONE_FIELD 1
 
@@ -721,8 +725,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 		}
-		//		ret = sensor_read(sd, vals->reg_num, &val);
-		//		printk("	{0x%x, 0x%x}\n",vals->reg_num, val);
+		//ret = sensor_read(sd, vals->reg_num, &val);
+		//printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		vals++;
 	}
 

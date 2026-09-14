@@ -120,6 +120,7 @@ unsigned int sensor_alloc_integration_time_short(unsigned int it, unsigned char 
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;
+
 	return isp_it;
 }
 

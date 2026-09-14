@@ -105,7 +105,6 @@ struct again_lut sensor_again_lut[] = {
 	//{0x20, 0x2e, 0x0d, 0x01, 0x3c, 0x3c, 0xcc, 0x26, 503093},            //204.593750
 	//{0x21, 0x9e, 0x0d, 0x01, 0x41, 0x41, 0xff, 0x3f, 519226},            //242.656250
 	//{0x22, 0x06, 0x0e, 0x01, 0x47, 0x47, 0xff, 0x3f, 535356},            //287.796875
-
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -344,7 +343,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = TISP_VI_FMT_SGRBG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2816_1584_30fps_mipi,
-	}};
+	}
+};
 
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
@@ -512,7 +512,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00b8, val_lut[value].regb8);
 	ret += sensor_write(sd, 0x00b9, val_lut[value].regb9);
 	if (ret < 0)
-		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n", __LINE__);
 
 	return ret;
 }
@@ -604,11 +604,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
+
 	ret += sensor_read(sd, 0x0342, &tmp);
 	hts = tmp & 0x0f;
 	ret += sensor_read(sd, 0x0343, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hts = ((hts << 8) | tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = sensor_write(sd, 0x0340, (unsigned char)((vts & 0x3f00) >> 8));
@@ -711,6 +713,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
+
 	rate = private_clk_get_rate(sensor->mclk);
 	if (((rate / 1000) % 27000) != 0) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
@@ -805,7 +808,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
-		/*
+/*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
 			ret = sensor_set_integration_time(sd, sensor_val->value);
@@ -819,7 +822,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
-
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
 			ret = sensor_get_black_pedestal(sd, sensor_val->value);

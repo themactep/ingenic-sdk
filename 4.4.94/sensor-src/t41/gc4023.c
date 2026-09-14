@@ -36,7 +36,6 @@
 // ============================================================================
 #define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0x0000
-#define SENSOR_REG_DELAY 0x0000
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -44,6 +43,10 @@
 #define SENSOR_SUPPORT_30FPS_SCLK (0x7e9 * 0x4b0 * 2 * 25)
 #define SENSOR_SUPPORT_20FPS_SCLK 108 * 1000 * 1000
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
 #define SENSOR_HIGH_TEMP "highTemp"
 #define SENSOR_LOW_TEMP "lowTemp"
 #define CAMERA_PROC_NAME "camera"

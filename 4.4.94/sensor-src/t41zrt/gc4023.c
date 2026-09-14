@@ -64,6 +64,10 @@ static int shvflip = 1;
 //module_param(shvflip, int, S_IRUGO);
 //MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
+static unsigned char ht_gain = 24;
+static unsigned char gain_flag = 0;
+static unsigned char ag_last = 0;
+
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
@@ -85,10 +89,6 @@ struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
 };
-
-static unsigned char ht_gain = 24;
-static unsigned char gain_flag = 0;
-static unsigned char ag_last = 0;
 
 struct again_lut {
 	unsigned int index;

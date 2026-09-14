@@ -50,7 +50,6 @@
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = -1;
-
 static int shvflip = 1;
 
 static struct sensor_info sensor_info = {

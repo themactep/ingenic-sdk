@@ -21,7 +21,6 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc4023s1"
-#define SENSOR_TEMP_PROC_NAME "sensorTemp"
 #define SENSOR_VERSION "H20230912a"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
@@ -45,15 +44,17 @@
 #define SENSOR_SUPPORT_20FPS_SCLK 108 * 1000 * 1000
 #define SENSOR_OUTPUT_MIN_FPS 5
 
-#define CAMERA_PROC_NAME "camera"
 // ============================================================================
 // SPECIAL FEATURES
 // ============================================================================
 #define SENSOR_HIGH_TEMP "highTemp"
 #define SENSOR_LOW_TEMP "lowTemp"
+#define CAMERA_PROC_NAME "camera"
+#define SENSOR_TEMP_PROC_NAME "sensorTemp"
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
+static int shvflip = 1;
 
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
@@ -61,7 +62,6 @@ MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
 struct proc_dir_entry *g_sinfo_proc;
 
-static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 

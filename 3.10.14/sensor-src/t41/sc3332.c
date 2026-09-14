@@ -49,7 +49,6 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PA(18);
-
 static int pwdn_gpio = GPIO_PA(19);
 
 struct regval_list {
@@ -917,12 +916,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//			if (arg)
-		//				ret = sensor_set_integration_time(sd, sensor_val->value);
+		//if (arg)
+		//	ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//			if (arg)
-		//				ret = sensor_set_analog_gain(sd, sensor_val->value);
+		//if (arg)
+		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

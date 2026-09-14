@@ -402,8 +402,8 @@ static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 }
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
-	unsigned char v;
 	int ret;
+	unsigned char v;
 
 	ret = sensor_read(sd, 0x03f0, &v);
 	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -528,6 +528,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
+
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
@@ -571,6 +572,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0xd06, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hts = (hts << 8) + tmp;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);

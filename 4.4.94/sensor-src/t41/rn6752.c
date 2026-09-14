@@ -614,6 +614,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = FHD_1080P25_video,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -742,8 +743,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 		}
-		//		ret = sensor_read(sd, vals->reg_num, &val);
-		//		printk("	{0x%x,0x%x}\n",vals->reg_num, val);
+		//ret = sensor_read(sd, vals->reg_num, &val);
+		//printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		vals++;
 	}
 
