@@ -369,10 +369,6 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
-/*
- * the part of driver maybe modify about different sensor and different board.
- */
-
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
@@ -528,7 +524,6 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}
 };
 
-
 static struct regval_list sensor_stream_on[] = {
 	{0xfe, 0x03},
 	{0x10, 0x91},
@@ -569,7 +564,6 @@ int sensor_read(struct v4l2_subdev *sd, unsigned char reg,
 	return ret;
 }
 
-
 int sensor_write(struct v4l2_subdev *sd, unsigned char reg,
 		 unsigned char value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -587,7 +581,6 @@ int sensor_write(struct v4l2_subdev *sd, unsigned char reg,
 
 	return ret;
 }
-
 
 static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 	int ret;

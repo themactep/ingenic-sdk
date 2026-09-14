@@ -90,9 +90,6 @@ struct regval_list {
 
 struct tx_isp_sensor_attribute sc535iot_attr;
 
-/*
-* The part of driver maybe modify about different sensor and different board.
-*/
 #ifdef SENSOR_AGAIN_TABLE
 struct again_lut {
 	unsigned int value;
