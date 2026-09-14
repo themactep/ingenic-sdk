@@ -921,9 +921,9 @@ static int mis20c1_g_chip_ident(struct tx_isp_subdev *sd,
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n",
 		SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
@@ -1040,7 +1040,7 @@ static int mis20c1_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	ret = mis20c1_write_array(sd,
 		enable ? mis20c1_stream_on : mis20c1_stream_off);
-	pr_debug("%s stream %s\n", SENSOR_NAME, enable ? "on" : "off");
+	ISP_INFO("%s stream %s\n", SENSOR_NAME, enable ? "on" : "off");
 
 	return ret;
 }
@@ -1346,7 +1346,7 @@ static int mis20c1_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_put_mclk:

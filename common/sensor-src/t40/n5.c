@@ -245,7 +245,7 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 void sensor_set_chnmode_1080p_25(struct tx_isp_subdev *sd, unsigned char chn) {
 	unsigned char reg_0x54;
 	unsigned char reg_0xED;
-	printk("=====> sensor_set_chnmode_1080p_25\n");
+	ISP_INFO("=====> sensor_set_chnmode_1080p_25\n");
 	sensor_write(sd, 0xff, 0x00);
 	sensor_write(sd, 0x08 + chn, 0x00);
 	sensor_write(sd, 0x34 + chn, 0x00);
@@ -290,7 +290,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	unsigned char reg_1xC8;
 	unsigned char reg_1xCA;
 
-	printk("=================> my_set_port_mode_1mux\n");
+	ISP_INFO("=================> my_set_port_mode_1mux\n");
 	sensor_write(sd, 0xFF, 0x00); //bank
 	sensor_read(sd, 0x54, &reg_0x54);
 	sensor_write(sd, 0x54, reg_0x54 & 0xFE);
@@ -347,7 +347,7 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	if (ret > 0)
 		ret = 0;
 
-	//	printk("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
+	//	ISP_INFO("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
 	//	private_msleep(5);
 	return ret;
 }
@@ -365,7 +365,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-	//	printk("	{0x%x, 0x%x}\n",buf[0], buf[1]);
+	//	ISP_INFO("	{0x%x, 0x%x}\n",buf[0], buf[1]);
 	//	private_msleep(5);
 	return ret;
 }
@@ -395,7 +395,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	while (len--) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
 		//		ret = sensor_read(sd, vals->reg_num, &val);
-		//		printk("	{0x%x, 0x%x}\n", vals->reg_num, val);
+		//		ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		if (ret < 0)
 			return ret;
 		vals++;
@@ -412,13 +412,13 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x08, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = sensor_read(sd, 0x09, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -476,11 +476,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			printk("%s stream on\n", SENSOR_NAME));
+			ISP_INFO("%s stream on\n", SENSOR_NAME));
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
-		printk("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -522,7 +522,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.total_width = 1920;
 		sensor_attr.total_height = 1080;
 		sensor_attr.max_integration_time = 1080;
-		printk("---------------> default_boot 0 is ok <--------------\n");
+		ISP_INFO("---------------> default_boot 0 is ok <--------------\n");
 		break;
 	default:
 		ISP_ERROR("this init boot is not supported yet!!!\n");
@@ -630,7 +630,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -753,7 +753,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

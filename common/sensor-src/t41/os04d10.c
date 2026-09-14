@@ -420,7 +420,7 @@ static int os04d10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
                         if (vals->reg_num == SENSOR_REG_PAGE)
                                 ret = os04d10_write(sd, vals->reg_num, vals->value);
                         ret = os04d10_read(sd, vals->reg_num, &val);
-                        ISP_WARNING("## reg 0x%x = 0x%x\n",vals->reg_num,val);
+                        ISP_INFO("## reg 0x%x = 0x%x\n",vals->reg_num,val);
                         if (ret < 0)
                                 return ret;
                 }
@@ -457,7 +457,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	os04d10_write(sd, 0xfd, 0x00);
 	ret = os04d10_read(sd, 0x02, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -465,7 +465,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = os04d10_read(sd, 0x03, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_M)
@@ -473,7 +473,7 @@ static int os04d10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = (*ident << 8) | v;
 
 	ret = os04d10_read(sd, 0x04, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -582,11 +582,11 @@ static int os04d10_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = os04d10_write_array(sd, os04d10_stream_on_mipi);
-			ISP_WARNING("os04d10 stream on\n");
+			ISP_INFO("os04d10 stream on\n");
 		}
 	} else {
 		ret = os04d10_write_array(sd, os04d10_stream_off_mipi);
-		ISP_WARNING("os04d10 stream off\n");
+		ISP_INFO("os04d10 stream off\n");
 	}
 
 	return ret;
@@ -760,7 +760,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
 				if (((rate / 1000) % 24000) != 0) {
@@ -773,7 +773,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	}
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -824,8 +824,8 @@ static int os04d10_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		ISP_ERROR("chip found @ 0x%x (%s) is not an os04d10 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("os04d10 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("os04d10 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "os04d10", sizeof("os04d10"));
 		chip->ident = ident;
@@ -980,7 +980,7 @@ static int os04d10_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->os04d10\n");
+	ISP_INFO("probe ok ------->os04d10\n");
 
 	return 0;
 }

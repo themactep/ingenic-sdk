@@ -622,7 +622,7 @@ static int sc3332p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc3332p_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -630,7 +630,7 @@ static int sc3332p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc3332p_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -724,12 +724,12 @@ static int sc3332p_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
                 ret = sc3332p_write_array(sd, sc3332p_stream_on);
-		ISP_WARNING("sc3332p stream on\n");
+		ISP_INFO("sc3332p stream on\n");
 
 	}
 	else {
                 ret = sc3332p_write_array(sd, sc3332p_stream_off);
-		ISP_WARNING("sc3332p stream off\n");
+		ISP_INFO("sc3332p stream off\n");
 	}
 
 	return ret;
@@ -860,8 +860,8 @@ static int sc3332p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc3332p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc3332p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc3332p", sizeof("sc3332p"));
 		chip->ident = ident;
@@ -1125,7 +1125,7 @@ static int sc3332p_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc3332p\n");
+	ISP_INFO("probe ok ------->sc3332p\n");
 
 	return 0;
 

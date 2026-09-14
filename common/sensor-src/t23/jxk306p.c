@@ -454,7 +454,7 @@ static int jxk306p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 			private_msleep(vals->value);
 		} else {
 			ret = jxk306p_write(sd, vals->reg_num, vals->value);
-                        //printk("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
+                        //ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -475,7 +475,7 @@ static int jxk306p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 
 	ret = jxk306p_read(sd, 0x0a, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -483,7 +483,7 @@ static int jxk306p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = jxk306p_read(sd, 0x0b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
@@ -571,11 +571,11 @@ static int jxk306p_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
                 ret = jxk306p_write_array(sd, jxk306p_stream_on_mipi);
-		ISP_WARNING("jxk306p stream on\n");
+		ISP_INFO("jxk306p stream on\n");
 
 	} else {
                 ret = jxk306p_write_array(sd, jxk306p_stream_off_mipi);
-		ISP_WARNING("jxk306p stream off\n");
+		ISP_INFO("jxk306p stream off\n");
 	}
 
 	return ret;
@@ -712,7 +712,7 @@ static int jxk306p_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("jxk306p chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_INFO("jxk306p chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "jxk306p", sizeof("jxk306p"));
 		chip->ident = ident;
@@ -974,7 +974,7 @@ static int jxk306p_probe(struct i2c_client *client, const struct i2c_device_id *
         tx_isp_set_subdev_hostdata(sd, sensor);
         private_i2c_set_clientdata(client, sd);
 
-        pr_debug("probe ok ------->jxk306p\n");
+        ISP_INFO("probe ok ------->jxk306p\n");
         return 0;
 
 err_get_mclk:

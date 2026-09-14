@@ -546,7 +546,7 @@ static int sc202cs_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc202cs_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -554,7 +554,7 @@ static int sc202cs_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc202cs_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -587,7 +587,7 @@ static int sc202cs_set_expo(struct tx_isp_subdev *sd, int value)
 static int sc202cs_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	printk("[ %s %d ] %d\n", __func__, __LINE__, value);
+	ISP_INFO("[ %s %d ] %d\n", __func__, __LINE__, value);
 	ret += sc202cs_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
 	ret += sc202cs_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sc202cs_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
@@ -660,7 +660,7 @@ static int sc202cs_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc202cs stream on\n");
+		ISP_INFO("sc202cs stream on\n");
 
 	}
 	else {
@@ -669,7 +669,7 @@ static int sc202cs_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc202cs stream off\n");
+		ISP_INFO("sc202cs stream off\n");
 	}
 
 	return ret;
@@ -774,8 +774,8 @@ static int sc202cs_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc202cs chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc202cs chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc202cs", sizeof("sc202cs"));
 		chip->ident = ident;
@@ -1082,7 +1082,7 @@ static int sc202cs_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc202cs\n");
+	ISP_INFO("probe ok ------->sc202cs\n");
 
 	return 0;
 

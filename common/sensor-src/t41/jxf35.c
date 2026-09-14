@@ -483,7 +483,7 @@ static int jxf35_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		} else {
 			ret = jxf35_write(sd, vals->reg_num, vals->value);
 			// ret+= jxf35_read(sd, vals->reg_num, &val);
-			// printk("{0x%2x, 0x%2x},\n", vals->reg_num, val);
+			// ISP_INFO("{0x%2x, 0x%2x},\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -502,7 +502,7 @@ static int jxf35_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = jxf35_read(sd, 0x0a, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -510,7 +510,7 @@ static int jxf35_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = jxf35_read(sd, 0x0b, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -670,13 +670,13 @@ static int jxf35_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init)
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = jxf35_write_array(sd, jxf35_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("jxf35 stream on\n");
+			ISP_INFO("jxf35 stream on\n");
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
 		ret = jxf35_write_array(sd, jxf35_stream_off_mipi);
 		//sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("jxf35 stream off\n");
+		ISP_INFO("jxf35 stream off\n");
 	}
 
 	return ret;
@@ -878,7 +878,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
+			ISP_ERROR("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
 			if (((rate / 1000) % 24000) != 0) {
@@ -937,8 +937,8 @@ static int jxf35_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident
 		ISP_ERROR("chip found @ 0x%x (%s) is not an jxf35 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("jxf35 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("jxf35 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "jxf35", sizeof("jxf35"));
 		chip->ident = ident;
@@ -1166,7 +1166,7 @@ static int jxf35_probe(struct i2c_client *client, const struct i2c_device_id *id
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->jxf35\n");
+	ISP_INFO("probe ok ------->jxf35\n");
 
 	return 0;
 }

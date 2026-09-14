@@ -2978,10 +2978,10 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 				return ret;
 #if 0
 			if (vals->reg_num == 0x34c || vals->reg_num == 0x34e) {
-				printk(" write reg_num = 0x%x \nv[0] = 0x%x ====== v[1] = 0x%x \n", vals->reg_num, v[0], v[1]);
+				ISP_INFO(" write reg_num = 0x%x \nv[0] = 0x%x ====== v[1] = 0x%x \n", vals->reg_num, v[0], v[1]);
 				sensor_read(sd, vals->reg_num, &z[0]);
 				sensor_read(sd, vals->reg_num+1, &z[1]);
-				printk(" read reg_num = 0x%x  \nz[0] = 0x%x ====== z[1] = 0x%x \n",vals->reg_num, z[0], z[1]);
+				ISP_INFO(" read reg_num = 0x%x  \nz[0] = 0x%x ====== z[1] = 0x%x \n",vals->reg_num, z[0], z[1]);
 			}
 #endif
 		}
@@ -2990,7 +2990,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 #if 0
 	sensor_read(sd, 0x31AE, &z[0]);
 	sensor_read(sd, 0x31AF, &z[1]);
-	printk(" read reg_num = 0x31AE  \nz[0] = 0x%x ====== z[1] = 0x%x \n", z[0], z[1]);
+	ISP_INFO(" read reg_num = 0x31AE  \nz[0] = 0x%x ====== z[1] = 0x%x \n", z[0], z[1]);
 #endif
 	return 0;
 }
@@ -3018,12 +3018,12 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	if (v[1] != SENSOR_CHIP_ID_L)
 		return -ENODEV;
-	printk("v[0] = 0x%x ---------- v[1] = 0x%x\n",v[0], v[1]);
+	ISP_INFO("v[0] = 0x%x ---------- v[1] = 0x%x\n",v[0], v[1]);
 #else
 	ret = sensor_read(sd, 0x3000, &v[0]);
-	printk("ret = %d &&&&&& v[0] = %d\n", ret, v[0]);
+	ISP_INFO("ret = %d &&&&&& v[0] = %d\n", ret, v[0]);
 	ret = sensor_read(sd, 0x3001, &v[1]);
-	printk("ret = %d &&&&&& v[0] = %d\n", ret, v[1]);
+	ISP_INFO("ret = %d &&&&&& v[0] = %d\n", ret, v[1]);
 	if (ret < 0)
 		return ret;
 
@@ -3032,7 +3032,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 	if (v[1] != SENSOR_CHIP_ID_L)
 		return -ENODEV;
-	printk("v[0] = %d --------- v[1] = %d\n", v[0], v[1]);
+	ISP_INFO("v[0] = %d --------- v[1] = %d\n", v[0], v[1]);
 #endif
 	return 0;
 }
@@ -3121,14 +3121,14 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -3215,8 +3215,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -3398,7 +3398,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_get_mclk:

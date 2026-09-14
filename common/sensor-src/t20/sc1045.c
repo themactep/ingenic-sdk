@@ -360,7 +360,7 @@ static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 			if (ret < 0)
 				return ret;
 		}
-		/*printk("read vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);*/
+		/*ISP_INFO("read vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);*/
 
 		vals++;
 	}
@@ -397,7 +397,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3107, &v);
-	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
+	/*ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
 
@@ -405,7 +405,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 	ret = sensor_read(sd, 0x3108, &v);
-	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
+	/*ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
 
@@ -487,10 +487,10 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("%s stream on\n", SENSOR_NAME));
+		ISP_INFO("%s stream on\n", SENSOR_NAME));
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -588,7 +588,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			gpio_direction_output(reset_gpio, 1);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -599,7 +599,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
@@ -728,14 +728,14 @@ static int sensor_probe(struct i2c_client *client,
 
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);

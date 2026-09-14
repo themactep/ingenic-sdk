@@ -387,7 +387,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
 
@@ -420,13 +420,13 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = sensor_read(sd, 0x0000, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = sensor_read(sd, 0x0001, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -507,7 +507,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
-			ISP_WARNING("%s stream on\n", SENSOR_NAME);
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
@@ -516,7 +516,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 
@@ -560,7 +560,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-	printk("%s:%d:fps=0x%x\n", __func__, __LINE__, fps);
+	ISP_INFO("%s:%d:fps=0x%x\n", __func__, __LINE__, fps);
 
 	return ret;
 }
@@ -687,7 +687,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -842,7 +842,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

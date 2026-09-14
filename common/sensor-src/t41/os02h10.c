@@ -663,7 +663,7 @@ static int os02h10_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 			ret = os02h10_read(sd, vals->reg_num, &val);
-			 printk("{0x%x, 0x%x}\n", vals->reg_num, val);
+			 ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -698,7 +698,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = os02h10_read(sd, 0x02, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -706,7 +706,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = os02h10_read(sd, 0x03, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_M0)
@@ -714,7 +714,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = (*ident << 8) | v;
 
 	ret = os02h10_read(sd, 0x04, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_M1)
@@ -722,7 +722,7 @@ static int os02h10_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = (*ident << 8) | v;
 
 	ret = os02h10_read(sd, 0x05, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -832,11 +832,11 @@ static int os02h10_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = os02h10_write_array(sd, os02h10_stream_on_mipi);
-			ISP_WARNING("os02h10 stream on\n");
+			ISP_INFO("os02h10 stream on\n");
 		}
 	} else {
 		ret = os02h10_write_array(sd, os02h10_stream_off_mipi);
-		ISP_WARNING("os02h10 stream off\n");
+		ISP_INFO("os02h10 stream off\n");
 	}
 
 	return ret;
@@ -1065,8 +1065,8 @@ static int os02h10_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		ISP_ERROR("chip found @ 0x%x (%s) is not an os02h10 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("os02h10 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("os02h10 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "os02h10", sizeof("os02h10"));
 		chip->ident = ident;
@@ -1225,7 +1225,7 @@ static int os02h10_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->os02h10\n");
+	ISP_INFO("probe ok ------->os02h10\n");
 
 	return 0;
 }

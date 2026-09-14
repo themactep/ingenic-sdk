@@ -591,7 +591,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
 	return 0;
@@ -608,7 +608,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 		}
-		/* pr_debug("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value); */
+		/* ISP_INFO("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value); */
 		vals++;
 	}
 	return 0;
@@ -622,7 +622,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x300a, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -630,7 +630,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x300b, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -702,12 +702,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_WARNING("%s stream on\n", SENSOR_NAME);
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -748,7 +748,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x380d, &val);
 	hts |= val;
 	if (0 != ret) {
-		pr_debug("Error: %s read error\n", SENSOR_NAME);
+		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -756,7 +756,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	if (0 != ret) {
-		pr_debug("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -919,7 +919,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1110,7 +1110,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

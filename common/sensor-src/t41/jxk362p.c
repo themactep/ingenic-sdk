@@ -428,7 +428,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = jxk362p_read(sd, 0x0a, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
 		return ret;
 	}
@@ -437,7 +437,7 @@ static int jxk362p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		*ident = v;
 
 	ret = jxk362p_read(sd, 0x0b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
 		return ret;
 	}
@@ -543,11 +543,11 @@ static int jxk362p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = jxk362p_write_array(sd, jxk362p_stream_on_mipi);
-			ISP_WARNING("jxk362p stream on\n");
+			ISP_INFO("jxk362p stream on\n");
 		}
 	} else {
 		ret = jxk362p_write_array(sd, jxk362p_stream_off_mipi);
-		ISP_WARNING("jxk362p stream off\n");
+		ISP_INFO("jxk362p stream off\n");
 	}
 
 	return ret;
@@ -599,7 +599,7 @@ static int jxk362p_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	val |= (1 << 7); //set bit[7],	register group write function,	auto clean
 	jxk362p_write(sd, 0x1f, val);
-	pr_debug("after register 0x1f value : 0x%02x\n", val);
+	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
 	//vts = vts >> 2;
 	ret = jxk362p_write(sd, 0x22, (unsigned char)(vts & 0xff));
@@ -768,8 +768,8 @@ static int jxk362p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk362p chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("jxk362p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("jxk362p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "jxk362p", sizeof("jxk362p"));
 		chip->ident = ident;
@@ -928,7 +928,7 @@ static int jxk362p_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->jxk362p\n");
+	ISP_INFO("probe ok ------->jxk362p\n");
 
 	return 0;
 }

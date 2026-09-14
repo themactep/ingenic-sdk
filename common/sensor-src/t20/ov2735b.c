@@ -600,7 +600,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = sensor_read(sd, 0x02, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -608,7 +608,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x03, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -616,7 +616,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	*ident = (*ident << 8) | v;
 
 	ret = sensor_read(sd, 0x04, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != 0x06 && v != 0x07)
@@ -633,7 +633,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3, (unsigned char) ((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
-		printk("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -646,7 +646,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x24, (unsigned char) value);
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
-		printk("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -678,7 +678,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 			wsize->fps = 15 << 16 | 1;
 			break;
 		default:
-			printk("Now we do not support this framerate!!!\n");
+			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -704,10 +704,10 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -741,12 +741,12 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 			max_fps = TX_SENSOR_MAX_FPS_15;
 			break;
 		default:
-			printk("Now we do not support this framerate!!!\n");
+			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		printk("warn: fps(%d) not in range\n", fps);
+		ISP_INFO("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
 
@@ -757,20 +757,20 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x8d, &tmp);
 	if (0 != ret) {
-		printk("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / 2 / hts / ((fps & 0xffff0000) >> 16);
 	ret = 0;
-	printk("vts is %d\n", vts);
+	ISP_INFO("vts is %d\n", vts);
 	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x0d, 0x10);//frame_exp_seperate_en
 	ret += sensor_write(sd, 0x0e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x0f, vts & 0xff);
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (0 != ret) {
-		printk("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -823,7 +823,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	if (reset_gpio != -1) {
@@ -836,7 +836,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd,
 			gpio_direction_output(reset_gpio, 1);
 			msleep(30);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 
@@ -885,7 +885,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = sensor_set_fps(sensor, ctrl->value);
 			break;
 		default:
-			pr_debug("do not support ctrl->cmd ====%d\n", ctrl->cmd);
+			ISP_INFO("do not support ctrl->cmd ====%d\n", ctrl->cmd);
 			break;
 	}
 	return 0;
@@ -968,14 +968,14 @@ static int sensor_probe(struct i2c_client *client,
 
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);
@@ -1016,7 +1016,7 @@ static int sensor_probe(struct i2c_client *client,
 			sensor_attr.max_integration_time = 0x76b - 4;
 			break;
 		default:
-			printk("Now we do not support this framerate!!!\n");
+			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 259142;
 	sensor_attr.max_dgain = 0;
@@ -1028,7 +1028,7 @@ static int sensor_probe(struct i2c_client *client,
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_set_sensor_gpio:

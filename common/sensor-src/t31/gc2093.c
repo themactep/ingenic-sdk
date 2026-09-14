@@ -1006,7 +1006,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%x, vals->value:0x%02x\n", vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n", vals->reg_num, val);
 		vals++;
 	}
 	return 0;
@@ -1035,7 +1035,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x03f0, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -1043,7 +1043,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	ret = sensor_read(sd, 0x03f1, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -1150,7 +1150,7 @@ static int sensor_set_analog_gain_ae(struct tx_isp_subdev *sd, unsigned int *ide
 	ret += sensor_write(sd, 0xb3, val_lut[ration_num].regb1);
 	ret += sensor_write(sd, 0x00b4, 0x00);
 	if (ret < 0)
-		pr_debug("set again failed is ae\n");
+		ISP_INFO("set again failed is ae\n");
 
 	return 0;
 }
@@ -1165,7 +1165,7 @@ static int sensor_read_integration_time(struct tx_isp_subdev *sd, unsigned int *
 	sGain = (sGain << 8) | expt;
 	time_reg = sGain;
 	if (ret < 0)
-		pr_debug("get exposuer failed\n");
+		ISP_INFO("get exposuer failed\n");
 
 	return 0;
 }
@@ -1183,7 +1183,7 @@ static int fast_ae_set_reg(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ret += sensor_write(sd, 0x01a5, 0x40);
 	ret += sensor_write(sd, 0x01a6, 0x40);
 	if (ret < 0)
-		pr_debug("set time and analgo failed\n");
+		ISP_INFO("set time and analgo failed\n");
 
 	return ret;
 }
@@ -1202,7 +1202,7 @@ static int fast_ae_set_reg_default(struct tx_isp_subdev *sd, unsigned int *ident
 	ret += sensor_write(sd, 0x01a5, 0x40);
 	ret += sensor_write(sd, 0x01a6, 0x40);
 	if (ret < 0)
-		pr_debug("set time and analgo failed\n");
+		ISP_INFO("set time and analgo failed\n");
 
 	return ret;
 }
@@ -1215,7 +1215,7 @@ static int setting_fast_ae(struct tx_isp_subdev *sd, unsigned int *ident) {
 	while ((y_avg >= y_target ? y_avg - y_target : y_target - y_avg) > 0x8) {
 		private_msleep(2);
 		if (loop > 30) {
-			pr_debug("y_avg != y_target,set failed!!!\n");
+			ISP_INFO("y_avg != y_target,set failed!!!\n");
 			break;
 		}
 		sensor_read(sd, 0x01b5, &y_target);
@@ -1224,10 +1224,10 @@ static int setting_fast_ae(struct tx_isp_subdev *sd, unsigned int *ident) {
 	}
 	if (loop <= 30) {
 		ret = fast_ae_set_reg(sd, NULL);
-		pr_debug("set time and analgo of right value\n");
+		ISP_INFO("set time and analgo of right value\n");
 	} else {
 		ret = fast_ae_set_reg_default(sd, NULL);
-		pr_debug("set time and analgo of default value\n");
+		ISP_INFO("set time and analgo of default value\n");
 	}
 	sensor_write(sd, 0x01e0, 0x07);
 
@@ -1265,10 +1265,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -1461,7 +1461,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n sensor drv version %s",
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n sensor drv version %s",
 		SENSOR_NAME,
 		client->addr,
 		client->adapter->name,
@@ -1626,7 +1626,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		struct clk *vpll;
 		vpll = clk_get(NULL, "vpll");
 		if (IS_ERR(vpll)) {
-			pr_err("get vpll failed\n");
+			ISP_ERROR("get vpll failed\n");
 		} else {
 			rate = clk_get_rate(vpll);
 			if (((rate / 1000) % 27000) != 0) {
@@ -1634,7 +1634,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			}
 			ret = clk_set_parent(sensor->mclk, vpll);
 			if (ret < 0)
-				pr_err("set mclk parent as epll err\n");
+				ISP_ERROR("set mclk parent as epll err\n");
 		}
 	}
 
@@ -1670,7 +1670,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1350 - 4;
 		sensor_attr.total_width = 1450;
 		sensor_attr.total_height = 1350;
-		pr_debug("probe in fast ae------->%s\n", SENSOR_NAME);
+		ISP_INFO("probe in fast ae------->%s\n", SENSOR_NAME);
 #else
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 25;
@@ -1681,7 +1681,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1350 - 4;
 		sensor_attr.total_width = 1450;
 		sensor_attr.total_height = 1350;
-		pr_debug("probe in default------->%s\n", SENSOR_NAME);
+		ISP_INFO("probe in default------->%s\n", SENSOR_NAME);
 #endif
 	}
 #endif
@@ -1705,7 +1705,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_get_mclk:

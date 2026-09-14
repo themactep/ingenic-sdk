@@ -1024,7 +1024,7 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc301IoT_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1032,7 +1032,7 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc301IoT_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1164,11 +1164,11 @@ static int sc301IoT_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sc301IoT_write_array(sd, sc301IoT_stream_on_mipi);
-		ISP_WARNING("sc301IoT stream on\n");
+		ISP_INFO("sc301IoT stream on\n");
 
 	} else {
 		ret = sc301IoT_write_array(sd, sc301IoT_stream_off_mipi);
-		ISP_WARNING("sc301IoT stream off\n");
+		ISP_INFO("sc301IoT stream off\n");
 	}
 
 	return ret;
@@ -1290,8 +1290,8 @@ static int sc301IoT_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc301IoT chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc301IoT chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc301IoT", sizeof("sc301IoT"));
 		chip->ident = ident;
@@ -1362,7 +1362,7 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc301IoT_attr.total_width = 2250;
 		sc301IoT_attr.total_height = 6400;
 		sc301IoT_attr.max_integration_time = 6400 - 191 - 5;
-		printk("------------> switch wdr ok <-------------\n");
+		ISP_INFO("------------> switch wdr ok <-------------\n");
 	} else if (wdr_en == 0){
 		wsize = &sc301IoT_win_sizes[0];
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -1374,7 +1374,7 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc301IoT_attr.total_width = 2250;
 		sc301IoT_attr.total_height = 1920;
 		sc301IoT_attr.max_integration_time = 1920 - 8;
-		printk("------------> switch linear ok <-------------\n");
+		ISP_INFO("------------> switch linear ok <-------------\n");
 	} else{
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
@@ -1697,7 +1697,7 @@ static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id 
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->sc301IoT\n");
+	ISP_INFO("probe ok ------->sc301IoT\n");
 
 	return 0;
 err_get_mclk:

@@ -542,7 +542,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret += bf314a_read(sd, 0xfc, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -550,7 +550,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret += bf314a_read(sd, 0xfd, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -631,7 +631,7 @@ static int bf314a_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("bf314a stream on\n");
+		ISP_INFO("bf314a stream on\n");
 
 	}
 	else {
@@ -640,7 +640,7 @@ static int bf314a_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("bf314a stream off\n");
+		ISP_INFO("bf314a stream off\n");
 	}
 
 	return ret;
@@ -662,7 +662,7 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	vts_base = 738;
 
-	printk("-------fps=%d\n",((fps >> 16) / (fps & 0xff)));
+	ISP_INFO("-------fps=%d\n",((fps >> 16) / (fps & 0xff)));
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
@@ -681,8 +681,8 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - vts_base;
 
-	printk("-------hts=%d\n",hts);
-	printk("-------vts=%d\n",vts);
+	ISP_INFO("-------hts=%d\n",hts);
+	ISP_INFO("-------vts=%d\n",vts);
 	
 	ret += bf314a_write(sd, 0x06, (unsigned char)(vb & 0xff));
 	ret += bf314a_write(sd, 0x07, (unsigned char)(vb >> 8));
@@ -758,8 +758,8 @@ static int bf314a_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("bf314a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("bf314a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "bf314a", sizeof("bf314a"));
 		chip->ident = ident;
@@ -1018,7 +1018,7 @@ static int bf314a_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->bf314a\n");
+	ISP_INFO("probe ok ------->bf314a\n");
 
 	return 0;
 

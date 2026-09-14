@@ -574,7 +574,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0xf0, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -582,7 +582,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	ret = sensor_read(sd, 0xf1, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -647,13 +647,13 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 				wsize->regs = sensor_init_regs_1920_1080_15fps_dvp;
 				break;
 			default:
-				printk("Now we do not support this framerate!!!\n");
+				ISP_INFO("Now we do not support this framerate!!!\n");
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->fps = 25 << 16 | 1;
 		wsize->regs = sensor_init_regs_1920_1080_25fps_mipi;
 	} else {
-		printk("Don't support this Sensor Data interface\n");
+		ISP_INFO("Don't support this Sensor Data interface\n");
 	}
 
 	sensor->video.mbus.width = wsize->width;
@@ -677,10 +677,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -706,7 +706,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 			break;
 		default:
 			ret = -1;
-			printk("Now we do not support this framerate!!!\n");
+			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -803,9 +803,9 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n",
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n",
 		    SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -984,7 +984,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.max_integration_time = 1124;
 			break;
 		default:
-			printk("Now we do not support this framerate!!!\n");
+			ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 
 	sensor_attr.max_again = 453170;
@@ -1006,7 +1006,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_set_sensor_gpio:

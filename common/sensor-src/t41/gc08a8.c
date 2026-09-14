@@ -941,13 +941,13 @@ static int gc08a8_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = gc08a8_read(sd, 0x03f0, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc08a8_read(sd, 0x03f1, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1056,11 +1056,11 @@ static int gc08a8_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ret = gc08a8_write_array(sd, gc08a8_stream_on);
-			ISP_WARNING("gc08a8 stream on\n");
+			ISP_INFO("gc08a8 stream on\n");
 		}
 	} else {
 		ret = gc08a8_write_array(sd, gc08a8_stream_off);
-		pr_debug("gc08a8 stream off\n");
+		ISP_INFO("gc08a8 stream off\n");
 	}
 
 	return ret;
@@ -1102,7 +1102,7 @@ static int gc08a8_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += gc08a8_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
-	printk("vts=%x hts=%x fps%d\n", vts, hts, fps);
+	ISP_INFO("vts=%x hts=%x fps%d\n", vts, hts, fps);
 
 	sensor->video.attr->max_integration_time_native = vts - 16;
 	sensor->video.attr->integration_time_limit = vts - 16;
@@ -1207,7 +1207,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
+			ISP_ERROR("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
 			if (((rate / 1000) % 27000) != 0) {
@@ -1266,7 +1266,7 @@ static int gc08a8_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an gc08a8 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc08a8 chip found @ 0x%02x (%s)\n sensor drv version %s",
+	ISP_INFO("gc08a8 chip found @ 0x%02x (%s)\n sensor drv version %s",
 		client->addr,
 		client->adapter->name,
 		SENSOR_VERSION);
@@ -1427,7 +1427,7 @@ static int gc08a8_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc08a8\n");
+	ISP_INFO("probe ok ------->gc08a8\n");
 
 	return 0;
 }

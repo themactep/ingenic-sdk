@@ -299,7 +299,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3000, &v);
-	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
+	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID)
@@ -324,7 +324,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3051, (unsigned char)((exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3084, (unsigned char)(again & 0xff));
 
-	ISP_WARNING("cv2001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
+	ISP_INFO("cv2001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
 
 	return ret;
 }
@@ -342,7 +342,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret = sensor_write(sd, 0x3050, (unsigned char)(exp0 & 0xff));
 	ret += sensor_write(sd, 0x3051, (unsigned char)((exp0 >> 8) & 0xff));
 
-	//ISP_WARNING("cv2001 set exp=0x%04x(%4d line)\n", exp0, it);
+	//ISP_INFO("cv2001 set exp=0x%04x(%4d line)\n", exp0, it);
 
 	return ret;
 }
@@ -353,7 +353,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret = sensor_write(sd, 0x3084, again);
 
-	//ISP_WARNING("cv2001 set gain0=0x%02x(%03d)\n", again, again);
+	//ISP_INFO("cv2001 set gain0=0x%02x(%03d)\n", again, again);
 
 	return ret;
 }
@@ -385,7 +385,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
-	ISP_WARNING("cv2001 init\n");
+	ISP_INFO("cv2001 init\n");
 
 	return 0;
 }
@@ -395,11 +395,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -491,7 +491,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
-	ISP_WARNING("cv2001 set mode\n");
+	ISP_INFO("cv2001 set mode\n");
 
 	return ret;
 }
@@ -533,8 +533,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -706,7 +706,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("---- cv2001 probe ok ----\n");
+	ISP_INFO("---- cv2001 probe ok ----\n");
 
 	return 0;
 

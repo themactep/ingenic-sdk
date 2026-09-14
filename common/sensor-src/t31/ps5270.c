@@ -2032,7 +2032,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 				ret = sensor_write(sd, vals->reg_num, val);
 				ret = sensor_read(sd, vals->reg_num, &val);
 			}
-			pr_debug("sensor_read_array ->> vals->reg_num:0x%02x, vals->reg_value:0x%02x\n",vals->reg_num, val);
+			ISP_INFO("sensor_read_array ->> vals->reg_num:0x%02x, vals->reg_value:0x%02x\n",vals->reg_num, val);
 		}
 		vals++;
 	}
@@ -2049,7 +2049,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0) {
-				pr_debug("sensor_write error  %d\n", __LINE__);
+				ISP_INFO("sensor_write error  %d\n", __LINE__);
 				return ret;
 			}
 		}
@@ -2067,9 +2067,9 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 	ret = sensor_read(sd, 0x00, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
-		pr_debug("err: ps5270 write error, ret= %d \n", ret);
+		ISP_INFO("err: ps5270 write error, ret= %d \n", ret);
 		return ret;
 	}
 	if (v != SENSOR_CHIP_ID_H)
@@ -2077,7 +2077,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x01, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -2179,10 +2179,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -2248,7 +2248,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x0a, (unsigned char)(Cmd_Lpf >> 8));
 	ret += sensor_write(sd, 0x09, 0x01);
 	if (ret < 0) {
-		pr_debug("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	ret = sensor_read(sd, 0x0c, &tmp);
@@ -2303,7 +2303,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 		} else {
-			pr_debug("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	if (reset_gpio != -1) {
@@ -2316,7 +2316,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
 		} else {
-			pr_debug("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 
@@ -2328,8 +2328,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -2508,7 +2508,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.mipi.image_twidth = 1440;
 		sensor_attr.mipi.image_theight = 1080;
 	} else {
-		pr_debug("%s:%d:Can not support this mode!!!\n", __func__, __LINE__);
+		ISP_INFO("%s:%d:Can not support this mode!!!\n", __func__, __LINE__);
 	}
 
 	/*
@@ -2533,7 +2533,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
@@ -2580,7 +2580,7 @@ static __init int init_sensor(void) {
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		pr_debug("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 

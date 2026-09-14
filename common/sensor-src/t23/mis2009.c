@@ -958,7 +958,7 @@ static int mis2009_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 		} else {
 			ret = mis2009_write(sd, vals->reg_num, vals->value);
 			//ret = mis2009_read(sd, vals->reg_num, &val);
-			//printk("	{0x%x 0x%x}\n", vals->reg_num, val);
+			//ISP_INFO("	{0x%x 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -978,7 +978,7 @@ static int mis2009_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 
 	ret = mis2009_read(sd, 0x3000, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -986,7 +986,7 @@ static int mis2009_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = mis2009_read(sd, 0x3001, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
@@ -1020,7 +1020,7 @@ static int mis2009_set_expo(struct tx_isp_subdev *sd, int value)
             mis2009_write(sd, 0x3a07, 0xcc);
         }
 
-		// //printk(" exp ==%d again ==%d\n",expo,again);
+		// //ISP_INFO(" exp ==%d again ==%d\n",expo,again);
 		// if (( value > 200 ) && (value < (vts - 200)) ){
 		// 	ret += mis2009_write(sd, 0x3a07, 0x4c);
 		// } else  {
@@ -1080,7 +1080,7 @@ static int mis2009_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("mis2009 stream on\n");
+		ISP_INFO("mis2009 stream on\n");
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
@@ -1091,7 +1091,7 @@ static int mis2009_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("mis2009 stream off\n");
+		ISP_INFO("mis2009 stream off\n");
 	}
 	return ret;
 }
@@ -1446,11 +1446,11 @@ static int mis2009_probe(struct i2c_client *client, const struct i2c_device_id *
 		wsize = &mis2009_win_sizes[1];
 		memcpy((void*)(&(mis2009_attr.dvp)),(void*)(&mis2009_dvp),sizeof(mis2009_dvp));
 		mis2009_attr.dvp.gpio = sensor_gpio_func;
-		printk("\n==> [%s %d] sboot 1 !!!\n", __func__, __LINE__);
+		ISP_INFO("\n==> [%s %d] sboot 1 !!!\n", __func__, __LINE__);
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI && sensor_max_fps == TX_SENSOR_MAX_FPS_30){
 		wsize = &mis2009_win_sizes[0];
 		memcpy((void*)(&(mis2009_attr.mipi)),(void*)(&mis2009_mipi),sizeof(mis2009_mipi));
-		printk("\n==> [%s %d] sboot 0 !!!\n", __func__, __LINE__);
+		ISP_INFO("\n==> [%s %d] sboot 0 !!!\n", __func__, __LINE__);
 		mis2009_attr.min_integration_time = 2;
 		mis2009_attr.min_integration_time_native = 2;
 		mis2009_attr.max_integration_time_native = 1125 - 1;
@@ -1459,7 +1459,7 @@ static int mis2009_probe(struct i2c_client *client, const struct i2c_device_id *
 		mis2009_attr.total_height = 1125;
 		mis2009_attr.max_integration_time = 1125 - 1;
 	}else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI && sensor_max_fps == TX_SENSOR_MAX_FPS_60){
-		printk("\n==> [%s %d] sboot 2 !!!\n", __func__, __LINE__);
+		ISP_INFO("\n==> [%s %d] sboot 2 !!!\n", __func__, __LINE__);
 		wsize = &mis2009_win_sizes[2];
 		memcpy((void*)(&(mis2009_attr.mipi)),(void*)(&mis2009_mipi_60fps),sizeof(mis2009_mipi_60fps));
 		mis2009_attr.min_integration_time = 2;
@@ -1495,7 +1495,7 @@ static int mis2009_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->mis2009\n");
+	ISP_INFO("probe ok ------->mis2009\n");
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:

@@ -1127,13 +1127,13 @@ static int gc2063_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 	int ret;
 	ret = gc2063_read(sd, 0xf0, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2063_read(sd, 0xf1, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1258,14 +1258,14 @@ static int gc2063_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 			ret = gc2063_write_array(sd, gc2063_stream_on_mipi);
 		}
-		pr_debug("gc2063 stream on\n");
+		ISP_INFO("gc2063 stream on\n");
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
 			ret = gc2063_write_array(sd, gc2063_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 			ret = gc2063_write_array(sd, gc2063_stream_off_mipi);
 		}
-		pr_debug("gc2063 stream off\n");
+		ISP_INFO("gc2063 stream off\n");
 	}
 
 	return ret;
@@ -1419,7 +1419,7 @@ static int gc2063_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc2063 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_INFO("gc2063 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "gc2063", sizeof("gc2063"));
 		chip->ident = ident;
@@ -1778,7 +1778,7 @@ static int gc2063_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc2063\n");
+	ISP_INFO("probe ok ------->gc2063\n");
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:

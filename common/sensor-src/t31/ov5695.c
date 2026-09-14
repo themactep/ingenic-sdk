@@ -1060,7 +1060,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x300b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1068,7 +1068,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x300c, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1159,7 +1159,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
@@ -1167,7 +1167,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1193,7 +1193,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x380d, &tmp);
 	if (0 != ret) {
-		printk("Error: %s read error\n", SENSOR_NAME);
+		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1203,7 +1203,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	if (0 != ret) {
-		printk("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1269,8 +1269,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1442,19 +1442,19 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	case TX_SENSOR_RES_200:
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 60;
-		printk("-----> 1920*1080 <------\n");
+		ISP_INFO("-----> 1920*1080 <------\n");
 		break;
 	case TX_SENSOR_RES_100:
 		wsize = &sensor_win_sizes[1];
 		sensor_attr.mipi.image_twidth = 1280;
 		sensor_attr.mipi.image_theight = 720;
-		printk("-------> 1280*720 <------\n");
+		ISP_INFO("-------> 1280*720 <------\n");
 		break;
 	case TX_SENSOR_RES_30:
 		wsize = &sensor_win_sizes[2];
 		sensor_attr.mipi.image_twidth = 640;
 		sensor_attr.mipi.image_theight = 480;
-		printk("-------> 640*480 <------\n");
+		ISP_INFO("-------> 640*480 <------\n");
 		break;
 	case TX_SENSOR_RES_500:
 		wsize = &sensor_win_sizes[3];
@@ -1467,7 +1467,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.total_height = 0x7e8;
 		sensor_attr.max_integration_time = 0x7e8 - 4;
 		sensor_attr.one_line_expr_in_us = 30;
-		printk("-------> 2592*1944 <-------\n");
+		ISP_INFO("-------> 2592*1944 <-------\n");
 		break;
 	default:
 		ISP_ERROR("Now we do not support this framerate!!!\n");
@@ -1494,7 +1494,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 

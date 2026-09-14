@@ -1745,7 +1745,7 @@ static int sc850sl_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sc850sl_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1753,7 +1753,7 @@ static int sc850sl_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sc850sl_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1854,11 +1854,11 @@ static int sc850sl_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ret = sc850sl_write_array(sd, sc850sl_stream_on_mipi);
-			ISP_WARNING("sc850sl stream on\n");
+			ISP_INFO("sc850sl stream on\n");
 		}
 	} else {
 		ret = sc850sl_write_array(sd, sc850sl_stream_off_mipi);
-		ISP_WARNING("sc850sl stream off\n");
+		ISP_INFO("sc850sl stream off\n");
 	}
 
 	return ret;
@@ -2100,7 +2100,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
 				if (((rate / 1000) % 27000) != 0) {
@@ -2158,8 +2158,8 @@ static int sc850sl_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc850sl chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc850sl chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("sc850sl chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "sc850sl", sizeof("sc850sl"));
 		chip->ident = ident;

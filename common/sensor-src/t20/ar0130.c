@@ -647,7 +647,7 @@ static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals) {
 				return ret;
 		}
 		value = (val[0] << 8) | (val[1]);
-		/*printk("vals->reg_num:%x, vvals->value:0x%x\n",vals->reg_num, value);*/
+		/*ISP_INFO("vals->reg_num:%x, vvals->value:0x%x\n",vals->reg_num, value);*/
 		vals++;
 	}
 	return 0;
@@ -659,7 +659,7 @@ static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals) 
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			/*printk("vals->reg_num=0x%x,vals->value =0x%x\n",vals->reg_num,vals->value);*/
+			/*ISP_INFO("vals->reg_num=0x%x,vals->value =0x%x\n",vals->reg_num,vals->value);*/
 			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
@@ -685,7 +685,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				tmp_dgain = (lut - 1)->d_value;
 				tmp_dcg = 0x0;
 				*sensor_again = (lut - 1)->d_value;
-				/* printk(" 11isp value ==%d,again sensor value ==0x%x, dgain value ===0x%x tmp_dcg ===%x \n",isp_gain,tmp_again,tmp_dgain,tmp_dcg); */
+				/* ISP_INFO(" 11isp value ==%d,again sensor value ==0x%x, dgain value ===0x%x tmp_dcg ===%x \n",isp_gain,tmp_again,tmp_dgain,tmp_dcg); */
 				return (lut - 1)->gain;
 			} else {
 				if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
@@ -787,7 +787,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	/* sensor_write(sd, 0x30B0, 0x1330); */
 	/* sensor_write(sd, 0x305e, 0x40); */
 	/* sensor_write(sd, 0x3100, 0x00 ); */
-	/*printk("aaa tmp_again=========0x%x final_again ===0x%x, tmp_dgain ========0x%x,final_dgain ===0x%x, tmp_dcg =0x%x\n",tmp_again,final_again,tmp_dgain,final_dgain,tmp_dcg); */
+	/*ISP_INFO("aaa tmp_again=========0x%x final_again ===0x%x, tmp_dgain ========0x%x,final_dgain ===0x%x, tmp_dcg =0x%x\n",tmp_again,final_again,tmp_dgain,final_dgain,tmp_dcg); */
 	if ((final_again != tmp_again) || (final_dgain != tmp_dgain)) {
 		sensor_write(sd, 0x30B0, tmp_again);
 		sensor_write(sd, 0x305e, tmp_dgain);
@@ -873,10 +873,10 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		udelay(100000);
 		sensor_write(sd, 0x30Ba, 0x0);
-		printk("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -972,7 +972,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -983,7 +983,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
@@ -1116,13 +1116,13 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);

@@ -1294,13 +1294,13 @@ static int gc2053_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 	int ret;
 	ret = gc2053_read(sd, 0xf0, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2053_read(sd, 0xf1, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1355,7 +1355,7 @@ static int gc2053_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 
 	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
-        //printk("-- [%s,0x%x] --\n",__func__,client->addr);
+        //ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
 	ret = gc2053_write(sd, 0x04, value&0xff);
 	ret += gc2053_write(sd, 0x03, (value&0x3f00)>>8);
@@ -1372,7 +1372,7 @@ static int gc2053_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 	struct again_lut *val_lut = gc2053_again_lut;
 	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
-        //printk("-- [%s,0x%x] --\n",__func__,client->addr);
+        //ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
 	ret = gc2053_write(sd, 0xfe, 0x00);
 	ret += gc2053_write(sd, 0xb4, val_lut[value].regb4);
@@ -1432,14 +1432,14 @@ static int gc2053_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 			ret = gc2053_write_array(sd, gc2053_stream_on_mipi);
 		}
-		pr_debug("gc2053 stream on\n");
+		ISP_INFO("gc2053 stream on\n");
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP){
 			ret = gc2053_write_array(sd, gc2053_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
 			ret = gc2053_write_array(sd, gc2053_stream_off_mipi);
 		}
-		pr_debug("gc2053 stream off\n");
+		ISP_INFO("gc2053 stream off\n");
 	}
 
 	return ret;
@@ -1598,7 +1598,7 @@ static int gc2053_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc2053 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_INFO("gc2053 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "gc2053", sizeof("gc2053"));
 		chip->ident = ident;
@@ -2027,7 +2027,7 @@ sensor_mclk_config(sensor, 24000000);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc2053\n");
+	ISP_INFO("probe ok ------->gc2053\n");
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:

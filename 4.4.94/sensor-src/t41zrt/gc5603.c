@@ -684,13 +684,13 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = sensor_read(sd, 0x03f0, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = sensor_read(sd, 0x03f1, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -831,11 +831,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ret = sensor_write_array(sd, sensor_stream_on);
-			ISP_WARNING("%s stream on\n", SENSOR_NAME);
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -987,7 +987,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.max_integration_time = 1750 - 16 - 102;
 		sensor_attr.max_integration_time_short = 102;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		printk("================>hdr@15fps is ok !!!\n");
+		ISP_INFO("================>hdr@15fps is ok !!!\n");
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
@@ -1018,7 +1018,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
 				if (((rate / 1000) % 27000) != 0) {
@@ -1032,7 +1032,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	}
 
 #endif
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -1103,7 +1103,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 #else
 	ident = 0x2063;
 #endif
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1155,7 +1155,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.integration_time_limit = 1750 - 16 - 102;
 		sensor_attr.max_integration_time = 1750 - 16 - 102;
 		sensor_attr.max_integration_time_short = 102;
-		ISP_WARNING("-----------------------------> switch wdr is ok <-----------------------\n");
+		ISP_INFO("-----------------------------> switch wdr is ok <-----------------------\n");
 	} else if (wdr_en == 0) {
 		info->default_boot = 0;
 		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
@@ -1169,7 +1169,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_integration_time = 1750 - 8;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x6ce;
-		ISP_WARNING("-----------------------------> switch linear is ok <-----------------------\n");
+		ISP_INFO("-----------------------------> switch linear is ok <-----------------------\n");
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
@@ -1339,7 +1339,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

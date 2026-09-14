@@ -571,7 +571,7 @@ static int ov9734s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = ov9734s1_read(sd, 0x300a, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -579,7 +579,7 @@ static int ov9734s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = ov9734s1_read(sd, 0x300b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -675,7 +675,7 @@ static int ov9734s1_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("ov9734s1 stream on\n");
+		ISP_INFO("ov9734s1 stream on\n");
 
 	}
 	else {
@@ -684,7 +684,7 @@ static int ov9734s1_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("ov9734s1 stream off\n");
+		ISP_INFO("ov9734s1 stream off\n");
 	}
 
 	return ret;
@@ -815,8 +815,8 @@ static int ov9734s1_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("ov9734s1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("ov9734s1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "ov9734s1", sizeof("ov9734s1"));
 		chip->ident = ident;
@@ -837,7 +837,7 @@ static int ov9734s1_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *
         case 0:
                 switch (fsync_mode) {
                 case 2:
-                        printk("===================>> %s %d\n", __func__, __LINE__);
+                        ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
                         ov9734s1_write(sd, 0x3001, 0x00);
                         ov9734s1_write(sd, 0x3007, 0x00);
                         ov9734s1_write(sd, 0x3814, 0x00);
@@ -851,7 +851,7 @@ static int ov9734s1_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *
                         ov9734s1_write(sd, 0x3825, 0x50);
                         break;
                 case 3:
-                        printk("===================>> %s %d\n", __func__, __LINE__);
+                        ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
                         ov9734s1_read(sd, 0x380e, &val);
                         ret_val = val << 8;
                         ov9734s1_read(sd, 0x380f, &val);
@@ -1159,7 +1159,7 @@ static int ov9734s1_probe(struct i2c_client *client, const struct i2c_device_id 
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->ov9734s1\n");
+	ISP_INFO("probe ok ------->ov9734s1\n");
 
 	return 0;
 

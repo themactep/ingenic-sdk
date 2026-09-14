@@ -167,11 +167,11 @@ done:
 	gain_one1 = fix_point_mult2(gain_one_a,
 				    (gain_one_d >> (TX_ISP_GAIN_FIXED_POINT - 8)) << (TX_ISP_GAIN_FIXED_POINT - 8));
 	*regs = (regsa << 8) | regsd;
-	//printk("info:  gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", gain_one, gain_one1, *regs);
+	//ISP_INFO("info:  gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", gain_one, gain_one1, *regs);
 	return gain_one1;
 err_div:
 
-	printk("err: %s,%s,%d err_div loop = %d\n", __FILE__, __func__, __LINE__, loop);
+	ISP_INFO("err: %s,%s,%d err_div loop = %d\n", __FILE__, __func__, __LINE__, loop);
 	gain_one1 = 0x10000;
 	*regs = 0x1000;
 	return gain_one1;
@@ -197,7 +197,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	gain_one1 = gain_one & mask;
 	isp_gain1 = log2_fixed_to_fixed(gain_one1, TX_ISP_GAIN_FIXED_POINT, shift);
 	*sensor_again = regs;
-	/* printk("info:  isp_gain = 0x%08x, isp_gain1 = 0x%08x, gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", isp_gain, isp_gain1, gain_one, gain_one1, regs); */
+	/* ISP_INFO("info:  isp_gain = 0x%08x, isp_gain1 = 0x%08x, gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", isp_gain, isp_gain1, gain_one, gain_one1, regs); */
 	return isp_gain1;
 #else
 	unsigned int gain_one = 0;
@@ -506,7 +506,7 @@ static int sensor_read_array(struct v4l2_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		/* printk("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val); */
+		/* ISP_INFO("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val); */
 		vals++;
 	}
 	return 0;
@@ -523,7 +523,7 @@ static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		/* printk("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value); */
+		/* ISP_INFO("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value); */
 		vals++;
 	}
 	return 0;
@@ -539,7 +539,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x300a, &v);
-	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
+	/*ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
 
@@ -549,7 +549,7 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sensor_read(sd, 0x300b, &v);
-	/*printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
+	/*ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);*/
 	if (ret < 0)
 		return ret;
 
@@ -676,10 +676,10 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		printk("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		printk("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -710,7 +710,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		/*printk("warn: fps(%d) not in range\n", fps);*/
+		/*ISP_INFO("warn: fps(%d) not in range\n", fps);*/
 		return -1;
 	}
 
@@ -764,7 +764,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 		pclk /= 2;
 	/* pixdiv */
 	pclk /= 2;
-	/*printk("info: pclk = %d\n", pclk);*/
+	/*ISP_INFO("info: pclk = %d\n", pclk);*/
 
 	val = 0;
 	ret += sensor_read(sd, 0x380c, &val);
@@ -772,19 +772,19 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps)
 	val = 0;
 	ret += sensor_read(sd, 0x380d, &val);
 	hts |= val;
-	/*printk("info: hts = %d\n", hts);*/
+	/*ISP_INFO("info: hts = %d\n", hts);*/
 	if (0 != ret) {
-		printk("Error: %s read error\n", SENSOR_NAME);
+		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	/*printk("info: vts = %d\n", vts);*/
+	/*ISP_INFO("info: vts = %d\n", vts);*/
 	ret += sensor_write(sd, 0x380f, vts & 0xff);
 	ret += sensor_write(sd, 0x380e, (vts >> 8) & 0xff);
 	if (0 != ret) {
-		printk("err: sensor_write err\n");
+		ISP_INFO("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -842,7 +842,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(reset_gpio, 1);
 			msleep(1);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -853,7 +853,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
@@ -993,14 +993,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);

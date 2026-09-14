@@ -1535,7 +1535,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_read(sd, vals->reg_num, &val);
-			/* printk("{0x%x, 0x%x}\n", vals->reg_num, val); */
+			/* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
 			if (ret < 0)
 				return ret;
 		}
@@ -1739,7 +1739,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
 			ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
 			if (IS_ERR(tclk)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(tclk);
 				if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
@@ -1780,7 +1780,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = sensor_read(sd, 0x0a, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1788,7 +1788,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x0b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -1839,8 +1839,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1926,7 +1926,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				ISP_ERROR("[%s %d] Don't support this Sensor Data interface\n", __func__, __LINE__);
 			}
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_WARNING("[%s %d] %s stream on\n", __func__, __LINE__, SENSOR_NAME);
+			ISP_INFO("[%s %d] %s stream on\n", __func__, __LINE__, SENSOR_NAME);
 		} else {
 			ISP_WARNING("[%s %d] Failed the open stream, state error!\n", __func__, __LINE__);
 		}
@@ -1940,7 +1940,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				ISP_ERROR("[%s %d] Don't support this Sensor Data interface\n", __func__, __LINE__);
 			}
 			sensor->video.state = TX_ISP_MODULE_INIT;
-			ISP_WARNING("[%s %d] %s stream off\n", __func__, __LINE__, SENSOR_NAME);
+			ISP_INFO("[%s %d] %s stream off\n", __func__, __LINE__, SENSOR_NAME);
 		} else {
 			ISP_WARNING("[%s %d] Failed the close stream, state error!\n", __func__, __LINE__);
 		}
@@ -1961,7 +1961,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;
-	/* printk("s0 it is %d\n", value); */
+	/* ISP_INFO("s0 it is %d\n", value); */
 
 	ret = sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
@@ -1989,7 +1989,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	unsigned char tmp99;
 	unsigned char tmp9b;
 	int ret = 0;
-	/* printk("s0 ag is %d\n", value); */
+	/* ISP_INFO("s0 ag is %d\n", value); */
 
 	if (value < 0x10) {
 		tmp1 = 0x00;
@@ -2124,12 +2124,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret = sensor_read(sd, 0x1f, &val);
-	//	pr_debug("before register 0x1f value : 0x%02x\n", val);
+	//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
 	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
-	//	pr_debug("after register 0x1f value : 0x%02x\n", val);
+	//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
@@ -2266,7 +2266,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	printk("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

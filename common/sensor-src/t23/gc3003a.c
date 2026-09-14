@@ -859,7 +859,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = gc3003a_read(sd, 0x03f0, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -867,7 +867,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = gc3003a_read(sd, 0x03f1, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 
 	if (ret < 0)
 		return ret;
@@ -881,7 +881,7 @@ static int gc3003a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
         ret += gc3003a_write(sd, 0x0370, 0xc4);   //[2]OTP read pulse
         ret += gc3003a_read(sd, 0x036a, &v);
         v = v & 0x10;
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 
 	if (ret < 0)
 		return ret;
@@ -975,7 +975,7 @@ static int gc3003a_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("gc3003a stream on\n");
+		ISP_INFO("gc3003a stream on\n");
 
 	}
 	else {
@@ -984,7 +984,7 @@ static int gc3003a_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("gc3003a stream off\n");
+		ISP_INFO("gc3003a stream off\n");
 	}
 
 	return ret;
@@ -1101,8 +1101,8 @@ static int gc3003a_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc3003a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("gc3003a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "gc3003a", sizeof("gc3003a"));
 		chip->ident = ident;
@@ -1390,7 +1390,7 @@ static int gc3003a_probe(struct i2c_client *client, const struct i2c_device_id *
 			gc3003a_attr.total_height = 1340;
 			gc3003a_attr.max_integration_time = 1332;
 			gc3003a_attr.one_line_expr_in_us = 25;
-                        printk("[%s,%d] -> 1920*1080\n", __func__, __LINE__);
+                        ISP_INFO("[%s,%d] -> 1920*1080\n", __func__, __LINE__);
 			break;
 		case TX_SENSOR_RES_300:
 			wsize = &gc3003a_win_sizes[0];
@@ -1403,7 +1403,7 @@ static int gc3003a_probe(struct i2c_client *client, const struct i2c_device_id *
 			gc3003a_attr.total_height = 1340;
 			gc3003a_attr.max_integration_time = 1332;
 			gc3003a_attr.one_line_expr_in_us = 25;
-                        printk("[%s,%d] -> 2304*1296\n", __func__, __LINE__);
+                        ISP_INFO("[%s,%d] -> 2304*1296\n", __func__, __LINE__);
 			break;
         case TX_SENSOR_RES_400:
 			wsize = &gc3003a_win_sizes[2];
@@ -1416,7 +1416,7 @@ static int gc3003a_probe(struct i2c_client *client, const struct i2c_device_id *
 			gc3003a_attr.total_height = 0x53c;
 			gc3003a_attr.max_integration_time = 0x53c-2;
 			gc3003a_attr.one_line_expr_in_us = 25;
-                        printk("[%s,%d] -> 2304*1296\n", __func__, __LINE__);
+                        ISP_INFO("[%s,%d] -> 2304*1296\n", __func__, __LINE__);
 			break;
                 default:
 			ISP_ERROR("Can not support this sensor resolution!!!\n");
@@ -1477,7 +1477,7 @@ static int gc3003a_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc3003a\n");
+	ISP_INFO("probe ok ------->gc3003a\n");
 
 	return 0;
 

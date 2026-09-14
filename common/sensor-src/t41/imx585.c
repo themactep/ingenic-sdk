@@ -592,7 +592,7 @@ static int imx585_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = imx585_read(sd, 0x3b00, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -600,7 +600,7 @@ static int imx585_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = imx585_read(sd, 0x3b06, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -709,13 +709,13 @@ static int imx585_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = imx585_write_array(sd, imx585_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("imx585 stream on\n");
+			ISP_INFO("imx585 stream on\n");
 		}
 
 	} else {
 		ret = imx585_write_array(sd, imx585_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("imx585 stream off\n");
+		ISP_INFO("imx585 stream off\n");
 	}
 
 	return ret;
@@ -814,7 +814,7 @@ static int imx585_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		/* struct timeval tv; */
 
 		/* do_gettimeofday(&tv); */
-		/* pr_debug("%d:before:time is %d.%d\n", __LINE__,tv.tv_sec,tv.tv_usec); */
+		/* ISP_INFO("%d:before:time is %d.%d\n", __LINE__,tv.tv_sec,tv.tv_usec); */
 		ret = imx585_write(sd, 0x3000, 0x1);
 		if(wdr_en == 1){
 				memcpy((void*)(&(imx585_attr.mipi)),(void*)(&imx585_mipi_dol),sizeof(imx585_mipi_dol));
@@ -968,7 +968,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
+			ISP_ERROR("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
 			if (((rate / 1000) % 37125) != 0) {
@@ -1034,7 +1034,7 @@ static int imx585_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an imx585 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("imx585 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("imx585 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, "imx585", sizeof("imx585"));
 		chip->ident = ident;
@@ -1213,7 +1213,7 @@ static int imx585_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->imx585\n");
+	ISP_INFO("probe ok ------->imx585\n");
 
 	return 0;
 }

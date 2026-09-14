@@ -649,7 +649,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3b00, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -657,7 +657,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x3b06, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -744,12 +744,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			ISP_WARNING("%s stream on\n", SENSOR_NAME);
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -938,7 +938,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 				tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
 				ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
 				if (IS_ERR(tclk)) {
-					pr_err("get sclka failed\n");
+					ISP_ERROR("get sclka failed\n");
 				} else {
 					rate = private_clk_get_rate(tclk);
 					if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
@@ -961,7 +961,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
 			sclka = private_devm_clk_get(&client->dev, "epll");
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
 				if (((rate / 1000) % 31725) != 0) {
@@ -1024,8 +1024,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1180,7 +1180,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }

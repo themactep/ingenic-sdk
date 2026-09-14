@@ -564,7 +564,7 @@ static int sc431hai_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
 	return 0;
@@ -597,7 +597,7 @@ static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = sc431hai_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -605,7 +605,7 @@ static int sc431hai_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sc431hai_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -722,12 +722,12 @@ static int sc431hai_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *in
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sc431hai_write_array(sd, sc431hai_stream_on);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("sc431hai stream on\n");
+			ISP_INFO("sc431hai stream on\n");
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
 		ret = sc431hai_write_array(sd, sc431hai_stream_off);
-		pr_debug("sc431hai stream off\n");
+		ISP_INFO("sc431hai stream off\n");
 	}
 
 	return ret;
@@ -859,7 +859,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sc431hai_attr.max_integration_time = 1500 - 6;
 		sc431hai_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sc431hai_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		printk("=================> linear is ok");
+		ISP_INFO("=================> linear is ok");
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
@@ -903,7 +903,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
+			ISP_ERROR("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
 			if (((rate / 1000) % 24000) != 0) {
@@ -962,7 +962,7 @@ static int sc431hai_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc431hai chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc431hai chip found @ 0x%02x (%s)\n sensor drv version %s",
+	ISP_INFO("sc431hai chip found @ 0x%02x (%s)\n sensor drv version %s",
 		client->addr,
 		client->adapter->name,
 		SENSOR_VERSION);
@@ -1136,7 +1136,7 @@ static int sc431hai_probe(struct i2c_client *client, const struct i2c_device_id 
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc431hai\n");
+	ISP_INFO("probe ok ------->sc431hai\n");
 
 	return 0;
 }

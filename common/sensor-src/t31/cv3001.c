@@ -289,14 +289,14 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3002, &v);
-	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
+	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 	ret += sensor_read(sd, 0x3003, &v);
-	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
+	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -324,7 +324,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x305A, (unsigned char)((exp >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3160, (unsigned char)(again & 0xff));
 
-	ISP_WARNING("cv3001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
+	ISP_INFO("cv3001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
 
 	return ret;
 }
@@ -343,7 +343,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3059, (unsigned char)((exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x305A, (unsigned char)((exp >> 16) & 0x0f));
 
-	//ISP_WARNING("cv3001 set exp=0x%04x(%4d line)\n", exp0, it);
+	//ISP_INFO("cv3001 set exp=0x%04x(%4d line)\n", exp0, it);
 
 	return ret;
 }
@@ -354,7 +354,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3160, (unsigned char)(again & 0xff));
 
-	//ISP_WARNING("cv3001 set gain0=0x%02x(%03d)\n", again, again);
+	//ISP_INFO("cv3001 set gain0=0x%02x(%03d)\n", again, again);
 
 	return ret;
 }
@@ -386,7 +386,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
-	ISP_WARNING("cv3001 init\n");
+	ISP_INFO("cv3001 init\n");
 
 	return 0;
 }
@@ -396,11 +396,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -417,7 +417,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	printk("\nfps = 0x%x\n", fps);
+	ISP_INFO("\nfps = 0x%x\n", fps);
 	sclk = 54043200; /* 648 * 2780 * 30 */
 	max_fps = TX_SENSOR_MAX_FPS_30;
 
@@ -433,14 +433,14 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x3028, &val);
 	hts = ((hts << 8) | val);
 
-	printk("\nhts = %d\n", hts);
+	ISP_INFO("\nhts = %d\n", hts);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	printk("\nvts = %d\n", vts);
+	ISP_INFO("\nvts = %d\n", vts);
 	ret = sensor_write(sd, 0x3024, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3025, (unsigned char)((vts >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3026, (unsigned char)((vts >> 16) & 0x0f));
@@ -495,7 +495,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
-	ISP_WARNING("cv3001 set mode\n");
+	ISP_INFO("cv3001 set mode\n");
 
 	return ret;
 }
@@ -537,8 +537,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -710,7 +710,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("---- cv3001 probe ok ----\n");
+	ISP_INFO("---- cv3001 probe ok ----\n");
 
 	return 0;
 

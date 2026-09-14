@@ -478,7 +478,7 @@ static int jxf57_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 
 	ret = jxf57_read(sd, 0x0a, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -486,7 +486,7 @@ static int jxf57_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = jxf57_read(sd, 0x0b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
@@ -565,7 +565,7 @@ static int jxf57_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("jxf57 stream on\n");
+		ISP_INFO("jxf57 stream on\n");
 
 	}
 	else {
@@ -577,7 +577,7 @@ static int jxf57_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("jxf57 stream off\n");
+		ISP_INFO("jxf57 stream off\n");
 	}
 
 	return ret;
@@ -717,7 +717,7 @@ static int jxf57_g_chip_ident(struct tx_isp_subdev *sd,
 			client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("jxf57 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
+	ISP_INFO("jxf57 chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "jxf57", sizeof("jxf57"));
 		chip->ident = ident;
@@ -996,7 +996,7 @@ static int jxf57_probe(struct i2c_client *client, const struct i2c_device_id *id
 		tx_isp_set_subdev_hostdata(sd, sensor);
 		private_i2c_set_clientdata(client, sd);
 
-		pr_debug("probe ok ------->jxf57\n");
+		ISP_INFO("probe ok ------->jxf57\n");
 		return 0;
 err_set_sensor_data_interface:
 		private_clk_disable(sensor->mclk);

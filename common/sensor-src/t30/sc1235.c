@@ -561,7 +561,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		/*printk("read vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);*/
+		/*ISP_INFO("read vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);*/
 		vals++;
 	}
 
@@ -578,7 +578,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 		}
-		/*printk("write vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value);*/
+		/*ISP_INFO("write vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value);*/
 		vals++;
 	}
 
@@ -594,7 +594,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3107, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -603,7 +603,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 	*ident = v;
 	ret = sensor_read(sd, 0x3108, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 
@@ -716,10 +716,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -809,7 +809,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -820,16 +820,16 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		printk("chip found @ 0x%x (%s) is not an %s chip.\n",
+		ISP_INFO("chip found @ 0x%x (%s) is not an %s chip.\n",
 		       client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
-	printk("%s chip found @ 0x%02x (%s)\n",
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n",
 	       SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
@@ -842,7 +842,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
-		printk("[%d]The pointer is invalid!\n", __LINE__);
+		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 	switch (cmd) {
@@ -963,7 +963,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int ret;
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 
@@ -971,7 +971,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 
@@ -1017,7 +1017,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_set_sensor_gpio:
@@ -1065,7 +1065,7 @@ static __init int init_sensor(void) {
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		printk("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

@@ -603,7 +603,7 @@ static int sc2331s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc2331s1_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -611,7 +611,7 @@ static int sc2331s1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc2331s1_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -712,11 +712,11 @@ static int sc2331s1_s_stream(struct tx_isp_subdev *sd, int enable)
 
 	if (enable) {
 		ret = sc2331s1_write_array(sd, sc2331s1_stream_on_mipi);
-		ISP_WARNING("sc2331s1 stream on\n");
+		ISP_INFO("sc2331s1 stream on\n");
 
 	} else {
 		ret = sc2331s1_write_array(sd, sc2331s1_stream_off_mipi);
-		ISP_WARNING("sc2331s1 stream off\n");
+		ISP_INFO("sc2331s1 stream off\n");
 	}
 
 	return ret;
@@ -826,8 +826,8 @@ static int sc2331s1_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc2331s1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc2331s1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc2331s1", sizeof("sc2331s1"));
 		chip->ident = ident;
@@ -1150,7 +1150,7 @@ static int sc2331s1_probe(struct i2c_client *client, const struct i2c_device_id 
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->sc2331s1\n");
+	ISP_INFO("probe ok ------->sc2331s1\n");
 
 	return 0;
 err_get_mclk:

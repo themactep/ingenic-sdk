@@ -687,7 +687,7 @@ static int ov2740_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
 	return 0;
@@ -717,7 +717,7 @@ static int ov2740_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = ov2740_read(sd, 0x300b, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -725,7 +725,7 @@ static int ov2740_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = ov2740_read(sd, 0x300c, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -812,12 +812,12 @@ static int ov2740_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 			ret = ov2740_write_array(sd, ov2740_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_WARNING("ov2740 stream on\n");
+			ISP_INFO("ov2740 stream on\n");
 		}
 	} else {
 		ret = ov2740_write_array(sd, ov2740_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_WARNING("ov2740 stream off\n");
+		ISP_INFO("ov2740 stream off\n");
 	}
 
 	return ret;
@@ -1039,7 +1039,7 @@ static int ov2740_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an ov2740 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("ov2740 chip found @ 0x%02x (%s) version %s \n",
+	ISP_INFO("ov2740 chip found @ 0x%02x (%s) version %s \n",
 		client->addr,
 		client->adapter->name,
 		SENSOR_VERSION);
@@ -1222,7 +1222,7 @@ static int ov2740_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("@@@@@@@probe ok ------->ov2740\n");
+	ISP_INFO("@@@@@@@probe ok ------->ov2740\n");
 
 	return 0;
 }

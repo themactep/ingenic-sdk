@@ -753,7 +753,7 @@ int sc2337p_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-        /* printk("[%s %d] 0x%04x = 0x%02x\n", __func__, __LINE__, reg, value); */
+        /* ISP_INFO("[%s %d] 0x%04x = 0x%02x\n", __func__, __LINE__, reg, value); */
 
 	return ret;
 }
@@ -786,7 +786,7 @@ static int sc2337p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 			private_msleep(vals->value);
 		} else {
 			ret = sc2337p_write(sd, vals->reg_num, vals->value);
-			printk("{0x%04x,0x%04x}\n",vals->reg_num, vals->value);
+			ISP_INFO("{0x%04x,0x%04x}\n",vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -807,7 +807,7 @@ static int sc2337p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret += sc2337p_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -815,7 +815,7 @@ static int sc2337p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret += sc2337p_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -925,7 +925,7 @@ static int sc2337p_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc2337p stream on\n");
+		ISP_INFO("sc2337p stream on\n");
 
 	}
 	else {
@@ -934,7 +934,7 @@ static int sc2337p_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc2337p stream off\n");
+		ISP_INFO("sc2337p stream off\n");
 	}
 
 	return ret;
@@ -1057,8 +1057,8 @@ static int sc2337p_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc2337p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc2337p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc2337p", sizeof("sc2337p"));
 		chip->ident = ident;
@@ -1079,15 +1079,15 @@ static int sc2337p_set_vflip(struct tx_isp_subdev *sd, int enable)
         val &= 0x99;
 		break;
 	case 1:
-		printk("---mirror-----\n");
+		ISP_INFO("---mirror-----\n");
         val = ((val & 0x9F) | 0x06);
 		break;
 	case 2:
-		printk("----flip---\n");
+		ISP_INFO("----flip---\n");
         val = ((val & 0xF9) | 0x60);
 		break;
 	case 3:
-		printk("---mirror and flip-----\n");
+		ISP_INFO("---mirror and flip-----\n");
         val = 0x66;
 		break;
 	}
@@ -1352,7 +1352,7 @@ static int sc2337p_probe(struct i2c_client *client, const struct i2c_device_id *
 		sc2337p_attr.total_height = 1125;
 		sc2337p_attr.max_integration_time = 1125-6;
 		sc2337p_attr.one_line_expr_in_us = 25;
-		printk("__sc2337p_win_sizes[1]__,\n");
+		ISP_INFO("__sc2337p_win_sizes[1]__,\n");
 	}else{
 		sensor_mclk_config(sensor, 24000000);
 		wsize = &sc2337p_win_sizes[0];
@@ -1365,7 +1365,7 @@ static int sc2337p_probe(struct i2c_client *client, const struct i2c_device_id *
 		sc2337p_attr.total_height = 0x5a0;
 		sc2337p_attr.max_integration_time = 0X5a0-6;
 		sc2337p_attr.one_line_expr_in_us = 25;
-		printk("__sc2337p_win_sizes[0]__,\n");
+		ISP_INFO("__sc2337p_win_sizes[0]__,\n");
 	}
 
 	/*
@@ -1388,7 +1388,7 @@ static int sc2337p_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc2337p\n");
+	ISP_INFO("probe ok ------->sc2337p\n");
 
 	return 0;
 

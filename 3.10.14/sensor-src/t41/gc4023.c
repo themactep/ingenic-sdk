@@ -1279,7 +1279,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		pr_debug("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
 		vals++;
 	}
 
@@ -1311,13 +1311,13 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 	ret = sensor_read(sd, 0x03f0, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = sensor_read(sd, 0x03f1, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1335,7 +1335,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 	struct again_lut *val_lut = sensor_again_lut;
 
-	/* ISP_WARNING("it is %d, again is %d\n",expo,again); */
+	/* ISP_INFO("it is %d, again is %d\n",expo,again); */
 	/*expo*/
 	ret = sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
@@ -1445,8 +1445,8 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x00b8, val_lut[ag_last].regb8);
 		ret += sensor_write(sd, 0x00b9, val_lut[ag_last].regb9);
 	}
-	//  pr_debug("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
-	//  pr_debug("gc4653_set_logic:reg_410=%d,gain_flag=%d,ag_last=%d,ht_gain=%d\n",reg_410,gain_flag,ag_last,ht_gain);
+	//  ISP_INFO("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
+	//  ISP_INFO("gc4653_set_logic:reg_410=%d,gain_flag=%d,ag_last=%d,ht_gain=%d\n",reg_410,gain_flag,ag_last,ht_gain);
 	return 0;
 }
 
@@ -1501,11 +1501,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ret = sensor_write_array(sd, sensor_stream_on);
-			ISP_WARNING("%s stream on\n", SENSOR_NAME);
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1739,7 +1739,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-	printk("\n====>[private_clk_get_rate(sensor->mclk)=%ld]\n", rate);
+	ISP_INFO("\n====>[private_clk_get_rate(sensor->mclk)=%ld]\n", rate);
 	switch (info->default_boot) {
 	case 0:
 	case 1:
@@ -1748,13 +1748,13 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	case 4:
 		if (((rate / 1000) % 27000) != 0) {
 			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
-			printk("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK, ret);
+			ISP_INFO("\n====>[clk_set_parent(sclka, clk_get(NULL, SEN_TCLK:%s))=%d]\n", SEN_TCLK, ret);
 			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
-				printk("\n====>[private_clk_get_rate(sclka)=%ld]\n", rate);
+				ISP_INFO("\n====>[private_clk_get_rate(sclka)=%ld]\n", rate);
 				if (((rate / 1000) % 27000) != 0) {
 					private_clk_set_rate(sclka, 1080000000);
 				}
@@ -1765,7 +1765,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	}
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -1823,7 +1823,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1984,7 +1984,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -2024,10 +2024,10 @@ static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	g_sinfo_proc = proc_mkdir(CAMERA_PROC_NAME, 0);
 	if (!g_sinfo_proc) {
-		printk("err: jz_proc_mkdir failed\n");
+		ISP_INFO("err: jz_proc_mkdir failed\n");
 	}
 	proc_create_data(SENSOR_TEMP_PROC_NAME, S_IRUGO, g_sinfo_proc, &sinfo_proc_fops, NULL);
-	printk(KERN_INFO "/proc/%s/%s created\n", CAMERA_PROC_NAME, SENSOR_TEMP_PROC_NAME);
+	ISP_INFO("/proc/%s/%s created\n", CAMERA_PROC_NAME, SENSOR_TEMP_PROC_NAME);
 	return private_i2c_add_driver(&sensor_driver);
 }
 

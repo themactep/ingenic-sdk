@@ -680,7 +680,7 @@ static int jxk251_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			private_msleep(vals->value);
 		} else {
 			ret = jxk251_read(sd, vals->reg_num, &val);
-			/* printk("{0x%x, 0x%x}\n", vals->reg_num, val); */
+			/* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
 			if (ret < 0)
 				return ret;
 		}
@@ -778,10 +778,10 @@ static int jxk251_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 
-			printk("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
+			ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
 			ret = jxk251_write(sd, vals->reg_num, vals->value);
 
-			printk("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
+			ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -803,7 +803,7 @@ static int jxk251_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk)
 		ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 		sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 		if (IS_ERR(sclka)) {
-			pr_err("get sclka failed\n");
+			ISP_ERROR("get sclka failed\n");
 		} else {
 			rate = private_clk_get_rate(sclka);
 			if (((rate / 1000) % mclk) != 0) {
@@ -972,7 +972,7 @@ static int jxk251_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 
 	ret = jxk251_read(sd, 0x0a, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -980,7 +980,7 @@ static int jxk251_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = jxk251_read(sd, 0x0b, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1028,19 +1028,19 @@ static int jxk251_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 
-	ISP_WARNING("===================================================\n");
-	ISP_WARNING("JXK251 version is %s\n", TVERSION);
-	ISP_WARNING("Sensor driver version is %s\n", SENSOR_VERSION);
-	ISP_WARNING("Sensor name is %s\n", jxk251_attr.name);
-	ISP_WARNING("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("Sensor video interface is %d\n", info->video_interface);
-	ISP_WARNING("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
+	ISP_INFO("===================================================\n");
+	ISP_INFO("JXK251 version is %s\n", TVERSION);
+	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
+	ISP_INFO("Sensor name is %s\n", jxk251_attr.name);
+	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("Sensor video interface is %d\n", info->video_interface);
+	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
 		wsize->fps >> 16,
 		wsize->fps & 0xffff);
-	ISP_WARNING("===================================================\n");
+	ISP_INFO("===================================================\n");
 
 	if (chip) {
 		memcpy(chip->name, "jxk251", sizeof("jxk251"));
@@ -1117,13 +1117,13 @@ static int jxk251_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = jxk251_write_array(sd, jxk251_stream_on_mipi);
 			ret = jxk251_read(sd, 0x27, &dismode);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			pr_debug("jxk251 stream on\n");
+			ISP_INFO("jxk251 stream on\n");
 		}
 
 	} else {
 		ret = jxk251_write_array(sd, jxk251_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		pr_debug("jxk251 stream off\n");
+		ISP_INFO("jxk251 stream off\n");
 	}
 
 	return ret;
@@ -1513,7 +1513,7 @@ static int jxk251_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->jxk251\n");
+	ISP_INFO("probe ok ------->jxk251\n");
 
 	return 0;
 }

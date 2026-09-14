@@ -664,7 +664,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x3208, 0x4E39);
 		ret += sensor_write(sd, 0x3100, 0x04);
 	} else {
-		printk("Do not support this Again mode!\n");
+		ISP_INFO("Do not support this Again mode!\n");
 	}
 #endif
 	ret = sensor_write(sd, 0x3060, value);
@@ -715,18 +715,18 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		} else {
-			printk("Don't support this Sensor Data interface\n");
+			ISP_INFO("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		} else {
-			printk("Don't support this Sensor Data interface\n");
+			ISP_INFO("Don't support this Sensor Data interface\n");
 		}
-		pr_debug("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 	return ret;
 }
@@ -812,7 +812,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 		} else {
-			printk("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request fail %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -823,7 +823,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			printk("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
@@ -868,7 +868,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 				ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 			} else {
-				printk("Don't support this Sensor Data interface\n");
+				ISP_INFO("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
@@ -878,14 +878,14 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 				ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 			} else {
-				printk("Don't support this Sensor Data interface\n");
+				ISP_INFO("Don't support this Sensor Data interface\n");
 			}
 			break;
 		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
 			ret = sensor_set_fps(sensor, ctrl->value);
 			break;
 		default:
-			pr_debug("do not support ctrl->cmd ====%d\n", ctrl->cmd);
+			ISP_INFO("do not support ctrl->cmd ====%d\n", ctrl->cmd);
 			break;
 	}
 	return 0;
@@ -970,14 +970,14 @@ static int sensor_probe(struct i2c_client *client,
 
 	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		printk("Failed to allocate sensor subdev.\n");
+		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		printk("Cannot get sensor input clock cgu_cim\n");
+		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 27000000);
@@ -993,7 +993,7 @@ static int sensor_probe(struct i2c_client *client,
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->regs = sensor_init_regs_1920_1080_30fps_mipi;
 	} else {
-		printk("Don't support this Sensor Data Output Interface.\n");
+		ISP_INFO("Don't support this Sensor Data Output Interface.\n");
 		goto err_set_sensor_data_interface;
 	}
 #if 0
@@ -1024,7 +1024,7 @@ static int sensor_probe(struct i2c_client *client,
 	sensor->video.vi_max_height = wsize->height;
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
-	pr_debug("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 
 err_set_sensor_data_interface:

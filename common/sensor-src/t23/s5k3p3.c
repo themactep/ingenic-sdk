@@ -886,7 +886,7 @@ static int s5k3p3_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 						private_msleep(vals->value);
 				} else {
 						ret = s5k3p3_read(sd, vals->reg_num, &val);
-						/* printk("{0x%x, 0x%x}\n", vals->reg_num, val); */
+						/* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
 						if (ret < 0)
 								return ret;
 				}
@@ -1195,7 +1195,7 @@ static int s5k3p3_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	ret = s5k3p3_write(sd, 0x6028, 0x4000);
 
 	ret += s5k3p3_read(sd, 0x0000, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1203,7 +1203,7 @@ static int s5k3p3_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = s5k3p3_read(sd, 0x0001, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1251,14 +1251,14 @@ static int s5k3p3_g_chip_ident(struct tx_isp_subdev *sd,
 			return ret;
 	}
 
-	ISP_WARNING("===================================================\n");
-	ISP_WARNING("Template version is %s\n", TVERSION);
-	ISP_WARNING("Sensor driver version is %s\n", SENSOR_VERSION);
-	ISP_WARNING("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("Sensor video interface is %d\n", data_interface);
-	ISP_WARNING("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
+	ISP_INFO("===================================================\n");
+	ISP_INFO("Template version is %s\n", TVERSION);
+	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
+	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("Sensor video interface is %d\n", data_interface);
+	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
 				default_boot, wsize->width, wsize->height, wsize->fps >> 16, wsize->fps&0xffff);
-	ISP_WARNING("===================================================\n");
+	ISP_INFO("===================================================\n");
 
 	if (chip) {
 		memcpy(chip->name, "s5k3p3", sizeof("s5k3p3"));
@@ -1339,13 +1339,13 @@ static int s5k3p3_s_stream(struct tx_isp_subdev *sd, int enable)
 				if (sensor->video.state == TX_ISP_MODULE_INIT) {
 						ret = s5k3p3_write_array(sd, s5k3p3_stream_on_mipi);
 						sensor->video.state = TX_ISP_MODULE_RUNNING;
-						pr_debug("s5k3p3 stream on\n");
+						ISP_INFO("s5k3p3 stream on\n");
 				}
 
 		} else {
 				ret = s5k3p3_write_array(sd, s5k3p3_stream_off_mipi);
 				sensor->video.state = TX_ISP_MODULE_INIT;
-				pr_debug("s5k3p3 stream off\n");
+				ISP_INFO("s5k3p3 stream off\n");
 		}
 
 		return ret;
@@ -1640,7 +1640,7 @@ static int s5k3p3_probe(struct i2c_client *client,
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->s5k3p3\n");
+	ISP_INFO("probe ok ------->s5k3p3\n");
 
 	return 0;
 }

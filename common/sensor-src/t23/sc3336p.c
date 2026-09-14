@@ -855,7 +855,7 @@ static int sc3336p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc3336p_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -863,7 +863,7 @@ static int sc3336p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc3336p_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -956,7 +956,7 @@ static int sc3336p_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc3336p stream on\n");
+		ISP_INFO("sc3336p stream on\n");
 
 	}
 	else {
@@ -965,7 +965,7 @@ static int sc3336p_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc3336p stream off\n");
+		ISP_INFO("sc3336p stream off\n");
 	}
 
 	return ret;
@@ -1104,8 +1104,8 @@ static int sc3336p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc3336p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc3336p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc3336p", sizeof("sc3336p"));
 		chip->ident = ident;
@@ -1363,7 +1363,7 @@ static int sc3336p_probe(struct i2c_client *client, const struct i2c_device_id *
 		sc3336p_attr.total_width = 1250;
 		sc3336p_attr.total_height = 1320;
 		sc3336p_attr.max_integration_time = 1320 - 8;
-		ISP_WARNING("[%s,%d] default_boot=%d\n", __func__, __LINE__, default_boot);
+		ISP_INFO("[%s,%d] default_boot=%d\n", __func__, __LINE__, default_boot);
 		break;
 	case 1:
 		wsize = &sc3336p_win_sizes[1];
@@ -1373,7 +1373,7 @@ static int sc3336p_probe(struct i2c_client *client, const struct i2c_device_id *
 		sc3336p_attr.total_height = 1320;
 		sc3336p_attr.max_integration_time = 1320 - 8;
 		sc3336p_attr.mipi.clk = 495;
-		ISP_WARNING("[%s,%d] default_boot=%d\n", __func__, __LINE__, default_boot);
+		ISP_INFO("[%s,%d] default_boot=%d\n", __func__, __LINE__, default_boot);
 		break;
 	default:
 		ISP_ERROR("do not support max framerate %d in mipi mode\n",default_boot);
@@ -1399,7 +1399,7 @@ static int sc3336p_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc3336p\n");
+	ISP_INFO("probe ok ------->sc3336p\n");
 
 	return 0;
 

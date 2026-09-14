@@ -1087,7 +1087,7 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = cv8001_read(sd, 0x3002, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1095,7 +1095,7 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = cv8001_read(sd, 0x3003, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1116,7 +1116,7 @@ static int cv8001_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret |= cv8001_write(sd, CV8001_EXP0_REG_M, (unsigned char)((reg >> 8) & 0xff));
 	ret |= cv8001_write(sd, CV8001_EXP0_REG_H, (unsigned char)((reg >> 16) & 0xff));
 
-	// ISP_WARNING("cv8001 set exp to %4d line\n", value);
+	// ISP_INFO("cv8001 set exp to %4d line\n", value);
 
 	return 0;
 }
@@ -1128,7 +1128,7 @@ static int cv8001_set_integration_time(struct tx_isp_subdev *sd, int value) {
 //
 //	ret = cv8001_write(sd, 0x3164, again);
 //
-//	ISP_WARNING("cv8001 set gain = 0x%02x(%03d)\n", again, again);
+//	ISP_INFO("cv8001 set gain = 0x%02x(%03d)\n", again, again);
 //
 //	return 0;
 //}
@@ -1149,7 +1149,7 @@ static int cv8001_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		CV8001_REG_SPLIT_DGAIN_H,
 		(unsigned char)(lut[index].sensor_dgain_value_high)); //set sensor Dgain
 
-	//ISP_WARNING("cv8001 again index = %03d ; again = %02x; Dgain lowbits=%02x;Dgain highbits=%02x\n", index,lut[index].sensor_again_value,lut[index].sensor_dgain_value_low,lut[index].sensor_dgain_value_high);
+	//ISP_INFO("cv8001 again index = %03d ; again = %02x; Dgain lowbits=%02x;Dgain highbits=%02x\n", index,lut[index].sensor_again_value,lut[index].sensor_dgain_value_low,lut[index].sensor_dgain_value_high);
 
 	if (ret < 0)
 		return ret;
@@ -1211,11 +1211,11 @@ static int cv8001_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = cv8001_write_array(sd, cv8001_stream_on_mipi);
-			ISP_WARNING("cv8001 stream on\n");
+			ISP_INFO("cv8001 stream on\n");
 		}
 	} else {
 		ret = cv8001_write_array(sd, cv8001_stream_off_mipi);
-		ISP_WARNING("cv8001 stream off\n");
+		ISP_INFO("cv8001 stream off\n");
 	}
 
 	return ret;
@@ -1238,7 +1238,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts_n = (CV8001_MAX_FPS * 10) * CV8001_30FPS_VTS / fps_n;
-	ISP_WARNING("cv8001 set fps_n(%d.%d)! vts_n(0x%04x)\n", fps_n / 10, fps_n % 10, vts_n);
+	ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x)\n", fps_n / 10, fps_n % 10, vts_n);
 
 	ret = cv8001_read(sd, CV8001_EXP0_REG_H, &reg);
 	cur_reg = reg;
@@ -1250,7 +1250,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	cur_reg |= reg;
 
 	if (ret) {
-		ISP_WARNING("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail i2c err(%d)!\n",
+		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail i2c err(%d)!\n",
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1267,7 +1267,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret |= cv8001_write(sd, CV8001_VTS_REG_M, (unsigned char)((vts_n >> 8) & 0xff));
 	ret |= cv8001_write(sd, CV8001_VTS_REG_H, (unsigned char)((vts_n >> 16) & 0xff));
 	if (ret) {
-		ISP_WARNING("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set vts err(%d)!\n",
+		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set vts err(%d)!\n",
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1282,7 +1282,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vts_n;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	if (ret < 0) {
-		ISP_WARNING("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail v4l2 notify err(%d)!\n",
+		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail v4l2 notify err(%d)!\n",
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1293,7 +1293,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (is_updata) {
 		ret = cv8001_set_integration_time(sd, cur_exp);
 		if (ret < 0) {
-			ISP_WARNING("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set exp err(%d)!\n",
+			ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set exp err(%d)!\n",
 				fps_n / 10,
 				fps_n % 10,
 				vts_n,
@@ -1392,7 +1392,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -1442,8 +1442,8 @@ static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an cv8001 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("cv8001 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("cv8001 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "cv8001", sizeof("cv8001"));
 		chip->ident = ident;
@@ -1596,7 +1596,7 @@ static int cv8001_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->cv8001\n");
+	ISP_INFO("probe ok ------->cv8001\n");
 
 	return 0;
 }

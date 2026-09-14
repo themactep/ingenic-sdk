@@ -1045,14 +1045,14 @@ static int cv5003_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = cv5003_read(sd, 0x3003, &v);
-	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
+	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
 	ret += cv5003_read(sd, 0x3002, &v);
-	ISP_WARNING("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
+	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1166,11 +1166,11 @@ static int cv5003_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = cv5003_write_array(sd, cv5003_stream_on_mipi);
-			ISP_WARNING("cv5003 stream on\n");
+			ISP_INFO("cv5003 stream on\n");
 		}
 	} else {
 		ret = cv5003_write_array(sd, cv5003_stream_off_mipi);
-		ISP_WARNING("cv5003 stream off\n");
+		ISP_INFO("cv5003 stream off\n");
 	}
 
 	return ret;
@@ -1322,7 +1322,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	private_clk_set_rate(sensor->mclk, SENSOR_MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -1372,8 +1372,8 @@ static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an cv5003 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("cv5003 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("cv5003 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "cv5003", sizeof("cv5003"));
 		chip->ident = ident;
@@ -1525,7 +1525,7 @@ static int cv5003_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->cv5003\n");
+	ISP_INFO("probe ok ------->cv5003\n");
 
 	return 0;
 }

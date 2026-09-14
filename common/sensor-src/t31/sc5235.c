@@ -1002,7 +1002,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	ret = sensor_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1010,7 +1010,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1140,7 +1140,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 }
 
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
-	//	printk("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
+	//	ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
 	int ret = 0;
 	unsigned int expo = 0;
 
@@ -1152,7 +1152,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 }
 
 static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
-	//	printk("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
+	//	ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
 	int ret = 0;
 
 	ret = sensor_write(sd, 0x3e13, (unsigned char)(value & 0xff));
@@ -1207,7 +1207,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.min_integration_time = 3;
 		sensor_attr.min_integration_time_short = 3;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		printk("------------> switch wdr ok <-------------\n");
+		ISP_INFO("------------> switch wdr ok <-------------\n");
 	} else if (wdr_en == 0) {
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 15;
@@ -1221,7 +1221,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.total_height = 2662;
 		sensor_attr.max_integration_time = 2662;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		printk("------------> switch linear ok <-------------\n");
+		ISP_INFO("------------> switch linear ok <-------------\n");
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
@@ -1271,11 +1271,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
-		ISP_WARNING("%s stream on\n", SENSOR_NAME);
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_WARNING("%s stream off\n", SENSOR_NAME);
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
@@ -1414,8 +1414,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
-	ISP_WARNING("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1596,7 +1596,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.total_height = 2662;
 			sensor_attr.max_integration_time = 2662;
 			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-			printk("------------> linear is ok <-------------\n");
+			ISP_INFO("------------> linear is ok <-------------\n");
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_400)) {
 			wsize = &sensor_win_sizes[2];
 			sensor_info.max_fps = 13;
@@ -1609,7 +1609,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.total_height = 1650;
 			sensor_attr.max_integration_time = 1650;
 			sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-			printk("------------> linear is ok <-------------\n");
+			ISP_INFO("------------> linear is ok <-------------\n");
 		} else {
 			ISP_ERROR("Can not support this data type!!!\n");
 		}
@@ -1631,7 +1631,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.total_width = 0x546;
 		sensor_attr.total_height = 0xbb8;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		printk("------------> wdr is ok <-------------\n");
+		ISP_INFO("------------> wdr is ok <-------------\n");
 	} else {
 		ISP_ERROR("Can not support this data type!!!\n");
 	}
@@ -1656,7 +1656,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_WARNING("probe ok ------->%s\n", SENSOR_NAME);
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 

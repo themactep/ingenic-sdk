@@ -793,7 +793,7 @@ static int sc1346_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret = sc1346_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -801,7 +801,7 @@ static int sc1346_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc1346_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -904,7 +904,7 @@ static int sc1346_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc1346 stream on\n");
+		ISP_INFO("sc1346 stream on\n");
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
@@ -912,7 +912,7 @@ static int sc1346_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc1346 stream off\n");
+		ISP_INFO("sc1346 stream off\n");
 	}
 
 	return ret;
@@ -969,8 +969,8 @@ static int sc1346_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 6;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-//   printk("....vts=%d\n",vts);
-//   printk(".....ret=%d\n",ret);
+//   ISP_INFO("....vts=%d\n",vts);
+//   ISP_INFO(".....ret=%d\n",ret);
 	return ret;
 }
 
@@ -1013,7 +1013,7 @@ static int sc1346_set_vflip(struct tx_isp_subdev *sd, int enable)
 		sc1346_write(sd, 0x3221, val | 0x66);
 		break;
 	}
-	printk("-------flip-----\n");
+	ISP_INFO("-------flip-----\n");
 	if(!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
@@ -1052,8 +1052,8 @@ static int sc1346_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc1346 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc1346 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc1346", sizeof("sc1346"));
 		chip->ident = ident;
@@ -1312,7 +1312,7 @@ static int sc1346_probe(struct i2c_client *client, const struct i2c_device_id *i
 			break;
 		case TX_SENSOR_MAX_FPS_30:
 			wsize = &sc1346_win_sizes[1];
-			printk("------sboot 1-------\n");
+			ISP_INFO("------sboot 1-------\n");
 			sc1346_attr.max_integration_time_native = 0x2ee - 6;
 			sc1346_attr.integration_time_limit = 0x2ee - 6;
 			sc1346_attr.total_width = 0x708,
@@ -1342,9 +1342,9 @@ static int sc1346_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	printk("---------->> integration_time: %d\n", sensor->video.attr->max_integration_time);
+	ISP_INFO("---------->> integration_time: %d\n", sensor->video.attr->max_integration_time);
 
-	ISP_WARNING("\n probe ok ------->sc1346\n");
+	ISP_INFO("\n probe ok ------->sc1346\n");
 
 	return 0;
 

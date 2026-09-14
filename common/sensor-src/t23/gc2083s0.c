@@ -408,7 +408,7 @@ int gc2083_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-	/* printk("[%s %d] 0x%04x = 0x%02x\n", __func__, __LINE__, reg, value); */
+	/* ISP_INFO("[%s %d] 0x%04x = 0x%02x\n", __func__, __LINE__, reg, value); */
 
 	return ret;
 }
@@ -460,13 +460,13 @@ static int gc2083_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 	int ret;
 	ret = gc2083_read(sd, 0x03f0, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	ret = gc2083_read(sd, 0x03f1, &v);
-	pr_debug("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -605,7 +605,7 @@ static int gc2083_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("gc2083 stream on\n");
+		ISP_INFO("gc2083 stream on\n");
 
 	}
 	else {
@@ -614,7 +614,7 @@ static int gc2083_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("gc2083 stream off\n");
+		ISP_INFO("gc2083 stream off\n");
 	}
 
 	return ret;
@@ -744,8 +744,8 @@ static int gc2083_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("gc2083 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("gc2083 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "gc2083", sizeof("gc2083"));
 		chip->ident = ident;
@@ -766,14 +766,14 @@ static int gc2083_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
         case 0:
                 switch (fsync_mode) {
                 case 2:
-                        printk("===================>> %s %d\n", __func__, __LINE__);
+                        ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
                         gc2083_read(sd, 0x0d42, &val);
                         gc2083_write(sd, 0x0d42, val + 4);
                         gc2083_write(sd, 0x0068, 0x95);
                         gc2083_write(sd, 0x0069, 0x00);
                         break;
                 case 3:
-                        printk("===================>> %s %d\n", __func__, __LINE__);
+                        ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
                         gc2083_read(sd, 0x0d41, &val);
                         ret_val = val << 8;
                         gc2083_read(sd, 0x0d42, &val);
@@ -1074,7 +1074,7 @@ static int gc2083_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->gc2083\n");
+	ISP_INFO("probe ok ------->gc2083\n");
 
 	return 0;
 

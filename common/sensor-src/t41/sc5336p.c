@@ -598,7 +598,7 @@ static int sc5336p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 	ret = sc5336p_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -606,7 +606,7 @@ static int sc5336p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sc5336p_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -726,11 +726,11 @@ static int sc5336p_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = sc5336p_write_array(sd, sc5336p_stream_on_mipi);
-			ISP_WARNING("sc5336p stream on\n");
+			ISP_INFO("sc5336p stream on\n");
 		}
 	} else {
 		ret = sc5336p_write_array(sd, sc5336p_stream_off_mipi);
-		ISP_WARNING("sc5336p stream off\n");
+		ISP_INFO("sc5336p stream off\n");
 	}
 
 	return ret;
@@ -770,11 +770,11 @@ static int sc5336p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 	hts = hts << 1;
 
-	printk("----set_fps is start------\n");
+	ISP_INFO("----set_fps is start------\n");
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = sc5336p_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sc5336p_write(sd, 0x320e, (unsigned char)(vts >> 8));
-	printk("----set_fps is end------\n");
+	ISP_INFO("----set_fps is end------\n");
 	if (0 != ret) {
 		ISP_ERROR("err: sc5336p_write err\n");
 		return ret;
@@ -806,7 +806,7 @@ static int sc5336p_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
-	printk("----set_vflip is start------\n");
+	ISP_INFO("----set_vflip is start------\n");
 	/* 2'b01:mirror,2'b10:filp */
 	val = sc5336p_read(sd, 0x3221, &val);
 	switch (enable) {
@@ -887,7 +887,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
 			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
 			if (IS_ERR(sclka)) {
-				pr_err("get sclka failed\n");
+				ISP_ERROR("get sclka failed\n");
 			} else {
 				rate = private_clk_get_rate(sclka);
 				if (((rate / 1000) % 27000) != 0) {
@@ -900,7 +900,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	}
 
-	ISP_WARNING("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
+	ISP_INFO("\n====>[default_boot=%d] [resolution=%dx%d] [video_interface=%d] [MCLK=%d] \n",
 		info->default_boot,
 		wsize->width,
 		wsize->height,
@@ -951,8 +951,8 @@ static int sc5336p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc5336p chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc5336p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n", SENSOR_VERSION);
+	ISP_INFO("sc5336p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "sc5336p", sizeof("sc5336p"));
 		chip->ident = ident;
@@ -1107,7 +1107,7 @@ static int sc5336p_probe(struct i2c_client *client, const struct i2c_device_id *
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc5336p\n");
+	ISP_INFO("probe ok ------->sc5336p\n");
 
 	return 0;
 }

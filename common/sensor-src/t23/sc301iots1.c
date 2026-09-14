@@ -608,7 +608,7 @@ static int sc301iots1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	unsigned char v;
 
 	ret += sc301iots1_read(sd, 0x3107, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -616,7 +616,7 @@ static int sc301iots1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret += sc301iots1_read(sd, 0x3108, &v);
-	ISP_WARNING("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -726,7 +726,7 @@ static int sc301iots1_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc301iots1 stream on\n");
+		ISP_INFO("sc301iots1 stream on\n");
 
 	}
 	else {
@@ -735,7 +735,7 @@ static int sc301iots1_s_stream(struct tx_isp_subdev *sd, int enable)
 		}else{
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_WARNING("sc301iots1 stream off\n");
+		ISP_INFO("sc301iots1 stream off\n");
 	}
 
 	return ret;
@@ -843,8 +843,8 @@ static int sc301iots1_g_chip_ident(struct tx_isp_subdev *sd,
 			  client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("sc301iots1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("sc301iots1 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "sc301iots1", sizeof("sc301iots1"));
 		chip->ident = ident;
@@ -895,10 +895,10 @@ static int sc301iots1_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync
         case 0:
                 switch (fsync_mode) {
                 case 2:
-                        printk("[%s] -> mode 2\n", __func__);
+                        ISP_INFO("[%s] -> mode 2\n", __func__);
                         break;
                 case 3:
-                        printk("[%s] -> mode 3\n", __func__);
+                        ISP_INFO("[%s] -> mode 3\n", __func__);
                         sc301iots1_read(sd, 0x320e, &val);
                         vts = val;
                         sc301iots1_read(sd, 0x320f, &val);
@@ -1198,7 +1198,7 @@ static int sc301iots1_probe(struct i2c_client *client, const struct i2c_device_i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->sc301iots1\n");
+	ISP_INFO("probe ok ------->sc301iots1\n");
 
 	return 0;
 

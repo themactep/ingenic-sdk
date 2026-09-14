@@ -471,7 +471,7 @@ static int jxf28p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	int ret;
 
 	ret = jxf28p_read(sd, 0x0a, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -479,7 +479,7 @@ static int jxf28p_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = jxf28p_read(sd, 0x0b, &v);
-	printk("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	if (ret < 0)
 		return ret;
 
@@ -496,7 +496,7 @@ static int jxf28p_set_expo(struct tx_isp_subdev *sd, int value)
 	int expo = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	/* printk("it is %d, again is %d\n",expo,again); */
+	/* ISP_INFO("it is %d, again is %d\n",expo,again); */
 	/*expo*/
 	ret = jxf28p_write(sd,  0x01, (unsigned char)(expo & 0xff));
 	ret += jxf28p_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
@@ -670,8 +670,8 @@ static int jxf28p_g_chip_ident(struct tx_isp_subdev *sd,
 				client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_WARNING("jxf28p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_WARNING("sensor driver version %s\n",SENSOR_VERSION);
+	ISP_INFO("jxf28p chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if(chip){
 		memcpy(chip->name, "jxf28p", sizeof("jxf28p"));
 		chip->ident = ident;
@@ -948,7 +948,7 @@ static int jxf28p_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	pr_debug("probe ok ------->jxf28p\n");
+	ISP_INFO("probe ok ------->jxf28p\n");
 
 	return 0;
 
