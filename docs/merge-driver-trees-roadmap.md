@@ -229,6 +229,42 @@ Structural verification used where a build was not possible:
 - Optional future work: unify the sensor drivers on the de-shimmed (4.4) form.
   Large and unverifiable without per-driver review; deliberately deferred.
 
+### 8b. Sensor source standardization (in progress)
+
+Goal: every sensor driver uses the same define-section layout:
+
+    SENSOR IDENTIFICATION   SENSOR_NAME, SENSOR_VERSION, SENSOR_CHIP_ID*
+    HARDWARE INTERFACE      SENSOR_BUS_TYPE, SENSOR_I2C_ADDRESS
+    SENSOR CAPABILITIES     SENSOR_MAX_WIDTH/HEIGHT
+    REGISTER DEFINITIONS    SENSOR_REG_END/DELAY
+    TIMING AND PERFORMANCE  SENSOR_SUPPORT_*_SCLK, SENSOR_OUTPUT_*_FPS, MCLK
+    SPECIAL FEATURES        feature toggles (SENSOR_EXPO, MIR_FLIP, ...)
+
+Done: `.clang-format` (from pending PR #36) applied to shrink variant drift;
+`3.10.14/sensor-src` is **fully canonical (0 files left)**; `4.4.94` has had
+~300 files bannerized in commits ebbae5f6, 1f70dcb5, 312cbacc, 2edc4d55,
+01629b62.
+
+Remaining (both are **file-prefixed** drivers that use e.g. `CV2001_MCLK`,
+`BF314A_CHIP_ID_H` instead of `SENSOR_*`; they need the defines renamed to the
+`SENSOR_*` vocabulary plus banner insertion):
+
+- `4.4.94/sensor-src`: 24 files (cv2001/cv3001/cv4001/cv5001, cv5003, cv8001,
+  gc08a8, imx585, imx662, jxf35, jxk351p, jxk362p, mis20s1, mis40c1, os02h10,
+  os04d10/j10/l10, ov2732, ov2740, sc431hai, sc5336p, sc835hai, sc850sl).
+  (`imx662` also lacks SENSOR_VERSION.)
+- `common/sensor-src/t23`: 50 files (BF314A_*, GC*, JX*, OS*, SC*, ...).
+- NOT YET DONE: these renamed files must be build-verified.
+
+Layout decision already made for the t41 TVERSION/feature shape (see commit
+01629b62): feature toggles + `SENSOR_I2C_REG_*` selection go in SPECIAL
+FEATURES, the `SENSOR_REG_END/DELAY` `#ifdef` pair in REGISTER DEFINITIONS.
+
+Pre-existing build bugs fixed along the way: `gc5603`, `cv2001/cv3001/cv4001`,
+`bf3a03`, `gc0328`, `gc032a`, `sc2235` (undefined macros); `sc3336` t31
+(`sensor_mipi_2`); t23 ISP (`get_driver_common_interfaces`); t31 3.10
+include order (`ar1337`, `gc1034`, `gc1084`).
+
 ## 9. Task history
 
 | # | Task | Status |
@@ -246,6 +282,9 @@ Structural verification used where a build was not possible:
 | 10 | Sensor drivers kept separate per kernel (decision) | done by design |
 | 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
 | 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
+| 19 | clang-format pass over sensor drivers (`.clang-format` from PR #36) | done |
+| 20 | Bannerize `3.10.14` + ~300 of `4.4.94` sensor drivers; fix undefined macros / include order | done |
+| 21 | Rename file-prefixed defines to `SENSOR_*` in remaining 24 (`4.4.94`) + 50 (t23) sensor drivers | **pending** |
 | 13 | Docs + build-matrix verification | done |
 | 14 | Flatten `sdk/` to one root with versioned filenames; dedup byte-identical blobs | done |
 | 15 | Make compiler and kernel tags explicit in every firmware filename and Kbuild; normalize kernel tag to `31014`/`4494` | done |
