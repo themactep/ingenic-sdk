@@ -430,14 +430,14 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 
 	{0xb1, 0x02},		  // ;[1]mipi_en
 	{0xfd, 0x01},		  //
-	{SENSOR_REG_DELAY, 0x20}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x20},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1088_30fps_mipi[] = {
 	//{0xfd , 0x00},//
 	//{0x20 , 0x00},//
-	//{SENSOR_REG_DELAY, 0x05}, /* END MARKER */
+	//{SENSOR_REG_DELAY, 0x05},
 	{0x53, 0xfe},		  //
 	{0x54, 0x7f},		  //
 	{0x61, 0xa8},		  //  ;mpll_divp_8lsb
@@ -599,7 +599,7 @@ static struct regval_list sensor_init_regs_1920_1088_30fps_mipi[] = {
 	{0xfd, 0x00},		  //
 	{0xb1, 0x02},		  // ;[1]mipi_en
 	{0xfd, 0x01},		  //
-	{SENSOR_REG_DELAY, 0x20}, /* END MARKER */
+	{SENSOR_REG_DELAY, 0x20},
 	{SENSOR_REG_END, 0x00},
 };
 

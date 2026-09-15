@@ -548,12 +548,12 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 };
 /* static struct regval_list sensor_init_regs_25_fps[] = { */
 /* 	{0x300A, 0x04BC}, //FRAME_LENGTH_LINES = 1010 */
-/* 	{SENSOR_REG_END, 0x0000}, /\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x0000}, */
 /* }; */
 
 /* static struct regval_list sensor_init_regs_30_fps[] = { */
 /* 	{0x300A, 0x03f2},	//FRAME_LENGTH_LINES = 1010 */
-/* 	{SENSOR_REG_END, 0x0000},	/\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x0000}, */
 /* }; */
 /*
  * the order of the sensor_win_sizes is [full_resolution, preview_resolution].

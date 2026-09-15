@@ -272,7 +272,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 /* 	{0x27, 0x46}, */
 /* 	{0x2C, 0x00}, */
 /* 	{0x63, 0x19}, */
-/* 	{SENSOR_REG_END, 0x00},	/\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x00}, */
 /* }; */
 
 /* static struct regval_list sensor_init_version_81[] = { */
@@ -280,7 +280,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 /* 	{0x27, 0x3c}, */
 /* 	{0x2C, 0x04}, */
 /* 	{0x63, 0x51}, */
-/* 	{SENSOR_REG_END, 0x00},	/\* END MARKER *\/ */
+/* 	{SENSOR_REG_END, 0x00}, */
 /* }; */
 
 /*
