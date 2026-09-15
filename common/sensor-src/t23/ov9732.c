@@ -537,7 +537,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable)
 		} else {
 			ISP_INFO("Don't support this Sensor Data interface\n");
 		}
-		ISP_INFO("%s stream on\n", SENSOR_NAME));
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	}
 	else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {

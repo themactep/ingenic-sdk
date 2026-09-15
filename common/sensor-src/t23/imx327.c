@@ -23,6 +23,7 @@
 #define SENSOR_VERSION "H20190822"
 #define SENSOR_CHIP_ID_H (0xb2)
 #define SENSOR_CHIP_ID_L (0x01)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -67,6 +68,17 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 static int rhs1 = 101;
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 1920,
+	.height = 1080,
+};
 
 struct regval_list {
 	uint16_t reg_num;

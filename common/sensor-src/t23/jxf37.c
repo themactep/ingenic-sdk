@@ -88,6 +88,17 @@ static unsigned char reg_2f = 0x44;
 static unsigned char reg_0c = 0x00;
 static unsigned char reg_82 = 0x21;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 1920,
+	.height = 1080,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;

@@ -80,6 +80,17 @@ static unsigned char evs0 = 0;
 static unsigned char evs1 = 0;
 static unsigned char evs2 = 0;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 0,
+	.height = 0,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;

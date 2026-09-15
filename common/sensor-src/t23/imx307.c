@@ -23,6 +23,7 @@
 #define SENSOR_VERSION "H20180402a"
 #define SENSOR_CHIP_ID_H (0xA0)
 #define SENSOR_CHIP_ID_L (0xB2)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -57,6 +58,17 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = 1920,
+	.height = 1080,
+};
 
 struct regval_list {
 	uint16_t reg_num;
