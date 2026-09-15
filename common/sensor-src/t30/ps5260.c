@@ -32,6 +32,12 @@
 #define SENSOR_I2C_ADDRESS 0x48
 
 // ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
+
+// ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xff
@@ -43,17 +49,17 @@
 #define SENSOR_SUPPORT_PCLK (38002500)
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
+
+// ============================================================================
+// SPECIAL FEATURES
+// ============================================================================
+#define SENSOR_BANK_REG 0xef
 #define AG_HS_MODE (40) // 6.0x
 #define AG_LS_MODE (32) // 4.0x
 #define NEPLS_LB (25)
 #define NEPLS_UB (200)
 #define NEPLS_SCALE (38)
 #define NE_NEP_CONST_LINEAR (0x868 + 0x19)
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_BANK_REG 0xef
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -66,6 +72,17 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_HIGH_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -505,7 +522,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ret = sensor_read(sd, 0x00, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
-		ISP_INFO("err: ps5260 write error, ret= %d \n", ret);
+		ISP_INFO("err: %s write error, ret= %d \n", SENSOR_NAME, ret);
 		return ret;
 	}
 	if (v != SENSOR_CHIP_ID_H)
@@ -967,7 +984,9 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
@@ -978,6 +997,7 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 

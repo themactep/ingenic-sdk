@@ -32,6 +32,12 @@
 #define SENSOR_I2C_ADDRESS 0x30
 
 // ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
+
+// ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
 #define SENSOR_REG_END 0xff
@@ -56,6 +62,17 @@ MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -304,7 +321,9 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	},
+};
+
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR8_1X8,
 	V4L2_MBUS_FMT_SBGGR10_1X10,
@@ -376,6 +395,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
+
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -427,11 +447,13 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	return 0;
 }
+
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	/* 0x00 bit[6:0] */
 	sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 	return 0;
 }
+
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
@@ -447,6 +469,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	if (!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -456,6 +479,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 	return 0;
@@ -487,11 +511,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
 		return -1;
+
 	ret += sensor_read(sd, 0x21, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x20, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hts = (hts << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	sensor_write(sd, 0xc0, 0x22);
@@ -604,7 +630,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -665,8 +690,10 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -680,8 +707,10 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
@@ -785,7 +814,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_gpio:
@@ -828,6 +856,7 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
@@ -839,6 +868,7 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 

@@ -24,12 +24,19 @@
 #define SENSOR_CHIP_ID_H (0x12)
 #define SENSOR_CHIP_ID_M (0x45)
 #define SENSOR_CHIP_ID_L (0x02)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -61,6 +68,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -201,7 +219,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
-
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x4500, 0x51},
@@ -330,7 +347,6 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3e03, 0x0b},
 	{0x3e08, 0x03},
 	{0x3e09, 0x10},
-
 	/*sc1245 version1*/
 	{0x3303, 0x20},
 	{0x3309, 0xa0},
@@ -342,14 +358,10 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 };
 
 static struct regval_list sensor_init_regs_1280_720_15fps[] = {
-
 	{SENSOR_REG_END, 0x00},
 };
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
-	/* 1920*1080 */
 	{
 		.width = 1280,
 		.height = 720,
@@ -357,7 +369,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	}
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
@@ -962,7 +975,10 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0},
+	{}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
@@ -977,7 +993,9 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
@@ -988,6 +1006,7 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 

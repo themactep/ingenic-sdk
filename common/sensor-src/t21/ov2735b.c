@@ -164,6 +164,7 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
+
 	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->value;
@@ -509,19 +510,20 @@ static struct regval_list sensor_stream_off[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		}
+	};
 
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
@@ -540,7 +542,6 @@ static int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned ch
 		.len = 2,
 		.buf = buf,
 	};
-
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
@@ -682,7 +683,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -761,7 +761,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	sensor->video.fps = fps;
-
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
@@ -788,7 +787,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 	return ret;
@@ -798,6 +796,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val = 0;
+
 	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_read(sd, 0x3f, &val);
 	if (enable) {
@@ -929,6 +928,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
+
 	len = strlen(sd->chip.name);
 	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
@@ -1048,7 +1048,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
@@ -1056,7 +1055,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
-
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);

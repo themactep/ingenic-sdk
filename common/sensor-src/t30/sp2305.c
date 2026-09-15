@@ -14,12 +14,14 @@
 #include <linux/proc_fs.h>
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sp2305"
 #define SENSOR_VERSION "H20191120a"
+#define SENSOR_CHIP_ID 0x2735
 #define SENSOR_CHIP_ID_H (0x27)
 #define SENSOR_CHIP_ID_L (0x35)
 
@@ -28,6 +30,12 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x3c
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -62,6 +70,17 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -171,7 +190,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x2735,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -455,7 +474,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x23, 0x14}, //	;enhance normal and dummy BPC
 	{0xfd, 0x01},
 	{0x05, 0x06},
-	{0x06, 0x11}, //;e0 ;insert dummy line , the frame rate is 30.01.
+	{0x06, 0x11}, //;e0	;insert dummy line , the frame rate is 30.01.
 	{0x01, 0x01}, //	;
 	{0xfd, 0x00},
 	{0x1b, 0x00}, //	;enable output
@@ -1060,7 +1079,9 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
@@ -1070,6 +1091,7 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 

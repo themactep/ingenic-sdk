@@ -940,9 +940,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
@@ -955,9 +955,9 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
@@ -1074,9 +1074,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	 */
+	/* convert sensor-gain into isp-gain */
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize->fps = 25 << 16 | 1;
