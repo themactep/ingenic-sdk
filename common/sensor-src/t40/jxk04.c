@@ -4,18 +4,19 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
 
-#include "linux/init.h"
-#include "linux/module.h"
-#include "linux/slab.h"
-#include "linux/i2c.h"
-#include "linux/delay.h"
-#include "linux/gpio.h"
-#include "linux/clk.h"
-#include "linux/proc_fs.h"
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/slab.h>
+#include <linux/i2c.h>
+#include <linux/delay.h>
+#include <linux/gpio.h>
+#include <linux/clk.h>
+#include <linux/proc_fs.h>
 #include <soc/gpio.h>
-#include "tx-isp-common.h"
-#include "sensor-common.h"
-#include "txx-funcs.h"
+#include <tx-isp-common.h>
+#include <sensor-common.h>
+#include <sensor-info.h>
+#include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
