@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * mis2032.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
  * Settings:
@@ -10,6 +9,7 @@
  *   1          1920*1080       25        mipi_2lane             wdr
  *   2          1920*1080       90        mipi_2lane             linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

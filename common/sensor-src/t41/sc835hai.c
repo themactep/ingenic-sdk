@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc835hai.c
- *
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
  *
  * Settings:
@@ -11,6 +10,7 @@
  *   2          1920*2160       25	mipi_2lane	linear
  *   3          3840*2160       30	mipi_2lane	linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

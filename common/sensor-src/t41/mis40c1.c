@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * mis40c1.c
-*
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
@@ -9,6 +8,7 @@
 *   0          2560x1440      30        mipi        2  	  linear
 *   ...
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

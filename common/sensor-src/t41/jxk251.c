@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * jxk251.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
  * Settings:

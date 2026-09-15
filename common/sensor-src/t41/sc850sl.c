@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc850sl.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
  * Settings:
@@ -12,6 +11,7 @@
  *   3          1920*1080       30        mipi_2lane            binning
  *   4          3840*2160       15        mipi_2lane            linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

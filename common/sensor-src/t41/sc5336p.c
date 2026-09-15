@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * sc5336p.c
-*
 * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
 * sboot        resolution      fps       interface              mode
 *   0          2880*1620       30        mipi_2lane            linear   ECO外供1.5V
-
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

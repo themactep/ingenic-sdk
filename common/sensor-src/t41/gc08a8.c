@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * gc08a8.c
-*
 * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:

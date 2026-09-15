@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * sc535iot.c
-*
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
@@ -11,6 +10,7 @@
 *   2          2688*1520       30        mipi_2lane            linear
 *   3          2688*1520       24        mipi_2lane            hdr
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

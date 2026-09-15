@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * sc485sl.c
-*
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
@@ -9,6 +8,7 @@
 *   0          2560*1440       30        mipi_2lane            linear
 *   1          2560*1440       30        mipi_2lane            hdr
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

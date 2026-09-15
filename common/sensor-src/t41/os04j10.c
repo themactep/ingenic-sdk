@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * os04j10.c
-*
 * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
 * sboot        resolution      fps       interface       bit        mode
 *   1          2560*1440       30        mipi_2lane     RAW10      linear
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

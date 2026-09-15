@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
 * mis20s1.c
-*
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
 *
 * Settings:
@@ -10,6 +9,7 @@
 *   1          1920*1080       30        mipi        2  	   hdr
 *   2          1920*1080       60        mipi        2  	  linear
 */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * ov2740.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
  * Settings:
@@ -9,6 +8,7 @@
  *   0          1920*1080       25        mipi_2lane            linear
  *   1          1920*1080       60        mipi_2lane            linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
