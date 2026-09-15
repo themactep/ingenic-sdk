@@ -476,3 +476,8 @@ multi-sensor drivers gated on CONFIG_MULTI_SENSOR (fsync_attr).
   the 34 others need `CONFIG_MULTI_SENSOR` (fsync_attr).
 
 All single-kernel trees (t10/t20/t21/t23/t30) now register `sensor_info`.
+
+Follow-up: **t40** (122) and the **t41 legacy set** (35) also lacked the
+`sensor_info` registration; both brought to full coverage (t40 127/127,
+t41 107/107) and, for t41, standardized to the `SENSOR_*` vocabulary.
+No t40/t41 build tree here - structural verification only.
