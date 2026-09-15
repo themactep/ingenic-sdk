@@ -463,3 +463,16 @@ drivers, SENSOR_CHIP_ID to imx307/327/335, removed dead sensor_attr.max_fps
 from 8, fixed gc4653 (unterminated macro), ov9732 (stray paren) and
 sc2315e (dup sensor_mipi). t23 now builds 73/107; the remaining 34 are all
 multi-sensor drivers gated on CONFIG_MULTI_SENSOR (fsync_attr).
+
+
+### 8g. t30/t23 capability + standardization
+
+- **t30**: only 4/48 drivers registered a `sensor_info`; added the block,
+  `SENSOR_MAX_*`/`SENSOR_CHIP_ID` and `sensor_common_init/exit` to the
+  other 44. 48/48 now.
+- **t23**: 70 legacy drivers (hardcoded name strings, `<name>_`-prefixed
+  symbols, no registration) fully standardized to the `SENSOR_*` /
+  `sensor_*` vocabulary + `sensor_info` registration. t23 builds 73/107;
+  the 34 others need `CONFIG_MULTI_SENSOR` (fsync_attr).
+
+All single-kernel trees (t10/t20/t21/t23/t30) now register `sensor_info`.
