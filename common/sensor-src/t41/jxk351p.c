@@ -12,7 +12,6 @@
  *   0          1984*1984        30       mipi_2lane           linear
  *   1          2000*2000        30       mipi_2lane           linear
  */
-#define DEBUG
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

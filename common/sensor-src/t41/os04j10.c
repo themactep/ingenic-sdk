@@ -11,8 +11,6 @@
 * sboot        resolution      fps       interface       bit        mode
 *   1          2560*1440       30        mipi_2lane     RAW10      linear
 */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

@@ -12,8 +12,6 @@
 *   0          2560x1440      30        mipi        2  	  linear
 *   ...
 */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

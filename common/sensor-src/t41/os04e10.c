@@ -12,8 +12,6 @@
  *   0          2048*2048       30        mipi_2lane             linear
  *   1          512*512         30        mipi_2lane             linear
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

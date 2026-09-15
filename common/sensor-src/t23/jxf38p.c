@@ -3,8 +3,6 @@
  * jxf38p.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

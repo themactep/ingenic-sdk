@@ -12,8 +12,6 @@
  *   0          1920*1080       25        mipi_2lane            linear
  *   1          1920*1080       60        mipi_2lane            linear
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

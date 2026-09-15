@@ -12,8 +12,6 @@
  *   0          1984*1984       30        mipi_2lane             linear
  *   1          1984*1984       15        mipi_2lane             hdr
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

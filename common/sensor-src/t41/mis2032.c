@@ -13,8 +13,6 @@
  *   1          1920*1080       25        mipi_2lane             wdr
  *   2          1920*1080       90        mipi_2lane             linear
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

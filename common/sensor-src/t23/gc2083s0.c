@@ -9,8 +9,6 @@
  *
  * @fsync Sync hardware connection: Primary Sensor vsync is directly connected to secondary Sensor vsync.
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

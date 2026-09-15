@@ -11,8 +11,6 @@
  * @fsync The PWM is divided into two parts, one end is directly connected to the main Sensor,
  * @fsync and one section is connected to the secondary Sensor through the inverter
  */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

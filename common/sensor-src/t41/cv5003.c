@@ -15,8 +15,6 @@
 *       builds from SENSOR_CHIP_ID_H/_L (0x02/0x50). Which of the two is the
 *       real CV5003 id is NOT verified against a datasheet.
 */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

@@ -12,8 +12,6 @@
 *   0          2880*1620       30        mipi_2lane            linear   ECO外供1.5V
 
 */
-#define DEBUG
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

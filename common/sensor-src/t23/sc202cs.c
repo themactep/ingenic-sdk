@@ -1,16 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * sc202cs.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  * Settings:
  * resolution      fps       interface          mode
  * 1600*1200       30        MIPI               1lane
  */
-#define DEBUG
 
 #include <linux/init.h>
 #include <linux/module.h>
