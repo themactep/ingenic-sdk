@@ -1,17 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * sc223a.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
  *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1920x1080       30        MIPI 1lane            linear
  *   1          1920x1080       30        MIPI 2lane            linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
