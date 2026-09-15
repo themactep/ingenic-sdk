@@ -652,8 +652,6 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	sensor->video.max_fps = wsize->fps;
-	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 
 	return 0;
 }
@@ -828,11 +826,19 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->mclk) {
 	case TISP_SENSOR_MCLK0:
-	case TISP_SENSOR_MCLK1:
-	case TISP_SENSOR_MCLK2:
-		sclka = private_devm_clk_get(&client->dev, SEN_MCLK);
-		sensor->mclk = private_devm_clk_get(sensor->dev, SEN_BCLK);
+		sclka = private_devm_clk_get(&client->dev, "mux_cim0");
+		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim0");
 		set_sensor_mclk_function(0);
+		break;
+	case TISP_SENSOR_MCLK1:
+		sclka = private_devm_clk_get(&client->dev, "mux_cim1");
+		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim1");
+		set_sensor_mclk_function(1);
+		break;
+	case TISP_SENSOR_MCLK2:
+		sclka = private_devm_clk_get(&client->dev, "mux_cim2");
+		sensor->mclk = private_devm_clk_get(sensor->dev, "div_cim2");
+		set_sensor_mclk_function(2);
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
@@ -842,8 +848,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	switch (info->default_boot) {
 	case 0:
 		if (((rate / 1000) % 27000) != 0) {
-			ret = clk_set_parent(sclka, clk_get(NULL, SEN_TCLK));
-			sclka = private_devm_clk_get(&client->dev, SEN_TCLK);
+			ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
+			sclka = private_devm_clk_get(&client->dev, "epll");
 			if (IS_ERR(sclka)) {
 				ISP_ERROR("get sclka failed\n");
 			} else {
@@ -869,8 +875,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
-	sensor->video.max_fps = wsize->fps;
-	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 	sensor_common_update(&sensor_info,
 		info->rst_gpio,
 		info->pwdn_gpio,

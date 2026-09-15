@@ -198,7 +198,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
-struct tx_isp_mipi_bus sensor_mipi_ = {
+struct tx_isp_mipi_bus sensor_mipi_1 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 720,
 	.lans = 1,
@@ -226,7 +226,7 @@ struct tx_isp_mipi_bus sensor_mipi_ = {
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
-struct tx_isp_mipi_bus sensor_mipi_ = {
+struct tx_isp_mipi_bus sensor_mipi_2 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 720,
 	.lans = 1,
@@ -600,7 +600,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_640_240_180fps_mipi,
-	}
+	},
 	/* 640*240 */
 	{
 		.width = 640,

@@ -200,7 +200,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
-struct tx_isp_mipi_bus sensor_mipi_ = {
+struct tx_isp_mipi_bus sensor_mipi_2 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1440,
 	.lans = 2,

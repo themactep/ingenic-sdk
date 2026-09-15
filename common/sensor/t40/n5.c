@@ -313,7 +313,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	sensor_write(sd, 0xA0, 0x00);
 	sensor_write(sd, 0xC0, 0x00);
 	sensor_write(sd, 0xC1, 0x00);
-	reg_1xC8 &= (== port ? 0x0F : 0xF0);
+	reg_1xC8 &= (1 == port ? 0x0F : 0xF0);
 	sensor_write(sd, 0xC8, reg_1xC8); //
 	sensor_write(sd, 0xCC, regCC);
 
@@ -490,7 +490,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_INFO("%s stream on\n", SENSOR_NAME));
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {

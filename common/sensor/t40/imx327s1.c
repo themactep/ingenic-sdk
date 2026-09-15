@@ -965,8 +965,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
 
-	sensor->video.max_fps = wsize->fps;
-	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 	return 0;
 
 err_get_mclk:

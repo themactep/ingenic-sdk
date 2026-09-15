@@ -308,7 +308,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
 #if 0 //mclk = 27Mhz ok
 	{0x0103, 0x01},
 	{0x0100, 0x00},

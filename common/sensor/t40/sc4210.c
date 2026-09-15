@@ -1400,23 +1400,23 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	switch (info->default_boot) {
 	case 0:
 		wsize = &sensor_win_sizes[0];
-		sc031gs_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		sc031gs_attr.max_integration_time_native = 0x61a - 4;
-		sc031gs_attr.integration_time_limit = 0x61a - 4;
-		sc031gs_attr.total_width = 0x5a0 * 2;
-		sc031gs_attr.total_height = 0x61a;
-		sc031gs_attr.max_integration_time = 0x61a - 4;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_integration_time_native = 0x61a - 4;
+		sensor_attr.integration_time_limit = 0x61a - 4;
+		sensor_attr.total_width = 0x5a0 * 2;
+		sensor_attr.total_height = 0x61a;
+		sensor_attr.max_integration_time = 0x61a - 4;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0xc2a;
 		break;
 	case 1:
 		wsize = &sensor_win_sizes[1];
-		sc031gs_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		sc031gs_attr.max_integration_time_native = 0x708 - 4;
-		sc031gs_attr.integration_time_limit = 0x708 - 4;
-		sc031gs_attr.total_width = 0x546 * 2;
-		sc031gs_attr.total_height = 0x708;
-		sc031gs_attr.max_integration_time = 0x708 - 4;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_integration_time_native = 0x708 - 4;
+		sensor_attr.integration_time_limit = 0x708 - 4;
+		sensor_attr.total_width = 0x546 * 2;
+		sensor_attr.total_height = 0x708;
+		sensor_attr.max_integration_time = 0x708 - 4;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0xbb4;
 		break;
