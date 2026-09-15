@@ -16,6 +16,7 @@
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
+#include <txx-funcs.h>
 
 /* 1080p@30fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=30 */
 /* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
