@@ -6,6 +6,7 @@
  * sboot        resolution      fps       interface              mode
  *   0          2560*1440       25        mipi_2lane             linear
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

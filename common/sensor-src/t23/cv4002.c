@@ -10,6 +10,7 @@
  *       builds from SENSOR_CHIP_ID_H/_L (0x02/0x40). Which of the two is the
  *       real CV4002 id is NOT verified against a datasheet.
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

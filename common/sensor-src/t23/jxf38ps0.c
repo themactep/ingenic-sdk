@@ -4,6 +4,7 @@
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  * @fsync Sync hardware connection: Primary Sensor vsync is directly connected to secondary Sensor vsync.
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

@@ -6,6 +6,7 @@
  * sboot        resolution      fps     interface              mode      DVDD
  *   0          2304*1296       30        mipi_2lane           linear    interior
  */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>

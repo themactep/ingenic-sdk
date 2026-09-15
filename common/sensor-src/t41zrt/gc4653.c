@@ -3,6 +3,7 @@
  * gc4653.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
  */
+
 #define __WDR__
 
 #include <linux/init.h>
