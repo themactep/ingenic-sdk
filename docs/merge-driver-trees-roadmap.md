@@ -481,3 +481,18 @@ Follow-up: **t40** (122) and the **t41 legacy set** (35) also lacked the
 `sensor_info` registration; both brought to full coverage (t40 127/127,
 t41 107/107) and, for t41, standardized to the `SENSOR_*` vocabulary.
 No t40/t41 build tree here - structural verification only.
+
+
+### 8h. Sensor include normalization
+
+Every sensor driver now carries the same explicit include set:
+
+- `<soc/gpio.h>` - added to the 48 t23 drivers that used GPIO_*/jzgpio but
+  relied on it transitively (commit 06ffa1e0).
+- `<txx-funcs.h>` - added to all 305 drivers calling a `private_*`
+  function across t21/t23/t30/t31/t40/t41/t41zrt (4f144b64).
+- `<sensor-info.h>` / `<sensor-common.h>` - already complete; the only
+  gap was t40 `jxk04.c` (used `struct sensor_info` but did not include the
+  header, and is not pulled in transitively on t40) - fixed (13f82e31).
+- t20/t10 use the apical ISP: they do not ship `txx-funcs.h`, and get
+  `tx-isp-common.h` via `sensor-common.h`; left as-is.
