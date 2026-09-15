@@ -432,7 +432,7 @@ static struct regval_list os02n10_init_regs_1920_1080_15fps_mipi[] = {
 	{0xfd, 0x00},
 	{0x23, 0x01},
 	{0xfb, 0x03},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting os02n10_win_sizes[] = {
@@ -452,13 +452,13 @@ static struct tx_isp_sensor_win_setting *wsize = &os02n10_win_sizes[0];
 static struct regval_list os02n10_stream_on_mipi[] = {
 	{0xfd, 0x00},
 	{0x23, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list os02n10_stream_off_mipi[] = {
 	{0xfd, 0x00},
 	{0x23, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 #ifdef SENSOR_I2C_REG_8BIT

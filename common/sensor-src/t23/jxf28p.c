@@ -32,9 +32,13 @@
 #define SENSOR_CHIP_ID_L (0x50)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x40
+#define SENSOR_VERSION "H20240408a"
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-#define SENSOR_VERSION "H20240408a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -245,7 +249,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.one_line_expr_in_us = 30,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
@@ -363,8 +367,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0x9B, 0x83},
 	{0x79, 0x00},
 	{0x12, 0x00},
-
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -381,12 +384,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x12, 0x40},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
@@ -453,6 +456,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
+
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
@@ -554,10 +558,8 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
-
 		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 	} else {
-
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 	}
 	return ret;
@@ -741,7 +743,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	default:
 		break;
-		;
 	}
 
 	return ret;
@@ -813,6 +814,7 @@ struct platform_device sensor_platform_device = {
 		},
 	.num_resources = 0,
 };
+
 static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate) {
 	unsigned long rate = 0;
 	struct clk *pll = NULL;
@@ -927,6 +929,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	sensor_mclk_config(sensor, 24000000);
+
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
@@ -945,7 +948,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 
-	ISP_INFO("probe ok ------->jxf28p\n");
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
@@ -989,24 +992,25 @@ static struct i2c_driver sensor_driver = {
 	.id_table = sensor_id,
 };
 
-static __init int init_jxf28p(void) {
-	sensor_common_init(&sensor_info);
+static __init int init_sensor(void) {
 	int ret = 0;
+	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init jxf28p dirver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_jxf28p(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_jxf28p);
-module_exit(exit_jxf28p);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for Sonic jxf28p sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

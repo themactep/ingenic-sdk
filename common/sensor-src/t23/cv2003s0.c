@@ -487,7 +487,7 @@ static struct regval_list cv2003_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3908, 0x50},
 	{0x390A, 0x02},
 	{0x3000, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting cv2003_win_sizes[] = {
@@ -504,12 +504,12 @@ struct tx_isp_sensor_win_setting *wsize = &cv2003_win_sizes[0];
 
 static struct regval_list cv2003_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list cv2003_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int cv2003_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

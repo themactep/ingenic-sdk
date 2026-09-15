@@ -38,10 +38,18 @@
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x10)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_VERSION "H20240219a"
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
 #define SENSOR_I2C_ADDRESS 0x37
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MAX_HEIGHT 1296
-#define SENSOR_VERSION "H20240219a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -419,7 +427,7 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
 	{0x0d04, 0x28},
 	{0x0d23, 0x0e},
 	{0x03fe, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
@@ -579,7 +587,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0d04, 0x28},
 	{0x0d23, 0x0e},
 	{0x03fe, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
@@ -744,7 +752,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x0d04, 0x28},
 	{0x0d23, 0x0e},
 	{0x03fe, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
@@ -776,12 +784,12 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x023e, 0x99},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x023e, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

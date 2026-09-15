@@ -810,7 +810,7 @@ static struct regval_list sensor_init_regs_3840_2160_25fps_mipi[] = {
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_3840_2160_25fps_mipi_raw12[] = {
@@ -1002,7 +1002,7 @@ static struct regval_list sensor_init_regs_3840_2160_25fps_mipi_raw12[] = {
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_binning[] = {
 	{0x0103, 0x01},
@@ -1210,7 +1210,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_binning[] = {
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_binning_sum[] = {
@@ -1421,7 +1421,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_binning_sum[] = 
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_raw12[] = {
@@ -1620,7 +1620,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_raw12[] = {
 	{0x59ff, 0x30},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
@@ -1668,12 +1668,12 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

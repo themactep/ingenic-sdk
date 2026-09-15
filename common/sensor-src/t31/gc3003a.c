@@ -22,11 +22,11 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc3003a"
-#define SENSOR_VERSION "H20221114a"
-#define SENSOR_CHIP_ID 0x300310
 #define SENSOR_CHIP_ID_H (0x30)
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x10)
+#define SENSOR_CHIP_ID 0x300310
+#define SENSOR_VERSION "H20221114a"
 
 // ============================================================================
 // HARDWARE INTERFACE

@@ -736,22 +736,24 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		goto err_get_mclk;
 	}
 
-	/*rate = clk_get_rate(clk_get_parent(sensor->mclk)); */
-	/* if (((rate / 1000) % 27000) != 0) {
-	   struct clk *vpll;
-	   vpll = clk_get(NULL,"vpll");
-	   if (IS_ERR(vpll)) {
-	   ISP_ERROR("get vpll failed\n");
-	   } else {
-	   rate = clk_get_rate(vpll);
-	   if (((rate / 1000) % 27000) != 0) {
-	   clk_set_rate(vpll,1080000027);
-	   }
-	   ret = clk_set_parent(sensor->mclk, vpll);
-	   if (ret < 0)
-	   ISP_ERROR("set mclk parent as epll err\n");
-	   }
-	   } */
+/*
+	rate = clk_get_rate(clk_get_parent(sensor->mclk));
+	if (((rate / 1000) % 27000) != 0) {
+		struct clk *vpll;
+		vpll = clk_get(NULL, "vpll");
+		if (IS_ERR(vpll)) {
+			ISP_ERROR("get vpll failed\n");
+		} else {
+			rate = clk_get_rate(vpll);
+			if (((rate / 1000) % 27000) != 0) {
+				clk_set_rate(vpll, 1080000027);
+			}
+			ret = clk_set_parent(sensor->mclk, vpll);
+			if (ret < 0)
+				ISP_ERROR("set mclk parent as epll err\n");
+		}
+	}
+*/
 
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);

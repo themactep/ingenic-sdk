@@ -331,7 +331,7 @@ static struct regval_list gc1084_init_regs_1280_720_50fps_mipi[] = {
 	{0x0229, 0x05},
 	{0x023e, 0x98},
 	{0x031e, 0x3e},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting gc1084_win_sizes[] = {
@@ -347,11 +347,11 @@ static struct tx_isp_sensor_win_setting gc1084_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &gc1084_win_sizes[0];
 
 static struct regval_list gc1084_stream_on_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list gc1084_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int gc1084_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

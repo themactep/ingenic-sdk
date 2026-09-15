@@ -1525,8 +1525,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	hts = ((hts << 8) + val) << 1;
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	//vtsn0 = (unsigned char) ((vts & 0x3f00) >> 8);
-	//vtsn1 = (unsigned char) (vts & 0xff);
+	//vtsn0 = (unsigned char)((vts & 0x3f00) >> 8);
+	//vtsn1 = (unsigned char)(vts & 0xff);
 	ret += sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
 	ret += sensor_write(sd, 0x42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
@@ -1538,7 +1538,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 8;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
@@ -1639,11 +1638,11 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		//if (arg)
-		//	ret = sensor_set_integration_time(sd, *(int *) arg);
+		//	ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, *(int *) arg);
+		//	ret = sensor_set_analog_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

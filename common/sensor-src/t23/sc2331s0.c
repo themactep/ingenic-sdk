@@ -497,7 +497,7 @@ static struct regval_list sc2331_init_regs_1920_1080_30fps_mipi[] = {
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sc2331_win_sizes[] = {
@@ -515,12 +515,12 @@ struct tx_isp_sensor_win_setting *wsize = &sc2331_win_sizes[0];
 
 static struct regval_list sc2331_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sc2331_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sc2331_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

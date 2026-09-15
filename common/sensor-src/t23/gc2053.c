@@ -1136,8 +1136,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 }
 
 #if 0
-static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -1237,8 +1236,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	ret += sensor_write(sd, 0x04, value & 0xff);
 	ret += sensor_write(sd, 0x03, (value & 0x3f00) >> 8);
@@ -1250,8 +1248,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 	ret += sensor_write(sd, 0xfe, 0x00);
@@ -1290,7 +1287,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -1406,14 +1402,11 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 	ret += sensor_write(sd, 0xfe, 0x0);
 	ret += sensor_read(sd, 0x17, &val);
-
 	if (enable & 0x2)
 		val |= 0x02;
 	else
 		val &= 0xfd;
-
 	ret += sensor_write(sd, 0x17, val);
-
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
@@ -1483,12 +1476,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//			if (arg)
-		//				ret = sensor_set_integration_time(sd, *(int *)arg);
+		//if (arg)
+		//	ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//			if (arg)
-		//				ret = sensor_set_analog_gain(sd, *(int *)arg);
+		//if (arg)
+		//	ret = sensor_set_analog_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
@@ -1766,7 +1759,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);

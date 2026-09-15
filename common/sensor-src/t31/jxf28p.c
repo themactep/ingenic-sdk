@@ -22,10 +22,10 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "jxf28p"
-#define SENSOR_VERSION "H20220228a"
 #define SENSOR_CHIP_ID 0x844
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x44)
+#define SENSOR_VERSION "H20220228a"
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -374,9 +374,6 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
 	{
@@ -472,6 +469,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
+
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
@@ -576,18 +574,15 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
-
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 			ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
-
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -736,7 +731,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 
-	//	return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
@@ -882,6 +876,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
+
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 

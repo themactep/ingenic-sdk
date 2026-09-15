@@ -499,7 +499,7 @@ static struct regval_list jxh63p_init_regs_1280_720_15fps_mipi[] = {
 	{0x47, 0x42},
 	{0x1E, 0x0C},
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting jxh63p_win_sizes[] = {{
@@ -513,20 +513,20 @@ static struct tx_isp_sensor_win_setting jxh63p_win_sizes[] = {{
 struct tx_isp_sensor_win_setting *wsize = &jxh63p_win_sizes[0];
 
 static struct regval_list jxh63p_stream_on_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxh63p_stream_off_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxh63p_stream_on_mipi[] = {
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxh63p_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int jxh63p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {

@@ -381,7 +381,7 @@ static struct regval_list jxf37pa_init_regs_1920_1080_12fps_mipi_sync3[] = {
 	{0x47, 0x42},
 	{0x1E, 0x0C},
 	{0x00, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting jxf37pa_win_sizes[] = {
@@ -397,20 +397,20 @@ static struct tx_isp_sensor_win_setting jxf37pa_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &jxf37pa_win_sizes[0];
 
 static struct regval_list jxf37pa_stream_on_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxf37pa_stream_off_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxf37pa_stream_on_mipi[] = {
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list jxf37pa_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int jxf37pa_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {

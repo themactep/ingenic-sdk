@@ -462,7 +462,7 @@ static struct regval_list ov9734_init_regs_1920_1080_30fps_mipi[] = {
 	//{0x381c, 0x01},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting ov9734_win_sizes[] = {
@@ -480,12 +480,12 @@ struct tx_isp_sensor_win_setting *wsize = &ov9734_win_sizes[0];
 
 static struct regval_list ov9734_stream_on[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list ov9734_stream_off[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int ov9734_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

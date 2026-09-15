@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
-#define DEBUG
 
 #include <linux/init.h>
 #include <linux/module.h>
@@ -18,7 +17,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -30,10 +28,18 @@
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_VERSION "H20240218a"
+
+// ============================================================================
+// HARDWARE INTERFACE
+// ============================================================================
 #define SENSOR_I2C_ADDRESS 0x37
+
+// ============================================================================
+// SENSOR CAPABILITIES
+// ============================================================================
 #define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-#define SENSOR_VERSION "H20240218a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -157,10 +163,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
-
 	return isp_gain;
 }
 
@@ -173,7 +177,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 600,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -240,7 +244,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 28,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
@@ -391,7 +395,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
@@ -540,7 +544,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
@@ -691,7 +695,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x91},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
@@ -839,7 +843,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x3e, 0x40},
 
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
@@ -985,7 +989,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x13, 0x07},
 	{0xfe, 0x00},
 	{0x3e, 0x40},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -1039,19 +1043,19 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {

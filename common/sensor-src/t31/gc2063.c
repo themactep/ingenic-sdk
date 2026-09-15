@@ -23,10 +23,10 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc2063"
-#define SENSOR_VERSION "H20230726a"
 #define SENSOR_CHIP_ID 0x2053
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
+#define SENSOR_VERSION "H20230726a"
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -149,6 +149,7 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
+
 	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].index;

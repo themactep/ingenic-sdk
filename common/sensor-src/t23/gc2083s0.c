@@ -359,7 +359,7 @@ static struct regval_list gc2083_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0229, 0x05},
 	{0x0237, 0x03},
 	{0x023e, 0x99},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting gc2083_win_sizes[] = {
@@ -375,11 +375,11 @@ static struct tx_isp_sensor_win_setting gc2083_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &gc2083_win_sizes[0];
 
 static struct regval_list gc2083_stream_on_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list gc2083_stream_off_mipi[] = {
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 int gc2083_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {

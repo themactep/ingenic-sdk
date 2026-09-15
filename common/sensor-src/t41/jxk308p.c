@@ -430,7 +430,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 	{0xC1, 0x01},
 	{0x12, 0x00},
 	{0x1F, 0xA0},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -449,12 +449,12 @@ static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x12, 0x00},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
 	{0x12, 0x40},
-	{SENSOR_REG_END, 0x00}, /* END MARKER */
+	{SENSOR_REG_END, 0x00},
 };
 
 #ifdef SENSOR_I2C_REG_8BIT
