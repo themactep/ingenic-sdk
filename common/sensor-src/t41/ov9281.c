@@ -27,6 +27,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "ov9281"
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 800
 #define SENSOR_VERSION "H20231115a"
 #define SENSOR_CHIP_ID_H (0x92)
 #define SENSOR_CHIP_ID_L (0x81)

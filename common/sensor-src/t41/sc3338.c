@@ -26,6 +26,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc3338"
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
 #define SENSOR_VERSION "H20220817a"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x41)
@@ -46,6 +48,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);

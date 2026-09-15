@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc301iot"
+#define SENSOR_MAX_WIDTH 2048
+#define SENSOR_MAX_HEIGHT 1536
 #define SENSOR_VERSION "H20230822a"
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x40)

@@ -25,6 +25,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "jxk08"
+#define SENSOR_MAX_WIDTH 3840
+#define SENSOR_MAX_HEIGHT 2160
 #define SENSOR_VERSION "H20230802a"
 #define SENSOR_CHIP_ID_H (0x06)
 #define SENSOR_CHIP_ID_L (0x05)

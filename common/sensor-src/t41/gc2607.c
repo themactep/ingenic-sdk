@@ -26,6 +26,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc2607"
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_VERSION "H20220818a"
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x07)
@@ -46,6 +48,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

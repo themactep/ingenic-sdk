@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "os04c10"
+#define SENSOR_MAX_WIDTH 2688
+#define SENSOR_MAX_HEIGHT 1520
 #define SENSOR_VERSION "H20220809a"
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_L (0x04)
@@ -48,6 +50,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 20
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

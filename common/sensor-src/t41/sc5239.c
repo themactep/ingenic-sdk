@@ -24,6 +24,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc5239"
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1920
 #define SENSOR_VERSION "H20230701a"
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x35)

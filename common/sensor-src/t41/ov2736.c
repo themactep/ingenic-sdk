@@ -26,6 +26,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "ov2736"
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_VERSION "H20220812a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_M (0x27)
@@ -47,6 +49,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

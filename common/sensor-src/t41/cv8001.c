@@ -12,14 +12,22 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "cv8001"
+#define SENSOR_MAX_WIDTH CV8001_W_SIZE
+#define SENSOR_MAX_HEIGHT CV8001_H_SIZE
 #define SENSOR_VERSION "CVSENS.CV8001.forxunmei.30fps.V01.20250805"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_I2C_ADDRESS 0x35
 #define SENSOR_CHIP_ID_H 0x80
 #define SENSOR_CHIP_ID_L 0x01
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // SENSOR CAPABILITIES
@@ -70,6 +78,17 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
@@ -83,9 +102,9 @@ struct again_lut {
 	unsigned int gain; //isp gain arguments to sensor
 };
 
-struct tx_isp_sensor_attribute cv8001_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-struct again_lut cv8001_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	//index, sensor_again_value, sensor_dgain_value_low, sensor_dgain_value_high, isp_gain_arguments //comment is sensor totaol gain
 	//sensor Again Start....
 	{0, 0x0, 0x40, 0x0, 0},		//1.0
@@ -828,10 +847,10 @@ struct again_lut cv8001_again_lut[] = {
 	{736, 0xf0, 0x0, 0x8, 589824},	//512.0
 };
 
-unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
-	struct again_lut *lut = cv8001_again_lut;
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sensor_again_lut;
 
-	while (lut->gain <= cv8001_attr.max_again) {
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->index;
 			return 0;
@@ -839,7 +858,7 @@ unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			*sensor_again = (lut - 1)->index;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == cv8001_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->index;
 				return lut->gain;
 			}
@@ -851,7 +870,7 @@ unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-//unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+//unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 //{
 //	uint16_t again=(isp_gain*20)>>shift;
 //	if(again>SENSOR_AGAIN_MAX) again=SENSOR_AGAIN_MAX;
@@ -861,11 +880,11 @@ unsigned int cv8001_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 //	return isp_gain;
 //}
 
-unsigned int cv8001_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus cv8001_mipi = {
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1600,
 	.lans = 2,
@@ -894,8 +913,8 @@ struct tx_isp_mipi_bus cv8001_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute cv8001_attr = {
-	.name = "cv8001",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0x8001,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
@@ -912,11 +931,11 @@ struct tx_isp_sensor_attribute cv8001_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = cv8001_alloc_again,
-	.sensor_ctrl.alloc_dgain = cv8001_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list cv8001_init_regs_mipi[] = {
+static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3028, 0x24},
 	{0x3029, 0x13},
 	{0x302C, 0x2E},
@@ -979,28 +998,28 @@ static struct regval_list cv8001_init_regs_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting cv8001_win_sizes[] = {{
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.width = CV8001_W_SIZE,
 	.height = CV8001_H_SIZE,
 	.fps = CV8001_MAX_FPS << 16 | 1,
 	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, //RAW
 	//.mbus_code	= TISP_VI_FMT_SBGGR10_1X10,//RAW,Mirror+FLip Mode.
 	.colorspace = TISP_COLORSPACE_SRGB,
-	.regs = cv8001_init_regs_mipi,
+	.regs = sensor_init_regs_mipi,
 }};
-struct tx_isp_sensor_win_setting *wsize = &cv8001_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list cv8001_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list cv8001_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x3000, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int cv8001_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {[0] =
@@ -1024,7 +1043,7 @@ int cv8001_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int cv8001_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -1042,7 +1061,7 @@ int cv8001_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int cv8001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -1050,7 +1069,7 @@ static int cv8001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = cv8001_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1061,14 +1080,14 @@ static int cv8001_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int cv8001_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = cv8001_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1078,15 +1097,15 @@ static int cv8001_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int cv8001_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
-	ret = cv8001_read(sd, 0x3002, &v);
+	ret = sensor_read(sd, 0x3002, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1094,7 +1113,7 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = cv8001_read(sd, 0x3003, &v);
+	ret = sensor_read(sd, 0x3003, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1105,47 +1124,47 @@ static int cv8001_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int cv8001_set_integration_time(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int reg;
 
-	reg = cv8001_attr.integration_time_limit - value;
+	reg = sensor_attr.integration_time_limit - value;
 	reg = reg / 2 * 2;
 
-	ret = cv8001_write(sd, CV8001_EXP0_REG_L, (unsigned char)(reg & 0xff));
-	ret |= cv8001_write(sd, CV8001_EXP0_REG_M, (unsigned char)((reg >> 8) & 0xff));
-	ret |= cv8001_write(sd, CV8001_EXP0_REG_H, (unsigned char)((reg >> 16) & 0xff));
+	ret = sensor_write(sd, CV8001_EXP0_REG_L, (unsigned char)(reg & 0xff));
+	ret |= sensor_write(sd, CV8001_EXP0_REG_M, (unsigned char)((reg >> 8) & 0xff));
+	ret |= sensor_write(sd, CV8001_EXP0_REG_H, (unsigned char)((reg >> 16) & 0xff));
 
 	// ISP_INFO("cv8001 set exp to %4d line\n", value);
 
 	return 0;
 }
 
-//static int cv8001_set_analog_gain(struct tx_isp_subdev *sd, int value)
+//static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 //{
 //	int ret = 0;
 //	unsigned char again = value & 0xff;
 //
-//	ret = cv8001_write(sd, 0x3164, again);
+//	ret = sensor_write(sd, 0x3164, again);
 //
 //	ISP_INFO("cv8001 set gain = 0x%02x(%03d)\n", again, again);
 //
 //	return 0;
 //}
 
-static int cv8001_set_analog_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int index = value & 0xffff;
-	struct again_lut *lut = cv8001_again_lut;
+	struct again_lut *lut = sensor_again_lut;
 
 	//set sensor gain
-	ret += cv8001_write(sd,
+	ret += sensor_write(sd,
 		CV8001_REG_SPLIT_AGAIN,
 		(unsigned char)(lut[index].sensor_again_value)); //set sensor Again
-	ret += cv8001_write(sd,
+	ret += sensor_write(sd,
 		CV8001_REG_SPLIT_DGAIN_L,
 		(unsigned char)(lut[index].sensor_dgain_value_low)); //set sensor Dgain
-	ret += cv8001_write(sd,
+	ret += sensor_write(sd,
 		CV8001_REG_SPLIT_DGAIN_H,
 		(unsigned char)(lut[index].sensor_dgain_value_high)); //set sensor Dgain
 
@@ -1157,11 +1176,11 @@ static int cv8001_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int cv8001_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int cv8001_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
@@ -1182,7 +1201,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int cv8001_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -1197,31 +1216,31 @@ static int cv8001_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int cv8001_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			ret = cv8001_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
-			ret = cv8001_write_array(sd, cv8001_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			ISP_INFO("cv8001 stream on\n");
 		}
 	} else {
-		ret = cv8001_write_array(sd, cv8001_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		ISP_INFO("cv8001 stream off\n");
 	}
 
 	return ret;
 }
 
-static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	int ret, fps_n, vts_n, cur_exp, cur_reg;
 	unsigned char reg = 0, is_updata = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -1240,12 +1259,12 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts_n = (CV8001_MAX_FPS * 10) * CV8001_30FPS_VTS / fps_n;
 	ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x)\n", fps_n / 10, fps_n % 10, vts_n);
 
-	ret = cv8001_read(sd, CV8001_EXP0_REG_H, &reg);
+	ret = sensor_read(sd, CV8001_EXP0_REG_H, &reg);
 	cur_reg = reg;
-	ret |= cv8001_read(sd, CV8001_EXP0_REG_M, &reg);
+	ret |= sensor_read(sd, CV8001_EXP0_REG_M, &reg);
 	cur_reg <<= 8;
 	cur_reg |= reg;
-	ret |= cv8001_read(sd, CV8001_EXP0_REG_L, &reg);
+	ret |= sensor_read(sd, CV8001_EXP0_REG_L, &reg);
 	cur_reg <<= 8;
 	cur_reg |= reg;
 
@@ -1263,9 +1282,9 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 		is_updata = 1;
 	}
 
-	ret = cv8001_write(sd, CV8001_VTS_REG_L, (unsigned char)(vts_n & 0xff));
-	ret |= cv8001_write(sd, CV8001_VTS_REG_M, (unsigned char)((vts_n >> 8) & 0xff));
-	ret |= cv8001_write(sd, CV8001_VTS_REG_H, (unsigned char)((vts_n >> 16) & 0xff));
+	ret = sensor_write(sd, CV8001_VTS_REG_L, (unsigned char)(vts_n & 0xff));
+	ret |= sensor_write(sd, CV8001_VTS_REG_M, (unsigned char)((vts_n >> 8) & 0xff));
+	ret |= sensor_write(sd, CV8001_VTS_REG_H, (unsigned char)((vts_n >> 16) & 0xff));
 	if (ret) {
 		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set vts err(%d)!\n",
 			fps_n / 10,
@@ -1291,7 +1310,7 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	if (is_updata) {
-		ret = cv8001_set_integration_time(sd, cur_exp);
+		ret = sensor_set_integration_time(sd, cur_exp);
 		if (ret < 0) {
 			ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set exp err(%d)!\n",
 				fps_n / 10,
@@ -1305,13 +1324,13 @@ static int cv8001_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return ret;
 }
 
-static int cv8001_set_hvflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = cv8001_read(sd, 0x3034, &val);
+	val = sensor_read(sd, 0x3034, &val);
 	switch (enable) {
 	case 0: //normal
 		val &= 0xFC;
@@ -1331,13 +1350,13 @@ static int cv8001_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		break;
 	}
 	sensor->video.mbus_change = 1;
-	cv8001_write(sd, 0x3034, val);
+	sensor_write(sd, 0x3034, val);
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
 
-static int cv8001_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1357,10 +1376,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->default_boot) {
 	case 0:
-		wsize = &cv8001_win_sizes[0];
-		memcpy(&(cv8001_attr.mipi), &cv8001_mipi, sizeof(cv8001_mipi));
-		cv8001_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		cv8001_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		wsize = &sensor_win_sizes[0];
+		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
@@ -1368,11 +1387,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
-		cv8001_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		cv8001_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		cv8001_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this Interface Source!!!\n");
@@ -1407,14 +1426,14 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	return 0;
 }
 
-static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "cv8001_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
@@ -1427,7 +1446,7 @@ static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "cv8001_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(5);
@@ -1437,7 +1456,7 @@ static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = cv8001_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an cv8001 chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1445,7 +1464,7 @@ static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ISP_INFO("cv8001 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "cv8001", sizeof("cv8001"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1453,7 +1472,7 @@ static int cv8001_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	return 0;
 }
 
-static int cv8001_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
@@ -1466,37 +1485,37 @@ static int cv8001_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = cv8001_set_integration_time(sd, sensor_val->value);
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = cv8001_set_analog_gain(sd, sensor_val->value);
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = cv8001_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = cv8001_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = cv8001_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = cv8001_write_array(sd, cv8001_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = cv8001_write_array(sd, cv8001_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = cv8001_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = cv8001_set_hvflip(sd, sensor_val->value);
+			ret = sensor_set_hvflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1505,7 +1524,7 @@ static int cv8001_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int cv8001_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1516,14 +1535,14 @@ static int cv8001_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = cv8001_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int cv8001_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1532,37 +1551,37 @@ static int cv8001_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	cv8001_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops cv8001_core_ops = {
-	.g_chip_ident = cv8001_g_chip_ident,
-	.reset = cv8001_reset,
-	.init = cv8001_init,
-	.g_register = cv8001_g_register,
-	.s_register = cv8001_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops cv8001_video_ops = {
-	.s_stream = cv8001_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops cv8001_sensor_ops = {
-	.ioctl = cv8001_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops cv8001_ops = {
-	.core = &cv8001_core_ops,
-	.video = &cv8001_video_ops,
-	.sensor = &cv8001_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "cv8001",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -1573,7 +1592,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int cv8001_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1588,10 +1607,10 @@ static int cv8001_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;
-	cv8001_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sensor->video.shvflip = 1;
-	sensor->video.attr = &cv8001_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &cv8001_ops);
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1601,7 +1620,7 @@ static int cv8001_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 }
 
-static int cv8001_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1618,26 +1637,28 @@ static int cv8001_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id cv8001_id[] = {{"cv8001", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, cv8001_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver cv8001_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "cv8001",
+			.name = SENSOR_NAME,
 		},
-	.probe = cv8001_probe,
-	.remove = cv8001_remove,
-	.id_table = cv8001_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_cv8001(void) {
-	return private_i2c_add_driver(&cv8001_driver);
+	sensor_common_init(&sensor_info);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_cv8001(void) {
-	private_i2c_del_driver(&cv8001_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_cv8001);

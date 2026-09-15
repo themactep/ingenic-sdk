@@ -25,13 +25,19 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "gc08a8"
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0xa8)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x31
+#define SENSOR_MAX_WIDTH 3264
+#define SENSOR_MAX_HEIGHT 2448
 #define SENSOR_VERSION "H20250304a"
 
 // ============================================================================
@@ -44,10 +50,22 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = -1; //GPIO_PA(18);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -59,7 +77,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut gc08a8_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x400, 0},
 	{0x440, 5732},
 	{0x480, 11136},
@@ -303,7 +321,7 @@ struct again_lut gc08a8_again_lut[] = {
 	{0x4000, 262144},
 };
 
-struct tx_isp_sensor_attribute gc08a8_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int gc08a8_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
@@ -314,9 +332,9 @@ unsigned int gc08a8_alloc_integration_time(unsigned int it, unsigned char shift,
 	return isp_it;
 }
 
-unsigned int gc08a8_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
-	struct again_lut *lut = gc08a8_again_lut;
-	while (lut->gain <= gc08a8_attr.max_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->value;
 			return 0;
@@ -324,7 +342,7 @@ unsigned int gc08a8_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == gc08a8_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -336,11 +354,11 @@ unsigned int gc08a8_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int gc08a8_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus gc08a8_mipi = {
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1344,
 	.lans = 2,
@@ -369,8 +387,8 @@ struct tx_isp_mipi_bus gc08a8_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute gc08a8_attr = {
-	.name = "gc08a8",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0x08a8,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
@@ -385,11 +403,11 @@ struct tx_isp_sensor_attribute gc08a8_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = gc08a8_alloc_again,
-	.sensor_ctrl.alloc_dgain = gc08a8_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list gc08a8_init_regs_3264_2448_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_3264_2448_30fps_mipi[] = {
 	{0x031c, 0x60},
 	{0x0337, 0x04},
 	{0x0335, 0x51},
@@ -832,7 +850,7 @@ static struct regval_list gc08a8_init_regs_3264_2448_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting gc08a8_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 3264*2448 [0] */
 	{
 		.width = 3264,
@@ -840,23 +858,23 @@ static struct tx_isp_sensor_win_setting gc08a8_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = gc08a8_init_regs_3264_2448_30fps_mipi,
+		.regs = sensor_init_regs_3264_2448_30fps_mipi,
 	},
 };
 
-struct tx_isp_sensor_win_setting *wsize = &gc08a8_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list gc08a8_stream_on[] = {
+static struct regval_list sensor_stream_on[] = {
 	// {0x0100,  0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list gc08a8_stream_off[] = {
+static struct regval_list sensor_stream_off[] = {
 	// {0x0100,  0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int gc08a8_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {[0] =
@@ -880,7 +898,7 @@ int gc08a8_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int gc08a8_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -898,7 +916,7 @@ int gc08a8_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int gc08a8_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -906,7 +924,7 @@ static int gc08a8_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = gc08a8_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -916,13 +934,13 @@ static int gc08a8_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int gc08a8_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = gc08a8_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -932,21 +950,21 @@ static int gc08a8_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int gc08a8_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int gc08a8_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v = 0;
 	int ret;
 
-	ret = gc08a8_read(sd, 0x03f0, &v);
+	ret = sensor_read(sd, 0x03f0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	ret = gc08a8_read(sd, 0x03f1, &v);
+	ret = sensor_read(sd, 0x03f1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -957,59 +975,59 @@ static int gc08a8_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int gc08a8_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += gc08a8_write(sd, 0x0202, (unsigned char)((it >> 8) & 0xff));
-	ret += gc08a8_write(sd, 0x0203, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x0202, (unsigned char)((it >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0203, (unsigned char)(it & 0xff));
 
-	ret += gc08a8_write(sd, 0x0204, (unsigned char)((again >> 8) & 0xff));
-	ret += gc08a8_write(sd, 0x0205, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x0204, (unsigned char)((again >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0205, (unsigned char)(again & 0xff));
 
 	return ret;
 }
 
 #if 0
-static int gc08a8_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret = gc08a8_write(sd, 0x0203, value & 0xff);
-	ret += gc08a8_write(sd, 0x0202, value >> 8);
+	ret = sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0)
-		ISP_ERROR("gc08a8_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 
 	return ret;
 }
 
-static int gc08a8_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	struct again_lut *val_lut = gc08a8_again_lut;
+	struct again_lut *val_lut = sensor_again_lut;
 
-	ret += gc08a8_write(sd, 0x031d , 0x2d);
-	ret += gc08a8_write(sd, 0x0614, val_lut[value].reg614);
-	ret += gc08a8_write(sd, 0x0615, val_lut[value].reg615);
-	ret += gc08a8_write(sd, 0x031d, 0x28);
-	ret += gc08a8_write(sd, 0x0225, val_lut[value].reg225);
-	ret += gc08a8_write(sd, 0x1467, val_lut[value].reg1467);
-	ret += gc08a8_write(sd, 0x1468, val_lut[value].reg1468);
-	ret += gc08a8_write(sd, 0x00b8, val_lut[value].regb8);
-	ret += gc08a8_write(sd, 0x00b9, val_lut[value].regb9);
+	ret += sensor_write(sd, 0x031d , 0x2d);
+	ret += sensor_write(sd, 0x0614, val_lut[value].reg614);
+	ret += sensor_write(sd, 0x0615, val_lut[value].reg615);
+	ret += sensor_write(sd, 0x031d, 0x28);
+	ret += sensor_write(sd, 0x0225, val_lut[value].reg225);
+	ret += sensor_write(sd, 0x1467, val_lut[value].reg1467);
+	ret += sensor_write(sd, 0x1468, val_lut[value].reg1468);
+	ret += sensor_write(sd, 0x00b8, val_lut[value].regb8);
+	ret += sensor_write(sd, 0x00b9, val_lut[value].regb9);
 	if (ret < 0)
-		ISP_ERROR("gc08a8_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
 
 	return ret;
 }
 #endif
 
-static int gc08a8_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int gc08a8_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
@@ -1028,7 +1046,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int gc08a8_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -1043,30 +1061,30 @@ static int gc08a8_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int gc08a8_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			ret = gc08a8_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
-			ret = gc08a8_write_array(sd, gc08a8_stream_on);
+			ret = sensor_write_array(sd, sensor_stream_on);
 			ISP_INFO("gc08a8 stream on\n");
 		}
 	} else {
-		ret = gc08a8_write_array(sd, gc08a8_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("gc08a8 stream off\n");
 	}
 
 	return ret;
 }
 
-static int gc08a8_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int vts = 0;
@@ -1091,15 +1109,15 @@ static int gc08a8_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) no in range\n", fps);
 		return -1;
 	}
-	ret += gc08a8_read(sd, 0x0342, &tmp);
+	ret += sensor_read(sd, 0x0342, &tmp);
 	hts = tmp & 0x0f;
-	ret += gc08a8_read(sd, 0x0343, &tmp);
+	ret += sensor_read(sd, 0x0343, &tmp);
 	if (ret < 0)
 		return -1;
 	hts = ((hts << 8) | tmp) << 1;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	ret = gc08a8_write(sd, 0x0340, (unsigned char)((vts >> 8) & 0xff));
-	ret += gc08a8_write(sd, 0x0341, (unsigned char)(vts & 0xff));
+	ret = sensor_write(sd, 0x0340, (unsigned char)((vts >> 8) & 0xff));
+	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
 	ISP_INFO("vts=%x hts=%x fps%d\n", vts, hts, fps);
@@ -1115,13 +1133,13 @@ static int gc08a8_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return 0;
 }
 
-static int gc08a8_set_hvflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = ISP_SUCCESS;
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	unsigned char val = 0x0;
 
 	/* 2'b01:mirror,2'b10:filp */
-	ret = gc08a8_read(sd, 0x0101, &val);
+	ret = sensor_read(sd, 0x0101, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xFC;
@@ -1140,7 +1158,7 @@ static int gc08a8_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
 	}
-	ret += gc08a8_write(sd, 0x0101, val);
+	ret += sensor_write(sd, 0x0101, val);
 
 	sensor->video.mbus_change = 1;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1148,7 +1166,7 @@ static int gc08a8_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int gc08a8_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1169,18 +1187,18 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->default_boot) {
 	case 0:
-		wsize = &gc08a8_win_sizes[0];
-		memcpy(&gc08a8_attr.mipi, &gc08a8_mipi, sizeof(gc08a8_mipi));
-		gc08a8_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		gc08a8_attr.one_line_expr_in_us = 19;
-		gc08a8_attr.total_width = 0x071c * 2;
-		gc08a8_attr.total_height = 0x09f4;
-		gc08a8_attr.max_integration_time_native = 0x09f4 - 16;
-		gc08a8_attr.integration_time_limit = 0x09f4 - 16;
-		gc08a8_attr.max_integration_time = 0x09f4 - 16;
-		gc08a8_attr.again = 0;
-		gc08a8_attr.integration_time = 0x10;
-		gc08a8_attr.max_again = 262144;
+		wsize = &sensor_win_sizes[0];
+		memcpy(&sensor_attr.mipi, &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.one_line_expr_in_us = 19;
+		sensor_attr.total_width = 0x071c * 2;
+		sensor_attr.total_height = 0x09f4;
+		sensor_attr.max_integration_time_native = 0x09f4 - 16;
+		sensor_attr.integration_time_limit = 0x09f4 - 16;
+		sensor_attr.max_integration_time = 0x09f4 - 16;
+		sensor_attr.again = 0;
+		sensor_attr.integration_time = 0x10;
+		sensor_attr.max_again = 262144;
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
@@ -1229,14 +1247,14 @@ err_get_mclk:
 	return -1;
 }
 
-static int gc08a8_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "gc08a8_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
@@ -1249,7 +1267,7 @@ static int gc08a8_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "gc08a8_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
@@ -1261,7 +1279,7 @@ static int gc08a8_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = gc08a8_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an gc08a8 chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1271,14 +1289,14 @@ static int gc08a8_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		client->adapter->name,
 		SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "gc08a8", sizeof("gc08a8"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
 	return 0;
 }
 
-static int gc08a8_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	// struct tx_isp_initarg *init = arg;
@@ -1290,44 +1308,44 @@ static int gc08a8_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = gc08a8_set_expo(sd, sensor_val->value);
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 		/*
 			case TX_ISP_EVENT_SENSOR_INT_TIME:
 				if(arg)
-					ret = gc08a8_set_integration_time(sd, sensor_val->value);
+					ret = sensor_set_integration_time(sd, sensor_val->value);
 				break;
 			case TX_ISP_EVENT_SENSOR_AGAIN:
 				if(arg)
-					ret = gc08a8_set_analog_gain(sd, sensor_val->value);
+					ret = sensor_set_analog_gain(sd, sensor_val->value);
 				break;
 		*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = gc08a8_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = gc08a8_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = gc08a8_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = gc08a8_write_array(sd, gc08a8_stream_off);
+		ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = gc08a8_write_array(sd, gc08a8_stream_on);
+		ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = gc08a8_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = gc08a8_set_hvflip(sd, sensor_val->value);
+			ret = sensor_set_hvflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1336,7 +1354,7 @@ static int gc08a8_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int gc08a8_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1347,14 +1365,14 @@ static int gc08a8_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = gc08a8_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int gc08a8_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1363,38 +1381,38 @@ static int gc08a8_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	gc08a8_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops gc08a8_core_ops = {
-	.g_chip_ident = gc08a8_g_chip_ident,
-	.reset = gc08a8_reset,
-	.init = gc08a8_init,
-	/*.ioctl = gc08a8_ops_ioctl,*/
-	.g_register = gc08a8_g_register,
-	.s_register = gc08a8_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops gc08a8_video_ops = {
-	.s_stream = gc08a8_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops gc08a8_sensor_ops = {
-	.ioctl = gc08a8_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops gc08a8_ops = {
-	.core = &gc08a8_core_ops,
-	.video = &gc08a8_video_ops,
-	.sensor = &gc08a8_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "gc08a8",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -1405,7 +1423,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int gc08a8_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1420,9 +1438,9 @@ static int gc08a8_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	gc08a8_attr.expo_fs = 1;
-	sensor->video.attr = &gc08a8_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &gc08a8_ops);
+	sensor_attr.expo_fs = 1;
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1432,7 +1450,7 @@ static int gc08a8_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 }
 
-static int gc08a8_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1448,26 +1466,28 @@ static int gc08a8_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id gc08a8_id[] = {{"gc08a8", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, gc08a8_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver gc08a8_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "gc08a8",
+			.name = SENSOR_NAME,
 		},
-	.probe = gc08a8_probe,
-	.remove = gc08a8_remove,
-	.id_table = gc08a8_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_gc08a8(void) {
-	return private_i2c_add_driver(&gc08a8_driver);
+	sensor_common_init(&sensor_info);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_gc08a8(void) {
-	private_i2c_del_driver(&gc08a8_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_gc08a8);

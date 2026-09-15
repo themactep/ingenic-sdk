@@ -26,6 +26,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "ov7251"
+#define SENSOR_MAX_WIDTH 320
+#define SENSOR_MAX_HEIGHT 240
 #define SENSOR_VERSION "H20220812a"
 #define SENSOR_CHIP_ID_H (0x77)
 #define SENSOR_CHIP_ID_L (0x50)

@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc031gs"
+#define SENSOR_MAX_WIDTH 640
+#define SENSOR_MAX_HEIGHT 480
 #define SENSOR_VERSION "H20220817a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x31)
@@ -48,6 +50,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 120
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);

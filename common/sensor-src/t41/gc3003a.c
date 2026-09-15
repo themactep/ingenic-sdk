@@ -26,6 +26,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc3003a"
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
 #define SENSOR_VERSION "H20221117a"
 #define SENSOR_CHIP_ID_H (0x30)
 #define SENSOR_CHIP_ID_M (0x03)

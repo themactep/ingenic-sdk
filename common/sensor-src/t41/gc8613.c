@@ -29,6 +29,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc8613"
+#define SENSOR_MAX_WIDTH 3840
+#define SENSOR_MAX_HEIGHT 2160
 #define SENSOR_VERSION "H20230427a"
 #define SENSOR_CHIP_ID_H (0x86)
 #define SENSOR_CHIP_ID_L (0x13)
@@ -49,6 +51,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 25
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

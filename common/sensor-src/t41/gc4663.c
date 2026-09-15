@@ -29,6 +29,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "gc4663"
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_VERSION "H20230928a"
 #define SENSOR_CHIP_ID_H (0x46)
 #define SENSOR_CHIP_ID_L (0x53)
@@ -51,6 +53,7 @@
 #define SENSOR_SUPPORT_30FPS_SCLK (144 * 1000 * 1000)
 #define SENSOR_SUPPORT_30FPS_SCLK_HDR (132000000)
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 25
 
 static int wdr_bufsize = 2 * 3000 * 188;
 

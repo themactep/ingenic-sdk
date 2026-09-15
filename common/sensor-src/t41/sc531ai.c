@@ -25,6 +25,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc531ai"
+#define SENSOR_MAX_WIDTH 2880
+#define SENSOR_MAX_HEIGHT 1620
 #define SENSOR_VERSION "H20230914a-roy"
 #define SENSOR_CHIP_ID_H (0x9e)
 #define SENSOR_CHIP_ID_L (0x39)

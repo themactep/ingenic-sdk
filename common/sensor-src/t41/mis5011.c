@@ -25,6 +25,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "mis5011"
+#define SENSOR_MAX_WIDTH 2960
+#define SENSOR_MAX_HEIGHT 1632
 #define SENSOR_VERSION "H20230928a"
 #define SENSOR_CHIP_ID_H (0x50)
 #define SENSOR_CHIP_ID_L (0x03)

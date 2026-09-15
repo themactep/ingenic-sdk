@@ -28,15 +28,21 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define TVERSION "V20231226a"
+#define SENSOR_NAME "sc535iot"
 #define SENSOR_VERSION "H20241011a"
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_CHIP_ID_H (0xce)
 #define SENSOR_CHIP_ID_L (0x78)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // SPECIAL FEATURES
@@ -71,6 +77,7 @@ static int wdr_line = 699 * 2;
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_MCLK 24000000
 
 #define SENSOR_SUPPORT_SCLK 1500 * 2000 * 30
@@ -78,9 +85,20 @@ static int wdr_line = 699 * 2;
 
 // static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 
-struct tx_isp_sensor_attribute sc535iot_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -92,7 +110,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc535iot_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x20, 0},
 	{0x21, 2886},
 	{0x22, 5776},
@@ -297,12 +315,12 @@ struct again_lut sc535iot_again_lut[] = {
 };
 #endif /* SENSOR_AGAIN_TABLE */
 
-unsigned int sc535iot_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
-	struct again_lut *lut = sc535iot_again_lut;
-	while (lut->gain <= sc535iot_attr.max_again) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
@@ -310,7 +328,7 @@ unsigned int sc535iot_alloc_again(unsigned int isp_gain, unsigned char shift, un
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == sc535iot_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -330,12 +348,12 @@ unsigned int sc535iot_alloc_again(unsigned int isp_gain, unsigned char shift, un
 }
 
 #ifdef SENSOR_WDR_2_FRAME
-unsigned int sc535iot_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
-	struct again_lut *lut = sc535iot_again_lut;
-	while (lut->gain <= sc535iot_attr.max_again_short) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again_short) {
 		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
@@ -343,7 +361,7 @@ unsigned int sc535iot_alloc_again_short(unsigned int isp_gain, unsigned char shi
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == sc535iot_attr.max_again_short) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again_short) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -363,11 +381,11 @@ unsigned int sc535iot_alloc_again_short(unsigned int isp_gain, unsigned char shi
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-unsigned int sc535iot_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus sc535iot_mipi_2592_1944_linear = {
+struct tx_isp_mipi_bus sensor_mipi_2592_1944_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 900,
 	.lans = 2,
@@ -395,7 +413,7 @@ struct tx_isp_mipi_bus sc535iot_mipi_2592_1944_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sc535iot_mipi_2688_1520_linear = {
+struct tx_isp_mipi_bus sensor_mipi_2688_1520_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 900,
 	.lans = 2,
@@ -423,7 +441,7 @@ struct tx_isp_mipi_bus sc535iot_mipi_2688_1520_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sc535iot_mipi_2592_1944_dol = {
+struct tx_isp_mipi_bus sensor_mipi_2592_1944_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 900,
 	.lans = 2,
@@ -452,7 +470,7 @@ struct tx_isp_mipi_bus sc535iot_mipi_2592_1944_dol = {
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-struct tx_isp_mipi_bus sc535iot_mipi_2688_1520_dol = {
+struct tx_isp_mipi_bus sensor_mipi_2688_1520_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1080,
 	.lans = 2,
@@ -481,7 +499,7 @@ struct tx_isp_mipi_bus sc535iot_mipi_2688_1520_dol = {
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-struct tx_isp_dvp_bus sc535iot_dvp = {
+struct tx_isp_dvp_bus sensor_dvp = {
 	.gpio = DVP_PA_LOW_10BIT,
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking =
@@ -498,20 +516,20 @@ struct tx_isp_dvp_bus sc535iot_dvp = {
 	.dvp_hcomp_en = 0,
 };
 
-struct tx_isp_sensor_attribute sc535iot_attr = {
-	.name = "sc535iot",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0xce78,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
-	.sensor_ctrl.alloc_again = sc535iot_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc535iot_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 #ifdef SENSOR_WDR_2_FRAME
-	.sensor_ctrl.alloc_again_short = sc535iot_alloc_again_short,
+	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 #endif /* SENSOR_WDR_2_FRAME */
 };
 
-static struct regval_list sc535iot_init_regs_2592_1944_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2592_1944_30fps_mipi[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -737,7 +755,7 @@ static struct regval_list sc535iot_init_regs_2592_1944_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc535iot_init_regs_2688_1520_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -963,7 +981,7 @@ static struct regval_list sc535iot_init_regs_2688_1520_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc535iot_init_regs_2592_1944_15fps_mipi_dol[] = {
+static struct regval_list sensor_init_regs_2592_1944_15fps_mipi_dol[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -1194,7 +1212,7 @@ static struct regval_list sc535iot_init_regs_2592_1944_15fps_mipi_dol[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc535iot_init_regs_2688_1520_24fps_mipi_dol[] = {
+static struct regval_list sensor_init_regs_2688_1520_24fps_mipi_dol[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -1426,7 +1444,7 @@ static struct regval_list sc535iot_init_regs_2688_1520_24fps_mipi_dol[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting sc535iot_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 2592*1944 [0] */
 	{
 		.width = 2592,
@@ -1434,7 +1452,7 @@ static struct tx_isp_sensor_win_setting sc535iot_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = sc535iot_init_regs_2592_1944_30fps_mipi,
+		.regs = sensor_init_regs_2592_1944_30fps_mipi,
 	},
 	/* 2592*1944 [1] */
 	{
@@ -1443,7 +1461,7 @@ static struct tx_isp_sensor_win_setting sc535iot_win_sizes[] = {
 		.fps = 15 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = sc535iot_init_regs_2592_1944_15fps_mipi_dol,
+		.regs = sensor_init_regs_2592_1944_15fps_mipi_dol,
 	},
 	/* 2688*1520 [2] */
 	{
@@ -1452,7 +1470,7 @@ static struct tx_isp_sensor_win_setting sc535iot_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = sc535iot_init_regs_2688_1520_30fps_mipi,
+		.regs = sensor_init_regs_2688_1520_30fps_mipi,
 	},
 	/* 2688*1520 [3] */
 	{
@@ -1461,24 +1479,24 @@ static struct tx_isp_sensor_win_setting sc535iot_win_sizes[] = {
 		.fps = 24 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = sc535iot_init_regs_2688_1520_24fps_mipi_dol,
+		.regs = sensor_init_regs_2688_1520_24fps_mipi_dol,
 	},
 };
 
-static struct tx_isp_sensor_win_setting *wsize = &sc535iot_win_sizes[0];
+static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list sc535iot_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc535iot_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 #ifdef SENSOR_I2C_REG_8BIT
-int sc535iot_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {[0] =
 					 {
@@ -1501,7 +1519,7 @@ int sc535iot_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *va
 	return ret;
 }
 
-int sc535iot_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -1519,7 +1537,7 @@ int sc535iot_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char va
 }
 
 #if 0
-static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -1527,7 +1545,7 @@ static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc535iot_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			/* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
 			if (ret < 0)
 				return ret;
@@ -1539,13 +1557,13 @@ static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 }
 #endif
 
-static int sc535iot_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc535iot_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1558,7 +1576,7 @@ static int sc535iot_write_array(struct tx_isp_subdev *sd, struct regval_list *va
 
 #ifdef SENSOR_I2C_REG_16BIT
 
-int sc535iot_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
@@ -1583,7 +1601,7 @@ int sc535iot_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) 
 	return ret;
 }
 
-int sc535iot_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -1601,7 +1619,7 @@ int sc535iot_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) 
 }
 
 #if 0
-static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 		int ret;
 		unsigned char val;
@@ -1609,7 +1627,7 @@ static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 				if (vals->reg_num == SENSOR_REG_DELAY) {
 						private_msleep(vals->value);
 				} else {
-						ret = sc535iot_read(sd, vals->reg_num, &val);
+						ret = sensor_read(sd, vals->reg_num, &val);
 						if (ret < 0)
 								return ret;
 				}
@@ -1619,13 +1637,13 @@ static int sc535iot_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 }
 #endif
 
-static int sc535iot_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc535iot_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1679,7 +1697,7 @@ error:
 	return ret;
 }
 
-static int sc535iot_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
+static int sensor_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1705,7 +1723,7 @@ static int sc535iot_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_
 	return ret;
 }
 
-static int sc535iot_setting_select(struct tx_isp_subdev *sd, int deboot) {
+static int sensor_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = ISP_SUCCESS;
@@ -1713,103 +1731,103 @@ static int sc535iot_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	switch (deboot) {
 	case 0:
 		info->default_boot = 0;
-		wsize = &sc535iot_win_sizes[0];
-		sc535iot_attr.mipi.clk = 900;
-		sc535iot_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		sc535iot_attr.max_dgain = 0;
-		sc535iot_attr.max_again = 327680;
-		sc535iot_attr.min_integration_time = 2;
-		sc535iot_attr.max_integration_time = 2000 - 8;
-		sc535iot_attr.total_width = 1500;
-		sc535iot_attr.total_height = 2000;
-		sc535iot_attr.integration_time_apply_delay = 2;
-		sc535iot_attr.again_apply_delay = 2;
-		sc535iot_attr.dgain_apply_delay = 0;
-		sc535iot_attr.integration_time_limit = sc535iot_attr.max_integration_time;
-		sc535iot_attr.max_integration_time_native = sc535iot_attr.max_integration_time;
-		sc535iot_attr.min_integration_time_native = sc535iot_attr.min_integration_time;
-		sc535iot_attr.expo_fs = 1;
-		memcpy((void *)(&(sc535iot_attr.mipi)),
-			(void *)(&sc535iot_mipi_2592_1944_linear),
-			sizeof(sc535iot_mipi_2592_1944_linear));
+		wsize = &sensor_win_sizes[0];
+		sensor_attr.mipi.clk = 900;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 2;
+		sensor_attr.max_integration_time = 2000 - 8;
+		sensor_attr.total_width = 1500;
+		sensor_attr.total_height = 2000;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
+		memcpy((void *)(&(sensor_attr.mipi)),
+			(void *)(&sensor_mipi_2592_1944_linear),
+			sizeof(sensor_mipi_2592_1944_linear));
 		break;
 	case 1:
 		info->default_boot = 1;
-		wsize = &sc535iot_win_sizes[1];
-		sc535iot_attr.mipi.clk = 900;
-		sc535iot_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		sc535iot_attr.max_dgain = 0;
-		sc535iot_attr.max_again = 327680;
-		sc535iot_attr.min_integration_time = 2;
-		sc535iot_attr.max_integration_time = 4000 - 242 - 11;
-		sc535iot_attr.total_width = 1500;
-		sc535iot_attr.total_height = 4000;
-		sc535iot_attr.integration_time_apply_delay = 2;
-		sc535iot_attr.again_apply_delay = 2;
-		sc535iot_attr.dgain_apply_delay = 0;
-		sc535iot_attr.integration_time_limit = sc535iot_attr.max_integration_time;
-		sc535iot_attr.max_integration_time_native = sc535iot_attr.max_integration_time;
-		sc535iot_attr.min_integration_time_native = sc535iot_attr.min_integration_time;
-		sc535iot_attr.expo_fs = 1;
+		wsize = &sensor_win_sizes[1];
+		sensor_attr.mipi.clk = 900;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 2;
+		sensor_attr.max_integration_time = 4000 - 242 - 11;
+		sensor_attr.total_width = 1500;
+		sensor_attr.total_height = 4000;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
 #ifdef SENSOR_WDR_2_FRAME
-		sc535iot_attr.max_again_short = 327680;
-		sc535iot_attr.min_integration_time_short = 2;
-		sc535iot_attr.max_integration_time_short = 242 - 9;
-		sc535iot_attr.wdr_cache = wdr_line * sc535iot_attr.total_width;
+		sensor_attr.max_again_short = 327680;
+		sensor_attr.min_integration_time_short = 2;
+		sensor_attr.max_integration_time_short = 242 - 9;
+		sensor_attr.wdr_cache = wdr_line * sensor_attr.total_width;
 #endif /* SENSOR_WDR_2_FRAME */
-		memcpy((void *)(&(sc535iot_attr.mipi)),
-			(void *)(&sc535iot_mipi_2592_1944_dol),
-			sizeof(sc535iot_mipi_2592_1944_dol));
+		memcpy((void *)(&(sensor_attr.mipi)),
+			(void *)(&sensor_mipi_2592_1944_dol),
+			sizeof(sensor_mipi_2592_1944_dol));
 		break;
 	case 2:
 		info->default_boot = 2;
-		wsize = &sc535iot_win_sizes[2];
-		sc535iot_attr.mipi.clk = 900;
-		sc535iot_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		sc535iot_attr.max_dgain = 0;
-		sc535iot_attr.max_again = 327680;
-		sc535iot_attr.min_integration_time = 2;
-		sc535iot_attr.max_integration_time = 2000 - 8;
-		sc535iot_attr.total_width = 1500;
-		sc535iot_attr.total_height = 2000;
-		sc535iot_attr.integration_time_apply_delay = 2;
-		sc535iot_attr.again_apply_delay = 2;
-		sc535iot_attr.dgain_apply_delay = 0;
-		sc535iot_attr.integration_time_limit = sc535iot_attr.max_integration_time;
-		sc535iot_attr.max_integration_time_native = sc535iot_attr.max_integration_time;
-		sc535iot_attr.min_integration_time_native = sc535iot_attr.min_integration_time;
-		sc535iot_attr.expo_fs = 1;
-		memcpy((void *)(&(sc535iot_attr.mipi)),
-			(void *)(&sc535iot_mipi_2688_1520_linear),
-			sizeof(sc535iot_mipi_2688_1520_linear));
+		wsize = &sensor_win_sizes[2];
+		sensor_attr.mipi.clk = 900;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 2;
+		sensor_attr.max_integration_time = 2000 - 8;
+		sensor_attr.total_width = 1500;
+		sensor_attr.total_height = 2000;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
+		memcpy((void *)(&(sensor_attr.mipi)),
+			(void *)(&sensor_mipi_2688_1520_linear),
+			sizeof(sensor_mipi_2688_1520_linear));
 		break;
 	case 3:
 		info->default_boot = 3;
-		wsize = &sc535iot_win_sizes[3];
-		sc535iot_attr.mipi.clk = 1080;
-		sc535iot_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		sc535iot_attr.max_dgain = 0;
-		sc535iot_attr.max_again = 327680;
-		sc535iot_attr.min_integration_time = 2;
-		sc535iot_attr.max_integration_time = 2993;
-		sc535iot_attr.total_width = 1875;
-		sc535iot_attr.total_height = 3200;
-		sc535iot_attr.integration_time_apply_delay = 2;
-		sc535iot_attr.again_apply_delay = 2;
-		sc535iot_attr.dgain_apply_delay = 0;
-		sc535iot_attr.integration_time_limit = sc535iot_attr.max_integration_time;
-		sc535iot_attr.max_integration_time_native = sc535iot_attr.max_integration_time;
-		sc535iot_attr.min_integration_time_native = sc535iot_attr.min_integration_time;
-		sc535iot_attr.expo_fs = 1;
+		wsize = &sensor_win_sizes[3];
+		sensor_attr.mipi.clk = 1080;
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 2;
+		sensor_attr.max_integration_time = 2993;
+		sensor_attr.total_width = 1875;
+		sensor_attr.total_height = 3200;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
 #ifdef SENSOR_WDR_2_FRAME
-		sc535iot_attr.max_again_short = 327680;
-		sc535iot_attr.min_integration_time_short = 2;
-		sc535iot_attr.max_integration_time_short = 187;
-		sc535iot_attr.wdr_cache = wdr_line * sc535iot_attr.total_width;
+		sensor_attr.max_again_short = 327680;
+		sensor_attr.min_integration_time_short = 2;
+		sensor_attr.max_integration_time_short = 187;
+		sensor_attr.wdr_cache = wdr_line * sensor_attr.total_width;
 #endif /* SENSOR_WDR_2_FRAME */
-		memcpy((void *)(&(sc535iot_attr.mipi)),
-			(void *)(&sc535iot_mipi_2688_1520_dol),
-			sizeof(sc535iot_mipi_2688_1520_dol));
+		memcpy((void *)(&(sensor_attr.mipi)),
+			(void *)(&sensor_mipi_2688_1520_dol),
+			sizeof(sensor_mipi_2688_1520_dol));
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
@@ -1818,23 +1836,23 @@ static int sc535iot_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	return ret;
 }
 
-static int sc535iot_attr_check(struct tx_isp_subdev *sd) {
+static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct clk *sclka;
 	int ret = ISP_SUCCESS;
 
-	sc535iot_setting_select(sd, info->default_boot);
+	sensor_setting_select(sd, info->default_boot);
 
 	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 	case TISP_SENSOR_VI_MIPI_CSI1:
-		sc535iot_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sc535iot_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		sc535iot_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this interface!!!\n");
@@ -1862,7 +1880,7 @@ static int sc535iot_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("MCLK configuration failed!!!\n");
 	}
 
-	sc535iot_attr_set(sd, wsize);
+	sensor_attr_set(sd, wsize);
 	sensor->priv = wsize;
 
 	return 0;
@@ -1871,11 +1889,11 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc535iot_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
-	ret = sc535iot_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1883,7 +1901,7 @@ static int sc535iot_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc535iot_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1894,16 +1912,16 @@ static int sc535iot_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	sc535iot_attr_check(sd);
+	sensor_attr_check(sd);
 	if (info->rst_gpio != -1) {
-		ret = private_gpio_request(info->rst_gpio, "sc535iot_reset");
+		ret = private_gpio_request(info->rst_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(info->rst_gpio, 0);
 			private_msleep(10);
@@ -1914,7 +1932,7 @@ static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 		}
 	}
 	if (info->pwdn_gpio != -1) {
-		ret = private_gpio_request(info->pwdn_gpio, "sc535iot_pwdn");
+		ret = private_gpio_request(info->pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(info->pwdn_gpio, 0);
 			private_msleep(10);
@@ -1924,7 +1942,7 @@ static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 			ISP_ERROR("gpio requrest fail %d\n", info->pwdn_gpio);
 		}
 	}
-	ret = sc535iot_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc535iot chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1933,7 +1951,7 @@ static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 	ISP_INFO("===================================================\n");
 	ISP_INFO("sc535iot version is %s\n", TVERSION);
 	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
-	ISP_INFO("Sensor name is %s\n", sc535iot_attr.name);
+	ISP_INFO("Sensor name is %s\n", sensor_attr.name);
 	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_INFO("Sensor video interface is %d\n", info->video_interface);
 	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
@@ -1945,7 +1963,7 @@ static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 	ISP_INFO("===================================================\n");
 
 	if (chip) {
-		memcpy(chip->name, "sc535iot", sizeof("sc535iot"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1953,11 +1971,11 @@ static int sc535iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 	return 0;
 }
 
-static int sc535iot_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int sc535iot_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1965,14 +1983,14 @@ static int sc535iot_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) 
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		return ISP_SUCCESS;
 	} else {
-		ret = sc535iot_attr_set(sd, wsize);
+		ret = sensor_attr_set(sd, wsize);
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 
 	return ret;
 }
 
-static int sc535iot_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = ISP_SUCCESS;
@@ -1983,14 +2001,14 @@ static int sc535iot_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regis
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc535iot_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc535iot_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1999,30 +2017,30 @@ static int sc535iot_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	sc535iot_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static int sc535iot_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			ret = sc535iot_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			ret = sc535iot_write_array(sd, sc535iot_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 			ISP_INFO("sc535iot stream on\n");
 		}
 
 	} else {
-		ret = sc535iot_write_array(sd, sc535iot_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_INFO("sc535iot stream off\n");
 	}
@@ -2032,59 +2050,59 @@ static int sc535iot_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *in
 
 #ifndef SENSOR_TEST
 #ifdef SENSOR_EXPO
-static int sc535iot_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += sc535iot_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-	ret += sc535iot_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	ret += sc535iot_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	ret = sc535iot_write(sd, 0x3e09, (unsigned char)(again & 0xff));
-	ret += sc535iot_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
+	ret = sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 
 	return ret;
 }
 #else
-static int sc535iot_set_integration_time(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	ret = sc535iot_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-	ret += sc535iot_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc535iot_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret = sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	return ret;
 }
 
-static int sc535iot_set_analog_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
-	ret += sc535iot_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc535iot_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
 
 	return ret;
 }
 #endif /* SENSOR_EXPO */
 
-static int sc535iot_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc535iot_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc535iot_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	if (wsize) {
-		ret = sc535iot_attr_set(sd, wsize);
+		ret = sensor_attr_set(sd, wsize);
 	}
 
 	return ret;
 }
 
-static int sc535iot_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int sclk = 0;
@@ -2122,10 +2140,10 @@ static int sc535iot_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret += sc535iot_read(sd, 0x320c, &val);
+	ret += sensor_read(sd, 0x320c, &val);
 	hts = val;
 	val = 0;
-	ret += sc535iot_read(sd, 0x320d, &val);
+	ret += sensor_read(sd, 0x320d, &val);
 	hts = ((hts << 8) | val);
 
 	if (0 != ret) {
@@ -2134,10 +2152,10 @@ static int sc535iot_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	sc535iot_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	sc535iot_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sc535iot_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -2189,12 +2207,12 @@ static int sc535iot_set_fps(struct tx_isp_subdev *sd, int fps) {
 }
 
 #ifdef SENSOR_MIR_FLIP
-static int sc535iot_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = ISP_SUCCESS;
 	uint8_t val;
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = sc535iot_read(sd, 0x3221, &val);
+	val = sensor_read(sd, 0x3221, &val);
 	switch (enable) {
 	case 0:
 		val = val & 0x99;
@@ -2209,7 +2227,7 @@ static int sc535iot_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val = (val & 0x99) | 0x66;
 		break;
 	}
-	ret += sc535iot_write(sd, 0x3221, val);
+	ret += sensor_write(sd, 0x3221, val);
 	return ret;
 }
 #endif /* SENSOR_MIR_FLIP */
@@ -2218,16 +2236,16 @@ static int sc535iot_set_vflip(struct tx_isp_subdev *sd, int enable) {
 #ifdef SENSOR_EXPO
 static int sc535iot_set_expo_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	ret = sc535iot_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
-	ret = sc535iot_write(sd, 0x3e05, (unsigned char)(value & 0x0f) << 4);
+	ret = sensor_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
+	ret = sensor_write(sd, 0x3e05, (unsigned char)(value & 0x0f) << 4);
 
-	ret += sc535iot_write(sd, 0x3e12, (unsigned char)((value >> 8) & 0xff));
-	ret += sc535iot_write(sd, 0x3e13, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e12, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3e13, (unsigned char)(value & 0xff));
 
 	return ret;
 }
 #else
-static int sc535iot_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -2235,7 +2253,7 @@ static int sc535iot_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-static int sc535iot_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	...;
@@ -2244,16 +2262,16 @@ static int sc535iot_set_integration_time_short(struct tx_isp_subdev *sd, int val
 }
 #endif /* SENSOR_EXPO */
 
-static int sc535iot_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
+static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = ISP_SUCCESS;
 
-	ret = sc535iot_write_array(sd, sc535iot_stream_off_mipi);
+	ret = sensor_write_array(sd, sensor_stream_off_mipi);
 	if (wdr_en == 1) {
-		sc535iot_setting_select(sd, 1);
-		sc535iot_attr_set(sd, wsize);
+		sensor_setting_select(sd, 1);
+		sensor_attr_set(sd, wsize);
 	} else if (wdr_en == 0) {
-		sc535iot_setting_select(sd, 0);
-		sc535iot_attr_set(sd, wsize);
+		sensor_setting_select(sd, 0);
+		sensor_attr_set(sd, wsize);
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
@@ -2262,7 +2280,7 @@ static int sc535iot_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	return 0;
 }
 
-static int sc535iot_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
+static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = ISP_SUCCESS;
@@ -2273,14 +2291,14 @@ static int sc535iot_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	private_gpio_direction_output(info->rst_gpio, 1);
 	private_msleep(100);
 
-	ret = sc535iot_write_array(sd, wsize->regs);
-	ret = sc535iot_write_array(sd, sc535iot_stream_on_mipi);
+	ret = sensor_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 	return 0;
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-static int sc535iot_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	struct tx_isp_initarg *init = arg;
@@ -2294,46 +2312,46 @@ static int sc535iot_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 #ifdef SENSOR_EXPO
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = sc535iot_set_expo(sd, sensor_val->value);
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = sc535iot_set_integration_time(sd, sensor_val->value);
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = sc535iot_set_analog_gain(sd, sensor_val->value);
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = sc535iot_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = sc535iot_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = sc535iot_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (arg)
-			ret = sc535iot_write_array(sd, sc535iot_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (arg)
-			ret = sc535iot_write_array(sd, sc535iot_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = sc535iot_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 #ifdef SENSOR_MIR_FLIP
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = sc535iot_set_vflip(sd, sensor_val->value);
+			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_MIR_FLIP */
 #ifdef SENSOR_WDR_2_FRAME
@@ -2345,20 +2363,20 @@ static int sc535iot_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
-			ret = sc535iot_set_integration_time_short(sd, sensor_val->value);
+			ret = sensor_set_integration_time_short(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)
-			ret = sc535iot_set_analog_gain_short(sd, sensor_val->value);
+			ret = sensor_set_analog_gain_short(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_WDR:
 		if (arg)
-			ret = sc535iot_set_wdr(sd, init->enable);
+			ret = sensor_set_wdr(sd, init->enable);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
 		if (arg)
-			ret = sc535iot_set_wdr_stop(sd, init->enable);
+			ret = sensor_set_wdr_stop(sd, init->enable);
 		break;
 #endif /* SENSOR_WDR_2_FRAME */
 	default:
@@ -2369,34 +2387,34 @@ static int sc535iot_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 }
 #endif /* SENSOR_TEST */
 
-static struct tx_isp_subdev_core_ops sc535iot_core_ops = {
-	.g_chip_ident = sc535iot_g_chip_ident,
-	.reset = sc535iot_reset,
-	.init = sc535iot_init,
-	.g_register = sc535iot_g_register,
-	.s_register = sc535iot_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc535iot_video_ops = {
-	.s_stream = sc535iot_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops sc535iot_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 #ifndef SENSOR_TEST
-	.ioctl = sc535iot_sensor_ops_ioctl,
+	.ioctl = sensor_sensor_ops_ioctl,
 #endif /* SENSOR_TEST */
 };
 
-static struct tx_isp_subdev_ops sc535iot_ops = {
-	.core = &sc535iot_core_ops,
-	.video = &sc535iot_video_ops,
-	.sensor = &sc535iot_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "sc535iot",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -2407,7 +2425,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int sc535iot_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -2421,9 +2439,9 @@ static int sc535iot_probe(struct i2c_client *client, const struct i2c_device_id 
 	sd = &sensor->sd;
 	video = &sensor->video;
 
-	sensor->video.attr = &sc535iot_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->dev = &client->dev;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc535iot_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -2433,7 +2451,7 @@ static int sc535iot_probe(struct i2c_client *client, const struct i2c_device_id 
 	return 0;
 }
 
-static int sc535iot_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -2451,26 +2469,28 @@ static int sc535iot_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sc535iot_id[] = {{"sc535iot", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, sc535iot_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc535iot_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "sc535iot",
+			.name = SENSOR_NAME,
 		},
-	.probe = sc535iot_probe,
-	.remove = sc535iot_remove,
-	.id_table = sc535iot_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sc535iot(void) {
-	return private_i2c_add_driver(&sc535iot_driver);
+	sensor_common_init(&sensor_info);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sc535iot(void) {
-	private_i2c_del_driver(&sc535iot_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sc535iot);

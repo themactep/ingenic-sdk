@@ -27,6 +27,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "imx335"
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_VERSION "H20231103a"
 #define SENSOR_CHIP_ID 0x380a
 #define SENSOR_CHIP_ID_H (0x38)

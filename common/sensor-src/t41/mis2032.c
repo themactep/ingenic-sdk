@@ -27,15 +27,21 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define TVERSION "V20231127a"
+#define SENSOR_NAME "mis2032"
 #define SENSOR_VERSION "H20240102a"
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x09)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // SPECIAL FEATURES
@@ -70,11 +76,23 @@ static int wdr_line = 1000;
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_MCLK 24000000
 
-struct tx_isp_sensor_attribute mis2032_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -86,7 +104,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut mis2032_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x0, 0},
 	{0x10, 1465},
 	{0x20, 2998},
@@ -331,12 +349,12 @@ struct again_lut mis2032_again_lut[] = {
 };
 #endif /* SENSOR_AGAIN_TABLE */
 
-unsigned int mis2032_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
-	struct again_lut *lut = mis2032_again_lut;
-	while (lut->gain <= mis2032_attr.max_again) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->value;
 			return 0;
@@ -344,7 +362,7 @@ unsigned int mis2032_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == mis2032_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -362,12 +380,12 @@ unsigned int mis2032_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 }
 
 #ifdef SENSOR_WDR_2_FRAME
-unsigned int mis2032_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 #ifndef SENSOR_TEST
 #ifdef SENSOR_AGAIN_TABLE
 	/* Analog gain table */
-	struct again_lut *lut = mis2032_again_lut;
-	while (lut->gain <= mis2032_attr.max_again_short) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again_short) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->value;
 			return 0;
@@ -375,7 +393,7 @@ unsigned int mis2032_alloc_again_short(unsigned int isp_gain, unsigned char shif
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == mis2032_attr.max_again_short) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again_short) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -392,11 +410,11 @@ unsigned int mis2032_alloc_again_short(unsigned int isp_gain, unsigned char shif
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-unsigned int mis2032_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus mis2032_mipi_linear = {
+struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 200,
 	.lans = 2,
@@ -424,7 +442,7 @@ struct tx_isp_mipi_bus mis2032_mipi_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus mis2032_mipi_dol = {
+struct tx_isp_mipi_bus sensor_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 430,
 	.lans = 2,
@@ -452,7 +470,7 @@ struct tx_isp_mipi_bus mis2032_mipi_dol = {
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-struct tx_isp_mipi_bus mis2032_mipi_90fps_linear = {
+struct tx_isp_mipi_bus sensor_mipi_90fps_linear = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 560,
 	.lans = 2,
@@ -480,7 +498,7 @@ struct tx_isp_mipi_bus mis2032_mipi_90fps_linear = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_dvp_bus mis2032_dvp = {
+struct tx_isp_dvp_bus sensor_dvp = {
 	.gpio = DVP_PA_LOW_10BIT,
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking =
@@ -497,20 +515,20 @@ struct tx_isp_dvp_bus mis2032_dvp = {
 	.dvp_hcomp_en = 0,
 };
 
-struct tx_isp_sensor_attribute mis2032_attr = {
-	.name = "mis2032",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0x2009,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
-	.sensor_ctrl.alloc_again = mis2032_alloc_again,
-	.sensor_ctrl.alloc_dgain = mis2032_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 #ifdef SENSOR_WDR_2_FRAME
-	.sensor_ctrl.alloc_again_short = mis2032_alloc_again_short,
+	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 #endif /* SENSOR_WDR_2_FRAME */
 };
 
-static struct regval_list mis2032_init_regs_1920_1080_25fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3006, 0x01},
 	{SENSOR_REG_DELAY, 50},
 	{0x300b, 0x01},
@@ -749,7 +767,7 @@ static struct regval_list mis2032_init_regs_1920_1080_25fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list mis2032_init_regs_1920_1080_25fps_mipi_dol[] = {
+static struct regval_list sensor_init_regs_1920_1080_25fps_mipi_dol[] = {
 	{0x300b, 0x01},
 	{0x3006, 0x02},
 	{SENSOR_REG_DELAY, 50},
@@ -984,7 +1002,7 @@ static struct regval_list mis2032_init_regs_1920_1080_25fps_mipi_dol[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list mis2032_init_regs_1920_1080_90fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_90fps_mipi[] = {
 	{0x3006, 0x01},
 	{SENSOR_REG_DELAY, 50},
 	{0x3006, 0x00},
@@ -1233,7 +1251,7 @@ static struct regval_list mis2032_init_regs_1920_1080_90fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting mis2032_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 [0] */
 	{
 		.width = 1920,
@@ -1241,7 +1259,7 @@ static struct tx_isp_sensor_win_setting mis2032_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SGRBG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = mis2032_init_regs_1920_1080_25fps_mipi,
+		.regs = sensor_init_regs_1920_1080_25fps_mipi,
 	},
 	/* 1920*1080 [1] */
 	{
@@ -1250,7 +1268,7 @@ static struct tx_isp_sensor_win_setting mis2032_win_sizes[] = {
 		.fps = 25 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SGRBG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = mis2032_init_regs_1920_1080_25fps_mipi_dol,
+		.regs = sensor_init_regs_1920_1080_25fps_mipi_dol,
 	},
 	/* 1920*1080 [2] */
 	{
@@ -1259,24 +1277,24 @@ static struct tx_isp_sensor_win_setting mis2032_win_sizes[] = {
 		.fps = 90 << 16 | 1,
 		.mbus_code = TISP_VI_FMT_SGRBG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
-		.regs = mis2032_init_regs_1920_1080_90fps_mipi,
+		.regs = sensor_init_regs_1920_1080_90fps_mipi,
 	},
 };
 
-static struct tx_isp_sensor_win_setting *wsize = &mis2032_win_sizes[0];
+static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list mis2032_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	//{0x3006, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list mis2032_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	//{0x3006, 0x02},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 #ifdef SENSOR_I2C_REG_8BIT
-int mis2032_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {[0] =
 					 {
@@ -1299,7 +1317,7 @@ int mis2032_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *val
 	return ret;
 }
 
-int mis2032_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -1317,7 +1335,7 @@ int mis2032_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char val
 }
 
 #if 0
-static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
         int ret;
         unsigned char val;
@@ -1325,7 +1343,7 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
                 if (vals->reg_num == SENSOR_REG_DELAY) {
                         private_msleep(vals->value);
                 } else {
-                        ret = mis2032_read(sd, vals->reg_num, &val);
+                        ret = sensor_read(sd, vals->reg_num, &val);
                         /* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
                         if (ret < 0)
                                 return ret;
@@ -1337,13 +1355,13 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int mis2032_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = mis2032_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1356,7 +1374,7 @@ static int mis2032_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 
 #ifdef SENSOR_I2C_REG_16BIT
 
-int mis2032_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
@@ -1381,7 +1399,7 @@ int mis2032_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int mis2032_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -1399,7 +1417,7 @@ int mis2032_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
         int ret;
         unsigned char val;
@@ -1407,7 +1425,7 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
                 if (vals->reg_num == SENSOR_REG_DELAY) {
                         private_msleep(vals->value);
                 } else {
-                        ret = mis2032_read(sd, vals->reg_num, &val);
+                        ret = sensor_read(sd, vals->reg_num, &val);
                         if (ret < 0)
                                 return ret;
                 }
@@ -1417,13 +1435,13 @@ static int mis2032_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif
 
-static int mis2032_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = mis2032_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1477,7 +1495,7 @@ error:
 	return ret;
 }
 
-static int mis2032_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
+static int sensor_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1503,69 +1521,69 @@ static int mis2032_attr_set(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_s
 	return ret;
 }
 
-static int mis2032_setting_select(struct tx_isp_subdev *sd, int deboot) {
+static int sensor_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	int ret = ISP_SUCCESS;
 
 	switch (deboot) {
 	case 0:
-		wsize = &mis2032_win_sizes[0];
-		mis2032_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		mis2032_attr.max_dgain = 0;
-		mis2032_attr.max_again = 327680;
-		mis2032_attr.min_integration_time = 1;
-		mis2032_attr.max_integration_time = 1348;
-		mis2032_attr.total_width = 2200;
-		mis2032_attr.total_height = 1350;
-		mis2032_attr.integration_time_apply_delay = 2;
-		mis2032_attr.again_apply_delay = 2;
-		mis2032_attr.dgain_apply_delay = 0;
-		mis2032_attr.integration_time_limit = mis2032_attr.max_integration_time;
-		mis2032_attr.max_integration_time_native = mis2032_attr.max_integration_time;
-		mis2032_attr.min_integration_time_native = mis2032_attr.min_integration_time;
-		mis2032_attr.expo_fs = 1;
-		memcpy((void *)(&(mis2032_attr.mipi)), (void *)(&mis2032_mipi_linear), sizeof(mis2032_attr.mipi));
+		wsize = &sensor_win_sizes[0];
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.max_integration_time = 1348;
+		sensor_attr.total_width = 2200;
+		sensor_attr.total_height = 1350;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_linear), sizeof(sensor_attr.mipi));
 		break;
 	case 1:
-		wsize = &mis2032_win_sizes[1];
-		mis2032_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		mis2032_attr.max_dgain = 0;
-		mis2032_attr.max_again = 327680;
-		mis2032_attr.min_integration_time = 1;
-		mis2032_attr.max_integration_time = 2815;
-		mis2032_attr.total_width = 2200;
-		mis2032_attr.total_height = 1500 * 2;
-		mis2032_attr.integration_time_apply_delay = 2;
-		mis2032_attr.again_apply_delay = 2;
-		mis2032_attr.dgain_apply_delay = 0;
-		mis2032_attr.integration_time_limit = mis2032_attr.max_integration_time;
-		mis2032_attr.max_integration_time_native = mis2032_attr.max_integration_time;
-		mis2032_attr.min_integration_time_native = mis2032_attr.min_integration_time;
-		mis2032_attr.expo_fs = 1;
+		wsize = &sensor_win_sizes[1];
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.max_integration_time = 2815;
+		sensor_attr.total_width = 2200;
+		sensor_attr.total_height = 1500 * 2;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
 #ifdef SENSOR_WDR_2_FRAME
-		mis2032_attr.wdr_cache = wdr_line * mis2032_attr.total_width * 2;
-		mis2032_attr.max_again_short = 327680;
-		mis2032_attr.min_integration_time_short = 1;
-		mis2032_attr.max_integration_time_short = 175;
+		sensor_attr.wdr_cache = wdr_line * sensor_attr.total_width * 2;
+		sensor_attr.max_again_short = 327680;
+		sensor_attr.min_integration_time_short = 1;
+		sensor_attr.max_integration_time_short = 175;
 #endif /* SENSOR_WDR_2_FRAME */
-		memcpy((void *)(&(mis2032_attr.mipi)), (void *)(&mis2032_mipi_dol), sizeof(mis2032_attr.mipi));
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_attr.mipi));
 		break;
 	case 2:
-		wsize = &mis2032_win_sizes[2];
-		mis2032_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		mis2032_attr.max_dgain = 0;
-		mis2032_attr.max_again = 327680;
-		mis2032_attr.min_integration_time = 1;
-		mis2032_attr.max_integration_time = 1123;
-		mis2032_attr.total_width = 2200;
-		mis2032_attr.total_height = 1125;
-		mis2032_attr.integration_time_apply_delay = 2;
-		mis2032_attr.again_apply_delay = 2;
-		mis2032_attr.dgain_apply_delay = 0;
-		mis2032_attr.integration_time_limit = mis2032_attr.max_integration_time;
-		mis2032_attr.max_integration_time_native = mis2032_attr.max_integration_time;
-		mis2032_attr.min_integration_time_native = mis2032_attr.min_integration_time;
-		mis2032_attr.expo_fs = 1;
-		memcpy((void *)(&(mis2032_attr.mipi)), (void *)(&mis2032_mipi_90fps_linear), sizeof(mis2032_attr.mipi));
+		wsize = &sensor_win_sizes[2];
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.max_dgain = 0;
+		sensor_attr.max_again = 327680;
+		sensor_attr.min_integration_time = 1;
+		sensor_attr.max_integration_time = 1123;
+		sensor_attr.total_width = 2200;
+		sensor_attr.total_height = 1125;
+		sensor_attr.integration_time_apply_delay = 2;
+		sensor_attr.again_apply_delay = 2;
+		sensor_attr.dgain_apply_delay = 0;
+		sensor_attr.integration_time_limit = sensor_attr.max_integration_time;
+		sensor_attr.max_integration_time_native = sensor_attr.max_integration_time;
+		sensor_attr.min_integration_time_native = sensor_attr.min_integration_time;
+		sensor_attr.expo_fs = 1;
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_90fps_linear), sizeof(sensor_attr.mipi));
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
@@ -1574,23 +1592,23 @@ static int mis2032_setting_select(struct tx_isp_subdev *sd, int deboot) {
 	return ret;
 }
 
-static int mis2032_attr_check(struct tx_isp_subdev *sd) {
+static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct clk *sclka;
 	int ret = ISP_SUCCESS;
 
-	mis2032_setting_select(sd, info->default_boot);
+	sensor_setting_select(sd, info->default_boot);
 
 	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
 	case TISP_SENSOR_VI_MIPI_CSI1:
-		mis2032_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		mis2032_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		mis2032_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this interface!!!\n");
@@ -1618,7 +1636,7 @@ static int mis2032_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("MCLK configuration failed!!!\n");
 	}
 
-	mis2032_attr_set(sd, wsize);
+	sensor_attr_set(sd, wsize);
 	sensor->priv = wsize;
 
 	return 0;
@@ -1627,11 +1645,11 @@ err_get_mclk:
 	return -1;
 }
 
-static int mis2032_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
-	ret = mis2032_read(sd, 0x3000, &v);
+	ret = sensor_read(sd, 0x3000, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1639,7 +1657,7 @@ static int mis2032_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = mis2032_read(sd, 0x3001, &v);
+	ret = sensor_read(sd, 0x3001, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1650,16 +1668,16 @@ static int mis2032_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
-	mis2032_attr_check(sd);
+	sensor_attr_check(sd);
 	if (info->rst_gpio != -1) {
-		ret = private_gpio_request(info->rst_gpio, "mis2032_reset");
+		ret = private_gpio_request(info->rst_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(info->rst_gpio, 1);
 			private_msleep(5);
@@ -1672,7 +1690,7 @@ static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		}
 	}
 	if (info->pwdn_gpio != -1) {
-		ret = private_gpio_request(info->pwdn_gpio, "mis2032_pwdn");
+		ret = private_gpio_request(info->pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(info->pwdn_gpio, 0);
 			private_msleep(5);
@@ -1682,7 +1700,7 @@ static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 			ISP_ERROR("gpio requrest fail %d\n", info->pwdn_gpio);
 		}
 	}
-	ret = mis2032_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an mis2032 chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1691,7 +1709,7 @@ static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	ISP_INFO("===================================================\n");
 	ISP_INFO("Template version is %s\n", TVERSION);
 	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
-	ISP_INFO("Sensor name is %s\n", mis2032_attr.name);
+	ISP_INFO("Sensor name is %s\n", sensor_attr.name);
 	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_INFO("Sensor video interface is %d\n", info->video_interface);
 	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
@@ -1703,7 +1721,7 @@ static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	ISP_INFO("===================================================\n");
 
 	if (chip) {
-		memcpy(chip->name, "mis2032", sizeof("mis2032"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1711,15 +1729,15 @@ static int mis2032_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	return 0;
 }
 
-static int mis2032_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int mis2032_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	ret = mis2032_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	sensor->video.state = TX_ISP_MODULE_INIT;
@@ -1730,14 +1748,14 @@ static int mis2032_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 		return ISP_SUCCESS;
 	} else {
-		ret = mis2032_attr_set(sd, wsize);
+		ret = sensor_attr_set(sd, wsize);
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 
 	return ret;
 }
 
-static int mis2032_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = ISP_SUCCESS;
@@ -1748,14 +1766,14 @@ static int mis2032_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regist
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = mis2032_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int mis2032_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1764,31 +1782,31 @@ static int mis2032_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	mis2032_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static int mis2032_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			//ret = mis2032_write_array(sd, wsize->regs);
+			//ret = sensor_write_array(sd, wsize->regs);
 			//if (ret)
 			//        return ret;
 			//sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			ret = mis2032_write_array(sd, mis2032_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			*((u32 *)0xb3380000) = 0x5;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 			ISP_INFO("mis2032 stream on\n");
 		}
 
 	} else {
-		ret = mis2032_write_array(sd, mis2032_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_INFO("mis2032 stream off\n");
 	}
@@ -1798,61 +1816,61 @@ static int mis2032_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *ini
 
 #ifndef SENSOR_TEST
 #ifdef SENSOR_EXPO
-static int mis2032_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += mis2032_write(sd, 0x3100, (unsigned char)((it >> 8) & 0xff));
-	ret += mis2032_write(sd, 0x3101, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x3100, (unsigned char)((it >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3101, (unsigned char)(it & 0xff));
 
-	ret += mis2032_write(sd, 0x3109, (unsigned char)((again >> 8) & 0x03));
-	ret += mis2032_write(sd, 0x310a, (unsigned char)(again & 0xff));
-	ret += mis2032_write(sd, 0x300c, 0x01);
+	ret += sensor_write(sd, 0x3109, (unsigned char)((again >> 8) & 0x03));
+	ret += sensor_write(sd, 0x310a, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x300c, 0x01);
 
 	return ret;
 }
 #else
-static int mis2032_set_integration_time(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
-	ret += mis2032_write(sd, 0x3100, (unsigned char)((value >> 8) & 0xff));
-	ret += mis2032_write(sd, 0x3101, (unsigned char)(value & 0xff));
-	ret += mis2032_write(sd, 0x300c, 0x01);
+	ret += sensor_write(sd, 0x3100, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3101, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x300c, 0x01);
 
 	return ret;
 }
 
-static int mis2032_set_analog_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
-	ret += mis2032_write(sd, 0x310a, (unsigned char)((value >> 8) & 0x03));
-	ret += mis2032_write(sd, 0x3509, (unsigned char)(value & 0xff));
-	ret += mis2032_write(sd, 0x300c, 0x01);
+	ret += sensor_write(sd, 0x310a, (unsigned char)((value >> 8) & 0x03));
+	ret += sensor_write(sd, 0x3509, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x300c, 0x01);
 
 	return ret;
 }
 #endif /* SENSOR_EXPO */
 
-static int mis2032_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int mis2032_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int mis2032_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	if (wsize) {
-		ret = mis2032_attr_set(sd, wsize);
+		ret = sensor_attr_set(sd, wsize);
 	}
 
 	return ret;
 }
 
-static int mis2032_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int sclk = 0;
@@ -1889,10 +1907,10 @@ static int mis2032_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	val = 0;
-	ret += mis2032_read(sd, 0x3202, &val);
+	ret += sensor_read(sd, 0x3202, &val);
 	hts = val << 8;
 	val = 0;
-	ret += mis2032_read(sd, 0x3203, &val);
+	ret += sensor_read(sd, 0x3203, &val);
 	hts = (hts | val);
 	if (0 != ret) {
 		ISP_ERROR("err: mis2032 read err\n");
@@ -1901,14 +1919,14 @@ static int mis2032_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret += mis2032_write(sd, 0x3201, (unsigned char)(vts & 0xff));
-	ret += mis2032_write(sd, 0x3200, (unsigned char)(vts >> 8));
-	ret += mis2032_write(sd, 0x300c, 0x01);
+	ret += sensor_write(sd, 0x3201, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x3200, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x300c, 0x01);
 
 	*((u32 *)0xb3380000) = 0x5;
 
 	if (0 != ret) {
-		ISP_ERROR("err: mis2032_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -1936,38 +1954,38 @@ static int mis2032_set_fps(struct tx_isp_subdev *sd, int fps) {
 }
 
 #ifdef SENSOR_MIR_FLIP
-static int mis2032_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = ISP_SUCCESS;
 
 	ISP_INFO("[%s,%d] -> flip = %d\n", __func__, __LINE__, enable);
 	switch (enable) {
 	case 0:
-		mis2032_write(sd, 0x3007, 0x00);
-		mis2032_write(sd, 0x3205, 0x08);
-		mis2032_write(sd, 0x3207, 0x43);
-		mis2032_write(sd, 0x3209, 0x08);
-		mis2032_write(sd, 0x320b, 0x87);
+		sensor_write(sd, 0x3007, 0x00);
+		sensor_write(sd, 0x3205, 0x08);
+		sensor_write(sd, 0x3207, 0x43);
+		sensor_write(sd, 0x3209, 0x08);
+		sensor_write(sd, 0x320b, 0x87);
 		break;
 	case 1:
-		mis2032_write(sd, 0x3007, 0x01);
-		mis2032_write(sd, 0x3205, 0x08);
-		mis2032_write(sd, 0x3207, 0x43);
-		mis2032_write(sd, 0x3209, 0x09);
-		mis2032_write(sd, 0x320b, 0x88);
+		sensor_write(sd, 0x3007, 0x01);
+		sensor_write(sd, 0x3205, 0x08);
+		sensor_write(sd, 0x3207, 0x43);
+		sensor_write(sd, 0x3209, 0x09);
+		sensor_write(sd, 0x320b, 0x88);
 		break;
 	case 2:
-		mis2032_write(sd, 0x3007, 0x02);
-		mis2032_write(sd, 0x3205, 0x09);
-		mis2032_write(sd, 0x3207, 0x44);
-		mis2032_write(sd, 0x3209, 0x08);
-		mis2032_write(sd, 0x320b, 0x87);
+		sensor_write(sd, 0x3007, 0x02);
+		sensor_write(sd, 0x3205, 0x09);
+		sensor_write(sd, 0x3207, 0x44);
+		sensor_write(sd, 0x3209, 0x08);
+		sensor_write(sd, 0x320b, 0x87);
 		break;
 	case 3:
-		mis2032_write(sd, 0x3007, 0x03);
-		mis2032_write(sd, 0x3205, 0x08);
-		mis2032_write(sd, 0x3207, 0x44);
-		mis2032_write(sd, 0x3209, 0x09);
-		mis2032_write(sd, 0x320b, 0x88);
+		sensor_write(sd, 0x3007, 0x03);
+		sensor_write(sd, 0x3205, 0x08);
+		sensor_write(sd, 0x3207, 0x44);
+		sensor_write(sd, 0x3209, 0x09);
+		sensor_write(sd, 0x320b, 0x88);
 		break;
 	}
 	*((u32 *)0xb3380000) = 0x5;
@@ -1983,40 +2001,40 @@ static int mis2032_set_expo_short(struct tx_isp_subdev *sd, int value) {
 	int it = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += mis2032_write(sd, 0x3103, (unsigned char)((it >> 8) & 0xff));
-	ret += mis2032_write(sd, 0x3104, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x3103, (unsigned char)((it >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3104, (unsigned char)(it & 0xff));
 
-	ret += mis2032_write(sd, 0x310b, (unsigned char)((again >> 8) & 0x03));
-	ret += mis2032_write(sd, 0x310c, (unsigned char)(again & 0xff));
-	ret += mis2032_write(sd, 0x300c, 0x01);
+	ret += sensor_write(sd, 0x310b, (unsigned char)((again >> 8) & 0x03));
+	ret += sensor_write(sd, 0x310c, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x300c, 0x01);
 
 	return ret;
 }
 #else
-static int mis2032_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	return ret;
 }
 
-static int mis2032_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	return ret;
 }
 #endif /* SENSOR_EXPO */
 
-static int mis2032_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
+static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	//struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = ISP_SUCCESS;
 
-	ret = mis2032_write_array(sd, mis2032_stream_off_mipi);
+	ret = sensor_write_array(sd, sensor_stream_off_mipi);
 	if (wdr_en == 1) {
-		mis2032_setting_select(sd, 1);
-		mis2032_attr_set(sd, wsize);
+		sensor_setting_select(sd, 1);
+		sensor_attr_set(sd, wsize);
 	} else if (wdr_en == 0) {
-		mis2032_setting_select(sd, 0);
-		mis2032_attr_set(sd, wsize);
+		sensor_setting_select(sd, 0);
+		sensor_attr_set(sd, wsize);
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
@@ -2025,7 +2043,7 @@ static int mis2032_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	return 0;
 }
 
-static int mis2032_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
+static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = ISP_SUCCESS;
@@ -2035,14 +2053,14 @@ static int mis2032_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	private_gpio_direction_output(info->rst_gpio, 1);
 	private_msleep(1);
 
-	ret = mis2032_write_array(sd, wsize->regs);
-	ret = mis2032_write_array(sd, mis2032_stream_on_mipi);
+	ret = sensor_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 	return 0;
 }
 #endif /* SENSOR_WDR_2_FRAME */
 
-static int mis2032_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 #ifdef SENSOR_WDR_2_FRAME
@@ -2058,46 +2076,46 @@ static int mis2032_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 #ifdef SENSOR_EXPO
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = mis2032_set_expo(sd, sensor_val->value);
+			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = mis2032_set_integration_time(sd, sensor_val->value);
+			ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = mis2032_set_analog_gain(sd, sensor_val->value);
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = mis2032_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = mis2032_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = mis2032_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (arg)
-			ret = mis2032_write_array(sd, mis2032_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (arg)
-			ret = mis2032_write_array(sd, mis2032_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = mis2032_set_fps(sd, sensor_val->value);
+			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 #ifdef SENSOR_MIR_FLIP
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = mis2032_set_vflip(sd, sensor_val->value);
+			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_MIR_FLIP */
 #ifdef SENSOR_WDR_2_FRAME
@@ -2109,20 +2127,20 @@ static int mis2032_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
-			ret = mis2032_set_integration_time_short(sd, sensor_val->value);
+			ret = sensor_set_integration_time_short(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)
-			ret = mis2032_set_analog_gain_short(sd, sensor_val->value);
+			ret = sensor_set_analog_gain_short(sd, sensor_val->value);
 		break;
 #endif /* SENSOR_EXPO */
 	case TX_ISP_EVENT_SENSOR_WDR:
 		if (arg)
-			ret = mis2032_set_wdr(sd, init->enable);
+			ret = sensor_set_wdr(sd, init->enable);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
 		if (arg)
-			ret = mis2032_set_wdr_stop(sd, init->enable);
+			ret = sensor_set_wdr_stop(sd, init->enable);
 		break;
 #endif /* SENSOR_WDR_2_FRAME */
 	default:
@@ -2133,34 +2151,34 @@ static int mis2032_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 }
 #endif /* SENSOR_TEST */
 
-static struct tx_isp_subdev_core_ops mis2032_core_ops = {
-	.g_chip_ident = mis2032_g_chip_ident,
-	.reset = mis2032_reset,
-	.init = mis2032_init,
-	.g_register = mis2032_g_register,
-	.s_register = mis2032_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops mis2032_video_ops = {
-	.s_stream = mis2032_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops mis2032_sensor_ops = {
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 #ifndef SENSOR_TEST
-	.ioctl = mis2032_sensor_ops_ioctl,
+	.ioctl = sensor_sensor_ops_ioctl,
 #endif /* SENSOR_TEST */
 };
 
-static struct tx_isp_subdev_ops mis2032_ops = {
-	.core = &mis2032_core_ops,
-	.video = &mis2032_video_ops,
-	.sensor = &mis2032_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "mis2032",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -2171,7 +2189,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int mis2032_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -2185,9 +2203,9 @@ static int mis2032_probe(struct i2c_client *client, const struct i2c_device_id *
 	sd = &sensor->sd;
 	video = &sensor->video;
 
-	sensor->video.attr = &mis2032_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->dev = &client->dev;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &mis2032_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -2197,7 +2215,7 @@ static int mis2032_probe(struct i2c_client *client, const struct i2c_device_id *
 	return 0;
 }
 
-static int mis2032_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -2215,26 +2233,28 @@ static int mis2032_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id mis2032_id[] = {{"mis2032", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, mis2032_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver mis2032_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "mis2032",
+			.name = SENSOR_NAME,
 		},
-	.probe = mis2032_probe,
-	.remove = mis2032_remove,
-	.id_table = mis2032_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_mis2032(void) {
-	return private_i2c_add_driver(&mis2032_driver);
+	sensor_common_init(&sensor_info);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_mis2032(void) {
-	private_i2c_del_driver(&mis2032_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_mis2032);

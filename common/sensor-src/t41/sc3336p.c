@@ -29,6 +29,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc3336p"
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
 #define SENSOR_VERSION "H20231011a"
 #define SENSOR_CHIP_ID_H (0x9c)
 #define SENSOR_CHIP_ID_L (0x41)
@@ -49,6 +51,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 25
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

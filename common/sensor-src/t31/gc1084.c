@@ -435,8 +435,8 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 }
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
-	int ret;
 	unsigned char v;
+	int ret;
 
 	ret = sensor_read(sd, 0x03f0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -602,7 +602,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 
 	hts = ((hts << 8) + tmp);
-
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	//ret += sensor_write(sd, 0x31d, 0x2e);
 	ret += sensor_write(sd, 0x0d41, (unsigned char)((vts & 0xff00) >> 8));
@@ -833,7 +832,6 @@ static struct tx_isp_subdev_ops sensor_ops = {
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
-
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -886,9 +884,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 27000000);
 	private_clk_enable(sensor->mclk);
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
+	/* convert sensor-gain into isp-gain */
 	sensor_attr.max_dgain = 0;
 	sensor_attr.expo_fs = 1;
 	sd = &sensor->sd;

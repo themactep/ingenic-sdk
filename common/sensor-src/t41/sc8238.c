@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc8238"
+#define SENSOR_MAX_WIDTH 3840
+#define SENSOR_MAX_HEIGHT 2160
 #define SENSOR_VERSION "H20230505a"
 #define SENSOR_CHIP_ID_H (0x82)
 #define SENSOR_CHIP_ID_L (0x35)
@@ -48,6 +50,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 15
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

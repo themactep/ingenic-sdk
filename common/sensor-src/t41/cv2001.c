@@ -18,9 +18,13 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "cv2001"
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_L 0x01
 #define SENSOR_CHIP_ID_H 0x20
 #define SENSOR_VERSION "H20230505a"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 // ============================================================================
 // HARDWARE INTERFACE

@@ -29,14 +29,22 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_CHIP_ID_L 0x50
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x35
+#define SENSOR_MAX_WIDTH 2880
+#define SENSOR_MAX_HEIGHT 1620
+#define SENSOR_NAME "cv5003"
 #define SENSOR_CHIP_ID_H 0x02
 #define SENSOR_VERSION "H20250624a"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -52,6 +60,17 @@
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
@@ -65,7 +84,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut cv5003_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0, 0x0, 0x40, 0x0, 0},		//1.0
 	{1, 0x1, 0x40, 0x0, 370},	//1.004
 	{2, 0x2, 0x40, 0x0, 741},	//1.008
@@ -798,12 +817,12 @@ struct again_lut cv5003_again_lut[] = {
 	{728, 0xf8, 0x0, 0x4, 589815},	//512.0
 };
 
-struct tx_isp_sensor_attribute cv5003_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int cv5003_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
-	struct again_lut *lut = cv5003_again_lut;
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sensor_again_lut;
 
-	while (lut->gain <= cv5003_attr.max_again) {
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut->index;
 			return 0;
@@ -811,7 +830,7 @@ unsigned int cv5003_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			*sensor_again = (lut - 1)->index;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == cv5003_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->index;
 				return lut->gain;
 			}
@@ -823,11 +842,11 @@ unsigned int cv5003_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int cv5003_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus cv5003_mipi = {
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 792,
 	.lans = 2,
@@ -856,8 +875,8 @@ struct tx_isp_mipi_bus cv5003_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute cv5003_attr = {
-	.name = "cv5003",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0x5002,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
@@ -874,11 +893,11 @@ struct tx_isp_sensor_attribute cv5003_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = cv5003_alloc_again,
-	.sensor_ctrl.alloc_dgain = cv5003_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list cv5003_init_regs_2880_1620_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_2880_1620_30fps_mipi[] = {
 	{0x300D, 0x01},
 	{0x300E, 0x00},
 	{0x30A8, 0x04},
@@ -939,27 +958,27 @@ static struct regval_list cv5003_init_regs_2880_1620_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting cv5003_win_sizes[] = {{
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.width = 2880,
 	.height = 1620,
 	.fps = 30 << 16 | 1,
 	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, //RAW
 	.colorspace = TISP_COLORSPACE_SRGB,
-	.regs = cv5003_init_regs_2880_1620_30fps_mipi,
+	.regs = sensor_init_regs_2880_1620_30fps_mipi,
 }};
-struct tx_isp_sensor_win_setting *wsize = &cv5003_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list cv5003_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list cv5003_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x3000, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int cv5003_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
 	struct i2c_msg msg[2] = {[0] =
@@ -983,7 +1002,7 @@ int cv5003_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int cv5003_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -1001,7 +1020,7 @@ int cv5003_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int cv5003_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -1009,7 +1028,7 @@ static int cv5003_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = cv5003_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1020,13 +1039,13 @@ static int cv5003_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int cv5003_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
-			ret = cv5003_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1036,22 +1055,22 @@ static int cv5003_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int cv5003_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int cv5003_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
-	ret = cv5003_read(sd, 0x3003, &v);
+	ret = sensor_read(sd, 0x3003, &v);
 	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 
-	ret += cv5003_read(sd, 0x3002, &v);
+	ret += sensor_read(sd, 0x3002, &v);
 	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1063,60 +1082,60 @@ static int cv5003_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int cv5003_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 	int it = value & 0xffff;
 	int index = (value & 0xffff0000) >> 16;
 	int shr0 = 0;
-	struct again_lut *lut = cv5003_again_lut;
+	struct again_lut *lut = sensor_again_lut;
 
-	/* shr0 = cv5003_attr.integration_time.max - it; */
-	shr0 = cv5003_attr.total_height - it;
+	/* shr0 = sensor_attr.integration_time.max - it; */
+	shr0 = sensor_attr.total_height - it;
 	shr0 = ((shr0 >> 1) << 1);
 
-	ret += cv5003_write(sd, 0x304a, ((shr0 >> 16) & 0xf));
-	ret += cv5003_write(sd, 0x3049, (unsigned char)((shr0 >> 8) & 0xff));
-	ret += cv5003_write(sd, 0x3048, (unsigned char)(shr0 & 0xff));
+	ret += sensor_write(sd, 0x304a, ((shr0 >> 16) & 0xf));
+	ret += sensor_write(sd, 0x3049, (unsigned char)((shr0 >> 8) & 0xff));
+	ret += sensor_write(sd, 0x3048, (unsigned char)(shr0 & 0xff));
 
-	ret += cv5003_write(sd, 0x3118, (unsigned char)(lut[index].sensor_again_value));      //set sensor Again
-	ret += cv5003_write(sd, 0x311c, (unsigned char)(lut[index].sensor_dgain_value_low));  //set sensor Dgain
-	ret += cv5003_write(sd, 0x311d, (unsigned char)(lut[index].sensor_dgain_value_high)); //set sensor Dgain
+	ret += sensor_write(sd, 0x3118, (unsigned char)(lut[index].sensor_again_value));      //set sensor Again
+	ret += sensor_write(sd, 0x311c, (unsigned char)(lut[index].sensor_dgain_value_low));  //set sensor Dgain
+	ret += sensor_write(sd, 0x311d, (unsigned char)(lut[index].sensor_dgain_value_high)); //set sensor Dgain
 
 	return ret;
 }
 
-// static int cv5003_set_integration_time(struct tx_isp_subdev *sd, int value)
+// static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 // {
 // 	int ret = 0;
 // 	int it = value & 0xffff;
 // 	unsigned short exp;
 // 	unsigned int vmax = 1125;
 
-// 	vmax = cv5003_attr.total_height;
+// 	vmax = sensor_attr.total_height;
 // 	exp = vmax - it;
 // 	exp = (exp >> 1) << 1;
-// 	ret += cv5003_write(sd, 0x3060, (unsigned char)(exp & 0xff));
-// 	ret += cv5003_write(sd, 0x3061, (unsigned char)((exp >> 8) & 0xff));
-// 	ret += cv5003_write(sd, 0x3062, (unsigned char)((exp >> 16) & 0x0f));
+// 	ret += sensor_write(sd, 0x3060, (unsigned char)(exp & 0xff));
+// 	ret += sensor_write(sd, 0x3061, (unsigned char)((exp >> 8) & 0xff));
+// 	ret += sensor_write(sd, 0x3062, (unsigned char)((exp >> 16) & 0x0f));
 
 // 	return ret;
 // }
 
-// static int cv5003_set_analog_gain(struct tx_isp_subdev *sd, int value)
+// static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 // {
 // 	int ret = 0;
 // 	unsigned char again = value & 0xff;
 
-// 	ret += cv5003_write(sd, 0x3164, (unsigned char)(again & 0xff));
+// 	ret += sensor_write(sd, 0x3164, (unsigned char)(again & 0xff));
 
 // 	return ret;
 // }
 
-static int cv5003_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int cv5003_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
@@ -1137,7 +1156,7 @@ static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_se
 	return 0;
 }
 
-static int cv5003_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -1152,31 +1171,31 @@ static int cv5003_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	return 0;
 }
 
-static int cv5003_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			ret = cv5003_write_array(sd, wsize->regs);
+			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
-			ret = cv5003_write_array(sd, cv5003_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			ISP_INFO("cv5003 stream on\n");
 		}
 	} else {
-		ret = cv5003_write_array(sd, cv5003_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		ISP_INFO("cv5003 stream off\n");
 	}
 
 	return ret;
 }
 
-static int cv5003_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -1201,10 +1220,10 @@ static int cv5003_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret += cv5003_read(sd, 0x3021, &val);
+	ret += sensor_read(sd, 0x3021, &val);
 	hts = val;
 	val = 0;
-	ret += cv5003_read(sd, 0x3020, &val);
+	ret += sensor_read(sd, 0x3020, &val);
 	hts <<= 8;
 	hts |= val;
 	if (0 != ret) {
@@ -1213,12 +1232,12 @@ static int cv5003_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	cv5003_write(sd, 0x301c, (unsigned char)(vts & 0xff));
-	cv5003_write(sd, 0x301d, (unsigned char)((vts >> 8) & 0xff));
-	cv5003_write(sd, 0x301e, (unsigned char)(vts >> 16));
+	sensor_write(sd, 0x301c, (unsigned char)(vts & 0xff));
+	sensor_write(sd, 0x301d, (unsigned char)((vts >> 8) & 0xff));
+	sensor_write(sd, 0x301e, (unsigned char)(vts >> 16));
 
 	if (0 != ret) {
-		ISP_ERROR("err: cv5003_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -1231,13 +1250,13 @@ static int cv5003_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return ret;
 }
 
-static int cv5003_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = cv5003_read(sd, 0x3028, &val);
+	val = sensor_read(sd, 0x3028, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xFC;
@@ -1258,7 +1277,7 @@ static int cv5003_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
 	}
-	cv5003_write(sd, 0x3028, val);
+	sensor_write(sd, 0x3028, val);
 
 	sensor->video.mbus_change = 1;
 	if (!ret)
@@ -1267,7 +1286,7 @@ static int cv5003_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int cv5003_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1287,10 +1306,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->default_boot) {
 	case 0:
-		wsize = &cv5003_win_sizes[0];
-		memcpy(&(cv5003_attr.mipi), &cv5003_mipi, sizeof(cv5003_mipi));
-		cv5003_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		cv5003_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		wsize = &sensor_win_sizes[0];
+		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
+		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
@@ -1298,11 +1317,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	switch (info->video_interface) {
 	case TISP_SENSOR_VI_MIPI_CSI0:
-		cv5003_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		cv5003_attr.mipi.index = 0;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
+		sensor_attr.mipi.index = 0;
 		break;
 	case TISP_SENSOR_VI_DVP:
-		cv5003_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
+		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		break;
 	default:
 		ISP_ERROR("Have no this Interface Source!!!\n");
@@ -1337,14 +1356,14 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	return 0;
 }
 
-static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "cv5003_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
@@ -1357,7 +1376,7 @@ static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "cv5003_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(5);
@@ -1367,7 +1386,7 @@ static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = cv5003_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an cv5003 chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1375,7 +1394,7 @@ static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ISP_INFO("cv5003 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "cv5003", sizeof("cv5003"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1383,7 +1402,7 @@ static int cv5003_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	return 0;
 }
 
-static int cv5003_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
@@ -1393,39 +1412,39 @@ static int cv5003_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		ret = cv5003_set_expo(sd, sensor_val->value);
+		ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	// case TX_ISP_EVENT_SENSOR_INT_TIME:
 	// 	if(arg)
-	// 		ret = cv5003_set_integration_time(sd, sensor_val->value);
+	// 		ret = sensor_set_integration_time(sd, sensor_val->value);
 	// 	break;
 	// case TX_ISP_EVENT_SENSOR_AGAIN:
 	// 	if(arg)
-	// 		ret = cv5003_set_analog_gain(sd, sensor_val->value);
+	// 		ret = sensor_set_analog_gain(sd, sensor_val->value);
 	// 	break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = cv5003_set_digital_gain(sd, sensor_val->value);
+			ret = sensor_set_digital_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = cv5003_get_black_pedestal(sd, sensor_val->value);
+			ret = sensor_get_black_pedestal(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = cv5003_set_mode(sd, sensor_val->value);
+			ret = sensor_set_mode(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = cv5003_write_array(sd, cv5003_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = cv5003_write_array(sd, cv5003_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		ret = cv5003_set_fps(sd, sensor_val->value);
+		ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		ret = cv5003_set_vflip(sd, sensor_val->value);
+		ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	default:
 		break;
@@ -1434,7 +1453,7 @@ static int cv5003_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int cv5003_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1445,14 +1464,14 @@ static int cv5003_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = cv5003_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int cv5003_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1461,37 +1480,37 @@ static int cv5003_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	cv5003_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops cv5003_core_ops = {
-	.g_chip_ident = cv5003_g_chip_ident,
-	.reset = cv5003_reset,
-	.init = cv5003_init,
-	.g_register = cv5003_g_register,
-	.s_register = cv5003_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops cv5003_video_ops = {
-	.s_stream = cv5003_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops cv5003_sensor_ops = {
-	.ioctl = cv5003_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops cv5003_ops = {
-	.core = &cv5003_core_ops,
-	.video = &cv5003_video_ops,
-	.sensor = &cv5003_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "cv5003",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -1502,7 +1521,7 @@ struct platform_device sensor_platform_device = {
 	.num_resources = 0,
 };
 
-static int cv5003_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1517,10 +1536,10 @@ static int cv5003_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;
-	cv5003_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sensor->video.shvflip = 1;
-	sensor->video.attr = &cv5003_attr;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &cv5003_ops);
+	sensor->video.attr = &sensor_attr;
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1530,7 +1549,7 @@ static int cv5003_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 }
 
-static int cv5003_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1547,26 +1566,28 @@ static int cv5003_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id cv5003_id[] = {{"cv5003", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, cv5003_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver cv5003_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "cv5003",
+			.name = SENSOR_NAME,
 		},
-	.probe = cv5003_probe,
-	.remove = cv5003_remove,
-	.id_table = cv5003_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_cv5003(void) {
-	return private_i2c_add_driver(&cv5003_driver);
+	sensor_common_init(&sensor_info);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_cv5003(void) {
-	private_i2c_del_driver(&cv5003_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_cv5003);

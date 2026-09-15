@@ -27,6 +27,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "ov5675s1"
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_MAX_HEIGHT 1944
 #define SENSOR_VERSION "H20230831a"
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_M (0x56)
@@ -48,6 +50,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 15
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

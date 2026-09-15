@@ -29,6 +29,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "os08a10"
+#define SENSOR_MAX_WIDTH 1200
+#define SENSOR_MAX_HEIGHT 800
 #define SENSOR_VERSION "H20230802a"
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x08)

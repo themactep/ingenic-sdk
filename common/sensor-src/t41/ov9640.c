@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "ov9640"
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
 #define SENSOR_VERSION "H20230920a"
 #define SENSOR_CHIP_ID_H (0xa6)
 #define SENSOR_CHIP_ID_L (0x40)
@@ -48,6 +50,7 @@
 // TIMING AND PERFORMANCE
 // ============================================================================
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

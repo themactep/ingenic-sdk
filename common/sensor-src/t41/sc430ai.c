@@ -27,6 +27,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc430ai"
+#define SENSOR_MAX_WIDTH 2688
+#define SENSOR_MAX_HEIGHT 1520
 #define SENSOR_VERSION "H20220105a"
 #define SENSOR_CHIP_ID_H (0xce)
 #define SENSOR_CHIP_ID_L (0x39)

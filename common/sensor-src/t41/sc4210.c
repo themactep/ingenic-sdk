@@ -28,6 +28,8 @@
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define SENSOR_NAME "sc4210"
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_MAX_HEIGHT 1440
 #define SENSOR_VERSION "H20230522a"
 #define SENSOR_CHIP_ID_H (0x42)
 #define SENSOR_CHIP_ID_L (0x10)
