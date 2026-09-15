@@ -1,4 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0+
+/*
+ * sensor-info.c
+ * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
+ */
+
 #include <linux/slab.h>
 #include <linux/proc_fs.h>
 #include <sensor-info.h>
