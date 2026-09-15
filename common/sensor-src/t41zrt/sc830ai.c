@@ -2,7 +2,6 @@
 /*
  * sc830ai.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          3840*2160       20        mipi_2lane            linear

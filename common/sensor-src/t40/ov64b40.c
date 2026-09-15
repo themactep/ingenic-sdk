@@ -2,7 +2,6 @@
 /*
  * ov64b40.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2304*1728       20        mipi_2lane           linear

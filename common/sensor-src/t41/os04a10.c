@@ -2,7 +2,6 @@
 /*
  * os04a10.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface       bit        mode
  *   0          2688*1520       25        mipi_2lane     RAW10      linear

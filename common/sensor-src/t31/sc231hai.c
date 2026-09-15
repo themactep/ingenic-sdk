@@ -2,7 +2,6 @@
 /*
  * sc231hai.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Register map recovered from the vendor sensor_sc231hai_t31.ko (Infiya K1).
  */
 

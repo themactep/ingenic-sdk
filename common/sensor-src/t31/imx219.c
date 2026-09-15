@@ -2,7 +2,6 @@
 /*
  * imx219.c
  * IMX219 sensor driver for the Ingenic T31 tx-isp framework.
- *
  * Ported from:
  *  - T31 framework glue: sensor-src/t31/sc2336.c (proven on 28 real boards)
  *  - 16-bit register read/write + split exposure/gain style: this session's
@@ -11,10 +10,8 @@
  *    encoding): mainline Linux drivers/media/i2c/imx219.c (v5.15, static
  *    per-mode register-table era) -- register values are Raspberry Pi's own
  *    firmware-derived dump for the 1920x1080@30fps mode.
- *
  * I2C address 0x10 and chip ID 0x0219 confirmed live on real hardware
  * (this exact board/sensor) before writing this driver.
- *
  * Four modes ported from mainline's supported_modes[], selected at load
  * time via the sensor_resolution module param (this SDK's convention --
  * see jxf35.c/gc2053.c for the same pattern):
@@ -24,7 +21,6 @@
  *   - 640x480@30fps                          -- sensor_resolution=480
  * Pixel rate (182.4MHz) and HTS (0x0d78) are identical across all four
  * modes -- only VTS and the digital crop/output-size registers change.
- *
  * All four confirmed live on real T31 hardware (I2C chip-ID read,
  * MIPI stream-on, real RTSP video). 1080p/1632x1232/640x480 also
  * confirmed through the full encoder pipeline (H.264 + JPEG channels

@@ -2,7 +2,6 @@
 /*
  * sc401ais1.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps        interface              mode
  *   0          2560*1440       30         mipi_2lane             linear

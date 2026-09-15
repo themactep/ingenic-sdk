@@ -2,11 +2,9 @@
 /*
 * cv5003.c
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
-*
 * Settings:
 * sboot        resolution      fps     interface       mode
 *  0           2880x1620       30      mipi_2lane      linear
-*
 * NOTE: SENSOR_ATTR chip_id (0x5002) does not match the value sensor_detect()
 *       builds from SENSOR_CHIP_ID_H/_L (0x02/0x50). Which of the two is the
 *       real CV5003 id is NOT verified against a datasheet.

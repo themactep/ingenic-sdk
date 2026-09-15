@@ -2,7 +2,6 @@
 /*
  * imx335.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface             mode
  *   0          2592*1944       25        mipi_2lane           linear

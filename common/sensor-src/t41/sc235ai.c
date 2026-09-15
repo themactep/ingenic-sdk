@@ -2,7 +2,6 @@
 /*
  * sc235ai.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode         DVDD
  *   0          1920*1056       30        mipi_2lane             linear       外供1.2V

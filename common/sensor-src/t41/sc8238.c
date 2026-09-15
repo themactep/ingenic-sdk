@@ -2,7 +2,6 @@
 /*
  * sc8238.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          3840*2160       15        mipi_2lane           linear

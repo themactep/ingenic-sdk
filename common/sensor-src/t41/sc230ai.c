@@ -2,7 +2,6 @@
 /*
  * sc230ai.c
  * Copyright (C) 2023 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface              mode
  *   0          1920*1080       60        mipi_2lane           linear

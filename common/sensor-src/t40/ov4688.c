@@ -2,7 +2,6 @@
 /*
  * ov4688.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2688*1520       30        mipi_4lane           linear

@@ -2,7 +2,6 @@
 /*
  * os05a20.c
  * Copyright (C) 2023 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sensor_max_fps   resolution      fps       interface              mode
  *  25               2592*1944       25        mipi_2lane            linear

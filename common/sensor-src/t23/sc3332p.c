@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
-/*sc3332p.c
- *
+/*
+ * sc3332p.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface              mode      DVDD
  *   0          2304*1296       30        mipi_2lane           linear    interior

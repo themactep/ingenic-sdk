@@ -2,7 +2,6 @@
 /*
  * gc2093.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * 1920*1080  carrier-server  --st=gc2093  data_interface=1  i2c=0x37
  */
 

@@ -2,7 +2,6 @@
 /*
  * sc450ai.c
  * Copyright (C) 2023 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface             mode
  *   0          2592*1520       25      mipi_2lane           linear

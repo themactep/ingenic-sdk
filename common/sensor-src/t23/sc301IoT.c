@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc301IoT.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  */
 #include <linux/init.h>
 #include <linux/module.h>

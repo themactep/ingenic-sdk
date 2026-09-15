@@ -2,7 +2,6 @@
 /*
  * mis2009.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface     lane   mode
  *   0          1920*1080       30        mipi        2      linear

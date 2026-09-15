@@ -2,7 +2,6 @@
 /*
  * sc031gs.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          640*480         120       mipi_2lane           linear

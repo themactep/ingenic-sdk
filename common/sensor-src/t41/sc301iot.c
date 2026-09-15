@@ -2,7 +2,6 @@
 /*
  * sc301iot.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0           2048*1536      25        mipi_2lane             linear

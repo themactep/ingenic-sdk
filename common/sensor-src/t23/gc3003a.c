@@ -2,7 +2,6 @@
 /*
  * gc3003a.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sensor_resolution      resolution      fps       interface          mode
  *       300               2304*1296       30        mipi_2lane        linear

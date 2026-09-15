@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * cv2003s1.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync FSync hardware connection:The VFSYNC of the two cameras is connected, and the HSYNC is connected
  * Settings:
  * sboot        resolution      fps       interface              mode

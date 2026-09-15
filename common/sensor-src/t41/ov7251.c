@@ -2,7 +2,6 @@
 /*
  * ov7251.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          320*240         150       mipi_2lane           linear

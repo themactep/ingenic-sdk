@@ -2,7 +2,6 @@
 /*
  * mis4001.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface  lane   mode
  *   0          2560x1440       30        mipi     2      linear

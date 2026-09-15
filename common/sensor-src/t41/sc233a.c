@@ -2,7 +2,6 @@
 /*
  * sc233a.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface              mode
  *   0          1920*1080       25        mipi_2lane           linear

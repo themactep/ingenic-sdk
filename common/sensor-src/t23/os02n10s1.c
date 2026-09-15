@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * os02n10s1.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync Sync hardware connection: Primary Sensor EVSYNC is directly connected to secondary Sensor EVSYNC.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1920x1080       15       MIPI_2lane             linear

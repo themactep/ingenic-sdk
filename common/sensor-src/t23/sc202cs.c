@@ -2,7 +2,6 @@
 /*
  * sc202cs.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * resolution      fps       interface          mode
  * 1600*1200       30        MIPI               1lane

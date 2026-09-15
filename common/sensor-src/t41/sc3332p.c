@@ -2,7 +2,6 @@
 /*
  * sc3332p.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2304*1296       30        mipi_2lane            linear

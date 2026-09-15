@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc535IoT.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * resolution      fps       interface          mode
  * 1936*1936       30        mipi_2lane        linear
- *
  */
 #include <linux/init.h>
 #include <linux/module.h>

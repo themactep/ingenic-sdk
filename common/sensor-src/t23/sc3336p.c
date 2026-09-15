@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0+
-/*sc3336p.c
- *
+/*
+ * sc3336p.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * default_boot    resolution      fps       interface          mode        DVDD
  *       0         2304*1296       45        mipi_2lane        linear       external=1.5v
  *       1         2304*1296       30        mipi_2lane        linear       interior
- *
  */
 #include <linux/init.h>
 #include <linux/module.h>

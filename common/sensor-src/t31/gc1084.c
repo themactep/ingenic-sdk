@@ -2,7 +2,6 @@
 /*
  * gc1084.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot      resolution      fps      interface        mode
  *   0         1920*720       30       mipi_1lane      linear

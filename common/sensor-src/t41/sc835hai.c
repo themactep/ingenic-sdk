@@ -2,7 +2,6 @@
 /*
  * sc835hai.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps	interface	mode
  *   0          3840*2160       25	mipi_2lane	linear

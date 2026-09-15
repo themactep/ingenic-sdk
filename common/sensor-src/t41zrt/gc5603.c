@@ -2,7 +2,6 @@
 /*
  * gc5603.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution       fps     interface              mode
  *   0          2880*1620        25     mipi_2lane             linear

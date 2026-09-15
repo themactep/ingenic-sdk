@@ -2,7 +2,6 @@
 /*
  * sc5239.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  */
 

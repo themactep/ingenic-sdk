@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc3003.c
- *
  * master sensor fsync to slave sensor fsync
- *
  * Settings:
  * sboot        resolution       fps     interface              mode
  *   0          2304*1296        15     mipi_2lane             linear

@@ -2,7 +2,6 @@
 /*
  * sc430ai.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface              mode
  *   0          2688*1520       20        mipi_2lane           hdr

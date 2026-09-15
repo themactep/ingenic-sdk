@@ -2,7 +2,6 @@
 /*
  * sc2336p.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  *   resolution    fps  interface     mode
  *   1920*1080     15   mipi_2lane    linear

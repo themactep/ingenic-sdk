@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc2331.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync FSync hardware connection:
  * @fsync The PWM is divided into two parts, one end is directly connected to the main Sensor,
  * @fsync and one section is connected to the secondary Sensor through the inverter

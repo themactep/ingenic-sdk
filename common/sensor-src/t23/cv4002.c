@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * cv4002.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync FSync hardware connection:The VFSYNC of the two cameras is connected, and the HSYNC is connected.
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          2304*1296       25        mipi_2lane            linear
- *
  * NOTE: SENSOR_ATTR chip_id (0x4002) does not match the value sensor_detect()
  *       builds from SENSOR_CHIP_ID_H/_L (0x02/0x40). Which of the two is the
  *       real CV4002 id is NOT verified against a datasheet.

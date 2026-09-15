@@ -2,7 +2,6 @@
 /*
  * gc2063.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * A clone of gc2053
  */
 

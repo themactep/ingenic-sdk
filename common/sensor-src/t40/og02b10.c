@@ -2,7 +2,6 @@
 /*
  * og02b10.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface             mode
  *   0          1280*720        60      mipi_2lane           linear

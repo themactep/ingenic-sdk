@@ -2,7 +2,6 @@
 /*
  * gc4023.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  */
 
 #include <linux/init.h>

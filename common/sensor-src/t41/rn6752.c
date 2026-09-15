@@ -2,7 +2,6 @@
 /*
  * rn6752.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps      interface        mode
  *   0          720*240         30        mipi           YUV422

@@ -2,7 +2,6 @@
 /*
  * gc2063.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1920*1080       30          dvp                  linear

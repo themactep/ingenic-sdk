@@ -2,13 +2,11 @@
 /*
  * imx662.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot	resolution      fps       interface	      mode
  *   0	  1920*1080       30	mipi_2lane	   linear
  *   1	  960*540	   30	mipi_2lane	   linear
  *   2	  1280*720	 30	mipi_2lane	   linear
- *
  * NOTE: SENSOR_CHIP_ID_H/_L are 0x00/0x00 placeholders and sensor_detect()
  *       only checks that the two raw bytes match them. The real IMX662 id
  *       (SENSOR_ATTR chip_id below = 0xb201) and the correct id registers

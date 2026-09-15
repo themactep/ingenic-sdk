@@ -2,7 +2,6 @@
 /*
  * jxf23.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps     interface       mode
  *   0          1920x1080       25        dvp           linear

@@ -2,7 +2,6 @@
 /*
  * ov02b10.c
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1600*1200       15        mipi_1lane           linear

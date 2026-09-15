@@ -2,7 +2,6 @@
 /*
  * sc3336p.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface       mode          func       DVDD
  *   0          2304*1296       25        mipi_2lane     linear        master      1.2V

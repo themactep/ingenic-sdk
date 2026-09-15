@@ -2,7 +2,6 @@
 /*
  * ov9640.c
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
- *
  * Settings:
  * sboot        resolution      fps       interface              mode
  *   0          1280*720        30        mipi_2lane            linear

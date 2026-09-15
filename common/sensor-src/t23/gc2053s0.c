@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc2053.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync Sync hardware connection: Primary Sensor fsync is directly connected to secondary Sensor fsync.
  */
 #include <linux/init.h>

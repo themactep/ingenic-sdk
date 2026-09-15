@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * mis20c1.c - ImageDesign MIS20C1 sensor driver
- *
  * Register programming and runtime behavior recovered from the vendor
  * sensor_mis20c1_t23.ko (version H20240321a).
  */

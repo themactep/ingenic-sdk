@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * gc5603.c
- *
  * Settings:
  * sboot        resolution       fps     interface              mode
  *   0          2880*1620        25     mipi_2lane             linear

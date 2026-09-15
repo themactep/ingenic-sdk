@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * sc301iot.c
- *
  * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
- *
  * @fsync Sync hardware connection: Primary Sensor fsync is directly connected to secondary Sensor efsync.
  */
 #include <linux/init.h>
