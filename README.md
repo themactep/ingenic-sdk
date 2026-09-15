@@ -22,6 +22,11 @@ SENSOR_MODEL=gc2053 ./build.sh t31 3.10
 - `<kernel_version>`: Indicate the kernel version. Supported versions include `3.10` and `4.4`.
 - `<make_args>`: Additional make arguments as required.
 
+The script derives the `CONFIG_KERNEL_3_10` / `CONFIG_KERNEL_4_4_94` define
+from `<kernel_version>` and passes it via `EXTRA_CFLAGS`, so the correct
+kernel-specific code paths are selected. A caller-supplied `EXTRA_CFLAGS=`
+(e.g. `EXTRA_CFLAGS=-mnan=legacy`) is preserved and merged.
+
 Ensure you provide the correct `SOC` environment variable corresponding to your sensor and SoC setup before executing the build command.
 
 ### Source layout

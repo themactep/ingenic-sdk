@@ -17,6 +17,8 @@ show_usage() {
 	echo "Environment variables:"
 	echo "  KDIR          - Path to kernel source (required)"
 	echo "  CROSS_COMPILE - Cross compiler prefix (required)"
+	echo "  EXTRA_CFLAGS  - Extra compiler flags (optional; the kernel-version"
+	echo "                  define is added automatically)."
 }
 
 # Function to clean build artifacts
@@ -91,10 +93,41 @@ fi
 # Convert SOC model to uppercase for config
 SOC_UPPER=$(echo "$SOC_MODEL" | tr '[:lower:]' '[:upper:]')
 
+# The in-tree sources select kernel-specific code paths via
+# CONFIG_KERNEL_4_4_94 / CONFIG_KERNEL_3_10. The firmware build passes these
+# through EXTRA_CFLAGS; do the same here so a direct build.sh run doesn't
+# silently compile 3.10 paths against a 4.4.94 kernel (or vice versa).
+case "$KERNEL_VERSION" in
+	4.4*)	KERNEL_CFLAGS="-DCONFIG_KERNEL_4_4_94" ;;
+	*)	KERNEL_CFLAGS="-DCONFIG_KERNEL_3_10" ;;
+esac
+
+# Merge with a caller-supplied EXTRA_CFLAGS (which may carry e.g. -mnan=legacy),
+# avoiding a duplicate kernel-version define.
+case "$*" in
+	*EXTRA_CFLAGS=*)
+		if ! echo "$*" | grep -q "CONFIG_KERNEL_"; then
+			# Rewrite the existing EXTRA_CFLAGS argument, appending the define.
+			args=()
+			for a in "$@"; do
+				case "$a" in
+					EXTRA_CFLAGS=*) a="${a} $KERNEL_CFLAGS" ;;
+				esac
+				args+=("$a")
+			done
+			set -- "${args[@]}"
+		fi
+		;;
+	*)
+		set -- "$@" "EXTRA_CFLAGS=$KERNEL_CFLAGS"
+		;;
+esac
+
 # Build command
 echo "Building for SoC: $SOC_MODEL, Kernel: $KERNEL_VERSION"
 echo "Using kernel directory: $KDIR"
 echo "Using cross compiler: ${CROSS_COMPILE}gcc"
+echo "Kernel-version CFLAGS: $KERNEL_CFLAGS"
 
 # Set environment variables
 export CROSS_COMPILE="${CROSS_COMPILE}"
