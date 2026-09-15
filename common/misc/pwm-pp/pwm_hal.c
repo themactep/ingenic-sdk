@@ -13,7 +13,7 @@
 #include <linux/module.h>
 #include <linux/miscdevice.h>
 #include <linux/platform_device.h>
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 #include <linux/mfd/ingenic-tcu.h>
 #else
 #include <linux/mfd/jz_tcu.h>
@@ -22,7 +22,7 @@
 
 /* Channels are selected by Kconfig/Kbuild/DT. Do not auto-enable here. */
 
-#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 #define PWM_NUM		8
 #else /* other soc type */
 #define PWM_NUM		4
@@ -39,7 +39,7 @@ struct platform_device pwm_device = {
 };
 
 struct pwm_lookup jz_pwm_lookup[] = {
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 #ifdef CONFIG_PWM0
 	PWM_LOOKUP("ingenic,tcu_chn0.0", 1, "pwm-jz", "pwm-jz.0", 2000, 1),
 #endif

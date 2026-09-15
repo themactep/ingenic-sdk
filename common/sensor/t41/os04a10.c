@@ -236,7 +236,7 @@ struct tx_isp_mipi_bus sensor_2560_1440_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_2560_1440_mipi_RAW1 = {
+struct tx_isp_mipi_bus sensor_2560_1440_mipi_RAW12 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1296,
 	.lans = 2,
@@ -265,7 +265,7 @@ struct tx_isp_mipi_bus sensor_2560_1440_mipi_RAW1 = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sensor_1280_720_mipi_RAW1 = {
+struct tx_isp_mipi_bus sensor_1280_720_mipi_RAW12 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1296,
 	.lans = 2,

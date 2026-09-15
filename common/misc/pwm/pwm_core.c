@@ -19,7 +19,7 @@
 #include <soc/gpio.h>
 #include <linux/slab.h>
 
-#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 #define PWM_NUM		8
 #else /* other soc type */
 #define PWM_NUM		4
@@ -48,7 +48,7 @@ struct jz_pwm_gpio pwm_pin[PWM_NUM] = {
 
 	[3] = {.group = GPIO_PORT_C, .pins = 1 << 20, .func = GPIO_FUNC_0},
 
-#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	// [4] = {.group = GPIO_PORT_B, .pins = 1 << 25, .func = GPIO_FUNC_1},
 	[4] = {.group = GPIO_PORT_C, .pins = 1 << 6, .func = GPIO_FUNC_2},
 
@@ -133,7 +133,7 @@ static int jz_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
     }
 #elif defined(CONFIG_SOC_T31)
 	jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group,pwm_pin[tcu_pwm->cib.id].func,pwm_pin[tcu_pwm->cib.id].pins);
-#elif defined(CONFIG_SOC_T40)
+#elif defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	jzgpio_set_func(pwm_pin[tcu_pwm->cib.id].group,pwm_pin[tcu_pwm->cib.id].func,pwm_pin[tcu_pwm->cib.id].pins);
 #else
 	jzgpio_set_func(tcu_pwm->gpio / 32,GPIO_FUNC_0,BIT(tcu_pwm->gpio & 0x1f));
@@ -426,11 +426,11 @@ static struct platform_driver jz_pwm3_driver = {
 };
 #endif
 
-#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40)
+#if defined(CONFIG_SOC_T30) || defined(CONFIG_SOC_T21) || defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 #if (PWM_NUM > 4)
 #ifdef CONFIG_PWM4
 static struct platform_driver jz_pwm4_driver = {
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	.driver = {
 		.name = "ingenic,tcu_chn4",
 		.owner = THIS_MODULE,
@@ -450,7 +450,7 @@ static struct platform_driver jz_pwm4_driver = {
 #if (PWM_NUM > 5)
 #ifdef CONFIG_PWM5
 static struct platform_driver jz_pwm5_driver = {
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	.driver = {
 		.name = "ingenic,tcu_chn5",
 		.owner = THIS_MODULE,
@@ -470,7 +470,7 @@ static struct platform_driver jz_pwm5_driver = {
 #if (PWM_NUM > 6)
 #ifdef CONFIG_PWM6
 static struct platform_driver jz_pwm6_driver = {
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	.driver = {
 		.name = "ingenic,tcu_chn6",
 		.owner = THIS_MODULE,
@@ -490,7 +490,7 @@ static struct platform_driver jz_pwm6_driver = {
 #if (PWM_NUM > 7)
 #ifdef CONFIG_PWM7
 static struct platform_driver jz_pwm7_driver = {
-#ifdef CONFIG_SOC_T40
+#if defined(CONFIG_SOC_T40) || defined(CONFIG_SOC_T41)
 	.driver = {
 		.name = "ingenic,tcu_chn7",
 		.owner = THIS_MODULE,

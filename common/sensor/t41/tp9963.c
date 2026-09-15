@@ -331,8 +331,8 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 }
 
 enum {
-	CH_ = 0,    //
-	CH_ = 1,    //
+	CH_0 = 0,    //
+	CH_1 = 1,    //
 	CH_ALL = 4, //
 	SENSOR_PAGE = 8,
 };

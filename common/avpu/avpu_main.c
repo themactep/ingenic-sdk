@@ -674,10 +674,12 @@ int avpu_codec_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, codec);
 
-#if defined(CONFIG_SOC_T31)
+#if defined(CONFIG_SOC_T31) || defined(CONFIG_SOC_T41)
 	if (of_property_read_string(codec->device->of_node, "t31,devicename",
 #elif defined(CONFIG_SOC_C100)
 	if (of_property_read_string(codec->device->of_node, "c100,devicename",
+#else
+	if (of_property_read_string(codec->device->of_node, "t40,devicename",
 #endif
 				    (const char **)&device_name) != 0)
 		device_name = NULL;

@@ -80,6 +80,11 @@
 #define SENSOR_INIT_60FPS_VTS 0x4e2
 #define SENSOR_INIT_60FPS_HTS 0x898
 
+#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
+#define SENSOR_EXPO
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
+
 #ifdef SENSOR_WDR_2_FRAME
 #define SENSOR_WDR_MCLK 27000000
 #define SENSOR_WDR_SUPPORT_RES_PCLK (165000000)
@@ -94,10 +99,6 @@ static int wdr_line = 1000;
 // ============================================================================
 // SPECIAL FEATURES
 // ============================================================================
-#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
-#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 
 struct tx_isp_sensor_attribute sensor_attr;
 
