@@ -60,9 +60,6 @@ static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
 
-static int fsync_mode = 3;
-module_param(fsync_mode, int, S_IRUGO);
-MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
 struct proc_dir_entry *g_sinfo_proc;
 
@@ -356,12 +353,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	.fsync_attr =
-		{
-			.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
-			.call_times = 1,
-			.sdelay = 1000,
-		}
 	//      void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
@@ -1952,11 +1943,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");
 	}
-	sensor_attr.fsync_attr.mode = fsync_mode;
-	if (fsync_mode == TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE) {
-		sensor_attr.total_height = sensor_attr.total_height * 2;
-		wsize->fps = ((wsize->fps & 0xffff0000) | (wsize->fps & 0xffff) * 2);
-	}
 	sensor_attr.max_integration_time_native = sensor_attr.total_height - 8;
 	sensor_attr.integration_time_limit = sensor_attr.total_height - 8;
 	sensor_attr.max_integration_time = sensor_attr.total_height - 8;
@@ -2053,42 +2039,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
-	}
-
-	return 0;
-}
-
-static int sensor_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
-	uint8_t val;
-	uint16_t ret_val;
-
-	ISP_INFO("=========>> [%s %d]\n", __func__, __LINE__);
-	if (fsync->place != TX_ISP_SENSOR_FSYNC_PLACE_STREAMON_AFTER)
-		return 0;
-	switch (fsync->call_index) {
-	case 0:
-		switch (fsync_mode) {
-		case 2:
-			ISP_INFO("=========>> [%s %d]\n", __func__, __LINE__);
-			sensor_write(sd, 0x027f, 0x03);
-			sensor_write(sd, 0x02f7, 0x02);
-			sensor_write(sd, 0x02e1, 0x07);
-			break;
-		case 3:
-			ISP_INFO("=========>> [%s %d]\n", __func__, __LINE__);
-			sensor_read(sd, 0x0340, &val);
-			ret_val = val << 8;
-			sensor_read(sd, 0x0341, &val);
-			ret_val |= val;
-			ret_val = ret_val << 1;
-			sensor_write(sd, 0x0340, ret_val >> 8);
-			sensor_write(sd, 0x0341, ret_val & 0xff);
-			sensor_write(sd, 0x027f, 0x03);
-			sensor_write(sd, 0x02f7, 0x02);
-			sensor_write(sd, 0x02e1, 0x07);
-			break;
-		}
-		break;
 	}
 
 	return 0;
@@ -2199,7 +2149,6 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 };
 
 static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
-	.fsync = sensor_fsync,
 	.ioctl = sensor_sensor_ops_ioctl,
 };
 
