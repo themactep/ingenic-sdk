@@ -450,6 +450,14 @@ The t23 failures are pre-existing and fall into:
 t10 (== t20), t20, t21 have complete sensor_info declarations; t30 uses
 sensor_info in only 4 drivers. So the work item is **t23 only**.
 
+**t20 fix:** the logging unification (task 36) was wrong for t20 - its
+kernel defines ISP_ERROR as the 0xfe return code and the ISP only has
+ISP_PRINT(LEVEL,...). Added ISP_INFO/ISP_WARNING to t20's tx-isp-debug.h,
+exposed it via tx-isp-common.h, converted the t20 sensor ISP_ERROR(...) to
+ISP_PRINT(ISP_ERROR_LEVEL,...), and fixed 10 stray-paren drivers + one
+missing SENSOR_MAX_*. t20 now builds 51/52 (gc1084 is an orphan t31-style
+driver in the t20 tree).
+
 **t23 fixes done (task):** added the missing sensor_info block to 19
 drivers, SENSOR_CHIP_ID to imx307/327/335, removed dead sensor_attr.max_fps
 from 8, fixed gc4653 (unterminated macro), ov9732 (stray paren) and
