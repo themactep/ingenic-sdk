@@ -117,16 +117,9 @@ ifeq ($(strip $(SENSOR_1_MODEL)$(SENSOR_2_MODEL)),)
     include $(src)/sinfo/Kbuild
 else
 # Sensor drivers all live in common/sensor-src/<soc>; the per-kernel
-# sensor-src/<soc> trees were merged away, so the Kbuild under
-# <kernel>/sensor-src just builds from common.
-ifneq ($(SENSOR_1_MODEL),)
-    $(info Building for sensor $(SENSOR_2_MODEL))
-    include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
-endif
-ifneq ($(SENSOR_2_MODEL),)
-    $(info Building for sensor $(SENSOR_1_MODEL))
-    include $(src)/$(KERNEL_VERSION)/sensor-src/Kbuild
-endif
+# sensor-src trees were merged away, so a single common Kbuild serves
+# both kernels (it reads SENSOR_MODEL / SENSOR_1_MODEL / SENSOR_2_MODEL).
+include $(src)/common/sensor-src/Kbuild
 endif
 endif
 

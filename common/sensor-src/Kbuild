@@ -1,6 +1,7 @@
 ccflags-y += -I$(src)/common/sensor-src/include
-# All sensor drivers now live in common/sensor-src/<soc> (kernel-shared); the
-# per-kernel sensor-src trees only contain this Kbuild.
+# All sensor drivers live in common/sensor-src/<soc>. The per-kernel
+# sensor-src trees were merged away; the build is parameterised purely by
+# SOC_FAMILY + SENSOR_MODEL, so a single Kbuild serves both kernels.
 SENSOR_DIR := common/sensor-src/$(SOC_FAMILY)
 
 ifneq ($(SENSOR_MODEL),)

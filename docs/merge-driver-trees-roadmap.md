@@ -140,10 +140,10 @@ Everything is under `common/` except the split sensor drivers. Selection:
 - Audio: `common/audio/<soc>/<driver>` (see 4.6).
 - misc: all under `common/misc/<name>` (split drivers `motor`/`motors-pp`,
   `pwm`/`pwm-pp` selected by `KERNEL_VERSION`).
-- sensor-src: the `Kbuild` resolves each sensor model per file - it prefers
-  `common/sensor-src/$(SOC_FAMILY)/$(SENSOR_MODEL).c` and falls back to
-  `$(KERNEL_VERSION)/sensor-src/$(SOC_FAMILY)/$(SENSOR_MODEL).c`, so a SoC can
-  mix merged (common) and per-kernel drivers.
+- sensor-src: all sensor drivers live in `common/sensor-src/<soc>/`. A single
+  `common/sensor-src/Kbuild` builds them, parameterised by `$(SOC_FAMILY)` and
+  `$(SENSOR_MODEL)`/`$(SENSOR_1_MODEL)`/`$(SENSOR_2_MODEL)`; there is no
+  per-kernel sensor-src tree anymore.
 - a1-only: `common/aip/a1`, `common/fb`, `common/ipu`, `common/video/a1`.
 - `ISP_INCLUDE` (top of `Kbuild`) is `common/isp/<soc>/include`
   (`t31-pp` on 3.10.14), because that dir also holds the sensor headers.
