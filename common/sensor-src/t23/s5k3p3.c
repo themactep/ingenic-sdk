@@ -1,11 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
 * s5k3p3.c
 *
 * Copyright (C) 2012 Ingenic Semiconductor Co., Ltd.
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License version 2 as
-* published by the Free Software Foundation.
 *
 * Settings:
 * sboot        resolution      fps       interface              mode
