@@ -449,3 +449,9 @@ The t23 failures are pre-existing and fall into:
 
 t10 (== t20), t20, t21 have complete sensor_info declarations; t30 uses
 sensor_info in only 4 drivers. So the work item is **t23 only**.
+
+**t23 fixes done (task):** added the missing sensor_info block to 19
+drivers, SENSOR_CHIP_ID to imx307/327/335, removed dead sensor_attr.max_fps
+from 8, fixed gc4653 (unterminated macro), ov9732 (stray paren) and
+sc2315e (dup sensor_mipi). t23 now builds 73/107; the remaining 34 are all
+multi-sensor drivers gated on CONFIG_MULTI_SENSOR (fsync_attr).
