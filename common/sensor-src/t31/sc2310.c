@@ -886,7 +886,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0x6000, 0x00},
 	{0x6002, 0x00},
 	{0x301c, 0x78}, //close dvp
-	{0x3037, 0x44}, //[3:0] pump div	range [10M,20M],sclk=81/ =40.5M,div=4-->sclk/4=10.125M,duty cycle-->even number
+	{0x3037,
+		0x44},	//[3:0] pump div	range [10M,20M],sclk=81/ =40.5M,div=4-->sclk/4=10.125M,duty cycle-->even number
 	{0x3038, 0x44}, //[7:4]ppump & [3:0]npump
 	{0x3632, 0x18}, //[5:4]idac driver
 	{0x5785, 0x40}, //black	point 1x
@@ -1217,7 +1218,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_dol[] = {
 	{0x6000, 0x00},
 	{0x6002, 0x00},
 	{0x301c, 0x78}, //close dvp
-	{0x3037, 0x44}, //[3:0] pump div	range [10M,20M],sclk=81/ =40.5M,div=4-->sclk/4=10.125M,duty cycle-->even number
+	{0x3037,
+		0x44},	//[3:0] pump div	range [10M,20M],sclk=81/ =40.5M,div=4-->sclk/4=10.125M,duty cycle-->even number
 	{0x3038, 0x44}, //[7:4]ppump & [3:0]npump
 	{0x3632, 0x18}, //[5:4]idac driver
 	{0x5785, 0x40}, //black	point 1x

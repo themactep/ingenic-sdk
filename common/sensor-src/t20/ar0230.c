@@ -226,13 +226,15 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_16BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
-	.dvp = {
-		.mode = SENSOR_DVP_HREF_MODE,
-		.blanking = {
-			.vblanking = 0,
-			.hblanking = 0,
+	.dvp =
+		{
+			.mode = SENSOR_DVP_HREF_MODE,
+			.blanking =
+				{
+					.vblanking = 0,
+					.hblanking = 0,
+				},
 		},
-	},
 	.max_again = 262144,
 	.max_dgain = 0,
 	.min_integration_time = 4,
@@ -521,8 +523,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_dvp,
-	}
-};
+	}};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG12_1X12,
@@ -550,20 +551,19 @@ int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr = client->addr,
-			.flags = 0,
-			.len = 2,
-			.buf = buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 2,
 			.buf = value,
-		}
-	};
+		}};
 	int ret;
 
 	ret = i2c_transfer(client->adapter, msg, 2);
@@ -701,7 +701,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	if (ret)
 		return ret;
 
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
 	return 0;
@@ -769,7 +769,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	return ret;
 }
@@ -792,7 +792,7 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
 
-		arg.value = (int) &sensor->video;
+		arg.value = (int)&sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	}
 	return ret;
@@ -828,13 +828,15 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
-			client->addr, client->adapter->name, SENSOR_NAME);
+		v4l_err(client,
+			"chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
 
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
-		 SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
@@ -846,47 +848,47 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
 	switch (ctrl->cmd) {
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
-			ret = sensor_set_integration_time(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
-			ret = sensor_set_analog_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
-			ret = sensor_set_digital_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
-			ret = sensor_get_black_pedestal(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = sensor_set_mode(sensor, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-				ret = sensor_write_array(sd, sensor_stream_off_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-				ret = sensor_write_array(sd, sensor_stream_off_mipi);
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
+		ret = sensor_set_integration_time(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
+		ret = sensor_set_analog_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
+		ret = sensor_set_digital_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
+		ret = sensor_get_black_pedestal(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
+		ret = sensor_set_mode(sensor, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_off_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
-			} else {
-				ISP_INFO("Don't support this Sensor Data interface\n");
-			}
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-			if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-				ret = sensor_write_array(sd, sensor_stream_on_dvp);
-			} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-				ret = sensor_write_array(sd, sensor_stream_on_mipi);
+		} else {
+			ISP_INFO("Don't support this Sensor Data interface\n");
+		}
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
+			ret = sensor_write_array(sd, sensor_stream_on_dvp);
+		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
-			} else {
-				ISP_INFO("Don't support this Sensor Data interface\n");
-			}
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
-			ret = sensor_set_fps(sensor, ctrl->value);
-			break;
-		default:
-			ISP_INFO("do not support ctrl->cmd ====%d\n", ctrl->cmd);
-			break;
+		} else {
+			ISP_INFO("Don't support this Sensor Data interface\n");
+		}
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
+		ret = sensor_set_fps(sensor, ctrl->value);
+		break;
+	default:
+		ISP_INFO("do not support ctrl->cmd ====%d\n", ctrl->cmd);
+		break;
 	}
 	return 0;
 }
@@ -895,12 +897,12 @@ static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
-		case VIDIOC_ISP_PRIVATE_IOCTL:
-			ret = sensor_ops_private_ioctl(sensor, arg);
-			break;
-		default:
-			return -1;
-			break;
+	case VIDIOC_ISP_PRIVATE_IOCTL:
+		ret = sensor_ops_private_ioctl(sensor, arg);
+		break;
+	default:
+		return -1;
+		break;
 	}
 	return 0;
 }
@@ -918,7 +920,7 @@ static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 
 	ret = sensor_read(sd, reg->reg & 0xffff, val);
 	reg->val = val[0];
-	reg->val = (reg->val<<8)+val[1];
+	reg->val = (reg->val << 8) + val[1];
 	reg->size = 2;
 	return ret;
 }
@@ -960,15 +962,14 @@ static const struct v4l2_subdev_ops sensor_ops = {
 	.video = &sensor_video_ops,
 };
 
-static int sensor_probe(struct i2c_client *client,
-			const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct v4l2_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1053,17 +1054,15 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {
-	{SENSOR_NAME, 0},
-	{}
-};
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
@@ -1082,5 +1081,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

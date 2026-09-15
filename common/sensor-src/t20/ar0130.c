@@ -46,7 +46,7 @@
 // ============================================================================
 // TIMING AND PERFORMANCE
 // ============================================================================
-#define SENSOR_SUPPORT_PCLK (50*1000*1000)
+#define SENSOR_SUPPORT_PCLK (50 * 1000 * 1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 
@@ -403,97 +403,97 @@ struct tx_isp_sensor_attribute sensor_attr;
 /* 	.mclk_name = "cgu_cim", */
 /* }; */
 static struct regval_list sensor_init_regs_1280_720[] = {
-	{0x301A, 0x0001}, // SENSOR_REGISTER
+	{0x301A, 0x0001},	 // SENSOR_REGISTER
 	{SENSOR_REG_DELAY, 100}, //ms
-	{0x301A, 0x10D8}, // SENSOR_REGISTER
-//Linear Mode Setup
-//AR0130 Rev1 Linear sequencer load 8-2-2011
-	{0x3088, 0x8000}, // SEQ_CTRL_PORT
-	{0x3086, 0x0225}, // SEQ_DATA_PORT
-	{0x3086, 0x5050}, // SEQ_DATA_PORT
-	{0x3086, 0x2D26}, // SEQ_DATA_PORT
-	{0x3086, 0x0828}, // SEQ_DATA_PORT
-	{0x3086, 0x0D17}, // SEQ_DATA_PORT
-	{0x3086, 0x0926}, // SEQ_DATA_PORT
-	{0x3086, 0x0028}, // SEQ_DATA_PORT
-	{0x3086, 0x0526}, // SEQ_DATA_PORT
-	{0x3086, 0xA728}, // SEQ_DATA_PORT
-	{0x3086, 0x0725}, // SEQ_DATA_PORT
-	{0x3086, 0x8080}, // SEQ_DATA_PORT
-	{0x3086, 0x2917}, // SEQ_DATA_PORT
-	{0x3086, 0x0525}, // SEQ_DATA_PORT
-	{0x3086, 0x0040}, // SEQ_DATA_PORT
-	{0x3086, 0x2702}, // SEQ_DATA_PORT
-	{0x3086, 0x1616}, // SEQ_DATA_PORT
-	{0x3086, 0x2706}, // SEQ_DATA_PORT
-	{0x3086, 0x1736}, // SEQ_DATA_PORT
-	{0x3086, 0x26A6}, // SEQ_DATA_PORT
-	{0x3086, 0x1703}, // SEQ_DATA_PORT
-	{0x3086, 0x26A4}, // SEQ_DATA_PORT
-	{0x3086, 0x171F}, // SEQ_DATA_PORT
-	{0x3086, 0x2805}, // SEQ_DATA_PORT
-	{0x3086, 0x2620}, // SEQ_DATA_PORT
-	{0x3086, 0x2804}, // SEQ_DATA_PORT
-	{0x3086, 0x2520}, // SEQ_DATA_PORT
-	{0x3086, 0x2027}, // SEQ_DATA_PORT
-	{0x3086, 0x0017}, // SEQ_DATA_PORT
-	{0x3086, 0x1E25}, // SEQ_DATA_PORT
-	{0x3086, 0x0020}, // SEQ_DATA_PORT
-	{0x3086, 0x2117}, // SEQ_DATA_PORT
-	{0x3086, 0x1028}, // SEQ_DATA_PORT
-	{0x3086, 0x051B}, // SEQ_DATA_PORT
-	{0x3086, 0x1703}, // SEQ_DATA_PORT
-	{0x3086, 0x2706}, // SEQ_DATA_PORT
-	{0x3086, 0x1703}, // SEQ_DATA_PORT
-	{0x3086, 0x1747}, // SEQ_DATA_PORT
-	{0x3086, 0x2660}, // SEQ_DATA_PORT
-	{0x3086, 0x17AE}, // SEQ_DATA_PORT
-	{0x3086, 0x2500}, // SEQ_DATA_PORT
-	{0x3086, 0x9027}, // SEQ_DATA_PORT
-	{0x3086, 0x0026}, // SEQ_DATA_PORT
-	{0x3086, 0x1828}, // SEQ_DATA_PORT
-	{0x3086, 0x002E}, // SEQ_DATA_PORT
-	{0x3086, 0x2A28}, // SEQ_DATA_PORT
-	{0x3086, 0x081E}, // SEQ_DATA_PORT
-	{0x3086, 0x0831}, // SEQ_DATA_PORT
-	{0x3086, 0x1440}, // SEQ_DATA_PORT
-	{0x3086, 0x4014}, // SEQ_DATA_PORT
-	{0x3086, 0x2020}, // SEQ_DATA_PORT
-	{0x3086, 0x1410}, // SEQ_DATA_PORT
-	{0x3086, 0x1034}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x1014}, // SEQ_DATA_PORT
-	{0x3086, 0x0020}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x4013}, // SEQ_DATA_PORT
-	{0x3086, 0x1802}, // SEQ_DATA_PORT
-	{0x3086, 0x1470}, // SEQ_DATA_PORT
-	{0x3086, 0x7004}, // SEQ_DATA_PORT
-	{0x3086, 0x1470}, // SEQ_DATA_PORT
-	{0x3086, 0x7003}, // SEQ_DATA_PORT
-	{0x3086, 0x1470}, // SEQ_DATA_PORT
-	{0x3086, 0x7017}, // SEQ_DATA_PORT
-	{0x3086, 0x2002}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x2002}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x5004}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x2004}, // SEQ_DATA_PORT
-	{0x3086, 0x1400}, // SEQ_DATA_PORT
-	{0x3086, 0x5022}, // SEQ_DATA_PORT
-	{0x3086, 0x0314}, // SEQ_DATA_PORT
-	{0x3086, 0x0020}, // SEQ_DATA_PORT
-	{0x3086, 0x0314}, // SEQ_DATA_PORT
-	{0x3086, 0x0050}, // SEQ_DATA_PORT
-	{0x3086, 0x2C2C}, // SEQ_DATA_PORT
-	{0x3086, 0x2C2C}, // SEQ_DATA_PORT
-	{0x309E, 0x0000}, // DCDS_PROG_START_ADDR
-	{0x30E4, 0x6372}, // ADC_BITS_6_7
-	{0x30E2, 0x7253}, // ADC_BITS_4_5
-	{0x30E0, 0x5470}, // ADC_BITS_2_3
-	{0x30E6, 0xC4CC}, // ADC_CONFIG1
-	{0x30E8, 0x8050}, // ADC_CONFIG2
+	{0x301A, 0x10D8},	 // SENSOR_REGISTER
+				 //Linear Mode Setup
+				 //AR0130 Rev1 Linear sequencer load 8-2-2011
+	{0x3088, 0x8000},	 // SEQ_CTRL_PORT
+	{0x3086, 0x0225},	 // SEQ_DATA_PORT
+	{0x3086, 0x5050},	 // SEQ_DATA_PORT
+	{0x3086, 0x2D26},	 // SEQ_DATA_PORT
+	{0x3086, 0x0828},	 // SEQ_DATA_PORT
+	{0x3086, 0x0D17},	 // SEQ_DATA_PORT
+	{0x3086, 0x0926},	 // SEQ_DATA_PORT
+	{0x3086, 0x0028},	 // SEQ_DATA_PORT
+	{0x3086, 0x0526},	 // SEQ_DATA_PORT
+	{0x3086, 0xA728},	 // SEQ_DATA_PORT
+	{0x3086, 0x0725},	 // SEQ_DATA_PORT
+	{0x3086, 0x8080},	 // SEQ_DATA_PORT
+	{0x3086, 0x2917},	 // SEQ_DATA_PORT
+	{0x3086, 0x0525},	 // SEQ_DATA_PORT
+	{0x3086, 0x0040},	 // SEQ_DATA_PORT
+	{0x3086, 0x2702},	 // SEQ_DATA_PORT
+	{0x3086, 0x1616},	 // SEQ_DATA_PORT
+	{0x3086, 0x2706},	 // SEQ_DATA_PORT
+	{0x3086, 0x1736},	 // SEQ_DATA_PORT
+	{0x3086, 0x26A6},	 // SEQ_DATA_PORT
+	{0x3086, 0x1703},	 // SEQ_DATA_PORT
+	{0x3086, 0x26A4},	 // SEQ_DATA_PORT
+	{0x3086, 0x171F},	 // SEQ_DATA_PORT
+	{0x3086, 0x2805},	 // SEQ_DATA_PORT
+	{0x3086, 0x2620},	 // SEQ_DATA_PORT
+	{0x3086, 0x2804},	 // SEQ_DATA_PORT
+	{0x3086, 0x2520},	 // SEQ_DATA_PORT
+	{0x3086, 0x2027},	 // SEQ_DATA_PORT
+	{0x3086, 0x0017},	 // SEQ_DATA_PORT
+	{0x3086, 0x1E25},	 // SEQ_DATA_PORT
+	{0x3086, 0x0020},	 // SEQ_DATA_PORT
+	{0x3086, 0x2117},	 // SEQ_DATA_PORT
+	{0x3086, 0x1028},	 // SEQ_DATA_PORT
+	{0x3086, 0x051B},	 // SEQ_DATA_PORT
+	{0x3086, 0x1703},	 // SEQ_DATA_PORT
+	{0x3086, 0x2706},	 // SEQ_DATA_PORT
+	{0x3086, 0x1703},	 // SEQ_DATA_PORT
+	{0x3086, 0x1747},	 // SEQ_DATA_PORT
+	{0x3086, 0x2660},	 // SEQ_DATA_PORT
+	{0x3086, 0x17AE},	 // SEQ_DATA_PORT
+	{0x3086, 0x2500},	 // SEQ_DATA_PORT
+	{0x3086, 0x9027},	 // SEQ_DATA_PORT
+	{0x3086, 0x0026},	 // SEQ_DATA_PORT
+	{0x3086, 0x1828},	 // SEQ_DATA_PORT
+	{0x3086, 0x002E},	 // SEQ_DATA_PORT
+	{0x3086, 0x2A28},	 // SEQ_DATA_PORT
+	{0x3086, 0x081E},	 // SEQ_DATA_PORT
+	{0x3086, 0x0831},	 // SEQ_DATA_PORT
+	{0x3086, 0x1440},	 // SEQ_DATA_PORT
+	{0x3086, 0x4014},	 // SEQ_DATA_PORT
+	{0x3086, 0x2020},	 // SEQ_DATA_PORT
+	{0x3086, 0x1410},	 // SEQ_DATA_PORT
+	{0x3086, 0x1034},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x1014},	 // SEQ_DATA_PORT
+	{0x3086, 0x0020},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x4013},	 // SEQ_DATA_PORT
+	{0x3086, 0x1802},	 // SEQ_DATA_PORT
+	{0x3086, 0x1470},	 // SEQ_DATA_PORT
+	{0x3086, 0x7004},	 // SEQ_DATA_PORT
+	{0x3086, 0x1470},	 // SEQ_DATA_PORT
+	{0x3086, 0x7003},	 // SEQ_DATA_PORT
+	{0x3086, 0x1470},	 // SEQ_DATA_PORT
+	{0x3086, 0x7017},	 // SEQ_DATA_PORT
+	{0x3086, 0x2002},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x2002},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x5004},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x2004},	 // SEQ_DATA_PORT
+	{0x3086, 0x1400},	 // SEQ_DATA_PORT
+	{0x3086, 0x5022},	 // SEQ_DATA_PORT
+	{0x3086, 0x0314},	 // SEQ_DATA_PORT
+	{0x3086, 0x0020},	 // SEQ_DATA_PORT
+	{0x3086, 0x0314},	 // SEQ_DATA_PORT
+	{0x3086, 0x0050},	 // SEQ_DATA_PORT
+	{0x3086, 0x2C2C},	 // SEQ_DATA_PORT
+	{0x3086, 0x2C2C},	 // SEQ_DATA_PORT
+	{0x309E, 0x0000},	 // DCDS_PROG_START_ADDR
+	{0x30E4, 0x6372},	 // ADC_BITS_6_7
+	{0x30E2, 0x7253},	 // ADC_BITS_4_5
+	{0x30E0, 0x5470},	 // ADC_BITS_2_3
+	{0x30E6, 0xC4CC},	 // ADC_CONFIG1
+	{0x30E8, 0x8050},	 // ADC_CONFIG2
 	{SENSOR_REG_DELAY, 200}, //ms
 
 	{0x30EA, 0x8c00},
@@ -501,24 +501,24 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 
 	{0x3082, 0x0029}, // OPERATION_MODE_CTRL
 	//AR0130 Rev1 Optimized settings 8-2-2011
-	{0x301E, 0x00C8}, // DATA_PEDESTAL
-	{0x3EDA, 0x0F03}, // DAC_LD_14_15
-	{0x3EDE, 0xC005}, // DAC_LD_18_19
-	{0x3ED8, 0x09EF}, // DAC_LD_12_13
-	{0x3EE2, 0xA46B}, // DAC_LD_22_23
-	{0x3EE0, 0x047D}, // DAC_LD_20_21
-	{0x3EDC, 0x0070}, // DAC_LD_16_17
-	{0x3044, 0x0404}, // DARK_CONTROL
-	{0x3EE6, 0x4303}, // DAC_LD_26_27
-	{0x3EE4, 0xD208}, // DAC_LD_24_25
-	{0x3ED6, 0x00BD}, // DAC_LD_10_11
-	{0x30B0, 0x1300}, // DIGITAL_TEST
-	{0x30D4, 0xE007}, // COLUMN_CORRECTION
-	{0x301A, 0x10DC}, // SENSOR_REGISTER
+	{0x301E, 0x00C8},	 // DATA_PEDESTAL
+	{0x3EDA, 0x0F03},	 // DAC_LD_14_15
+	{0x3EDE, 0xC005},	 // DAC_LD_18_19
+	{0x3ED8, 0x09EF},	 // DAC_LD_12_13
+	{0x3EE2, 0xA46B},	 // DAC_LD_22_23
+	{0x3EE0, 0x047D},	 // DAC_LD_20_21
+	{0x3EDC, 0x0070},	 // DAC_LD_16_17
+	{0x3044, 0x0404},	 // DARK_CONTROL
+	{0x3EE6, 0x4303},	 // DAC_LD_26_27
+	{0x3EE4, 0xD208},	 // DAC_LD_24_25
+	{0x3ED6, 0x00BD},	 // DAC_LD_10_11
+	{0x30B0, 0x1300},	 // DIGITAL_TEST
+	{0x30D4, 0xE007},	 // COLUMN_CORRECTION
+	{0x301A, 0x10DC},	 // SENSOR_REGISTER
 	{SENSOR_REG_DELAY, 500}, // delay 500ms
-	{0x301A, 0x10D8}, // SENSOR_REGISTER
+	{0x301A, 0x10D8},	 // SENSOR_REGISTER
 	{SENSOR_REG_DELAY, 500}, // delay 500ms
-	{0x3044, 0x0400}, // DARK_CONTROL
+	{0x3044, 0x0400},	 // DARK_CONTROL
 	/* {0x3044, 0x000}, // DARK_CONTROL */
 
 	{0x3012, 0x0160}, // COARSE_INTEGRATION_TIME
@@ -537,13 +537,13 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x3064, 0x1802}, // Diable embeded data
 	//PLL Enabled 24Mhz to 50Mhz
 	{0x306e, 0x9211},
-	{0x302C, 0x0001}, // VT_SYS_CLK_DIV //
-	{0x302A, 0x000C}, // VT_PIX_CLK_DIV
-	{0x302E, 0x0002}, //0x0003 // PRE_PLL_CLK_DIV
-	{0x3030, 0x0032}, // PLL_MULTIPLIER//
-	{0x30B0, 0x1300}, // DIGITAL_TEST
+	{0x302C, 0x0001},	 // VT_SYS_CLK_DIV //
+	{0x302A, 0x000C},	 // VT_PIX_CLK_DIV
+	{0x302E, 0x0002},	 //0x0003 // PRE_PLL_CLK_DIV
+	{0x3030, 0x0032},	 // PLL_MULTIPLIER//
+	{0x30B0, 0x1300},	 // DIGITAL_TEST
 	{SENSOR_REG_DELAY, 100}, //ms
-	/* {0x3070, 0x2}, */ //color bar
+	/* {0x3070, 0x2}, */	 //color bar
 	{SENSOR_REG_END, 0x0000},
 };
 /* static struct regval_list sensor_init_regs_25_fps[] = { */
@@ -569,8 +569,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720,
 		/* .fast = sensor_init_regs_25_fps, */
 		/* .slow = sensor_init_regs_30_fps, */
-	}
-};
+	}};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG10_1X10,
@@ -592,20 +591,19 @@ int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr = client->addr,
-			.flags = 0,
-			.len = 2,
-			.buf = buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 2,
 			.buf = value,
-		}
-	};
+		}};
 	int ret;
 
 	ret = i2c_transfer(client->adapter, msg, 2);
@@ -736,13 +734,15 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
-	.dvp = {
-		.mode = SENSOR_DVP_HREF_MODE,
-		.blanking = {
-			.vblanking = 0,
-			.hblanking = 0,
+	.dvp =
+		{
+			.mode = SENSOR_DVP_HREF_MODE,
+			.blanking =
+				{
+					.vblanking = 0,
+					.hblanking = 0,
+				},
 		},
-	},
 	.max_again = 237134,
 	.max_dgain = 0,
 	.min_integration_time = 1,
@@ -757,7 +757,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-// void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static int sensor_reset(struct v4l2_subdev *sd, u32 val) {
@@ -861,7 +861,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	if (ret)
 		return ret;
 
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
 	return 0;
@@ -922,7 +922,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 #endif
 	return 0;
@@ -946,7 +946,7 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
 
-		arg.value = (int) &sensor->video;
+		arg.value = (int)&sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 		if (sensor->priv != wsize) {
 			ret = sensor_write_array(sd, wsize->regs);
@@ -988,13 +988,15 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
-			client->addr, client->adapter->name, SENSOR_NAME);
+		v4l_err(client,
+			"chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
 
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
-		 SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
@@ -1006,32 +1008,32 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
 	switch (ctrl->cmd) {
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
-			ret = sensor_set_integration_time(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
-			ret = sensor_set_analog_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
-			ret = sensor_set_digital_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
-			ret = sensor_get_black_pedestal(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = sensor_set_mode(sensor, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_off);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_on);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
-			ret = sensor_set_fps(sensor, ctrl->value);
-			break;
-		default:
-			break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
+		ret = sensor_set_integration_time(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
+		ret = sensor_set_analog_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
+		ret = sensor_set_digital_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
+		ret = sensor_get_black_pedestal(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
+		ret = sensor_set_mode(sensor, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_off);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_on);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
+		ret = sensor_set_fps(sensor, ctrl->value);
+		break;
+	default:
+		break;
 	}
 	return 0;
 }
@@ -1040,12 +1042,12 @@ static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
-		case VIDIOC_ISP_PRIVATE_IOCTL:
-			ret = sensor_ops_private_ioctl(sensor, arg);
-			break;
-		default:
-			return -1;
-			break;
+	case VIDIOC_ISP_PRIVATE_IOCTL:
+		ret = sensor_ops_private_ioctl(sensor, arg);
+		break;
+	default:
+		return -1;
+		break;
 	}
 	return 0;
 }
@@ -1063,7 +1065,7 @@ static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 
 	ret = sensor_read(sd, reg->reg & 0xffff, val);
 	reg->val = val[0];
-	reg->val = (reg->val<<8)+val[1];
+	reg->val = (reg->val << 8) + val[1];
 	reg->size = 2;
 	return ret;
 }
@@ -1114,7 +1116,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int i = 0;
 	int ret;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1134,15 +1136,15 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 	switch (sensor_gpio_func) {
-		case DVP_PA_LOW_10BIT:
-		case DVP_PA_HIGH_10BIT:
-			mbus = sensor_mbus_code[0];
-			break;
-		case DVP_PA_12BIT:
-			mbus = sensor_mbus_code[1];
-			break;
-		default:
-			goto err_set_sensor_gpio;
+	case DVP_PA_LOW_10BIT:
+	case DVP_PA_HIGH_10BIT:
+		mbus = sensor_mbus_code[0];
+		break;
+	case DVP_PA_12BIT:
+		mbus = sensor_mbus_code[1];
+		break;
+	default:
+		goto err_set_sensor_gpio;
 	}
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
@@ -1180,17 +1182,15 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {
-	{SENSOR_NAME, 0},
-	{}
-};
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
@@ -1209,5 +1209,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

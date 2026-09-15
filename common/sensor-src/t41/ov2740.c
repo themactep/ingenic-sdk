@@ -1039,10 +1039,7 @@ static int ov2740_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		ISP_ERROR("chip found @ 0x%x (%s) is not an ov2740 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
-	ISP_INFO("ov2740 chip found @ 0x%02x (%s) version %s \n",
-		client->addr,
-		client->adapter->name,
-		SENSOR_VERSION);
+	ISP_INFO("ov2740 chip found @ 0x%02x (%s) version %s \n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, "ov2740", sizeof("ov2740"));
 		chip->ident = ident;

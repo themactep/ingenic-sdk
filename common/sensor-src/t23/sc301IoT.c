@@ -25,15 +25,15 @@
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
-#define SENSOR_CHIP_ID_H	(0xcc)
-#define SENSOR_CHIP_ID_L	(0x40)
-#define SENSOR_VERSION	"H20240408a"
+#define SENSOR_CHIP_ID_H (0xcc)
+#define SENSOR_CHIP_ID_L (0x40)
+#define SENSOR_VERSION "H20240408a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
-#define SENSOR_REG_END		0xffff
-#define SENSOR_REG_DELAY		0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -266,19 +266,18 @@ struct again_lut sc301IoT_again_lut[] = {
 
 struct tx_isp_sensor_attribute sc301IoT_attr;
 
-unsigned int sc301IoT_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sc301IoT_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sc301IoT_again_lut;
 
-	while(lut->gain <= sc301IoT_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sc301IoT_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc301IoT_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sc301IoT_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -289,47 +288,42 @@ unsigned int sc301IoT_alloc_again(unsigned int isp_gain, unsigned char shift, un
 	return isp_gain;
 }
 
-unsigned int sc301IoT_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
-    struct again_lut *lut = sc301IoT_again_lut;
-    while(lut->gain <= sc301IoT_attr.max_again) {
-        if(isp_gain == 0) {
-            *sensor_again = lut[0].value;
-            return lut[0].gain;
-        }
-        else if(isp_gain < lut->gain) {
-            *sensor_again = (lut - 1)->value;
-            return (lut - 1)->gain;
-        }
-        else{
-            if((lut->gain == sc301IoT_attr.max_again) && (isp_gain >= lut->gain)) {
-                *sensor_again = lut->value;
-                return lut->gain;
-            }
-        }
+unsigned int sc301IoT_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sc301IoT_again_lut;
+	while (lut->gain <= sc301IoT_attr.max_again) {
+		if (isp_gain == 0) {
+			*sensor_again = lut[0].value;
+			return lut[0].gain;
+		} else if (isp_gain < lut->gain) {
+			*sensor_again = (lut - 1)->value;
+			return (lut - 1)->gain;
+		} else {
+			if ((lut->gain == sc301IoT_attr.max_again) && (isp_gain >= lut->gain)) {
+				*sensor_again = lut->value;
+				return lut->gain;
+			}
+		}
 
-        lut++;
-    }
+		lut++;
+	}
 
-    return isp_gain;
+	return isp_gain;
 }
 
-unsigned int sc301IoT_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sc301IoT_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-unsigned int sc301IoT_alloc_dgain_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sc301IoT_alloc_dgain_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus sc301IoT_mipi={
+struct tx_isp_mipi_bus sc301IoT_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 540,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -353,12 +347,12 @@ struct tx_isp_mipi_bus sc301IoT_mipi={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sc301IoT_mipi_30={
+struct tx_isp_mipi_bus sc301IoT_mipi_30 = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 540,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -382,12 +376,12 @@ struct tx_isp_mipi_bus sc301IoT_mipi_30={
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_mipi_bus sc301IoT_mipi_dol={
+struct tx_isp_mipi_bus sc301IoT_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 1080,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -411,21 +405,23 @@ struct tx_isp_mipi_bus sc301IoT_mipi_dol={
 	.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE,
 };
 
-struct tx_isp_sensor_attribute sc301IoT_attr={
+struct tx_isp_sensor_attribute sc301IoT_attr = {
 	.name = "sc301IoT",
 	.chip_id = 0xcc40,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.dvp = {
-		.mode = SENSOR_DVP_HREF_MODE,
-		.blanking = {
-			.vblanking = 0,
-			.hblanking = 0,
+	.dvp =
+		{
+			.mode = SENSOR_DVP_HREF_MODE,
+			.blanking =
+				{
+					.vblanking = 0,
+					.hblanking = 0,
+				},
+			.dvp_hcomp_en = 0,
 		},
-		.dvp_hcomp_en = 0,
-	},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 368791,
 	.max_again_short = 368791,
@@ -462,10 +458,10 @@ static struct regval_list sc301IoT_init_regs_2048_1536_25fps_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x06},
 	{0x320b, 0x00},
-	{0x320c, 0x04},//
-	{0x320d, 0x65},/* 0x465 = 1125 = hts */
-	{0x320e, 0x07},//
-	{0x320f, 0x80},/* 0x780 = 1920 = vts */
+	{0x320c, 0x04}, //
+	{0x320d, 0x65}, /* 0x465 = 1125 = hts */
+	{0x320e, 0x07}, //
+	{0x320f, 0x80}, /* 0x780 = 1920 = vts */
 	{0x3214, 0x11},
 	{0x3215, 0x11},
 	{0x3223, 0xc0},
@@ -588,7 +584,7 @@ static struct regval_list sc301IoT_init_regs_2048_1536_25fps_mipi[] = {
 	{0x36e9, 0x24},
 	{0x37f9, 0x24},
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc301IoT_init_regs_dol_2048_1536_15fps_mipi[] = {
@@ -743,213 +739,211 @@ static struct regval_list sc301IoT_init_regs_dol_2048_1536_15fps_mipi[] = {
 	{0x36e9, 0x24},
 	{0x37f9, 0x24},
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc301IoT_init_regs_2048_1536_30fps_mipi[] = {
-{0x0103, 0x01},
-{0x0100, 0x00},
-{0x36e9, 0x80},
-{0x37f9, 0x80},
-{0x301c, 0x78},
-{0x301f, 0x11},
-{0x30b8, 0x44},
-{0x3208, 0x08},
-{0x3209, 0x00},
-{0x320a, 0x06},
-{0x320b, 0x00},
-{0x320c, 0x04},
-{0x320d, 0x65},
-{0x320e, 0x06},
-{0x320f, 0x40},
-{0x3214, 0x11},
-{0x3215, 0x11},
-{0x3223, 0xd0},
-{0x3231, 0x01},
-{0x3253, 0x0c},
-{0x3274, 0x09},
-{0x3301, 0x08},
-{0x3306, 0x58},
-{0x3308, 0x08},
-{0x330a, 0x00},
-{0x330b, 0xe0},
-{0x330e, 0x10},
-{0x3314, 0x14},
-{0x331e, 0x55},
-{0x331f, 0x7d},
-{0x3333, 0x10},
-{0x3334, 0x40},
-{0x335e, 0x06},
-{0x335f, 0x08},
-{0x3364, 0x5e},
-{0x337c, 0x02},
-{0x337d, 0x0a},
-{0x3390, 0x01},
-{0x3391, 0x03},
-{0x3392, 0x07},
-{0x3393, 0x08},
-{0x3394, 0x08},
-{0x3395, 0x08},
-{0x3396, 0x08},
-{0x3397, 0x09},
-{0x3398, 0x1f},
-{0x3399, 0x08},
-{0x339a, 0x0a},
-{0x339b, 0x40},
-{0x339c, 0x88},
-{0x33a2, 0x04},
-{0x33ad, 0x0c},
-{0x33b1, 0x80},
-{0x33b3, 0x30},
-{0x33f9, 0x68},
-{0x33fb, 0x80},
-{0x33fc, 0x48},
-{0x33fd, 0x5f},
-{0x349f, 0x03},
-{0x34a6, 0x48},
-{0x34a7, 0x5f},
-{0x34a8, 0x30},
-{0x34a9, 0x30},
-{0x34aa, 0x00},
-{0x34ab, 0xf0},
-{0x34ac, 0x01},
-{0x34ad, 0x08},
-{0x34f8, 0x5f},
-{0x34f9, 0x10},
-{0x3630, 0xf0},
-{0x3631, 0x85},
-{0x3632, 0x74},
-{0x3633, 0x22},
-{0x3637, 0x4d},
-{0x3638, 0xcb},
-{0x363a, 0x8b},
-{0x363b, 0x02},
-{0x363c, 0x08},
-{0x3640, 0x00},
-{0x3641, 0x38},
-{0x3670, 0x4e},
-{0x3674, 0xc0},
-{0x3675, 0xb0},
-{0x3676, 0xa0},
-{0x3677, 0x85},
-{0x3678, 0x87},
-{0x3679, 0x8a},
-{0x367c, 0x49},
-{0x367d, 0x4f},
-{0x367e, 0x48},
-{0x367f, 0x4b},
-{0x3690, 0x33},
-{0x3691, 0x33},
-{0x3692, 0x44},
-{0x3699, 0x8a},
-{0x369a, 0xa1},
-{0x369b, 0xc2},
-{0x369c, 0x48},
-{0x369d, 0x4f},
-{0x36a2, 0x4b},
-{0x36a3, 0x4f},
-{0x36ea, 0x09},
-{0x36eb, 0x0d},
-{0x36ec, 0x1c},
-{0x36ed, 0x25},
-{0x370f, 0x01},
-{0x3714, 0x80},
-{0x3722, 0x09},
-{0x3724, 0x41},
-{0x3725, 0xc1},
-{0x3728, 0x00},
-{0x3771, 0x09},
-{0x3772, 0x05},
-{0x3773, 0x05},
-{0x377a, 0x48},
-{0x377b, 0x49},
-{0x37fa, 0x09},
-{0x37fb, 0x33},
-{0x37fc, 0x11},
-{0x37fd, 0x18},
-{0x3905, 0x8d},
-{0x391d, 0x08},
-{0x3922, 0x1a},
-{0x3926, 0x21},
-{0x3933, 0x80},
-{0x3934, 0x0d},
-{0x3937, 0x6a},
-{0x3939, 0x00},
-{0x393a, 0x0e},
-{0x39dc, 0x02},
-{0x3e00, 0x00},
-{0x3e01, 0x63},
-{0x3e02, 0x80},
-{0x3e03, 0x0b},
-{0x3e1b, 0x2a},
-{0x4407, 0x34},
-{0x440e, 0x02},
-{0x5001, 0x40},
-{0x5007, 0x80},
-{0x36e9, 0x24},
-{0x37f9, 0x24},
-{0x0100, 0x01},
-{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{0x0103, 0x01},
+	{0x0100, 0x00},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x301c, 0x78},
+	{0x301f, 0x11},
+	{0x30b8, 0x44},
+	{0x3208, 0x08},
+	{0x3209, 0x00},
+	{0x320a, 0x06},
+	{0x320b, 0x00},
+	{0x320c, 0x04},
+	{0x320d, 0x65},
+	{0x320e, 0x06},
+	{0x320f, 0x40},
+	{0x3214, 0x11},
+	{0x3215, 0x11},
+	{0x3223, 0xd0},
+	{0x3231, 0x01},
+	{0x3253, 0x0c},
+	{0x3274, 0x09},
+	{0x3301, 0x08},
+	{0x3306, 0x58},
+	{0x3308, 0x08},
+	{0x330a, 0x00},
+	{0x330b, 0xe0},
+	{0x330e, 0x10},
+	{0x3314, 0x14},
+	{0x331e, 0x55},
+	{0x331f, 0x7d},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x335e, 0x06},
+	{0x335f, 0x08},
+	{0x3364, 0x5e},
+	{0x337c, 0x02},
+	{0x337d, 0x0a},
+	{0x3390, 0x01},
+	{0x3391, 0x03},
+	{0x3392, 0x07},
+	{0x3393, 0x08},
+	{0x3394, 0x08},
+	{0x3395, 0x08},
+	{0x3396, 0x08},
+	{0x3397, 0x09},
+	{0x3398, 0x1f},
+	{0x3399, 0x08},
+	{0x339a, 0x0a},
+	{0x339b, 0x40},
+	{0x339c, 0x88},
+	{0x33a2, 0x04},
+	{0x33ad, 0x0c},
+	{0x33b1, 0x80},
+	{0x33b3, 0x30},
+	{0x33f9, 0x68},
+	{0x33fb, 0x80},
+	{0x33fc, 0x48},
+	{0x33fd, 0x5f},
+	{0x349f, 0x03},
+	{0x34a6, 0x48},
+	{0x34a7, 0x5f},
+	{0x34a8, 0x30},
+	{0x34a9, 0x30},
+	{0x34aa, 0x00},
+	{0x34ab, 0xf0},
+	{0x34ac, 0x01},
+	{0x34ad, 0x08},
+	{0x34f8, 0x5f},
+	{0x34f9, 0x10},
+	{0x3630, 0xf0},
+	{0x3631, 0x85},
+	{0x3632, 0x74},
+	{0x3633, 0x22},
+	{0x3637, 0x4d},
+	{0x3638, 0xcb},
+	{0x363a, 0x8b},
+	{0x363b, 0x02},
+	{0x363c, 0x08},
+	{0x3640, 0x00},
+	{0x3641, 0x38},
+	{0x3670, 0x4e},
+	{0x3674, 0xc0},
+	{0x3675, 0xb0},
+	{0x3676, 0xa0},
+	{0x3677, 0x85},
+	{0x3678, 0x87},
+	{0x3679, 0x8a},
+	{0x367c, 0x49},
+	{0x367d, 0x4f},
+	{0x367e, 0x48},
+	{0x367f, 0x4b},
+	{0x3690, 0x33},
+	{0x3691, 0x33},
+	{0x3692, 0x44},
+	{0x3699, 0x8a},
+	{0x369a, 0xa1},
+	{0x369b, 0xc2},
+	{0x369c, 0x48},
+	{0x369d, 0x4f},
+	{0x36a2, 0x4b},
+	{0x36a3, 0x4f},
+	{0x36ea, 0x09},
+	{0x36eb, 0x0d},
+	{0x36ec, 0x1c},
+	{0x36ed, 0x25},
+	{0x370f, 0x01},
+	{0x3714, 0x80},
+	{0x3722, 0x09},
+	{0x3724, 0x41},
+	{0x3725, 0xc1},
+	{0x3728, 0x00},
+	{0x3771, 0x09},
+	{0x3772, 0x05},
+	{0x3773, 0x05},
+	{0x377a, 0x48},
+	{0x377b, 0x49},
+	{0x37fa, 0x09},
+	{0x37fb, 0x33},
+	{0x37fc, 0x11},
+	{0x37fd, 0x18},
+	{0x3905, 0x8d},
+	{0x391d, 0x08},
+	{0x3922, 0x1a},
+	{0x3926, 0x21},
+	{0x3933, 0x80},
+	{0x3934, 0x0d},
+	{0x3937, 0x6a},
+	{0x3939, 0x00},
+	{0x393a, 0x0e},
+	{0x39dc, 0x02},
+	{0x3e00, 0x00},
+	{0x3e01, 0x63},
+	{0x3e02, 0x80},
+	{0x3e03, 0x0b},
+	{0x3e1b, 0x2a},
+	{0x4407, 0x34},
+	{0x440e, 0x02},
+	{0x5001, 0x40},
+	{0x5007, 0x80},
+	{0x36e9, 0x24},
+	{0x37f9, 0x24},
+	{0x0100, 0x01},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc301IoT_win_sizes[] = {
 	/* resolution 2048*1536 @25fps max*/
 	{
-		.width		= 2048,
-		.height		= 1536,
-		.fps		= 25 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc301IoT_init_regs_2048_1536_25fps_mipi,
+		.width = 2048,
+		.height = 1536,
+		.fps = 25 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sc301IoT_init_regs_2048_1536_25fps_mipi,
 	},
 	/* resolution 2048*1536 @25fps max*/
 	{
-		.width		= 2048,
-		.height		= 1536,
-		.fps		= 15 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc301IoT_init_regs_dol_2048_1536_15fps_mipi,
+		.width = 2048,
+		.height = 1536,
+		.fps = 15 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sc301IoT_init_regs_dol_2048_1536_15fps_mipi,
 	},
 	{
-		.width		= 2048,
-		.height		= 1536,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc301IoT_init_regs_2048_1536_30fps_mipi,
+		.width = 2048,
+		.height = 1536,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sc301IoT_init_regs_2048_1536_30fps_mipi,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &sc301IoT_win_sizes[0];
 
 static struct regval_list sc301IoT_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc301IoT_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int sc301IoT_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
-{
+int sc301IoT_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -958,15 +952,14 @@ int sc301IoT_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sc301IoT_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
-{
+int sc301IoT_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -996,8 +989,7 @@ static int sc301IoT_read_array(struct tx_isp_subdev *sd, struct regval_list *val
 }
 #endif
 
-static int sc301IoT_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sc301IoT_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -1013,18 +1005,16 @@ static int sc301IoT_write_array(struct tx_isp_subdev *sd, struct regval_list *va
 	return 0;
 }
 
-static int sc301IoT_reset(struct tx_isp_subdev *sd, int val)
-{
+static int sc301IoT_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
 	ret = sc301IoT_read(sd, 0x3107, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -1032,7 +1022,7 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc301IoT_read(sd, 0x3108, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -1042,29 +1032,27 @@ static int sc301IoT_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int sc301IoT_set_expo(struct tx_isp_subdev *sd, int value)
-{
-	 int ret = 0;
-     int it = (value & 0xffff);
-     int again = (value & 0xffff0000) >> 16;
+static int sc301IoT_set_expo(struct tx_isp_subdev *sd, int value) {
+	int ret = 0;
+	int it = (value & 0xffff);
+	int again = (value & 0xffff0000) >> 16;
 
-     //integration time
-     ret = sc301IoT_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-     ret += sc301IoT_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-     ret += sc301IoT_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	//integration time
+	ret = sc301IoT_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sc301IoT_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sc301IoT_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-     //sensor analog gain
-     ret += sc301IoT_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-     //sensor dig fine gain
-     ret += sc301IoT_write(sd, 0x3e07, (unsigned char)(again & 0xff));
-     if (ret < 0)
-         return ret;
+	//sensor analog gain
+	ret += sc301IoT_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
+	//sensor dig fine gain
+	ret += sc301IoT_write(sd, 0x3e07, (unsigned char)(again & 0xff));
+	if (ret < 0)
+		return ret;
 
-     return 0;
+	return 0;
 }
 
-static int sc301IoT_set_integration_time_short(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	ret = sc301IoT_write(sd, 0x3e22, (unsigned char)((value >> 12) & 0xf));
@@ -1076,8 +1064,7 @@ static int sc301IoT_set_integration_time_short(struct tx_isp_subdev *sd, int val
 	return 0;
 }
 
-static int sc301IoT_set_analog_gain_short(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 
 	int ret = 0;
 
@@ -1118,27 +1105,23 @@ static int sc301IoT_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc301IoT_set_logic(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_set_logic(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc301IoT_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc301IoT_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc301IoT_init(struct tx_isp_subdev *sd, int enable)
-{
+static int sc301IoT_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -1158,8 +1141,7 @@ static int sc301IoT_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int sc301IoT_s_stream(struct tx_isp_subdev *sd, int enable)
-{
+static int sc301IoT_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
@@ -1174,8 +1156,7 @@ static int sc301IoT_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -1186,23 +1167,23 @@ static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
 	unsigned int newformat = 0; //the format is 24.8
 	int ret = 0;
 
-	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
-                if(sensor_max_fps==25){
-		sclk = SENSOR_SUPPORT_25FPS_SCLK;
-		max_fps = TX_SENSOR_MAX_FPS_25;
-                }else{
-        sclk = 0x640*0x465*30;
-		max_fps = TX_SENSOR_MAX_FPS_30;
-                }
-	}else if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
+	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
+		if (sensor_max_fps == 25) {
+			sclk = SENSOR_SUPPORT_25FPS_SCLK;
+			max_fps = TX_SENSOR_MAX_FPS_25;
+		} else {
+			sclk = 0x640 * 0x465 * 30;
+			max_fps = TX_SENSOR_MAX_FPS_30;
+		}
+	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		sclk = SENSOR_SUPPORT_WDR_15FPS_SCLK;
 		max_fps = TX_SENSOR_MAX_FPS_15;
-	}else{
-		ISP_ERROR("do not support max framerate %d in mipi mode\n",sensor_max_fps);
+	} else {
+		ISP_ERROR("do not support max framerate %d in mipi mode\n", sensor_max_fps);
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(0x%x) no in range\n", fps);
 		return -1;
 	}
@@ -1230,18 +1211,17 @@ static int sc301IoT_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->integration_time_limit = vts - 8;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 8;
-	if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
+	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		sensor->video.attr->max_integration_time -= 191;
 
 	return ret;
 }
 
-static int sc301IoT_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int sc301IoT_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -1254,45 +1234,42 @@ static int sc301IoT_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc301IoT_g_chip_ident(struct tx_isp_subdev *sd,
-			       struct tx_isp_chip_ident *chip)
-{
+static int sc301IoT_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc301IoT_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio, "sc301IoT_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(35);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(35);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc301IoT_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio, "sc301IoT_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sc301IoT_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an sc301IoT chip.\n",
-			  client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an sc301IoT chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_INFO("sc301IoT chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
+	if (chip) {
 		memcpy(chip->name, "sc301IoT", sizeof("sc301IoT"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -1300,15 +1277,14 @@ static int sc301IoT_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc301IoT_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int sc301IoT_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
 
 	enable &= 0x03;
 
-	switch(enable) {
+	switch (enable) {
 	case 0:
 		val = 0x00;
 		break;
@@ -1325,17 +1301,16 @@ static int sc301IoT_set_vflip(struct tx_isp_subdev *sd, int enable)
 		break;
 	}
 	ret = sc301IoT_write(sd, 0x3221, val);
-	if(ret != 0)
-		ISP_ERROR("%s %d: reg write err!!\n",__func__,__LINE__);
+	if (ret != 0)
+		ISP_ERROR("%s %d: reg write err!!\n", __func__, __LINE__);
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
 
-static int sc301IoT_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
-{
+static int sc301IoT_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
 	private_msleep(5);
 
@@ -1345,15 +1320,14 @@ static int sc301IoT_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 	return ret;
 }
 
-static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
-{
+static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
 
-	if(wdr_en == 1){
+	if (wdr_en == 1) {
 		wsize = &sc301IoT_win_sizes[1];
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
-		memcpy((void*)(&(sc301IoT_attr.mipi)),(void*)(&sc301IoT_mipi_dol),sizeof(sc301IoT_mipi_dol));
+		memcpy((void *)(&(sc301IoT_attr.mipi)), (void *)(&sc301IoT_mipi_dol), sizeof(sc301IoT_mipi_dol));
 		sc301IoT_attr.data_type = data_type;
 		sc301IoT_attr.wdr_cache = wdr_bufsize;
 		sc301IoT_attr.one_line_expr_in_us = 25;
@@ -1363,10 +1337,10 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc301IoT_attr.total_height = 6400;
 		sc301IoT_attr.max_integration_time = 6400 - 191 - 5;
 		ISP_INFO("------------> switch wdr ok <-------------\n");
-	} else if (wdr_en == 0){
+	} else if (wdr_en == 0) {
 		wsize = &sc301IoT_win_sizes[0];
 		data_type = TX_SENSOR_DATA_TYPE_LINEAR;
-		memcpy((void*)(&(sc301IoT_attr.mipi)),(void*)(&sc301IoT_mipi),sizeof(sc301IoT_mipi));
+		memcpy((void *)(&(sc301IoT_attr.mipi)), (void *)(&sc301IoT_mipi), sizeof(sc301IoT_mipi));
 		sc301IoT_attr.data_type = data_type;
 		sc301IoT_attr.one_line_expr_in_us = 25;
 		sc301IoT_attr.max_integration_time_native = 1920 - 8;
@@ -1375,7 +1349,7 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 		sc301IoT_attr.total_height = 1920;
 		sc301IoT_attr.max_integration_time = 1920 - 8;
 		ISP_INFO("------------> switch linear ok <-------------\n");
-	} else{
+	} else {
 		ISP_ERROR("Can not support this data type!!!");
 		return -1;
 	}
@@ -1393,46 +1367,45 @@ static int sc301IoT_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	return ret;
 }
 
-static int sc301IoT_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int sc301IoT_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 
-	switch(cmd){
+	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-			ret = sc301IoT_set_expo(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-//		if(arg)
-//			ret = sc301IoT_set_integration_time(sd, *(int*)arg);
+		//		if(arg)
+		//			ret = sc301IoT_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-//		if(arg)
-//			ret = sc301IoT_set_analog_gain(sd, *(int*)arg);
+		//		if(arg)
+		//			ret = sc301IoT_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = sc301IoT_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-    	if(arg)
-        	ret = sc301IoT_set_integration_time_short(sd, *(int*)arg);
-    	break;
+		if (arg)
+			ret = sc301IoT_set_integration_time_short(sd, *(int *)arg);
+		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
-    	if(arg)
-        	ret = sc301IoT_set_analog_gain_short(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_analog_gain_short(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = sc301IoT_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = sc301IoT_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		ret = sc301IoT_write_array(sd, sc301IoT_stream_off_mipi);
@@ -1441,24 +1414,24 @@ static int sc301IoT_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 		ret = sc301IoT_write_array(sd, sc301IoT_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = sc301IoT_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = sc301IoT_set_vflip(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_vflip(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if(arg)
-			ret = sc301IoT_set_logic(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_logic(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR:
-		if(arg)
-			ret = sc301IoT_set_wdr(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_wdr(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_WDR_STOP:
-		if(arg)
-			ret = sc301IoT_set_wdr_stop(sd, *(int*)arg);
+		if (arg)
+			ret = sc301IoT_set_wdr_stop(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -1467,14 +1440,13 @@ static int sc301IoT_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd,
 	return ret;
 }
 
-static int sc301IoT_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int sc301IoT_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1486,12 +1458,11 @@ static int sc301IoT_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regis
 	return ret;
 }
 
-static int sc301IoT_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int sc301IoT_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -1514,8 +1485,8 @@ static struct tx_isp_subdev_video_ops sc301IoT_video_ops = {
 	.s_stream = sc301IoT_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc301IoT_sensor_ops = {
-	.ioctl	= sc301IoT_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sc301IoT_sensor_ops = {
+	.ioctl = sc301IoT_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops sc301IoT_ops = {
@@ -1529,109 +1500,116 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "sc301IoT",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate)
-{
-        unsigned long rate = 0;
-        struct clk *pll = NULL;
-        char *plls[] = {"mpll", "sclka"};
-        int psize = sizeof(plls) / sizeof(char *);
-        char *ppll = plls[psize - 1];
-        int ret = 0, i = 0;
+static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate) {
+	unsigned long rate = 0;
+	struct clk *pll = NULL;
+	char *plls[] = {"mpll", "sclka"};
+	int psize = sizeof(plls) / sizeof(char *);
+	char *ppll = plls[psize - 1];
+	int ret = 0, i = 0;
 
-        pll = clk_get_parent(sensor->mclk);
-        rate = clk_get_rate(pll);
-        if (rate % want_rate) {
-                for (i = 0; i < psize; i++) {
-                        pll = clk_get(NULL, plls[i]);
-                        rate = clk_get_rate(pll);
-                        if (!(rate % want_rate)) {
-                                ret = clk_set_parent(sensor->mclk, pll);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
-                                                    __func__, __LINE__, plls[i]);
-                                        continue;
-                                } else {
-                                        break;
-                                }
-                        }
-                }
-                if (i == psize) {
-                        if (!ret) {
-                                pll = clk_get(NULL, ppll);
-                                rate = clk_get_rate(pll);
-                                if(want_rate == 37125000){
-                                        if((rate >= 1188000000)) {
-                                                rate = 1188000000;
-                                        } else if (rate >= 891000000) {
-                                                rate = 891000000;
-                                        } else {
-                                                ISP_ERROR("[%s %d] The %s clock setting failed !!!\n",
-                                                          __func__, __LINE__, ppll);
-                                                ret = -1;
-                                                goto error;
-                                        }
-                                } else if (want_rate == 24000000 || want_rate == 27000000) {
-                                        rate -= rate % want_rate;
-                                } else {
-                                        ret = -1;
-                                        goto error;
-                                }
-                                ret = private_clk_set_rate(pll, rate);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] Failed to set %s !!!\n",
-                                                    __func__, __LINE__, ppll);
-                                        goto error;
-                                } else {
-                                        ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld !!!\n",
-                                                    __func__, __LINE__, ppll, rate);
-                                }
-                                ret = clk_set_parent(sensor->mclk, pll);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
-                                                    __func__, __LINE__, ppll);
-                                        goto error;
-                                }
-                        } else {
-                                goto error;
-                        }
-                }
-        }
-        private_clk_set_rate(sensor->mclk, want_rate);
-        private_clk_enable(sensor->mclk);
+	pll = clk_get_parent(sensor->mclk);
+	rate = clk_get_rate(pll);
+	if (rate % want_rate) {
+		for (i = 0; i < psize; i++) {
+			pll = clk_get(NULL, plls[i]);
+			rate = clk_get_rate(pll);
+			if (!(rate % want_rate)) {
+				ret = clk_set_parent(sensor->mclk, pll);
+				if (ret) {
+					ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
+						__func__,
+						__LINE__,
+						plls[i]);
+					continue;
+				} else {
+					break;
+				}
+			}
+		}
+		if (i == psize) {
+			if (!ret) {
+				pll = clk_get(NULL, ppll);
+				rate = clk_get_rate(pll);
+				if (want_rate == 37125000) {
+					if ((rate >= 1188000000)) {
+						rate = 1188000000;
+					} else if (rate >= 891000000) {
+						rate = 891000000;
+					} else {
+						ISP_ERROR("[%s %d] The %s clock setting failed !!!\n",
+							__func__,
+							__LINE__,
+							ppll);
+						ret = -1;
+						goto error;
+					}
+				} else if (want_rate == 24000000 || want_rate == 27000000) {
+					rate -= rate % want_rate;
+				} else {
+					ret = -1;
+					goto error;
+				}
+				ret = private_clk_set_rate(pll, rate);
+				if (ret) {
+					ISP_WARNING("[%s %d] Failed to set %s !!!\n", __func__, __LINE__, ppll);
+					goto error;
+				} else {
+					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
+						    "!!!\n",
+						__func__,
+						__LINE__,
+						ppll,
+						rate);
+				}
+				ret = clk_set_parent(sensor->mclk, pll);
+				if (ret) {
+					ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
+						__func__,
+						__LINE__,
+						ppll);
+					goto error;
+				}
+			} else {
+				goto error;
+			}
+		}
+	}
+	private_clk_set_rate(sensor->mclk, want_rate);
+	private_clk_enable(sensor->mclk);
 
-        rate = clk_get_rate(sensor->mclk);
-        if (rate % want_rate) {
-                ret = -1;
-                goto error;
-        }
+	rate = clk_get_rate(sensor->mclk);
+	if (rate % want_rate) {
+		ret = -1;
+		goto error;
+	}
 
-        return ret;
+	return ret;
 
 error:
-        ISP_ERROR("[%s %d] Unable to allocate the required MCLK %ld !!!\n",
-                  __func__, __LINE__, want_rate);
-        return ret;
+	ISP_ERROR("[%s %d] Unable to allocate the required MCLK %ld !!!\n", __func__, __LINE__, want_rate);
+	return ret;
 }
 
-static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 
 #ifdef CONFIG_KERNEL_4_4_94
 	sensor->mclk = clk_get(NULL, "div_cim");
@@ -1642,31 +1620,30 @@ static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id 
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-    sensor_mclk_config(sensor, 24000000);
+	sensor_mclk_config(sensor, 24000000);
 
-	if(data_type == TX_SENSOR_DATA_TYPE_LINEAR){
-        if(sensor_max_fps==25)
-        {
-		wsize = &sc301IoT_win_sizes[0];
-		sc301IoT_attr.data_type = data_type;
-		sc301IoT_attr.max_integration_time_native = 1920 - 8;
-		sc301IoT_attr.integration_time_limit = 1920 - 8;
-		sc301IoT_attr.total_width = 2250;
-		sc301IoT_attr.total_height = 1920;
-		sc301IoT_attr.max_integration_time = 1920 - 8;
-		memcpy((void*)(&(sc301IoT_attr.mipi)),(void*)(&sc301IoT_mipi),sizeof(sc301IoT_mipi));
-        }else{
-        wsize = &sc301IoT_win_sizes[2];
-		sc301IoT_attr.data_type = data_type;
-		sc301IoT_attr.max_integration_time_native = 0x640 - 8;
-		sc301IoT_attr.integration_time_limit = 0x640 - 8;
-		sc301IoT_attr.total_width = 0x465*2;
-		sc301IoT_attr.total_height = 0x640;
-		sc301IoT_attr.max_integration_time = 0x640 - 8;
-		memcpy((void*)(&(sc301IoT_attr.mipi)),(void*)(&sc301IoT_mipi_30),sizeof(sc301IoT_mipi_30));
-}
+	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
+		if (sensor_max_fps == 25) {
+			wsize = &sc301IoT_win_sizes[0];
+			sc301IoT_attr.data_type = data_type;
+			sc301IoT_attr.max_integration_time_native = 1920 - 8;
+			sc301IoT_attr.integration_time_limit = 1920 - 8;
+			sc301IoT_attr.total_width = 2250;
+			sc301IoT_attr.total_height = 1920;
+			sc301IoT_attr.max_integration_time = 1920 - 8;
+			memcpy((void *)(&(sc301IoT_attr.mipi)), (void *)(&sc301IoT_mipi), sizeof(sc301IoT_mipi));
+		} else {
+			wsize = &sc301IoT_win_sizes[2];
+			sc301IoT_attr.data_type = data_type;
+			sc301IoT_attr.max_integration_time_native = 0x640 - 8;
+			sc301IoT_attr.integration_time_limit = 0x640 - 8;
+			sc301IoT_attr.total_width = 0x465 * 2;
+			sc301IoT_attr.total_height = 0x640;
+			sc301IoT_attr.max_integration_time = 0x640 - 8;
+			memcpy((void *)(&(sc301IoT_attr.mipi)), (void *)(&sc301IoT_mipi_30), sizeof(sc301IoT_mipi_30));
+		}
 
-    }else if(data_type == TX_SENSOR_DATA_TYPE_WDR_DOL){
+	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sc301IoT_win_sizes[1];
 		sc301IoT_attr.data_type = data_type;
 		sc301IoT_attr.wdr_cache = wdr_bufsize;
@@ -1675,8 +1652,8 @@ static int sc301IoT_probe(struct i2c_client *client, const struct i2c_device_id 
 		sc301IoT_attr.total_width = 2250;
 		sc301IoT_attr.total_height = 6400;
 		sc301IoT_attr.max_integration_time = 6400 - 191;
-		memcpy((void*)(&(sc301IoT_attr.mipi)),(void*)(&sc301IoT_mipi_dol),sizeof(sc301IoT_mipi_dol));
-	}else{
+		memcpy((void *)(&(sc301IoT_attr.mipi)), (void *)(&sc301IoT_mipi_dol), sizeof(sc301IoT_mipi_dol));
+	} else {
 		ISP_ERROR("Can not support this data type!!!\n");
 	}
 
@@ -1705,14 +1682,13 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc301IoT_remove(struct i2c_client *client)
-{
+static int sc301IoT_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1723,35 +1699,31 @@ static int sc301IoT_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc301IoT_id[] = {
-	{ "sc301IoT", 0 },
-	{ }
-};
+static const struct i2c_device_id sc301IoT_id[] = {{"sc301IoT", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sc301IoT_id);
 
 static struct i2c_driver sc301IoT_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc301IoT",
-	},
-	.probe		= sc301IoT_probe,
-	.remove		= sc301IoT_remove,
-	.id_table	= sc301IoT_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "sc301IoT",
+		},
+	.probe = sc301IoT_probe,
+	.remove = sc301IoT_remove,
+	.id_table = sc301IoT_id,
 };
 
-static __init int init_sc301IoT(void)
-{
+static __init int init_sc301IoT(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init sc301IoT dirver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sc301IoT_driver);
 }
 
-static __exit void exit_sc301IoT(void)
-{
+static __exit void exit_sc301IoT(void) {
 	private_i2c_del_driver(&sc301IoT_driver);
 }
 

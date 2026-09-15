@@ -46,7 +46,7 @@
 // ============================================================================
 // TIMING AND PERFORMANCE
 // ============================================================================
-#define SENSOR_SUPPORT_PCLK (96*1000*1000)
+#define SENSOR_SUPPORT_PCLK (96 * 1000 * 1000)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 
@@ -83,23 +83,33 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-const unsigned int ANALOG_GAIN_1 = (1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.0 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_2 = (1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.42 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_3 = (1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.99 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_4 = (2 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.86 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_5 = (4 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.05 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_6 = (5 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.78 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_7 = (8 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.23 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_8 = (11 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.72 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_9 = (16 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.55 * (1 << TX_ISP_GAIN_FIXED_POINT)));
-const unsigned int ANALOG_GAIN_10 = (22 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int) ((0.68 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_1 =
+	(1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.0 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_2 =
+	(1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.42 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_3 =
+	(1 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.99 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_4 =
+	(2 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.86 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_5 =
+	(4 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.05 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_6 =
+	(5 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.78 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_7 =
+	(8 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.23 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_8 =
+	(11 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.72 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_9 =
+	(16 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.55 * (1 << TX_ISP_GAIN_FIXED_POINT)));
+const unsigned int ANALOG_GAIN_10 =
+	(22 << TX_ISP_GAIN_FIXED_POINT) | (unsigned int)((0.68 * (1 << TX_ISP_GAIN_FIXED_POINT)));
 
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int fix_point_mult2(unsigned int a, unsigned int b) {
 	unsigned int x1, x2, x;
 	unsigned int a1, a2, b1, b2;
-	unsigned int mask = (((unsigned int) 0xffffffff) >> (32 - TX_ISP_GAIN_FIXED_POINT));
+	unsigned int mask = (((unsigned int)0xffffffff) >> (32 - TX_ISP_GAIN_FIXED_POINT));
 	a1 = a >> TX_ISP_GAIN_FIXED_POINT;
 	a2 = a & mask;
 	b1 = b >> TX_ISP_GAIN_FIXED_POINT;
@@ -121,7 +131,8 @@ unsigned int fix_point_mult3(unsigned int a, unsigned int b, unsigned int c) {
 	return x;
 }
 
-#define ANALOG_GAIN_MAX (fix_point_mult2(ANALOG_GAIN_10, (0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6))))
+#define ANALOG_GAIN_MAX                                                                                                \
+	(fix_point_mult2(ANALOG_GAIN_10, (0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6))))
 
 unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 	unsigned int gain_one1 = 0;
@@ -130,7 +141,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 	unsigned char regb1 = 0x1;
 	unsigned char regb2 = 0;
 	int i, j;
-	unsigned int gain_one_max = fix_point_mult2(ANALOG_GAIN_10, (0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6)));
+	unsigned int gain_one_max = fix_point_mult2(ANALOG_GAIN_10,
+		(0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6)));
 	if (gain_one < ANALOG_GAIN_1) {
 		gain_one1 = ANALOG_GAIN_1;
 		regb6 = 0x00;
@@ -143,7 +155,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_1, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_1,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -158,7 +171,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_2, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_2,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -173,7 +187,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_3, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_3,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -188,7 +203,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_4, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_4,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -203,7 +219,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_5, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_5,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -218,7 +235,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_6, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_6,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -233,7 +251,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_7, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_7,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -248,7 +267,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_8, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_8,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -263,7 +283,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_9, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_9,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -278,7 +299,8 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		regb2 = 0;
 		for (i = 1; i <= 0xf; i++)
 			for (j = 0; j <= 0x3f; j++) {
-				gain_tmp = fix_point_mult2(ANALOG_GAIN_10, (i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
+				gain_tmp = fix_point_mult2(ANALOG_GAIN_10,
+					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
 				if (gain_one < gain_tmp) {
 					goto done;
 				}
@@ -323,14 +345,16 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
-	.dvp = {
-		.mode = SENSOR_DVP_HREF_MODE,
-		.blanking = {
-			.vblanking = 0,
-			.hblanking = 0,
+	.dvp =
+		{
+			.mode = SENSOR_DVP_HREF_MODE,
+			.blanking =
+				{
+					.vblanking = 0,
+					.hblanking = 0,
+				},
 		},
-	},
-	.max_again = 276471,//321573,
+	.max_again = 276471, //321573,
 	.max_dgain = 0,
 	.min_integration_time = 4,
 	.min_integration_time_native = 4,
@@ -363,7 +387,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x05, 0x02}, //HB
 	{0x06, 0xc6},
 	{0x86, 0x51},
-	{0x8e, 0x0c},/*drop frame while change VB*/
+	{0x8e, 0x0c}, /*drop frame while change VB*/
 	{0x07, 0x00},
 	{0x08, 0xf8},
 	{0x09, 0x00},
@@ -632,8 +656,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_dvp,
-	}
-};
+	}};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SRGGB10_1X10,
@@ -652,20 +675,19 @@ static struct regval_list sensor_stream_off[] = {
 
 int sensor_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr = client->addr,
-			.flags = 0,
-			.len = 1,
-			.buf = &reg,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 1,
+						 .buf = &reg,
+					 },
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}
-	};
+		}};
 	int ret;
 
 	ret = i2c_transfer(client->adapter, msg, 2);
@@ -821,7 +843,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
 	return 0;
@@ -882,8 +904,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret += sensor_write(sd, 0x08, (unsigned char) (vb & 0xff));
-	ret += sensor_write(sd, 0x07, (unsigned char) (vb >> 8));
+	ret += sensor_write(sd, 0x08, (unsigned char)(vb & 0xff));
+	ret += sensor_write(sd, 0x07, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
@@ -892,7 +914,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
-	arg.value = (int) &sensor->video;
+	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	return ret;
 }
@@ -923,7 +945,7 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 		}
 		sensor->video.fps = wsize->fps;
 
-		arg.value = (int) &sensor->video;
+		arg.value = (int)&sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	}
 	return ret;
@@ -959,12 +981,14 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		v4l_err(client, "chip found @ 0x%x (%s) is not an %s chip.\n",
-			client->addr, client->adapter->name, SENSOR_NAME);
+		v4l_err(client,
+			"chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
-	v4l_info(client, "%s chip found @ 0x%02x (%s)\n",
-		SENSOR_NAME, client->addr, client->adapter->name);
+	v4l_info(client, "%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	return v4l2_chip_ident_i2c_client(client, chip, ident, 0);
 }
 
@@ -976,32 +1000,32 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
 	switch (ctrl->cmd) {
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
-			ret = sensor_set_integration_time(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
-			ret = sensor_set_analog_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
-			ret = sensor_set_digital_gain(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
-			ret = sensor_get_black_pedestal(sd, ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
-			ret = sensor_set_mode(sensor,ctrl->value);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_off);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-			ret = sensor_write_array(sd, sensor_stream_on);
-			break;
-		case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
-			ret = sensor_set_fps(sensor, ctrl->value);
-			break;
-		default:
-			break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
+		ret = sensor_set_integration_time(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_AGAIN:
+		ret = sensor_set_analog_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_DGAIN:
+		ret = sensor_set_digital_gain(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_BLACK_LEVEL:
+		ret = sensor_get_black_pedestal(sd, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_RESIZE:
+		ret = sensor_set_mode(sensor, ctrl->value);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_off);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
+		ret = sensor_write_array(sd, sensor_stream_on);
+		break;
+	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
+		ret = sensor_set_fps(sensor, ctrl->value);
+		break;
+	default:
+		break;
 	}
 	return 0;
 }
@@ -1010,12 +1034,12 @@ static long sensor_ops_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg
 	struct tx_isp_sensor *sensor = container_of(sd, struct tx_isp_sensor, sd);
 	int ret;
 	switch (cmd) {
-		case VIDIOC_ISP_PRIVATE_IOCTL:
-			ret = sensor_ops_private_ioctl(sensor, arg);
-			break;
-		default:
-			return -1;
-			break;
+	case VIDIOC_ISP_PRIVATE_IOCTL:
+		ret = sensor_ops_private_ioctl(sensor, arg);
+		break;
+	default:
+		return -1;
+		break;
 	}
 	return 0;
 }
@@ -1038,8 +1062,7 @@ static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 	return ret;
 }
 
-static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg)
-{
+static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_register *reg) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 
 	if (!v4l2_chip_match_i2c_client(client, &reg->match))
@@ -1083,7 +1106,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int i = 0;
 	int ret;
 
-	sensor = (struct tx_isp_sensor *) kzalloc(sizeof(*sensor), GFP_KERNEL);
+	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
 		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
@@ -1105,15 +1128,15 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 
 	switch (sensor_gpio_func) {
-		case DVP_PA_LOW_10BIT:
-		case DVP_PA_HIGH_10BIT:
-			mbus = sensor_mbus_code[0];
-			break;
-		case DVP_PA_12BIT:
-			mbus = sensor_mbus_code[1];
-			break;
-		default:
-			goto err_set_sensor_gpio;
+	case DVP_PA_LOW_10BIT:
+	case DVP_PA_HIGH_10BIT:
+		mbus = sensor_mbus_code[0];
+		break;
+	case DVP_PA_12BIT:
+		mbus = sensor_mbus_code[1];
+		break;
+	default:
+		goto err_set_sensor_gpio;
 	}
 
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
@@ -1122,7 +1145,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/*
 	   convert sensor-gain into isp-gain,
 	*/
-	sensor_attr.max_again = 276471;//321573;/*log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);*/
+	sensor_attr.max_again =
+		276471; //321573;/*log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);*/
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1160,17 +1184,15 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {
-	{SENSOR_NAME, 0},
-	{}
-};
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = sensor_probe,
 	.remove = sensor_remove,
 	.id_table = sensor_id,
@@ -1187,5 +1209,5 @@ static __exit void exit_sensor(void) {
 module_init(init_sensor);
 module_exit(exit_sensor);
 
-MODULE_DESCRIPTION("A low-level driver for "SENSOR_NAME" sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -713,7 +713,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			ret = sensor_read(sd, vals->reg_num, &vals->value);			    //
+			ret = sensor_read(sd, vals->reg_num, &vals->value);			      //
 			ISP_INFO("---->> reg=0x%x, value=0x%x <<----\n", vals->reg_num, vals->value); //
 			if (ret < 0)
 				return ret;

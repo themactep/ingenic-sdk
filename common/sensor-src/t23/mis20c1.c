@@ -23,35 +23,35 @@
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
-#define SENSOR_NAME                 "mis20c1"
-#define SENSOR_VERSION              "H20240321a"
-#define SENSOR_CHIP_ID_H            0x20
-#define SENSOR_CHIP_ID_L            0xc1
-#define SENSOR_CHIP_ID              0x20c1
+#define SENSOR_NAME "mis20c1"
+#define SENSOR_VERSION "H20240321a"
+#define SENSOR_CHIP_ID_H 0x20
+#define SENSOR_CHIP_ID_L 0xc1
+#define SENSOR_CHIP_ID 0x20c1
 
 // ============================================================================
 // HARDWARE INTERFACE
 // ============================================================================
-#define SENSOR_I2C_ADDRESS          0x30
+#define SENSOR_I2C_ADDRESS 0x30
 
 // ============================================================================
 // SENSOR CAPABILITIES
 // ============================================================================
-#define SENSOR_MAX_WIDTH            1920
-#define SENSOR_MAX_HEIGHT           1080
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
-#define SENSOR_REG_END              0xffff
-#define SENSOR_REG_DELAY            0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
 // ============================================================================
 // TIMING AND PERFORMANCE
 // ============================================================================
-#define SENSOR_SUPPORT_30FPS_PCLK   74385000U
-#define SENSOR_OUTPUT_MAX_FPS       30
-#define SENSOR_OUTPUT_MIN_FPS       5
+#define SENSOR_SUPPORT_30FPS_PCLK 74385000U
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -91,7 +91,7 @@ struct again_lut {
 };
 
 static struct again_lut mis20c1_again_lut[] = {
-/* Exact vendor gain-code to ISP log2-gain mapping. */
+	/* Exact vendor gain-code to ISP log2-gain mapping. */
 	{0x0, 0},
 	{0x10, 1465},
 	{0x20, 2998},
@@ -366,32 +366,31 @@ static struct again_lut mis20c1_again_lut[] = {
 	{0x3ff, 655360},
 };
 
-static unsigned int mis20c1_alloc_again(unsigned int isp_gain,
-		unsigned char shift, unsigned int *sensor_again);
-static unsigned int mis20c1_alloc_dgain(unsigned int isp_gain,
-		unsigned char shift, unsigned int *sensor_dgain);
+static unsigned int mis20c1_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again);
+static unsigned int mis20c1_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain);
 
 struct tx_isp_sensor_attribute mis20c1_attr = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
-	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS |
-		V4L2_SBUS_MASK_ADDR_16BITS,
+	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.mipi = {
-		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 372,
-		.lans = 2,
-		.image_twidth = SENSOR_MAX_WIDTH,
-		.image_theight = SENSOR_MAX_HEIGHT,
-		.mipi_sc = {
-			.data_type_value = RAW10,
-			.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
-			.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-			.sensor_csi_fmt = TX_SENSOR_RAW10,
+	.mipi =
+		{
+			.mode = SENSOR_MIPI_OTHER_MODE,
+			.clk = 372,
+			.lans = 2,
+			.image_twidth = SENSOR_MAX_WIDTH,
+			.image_theight = SENSOR_MAX_HEIGHT,
+			.mipi_sc =
+				{
+					.data_type_value = RAW10,
+					.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+					.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+					.sensor_csi_fmt = TX_SENSOR_RAW10,
+				},
 		},
-	},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 327680,
 	.max_dgain = 0,
@@ -410,9 +409,7 @@ struct tx_isp_sensor_attribute mis20c1_attr = {
 	.sensor_ctrl.alloc_dgain = mis20c1_alloc_dgain,
 };
 
-static unsigned int mis20c1_alloc_again(unsigned int isp_gain,
-		unsigned char shift, unsigned int *sensor_again)
-{
+static unsigned int mis20c1_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = mis20c1_again_lut;
 
 	while (lut->gain <= mis20c1_attr.max_again) {
@@ -424,8 +421,7 @@ static unsigned int mis20c1_alloc_again(unsigned int isp_gain,
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		}
-		if (lut->gain == mis20c1_attr.max_again &&
-		    isp_gain >= lut->gain) {
+		if (lut->gain == mis20c1_attr.max_again && isp_gain >= lut->gain) {
 			*sensor_again = lut->value;
 			return lut->gain;
 		}
@@ -435,14 +431,12 @@ static unsigned int mis20c1_alloc_again(unsigned int isp_gain,
 	return isp_gain;
 }
 
-static unsigned int mis20c1_alloc_dgain(unsigned int isp_gain,
-		unsigned char shift, unsigned int *sensor_dgain)
-{
+static unsigned int mis20c1_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
 static struct regval_list mis20c1_init_regs_1920_1080_30fps_mipi[] = {
-/* Exact vendor 1920x1080, 30 fps, 2-lane RAW10 register program. */
+	/* Exact vendor 1920x1080, 30 fps, 2-lane RAW10 register program. */
 	{0x3006, 0x02},
 	{0xfffe, 0x01},
 	{0x3038, 0x01},
@@ -789,8 +783,7 @@ static struct tx_isp_sensor_win_setting mis20c1_win_sizes[] = {
 
 static struct tx_isp_sensor_win_setting *wsize = &mis20c1_win_sizes[0];
 
-static int mis20c1_read(struct tx_isp_subdev *sd, u16 reg, u8 *value)
-{
+static int mis20c1_read(struct tx_isp_subdev *sd, u16 reg, u8 *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	u8 buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {
@@ -816,8 +809,7 @@ static int mis20c1_read(struct tx_isp_subdev *sd, u16 reg, u8 *value)
 	return ret;
 }
 
-static int mis20c1_write(struct tx_isp_subdev *sd, u16 reg, u8 value)
-{
+static int mis20c1_write(struct tx_isp_subdev *sd, u16 reg, u8 value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	u8 buf[3] = {reg >> 8, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -835,9 +827,7 @@ static int mis20c1_write(struct tx_isp_subdev *sd, u16 reg, u8 value)
 	return ret;
 }
 
-static int mis20c1_write_array(struct tx_isp_subdev *sd,
-		struct regval_list *values)
-{
+static int mis20c1_write_array(struct tx_isp_subdev *sd, struct regval_list *values) {
 	int ret;
 
 	while (values->reg_num != SENSOR_REG_END) {
@@ -854,13 +844,11 @@ static int mis20c1_write_array(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int mis20c1_reset(struct tx_isp_subdev *sd, int val)
-{
+static int mis20c1_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int mis20c1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int mis20c1_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	u8 value;
 	int ret;
 
@@ -881,9 +869,7 @@ static int mis20c1_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int mis20c1_g_chip_ident(struct tx_isp_subdev *sd,
-		struct tx_isp_chip_ident *chip)
-{
+static int mis20c1_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret;
@@ -916,13 +902,11 @@ static int mis20c1_g_chip_ident(struct tx_isp_subdev *sd,
 
 	ret = mis20c1_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not %s\n",
-			client->addr, client->adapter->name, SENSOR_NAME);
+		ISP_ERROR("chip found @ 0x%x (%s) is not %s\n", client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 
-	ISP_INFO("%s chip found @ 0x%02x (%s)\n",
-		SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 
 	if (chip) {
@@ -934,8 +918,7 @@ static int mis20c1_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int mis20c1_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int mis20c1_set_expo(struct tx_isp_subdev *sd, int value) {
 	unsigned int expo = value & 0xffff;
 	unsigned int again = (value >> 16) & 0xffff;
 	unsigned int vts;
@@ -985,8 +968,7 @@ static int mis20c1_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += mis20c1_read(sd, 0x3403, &tmp);
 	statistic |= tmp;
 
-	ret += mis20c1_write(sd, 0x3800,
-		(statistic >= 0x0b01 && again >= 0x0380) ? 0x02 : 0x00);
+	ret += mis20c1_write(sd, 0x3800, (statistic >= 0x0b01 && again >= 0x0380) ? 0x02 : 0x00);
 	ret += mis20c1_write(sd, 0x3a1b, again < 0x0300 ? 0x1a : 0x16);
 
 	if (statistic < 0x0b01) {
@@ -1003,8 +985,7 @@ static int mis20c1_set_expo(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int mis20c1_init(struct tx_isp_subdev *sd, int enable)
-{
+static int mis20c1_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret;
 
@@ -1022,15 +1003,13 @@ static int mis20c1_init(struct tx_isp_subdev *sd, int enable)
 	if (ret)
 		return ret;
 
-	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR,
-		&sensor->video);
+	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
 	return ret;
 }
 
-static int mis20c1_s_stream(struct tx_isp_subdev *sd, int enable)
-{
+static int mis20c1_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret;
 
 	if (data_interface != TX_SENSOR_DATA_INTERFACE_MIPI) {
@@ -1038,15 +1017,13 @@ static int mis20c1_s_stream(struct tx_isp_subdev *sd, int enable)
 		return -EINVAL;
 	}
 
-	ret = mis20c1_write_array(sd,
-		enable ? mis20c1_stream_on : mis20c1_stream_off);
+	ret = mis20c1_write_array(sd, enable ? mis20c1_stream_on : mis20c1_stream_off);
 	ISP_INFO("%s stream %s\n", SENSOR_NAME, enable ? "on" : "off");
 
 	return ret;
 }
 
-static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int numerator = fps >> 16;
 	unsigned int denominator = fps & 0xffff;
@@ -1061,8 +1038,7 @@ static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps)
 
 	newformat = (numerator / denominator) << 8;
 	newformat += ((numerator % denominator) << 8) / denominator;
-	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) ||
-	    newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -ERANGE;
 	}
@@ -1090,12 +1066,10 @@ static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps)
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 1;
 
-	return tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR,
-		&sensor->video);
+	return tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 }
 
-static int mis20c1_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int mis20c1_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	sensor->video.mbus.width = wsize->width;
@@ -1105,12 +1079,10 @@ static int mis20c1_set_mode(struct tx_isp_subdev *sd, int value)
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-	return tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR,
-		&sensor->video);
+	return tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 }
 
-static int mis20c1_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int mis20c1_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	u8 reg_3007;
 	u8 reg_310a;
 	u8 reg_310c;
@@ -1164,8 +1136,7 @@ static int mis20c1_set_vflip(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int mis20c1_set_logic(struct tx_isp_subdev *sd, int value)
-{
+static int mis20c1_set_logic(struct tx_isp_subdev *sd, int value) {
 	u8 state = 0;
 	u8 high = 0;
 	u8 low = 0;
@@ -1176,15 +1147,12 @@ static int mis20c1_set_logic(struct tx_isp_subdev *sd, int value)
 	ret += mis20c1_read(sd, 0x3636, &high);
 	ret += mis20c1_read(sd, 0x3637, &low);
 	statistic = (high << 8) | low;
-	ret += mis20c1_write(sd, 0x3400,
-		(state == 1 && statistic >= 0x0110) ? 0x00 : 0x01);
+	ret += mis20c1_write(sd, 0x3400, (state == 1 && statistic >= 0x0110) ? 0x00 : 0x01);
 
 	return ret;
 }
 
-static int mis20c1_sensor_ops_ioctl(struct tx_isp_subdev *sd,
-		unsigned int cmd, void *arg)
-{
+static int mis20c1_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 
 	if (IS_ERR_OR_NULL(sd)) {
@@ -1226,9 +1194,7 @@ static int mis20c1_sensor_ops_ioctl(struct tx_isp_subdev *sd,
 	return ret;
 }
 
-static int mis20c1_g_register(struct tx_isp_subdev *sd,
-		struct tx_isp_dbg_register *reg)
-{
+static int mis20c1_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	u8 value = 0;
 	int len;
 	int ret;
@@ -1246,9 +1212,7 @@ static int mis20c1_g_register(struct tx_isp_subdev *sd,
 	return ret;
 }
 
-static int mis20c1_s_register(struct tx_isp_subdev *sd,
-		const struct tx_isp_dbg_register *reg)
-{
+static int mis20c1_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len;
 
 	len = strlen(sd->chip.name);
@@ -1287,17 +1251,16 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int mis20c1_probe(struct i2c_client *client,
-		const struct i2c_device_id *id)
-{
+static int mis20c1_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_sensor *sensor;
 	struct tx_isp_subdev *sd;
 	int ret;
@@ -1356,8 +1319,7 @@ err_free_sensor:
 	return ret;
 }
 
-static int mis20c1_remove(struct i2c_client *client)
-{
+static int mis20c1_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1381,17 +1343,17 @@ static const struct i2c_device_id mis20c1_id[] = {
 MODULE_DEVICE_TABLE(i2c, mis20c1_id);
 
 static struct i2c_driver mis20c1_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = SENSOR_NAME,
-	},
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = SENSOR_NAME,
+		},
 	.probe = mis20c1_probe,
 	.remove = mis20c1_remove,
 	.id_table = mis20c1_id,
 };
 
-static __init int init_mis20c1(void)
-{
+static __init int init_mis20c1(void) {
 	int ret;
 
 	sensor_common_init(&sensor_info);
@@ -1410,8 +1372,7 @@ static __init int init_mis20c1(void)
 	return ret;
 }
 
-static __exit void exit_mis20c1(void)
-{
+static __exit void exit_mis20c1(void) {
 	private_i2c_del_driver(&mis20c1_driver);
 	sensor_common_exit();
 }

@@ -31,15 +31,15 @@
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
-#define SENSOR_CHIP_ID_H	(0x31)
-#define SENSOR_CHIP_ID_L	(0x4a)
-#define SENSOR_VERSION	"H20240801a"
+#define SENSOR_CHIP_ID_H (0x31)
+#define SENSOR_CHIP_ID_L (0x4a)
+#define SENSOR_VERSION "H20240801a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
-#define SENSOR_REG_END		0xff
-#define SENSOR_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_DELAY 0xfffe
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -321,18 +321,17 @@ struct again_lut bf314a_again_lut[] = {
 
 struct tx_isp_sensor_attribute bf314a_attr;
 
-unsigned int bf314a_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int bf314a_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = bf314a_again_lut;
-	while(lut->gain <= bf314a_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= bf314a_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == bf314a_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == bf314a_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -344,46 +343,46 @@ unsigned int bf314a_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int bf314a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int bf314a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute bf314a_attr={
+struct tx_isp_sensor_attribute bf314a_attr = {
 	.name = "bf314a",
 	.chip_id = 0x314a,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x6e,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.mipi = {
-		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 360,
-		.lans = 1,
-		.settle_time_apative_en = 0,
-		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
-		.mipi_sc.hcrop_diff_en = 0,
-		.mipi_sc.mipi_vcomp_en = 0,
-		.mipi_sc.mipi_hcomp_en = 0,
-		.mipi_sc.line_sync_mode = 0,
-		.mipi_sc.work_start_flag = 0,
-		.image_twidth = 1280,
-		.image_theight = 720,
-		.mipi_sc.mipi_crop_start0x = 0,
-		.mipi_sc.mipi_crop_start0y = 0,
-		.mipi_sc.mipi_crop_start1x = 0,
-		.mipi_sc.mipi_crop_start1y = 0,
-		.mipi_sc.mipi_crop_start2x = 0,
-		.mipi_sc.mipi_crop_start2y = 0,
-		.mipi_sc.mipi_crop_start3x = 0,
-		.mipi_sc.mipi_crop_start3y = 0,
-		.mipi_sc.data_type_en = 0,
-		.mipi_sc.data_type_value = RAW10,
-		.mipi_sc.del_start = 0,
-		.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
-		.mipi_sc.sensor_fid_mode = 0,
-		.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-	},
+	.mipi =
+		{
+			.mode = SENSOR_MIPI_OTHER_MODE,
+			.clk = 360,
+			.lans = 1,
+			.settle_time_apative_en = 0,
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.hcrop_diff_en = 0,
+			.mipi_sc.mipi_vcomp_en = 0,
+			.mipi_sc.mipi_hcomp_en = 0,
+			.mipi_sc.line_sync_mode = 0,
+			.mipi_sc.work_start_flag = 0,
+			.image_twidth = 1280,
+			.image_theight = 720,
+			.mipi_sc.mipi_crop_start0x = 0,
+			.mipi_sc.mipi_crop_start0y = 0,
+			.mipi_sc.mipi_crop_start1x = 0,
+			.mipi_sc.mipi_crop_start1y = 0,
+			.mipi_sc.mipi_crop_start2x = 0,
+			.mipi_sc.mipi_crop_start2y = 0,
+			.mipi_sc.mipi_crop_start3x = 0,
+			.mipi_sc.mipi_crop_start3y = 0,
+			.mipi_sc.data_type_en = 0,
+			.mipi_sc.data_type_value = RAW10,
+			.mipi_sc.del_start = 0,
+			.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+			.mipi_sc.sensor_fid_mode = 0,
+			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+		},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 262144,
 	.max_dgain = 0,
@@ -426,48 +425,46 @@ static struct regval_list bf314a_init_regs_1280_720_30fps_mipi[] = {
 	{0x6b, 0x02},
 	{0x6c, 0xd0},
 	{0x6f, 0x10},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting bf314a_win_sizes[] = {
 	{
-		.width		= 1280,
-		.height		= 720,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= bf314a_init_regs_1280_720_30fps_mipi,
+		.width = 1280,
+		.height = 720,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = bf314a_init_regs_1280_720_30fps_mipi,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &bf314a_win_sizes[0];
 
 static struct regval_list bf314a_stream_on_mipi[] = {
 	{0xf3, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list bf314a_stream_off_mipi[] = {
 	{0xf3, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int bf314a_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value)
-{
+int bf314a_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 1,
-			.buf	= &reg,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 1,
+						 .buf = &reg,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -476,15 +473,14 @@ int bf314a_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	return ret;
 }
 
-int bf314a_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value)
-{
+int bf314a_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 2,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 2,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -514,8 +510,7 @@ static int bf314a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int bf314a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int bf314a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -531,18 +526,16 @@ static int bf314a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int bf314a_reset(struct tx_isp_subdev *sd, int val)
-{
+static int bf314a_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret = 0;
 	unsigned char v;
 
 	ret += bf314a_read(sd, 0xfc, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -550,7 +543,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret += bf314a_read(sd, 0xfd, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -560,8 +553,7 @@ static int bf314a_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int bf314a_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int bf314a_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	int ret = 0;
 	int it = (value & 0xffff);
@@ -575,34 +567,30 @@ static int bf314a_set_expo(struct tx_isp_subdev *sd, int value)
 	// ret += bf314a_write(sd, 0x6a, (unsigned char)(((again >> 8) & 0xff)));
 	//sensor dig fine gain
 	ret += bf314a_write(sd, 0x6a, (unsigned char)(again & 0xff));
-	
+
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int bf314a_set_logic(struct tx_isp_subdev *sd, int value)
-{
+static int bf314a_set_logic(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int bf314a_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int bf314a_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int bf314a_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int bf314a_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int bf314a_init(struct tx_isp_subdev *sd, int enable)
-{
+static int bf314a_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -621,23 +609,21 @@ static int bf314a_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int bf314a_s_stream(struct tx_isp_subdev *sd, int enable)
-{
+static int bf314a_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bf314a_write_array(sd, bf314a_stream_on_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("bf314a stream on\n");
 
-	}
-	else {
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+	} else {
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bf314a_write_array(sd, bf314a_stream_off_mipi);
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("bf314a stream off\n");
@@ -646,8 +632,7 @@ static int bf314a_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
@@ -662,9 +647,9 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	vts_base = 738;
 
-	ISP_INFO("-------fps=%d\n",((fps >> 16) / (fps & 0xff)));
+	ISP_INFO("-------fps=%d\n", ((fps >> 16) / (fps & 0xff)));
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
@@ -681,13 +666,12 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - vts_base;
 
-	ISP_INFO("-------hts=%d\n",hts);
-	ISP_INFO("-------vts=%d\n",vts);
-	
+	ISP_INFO("-------hts=%d\n", hts);
+	ISP_INFO("-------vts=%d\n", vts);
+
 	ret += bf314a_write(sd, 0x06, (unsigned char)(vb & 0xff));
 	ret += bf314a_write(sd, 0x07, (unsigned char)(vb >> 8));
 
-	
 	if (0 != ret) {
 		ISP_ERROR("err: bf314a_write err\n");
 		return ret;
@@ -701,15 +685,13 @@ static int bf314a_set_fps(struct tx_isp_subdev *sd, int fps)
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
-
 }
 
-static int bf314a_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int bf314a_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -722,45 +704,42 @@ static int bf314a_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int bf314a_g_chip_ident(struct tx_isp_subdev *sd,
-			       struct tx_isp_chip_ident *chip)
-{
+static int bf314a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"bf314a_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio, "bf314a_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"bf314a_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio, "bf314a_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = bf314a_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an bf314a chip.\n",
-			  client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an bf314a chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_INFO("bf314a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
+	if (chip) {
 		memcpy(chip->name, "bf314a", sizeof("bf314a"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -769,30 +748,29 @@ static int bf314a_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int bf314a_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int bf314a_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	uint8_t val;
 
 	val = bf314a_read(sd, 0x00, &val);
-	switch(enable) {
+	switch (enable) {
 	case 0:
-                val &= 0xf3;
-				sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
+		val &= 0xf3;
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-                val = ((val & 0xF7) | 0x08);//mirror
-				sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
+		val = ((val & 0xF7) | 0x08); //mirror
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 		break;
 	case 2:
 
-                val = ((val & 0xFb) | 0x04);//flip
-				sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
+		val = ((val & 0xFb) | 0x04); //flip
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
 		break;
 	case 3:
-                val = ((val &0xff) | 0x0c);
-				sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
+		val = ((val & 0xff) | 0x0c);
+		sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
 		break;
 	}
 	bf314a_write(sd, 0x00, val);
@@ -803,66 +781,65 @@ static int bf314a_set_vflip(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int bf314a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int bf314a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-	     	ret = bf314a_set_expo(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-	//	if(arg)
-	//		ret = bf314a_set_integration_time(sd, *(int*)arg);
+		//	if(arg)
+		//		ret = bf314a_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-	//	if(arg)
-	//		ret = bf314a_set_analog_gain(sd, *(int*)arg);
+		//	if(arg)
+		//		ret = bf314a_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = bf314a_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = bf314a_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = bf314a_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bf314a_write_array(sd, bf314a_stream_off_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI){
+		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = bf314a_write_array(sd, bf314a_stream_on_mipi);
 
-		}else{
+		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = bf314a_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = bf314a_set_vflip(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_vflip(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if(arg)
-			ret = bf314a_set_logic(sd, *(int*)arg);
+		if (arg)
+			ret = bf314a_set_logic(sd, *(int *)arg);
 	default:
 		break;
 	}
@@ -870,14 +847,13 @@ static int bf314a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int bf314a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int bf314a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -889,12 +865,11 @@ static int bf314a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	return ret;
 }
 
-static int bf314a_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int bf314a_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -918,8 +893,8 @@ static struct tx_isp_subdev_video_ops bf314a_video_ops = {
 	.s_stream = bf314a_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	bf314a_sensor_ops = {
-	.ioctl	= bf314a_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops bf314a_sensor_ops = {
+	.ioctl = bf314a_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops bf314a_ops = {
@@ -933,70 +908,70 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "bf314a",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int bf314a_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int bf314a_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 
 #ifdef CONFIG_KERNEL_4_4_94
-		sensor->mclk = clk_get(NULL, "div_cim");
+	sensor->mclk = clk_get(NULL, "div_cim");
 #else
-		sensor->mclk = clk_get(NULL, "cgu_cim");
+	sensor->mclk = clk_get(NULL, "cgu_cim");
 #endif
-        if (IS_ERR(sensor->mclk)) {
-                ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
-                goto err_get_mclk;
-        }
-        {
-                unsigned int arate = 0,mrate = 0;
-                unsigned int want_rate = 0;
-                struct clk *clka = NULL;
-                struct clk *clkm = NULL;
+	if (IS_ERR(sensor->mclk)) {
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		goto err_get_mclk;
+	}
+	{
+		unsigned int arate = 0, mrate = 0;
+		unsigned int want_rate = 0;
+		struct clk *clka = NULL;
+		struct clk *clkm = NULL;
 
-                want_rate=24000000;
-                clka = clk_get(NULL, "sclka");
-                clkm = clk_get(NULL, "mpll");
-                arate = clk_get_rate(clka);
-                mrate = clk_get_rate(clkm);
-                if((arate%want_rate) && (mrate%want_rate)) {
-                        if(want_rate == 37125000){
-                                if(arate >= 1400000000) {
-                                        arate = 1485000000;
-                                } else if((arate >= 1100) || (arate < 1400)) {
-                                        arate = 1188000000;
-                                } else if(arate <= 1100) {
-                                        arate = 891000000;
-                                }
-                        } else {
-                                mrate = arate%want_rate;
-                                arate = arate-mrate;
-                        }
-                        clk_set_rate(clka, arate);
-                        clk_set_parent(sensor->mclk, clka);
-                } else if(!(arate%want_rate)) {
-                        clk_set_parent(sensor->mclk, clka);
-                } else if(!(mrate%want_rate)) {
-                        clk_set_parent(sensor->mclk, clkm);
-                }
-                private_clk_set_rate(sensor->mclk, want_rate);
-                private_clk_enable(sensor->mclk);
-        }
+		want_rate = 24000000;
+		clka = clk_get(NULL, "sclka");
+		clkm = clk_get(NULL, "mpll");
+		arate = clk_get_rate(clka);
+		mrate = clk_get_rate(clkm);
+		if ((arate % want_rate) && (mrate % want_rate)) {
+			if (want_rate == 37125000) {
+				if (arate >= 1400000000) {
+					arate = 1485000000;
+				} else if ((arate >= 1100) || (arate < 1400)) {
+					arate = 1188000000;
+				} else if (arate <= 1100) {
+					arate = 891000000;
+				}
+			} else {
+				mrate = arate % want_rate;
+				arate = arate - mrate;
+			}
+			clk_set_rate(clka, arate);
+			clk_set_parent(sensor->mclk, clka);
+		} else if (!(arate % want_rate)) {
+			clk_set_parent(sensor->mclk, clka);
+		} else if (!(mrate % want_rate)) {
+			clk_set_parent(sensor->mclk, clkm);
+		}
+		private_clk_set_rate(sensor->mclk, want_rate);
+		private_clk_enable(sensor->mclk);
+	}
 
 	/*
 	  convert sensor-gain into isp-gain,
@@ -1030,14 +1005,13 @@ err_get_mclk:
 	return -1;
 }
 
-static int bf314a_remove(struct i2c_client *client)
-{
+static int bf314a_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable(sensor->mclk);
@@ -1048,35 +1022,31 @@ static int bf314a_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id bf314a_id[] = {
-	{ "bf314a", 0 },
-	{ }
-};
+static const struct i2c_device_id bf314a_id[] = {{"bf314a", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, bf314a_id);
 
 static struct i2c_driver bf314a_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "bf314a",
-	},
-	.probe		= bf314a_probe,
-	.remove		= bf314a_remove,
-	.id_table	= bf314a_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "bf314a",
+		},
+	.probe = bf314a_probe,
+	.remove = bf314a_remove,
+	.id_table = bf314a_id,
 };
 
-static __init int init_bf314a(void)
-{
+static __init int init_bf314a(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init bf314a dirver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&bf314a_driver);
 }
 
-static __exit void exit_bf314a(void)
-{
+static __exit void exit_bf314a(void) {
 	private_i2c_del_driver(&bf314a_driver);
 }
 

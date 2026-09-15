@@ -30,15 +30,15 @@
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
-#define SENSOR_CHIP_ID_H	(0xcb)
-#define SENSOR_CHIP_ID_L	(0x5c)
-#define SENSOR_VERSION	"H20240219a"
+#define SENSOR_CHIP_ID_H (0xcb)
+#define SENSOR_CHIP_ID_L (0x5c)
+#define SENSOR_VERSION "H20240219a"
 
 // ============================================================================
 // REGISTER DEFINITIONS
 // ============================================================================
-#define SENSOR_REG_END		0xffff
-#define SENSOR_REG_DELAY	0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_DELAY 0xfffe
 
 // ============================================================================
 // TIMING AND PERFORMANCE
@@ -238,18 +238,17 @@ struct again_lut sc2331_again_lut[] = {
 
 struct tx_isp_sensor_attribute sc2331_attr;
 
-unsigned int sc2331_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
-{
+unsigned int sc2331_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sc2331_again_lut;
-	while(lut->gain <= sc2331_attr.max_again) {
-		if(isp_gain == 0) {
+	while (lut->gain <= sc2331_attr.max_again) {
+		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
-		} else if(isp_gain < lut->gain) {
+		} else if (isp_gain < lut->gain) {
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if((lut->gain == sc2331_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sc2331_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -261,46 +260,45 @@ unsigned int sc2331_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sc2331_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
-{
+unsigned int sc2331_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_sensor_attribute sc2331_attr={
-	.name = "sc2331",
+struct tx_isp_sensor_attribute sc2331_attr = {.name = "sc2331",
 	.chip_id = 0xcb5c,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.mipi = {
-		.mode = SENSOR_MIPI_OTHER_MODE,
-		.clk = 405,
-		.lans = 2,
-		.settle_time_apative_en = 0,
-		.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,//RAW10
-		.mipi_sc.hcrop_diff_en = 0,
-		.mipi_sc.mipi_vcomp_en = 0,
-		.mipi_sc.mipi_hcomp_en = 0,
-		.mipi_sc.line_sync_mode = 0,
-		.mipi_sc.work_start_flag = 0,
-		.image_twidth = 1920,
-		.image_theight = 1080,
-		.mipi_sc.mipi_crop_start0x = 0,
-		.mipi_sc.mipi_crop_start0y = 0,
-		.mipi_sc.mipi_crop_start1x = 0,
-		.mipi_sc.mipi_crop_start1y = 0,
-		.mipi_sc.mipi_crop_start2x = 0,
-		.mipi_sc.mipi_crop_start2y = 0,
-		.mipi_sc.mipi_crop_start3x = 0,
-		.mipi_sc.mipi_crop_start3y = 0,
-		.mipi_sc.data_type_en = 0,
-		.mipi_sc.data_type_value = RAW10,
-		.mipi_sc.del_start = 0,
-		.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
-		.mipi_sc.sensor_fid_mode = 0,
-		.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-	},
+	.mipi =
+		{
+			.mode = SENSOR_MIPI_OTHER_MODE,
+			.clk = 405,
+			.lans = 2,
+			.settle_time_apative_en = 0,
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.hcrop_diff_en = 0,
+			.mipi_sc.mipi_vcomp_en = 0,
+			.mipi_sc.mipi_hcomp_en = 0,
+			.mipi_sc.line_sync_mode = 0,
+			.mipi_sc.work_start_flag = 0,
+			.image_twidth = 1920,
+			.image_theight = 1080,
+			.mipi_sc.mipi_crop_start0x = 0,
+			.mipi_sc.mipi_crop_start0y = 0,
+			.mipi_sc.mipi_crop_start1x = 0,
+			.mipi_sc.mipi_crop_start1y = 0,
+			.mipi_sc.mipi_crop_start2x = 0,
+			.mipi_sc.mipi_crop_start2y = 0,
+			.mipi_sc.mipi_crop_start3x = 0,
+			.mipi_sc.mipi_crop_start3y = 0,
+			.mipi_sc.data_type_en = 0,
+			.mipi_sc.data_type_value = RAW10,
+			.mipi_sc.del_start = 0,
+			.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
+			.mipi_sc.sensor_fid_mode = 0,
+			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
+		},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 326203,
 	.max_dgain = 0,
@@ -319,216 +317,211 @@ struct tx_isp_sensor_attribute sc2331_attr={
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sc2331_alloc_again,
 	.sensor_ctrl.alloc_dgain = sc2331_alloc_dgain,
-        .fsync_attr = {
-                .mode = TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE,
-                .call_times = 1,
-                .sdelay = 100,
-                .pwm = {
-                        .mpwmx = 0,
-                        .freq = 15,
-                        .dratio = 50,
-                }
-        }
-};
+	.fsync_attr = {.mode = TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE,
+		.call_times = 1,
+		.sdelay = 100,
+		.pwm = {
+			.mpwmx = 0,
+			.freq = 15,
+			.dratio = 50,
+		}}};
 
 static struct regval_list sc2331_init_regs_1920_1080_30fps_mipi[] = {
-        {0x0103, 0x01},
-        {0x0100, 0x00},
-        {0x36e9, 0x80},
-        {0x37f9, 0x80},
-        {0x300a, 0x24},
-        {0x3018, 0x3a},
-        {0x3019, 0x0c},
-        {0x301f, 0x45},
-        {0x3200, 0x00},
-        {0x3201, 0x00},
-        {0x3202, 0x00},
-        {0x3203, 0x00},
-        {0x3204, 0x07},
-        {0x3205, 0x87},
-        {0x3206, 0x04},
-        {0x3207, 0x3f},
-        {0x3208, 0x07},
-        {0x3209, 0x80},
-        {0x320a, 0x04},
-        {0x320b, 0x38},
-        {0x320c, 0x08},
-        {0x320d, 0x98},
-        {0x320e, 0x04},
-        {0x320f, 0xcb},
-        {0x3210, 0x00},
-        {0x3211, 0x04},
-        {0x3212, 0x00},
-        {0x3213, 0x04},
-        {0x3222, 0x01},
-        {0x3224, 0x82},
-        {0x322e, 0x00},
-        {0x322f, 0x02},
-        {0x3230, 0x00},
-        {0x3231, 0x04},
-        {0x3258, 0x0e},
-        {0x3301, 0x06},
-        {0x3302, 0x10},
-        {0x3304, 0x68},
-        {0x3306, 0x90},
-        {0x3308, 0x18},
-        {0x3309, 0x80},
-        {0x330a, 0x01},
-        {0x330b, 0x48},
-        {0x330d, 0x18},
-        {0x331c, 0x02},
-        {0x331e, 0x59},
-        {0x331f, 0x71},
-        {0x3333, 0x10},
-        {0x3334, 0x40},
-        {0x3364, 0x56},
-        {0x3390, 0x08},
-        {0x3391, 0x09},
-        {0x3392, 0x0b},
-        {0x3393, 0x0a},
-        {0x3394, 0x2a},
-        {0x3395, 0x2a},
-        {0x3396, 0x48},
-        {0x3397, 0x49},
-        {0x3398, 0x4b},
-        {0x3399, 0x06},
-        {0x339a, 0x0a},
-        {0x339b, 0x30},
-        {0x339c, 0x48},
-        {0x33ad, 0x2c},
-        {0x33ae, 0x38},
-        {0x33b3, 0x40},
-        {0x349f, 0x02},
-        {0x34a6, 0x09},
-        {0x34a7, 0x0f},
-        {0x34a8, 0x30},
-        {0x34a9, 0x28},
-        {0x34f8, 0x5f},
-        {0x34f9, 0x28},
-        {0x3630, 0xc6},
-        {0x3633, 0x33},
-        {0x3637, 0x6b},
-        {0x363c, 0xc1},
-        {0x363e, 0xc2},
-        {0x3670, 0x2e},
-        {0x3674, 0xc5},
-        {0x3675, 0xc7},
-        {0x3676, 0xcb},
-        {0x3677, 0x44},
-        {0x3678, 0x48},
-        {0x3679, 0x48},
-        {0x367c, 0x08},
-        {0x367d, 0x0b},
-        {0x367e, 0x0b},
-        {0x367f, 0x0f},
-        {0x3690, 0x33},
-        {0x3691, 0x33},
-        {0x3692, 0x33},
-        {0x3693, 0x84},
-        {0x3694, 0x85},
-        {0x3695, 0x8d},
-        {0x3696, 0x9c},
-        {0x369c, 0x0b},
-        {0x369d, 0x0f},
-        {0x369e, 0x09},
-        {0x369f, 0x0b},
-        {0x36a0, 0x0f},
-        {0x36ea, 0x09},
-        {0x36eb, 0x0c},
-        {0x36ec, 0x1c},
-        {0x36ed, 0x28},
-        {0x370f, 0x01},
-        {0x3722, 0x05},
-        {0x3724, 0x20},
-        {0x3725, 0x91},
-        {0x3771, 0x05},
-        {0x3772, 0x05},
-        {0x3773, 0x05},
-        {0x377a, 0x0b},
-        {0x377b, 0x0f},
-        {0x37fa, 0x09},
-        {0x37fb, 0x32},
-        {0x37fc, 0x11},
-        {0x37fd, 0x37},
-        {0x3900, 0x19},
-        {0x3905, 0xb8},
-        {0x391b, 0x80},
-        {0x391c, 0x04},
-        {0x391d, 0x81},
-        {0x3933, 0xc0},
-        {0x3934, 0x08},
-        {0x3940, 0x72},
-        {0x3941, 0x00},
-        {0x3942, 0x00},
-        {0x3943, 0x09},
-        {0x3946, 0x10},
-        {0x3957, 0x86},
-        {0x3e00, 0x00},
-        {0x3e01, 0x98},
-        {0x3e02, 0x90},
-        {0x3e08, 0x00},
-        {0x440e, 0x02},
-        {0x4509, 0x28},
-        {0x450d, 0x10},
-        {0x4819, 0x06},
-        {0x481b, 0x03},
-        {0x481d, 0x0b},
-        {0x481f, 0x03},
-        {0x4821, 0x08},
-        {0x4823, 0x03},
-        {0x4825, 0x03},
-        {0x4827, 0x03},
-        {0x4829, 0x05},
-        {0x5780, 0x66},
-        {0x578d, 0x40},
-        {0x5799, 0x06},
-        {0x36e9, 0x53},
-        {0x37f9, 0x53},
-        {0x0100, 0x01},
-        {SENSOR_REG_END, 0x00},	/* END MARKER */
+	{0x0103, 0x01},
+	{0x0100, 0x00},
+	{0x36e9, 0x80},
+	{0x37f9, 0x80},
+	{0x300a, 0x24},
+	{0x3018, 0x3a},
+	{0x3019, 0x0c},
+	{0x301f, 0x45},
+	{0x3200, 0x00},
+	{0x3201, 0x00},
+	{0x3202, 0x00},
+	{0x3203, 0x00},
+	{0x3204, 0x07},
+	{0x3205, 0x87},
+	{0x3206, 0x04},
+	{0x3207, 0x3f},
+	{0x3208, 0x07},
+	{0x3209, 0x80},
+	{0x320a, 0x04},
+	{0x320b, 0x38},
+	{0x320c, 0x08},
+	{0x320d, 0x98},
+	{0x320e, 0x04},
+	{0x320f, 0xcb},
+	{0x3210, 0x00},
+	{0x3211, 0x04},
+	{0x3212, 0x00},
+	{0x3213, 0x04},
+	{0x3222, 0x01},
+	{0x3224, 0x82},
+	{0x322e, 0x00},
+	{0x322f, 0x02},
+	{0x3230, 0x00},
+	{0x3231, 0x04},
+	{0x3258, 0x0e},
+	{0x3301, 0x06},
+	{0x3302, 0x10},
+	{0x3304, 0x68},
+	{0x3306, 0x90},
+	{0x3308, 0x18},
+	{0x3309, 0x80},
+	{0x330a, 0x01},
+	{0x330b, 0x48},
+	{0x330d, 0x18},
+	{0x331c, 0x02},
+	{0x331e, 0x59},
+	{0x331f, 0x71},
+	{0x3333, 0x10},
+	{0x3334, 0x40},
+	{0x3364, 0x56},
+	{0x3390, 0x08},
+	{0x3391, 0x09},
+	{0x3392, 0x0b},
+	{0x3393, 0x0a},
+	{0x3394, 0x2a},
+	{0x3395, 0x2a},
+	{0x3396, 0x48},
+	{0x3397, 0x49},
+	{0x3398, 0x4b},
+	{0x3399, 0x06},
+	{0x339a, 0x0a},
+	{0x339b, 0x30},
+	{0x339c, 0x48},
+	{0x33ad, 0x2c},
+	{0x33ae, 0x38},
+	{0x33b3, 0x40},
+	{0x349f, 0x02},
+	{0x34a6, 0x09},
+	{0x34a7, 0x0f},
+	{0x34a8, 0x30},
+	{0x34a9, 0x28},
+	{0x34f8, 0x5f},
+	{0x34f9, 0x28},
+	{0x3630, 0xc6},
+	{0x3633, 0x33},
+	{0x3637, 0x6b},
+	{0x363c, 0xc1},
+	{0x363e, 0xc2},
+	{0x3670, 0x2e},
+	{0x3674, 0xc5},
+	{0x3675, 0xc7},
+	{0x3676, 0xcb},
+	{0x3677, 0x44},
+	{0x3678, 0x48},
+	{0x3679, 0x48},
+	{0x367c, 0x08},
+	{0x367d, 0x0b},
+	{0x367e, 0x0b},
+	{0x367f, 0x0f},
+	{0x3690, 0x33},
+	{0x3691, 0x33},
+	{0x3692, 0x33},
+	{0x3693, 0x84},
+	{0x3694, 0x85},
+	{0x3695, 0x8d},
+	{0x3696, 0x9c},
+	{0x369c, 0x0b},
+	{0x369d, 0x0f},
+	{0x369e, 0x09},
+	{0x369f, 0x0b},
+	{0x36a0, 0x0f},
+	{0x36ea, 0x09},
+	{0x36eb, 0x0c},
+	{0x36ec, 0x1c},
+	{0x36ed, 0x28},
+	{0x370f, 0x01},
+	{0x3722, 0x05},
+	{0x3724, 0x20},
+	{0x3725, 0x91},
+	{0x3771, 0x05},
+	{0x3772, 0x05},
+	{0x3773, 0x05},
+	{0x377a, 0x0b},
+	{0x377b, 0x0f},
+	{0x37fa, 0x09},
+	{0x37fb, 0x32},
+	{0x37fc, 0x11},
+	{0x37fd, 0x37},
+	{0x3900, 0x19},
+	{0x3905, 0xb8},
+	{0x391b, 0x80},
+	{0x391c, 0x04},
+	{0x391d, 0x81},
+	{0x3933, 0xc0},
+	{0x3934, 0x08},
+	{0x3940, 0x72},
+	{0x3941, 0x00},
+	{0x3942, 0x00},
+	{0x3943, 0x09},
+	{0x3946, 0x10},
+	{0x3957, 0x86},
+	{0x3e00, 0x00},
+	{0x3e01, 0x98},
+	{0x3e02, 0x90},
+	{0x3e08, 0x00},
+	{0x440e, 0x02},
+	{0x4509, 0x28},
+	{0x450d, 0x10},
+	{0x4819, 0x06},
+	{0x481b, 0x03},
+	{0x481d, 0x0b},
+	{0x481f, 0x03},
+	{0x4821, 0x08},
+	{0x4823, 0x03},
+	{0x4825, 0x03},
+	{0x4827, 0x03},
+	{0x4829, 0x05},
+	{0x5780, 0x66},
+	{0x578d, 0x40},
+	{0x5799, 0x06},
+	{0x36e9, 0x53},
+	{0x37f9, 0x53},
+	{0x0100, 0x01},
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct tx_isp_sensor_win_setting sc2331_win_sizes[] = {
 	/* resolution 2048*1536 @25fps max*/
 	{
-		.width		= 1920,
-		.height		= 1080,
-		.fps		= 30 << 16 | 1,
-		.mbus_code	= V4L2_MBUS_FMT_SBGGR10_1X10,
-		.colorspace	= V4L2_COLORSPACE_SRGB,
-		.regs 		= sc2331_init_regs_1920_1080_30fps_mipi,
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
+		.colorspace = V4L2_COLORSPACE_SRGB,
+		.regs = sc2331_init_regs_1920_1080_30fps_mipi,
 	},
 };
 struct tx_isp_sensor_win_setting *wsize = &sc2331_win_sizes[0];
 
 static struct regval_list sc2331_stream_on_mipi[] = {
 	{0x0100, 0x01},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
 static struct regval_list sc2331_stream_off_mipi[] = {
 	{0x0100, 0x00},
-	{SENSOR_REG_END, 0x00},	/* END MARKER */
+	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int sc2331_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
-{
+int sc2331_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {
-		[0] = {
-			.addr	= client->addr,
-			.flags	= 0,
-			.len	= 2,
-			.buf	= buf,
-		},
+	struct i2c_msg msg[2] = {[0] =
+					 {
+						 .addr = client->addr,
+						 .flags = 0,
+						 .len = 2,
+						 .buf = buf,
+					 },
 		[1] = {
-			.addr	= client->addr,
-			.flags	= I2C_M_RD,
-			.len	= 1,
-			.buf	= value,
-		}
-	};
+			.addr = client->addr,
+			.flags = I2C_M_RD,
+			.len = 1,
+			.buf = value,
+		}};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -537,15 +530,14 @@ int sc2331_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value)
 	return ret;
 }
 
-int sc2331_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value)
-{
+int sc2331_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
-		.addr	= client->addr,
-		.flags	= 0,
-		.len	= 3,
-		.buf	= buf,
+		.addr = client->addr,
+		.flags = 0,
+		.len = 3,
+		.buf = buf,
 	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
@@ -575,8 +567,7 @@ static int sc2331_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int sc2331_write_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sc2331_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -592,18 +583,16 @@ static int sc2331_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sc2331_reset(struct tx_isp_subdev *sd, int val)
-{
+static int sc2331_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int sc2331_detect(struct tx_isp_subdev *sd, unsigned int *ident)
-{
+static int sc2331_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
 	ret = sc2331_read(sd, 0x3107, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
@@ -611,7 +600,7 @@ static int sc2331_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	*ident = v;
 
 	ret = sc2331_read(sd, 0x3108, &v);
-	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_L)
@@ -621,8 +610,7 @@ static int sc2331_detect(struct tx_isp_subdev *sd, unsigned int *ident)
 	return 0;
 }
 
-static int sc2331_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sc2331_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	uint32_t it = (value & 0xffff) << 1;
 	int again = (value & 0xffff0000) >> 16;
@@ -666,27 +654,23 @@ static int sc2331_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc2331_set_logic(struct tx_isp_subdev *sd, int value)
-{
+static int sc2331_set_logic(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc2331_set_digital_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sc2331_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc2331_get_black_pedestal(struct tx_isp_subdev *sd, int value)
-{
+static int sc2331_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc2331_init(struct tx_isp_subdev *sd, int enable)
-{
+static int sc2331_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
-	if(!enable)
+	if (!enable)
 		return ISP_SUCCESS;
 
 	sensor->video.mbus.width = wsize->width;
@@ -706,8 +690,7 @@ static int sc2331_init(struct tx_isp_subdev *sd, int enable)
 	return 0;
 }
 
-static int sc2331_s_stream(struct tx_isp_subdev *sd, int enable)
-{
+static int sc2331_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
@@ -722,8 +705,7 @@ static int sc2331_s_stream(struct tx_isp_subdev *sd, int enable)
 	return ret;
 }
 
-static int sc2331_set_fps(struct tx_isp_subdev *sd, int fps)
-{
+static int sc2331_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -735,12 +717,12 @@ static int sc2331_set_fps(struct tx_isp_subdev *sd, int fps)
 	int ret = 0;
 
 	ISP_WARNING("[%s %d] Frame rate setting is not supported !!!\n", __func__, __LINE__);
-        return 0;
+	return 0;
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
 	max_fps = TX_SENSOR_MAX_FPS_30;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if(newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
+	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(0x%x) no in range\n", fps);
 		return -1;
 	}
@@ -764,20 +746,19 @@ static int sc2331_set_fps(struct tx_isp_subdev *sd, int fps)
 	}
 
 	sensor->video.fps = fps;
-	sensor->video.attr->max_integration_time_native = 2*vts - 13;
-	sensor->video.attr->integration_time_limit = 2*vts - 13;
+	sensor->video.attr->max_integration_time_native = 2 * vts - 13;
+	sensor->video.attr->integration_time_limit = 2 * vts - 13;
 	sensor->video.attr->total_height = vts;
-	sensor->video.attr->max_integration_time = 2*vts - 13;
+	sensor->video.attr->max_integration_time = 2 * vts - 13;
 
 	return ret;
 }
 
-static int sc2331_set_mode(struct tx_isp_subdev *sd, int value)
-{
+static int sc2331_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
-	if(wsize){
+	if (wsize) {
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
 		sensor->video.mbus.code = wsize->mbus_code;
@@ -790,45 +771,42 @@ static int sc2331_set_mode(struct tx_isp_subdev *sd, int value)
 	return ret;
 }
 
-static int sc2331_g_chip_ident(struct tx_isp_subdev *sd,
-			       struct tx_isp_chip_ident *chip)
-{
+static int sc2331_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
-	if(reset_gpio != -1){
-		ret = private_gpio_request(reset_gpio,"sc2331_reset");
-		if(!ret){
+	if (reset_gpio != -1) {
+		ret = private_gpio_request(reset_gpio, "sc2331_reset");
+		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(35);
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(35);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",reset_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
 		}
 	}
-	if(pwdn_gpio != -1){
-		ret = private_gpio_request(pwdn_gpio,"sc2331_pwdn");
-		if(!ret){
+	if (pwdn_gpio != -1) {
+		ret = private_gpio_request(pwdn_gpio, "sc2331_pwdn");
+		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(150);
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
-		}else{
-			ISP_ERROR("gpio requrest fail %d\n",pwdn_gpio);
+		} else {
+			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
 	ret = sc2331_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an sc2331 chip.\n",
-			  client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an sc2331 chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_INFO("sc2331 chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
-	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
-	if(chip){
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
+	if (chip) {
 		memcpy(chip->name, "sc2331", sizeof("sc2331"));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
@@ -836,86 +814,83 @@ static int sc2331_g_chip_ident(struct tx_isp_subdev *sd,
 	return 0;
 }
 
-static int sc2331_set_vflip(struct tx_isp_subdev *sd, int enable)
-{
+static int sc2331_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 	unsigned char val = 0x0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	ret = sc2331_read(sd, 0x3221, &val);
-	if(enable & 0x2)
+	if (enable & 0x2)
 		val |= 0x60;
 	else
 		val &= 0x9f;
 	ret += sc2331_write(sd, 0x3221, val);
-	if(0 != ret)
+	if (0 != ret)
 		return ret;
 
-	if(!ret)
+	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }
 
-static int sc2331_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync)
-{
-        int ret = 0;
-        uint32_t val;
-        uint32_t vts;
+static int sc2331_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
+	int ret = 0;
+	uint32_t val;
+	uint32_t vts;
 
-        if (fsync->place != TX_ISP_SENSOR_FSYNC_PLACE_STREAMON_AFTER)
-                return 0;
-        switch (fsync->call_index) {
-        case 0:
-                switch (fsync_mode) {
-                case TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE:
-                        ret += sc2331_read(sd, 0x320e, (uint8_t *)&val);
-                        vts = val << 8;
-                        ret += sc2331_read(sd, 0x320f, (uint8_t *)&val);
-                        vts = vts | val;
-                        vts *= 2;
-                        ret += sc2331_write(sd, 0x320e, (vts >> 8) & 0xff);
-                        ret += sc2331_write(sd, 0x320f, vts & 0xff);
-                        break;
-                }
-                break;
-        }
+	if (fsync->place != TX_ISP_SENSOR_FSYNC_PLACE_STREAMON_AFTER)
+		return 0;
+	switch (fsync->call_index) {
+	case 0:
+		switch (fsync_mode) {
+		case TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE:
+			ret += sc2331_read(sd, 0x320e, (uint8_t *)&val);
+			vts = val << 8;
+			ret += sc2331_read(sd, 0x320f, (uint8_t *)&val);
+			vts = vts | val;
+			vts *= 2;
+			ret += sc2331_write(sd, 0x320e, (vts >> 8) & 0xff);
+			ret += sc2331_write(sd, 0x320f, vts & 0xff);
+			break;
+		}
+		break;
+	}
 
-        return 0;
+	return 0;
 }
 
-static int sc2331_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg)
-{
+static int sc2331_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 
-	if(IS_ERR_OR_NULL(sd)){
+	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	switch(cmd){
+	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		if(arg)
-			ret = sc2331_set_expo(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-//		if(arg)
-//			ret = sc2331_set_integration_time(sd, *(int*)arg);
+		//		if(arg)
+		//			ret = sc2331_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-//		if(arg)
-//			ret = sc2331_set_analog_gain(sd, *(int*)arg);
+		//		if(arg)
+		//			ret = sc2331_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
-		if(arg)
-			ret = sc2331_set_digital_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
-		if(arg)
-			ret = sc2331_get_black_pedestal(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
-		if(arg)
-			ret = sc2331_set_mode(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		ret = sc2331_write_array(sd, sc2331_stream_off_mipi);
@@ -924,16 +899,16 @@ static int sc2331_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ret = sc2331_write_array(sd, sc2331_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
-		if(arg)
-			ret = sc2331_set_fps(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		if(arg)
-			ret = sc2331_set_vflip(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_vflip(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		if(arg)
-			ret = sc2331_set_logic(sd, *(int*)arg);
+		if (arg)
+			ret = sc2331_set_logic(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -942,14 +917,13 @@ static int sc2331_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int sc2331_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg)
-{
+static int sc2331_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -961,12 +935,11 @@ static int sc2331_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	return ret;
 }
 
-static int sc2331_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg)
-{
+static int sc2331_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if(len && strncmp(sd->chip.name, reg->name, len)){
+	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
@@ -989,9 +962,9 @@ static struct tx_isp_subdev_video_ops sc2331_video_ops = {
 	.s_stream = sc2331_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops	sc2331_sensor_ops = {
-	.ioctl	= sc2331_sensor_ops_ioctl,
-        .fsync = sc2331_fsync,
+static struct tx_isp_subdev_sensor_ops sc2331_sensor_ops = {
+	.ioctl = sc2331_sensor_ops_ioctl,
+	.fsync = sc2331_fsync,
 };
 
 static struct tx_isp_subdev_ops sc2331_ops = {
@@ -1005,112 +978,119 @@ static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "sc2331",
 	.id = -1,
-	.dev = {
-		.dma_mask = &tx_isp_module_dma_mask,
-		.coherent_dma_mask = 0xffffffff,
-		.platform_data = NULL,
-	},
+	.dev =
+		{
+			.dma_mask = &tx_isp_module_dma_mask,
+			.coherent_dma_mask = 0xffffffff,
+			.platform_data = NULL,
+		},
 	.num_resources = 0,
 };
 
-static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate)
-{
-        unsigned long rate = 0;
-        struct clk *pll = NULL;
-        char *plls[] = {"mpll", "sclka"};
-        int psize = sizeof(plls) / sizeof(char *);
-        char *ppll = plls[psize - 1];
-        int ret = 0, i = 0;
+static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_rate) {
+	unsigned long rate = 0;
+	struct clk *pll = NULL;
+	char *plls[] = {"mpll", "sclka"};
+	int psize = sizeof(plls) / sizeof(char *);
+	char *ppll = plls[psize - 1];
+	int ret = 0, i = 0;
 
-        pll = clk_get_parent(sensor->mclk);
-        rate = clk_get_rate(pll);
-        if (rate % want_rate) {
-                for (i = 0; i < psize; i++) {
-                        pll = clk_get(NULL, plls[i]);
-                        rate = clk_get_rate(pll);
-                        if (!(rate % want_rate)) {
-                                ret = clk_set_parent(sensor->mclk, pll);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
-                                                    __func__, __LINE__, plls[i]);
-                                        continue;
-                                } else {
-                                        break;
-                                }
-                        }
-                }
-                if (i == psize) {
-                        if (!ret) {
-                                pll = clk_get(NULL, ppll);
-                                rate = clk_get_rate(pll);
-                                if(want_rate == 37125000){
-                                        if((rate >= 1188000000)) {
-                                                rate = 1188000000;
-                                        } else if (rate >= 891000000) {
-                                                rate = 891000000;
-                                        } else {
-                                                ISP_ERROR("[%s %d] The %s clock setting failed !!!\n",
-                                                          __func__, __LINE__, ppll);
-                                                ret = -1;
-                                                goto error;
-                                        }
-                                } else if (want_rate == 24000000 || want_rate == 27000000) {
-                                        rate -= rate % want_rate;
-                                } else {
-                                        ret = -1;
-                                        goto error;
-                                }
-                                ret = private_clk_set_rate(pll, rate);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] Failed to set %s !!!\n",
-                                                    __func__, __LINE__, ppll);
-                                        goto error;
-                                } else {
-                                        ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld !!!\n",
-                                                    __func__, __LINE__, ppll, rate);
-                                }
-                                ret = clk_set_parent(sensor->mclk, pll);
-                                if (ret) {
-                                        ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
-                                                    __func__, __LINE__, ppll);
-                                        goto error;
-                                }
-                        } else {
-                                goto error;
-                        }
-                }
-        }
-        private_clk_set_rate(sensor->mclk, want_rate);
-        private_clk_enable(sensor->mclk);
+	pll = clk_get_parent(sensor->mclk);
+	rate = clk_get_rate(pll);
+	if (rate % want_rate) {
+		for (i = 0; i < psize; i++) {
+			pll = clk_get(NULL, plls[i]);
+			rate = clk_get_rate(pll);
+			if (!(rate % want_rate)) {
+				ret = clk_set_parent(sensor->mclk, pll);
+				if (ret) {
+					ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
+						__func__,
+						__LINE__,
+						plls[i]);
+					continue;
+				} else {
+					break;
+				}
+			}
+		}
+		if (i == psize) {
+			if (!ret) {
+				pll = clk_get(NULL, ppll);
+				rate = clk_get_rate(pll);
+				if (want_rate == 37125000) {
+					if ((rate >= 1188000000)) {
+						rate = 1188000000;
+					} else if (rate >= 891000000) {
+						rate = 891000000;
+					} else {
+						ISP_ERROR("[%s %d] The %s clock setting failed !!!\n",
+							__func__,
+							__LINE__,
+							ppll);
+						ret = -1;
+						goto error;
+					}
+				} else if (want_rate == 24000000 || want_rate == 27000000) {
+					rate -= rate % want_rate;
+				} else {
+					ret = -1;
+					goto error;
+				}
+				ret = private_clk_set_rate(pll, rate);
+				if (ret) {
+					ISP_WARNING("[%s %d] Failed to set %s !!!\n", __func__, __LINE__, ppll);
+					goto error;
+				} else {
+					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
+						    "!!!\n",
+						__func__,
+						__LINE__,
+						ppll,
+						rate);
+				}
+				ret = clk_set_parent(sensor->mclk, pll);
+				if (ret) {
+					ISP_WARNING("[%s %d] %s mounted node switchover failed !!!\n",
+						__func__,
+						__LINE__,
+						ppll);
+					goto error;
+				}
+			} else {
+				goto error;
+			}
+		}
+	}
+	private_clk_set_rate(sensor->mclk, want_rate);
+	private_clk_enable(sensor->mclk);
 
-        rate = clk_get_rate(sensor->mclk);
-        if (rate % want_rate) {
-                ret = -1;
-                goto error;
-        }
+	rate = clk_get_rate(sensor->mclk);
+	if (rate % want_rate) {
+		ret = -1;
+		goto error;
+	}
 
-        return ret;
+	return ret;
 
 error:
-        ISP_ERROR("[%s %d] Unable to allocate the required MCLK %ld !!!\n",
-                  __func__, __LINE__, want_rate);
-        return ret;
+	ISP_ERROR("[%s %d] Unable to allocate the required MCLK %ld !!!\n", __func__, __LINE__, want_rate);
+	return ret;
 }
 
 uint16_t theight_tmp;
 uint32_t fps_tmp;
-static int sc2331_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
+static int sc2331_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
-	if(!sensor){
+	if (!sensor) {
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0 ,sizeof(*sensor));
+	memset(sensor, 0, sizeof(*sensor));
 
 #ifdef CONFIG_KERNEL_4_4_94
 	sensor->mclk = clk_get(NULL, "div_cim");
@@ -1118,20 +1098,20 @@ static int sc2331_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 #endif
 	if (IS_ERR(sensor->mclk)) {
-                ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
-                goto err_get_mclk;
-        }
-    sensor_mclk_config(sensor, 24000000);
-        sc2331_attr.fsync_attr.mode = fsync_mode;
-        if (fsync_mode == TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE) {
-                theight_tmp = sc2331_attr.total_height;
-                fps_tmp = wsize->fps;
-                sc2331_attr.total_height = sc2331_attr.total_height * 2;
-                wsize->fps = (wsize->fps & 0xffff0000) | ((wsize->fps & 0xffff) * 2);
-        }
-        sc2331_attr.max_integration_time_native = sc2331_attr.total_height - 7;
-        sc2331_attr.integration_time_limit = sc2331_attr.total_height - 7;
-        sc2331_attr.max_integration_time = sc2331_attr.total_height - 7;
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		goto err_get_mclk;
+	}
+	sensor_mclk_config(sensor, 24000000);
+	sc2331_attr.fsync_attr.mode = fsync_mode;
+	if (fsync_mode == TX_ISP_SENSOR_FSYNC_MODE_SS_SINGLE_PWM_MISPLACE) {
+		theight_tmp = sc2331_attr.total_height;
+		fps_tmp = wsize->fps;
+		sc2331_attr.total_height = sc2331_attr.total_height * 2;
+		wsize->fps = (wsize->fps & 0xffff0000) | ((wsize->fps & 0xffff) * 2);
+	}
+	sc2331_attr.max_integration_time_native = sc2331_attr.total_height - 7;
+	sc2331_attr.integration_time_limit = sc2331_attr.total_height - 7;
+	sc2331_attr.max_integration_time = sc2331_attr.total_height - 7;
 
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1159,18 +1139,17 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc2331_remove(struct i2c_client *client)
-{
+static int sc2331_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
-	if(reset_gpio != -1)
+	if (reset_gpio != -1)
 		private_gpio_free(reset_gpio);
-	if(pwdn_gpio != -1)
+	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
 
-        sc2331_attr.total_height = theight_tmp;
-        wsize->fps = fps_tmp;
+	sc2331_attr.total_height = theight_tmp;
+	wsize->fps = fps_tmp;
 
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
@@ -1180,35 +1159,31 @@ static int sc2331_remove(struct i2c_client *client)
 	return 0;
 }
 
-static const struct i2c_device_id sc2331_id[] = {
-	{ "sc2331", 0 },
-	{ }
-};
+static const struct i2c_device_id sc2331_id[] = {{"sc2331", 0}, {}};
 MODULE_DEVICE_TABLE(i2c, sc2331_id);
 
 static struct i2c_driver sc2331_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "sc2331",
-	},
-	.probe		= sc2331_probe,
-	.remove		= sc2331_remove,
-	.id_table	= sc2331_id,
+	.driver =
+		{
+			.owner = THIS_MODULE,
+			.name = "sc2331",
+		},
+	.probe = sc2331_probe,
+	.remove = sc2331_remove,
+	.id_table = sc2331_id,
 };
 
-static __init int init_sc2331(void)
-{
+static __init int init_sc2331(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
-	if(ret){
+	if (ret) {
 		ISP_ERROR("Failed to init sc2331 dirver.\n");
 		return -1;
 	}
 	return private_i2c_add_driver(&sc2331_driver);
 }
 
-static __exit void exit_sc2331(void)
-{
+static __exit void exit_sc2331(void) {
 	private_i2c_del_driver(&sc2331_driver);
 }
 

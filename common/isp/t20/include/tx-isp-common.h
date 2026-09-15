@@ -1,6 +1,7 @@
 #ifndef __TX_ISP_COMMON_H__
 #define __TX_ISP_COMMON_H__
 #include <linux/device.h>
+#include "tx-isp-debug.h"
 #include <linux/platform_device.h>
 #include <linux/errno.h>
 #include <linux/i2c.h>
