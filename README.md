@@ -28,15 +28,15 @@ Ensure you provide the correct `SOC` environment variable corresponding to your 
 
 Driver sources live under `common/`, organized by subsystem and SoC
 (`common/isp/<soc>`, `common/audio/<soc>/<driver>`, `common/misc/<name>`,
-`common/avpu`, `common/sensor-src/<soc>`, ...). Per-kernel or per-SoC
+`common/avpu`, `common/sensor/<soc>`, ...). Per-kernel or per-SoC
 differences are handled in the sources via `CONFIG_KERNEL_*` / `CONFIG_SOC_*`
 guards. Drivers that are genuinely a different implementation per kernel
 (e.g. motor, pwm, t31 ISP) keep separate source sets and are selected per
 kernel in the top-level `Kbuild`.
 
-The only content still kept per tree is the sensor drivers that exist for both
-kernels (`3.10.14/sensor-src/{t31,t40,t41,t41zrt}` and the 4.4.94 counterparts);
-they use different calling conventions and are not yet unified.
+The sensor drivers all live under `common/sensor/<soc>/` now; a single
+`common/sensor/Kbuild` builds them, parameterised by `$(SOC_FAMILY)` and the
+requested `SENSOR_*_MODEL`.
 
 Prebuilt firmware blobs live in a single top-level `sdk/` directory. Every
 filename carries its full identity so a blob is selected purely by its path:

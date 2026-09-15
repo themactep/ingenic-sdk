@@ -55,7 +55,7 @@ For each duplicated driver, diff the two trees and classify:
 | avpu | `common/avpu/` | 3.10.14 `avpu/t31` (superset, handles T31/C100/T40/T41) + 2 guards ported from 4.4.94 | `CONFIG_KERNEL_4_4_94` for `dma_buf_export()` API and T31 AVPU clock (440 vs 550 MHz); `CONFIG_SOC_*` already present |
 | isp/t41 | `common/isp/t41/` | 4.4.94 `isp/t41` (superset) | already used `CONFIG_KERNEL_3_10/4_4_94/6_1`; Kbuild picks firmware blob per kernel |
 | isp/t41zrt (headers) | `common/isp/t41zrt/` | 3.10.14 (identical) | none |
-| sensor-info | `common/sensor-src/common/sensor-info.c`, `common/sensor-src/include/sensor-info.h` | union of both | union struct + both APIs (`sensor_update_actual_fps` and `sensor_common_update`) |
+| sensor-info | `common/sensor/common/sensor-info.c`, `common/sensor/include/sensor-info.h` | union of both | union struct + both APIs (`sensor_update_actual_fps` and `sensor_common_update`) |
 | jz-dtrng | `common/misc/jz-dtrng/` | 4.4.94 | `CONFIG_KERNEL_4_4_94` for the IRQ header |
 | mpsys-driver | `common/misc/mpsys-driver/` | 4.4.94 (sources identical anyway) | Kbuild picks `sdk/<soc>/lib<soc>-mpsys-firmware-720-<31014\|4494>.a` by `KERNEL_VERSION` |
 | soc-nna | `common/misc/soc-nna/` | 4.4.94 (superset, adds A1) | `CONFIG_SOC_A1` (inert on 3.10) |
@@ -72,7 +72,7 @@ For each duplicated driver, diff the two trees and classify:
 
 Sensor drivers now live in **three** places:
 
-- `common/sensor-src/<soc>` for drivers that are byte-identical in both
+- `common/sensor/<soc>` for drivers that are byte-identical in both
   kernels (task 31: all 120 t40 drivers, 56 of the t31 drivers) and for the
   single-kernel SoCs (t10, t20, t21, t23, t30, c100).
 - `3.10.14/sensor-src/<soc>` and `4.4.94/sensor-src/<soc>` for the drivers
@@ -140,8 +140,8 @@ Everything is under `common/` except the split sensor drivers. Selection:
 - Audio: `common/audio/<soc>/<driver>` (see 4.6).
 - misc: all under `common/misc/<name>` (split drivers `motor`/`motors-pp`,
   `pwm`/`pwm-pp` selected by `KERNEL_VERSION`).
-- sensor-src: all sensor drivers live in `common/sensor-src/<soc>/`. A single
-  `common/sensor-src/Kbuild` builds them, parameterised by `$(SOC_FAMILY)` and
+- sensor-src: all sensor drivers live in `common/sensor/<soc>/`. A single
+  `common/sensor/Kbuild` builds them, parameterised by `$(SOC_FAMILY)` and
   `$(SENSOR_MODEL)`/`$(SENSOR_1_MODEL)`/`$(SENSOR_2_MODEL)`; there is no
   per-kernel sensor-src tree anymore.
 - a1-only: `common/aip/a1`, `common/fb`, `common/ipu`, `common/video/a1`.
@@ -252,7 +252,7 @@ Goal: every sensor driver uses the same define-section layout:
 
 Done: `.clang-format` (from pending PR #36) applied to shrink variant drift.
 **All three sensor trees are now fully canonical (0 non-canonical files):**
-`3.10.14/sensor-src`, `4.4.94/sensor-src`, `common/sensor-src/t23`. Every
+`3.10.14/sensor-src`, `4.4.94/sensor-src`, `common/sensor/t23`. Every
 driver uses the section layout below with the `SENSOR_*` define vocabulary;
 no driver-prefixed standard macros remain.
 
@@ -263,9 +263,9 @@ tree were checked (bf314a, gc2063, sc1346, cv4002, os02n10, os02n10? , s5k3p3).
 
 Pre-existing sensor bugs still open (NOT caused by this work, present in
 `origin/master`):
-- `common/sensor-src/t23/sc301iot.c`: uses `sensor_attr.max_fps` which the t23
+- `common/sensor/t23/sc301iot.c`: uses `sensor_attr.max_fps` which the t23
   `struct tx_isp_sensor_attribute` lacks.
-- `common/sensor-src/t23/os02n10s0.c`, `os02n10s1.c`: use `.fsync_attr`, not
+- `common/sensor/t23/os02n10s0.c`, `os02n10s1.c`: use `.fsync_attr`, not
   in the t23 `tx_isp_sensor_attribute`.
 - Imbalanced preprocessor in `t40/mis2031.c` (1 `#if` / 2 `#endif`),
   `t41/mis5011.c` (0/1), `t41/mis20s1.c` (29/30).
@@ -320,7 +320,7 @@ than guessing.
 | 6 | (folded into 5) | done |
 | 7 | Rename 3.10 ISP/t31 set to `isp/t31-pp`; select per kernel | done |
 | 8 | Merge `isp/t41` (+`t41zrt` headers) into `common/isp` | done |
-| 9 | Merge `sensor-info.[ch]` into `common/sensor-src` | done |
+| 9 | Merge `sensor-info.[ch]` into `common/sensor` | done |
 | 10 | Sensor drivers kept separate per kernel (decision) | done by design |
 | 11 | Merge `misc/soc-nna` into `common/misc/soc-nna` | done |
 | 12 | Cleanup (no empty trees; fixed a duplicated Kbuild info line) | done |
@@ -342,11 +342,11 @@ than guessing.
 | 28 | Unify `struct regval_list` layout (`uint16_t reg_num; uint16_t value;`) and placement (after `sensor_info`, before `again_lut`) | done (923 files) |
 | 29 | Align driver include blocks to one canonical order, drop duplicate includes and dead `again_lut` structs | done (141 files; code-identical pairs 138 -> 163) |
 | 30 | Restore `common/audio/{t10,t20,t21,t30,c100}` -> t31 symlinks lost in the audio relocation (blocked t20/t21/t30 builds) | done |
-| 31 | Merge byte-identical t31/t40 sensor drivers into `common/sensor-src/<soc>`; per-file resolution in the Kbuild | done (176 files: 120 t40, 56 t31) |
-| 32 | Move single-kernel sensor drivers into `common/sensor-src/<soc>` (no counterpart to conflict with) | done (41 files: 4 3.10-only, 37 4.4-only) |
+| 31 | Merge byte-identical t31/t40 sensor drivers into `common/sensor/<soc>`; per-file resolution in the Kbuild | done (176 files: 120 t40, 56 t31) |
+| 32 | Move single-kernel sensor drivers into `common/sensor/<soc>` (no counterpart to conflict with) | done (41 files: 4 3.10-only, 37 4.4-only) |
 | 33 | Add `sensor_info` + `sensor_common_init()/exit()` registration to the 95 3.10.14 t40/t41/t41zrt drivers that lacked it (port the 4.4 `/proc/jz/sensor/*` exposure down) | done (95 files; t40/t41 not build-verified) |
 | 34 | Restore per-profile `sensor_info.max_fps` updates in the t31 4.4.94 drivers (prudynt caps the pipeline to `/proc/jz/sensor/max_fps`) | done (42 files, 178 assignments) |
-| 35 | Merge the 31 t31 drivers that became byte-identical into `common/sensor-src/t31` | done (31 files; 62 builds) |
+| 35 | Merge the 31 t31 drivers that became byte-identical into `common/sensor/t31` | done (31 files; 62 builds) |
 | 36 | Unify sensor logging on the ISP_* macros: drop the `ISP_PRINT` overrides, `pr_err`->`ISP_ERROR`, `pr_debug`/`printk`->`ISP_INFO`, demote trace-level `ISP_WARNING`->`ISP_INFO` | done (710 files) |
 | 37 | Accumulate `sensor_read/write()` error codes (`ret +=`) instead of overwriting, and zero-init the accumulating `ret` | done (599 files) |
 | 38 | Adopt accumulated `ret` in `sensor_detect`; merge `sc2239`, `sc2335`, `os03b10` to common | done (3 merges) |
@@ -408,7 +408,7 @@ guards (a later pass); 4-6 need per-driver decisions.
 
 ### 8f. Full recompile results
 
-All sensor drivers now build from `common/sensor-src/<soc>`. Recompiled
+All sensor drivers now build from `common/sensor/<soc>`. Recompiled
 every driver for every available tree:
 
 | tree | result |

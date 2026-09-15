@@ -11,7 +11,7 @@ else
 endif
 
 # ISP include directory, which also holds the shared sensor headers used by
-# sensor-src. All ISP sources live under common/isp/<soc>; 3.10.14 t31 uses the
+# the sensor drivers. All ISP sources live under common/isp/<soc>; 3.10.14 t31 uses the
 # t31-pp source set, 4.4.94 uses t31.
 ifeq ($(KERNEL_VERSION),3.10.14)
 ifeq ($(SOC_FAMILY),t31)
@@ -116,10 +116,10 @@ ifeq ($(strip $(SENSOR_1_MODEL)$(SENSOR_2_MODEL)),)
     $(info Sensor models missing, building sinfo module)
     include $(src)/sinfo/Kbuild
 else
-# Sensor drivers all live in common/sensor-src/<soc>; the per-kernel
+# Sensor drivers all live in common/sensor/<soc>; the per-kernel
 # sensor-src trees were merged away, so a single common Kbuild serves
 # both kernels (it reads SENSOR_MODEL / SENSOR_1_MODEL / SENSOR_2_MODEL).
-include $(src)/common/sensor-src/Kbuild
+include $(src)/common/sensor/Kbuild
 endif
 endif
 

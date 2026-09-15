@@ -1,15 +1,15 @@
-ccflags-y += -I$(src)/common/sensor-src/include
-# All sensor drivers live in common/sensor-src/<soc>. The per-kernel
+ccflags-y += -I$(src)/common/sensor/include
+# All sensor drivers live in common/sensor/<soc>. The per-kernel
 # sensor-src trees were merged away; the build is parameterised purely by
 # SOC_FAMILY + SENSOR_MODEL, so a single Kbuild serves both kernels.
-SENSOR_DIR := common/sensor-src/$(SOC_FAMILY)
+SENSOR_DIR := common/sensor/$(SOC_FAMILY)
 
 ifneq ($(SENSOR_MODEL),)
 	MODULE_NAME := sensor_$(SENSOR_MODEL)_$(SOC_FAMILY)
 	OUT := $(MODULE_NAME)
 	SRCS := \
 		$(SENSOR_DIR)/$(SENSOR_MODEL).c \
-		common/sensor-src/common/sensor-info.c
+		common/sensor/common/sensor-info.c
 	OBJS := $(SRCS:%.c=%.o) \
 		$(ASM_SRCS:%.S=%.o)
 	$(OUT)-objs := $(OBJS)
@@ -23,7 +23,7 @@ ifneq ($(SENSOR_1_MODEL),)
 	OUT_1 := $(MODULE_1_NAME)
 	SRCS_1 := \
 		$(SENSOR_DIR)/$(SENSOR_1_MODEL).c \
-		common/sensor-src/common/sensor-info.c
+		common/sensor/common/sensor-info.c
 	OBJS_1 := $(SRCS_1:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
 	$(OUT_1)-objs := $(OBJS_1)
@@ -36,7 +36,7 @@ ifneq ($(SENSOR_2_MODEL),)
 	OUT_2 := $(MODULE_2_NAME)
 	SRCS_2 := \
 		$(SENSOR_DIR)/$(SENSOR_2_MODEL).c \
-		common/sensor-src/common/sensor-info.c
+		common/sensor/common/sensor-info.c
 	OBJS_2 := $(SRCS_2:%.c=%.o) \
 			$(ASM_SRCS:%.S=%.o)
 	$(OUT_2)-objs := $(OBJS_2)

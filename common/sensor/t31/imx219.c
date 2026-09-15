@@ -3,9 +3,9 @@
  * imx219.c
  * IMX219 sensor driver for the Ingenic T31 tx-isp framework.
  * Ported from:
- *  - T31 framework glue: sensor-src/t31/sc2336.c (proven on 28 real boards)
+ *  - T31 framework glue: t31/sc2336.c (proven on 28 real boards)
  *  - 16-bit register read/write + split exposure/gain style: this session's
- *    own sensor-src/t31/ov5647.c port (same conventions apply directly)
+ *    own t31/ov5647.c port (same conventions apply directly)
  *  - All IMX219-specific register data (chip ID, mode timing, exposure/gain
  *    encoding): mainline Linux drivers/media/i2c/imx219.c (v5.15, static
  *    per-mode register-table era) -- register values are Raspberry Pi's own
