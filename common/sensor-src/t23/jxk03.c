@@ -29,6 +29,8 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x40
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_MAX_HEIGHT 1944
 
 // ============================================================================
 // REGISTER DEFINITIONS
@@ -923,6 +925,7 @@ static struct i2c_driver sensor_driver = {
 };
 
 static __init int init_sensor(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
@@ -933,6 +936,7 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 

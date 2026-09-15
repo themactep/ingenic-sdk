@@ -564,7 +564,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	if (ret < 0)
 		return ret;
 
-	//	sensor_write(sd, 0x3812, 0x00);
+	//sensor_write(sd, 0x3812, 0x00);
 	/* denoise logic */
 	if (again < 0x720) { //<2
 		sensor_write(sd, 0x3632, 0x18);

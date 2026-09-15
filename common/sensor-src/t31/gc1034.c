@@ -543,9 +543,6 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*720 */
 	{
@@ -661,14 +658,18 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
+
 	ret = sensor_read(sd, 0xf1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
+
 	*ident = (*ident << 8) | v;
 
 	return 0;
@@ -741,6 +742,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
+
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
@@ -769,7 +771,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_WARNING("set_fps error ,should be %d  ~ %d \n", SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
+		ISP_WARNING("set_fps error, should be %d ~ %d \n", SENSOR_OUTPUT_MIN_FPS, SENSOR_OUTPUT_MAX_FPS);
 		return -1;
 	}
 
@@ -864,6 +866,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			SENSOR_NAME);
 		return ret;
 	}
+
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
@@ -939,6 +942,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
+
 	len = strlen(sd->chip.name);
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
@@ -1050,7 +1054,6 @@ static int sensor_remove(struct i2c_client *client) {
 
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
-
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

@@ -36,6 +36,8 @@
 // ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_MAX_HEIGHT 1296
 
 // ============================================================================
 // REGISTER DEFINITIONS

@@ -27,16 +27,22 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
 #define TVERSION "V20231121a"
+#define SENSOR_NAME "os02n10s0"
 #define SENSOR_VERSION "H20240219a"
+#define SENSOR_I2C_ADDRESS 0x3c
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_CHIP_ID_HH (0x53)
 #define SENSOR_CHIP_ID_HL (0x02)
 #define SENSOR_CHIP_ID_LH (0x4e)
 #define SENSOR_CHIP_ID_LL (0x10)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_HH << 24) | (SENSOR_CHIP_ID_HL << 16) | (SENSOR_CHIP_ID_LH << 8) | SENSOR_CHIP_ID_LL)
 
 // ============================================================================
 // SPECIAL FEATURES
@@ -63,6 +69,7 @@
 // ============================================================================
 // TIMING AND PERFORMANCE
 // ============================================================================
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_MCLK 27000000
 
@@ -89,6 +96,17 @@ MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 struct tx_isp_sensor_attribute os02n10_attr;
 
 #ifdef SENSOR_AGAIN_TABLE
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -1287,10 +1305,12 @@ static struct i2c_driver os02n10_driver = {
 };
 
 static __init int init_os02n10(void) {
+	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&os02n10_driver);
 }
 
 static __exit void exit_os02n10(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&os02n10_driver);
 }
 

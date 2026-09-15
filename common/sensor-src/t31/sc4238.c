@@ -1217,6 +1217,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	ISP_INFO("fps=%x,newformat=%x,hts=%d,vts=%d,max_fps=%d\n", fps, newformat, hts, vts, max_fps);
+
 	return ret;
 }
 
@@ -1295,14 +1296,16 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
-		/*	case TX_ISP_EVENT_SENSOR_INT_TIME:
+/*
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = sensor_set_integration_time(sd, *(int*)arg);
+			ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = sensor_set_analog_gain(sd, *(int*)arg);
-		break;  */
+			ret = sensor_set_analog_gain(sd, *(int *)arg);
+		break;
+*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
 			ret = sensor_set_digital_gain(sd, *(int *)arg);

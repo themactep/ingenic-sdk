@@ -958,8 +958,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -1095,7 +1094,6 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x3812, 0x00);
-
 	if (value < 0x720) {
 		ret += sensor_write(sd, 0x3301, 0x1c);
 		ret += sensor_write(sd, 0x3630, 0x30);
@@ -1428,15 +1426,15 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 
-	//	return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//		if (arg)
-		//			ret = sensor_set_expo(sd, *(int*)arg);
+		//if (arg)
+		//	ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

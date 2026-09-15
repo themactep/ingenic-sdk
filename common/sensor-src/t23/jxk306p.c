@@ -21,12 +21,18 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "jxk306p"
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x60)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x40
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_VERSION "H20240222a"
 
 // ============================================================================
@@ -54,6 +60,17 @@ static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
@@ -64,7 +81,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut jxk306p_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x00, 0},
 	{0x01, 5732},
 	{0x02, 11136},
@@ -147,11 +164,11 @@ struct again_lut jxk306p_again_lut[] = {
 	{0x4f, 324678},
 };
 
-struct tx_isp_sensor_attribute jxk306p_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int jxk306p_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
-	struct again_lut *lut = jxk306p_again_lut;
-	while (lut->gain <= jxk306p_attr.max_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = 0;
 			return 0;
@@ -159,7 +176,7 @@ unsigned int jxk306p_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == jxk306p_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -171,11 +188,11 @@ unsigned int jxk306p_alloc_again(unsigned int isp_gain, unsigned char shift, uns
 	return isp_gain;
 }
 
-unsigned int jxk306p_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
-struct tx_isp_mipi_bus jxk306p_mipi = {
+struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 216,
 	.lans = 2,
@@ -204,8 +221,8 @@ struct tx_isp_mipi_bus jxk306p_mipi = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute jxk306p_attr = {
-	.name = "jxk306p",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
@@ -224,12 +241,12 @@ struct tx_isp_sensor_attribute jxk306p_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = jxk306p_alloc_again,
-	.sensor_ctrl.alloc_dgain = jxk306p_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 28,
 };
 
-static struct regval_list jxk306p_init_regs_1920_1080_30fps_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x12, 0x60},
 	{0x48, 0x8A},
 	{0x48, 0x0A},
@@ -357,28 +374,28 @@ static struct regval_list jxk306p_init_regs_1920_1080_30fps_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting jxk306p_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
 		.width = 1920,
 		.height = 1080,
 		.fps = 30 << 16 | 2,
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = jxk306p_init_regs_1920_1080_30fps_mipi,
+		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 };
-struct tx_isp_sensor_win_setting *wsize = &jxk306p_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list jxk306p_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list jxk306p_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int jxk306p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {[0] =
 					 {
@@ -401,7 +418,7 @@ int jxk306p_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *val
 	return ret;
 }
 
-int jxk306p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -419,7 +436,7 @@ int jxk306p_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char val
 }
 
 #if 0
-static int jxk306p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -427,7 +444,7 @@ static int jxk306p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxk306p_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -437,13 +454,13 @@ static int jxk306p_read_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 #endif
-static int jxk306p_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = jxk306p_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			//ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
@@ -454,15 +471,15 @@ static int jxk306p_write_array(struct tx_isp_subdev *sd, struct regval_list *val
 	return 0;
 }
 
-static int jxk306p_reset(struct tx_isp_subdev *sd, int val) {
+static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int jxk306p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
-	ret = jxk306p_read(sd, 0x0a, &v);
+	ret = sensor_read(sd, 0x0a, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -470,7 +487,7 @@ static int jxk306p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = jxk306p_read(sd, 0x0b, &v);
+	ret = sensor_read(sd, 0x0b, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -482,36 +499,36 @@ static int jxk306p_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int jxk306p_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret = jxk306p_write(sd, 0x01, (unsigned char)(it & 0xff));
-	ret += jxk306p_write(sd, 0x02, (unsigned char)((it >> 8) & 0xff));
+	ret = sensor_write(sd, 0x01, (unsigned char)(it & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((it >> 8) & 0xff));
 
-	ret = jxk306p_write(sd, 0x00, (unsigned char)(again & 0x7f));
+	ret = sensor_write(sd, 0x00, (unsigned char)(again & 0x7f));
 
 	return 0;
 }
 
 #if 0
-static int jxk306p_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	unsigned int expo = value;
-	ret = jxk306p_write(sd,  0x01, (unsigned char)(expo & 0xff));
-	ret += jxk306p_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
+	ret = sensor_write(sd,  0x01, (unsigned char)(expo & 0xff));
+	ret += sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int jxk306p_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	ret = jxk306p_write(sd, 0x00, (unsigned char)(value & 0x7f));
+	ret = sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 	if (ret < 0)
 		return ret;
 
@@ -519,15 +536,15 @@ static int jxk306p_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int jxk306p_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int jxk306p_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int jxk306p_init(struct tx_isp_subdev *sd, int enable) {
+static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -540,7 +557,7 @@ static int jxk306p_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = jxk306p_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -549,22 +566,22 @@ static int jxk306p_init(struct tx_isp_subdev *sd, int enable) {
 	return 0;
 }
 
-static int jxk306p_s_stream(struct tx_isp_subdev *sd, int enable) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
-		ret = jxk306p_write_array(sd, jxk306p_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		ISP_INFO("jxk306p stream on\n");
 
 	} else {
-		ret = jxk306p_write_array(sd, jxk306p_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		ISP_INFO("jxk306p stream off\n");
 	}
 
 	return ret;
 }
 
-static int jxk306p_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned int sclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -581,10 +598,10 @@ static int jxk306p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	val = 0;
-	ret += jxk306p_read(sd, 0x21, &val);
+	ret += sensor_read(sd, 0x21, &val);
 	hts = val;
 	val = 0;
-	ret += jxk306p_read(sd, 0x20, &val);
+	ret += sensor_read(sd, 0x20, &val);
 	hts = (((hts << 8) | val) << 1);
 	if (0 != ret) {
 		ISP_ERROR("err: jxk306p read err\n");
@@ -593,10 +610,10 @@ static int jxk306p_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret += jxk306p_write(sd, 0x22, (unsigned char)(vts & 0xff));
-	ret += jxk306p_write(sd, 0x23, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: jxk306p_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -609,11 +626,11 @@ static int jxk306p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return 0;
 }
 
-static int jxk306p_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	unsigned char val;
 
-	ret += jxk306p_read(sd, 0x12, &val);
+	ret += sensor_read(sd, 0x12, &val);
 
 	enable &= 0x03;
 	switch (enable) {
@@ -632,12 +649,12 @@ static int jxk306p_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	default:
 		break;
 	}
-	ret += jxk306p_write(sd, 0x12, val);
+	ret += sensor_write(sd, 0x12, val);
 
 	return ret;
 }
 
-static int jxk306p_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -654,12 +671,12 @@ static int jxk306p_set_mode(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-static int jxk306p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "jxk306p_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(50);
@@ -672,7 +689,7 @@ static int jxk306p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "jxk306p_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
@@ -684,21 +701,21 @@ static int jxk306p_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = jxk306p_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an jxk306p chip.\n", client->addr, client->adapter->name);
 		return ret;
 	}
 	ISP_INFO("jxk306p chip found @ 0x%02x (%s) version %s\n", client->addr, client->adapter->name, SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "jxk306p", sizeof("jxk306p"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
 	return 0;
 }
 
-static int jxk306p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -707,41 +724,41 @@ static int jxk306p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = jxk306p_set_expo(sd, *(int *)arg);
+			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	/* case TX_ISP_EVENT_SENSOR_INT_TIME: */
 	/* 	if(arg) */
-	/* 		ret = jxk306p_set_integration_time(sd, *(int*)arg); */
+	/* 		ret = sensor_set_integration_time(sd, *(int*)arg); */
 	/* 	break; */
 	/* case TX_ISP_EVENT_SENSOR_AGAIN: */
 	/* 	if(arg) */
-	/* 		ret = jxk306p_set_analog_gain(sd, *(int*)arg); */
+	/* 		ret = sensor_set_analog_gain(sd, *(int*)arg); */
 	/* 	break; */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = jxk306p_set_digital_gain(sd, *(int *)arg);
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = jxk306p_get_black_pedestal(sd, *(int *)arg);
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = jxk306p_set_mode(sd, *(int *)arg);
+			ret = sensor_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
-		ret = jxk306p_write_array(sd, jxk306p_stream_off_mipi);
+		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
-		ret = jxk306p_write_array(sd, jxk306p_stream_on_mipi);
+		ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = jxk306p_set_fps(sd, *(int *)arg);
+			ret = sensor_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = jxk306p_set_vflip(sd, *(int *)arg);
+			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -750,7 +767,7 @@ static int jxk306p_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, 
 	return ret;
 }
 
-static int jxk306p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -761,14 +778,14 @@ static int jxk306p_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_regist
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = jxk306p_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int jxk306p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -777,38 +794,38 @@ static int jxk306p_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	jxk306p_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops jxk306p_core_ops = {
-	.g_chip_ident = jxk306p_g_chip_ident,
-	.reset = jxk306p_reset,
-	.init = jxk306p_init,
-	/*.ioctl = jxk306p_ops_ioctl,*/
-	.g_register = jxk306p_g_register,
-	.s_register = jxk306p_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops jxk306p_video_ops = {
-	.s_stream = jxk306p_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops jxk306p_sensor_ops = {
-	.ioctl = jxk306p_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops jxk306p_ops = {
-	.core = &jxk306p_core_ops,
-	.video = &jxk306p_video_ops,
-	.sensor = &jxk306p_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "jxk306p",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -910,7 +927,7 @@ error:
 	return ret;
 }
 
-static int jxk306p_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -934,14 +951,14 @@ static int jxk306p_probe(struct i2c_client *client, const struct i2c_device_id *
 
 	sensor_mclk_config(sensor, 24000000);
 
-	wsize = &jxk306p_win_sizes[0];
-	memcpy((void *)(&(jxk306p_attr.mipi)), (void *)(&jxk306p_mipi), sizeof(jxk306p_mipi));
+	wsize = &sensor_win_sizes[0];
+	memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 
-	jxk306p_attr.expo_fs = 1;
+	sensor_attr.expo_fs = 1;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &jxk306p_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -950,7 +967,7 @@ static int jxk306p_probe(struct i2c_client *client, const struct i2c_device_id *
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &jxk306p_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -964,7 +981,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int jxk306p_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -980,32 +997,34 @@ static int jxk306p_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id jxk306p_id[] = {{"jxk306p", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, jxk306p_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver jxk306p_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "jxk306p",
+			.name = SENSOR_NAME,
 		},
-	.probe = jxk306p_probe,
-	.remove = jxk306p_remove,
-	.id_table = jxk306p_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_jxk306p(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init jxk306p dirver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&jxk306p_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_jxk306p(void) {
-	private_i2c_del_driver(&jxk306p_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_jxk306p);

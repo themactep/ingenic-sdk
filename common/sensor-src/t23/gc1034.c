@@ -784,6 +784,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x2c, &tmp);
 	if (ret < 0)
 		return -1;
+
 	sh_delay = tmp;
 	hts = 2 * (hb + 16) + ((win_width + sh_delay) / 2);
 	ret += sensor_read(sd, 0xd, &tmp);
@@ -798,14 +799,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x7, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
-	sensor->video.fps = fps;
 
+	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 4;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-
 	return ret;
 }
 
@@ -822,10 +822,8 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
-
 	return ret;
 }
 
@@ -873,7 +871,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -933,8 +930,8 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
@@ -1014,11 +1011,9 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	/*
-		convert sensor-gain into isp-gain,
-	 */
-	sensor_attr.max_again =
-		262850; //private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	/* convert sensor-gain into isp-gain, */
+	sensor_attr.max_again = 262850;
+	//private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
@@ -1031,7 +1026,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);

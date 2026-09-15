@@ -717,14 +717,16 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
+/*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
+*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
 			ret = sensor_set_digital_gain(sd, *(int *)arg);

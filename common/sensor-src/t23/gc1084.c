@@ -13,7 +13,6 @@
 #include <linux/clk.h>
 #include <linux/proc_fs.h>
 #include <soc/gpio.h>
-
 #include <tx-isp-common.h>
 #include <sensor-common.h>
 #include <sensor-info.h>
@@ -52,10 +51,6 @@
 #define SENSOR_SUPPORT_30FPS_SCLK (2222 * 750 * 30)
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -332,7 +327,9 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SGRBG10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_30fps_mipi,
-	}};
+	},
+};
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -482,9 +479,8 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
-	if (ret < 0) {
+	if (ret < 0)
 		return ret;
-	}
 
 	return 0;
 }
@@ -635,7 +631,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
@@ -681,6 +676,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -701,15 +697,15 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
-		/*
-		case TX_ISP_EVENT_SENSOR_INT_TIME:
-			if (arg)
-				ret = sensor_set_integration_time(sd, *(int*)arg);
-			break;
-		case TX_ISP_EVENT_SENSOR_AGAIN:
-			if (arg)
-				ret = sensor_set_analog_gain(sd, *(int*)arg);
-			break;
+/*
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if (arg)
+			ret = sensor_set_integration_time(sd, *(int*)arg);
+		break;
+	case TX_ISP_EVENT_SENSOR_AGAIN:
+		if (arg)
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
+		break;
 */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

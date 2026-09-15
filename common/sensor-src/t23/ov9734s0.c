@@ -20,13 +20,19 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "ov9734s0"
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x34)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_MAX_HEIGHT 720
 #define SENSOR_VERSION "H20240219a"
 
 // ============================================================================
@@ -61,6 +67,17 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
 
 struct regval_list {
 	uint16_t reg_num;
@@ -1183,6 +1200,7 @@ static struct i2c_driver ov9734_driver = {
 };
 
 static __init int init_ov9734(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
@@ -1193,6 +1211,7 @@ static __init int init_ov9734(void) {
 }
 
 static __exit void exit_ov9734(void) {
+	sensor_common_exit();
 	private_i2c_del_driver(&ov9734_driver);
 }
 

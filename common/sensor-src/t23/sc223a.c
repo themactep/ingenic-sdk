@@ -26,13 +26,19 @@
 
 #include <tx-isp-common.h>
 #include <sensor-common.h>
+#include <sensor-info.h>
 #include <txx-funcs.h>
 
 // ============================================================================
 // SENSOR IDENTIFICATION
 // ============================================================================
+#define SENSOR_NAME "sc223a"
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x3e)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_VERSION "H20240730a"
 
 // ============================================================================
@@ -69,6 +75,17 @@ static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
 struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
@@ -79,7 +96,7 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sc223a_again_lut[] = {
+struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x84, 2909},
 	{0x88, 5731},
@@ -300,11 +317,11 @@ struct again_lut sc223a_again_lut[] = {
 	{0x5ffc, 447818},
 };
 
-struct tx_isp_sensor_attribute sc223a_attr;
+struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc223a_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
-	struct again_lut *lut = sc223a_again_lut;
-	while (lut->gain <= sc223a_attr.max_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+	struct again_lut *lut = sensor_again_lut;
+	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
 			return 0;
@@ -312,7 +329,7 @@ unsigned int sc223a_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			*sensor_again = (lut - 1)->value;
 			return (lut - 1)->gain;
 		} else {
-			if ((lut->gain == sc223a_attr.max_again) && (isp_gain >= lut->gain)) {
+			if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 				*sensor_again = lut->value;
 				return lut->gain;
 			}
@@ -324,7 +341,7 @@ unsigned int sc223a_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int sc223a_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
@@ -386,8 +403,8 @@ struct tx_isp_mipi_bus sc301IoT_mipi_2line = {
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 };
 
-struct tx_isp_sensor_attribute sc223a_attr = {
-	.name = "sc223a",
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
 	.chip_id = 0xcb3e,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
@@ -436,11 +453,11 @@ struct tx_isp_sensor_attribute sc223a_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = sc223a_alloc_again,
-	.sensor_ctrl.alloc_dgain = sc223a_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
-static struct regval_list sc223a_init_regs_1920_1080_30fps_1line_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_1line_mipi[] = {
 	/*cleaned 0x08 sc223a 24Minput 1lane 810Mbps 1080p@30fps*/
 	{0x0103, 0x01},
 	{0x0100, 0x00},
@@ -629,7 +646,7 @@ static struct regval_list sc223a_init_regs_1920_1080_30fps_1line_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc223a_init_regs_1920_1080_30fps_2line_mipi[] = {
+static struct regval_list sensor_init_regs_1920_1080_30fps_2line_mipi[] = {
 	/*cleaned 0x08 sc223a 24Minput 2lane 405Mbps 1080p@30fps*/
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -812,7 +829,7 @@ static struct regval_list sc223a_init_regs_1920_1080_30fps_2line_mipi[] = {
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct tx_isp_sensor_win_setting sc223a_win_sizes[] = {
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* resolution 1920*1080 1line @30fps*/
 	{
 		.width = 1920,
@@ -820,7 +837,7 @@ static struct tx_isp_sensor_win_setting sc223a_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = sc223a_init_regs_1920_1080_30fps_1line_mipi,
+		.regs = sensor_init_regs_1920_1080_30fps_1line_mipi,
 	},
 	/* resolution 1920*1080 2line @30fps*/
 	{
@@ -829,22 +846,22 @@ static struct tx_isp_sensor_win_setting sc223a_win_sizes[] = {
 		.fps = 30 << 16 | 1,
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
-		.regs = sc223a_init_regs_1920_1080_30fps_2line_mipi,
+		.regs = sensor_init_regs_1920_1080_30fps_2line_mipi,
 	},
 };
-struct tx_isp_sensor_win_setting *wsize = &sc223a_win_sizes[0];
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
-static struct regval_list sc223a_stream_on_mipi[] = {
+static struct regval_list sensor_stream_on_mipi[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-static struct regval_list sc223a_stream_off_mipi[] = {
+static struct regval_list sensor_stream_off_mipi[] = {
 	{0x0100, 0x00},
 	{SENSOR_REG_END, 0x00}, /* END MARKER */
 };
 
-int sc223a_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {[0] =
@@ -868,7 +885,7 @@ int sc223a_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int sc223a_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -885,7 +902,7 @@ int sc223a_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	return ret;
 }
 #if 0
-static int sc223a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -893,7 +910,7 @@ static int sc223a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc223a_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -903,13 +920,13 @@ static int sc223a_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 #endif
-static int sc223a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = sc223a_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -919,15 +936,15 @@ static int sc223a_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int sc223a_reset(struct tx_isp_subdev *sd, int val) {
+static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int sc223a_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
-	ret = sc223a_read(sd, 0x3107, &v);
+	ret = sensor_read(sd, 0x3107, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -935,7 +952,7 @@ static int sc223a_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = sc223a_read(sd, 0x3108, &v);
+	ret = sensor_read(sd, 0x3108, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -946,18 +963,18 @@ static int sc223a_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int sc223a_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = (value & 0xffff) * 2;
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integration time*/
-	ret += sc223a_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
-	ret += sc223a_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
-	ret += sc223a_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	/*set analog gain*/
-	ret = sc223a_write(sd, 0x3e07, (unsigned char)(again & 0xff));
-	ret += sc223a_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
+	ret = sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
 
@@ -965,14 +982,14 @@ static int sc223a_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int sc223a_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
 	value *= 2;
-	ret += sc223a_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
-	ret += sc223a_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-	ret += sc223a_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
 	if (ret < 0)
 		return ret;
@@ -980,12 +997,12 @@ static int sc223a_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sc223a_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += sc223a_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-	ret += sc223a_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
 	gain_val = value;
@@ -994,19 +1011,19 @@ static int sc223a_set_analog_gain(struct tx_isp_subdev *sd, int value)
 }
 #endif
 
-static int sc223a_set_logic(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc223a_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc223a_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int sc223a_init(struct tx_isp_subdev *sd, int enable) {
+static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -1020,7 +1037,7 @@ static int sc223a_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 
-	ret = sc223a_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1029,12 +1046,12 @@ static int sc223a_init(struct tx_isp_subdev *sd, int enable) {
 	return 0;
 }
 
-static int sc223a_s_stream(struct tx_isp_subdev *sd, int enable) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = sc223a_write_array(sd, sc223a_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -1042,7 +1059,7 @@ static int sc223a_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = sc223a_write_array(sd, sc223a_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -1052,7 +1069,7 @@ static int sc223a_s_stream(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int sc223a_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -1078,9 +1095,9 @@ static int sc223a_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret = sc223a_read(sd, 0x320c, &tmp);
+	ret = sensor_read(sd, 0x320c, &tmp);
 	hts = tmp;
-	ret += sc223a_read(sd, 0x320d, &tmp);
+	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: sc223a read err\n");
 		return ret;
@@ -1088,10 +1105,10 @@ static int sc223a_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret += sc223a_write(sd, 0x320f, (unsigned char)(vts & 0xff));
-	ret += sc223a_write(sd, 0x320e, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: sc223a_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 
@@ -1105,7 +1122,7 @@ static int sc223a_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return ret;
 }
 
-static int sc223a_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1122,12 +1139,12 @@ static int sc223a_set_mode(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-static int sc223a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "sc223a_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(15);
@@ -1140,7 +1157,7 @@ static int sc223a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		}
 	}
 	if (pwdn_gpio != -1) {
-		ret = private_gpio_request(pwdn_gpio, "sc223a_pwdn");
+		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
 			private_gpio_direction_output(pwdn_gpio, 1);
 			private_msleep(10);
@@ -1150,7 +1167,7 @@ static int sc223a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
 		}
 	}
-	ret = sc223a_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an sc223a chip.\n", client->addr, client->adapter->name);
 		return ret;
@@ -1158,7 +1175,7 @@ static int sc223a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ISP_INFO("sc223a chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
 	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
-		memcpy(chip->name, "sc223a", sizeof("sc223a"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
@@ -1166,7 +1183,7 @@ static int sc223a_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	return 0;
 }
 
-static int sc223a_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
 	unsigned char val = 0x0;
@@ -1189,7 +1206,7 @@ static int sc223a_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	default:
 		break;
 	}
-	ret = sc223a_write(sd, 0x3221, val);
+	ret = sensor_write(sd, 0x3221, val);
 	if (ret != 0)
 		ISP_ERROR("%s %d: reg write err!!\n", __func__, __LINE__);
 
@@ -1199,7 +1216,7 @@ static int sc223a_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int sc223a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -1209,31 +1226,31 @@ static int sc223a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = sc223a_set_expo(sd, *(int *)arg);
+			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		//	if(arg)
-		//		ret = sc223a_set_integration_time(sd, *(int*)arg);
+		//		ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		//	if(arg)
-		//		ret = sc223a_set_analog_gain(sd, *(int*)arg);
+		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = sc223a_set_digital_gain(sd, *(int *)arg);
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = sc223a_get_black_pedestal(sd, *(int *)arg);
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = sc223a_set_mode(sd, *(int *)arg);
+			ret = sensor_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = sc223a_write_array(sd, sc223a_stream_off_mipi);
+			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -1241,7 +1258,7 @@ static int sc223a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = sc223a_write_array(sd, sc223a_stream_on_mipi);
+			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -1250,15 +1267,15 @@ static int sc223a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = sc223a_set_fps(sd, *(int *)arg);
+			ret = sensor_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = sc223a_set_vflip(sd, *(int *)arg);
+			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
 		if (arg)
-			ret = sc223a_set_logic(sd, *(int *)arg);
+			ret = sensor_set_logic(sd, *(int *)arg);
 	default:
 		break;
 	}
@@ -1266,7 +1283,7 @@ static int sc223a_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int sc223a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1277,14 +1294,14 @@ static int sc223a_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = sc223a_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int sc223a_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1294,38 +1311,38 @@ static int sc223a_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
-	sc223a_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
-static struct tx_isp_subdev_core_ops sc223a_core_ops = {
-	.g_chip_ident = sc223a_g_chip_ident,
-	.reset = sc223a_reset,
-	.init = sc223a_init,
-	/*.ioctl = sc223a_ops_ioctl,*/
-	.g_register = sc223a_g_register,
-	.s_register = sc223a_s_register,
+static struct tx_isp_subdev_core_ops sensor_core_ops = {
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
+	/*.ioctl = sensor_ops_ioctl,*/
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
-static struct tx_isp_subdev_video_ops sc223a_video_ops = {
-	.s_stream = sc223a_s_stream,
+static struct tx_isp_subdev_video_ops sensor_video_ops = {
+	.s_stream = sensor_s_stream,
 };
 
-static struct tx_isp_subdev_sensor_ops sc223a_sensor_ops = {
-	.ioctl = sc223a_sensor_ops_ioctl,
+static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
-static struct tx_isp_subdev_ops sc223a_ops = {
-	.core = &sc223a_core_ops,
-	.video = &sc223a_video_ops,
-	.sensor = &sc223a_sensor_ops,
+static struct tx_isp_subdev_ops sensor_ops = {
+	.core = &sensor_core_ops,
+	.video = &sensor_video_ops,
+	.sensor = &sensor_sensor_ops,
 };
 
 /* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
-	.name = "sc223a",
+	.name = SENSOR_NAME,
 	.id = -1,
 	.dev =
 		{
@@ -1427,7 +1444,7 @@ error:
 	return ret;
 }
 
-static int sc223a_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1452,19 +1469,19 @@ static int sc223a_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	switch (sensor_mipi_line) {
 	case 1:
-		wsize = &sc223a_win_sizes[0];
-		memcpy((void *)(&(sc223a_attr.mipi)), (void *)(&sc301IoT_mipi_1line), sizeof(sc301IoT_mipi_1line));
+		wsize = &sensor_win_sizes[0];
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sc301IoT_mipi_1line), sizeof(sc301IoT_mipi_1line));
 		break;
 	case 2:
-		wsize = &sc223a_win_sizes[1];
-		memcpy((void *)(&(sc223a_attr.mipi)), (void *)(&sc301IoT_mipi_2line), sizeof(sc301IoT_mipi_2line));
+		wsize = &sensor_win_sizes[1];
+		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sc301IoT_mipi_2line), sizeof(sc301IoT_mipi_2line));
 		break;
 	}
 
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	sensor->video.attr = &sc223a_attr;
+	sensor->video.attr = &sensor_attr;
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
@@ -1473,7 +1490,7 @@ static int sc223a_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	tx_isp_subdev_init(&sensor_platform_device, sd, &sc223a_ops);
+	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
@@ -1489,7 +1506,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int sc223a_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1506,32 +1523,34 @@ static int sc223a_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sc223a_id[] = {{"sc223a", 0}, {}};
-MODULE_DEVICE_TABLE(i2c, sc223a_id);
+static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+MODULE_DEVICE_TABLE(i2c, sensor_id);
 
-static struct i2c_driver sc223a_driver = {
+static struct i2c_driver sensor_driver = {
 	.driver =
 		{
 			.owner = THIS_MODULE,
-			.name = "sc223a",
+			.name = SENSOR_NAME,
 		},
-	.probe = sc223a_probe,
-	.remove = sc223a_remove,
-	.id_table = sc223a_id,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
+	.id_table = sensor_id,
 };
 
 static __init int init_sc223a(void) {
+	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init sc223a dirver.\n");
 		return -1;
 	}
-	return private_i2c_add_driver(&sc223a_driver);
+	return private_i2c_add_driver(&sensor_driver);
 }
 
 static __exit void exit_sc223a(void) {
-	private_i2c_del_driver(&sc223a_driver);
+	sensor_common_exit();
+	private_i2c_del_driver(&sensor_driver);
 }
 
 module_init(init_sc223a);

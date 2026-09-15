@@ -267,6 +267,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 600,
 	.lans = 2,
 };
+
 struct tx_isp_dvp_bus sensor_dvp = {
 	.mode = SENSOR_DVP_HREF_MODE,
 	.blanking =
@@ -316,7 +317,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
  * max 30fps
  */
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
-	/****system****/
+	/* SYS */
 	{0xfe, 0x80},
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -330,7 +331,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-	/****CISCTL & ANALOG****/
+
+	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
 	{0xee, 0x30},
@@ -378,7 +380,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-	/*gain*/
+
+	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
 	{0xb1, 0x01},
@@ -387,7 +390,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-	/*blk*/
+
+	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
 	{0x40, 0x23},
@@ -398,7 +402,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-	/*window*/
+
+	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
 	{0x94, 0x03},
@@ -406,7 +411,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-	/*ISP*/
+
+	/* ISP */
 	{0xfe, 0x01},
 	{0x01, 0x05},
 	{0x02, 0x89},
@@ -445,7 +451,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-	/****DVP & MIPI****/
+
+	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
 	{0xfe, 0x00},
@@ -464,12 +471,11 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
-
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
-	/*system*/
+	/* SYS */
 	{0xfe, 0x80},
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -483,7 +489,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-	/*CISCTL & ANALOG*/
+
+	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
 	{0xee, 0x30},
@@ -531,7 +538,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-	/*gain*/
+
+	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
 	{0xb1, 0x01},
@@ -540,7 +548,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-	/*blk*/
+
+	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
 	{0x40, 0x23},
@@ -551,7 +560,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-	/*window*/
+
+	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
 	{0x94, 0x03},
@@ -559,7 +569,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-	/*ISP*/
+
+	/* ISP */
 	{0xfe, 0x01},
 	{0x01, 0x05},
 	{0x02, 0x89},
@@ -598,7 +609,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-	/****DVP & MIPI****/
+
+	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
 	{0xfe, 0x00},
@@ -721,6 +733,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
+
 	return 0;
 }
 
@@ -731,6 +744,7 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
+
 	ret = sensor_read(sd, 0xf0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -748,6 +762,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	*ident = (*ident << 8) | v;
+
 	return 0;
 }
 
@@ -760,6 +775,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		ISP_INFO("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
+
 	return 0;
 }
 
@@ -777,6 +793,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, unsigned int value) 
 		ISP_INFO("sensor_write error  %d", __LINE__);
 		return ret;
 	}
+
 	return 0;
 }
 
@@ -828,6 +845,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
+
 	return 0;
 }
 
@@ -841,6 +859,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
+
 	return ret;
 }
 
@@ -949,6 +968,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+
 	return ret;
 }
 
@@ -993,6 +1013,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
+	ISP_INFO("sensor driver version %s\n", SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
@@ -1007,6 +1028,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -1065,6 +1087,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
+
 	return ret;
 }
 
@@ -1080,6 +1103,7 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 		return -EPERM;
 
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+
 	return 0;
 }
 
@@ -1133,6 +1157,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
