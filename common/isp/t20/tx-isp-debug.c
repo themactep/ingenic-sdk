@@ -1,4 +1,5 @@
 #include <linux/debugfs.h>
+#include <linux/module.h>
 #include "tx-isp-debug.h"
 
 /* -------------------debugfs interface------------------- */
@@ -25,6 +26,8 @@ int isp_printf(unsigned int level, unsigned char *fmt, ...)
 	}
 	return r;
 }
+EXPORT_SYMBOL(isp_printf);
+
 int isp_debug_init(void)
 {
 	int ret = 0;

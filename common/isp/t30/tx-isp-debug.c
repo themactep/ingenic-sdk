@@ -26,3 +26,4 @@ int isp_printf(unsigned int level, unsigned char *fmt, ...)
 	}
 	return r;
 }
+EXPORT_SYMBOL(isp_printf);
