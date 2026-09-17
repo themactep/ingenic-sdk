@@ -1184,8 +1184,8 @@ static struct i2c_driver jxh63p_driver = {
 };
 
 static __init int init_sensor(void) {
-	sensor_common_init(&sensor_info);
 	int ret = 0;
+	sensor_common_init(&sensor_info);
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init jxh63p dirver.\n");
