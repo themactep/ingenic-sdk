@@ -974,9 +974,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	 * while (*(volatile unsigned int*)(0xb000007c) & (1 << 28));
 	 */
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 #ifdef OV9732_USE_AGAIN_ONLY
 	sensor_attr.max_again = 0x3f446;
 #else

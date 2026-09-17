@@ -1081,9 +1081,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	 * while (*(volatile unsigned int*)(0xb000007c) & (1 << 28));
 	 */
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 0x3f446;
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;

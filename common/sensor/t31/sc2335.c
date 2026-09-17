@@ -1070,7 +1070,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	/* convert sensor-gain into isp-gain, */
 	sensor_attr.expo_fs = 1;
 	sd = &sensor->sd;
 	video = &sensor->video;

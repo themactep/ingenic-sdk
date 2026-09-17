@@ -1034,9 +1034,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	gc2083_attr.integration_time_limit = gc2083_attr.total_height - 8;
 	gc2083_attr.max_integration_time = gc2083_attr.total_height - 8;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sd = &sensor->sd;
 	video = &sensor->video;
 	gc2083_attr.expo_fs = 1;

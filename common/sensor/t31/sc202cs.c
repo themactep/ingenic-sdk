@@ -943,9 +943,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_enable(sensor->mclk);
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	wsize = &sensor_win_sizes[0];
 	memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 	sensor_attr.max_integration_time_native = 1250 - 6;

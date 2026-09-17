@@ -1007,9 +1007,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		goto err_set_sensor_gpio;
 
 	sensor_attr.dvp.gpio = sensor_gpio_func;
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_30:
 		break;

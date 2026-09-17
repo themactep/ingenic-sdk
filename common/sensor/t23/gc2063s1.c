@@ -1977,9 +1977,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.integration_time_limit = sensor_attr.total_height - 8;
 	sensor_attr.max_integration_time = sensor_attr.total_height - 8;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 444864;
 	sensor_attr.max_dgain = 0;
 	sensor_attr.expo_fs = 0;

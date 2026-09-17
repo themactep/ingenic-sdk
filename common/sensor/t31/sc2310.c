@@ -2391,9 +2391,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_win_sizes[i].mbus_code = mbus;
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 	}
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 356010;
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;

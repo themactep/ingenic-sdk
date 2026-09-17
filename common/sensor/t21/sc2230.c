@@ -841,7 +841,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		goto err_set_sensor_gpio;
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 
-	/* convert sensor-gain into isp-gain */
 	sensor_attr.max_again = 256041;
 	sensor_attr.max_dgain = 0; // sc1245a_attr.max_dgain;
 	sd = &sensor->sd;

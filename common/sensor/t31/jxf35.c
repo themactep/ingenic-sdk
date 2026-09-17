@@ -1903,9 +1903,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	} else {
 		ISP_ERROR("Can not support this data type!!!\n");
 	}
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.dbus_type = data_interface;
 	sensor_attr.data_type = data_type;
 	sd = &sensor->sd;

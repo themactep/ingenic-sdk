@@ -1155,9 +1155,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sc301iot_attr.integration_time_limit = sc301iot_attr.total_height - 6;
 	sc301iot_attr.max_integration_time = sc301iot_attr.total_height - 6;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;

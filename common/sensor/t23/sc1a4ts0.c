@@ -1117,9 +1117,6 @@ static int sc1a4t_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sc1a4t_attr.fsync_attr.mode = fsync_mode;
 
-	/*
-           convert sensor-gain into isp-gain,
-           */
 	sc1a4t_attr.max_again = 391733;
 	sc1a4t_attr.max_dgain = 0;
 	sd = &sensor->sd;

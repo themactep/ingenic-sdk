@@ -1113,9 +1113,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sc1346_attr.fsync_attr.mode = fsync_mode;
 
-	/*
-           convert sensor-gain into isp-gain,
-           */
 	sc1346_attr.max_again = 391733;
 	sc1346_attr.max_dgain = 0;
 	sd = &sensor->sd;

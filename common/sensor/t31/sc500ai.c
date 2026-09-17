@@ -1267,9 +1267,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	default:
 		ISP_ERROR("Now we do not support this framerate !!!\n");
 	}
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 300739;
 	sd = &sensor->sd;
 	video = &sensor->video;

@@ -1057,9 +1057,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	memset(sensor, 0, sizeof(*sensor));
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;

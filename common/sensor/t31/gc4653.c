@@ -1615,9 +1615,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_set_rate(sensor->mclk, 27000000);
 	private_clk_enable(sensor->mclk);
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[1];
 		sensor_info.max_fps = 15;

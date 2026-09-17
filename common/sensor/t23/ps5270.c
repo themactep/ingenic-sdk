@@ -1989,9 +1989,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("%s:%d:Can not support this mode!!!\n", __func__, __LINE__);
 	}
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.dbus_type = data_interface;
 	sensor_attr.max_again = 458752;
 	sensor_attr.max_dgain = 0;

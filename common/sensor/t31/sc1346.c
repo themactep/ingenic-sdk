@@ -978,9 +978,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.total_height = 0x2ee;
 	sensor_attr.max_integration_time = 0x2ee - 6;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 391733;
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;

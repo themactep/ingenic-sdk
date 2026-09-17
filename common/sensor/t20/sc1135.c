@@ -786,9 +786,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sensor_attr.max_again = 256410;
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;

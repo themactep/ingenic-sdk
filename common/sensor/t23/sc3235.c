@@ -1326,9 +1326,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor_attr.dbus_type = data_interface;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

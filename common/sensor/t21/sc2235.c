@@ -1054,7 +1054,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
 
-	/* convert sensor-gain into isp-gain */
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
 		wsize->fps = 25 << 16 | 1;

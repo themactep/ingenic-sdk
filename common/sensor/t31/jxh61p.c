@@ -872,9 +872,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	} else {
 		ISP_ERROR("%s %d not supported data_interface!!\n", __func__, __LINE__);
 	}
-	/*
-	   convert sensor-gain into isp-gain,
-	   */
 	sensor_attr.max_again = 259142;
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;

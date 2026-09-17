@@ -967,9 +967,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_WARNING("Don't support this Sensor Data Output Interface.\n");
 	}
 
-	/*
-       convert sensor-gain into isp-gain,
-     */
 	sensor_attr.dbus_type = data_interface;
 	sensor_attr.max_again = 324678;
 	sensor_attr.max_dgain = 0;

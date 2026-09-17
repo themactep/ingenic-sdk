@@ -756,9 +756,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	clk_set_rate(sensor->mclk, 27000000);
 	clk_enable(sensor->mclk);
 
-	/*
-	 * convert sensor-gain into isp-gain,
-	 */
 	sensor_attr.dbus_type = data_interface;
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;

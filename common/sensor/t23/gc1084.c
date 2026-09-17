@@ -912,7 +912,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor_mclk_config(sensor, 24000000);
 
-	/* convert sensor-gain into isp-gain */
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;

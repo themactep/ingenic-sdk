@@ -1986,9 +1986,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	gc2053_attr.integration_time_limit = gc2053_attr.total_height - 8;
 	gc2053_attr.max_integration_time = gc2053_attr.total_height - 8;
 
-	/*
-	  convert sensor-gain into isp-gain,
-	*/
 	gc2053_attr.max_again = 444864;
 	gc2053_attr.max_dgain = 0;
 	gc2053_attr.expo_fs = 0;
