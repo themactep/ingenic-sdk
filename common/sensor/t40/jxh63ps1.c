@@ -687,7 +687,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned long rate;
 
-	ISP_INFO("jxh63ps1: default boot is %d, video interface is %d, mclk is %d, reset is %d, pwdn is %d\n",
+	ISP_INFO("%s: default boot is %d, video interface is %d, mclk is %d, reset is %d, pwdn is %d\n", SENSOR_NAME,
 		info->default_boot,
 		info->video_interface,
 		info->mclk,

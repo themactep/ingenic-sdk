@@ -358,7 +358,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3062, (unsigned char)((exp >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3164, (unsigned char)(again & 0xff));
 
-	ISP_INFO("cv4001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
+	ISP_INFO("%s set exp=0x%04x(%4d line) gain=0x%02x\n", SENSOR_NAME, exp, it, again);
 
 	return ret;
 }
@@ -421,7 +421,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 
-	ISP_INFO("cv4001 init\n");
+	ISP_INFO("%s init\n", SENSOR_NAME);
 
 	return 0;
 }
@@ -528,7 +528,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
-	ISP_INFO("cv4001 set mode\n");
+	ISP_INFO("%s set mode\n", SENSOR_NAME);
 
 	return ret;
 }

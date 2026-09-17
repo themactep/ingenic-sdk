@@ -833,7 +833,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((again >> 8 & 0xff)));
 	if (ret != 0) {
-		ISP_ERROR("err: sc500ai write err %d\n", __LINE__);
+		ISP_ERROR("err: %s write err %d\n", SENSOR_NAME, __LINE__);
 		return ret;
 	}
 
@@ -934,7 +934,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 					ret += sensor_read(sd, 0x3109, &reg_val);
 			}
 			if (i >= 5)
-				ISP_INFO("sc500ai read timeout!!!\n");
+				ISP_INFO("%s read timeout!!!\n", SENSOR_NAME);
 
 			if (reg_val == 1)
 				ret += sensor_write(sd, 0x336d, 0x23);
@@ -950,7 +950,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 					ret += sensor_read(sd, 0x3040, &reg_val);
 			}
 			if (i >= 5)
-				ISP_INFO("sc500ai read timeout!!!\n");
+				ISP_INFO("%s read timeout!!!\n", SENSOR_NAME);
 
 			if (reg_val == 1)
 				ret += sensor_write(sd, 0x363c, 0x42);

@@ -777,7 +777,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((again >> 8 & 0xff)));
 	if (ret != 0) {
-		ISP_ERROR("err: sc230ai write err %d\n", __LINE__);
+		ISP_ERROR("err: %s write err %d\n", SENSOR_NAME, __LINE__);
 		return ret;
 	}
 

@@ -716,7 +716,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = (hts | val);
 
 	if (0 != ret) {
-		ISP_ERROR("err: ov2732 read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return -1;
 	}
 

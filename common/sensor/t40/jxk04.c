@@ -1068,7 +1068,7 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 				wsize = &sensor_win_sizes[2];
 				break;
 			default:
-				ISP_WARNING("jxk04 Do not support this max fps now.\n");
+				ISP_WARNING("%s Do not support this max fps now.\n", SENSOR_NAME);
 			}
 		}
 	}
@@ -1132,7 +1132,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		sclk = SENSOR_SUPPORT_SCLK_30FPS;
 		break;
 	default:
-		ISP_WARNING("jxk04 Do not support this max fps now.\n");
+		ISP_WARNING("%s Do not support this max fps now.\n", SENSOR_NAME);
 	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (sensor_max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -1256,7 +1256,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 				wsize = &sensor_win_sizes[2];
 				break;
 			default:
-				ISP_WARNING("jxk04 Do not support this max fps now.\n");
+				ISP_WARNING("%s Do not support this max fps now.\n", SENSOR_NAME);
 			}
 		}
 	}

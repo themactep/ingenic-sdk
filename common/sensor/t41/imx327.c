@@ -622,7 +622,7 @@ static int imx327_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	}
 
 	if (0 != ret) {
-		ISP_ERROR("err: imx327_write err\n");
+		ISP_ERROR("err: %s_write err\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -750,7 +750,7 @@ static int imx327_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += imx327_write(sd, 0x301c, hmax & 0xff);
 	ret += imx327_write(sd, 0x301d, (hmax >> 8) & 0xff);
 	if (0 != ret) {
-		ISP_INFO("err: imx327_write err\n");
+		ISP_INFO("err: %s_write err\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.attr->total_width = hmax >> 1;

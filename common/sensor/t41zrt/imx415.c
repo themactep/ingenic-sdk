@@ -696,7 +696,7 @@ static int imx415_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += imx415_write(sd, 0x3024, (unsigned char)(vts & 0xff));
 	ret += imx415_write(sd, 0x3001, 0x00);
 	if (0 != ret) {
-		ISP_ERROR("err: imx415_write err\n");
+		ISP_ERROR("err: %s_write err\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;

@@ -658,7 +658,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 
 	if (ret != 0) {
-		ISP_ERROR("err: sc3332p write err %d\n", __LINE__);
+		ISP_ERROR("err: %s write err %d\n", SENSOR_NAME, __LINE__);
 		return ret;
 	}
 
@@ -757,7 +757,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: sc3332p read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
@@ -1172,7 +1172,7 @@ static __init int init_sensor(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init sc3332p dirver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

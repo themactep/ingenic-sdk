@@ -1135,7 +1135,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ret = sensor_read(sd, 0x00, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0) {
-		ISP_INFO("err: ps5270 write error, ret= %d \n", ret);
+		ISP_INFO("err: %s write error, ret= %d \n", SENSOR_NAME, ret);
 		return ret;
 	}
 	if (v != SENSOR_CHIP_ID_H)

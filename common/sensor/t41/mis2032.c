@@ -1906,7 +1906,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x3203, &val);
 	hts = (hts | val);
 	if (0 != ret) {
-		ISP_ERROR("err: mis2032 read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 

@@ -1260,7 +1260,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	vts_n = (CV8001_MAX_FPS * 10) * CV8001_30FPS_VTS / fps_n;
-	ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x)\n", fps_n / 10, fps_n % 10, vts_n);
+	ISP_INFO("%s set fps_n(%d.%d)! vts_n(0x%04x)\n", SENSOR_NAME, fps_n / 10, fps_n % 10, vts_n);
 
 	ret = sensor_read(sd, CV8001_EXP0_REG_H, &reg);
 	cur_reg = reg;
@@ -1272,7 +1272,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	cur_reg |= reg;
 
 	if (ret) {
-		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail i2c err(%d)!\n",
+		ISP_INFO("%s set fps_n(%d.%d)! vts_n(0x%04x) fail i2c err(%d)!\n", SENSOR_NAME,
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1289,7 +1289,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret |= sensor_write(sd, CV8001_VTS_REG_M, (unsigned char)((vts_n >> 8) & 0xff));
 	ret |= sensor_write(sd, CV8001_VTS_REG_H, (unsigned char)((vts_n >> 16) & 0xff));
 	if (ret) {
-		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set vts err(%d)!\n",
+		ISP_INFO("%s set fps_n(%d.%d)! vts_n(0x%04x) fail set vts err(%d)!\n", SENSOR_NAME,
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1304,7 +1304,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vts_n;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	if (ret < 0) {
-		ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail v4l2 notify err(%d)!\n",
+		ISP_INFO("%s set fps_n(%d.%d)! vts_n(0x%04x) fail v4l2 notify err(%d)!\n", SENSOR_NAME,
 			fps_n / 10,
 			fps_n % 10,
 			vts_n,
@@ -1315,7 +1315,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (is_updata) {
 		ret = sensor_set_integration_time(sd, cur_exp);
 		if (ret < 0) {
-			ISP_INFO("cv8001 set fps_n(%d.%d)! vts_n(0x%04x) fail set exp err(%d)!\n",
+			ISP_INFO("%s set fps_n(%d.%d)! vts_n(0x%04x) fail set exp err(%d)!\n", SENSOR_NAME,
 				fps_n / 10,
 				fps_n % 10,
 				vts_n,

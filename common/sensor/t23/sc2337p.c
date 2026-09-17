@@ -971,7 +971,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: sc2337p read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = ((hts << 8) + tmp);
@@ -1345,7 +1345,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.total_height = 1125;
 		sensor_attr.max_integration_time = 1125 - 6;
 		sensor_attr.one_line_expr_in_us = 25;
-		ISP_INFO("__sc2337p_win_sizes[1]__,\n");
+		ISP_INFO("__%s_win_sizes[1]__,\n", SENSOR_NAME);
 	} else {
 		sensor_mclk_config(sensor, 24000000);
 		wsize = &sensor_win_sizes[0];
@@ -1357,7 +1357,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.total_height = 0x5a0;
 		sensor_attr.max_integration_time = 0X5a0 - 6;
 		sensor_attr.one_line_expr_in_us = 25;
-		ISP_INFO("__sc2337p_win_sizes[0]__,\n");
+		ISP_INFO("__%s_win_sizes[0]__,\n", SENSOR_NAME);
 	}
 
 	/*
@@ -1428,7 +1428,7 @@ static __init int init_sensor(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init sc2337p dirver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

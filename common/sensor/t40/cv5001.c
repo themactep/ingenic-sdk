@@ -333,7 +333,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3061, (unsigned char)((exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3164, (unsigned char)(again & 0xff));
 
-	ISP_INFO("cv5001 set exp=0x%04x(%4d line) gain=0x%02x\n", exp, it, again);
+	ISP_INFO("%s set exp=0x%04x(%4d line) gain=0x%02x\n", SENSOR_NAME, exp, it, again);
 
 	return ret;
 }

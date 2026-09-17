@@ -1015,7 +1015,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x20, &val);
 	hts = (hts | val) << 2;
 	if (0 != ret) {
-		ISP_ERROR("err: jxk308p read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 

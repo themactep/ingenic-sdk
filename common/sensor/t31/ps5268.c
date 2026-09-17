@@ -600,7 +600,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x0115, &val);
 	hts = (hts | val);
 	if (0 != ret) {
-		ISP_ERROR("err: ps5268 read hts err\n");
+		ISP_ERROR("err: %s read hts err\n", SENSOR_NAME);
 		return -1;
 	}
 
@@ -619,7 +619,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x0119, &val);
 	Cur_OffNy = (Cur_OffNy | val);
 	if (0 != ret) {
-		ISP_ERROR("err: ps5268 read offny err\n");
+		ISP_ERROR("err: %s read offny err\n", SENSOR_NAME);
 		return -1;
 	}
 	Cur_ExpLine = sensor_attr.total_height - Cur_OffNy;

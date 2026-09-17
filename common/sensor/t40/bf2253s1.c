@@ -407,7 +407,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		return ret;
 	}
 
-	ISP_INFO("bf2253s1--%s:%d-   again = %d  ,should be (15, 79) \n", __func__, __LINE__, again);
+	ISP_INFO("%s--%s:%d-   again = %d  ,should be (15, 79) \n", SENSOR_NAME, __func__, __LINE__, again);
 	ret += sensor_write(sd, 0x6a, again);
 
 	return 0;

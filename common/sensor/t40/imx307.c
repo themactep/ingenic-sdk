@@ -1166,7 +1166,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		ret += sensor_write(sd, 0x3007, val);
 	}
 	if (0 != ret)
-		ISP_ERROR("%s:%d imx307 write err !!!\n", __func__, __LINE__);
+		ISP_ERROR("%s:%d %s write err !!!\n", __func__, __LINE__, SENSOR_NAME);
 
 	return ret;
 }

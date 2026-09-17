@@ -636,7 +636,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x0d06, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: gc2083s1 read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = (((hts << 8) + tmp) << 1);
@@ -1136,7 +1136,7 @@ static __init int init_sensor(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_ERROR("Failed to init gc2083s1 dirver.\n");
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

@@ -1942,7 +1942,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 
 	ISP_INFO("===================================================\n");
-	ISP_INFO("sc535iot version is %s\n", TVERSION);
+	ISP_INFO("%s version is %s\n", SENSOR_NAME, TVERSION);
 	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
 	ISP_INFO("Sensor name is %s\n", sensor_attr.name);
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
@@ -2140,7 +2140,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) | val);
 
 	if (0 != ret) {
-		ISP_ERROR("err: sc535iot read err\n");
+		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
 		return ret;
 	}
 
