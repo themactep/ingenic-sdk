@@ -750,7 +750,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val;
-	val = sensor_read(sd, 0x3030, &val);
+	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
 	case 0: //normal
 		val &= 0xfc;

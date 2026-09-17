@@ -1242,7 +1242,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t otp_val = 0x0;
 
 	/* 2'b01: mirror; 2'b10:flip*/
-	val = sensor_read(sd, 0x022c, &val);
+	ret = sensor_read(sd, 0x022c, &val);
 	val1 = sensor_read(sd, 0x0063, &val1);
 
 	/* 2'b01 mirror; 2'b10 flip; 2'b11 mirror &flip */

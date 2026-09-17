@@ -1193,7 +1193,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t val;
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = sensor_read(sd, 0x0101, &val);
+	ret = sensor_read(sd, 0x0101, &val);
 	switch (enable) {
 	case 0: //normal
 		val &= 0xfc;

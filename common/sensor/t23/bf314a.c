@@ -763,7 +763,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	uint8_t val;
 
-	val = sensor_read(sd, 0x00, &val);
+	ret = sensor_read(sd, 0x00, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xf3;

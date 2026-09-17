@@ -818,7 +818,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 	ISP_INFO("----set_vflip is start------\n");
 	/* 2'b01:mirror,2'b10:filp */
-	val = sensor_read(sd, 0x3221, &val);
+	ret = sensor_read(sd, 0x3221, &val);
 	switch (enable) {
 	case 0:
 		sensor_write(sd, 0x3221, val & 0x99);

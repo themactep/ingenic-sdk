@@ -845,7 +845,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t val;
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = sensor_read(sd, 0x3030, &val);
+	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
 	case 0: //normal
 		val &= 0xfc;
