@@ -771,7 +771,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		wsize = &sensor_win_sizes[0];
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x5;
+		sensor_attr.integration_time = 0x05;
 		break;
 	case 1:
 		wsize = &sensor_win_sizes[1];
@@ -784,7 +784,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.max_integration_time = 4503 - 4;
 		*/
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x5;
+		sensor_attr.integration_time = 0x05;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");

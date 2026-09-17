@@ -1100,7 +1100,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	else if (sensor_resolution == TX_SENSOR_RES_500 && sensor_max_fps == TX_SENSOR_MAX_FPS_25)
 		sclk = SENSOR_SUPPORT_500RES_25FPS_SCLK;
 
-	ret += sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_read(sd, 0x05, &tmp);
 	hts = tmp;
 	ret += sensor_read(sd, 0x06, &tmp);

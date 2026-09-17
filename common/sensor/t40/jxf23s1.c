@@ -1817,7 +1817,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
-	//	*(volatile unsigned int*)(0xB0010100) = 0x1;
+	//	*(volatile unsigned int*)(0xB0010100) = 0x01;
 	//	*(volatile unsigned int*)(0xB0010134) = 0xC0000000;
 
 #ifndef CONFIG_FPGA_TEST
@@ -1858,7 +1858,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.total_height = 1125;
 			sensor_attr.max_integration_time = 1121;
 			sensor_attr.again = 0;
-			sensor_attr.integration_time = 0xa;
+			sensor_attr.integration_time = 0x0a;
 			ret = set_sensor_gpio_function(sensor_gpio_func);
 			if (ret < 0)
 				goto err_set_sensor_gpio;
@@ -1879,7 +1879,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.total_height = 1125;
 			sensor_attr.max_integration_time = 1121;
 			sensor_attr.again = 0;
-			sensor_attr.integration_time = 0xa;
+			sensor_attr.integration_time = 0x0a;
 		} else {
 			ISP_ERROR("Can not support this data interface and fps!!!\n");
 			goto err_set_sensor_data_interface;

@@ -777,7 +777,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	shs1 = rhs1 - (value << 2);
 	ret += sensor_write(sd, 0x3054, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3055, (unsigned char)((shs1 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3056, (unsigned char)((shs1 >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3056, (unsigned char)((shs1 >> 16) & 0x03));
 
 	return 0;
 }
@@ -814,9 +814,9 @@ static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3073, (unsigned char)((value >> 8) & 0xff));
 
 	if (value & (1 << 12)) {
-		ret += sensor_write(sd, 0x3031, 0x1);
+		ret += sensor_write(sd, 0x3031, 0x01);
 	} else {
-		ret += sensor_write(sd, 0x3031, 0x0);
+		ret += sensor_write(sd, 0x3031, 0x00);
 	}
 	if (ret < 0)
 		return ret;
@@ -831,9 +831,9 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3071, (unsigned char)((value >> 8) & 0xff));
 
 	if (value & (1 << 12)) {
-		ret += sensor_write(sd, 0x3030, 0x1);
+		ret += sensor_write(sd, 0x3030, 0x01);
 	} else {
-		ret += sensor_write(sd, 0x3030, 0x0);
+		ret += sensor_write(sd, 0x3030, 0x00);
 	}
 	if (ret < 0)
 		return ret;
@@ -1010,7 +1010,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3000, 0x1);
+	ret = sensor_write(sd, 0x3000, 0x01);
 	if (wdr_en == 1) {
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_mipi_dol));
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;

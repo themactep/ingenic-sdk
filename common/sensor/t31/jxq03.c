@@ -730,7 +730,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int ret = 0;
 
 	ret = sensor_write(sd, 0x05, (unsigned char)(value & 0xff));
-	ret = sensor_write(sd, 0x08, (unsigned char)((value >> 8) & 0x1));
+	ret = sensor_write(sd, 0x08, (unsigned char)((value >> 8) & 0x01));
 	if (ret < 0)
 		return ret;
 
@@ -1009,7 +1009,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val = 0x01;
-	unsigned char valg = 0x0;
+	unsigned char valg = 0x00;
 	unsigned char vwinSt = 0x15;
 
 	ret += sensor_read(sd, 0x12, &val);

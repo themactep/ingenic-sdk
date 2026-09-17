@@ -828,7 +828,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x3031, &value);
 	vmax |= value << 8;
 	ret += sensor_read(sd, 0x3032, &value);
-	vmax |= (value | 0x7) << 16;
+	vmax |= (value | 0x07) << 16;
 
 	hmax = pclk * (fps & 0xffff) / vmax / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3034, hmax & 0xff);

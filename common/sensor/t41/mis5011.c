@@ -1710,7 +1710,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				//ISP_INFO("*******DVP******\n");//add
 			} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = sensor_write_array(sd, sensor_stream_on_mipi);
-				*((u32 *)0xb3380000) = 0x5;
+				*((u32 *)0xb3380000) = 0x05;
 				//ISP_INFO("*******MIPI******\n");//add
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -1786,7 +1786,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 3;
 	sensor->video.attr->integration_time_limit = vts - 3;

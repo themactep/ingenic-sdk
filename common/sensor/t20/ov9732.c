@@ -545,7 +545,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	ret = sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
-	ret = sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xf));
+	ret = sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0x0f));
 	if (ret < 0)
 		return ret;
 	return 0;
@@ -584,19 +584,19 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 		return ret;
 	switch(*v) {
 		case SENSOR_R_BLACK_LEVEL:
-			black = (h & 0x3) << 8;
+			black = (h & 0x03) << 8;
 			reg = 0x44;
 			break;
 		case SENSOR_GR_BLACK_LEVEL:
-			black = (h & (0x3 << 2)) << 8;
+			black = (h & (0x03 << 2)) << 8;
 			reg = 0x45;
 			break;
 		case SENSOR_GB_BLACK_LEVEL:
-			black = (h & (0x3 << 4)) << 8;
+			black = (h & (0x03 << 4)) << 8;
 			reg = 0x46;
 			break;
 		case SENSOR_B_BLACK_LEVEL:
-			black = (h & (0x3 << 6)) << 8;
+			black = (h & (0x03 << 6)) << 8;
 			reg = 0x47;
 			break;
 		default:
@@ -683,7 +683,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	/* prediv */
 	val = 0;
 	ret += sensor_read(sd, 0x3080, &val);
-	val &= 0x7;
+	val &= 0x07;
 	switch (val) {
 	case 0:
 		pclk = mclk / 1;
@@ -719,11 +719,11 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	/* sysdiv */
 	val = 0;
 	ret += sensor_read(sd, 0x3082, &val);
-	pclk /= ((val & 0xf) + 1);
+	pclk /= ((val & 0x0f) + 1);
 	/* pixdiv */
 	val = 0;
 	ret += sensor_read(sd, 0x3083, &val);
-	if (val & 0x1)
+	if (val & 0x01)
 		pclk /= 4;
 	else
 		pclk /= 2;

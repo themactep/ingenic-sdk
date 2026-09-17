@@ -663,7 +663,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	int ret = -1;
-	unsigned char flip = 0x0;
+	unsigned char flip = 0x00;
 	unsigned char h_start = 0;
 	unsigned char h_end = 0;
 
@@ -687,7 +687,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	}
 
 	if ((vic_reset % 20) == 0)
-		*((u32 *)0xb3380000) = 0x5;
+		*((u32 *)0xb3380000) = 0x05;
 	vic_reset++;
 
 	return ret;
@@ -804,7 +804,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return ret;
 	}
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -859,7 +859,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 	return ret;
 }
 

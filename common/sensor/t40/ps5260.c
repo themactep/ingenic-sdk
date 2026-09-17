@@ -1045,7 +1045,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			goto err_set_sensor_gpio;
 		sensor_attr.dvp.gpio = sensor_gpio_func;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x3;
+		sensor_attr.integration_time = 0x03;
 		break;
 	case 1:
 		wsize = &sensor_win_sizes[1];

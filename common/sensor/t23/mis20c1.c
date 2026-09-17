@@ -74,7 +74,7 @@ struct again_lut {
 
 static struct again_lut mis20c1_again_lut[] = {
 	/* Exact vendor gain-code to ISP log2-gain mapping. */
-	{0x0, 0},
+	{0x00, 0},
 	{0x10, 1465},
 	{0x20, 2998},
 	{0x30, 4506},
@@ -1113,7 +1113,7 @@ static int mis20c1_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret += mis20c1_write(sd, 0x3110, reg_3110);
 	ret += mis20c1_write(sd, 0x3006, 0x00);
 
-	*(volatile u32 *)0xb3380000 = 0x5;
+	*(volatile u32 *)0xb3380000 = 0x05;
 
 	return ret;
 }

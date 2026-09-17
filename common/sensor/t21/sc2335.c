@@ -522,7 +522,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	value *= 2;
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 
@@ -581,11 +581,11 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 		if ((blc_val > 0x1040) || gain_val >= 0x1f7c) {
 			if (blc_val > 0x1040) {
 				if (2 != dpc_flag) {
-					ret += sensor_write(sd, 0x5787, 0x0);
-					ret += sensor_write(sd, 0x5788, 0x0);
-					ret += sensor_write(sd, 0x5790, 0x0);
-					ret += sensor_write(sd, 0x5791, 0x0);
-					ret += sensor_write(sd, 0x5799, 0x7);
+					ret += sensor_write(sd, 0x5787, 0x00);
+					ret += sensor_write(sd, 0x5788, 0x00);
+					ret += sensor_write(sd, 0x5790, 0x00);
+					ret += sensor_write(sd, 0x5791, 0x00);
+					ret += sensor_write(sd, 0x5799, 0x07);
 					dpc_flag = 2;
 				}
 			} else {

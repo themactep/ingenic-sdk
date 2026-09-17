@@ -656,7 +656,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	int ret = -1;
-	unsigned char flip = 0x0;
+	unsigned char flip = 0x00;
 	unsigned char h_start = 0;
 	unsigned char h_end = 0;
 
@@ -778,12 +778,12 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	return 0;
 	/*
 	int ret = -1;
-	unsigned char flip = 0x0;
+	unsigned char flip = 0x00;
 	unsigned char h_start = 0;
 	unsigned char h_end = 0;
 
 	ret += sensor_read(sd, 0x3007, &flip);
-	if (enable & 0x2) {
+	if (enable & 0x02) {
 		flip |= 0x02;
 		h_start = 0xfd;
 		h_end = 0x9e;

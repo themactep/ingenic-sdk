@@ -453,8 +453,8 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 	unsigned char page = 0;
 	sensor_read(sd, 0xfd, &page);
 	if (page != 0) {
-		sensor_write(sd, 0xfd, 0x0);
-		sensor_write(sd, 0xfe, 0x2);
+		sensor_write(sd, 0xfd, 0x00);
+		sensor_write(sd, 0xfe, 0x02);
 	}
 
 	ret = sensor_read(sd, 0x04, &v);

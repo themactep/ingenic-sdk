@@ -743,7 +743,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	//integration time
 	//	 ISP_INFO("------> it <---------\n");
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 

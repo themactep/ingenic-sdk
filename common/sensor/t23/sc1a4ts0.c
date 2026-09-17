@@ -619,7 +619,7 @@ static int sc1a4t_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += sc1a4t_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sc1a4t_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sc1a4t_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sc1a4t_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	ret = sc1a4t_write(sd, 0x3e07, (unsigned char)(again & 0xff));
@@ -636,7 +636,7 @@ static int sc1a4t_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += sc1a4t_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sc1a4t_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sc1a4t_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sc1a4t_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)

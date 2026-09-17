@@ -122,17 +122,17 @@ static unsigned int fix_point_mult2(unsigned int a, unsigned int b) {
 //}
 
 #define ANALOG_GAIN_MAX                                                                                                \
-	(fix_point_mult2(ANALOG_GAIN_9, (0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6))))
+	(fix_point_mult2(ANALOG_GAIN_9, (0x0f << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6))))
 
 unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 	unsigned int gain_one1 = 0;
 	unsigned int gain_tmp = 0;
 	unsigned char regb6 = 0;
-	unsigned char regb1 = 0x1;
+	unsigned char regb1 = 0x01;
 	unsigned char regb2 = 0;
 	int i, j;
 	unsigned int gain_one_max = fix_point_mult2(ANALOG_GAIN_9,
-		(0xf << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6)));
+		(0x0f << TX_ISP_GAIN_FIXED_POINT) + (0x3f << (TX_ISP_GAIN_FIXED_POINT - 6)));
 
 	if (gain_one < ANALOG_GAIN_1) {
 		gain_one1 = ANALOG_GAIN_1;
@@ -144,7 +144,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_1;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_1,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -160,7 +160,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_2;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_2,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -176,7 +176,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_3;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_3,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -192,7 +192,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_4;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_4,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -208,7 +208,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_5;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_5,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -224,7 +224,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_6;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_6,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -240,7 +240,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_7;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_7,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -256,7 +256,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_8;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_8,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -272,7 +272,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 		gain_one1 = gain_tmp = ANALOG_GAIN_9;
 		regb1 = 0;
 		regb2 = 0;
-		for (i = 1; i <= 0xf; i++)
+		for (i = 1; i <= 0x0f; i++)
 			for (j = 0; j <= 0x3f; j++) {
 				gain_tmp = fix_point_mult2(ANALOG_GAIN_9,
 					(i << TX_ISP_GAIN_FIXED_POINT) + (j << (TX_ISP_GAIN_FIXED_POINT - 6)));
@@ -287,7 +287,7 @@ unsigned int sensor_gainone_to_reg(unsigned int gain_one, unsigned int *regs) {
 	} else {
 		gain_one1 = gain_one_max;
 		regb6 = 0x08;
-		regb1 = 0xf;
+		regb1 = 0x0f;
 		regb2 = 0x3f;
 		goto done;
 	}
@@ -842,12 +842,12 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x4, value & 0xff);
+	ret = sensor_write(sd, 0x04, value & 0xff);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
-	ret = sensor_write(sd, 0x3, (value & 0x1f00) >> 8);
+	ret = sensor_write(sd, 0x03, (value & 0x1f00) >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
@@ -860,8 +860,8 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	ret += sensor_write(sd, 0xfe, 0x01);
-	ret += sensor_write(sd, 0xb6, (value >> 12) & 0xf);
-	ret += sensor_write(sd, 0xb1, (value >> 8) & 0xf);
+	ret += sensor_write(sd, 0xb6, (value >> 12) & 0x0f);
+	ret += sensor_write(sd, 0xb1, (value >> 8) & 0x0f);
 	ret += sensor_write(sd, 0xb2, (value << 2) & 0xff);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d", __LINE__);
@@ -956,11 +956,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret += sensor_read(sd, 0x5, &tmp);
+	ret += sensor_read(sd, 0x05, &tmp);
 	hb = tmp;
-	ret += sensor_read(sd, 0x6, &tmp);
+	ret += sensor_read(sd, 0x06, &tmp);
 	hb = (hb << 8) + tmp;
-	ret += sensor_read(sd, 0xf, &tmp);
+	ret += sensor_read(sd, 0x0f, &tmp);
 	win_width = tmp;
 	ret += sensor_read(sd, 0x10, &tmp);
 	win_width = (win_width << 8) + tmp;
@@ -969,16 +969,16 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	sh_delay = tmp;
 	hts = 2 * (hb + 16) + ((win_width + sh_delay) / 2);
-	ret += sensor_read(sd, 0xd, &tmp);
+	ret += sensor_read(sd, 0x0d, &tmp);
 	win_high = tmp;
-	ret += sensor_read(sd, 0xe, &tmp);
+	ret += sensor_read(sd, 0x0e, &tmp);
 	if (ret < 0)
 		return -1;
 	win_high = (win_high << 8) + tmp;
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
-	ret += sensor_write(sd, 0x8, (unsigned char)(vb & 0xff));
-	ret += sensor_write(sd, 0x7, (unsigned char)(vb >> 8));
+	ret += sensor_write(sd, 0x08, (unsigned char)(vb & 0xff));
+	ret += sensor_write(sd, 0x07, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;

@@ -254,7 +254,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	// SENSOR_1080p_mipi1lane_30fps_V2P0.ini
 	{0x0103, 0x01},
-	{SENSOR_REG_DELAY, 0xa},
+	{SENSOR_REG_DELAY, 0x0a},
 	{0x3288, 0x50},
 	{0x0401, 0x3b},
 	{0x0403, 0x00},
@@ -909,13 +909,13 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 	unsigned char startx = 0;
 	unsigned char starty = 0;
 
 	ret += sensor_read(sd, 0x0101, &val);
 
-	if (enable & 0x2) {
+	if (enable & 0x02) {
 		val |= 0x02;
 		startx = 0x05;
 		starty = 0x0f;

@@ -823,7 +823,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.total_height = 2658;
 		sensor_attr.max_integration_time = 2658 - 4;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x1;
+		sensor_attr.integration_time = 0x01;
 		break;
 	default:
 		ISP_ERROR("not supported boot setting!!!\n");

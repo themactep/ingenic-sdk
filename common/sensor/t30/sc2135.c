@@ -1020,7 +1020,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	char val = 0;
-	val = enable ? 0x2 : 0;
+	val = enable ? 0x02 : 0;
 	ret = sensor_write(sd, 0x3220, val);
 	sensor->video.mbus_change = 0;
 	if (!ret)

@@ -869,8 +869,8 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_ae[] = {
 	{0x0215, 0x10},
 	{0x003e, 0x91},
 
-	{0x01af, 0x0b}, //aec, 0xen
-	{0x01a0, 0xc0}, //awb, 0xen + awb_write_valid
+	{0x01af, 0x0b}, //aec, 0x0en
+	{0x01a0, 0xc0}, //awb, 0x0en + awb_write_valid
 	{0x01e0, 0x03}, //speed mode
 	{0x03fe, 0x00}, //cisctrl rst
 
@@ -1192,7 +1192,7 @@ static int setting_fast_ae(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret = 0, loop = 0;
 	sensor_read(sd, 0x00a9, &y_avg);
 	sensor_read(sd, 0x01b5, &y_target);
-	while ((y_avg >= y_target ? y_avg - y_target : y_target - y_avg) > 0x8) {
+	while ((y_avg >= y_target ? y_avg - y_target : y_target - y_avg) > 0x08) {
 		private_msleep(2);
 		if (loop > 30) {
 			ISP_INFO("y_avg != y_target,set failed!!!\n");
@@ -1271,7 +1271,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
-	ret += sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_read(sd, 0x05, &val);
 	hts = val & 0x0f;
 	ret += sensor_read(sd, 0x06, &val);

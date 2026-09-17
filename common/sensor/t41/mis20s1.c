@@ -1539,7 +1539,7 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 		return ret;
 	sensor->video.state = TX_ISP_MODULE_INIT;
 	private_msleep(280);
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 
 	if (!init->enable) {
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
@@ -1595,7 +1595,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on);
-			*((u32 *)0xb3380000) = 0x5;
+			*((u32 *)0xb3380000) = 0x05;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
@@ -1652,7 +1652,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	unsigned int exp = value & 0xffff;
 	int again = (value & 0xffff0000) >> 16;
 
-	if ((again >> 12) == 0x1) {
+	if ((again >> 12) == 0x01) {
 #ifdef SENSOR_WDR_2_FRAME
 		ret += sensor_write(sd, 0x310c, 0x01 | 0x02);
 #else
@@ -1775,7 +1775,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x310e, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x3008, 0x01);
 
-	//  \*((u32 *)0xb3380000) = 0x5;
+	//  \*((u32 *)0xb3380000) = 0x05;
 
 	if (0 != ret) {
 		ISP_ERROR("err: sensor_write err\n");
@@ -1843,7 +1843,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		break;
 	}
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 	return ret;
 }
 #endif /* SENSOR_MIR_FLIP */

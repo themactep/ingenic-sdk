@@ -303,8 +303,8 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x3076, 0xF2}, // AREA3_WIDTH_1[12:0] 0x5f2 = 1522
 	{0x3077, 0x05}, //
 	{0x30BE, 0x5E}, //
-	{0x30C6, 0x00}, // BLACK_OFSET_ADR[12:0] 0x0
-	{0x30CE, 0x00}, // UNRD_LINE_MAX[12:0] 0x0
+	{0x30C6, 0x00}, // BLACK_OFSET_ADR[12:0] 0x00
+	{0x30CE, 0x00}, // UNRD_LINE_MAX[12:0] 0x00
 	{0x30D8, 0x3C}, // UNREAD_ED_ADR[12:0] 0x63c = 1596
 	{0x315A, 0x02}, // INCKSEL2[1:0]
 	{0x316A, 0x7E}, // INCKSEL4[1:0]
@@ -528,7 +528,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		shr0 = (vmax - value - 1) << 1;
 	ret += sensor_write(sd, 0x3058, (unsigned char)(shr0 & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((shr0 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x305A, (unsigned char)((shr0 >> 16) & 0xf));
+	ret += sensor_write(sd, 0x305A, (unsigned char)((shr0 >> 16) & 0x0f));
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
@@ -545,7 +545,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	shr1 = rhs1 - (value << 1);
 	ret += sensor_write(sd, 0x305c, (unsigned char)(shr1 & 0xff));
 	ret += sensor_write(sd, 0x305d, (unsigned char)((shr1 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x305e, (unsigned char)((shr1 >> 16) & 0xf));
+	ret += sensor_write(sd, 0x305e, (unsigned char)((shr1 >> 16) & 0x0f));
 
 	return 0;
 }
@@ -700,7 +700,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 	/* do_gettimeofday(&tv); */
 	/* ISP_INFO("%d:before:time is %d.%d\n", __LINE__,tv.tv_sec,tv.tv_usec); */
-	ret = sensor_write(sd, 0x3000, 0x1);
+	ret = sensor_write(sd, 0x3000, 0x01);
 	if (wdr_en == 1) {
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&mipi_2lane_dol), sizeof(mipi_2lane_dol));
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;

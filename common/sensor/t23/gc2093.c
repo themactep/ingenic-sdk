@@ -492,7 +492,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
-	ret += sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_read(sd, 0x05, &val);
 	hts = val & 0x0f;
 	ret += sensor_read(sd, 0x06, &val);

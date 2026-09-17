@@ -321,7 +321,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int int_time) {
 	shs = vmax - int_time - 2;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x03));
 	if (0 != ret) {
 		ISP_INFO("err: sensor_write err\n");
 		return ret;
@@ -411,7 +411,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret += sensor_read(sd, 0x3019, &value);
 	vmax |= value << 8;
 	ret += sensor_read(sd, 0x301a, &value);
-	vmax |= (value | 0x3) << 16;
+	vmax |= (value | 0x03) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += sensor_write(sd, 0x301c, hmax & 0xff);

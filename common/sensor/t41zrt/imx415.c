@@ -770,8 +770,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		imx415_attr.total_width = 1668;
 		imx415_attr.total_height = 2226;
 		imx415_attr.max_integration_time = 2226 - 8;
-		imx415_attr.again = 0x0;
-		imx415_attr.integration_time = 0x8;
+		imx415_attr.again = 0x00;
+		imx415_attr.integration_time = 0x08;
 		break;
 	default:
 		ISP_ERROR("Have no this Setting Source!!!\n");

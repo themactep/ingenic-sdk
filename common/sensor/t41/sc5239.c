@@ -859,7 +859,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 				return ret;
 		}
 
-		ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+		ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 		ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 		ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -914,7 +914,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 		// it = it <<1;
 		it = (it << 1) - 1;
-		ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+		ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 		ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 		ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 		ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
@@ -1383,7 +1383,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
-	ret = sensor_write(sd, 0x0103, 0x1);
+	ret = sensor_write(sd, 0x0103, 0x01);
 
 	if (wdr_en == 1) {
 

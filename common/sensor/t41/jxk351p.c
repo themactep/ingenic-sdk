@@ -841,7 +841,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char val = 0;
 
 	/* 2'b01: mirror; 2'b10:flip*/
-	enable &= 0x3;
+	enable &= 0x03;
 	switch (enable) {
 	case 0: /*normal*/
 		val &= 0xCF;

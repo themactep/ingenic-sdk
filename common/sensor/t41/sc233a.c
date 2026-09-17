@@ -1361,7 +1361,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x0103, 0x1);
+	//ret = sensor_write(sd, 0x0103, 0x01);
 
 	if (wdr_en == 1) {
 		info->default_boot = 1;

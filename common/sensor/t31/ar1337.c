@@ -506,7 +506,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3172, 0x0206}, // ANALOG_CONTROL2
 	{0x317A, 0x516E}, // ANALOG_CONTROL6
 	{0x3F3C, 0x0003}, // ANALOG_CONTROL9
-	{0x0400, 0x1},	  //Scaling Enabling: 0= disable, = x-dir
+	{0x0400, 0x01},	  //Scaling Enabling: 0= disable, = x-dir
 	{0x0404, 0x20},	  //Scale_M = 32
 	{0x32C8, 0x030C}, // PDAF_SEQ_START
 	{0x32CA, 0x08A6}, // PDAF_ODP_LLENGTH
@@ -3027,7 +3027,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	struct sensor_gain_lut *gain_lut = sensor_gain_lut;
 
 	/*set integration time*/
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 	/*set analog gain*/

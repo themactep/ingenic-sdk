@@ -656,13 +656,13 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			if (isp_gain == 0) {
 				tmp_again = 0x1300;
 				tmp_dgain = 0x20;
-				tmp_dcg = 0x0;
+				tmp_dcg = 0x00;
 				*sensor_again = 0;
 				return 0;
 			} else if (isp_gain < lut->gain) {
 				tmp_again = 0x1300 | ((lut - 1)->a_value);
 				tmp_dgain = (lut - 1)->d_value;
-				tmp_dcg = 0x0;
+				tmp_dcg = 0x00;
 				*sensor_again = (lut - 1)->d_value;
 				/* ISP_INFO(" 11isp value ==%d,again sensor value ==0x%x, dgain value ===0x%x tmp_dcg ===%x \n",isp_gain,tmp_again,tmp_dgain,tmp_dcg); */
 				return (lut - 1)->gain;
@@ -670,7 +670,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				if ((lut->gain == sensor_attr.max_again) && (isp_gain >= lut->gain)) {
 					tmp_again = 0x1300 | ((lut)->a_value);
 					tmp_dgain = (lut)->d_value;
-					tmp_dcg = 0x0;
+					tmp_dcg = 0x00;
 					*sensor_again = (lut)->d_value;
 					return lut->gain;
 				}
@@ -680,20 +680,20 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			if (isp_gain < 96713) {
 				tmp_again = 0x1300;
 				tmp_dgain = 0x21;
-				tmp_dcg = 0x4;
+				tmp_dcg = 0x04;
 				*sensor_again = 0;
 				return 0;
 			} else if (isp_gain < dcg_lut->gain) {
 				tmp_again = 0x1300 | ((dcg_lut - 1)->a_value);
 				tmp_dgain = (dcg_lut - 1)->d_value;
-				tmp_dcg = 0x4;
+				tmp_dcg = 0x04;
 				*sensor_again = (dcg_lut - 1)->d_value;
 				return (dcg_lut - 1)->gain;
 			} else {
 				if ((dcg_lut->gain == sensor_attr.max_again) && (isp_gain >= dcg_lut->gain)) {
 					tmp_again = 0x1300 | ((dcg_lut)->a_value);
 					tmp_dgain = (dcg_lut)->d_value;
-					tmp_dcg = 0x4;
+					tmp_dcg = 0x04;
 					*sensor_again = (dcg_lut)->d_value;
 					return dcg_lut->gain;
 				}
@@ -796,19 +796,19 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 		return ret;
 	switch (*v) {
 		case SENSOR_R_BLACK_LEVEL:
-			black = (h & 0x3) << 8;
+			black = (h & 0x03) << 8;
 			reg = 0x44;
 			break;
 		case SENSOR_GR_BLACK_LEVEL:
-			black = (h & (0x3 << 2)) << 8;
+			black = (h & (0x03 << 2)) << 8;
 			reg = 0x45;
 			break;
 		case SENSOR_GB_BLACK_LEVEL:
-			black = (h & (0x3 << 4)) << 8;
+			black = (h & (0x03 << 4)) << 8;
 			reg = 0x46;
 			break;
 		case SENSOR_B_BLACK_LEVEL:
-			black = (h & (0x3 << 6)) << 8;
+			black = (h & (0x03 << 6)) << 8;
 			reg = 0x47;
 			break;
 		default:
@@ -853,7 +853,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		udelay(100000);
-		sensor_write(sd, 0x30Ba, 0x0);
+		sensor_write(sd, 0x30Ba, 0x00);
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);

@@ -71,14 +71,14 @@ static inline unsigned char cale_again_register(unsigned int gain) {
 		if (gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
 			break;
 	i = index;
-	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0xf;
+	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0x0f;
 	return (i << 4) | p;
 }
 
 static inline unsigned int cale_sensor_again_to_isp(unsigned char reg) {
 	unsigned int h, l;
 	h = reg >> 4;
-	l = reg & 0xf;
+	l = reg & 0x0f;
 	return (1 << (h + TX_ISP_GAIN_FIXED_POINT)) | (l << ((TX_ISP_GAIN_FIXED_POINT + h - 4)));
 }
 

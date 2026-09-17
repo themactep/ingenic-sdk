@@ -440,7 +440,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	if (value < 30)
 		ret += sensor_write(sd, 0x3307, 0x13);
 	else
-		ret += sensor_write(sd, 0x3307, 0x3);
+		ret += sensor_write(sd, 0x3307, 0x03);
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((expo >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((expo & 0x0f) << 4));
 

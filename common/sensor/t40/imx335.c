@@ -1208,7 +1208,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_integration_time_native = 5400 - 10;
 		sensor_attr.min_integration_time = 4;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x9;
+		sensor_attr.integration_time = 0x09;
 		sensor->video.attr = &sensor_attr;
 		ISP_INFO("\n-------------------------switch linear ok ----------------------\n");
 	} else {
@@ -1432,7 +1432,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.integration_time_limit = 4125 - 9;
 		sensor_attr.max_integration_time_native = 4125 - 9;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x9;
+		sensor_attr.integration_time = 0x09;
 		break;
 	case 1:
 		wsize = &sensor_win_sizes[1];
@@ -1444,7 +1444,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.max_integration_time_native = 5400 - 9;
 		sensor_attr.min_integration_time = 4;
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0x9;
+		sensor_attr.integration_time = 0x09;
 		ISP_INFO("==============> sboot1\n");
 		break;
 	case 2:

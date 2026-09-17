@@ -7722,7 +7722,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x04);
-	/* ret += sensor_write(sd, 0xb0b6, 0x2); */
+	/* ret += sensor_write(sd, 0xb0b6, 0x02); */
 	ret += sensor_write(sd, 0xb0b7, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0xb0b6, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3464, 0x14);
@@ -7738,8 +7738,8 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x08);
-	/* ret += sensor_write(sd, 0xb0b6, 0x3); */
-	ret += sensor_write(sd, 0xb0bb, (unsigned char)((value & 0x3) + 0x40));
+	/* ret += sensor_write(sd, 0xb0b6, 0x03); */
+	ret += sensor_write(sd, 0xb0bb, (unsigned char)((value & 0x03) + 0x40));
 	ret += sensor_write(sd, 0xb15b, (unsigned char)((value >> 2) & 0xff));
 	ret += sensor_write(sd, 0x3464, 0x18);
 	ret += sensor_write(sd, 0x3467, 0x01);
@@ -7844,7 +7844,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x00);
-	/* ret += sensor_write(sd, 0xb0b6, 0x1); */
+	/* ret += sensor_write(sd, 0xb0b6, 0x01); */
 	ret += sensor_write(sd, 0xb0b3, vts & 0xff);
 	ret += sensor_write(sd, 0xb0b2, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x3464, 0x10);

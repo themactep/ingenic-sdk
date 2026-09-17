@@ -546,7 +546,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	shs1 = rhs1 - value - 1;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3022, (unsigned char)((shs1 >> 16) & 0x03));
 
 	return 0;
 }
@@ -561,14 +561,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		shs = vmax - value - 1;
 		ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
-		ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
+		ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x03));
 	} else {
 		//long frame use shs2
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
 		ret += sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3025, (unsigned char)((shs >> 8) & 0xff));
-		ret += sensor_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x3));
+		ret += sensor_write(sd, 0x3026, (unsigned char)((shs >> 16) & 0x03));
 	}
 
 	if (0 != ret) {
@@ -655,7 +655,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 	/* do_gettimeofday(&tv); */
 	/* ISP_INFO("%d:before:time is %d.%d\n", __LINE__,tv.tv_sec,tv.tv_usec); */
-	ret = sensor_write(sd, 0x3000, 0x1);
+	ret = sensor_write(sd, 0x3000, 0x01);
 	if (wdr_en == 1) {
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&mipi_2dol_lcg), sizeof(mipi_2dol_lcg));
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;

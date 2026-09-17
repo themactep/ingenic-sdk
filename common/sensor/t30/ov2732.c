@@ -794,7 +794,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3208, 0x01);
 	ret += sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xf));
+	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3208, 0x11);
 	ret += sensor_write(sd, 0x320d, 0x00);
 	ret += sensor_write(sd, 0x3208, 0xa1);

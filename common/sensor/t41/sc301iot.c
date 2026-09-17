@@ -1060,7 +1060,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	int again = (value & 0xffff0000) >> 16;
 
 	//integration time
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -1090,7 +1090,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	ret += sensor_write(sd, 0x3e22, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e22, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e05, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
@@ -1282,7 +1282,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 
 	enable &= 0x03;
 

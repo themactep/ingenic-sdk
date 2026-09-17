@@ -319,7 +319,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	shs = vmax - value - 2;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x03));
 	if (0 != ret) {
 		ISP_INFO("err: sensor_write err\n");
 		return ret;

@@ -423,7 +423,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int int_time) {
 	shs = vmax - int_time - 2;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x03));
 	if (0 != ret) {
 		ISP_INFO("err: sensor_write err\n");
 		return ret;
@@ -513,7 +513,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x3019, &value);
 	vmax |= value << 8;
 	ret += sensor_read(sd, 0x301a, &value);
-	vmax |= (value|0x3) << 16;
+	vmax |= (value|0x03) << 16;
 
 	hmax = ((pclk << 4) / (vmax * (newformat >> 4))) << 1;
 	ret += sensor_write(sd, 0x301c, hmax & 0xff);
@@ -627,10 +627,10 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 
 	ret += sensor_read(sd, 0x3007, &val);
-	if (enable & 0x2)
+	if (enable & 0x02)
 		val |= 0x01;
 	else
 		val &= 0xfe;

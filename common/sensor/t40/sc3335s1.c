@@ -790,7 +790,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integratio time*/
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -816,7 +816,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	/*DPC strength*/
 	if (gain_val >= 0xf60) { //6x
-		ret += sensor_write(sd, 0x5799, 0x7);
+		ret += sensor_write(sd, 0x5799, 0x07);
 	} else if (gain_val <= 0xf40) { //4x
 		ret += sensor_write(sd, 0x5799, 0x00);
 	}
@@ -830,7 +830,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	int ret = 0;
 
 	value *= 2;
-	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0xf));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
@@ -1153,11 +1153,11 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 
 	ret += sensor_read(sd, 0x3221, &val);
 
-	if (enable & 0x2)
+	if (enable & 0x02)
 		val |= 0x60;
 	else
 		val &= 0x9f;

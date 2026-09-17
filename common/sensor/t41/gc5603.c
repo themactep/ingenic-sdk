@@ -1225,7 +1225,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val, val1;
-	uint8_t otp_val = 0x0;
+	uint8_t otp_val = 0x00;
 
 	/* 2'b01: mirror; 2'b10:flip*/
 	ret = sensor_read(sd, 0x022c, &val);

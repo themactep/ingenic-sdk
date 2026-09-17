@@ -594,8 +594,8 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 
 	int ret = 0;
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x4, (unsigned char)(value & 0xff));
-	ret += sensor_write(sd, 0x3, (unsigned char)((value & 0xff00) >> 8));
+	ret += sensor_write(sd, 0x04, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x03, (unsigned char)((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
 		ISP_INFO("sensor_write error %d\n", __LINE__);

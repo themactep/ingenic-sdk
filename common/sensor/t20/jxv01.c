@@ -98,14 +98,14 @@ static inline unsigned char cale_again_register(unsigned int gain) {
 		if (gain & (1 << (index + TX_ISP_GAIN_FIXED_POINT)))
 			break;
 	i = index;
-	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0xf;
+	p = (gain >> (TX_ISP_GAIN_FIXED_POINT + index - 4)) & 0x0f;
 	return (i << 4) | p;
 }
 
 static inline unsigned int cale_sensor_again_to_isp(unsigned char reg) {
 	unsigned int h, l;
 	h = reg >> 4;
-	l = reg & 0xf;
+	l = reg & 0x0f;
 	return (1 << (h + TX_ISP_GAIN_FIXED_POINT)) | (l << ((TX_ISP_GAIN_FIXED_POINT + h - 4)));
 }
 
@@ -522,19 +522,19 @@ static int sensor_get_black_pedestal(struct v4l2_subdev *sd, int value) {
 		return ret;
 	switch(*v) {
 		case SENSOR_R_BLACK_LEVEL:
-			black = (h & 0x3) << 8;
+			black = (h & 0x03) << 8;
 			reg = 0x44;
 			break;
 		case SENSOR_GR_BLACK_LEVEL:
-			black = (h & (0x3 << 2)) << 8;
+			black = (h & (0x03 << 2)) << 8;
 			reg = 0x45;
 			break;
 		case SENSOR_GB_BLACK_LEVEL:
-			black = (h & (0x3 << 4)) << 8;
+			black = (h & (0x03 << 4)) << 8;
 			reg = 0x46;
 			break;
 		case SENSOR_B_BLACK_LEVEL:
-			black = (h & (0x3 << 6)) << 8;
+			black = (h & (0x03 << 6)) << 8;
 			reg = 0x47;
 			break;
 		default:

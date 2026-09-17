@@ -590,7 +590,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
-	unsigned char val0 = 0x0;
+	unsigned char val0 = 0x00;
 
 	ret += sensor_read(sd, 0x12, &val0);
 	if (enable & 0x02) {

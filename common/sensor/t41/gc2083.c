@@ -770,7 +770,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 
 	ret += sensor_read(sd, 0x0d15, &val);
 	switch (enable) {

@@ -1209,7 +1209,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	*((u32 *)0xb3380000) = 0x5;
+	*((u32 *)0xb3380000) = 0x05;
 	return ret;
 }
 

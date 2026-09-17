@@ -1041,10 +1041,10 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
-	unsigned char val0 = 0x0;
-	unsigned char val1 = 0x0;
+	unsigned char val0 = 0x00;
+	unsigned char val1 = 0x00;
 
-	if (enable & 0x2) {
+	if (enable & 0x02) {
 		val0 = 0x02;
 		val1 = 0x02;
 	} else {

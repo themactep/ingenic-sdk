@@ -749,7 +749,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	ret = sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
-	ret = sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xf));
+	ret = sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0x0f));
 	if (ret < 0)
 		return ret;
 	return 0;

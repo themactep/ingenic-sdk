@@ -1789,24 +1789,24 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
-	unsigned char val = 0x0;
-	unsigned char otp_val = 0x0;
+	unsigned char val = 0x00;
+	unsigned char otp_val = 0x00;
 	ret += sensor_read(sd, 0x022c, &val);
 
-	val = (val & (~0x3));
+	val = (val & (~0x03));
 	/* 2'b01 mirror; 2'b10 flip; 2'b11 mirror &flip */
 	switch (enable) {
 	case 0:
 		sensor_write(sd, 0x022c, val);
 		break;
 	case 1:
-		sensor_write(sd, 0x022c, (val | 0x1));
+		sensor_write(sd, 0x022c, (val | 0x01));
 		break;
 	case 2:
-		sensor_write(sd, 0x022c, (val | 0x2));
+		sensor_write(sd, 0x022c, (val | 0x02));
 		break;
 	case 3:
-		sensor_write(sd, 0x022c, (val | 0x3));
+		sensor_write(sd, 0x022c, (val | 0x03));
 		break;
 	}
 	otp_val = 0x60 | val;

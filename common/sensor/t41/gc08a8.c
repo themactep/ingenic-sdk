@@ -1119,7 +1119,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = ISP_SUCCESS;
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
-	unsigned char val = 0x0;
+	unsigned char val = 0x00;
 
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sensor_read(sd, 0x0101, &val);

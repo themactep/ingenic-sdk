@@ -278,7 +278,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 #if 0
 	if (vic_num < 1) {
 //		if (vic_num % 2 == 0)
-			*((u32 *)0xb3380000) = 0x5;
+			*((u32 *)0xb3380000) = 0x05;
 		vic_num++;
 	}
 #endif
@@ -550,7 +550,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 			private_msleep(1000);
 			sensor_read(sd, 0x03, &reg3);
-			if ((reg3 & 0x07) == 0x2) {
+			if ((reg3 & 0x07) == 0x02) {
 				ISP_INFO("\n======> now is N <======\n");
 				private_msleep(300);
 				sensor_read(sd, 0x01, &reg1);
@@ -559,7 +559,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 				}
 			}
 
-			if ((reg3 & 0x07) == 0x3) {
+			if ((reg3 & 0x07) == 0x03) {
 				ISP_INFO("\n======> now is P <======\n");
 				sensor_decoder_init(sd, CH_ALL, FHD25, STD_HDA);
 				sensor_mipi_out(sd, MIPI_2CH2LANE_594M);
@@ -577,7 +577,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 			ISP_INFO("%s stream on\n", SENSOR_NAME);
 			private_msleep(1000);
-			*((u32 *)0xb3380000) = 0x5;
+			*((u32 *)0xb3380000) = 0x05;
 		}
 	} else {
 		ISP_INFO("%s stream off\n", SENSOR_NAME);

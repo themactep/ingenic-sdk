@@ -9569,7 +9569,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x04);
-	/* ret += sensor_write(sd, 0xb0b6, 0x2); */
+	/* ret += sensor_write(sd, 0xb0b6, 0x02); */
 	ret += sensor_write(sd, 0xb0b7, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0xb0b6, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3464, 0x14);
@@ -9585,8 +9585,8 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x08);
-	/* ret += sensor_write(sd, 0xb0b6, 0x3); */
-	ret += sensor_write(sd, 0xb0bb, (unsigned char)((value & 0x3) + 0x40));
+	/* ret += sensor_write(sd, 0xb0b6, 0x03); */
+	ret += sensor_write(sd, 0xb0bb, (unsigned char)((value & 0x03) + 0x40));
 	ret += sensor_write(sd, 0xb15b, (unsigned char)((value >> 2) & 0xff));
 	ret += sensor_write(sd, 0x3464, 0x18);
 	ret += sensor_write(sd, 0x3467, 0x01);
@@ -9688,7 +9688,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x00);
-	/* ret += sensor_write(sd, 0xb0b6, 0x1); */
+	/* ret += sensor_write(sd, 0xb0b6, 0x01); */
 	ret += sensor_write(sd, 0xb0b3, vts & 0xff);
 	ret += sensor_write(sd, 0xb0b2, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x3464, 0x10);
@@ -9739,7 +9739,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 	ret += sensor_read(sd, 0x30c0, &val);
 	if (enable) {
-		val = val | 0x8;
+		val = val | 0x08;
 		cfa = 0x22;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG12_1X12;
 	} else {
@@ -9751,7 +9751,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus_change = 0;
 	ret += sensor_write(sd, 0x3467, 0x00);
 	ret += sensor_write(sd, 0x3464, 0x0c);
-	/* ret += sensor_write(sd, 0xb0b6, 0x4); */
+	/* ret += sensor_write(sd, 0xb0b6, 0x04); */
 	ret += sensor_write(sd, 0xb0c0, val);
 	ret += sensor_write(sd, 0xb252, cfa);
 	ret += sensor_write(sd, 0x3464, 0x1c);

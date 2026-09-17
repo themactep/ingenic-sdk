@@ -1075,7 +1075,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	shr0 = sensor_attr.total_height - it;
 	shr0 = ((shr0 >> 1) << 1);
 
-	ret += sensor_write(sd, 0x304a, ((shr0 >> 16) & 0xf));
+	ret += sensor_write(sd, 0x304a, ((shr0 >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3049, (unsigned char)((shr0 >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3048, (unsigned char)(shr0 & 0xff));
 

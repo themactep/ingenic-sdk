@@ -32,8 +32,8 @@
 #define SENSOR_SUPPORT_SCLK (37125000)
 #define SENSOR_VERSION "20180320"
 
-#define LCG 0x0
-#define HCG 0x1
+#define LCG 0x00
+#define HCG 0x01
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -474,7 +474,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3EEA, 0x2819},
 	{0x30B0, 0x1A3A},
 	{0x306E, 0x2418},
-	/* {0x3070, 0x2}, //color bar */
+	/* {0x3070, 0x02}, //color bar */
 	/* {0x301A, 0x10DC}, */
 	{SENSOR_REG_END, 0x00},
 };

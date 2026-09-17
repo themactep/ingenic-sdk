@@ -962,7 +962,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	shs1 = rhs1 - (value << 1);
 	ret += sensor_write(sd, 0x3054, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3055, (unsigned char)((shs1 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x3056, (unsigned char)((shs1 >> 16) & 0x3));
+	ret += sensor_write(sd, 0x3056, (unsigned char)((shs1 >> 16) & 0x03));
 
 	return 0;
 }
@@ -1164,7 +1164,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
 
-	ret = sensor_write(sd, 0x3000, 0x1);
+	ret = sensor_write(sd, 0x3000, 0x01);
 	if (wdr_en == 1) {
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_mipi_dol));
 		data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;

@@ -29,7 +29,7 @@
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_PAGE_REG 0xfd
-#define SENSOR_REG_DELAY 0x0
+#define SENSOR_REG_DELAY 0x00
 #define SENSOR_REG_END 0xff
 #define SENSOR_SUPPORT_SCLK (84000000)
 #define SENSOR_VERSION "H20191120a"
@@ -593,7 +593,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char page = 0;
 	sensor_read(sd, 0xfd, &page);
 	if (page != 0) {
-		sensor_write(sd, 0xfd, 0x0);
+		sensor_write(sd, 0xfd, 0x00);
 	}
 
 	ret = sensor_read(sd, 0x02, &v);
@@ -620,8 +620,8 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	int ret = 0;
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x4, (unsigned char)(value & 0xff));
-	ret += sensor_write(sd, 0x3, (unsigned char)((value & 0xff00) >> 8));
+	ret += sensor_write(sd, 0x04, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x03, (unsigned char)((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
 		ISP_INFO("sensor_write error %d\n", __LINE__);

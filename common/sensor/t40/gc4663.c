@@ -606,7 +606,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on[] = {
-	{0x0101, 0x3},
+	{0x0101, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
 

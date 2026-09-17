@@ -1082,8 +1082,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
-	int hflip = enable & 0x1;
-	int vflip = (enable >> 1) & 0x1;
+	int hflip = enable & 0x01;
+	int vflip = (enable >> 1) & 0x01;
 	static const u32 codes[4] = {
 		V4L2_MBUS_FMT_SRGGB10_1X10, /* no flip (matches mode table default) */
 		V4L2_MBUS_FMT_SGRBG10_1X10, /* hflip only */
@@ -1365,7 +1365,7 @@ static __init int init_sensor(void) {
 	int ret = 0;
 
 	/* sensor_info.width/height (registered here, at module_init, before
-     * sensor_probe() runs) is what "auto" (0x0) stream resolution
+     * sensor_probe() runs) is what "auto" (0x00) stream resolution
      * requests resolve against -- it must match whichever mode
      * sensor_resolution actually selects, not the sensor's absolute
      * max capability, or downstream would request a size the hardware

@@ -222,7 +222,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	// C2399_1080p_mipi1lane_30fps_V2P0.ini
 	{0x0103, 0x01},
-	{SENSOR_REG_DELAY, 0xa},
+	{SENSOR_REG_DELAY, 0x0a},
 	{0x3288, 0x50},
 	{0x0401, 0x3b},
 	{0x0403, 0x00},

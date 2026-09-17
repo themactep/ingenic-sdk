@@ -383,7 +383,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char page = 0;
 	sensor_read(sd, 0xfd, &page);
 	if (page != 0) {
-		sensor_write(sd, 0xfd, 0x0);
+		sensor_write(sd, 0xfd, 0x00);
 	}
 
 	ret = sensor_read(sd, 0x02, &v);
