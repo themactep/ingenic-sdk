@@ -644,7 +644,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
-		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
+		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 	switch (cmd) {

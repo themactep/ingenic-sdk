@@ -574,7 +574,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_INFO("chip found @ 0x%x (%s) is not an %s chip.\n",
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
 			client->addr,
 			client->adapter->name,
 			SENSOR_NAME);
@@ -594,7 +594,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 
 	if (IS_ERR_OR_NULL(sd)) {
-		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
+		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 	switch (cmd) {

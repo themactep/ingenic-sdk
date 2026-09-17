@@ -1166,7 +1166,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	struct tx_isp_sensor_value *sensor_val = arg;
 
 	if (IS_ERR_OR_NULL(sd)) {
-		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
+		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 	switch (cmd) {
