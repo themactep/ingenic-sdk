@@ -565,7 +565,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int wpclk = SENSOR_SUPPORT_30FPS_SCLK;
 	unsigned short vts = 0;
 	unsigned short hts = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 

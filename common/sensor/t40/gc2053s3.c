@@ -645,7 +645,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	ISP_WARNING("Frame Sync mode not support set fps !!!\n");

@@ -740,7 +740,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned int sensor_max_fps;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor->info.default_boot) {

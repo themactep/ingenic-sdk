@@ -688,7 +688,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int pclk = SENSOR_SUPPORT_PCLK;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

@@ -746,7 +746,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned short hb = 0;
 	unsigned short vb = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

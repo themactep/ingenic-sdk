@@ -698,7 +698,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;

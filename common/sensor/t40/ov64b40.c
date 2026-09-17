@@ -3856,7 +3856,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
-	unsigned char tmp;
+	unsigned char tmp = 0;
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
 	unsigned int vts = 0;
