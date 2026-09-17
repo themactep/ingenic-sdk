@@ -1343,20 +1343,16 @@ static __init int init_sensor(void) {
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver\n", SENSOR_NAME);
-		sensor_common_exit();
 		return ret;
 	}
 
 	ret = private_i2c_add_driver(&mis20c1_driver);
-	if (ret)
-		sensor_common_exit();
 
 	return ret;
 }
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&mis20c1_driver);
-	sensor_common_exit();
 }
 
 module_init(init_sensor);

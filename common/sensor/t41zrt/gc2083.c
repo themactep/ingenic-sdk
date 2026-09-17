@@ -984,6 +984,5 @@ int init_sensor(void) {
 }
 
 void exit_sensor(void) {
-	sensor_common_exit();
 	i2c_del_driver(&sensor_driver);
 }

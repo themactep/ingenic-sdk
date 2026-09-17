@@ -219,11 +219,6 @@ void sensor_common_update(struct sensor_info *info, int rst_gpio, int pwdn_gpio,
 	info->i2c_adapter = i2c_adapter;
 }
 
-void sensor_common_exit(void) {
-	/* Note: Each sensor driver should call this with its own info pointer */
-	/* For now, we rely on the proc entries being cleaned up when the module unloads */
-}
-
 #ifndef SENSOR_PROC_OWNED_BY_ISP
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));

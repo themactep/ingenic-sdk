@@ -2234,7 +2234,6 @@ static __init int init_sensor(void) {
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
-	sensor_common_exit();
 }
 
 module_init(init_sensor);
