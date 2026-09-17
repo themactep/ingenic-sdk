@@ -607,17 +607,17 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	struct again_lut *val_lut = sensor_again_lut;
 	ret = sensor_write(sd, 0x0203, it & 0xfe);
 	ret += sensor_write(sd, 0x0202, it >> 8);
-	ret = sensor_write(sd, 0x031d, 0x2a);
-	ret = sensor_write(sd, 0x02fd, val_lut[value].reg2fd);
-	ret = sensor_write(sd, 0x02fc, val_lut[value].reg2fc);
-	ret = sensor_write(sd, 0x0263, val_lut[value].reg263);
-	ret = sensor_write(sd, 0x0267, val_lut[value].reg267);
-	ret = sensor_write(sd, 0x031d, 0x28);
-	ret = sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
-	ret = sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
-	ret = sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
-	ret = sensor_write(sd, 0x02b9, val_lut[value].reg2b9);
-	ret = sensor_write(sd, 0x0515, val_lut[value].reg515);
+	ret += sensor_write(sd, 0x031d, 0x2a);
+	ret += sensor_write(sd, 0x02fd, val_lut[value].reg2fd);
+	ret += sensor_write(sd, 0x02fc, val_lut[value].reg2fc);
+	ret += sensor_write(sd, 0x0263, val_lut[value].reg263);
+	ret += sensor_write(sd, 0x0267, val_lut[value].reg267);
+	ret += sensor_write(sd, 0x031d, 0x28);
+	ret += sensor_write(sd, 0x02b3, val_lut[value].reg2b3);
+	ret += sensor_write(sd, 0x02b4, val_lut[value].reg2b4);
+	ret += sensor_write(sd, 0x02b8, val_lut[value].reg2b8);
+	ret += sensor_write(sd, 0x02b9, val_lut[value].reg2b9);
+	ret += sensor_write(sd, 0x0515, val_lut[value].reg515);
 
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d", __LINE__);

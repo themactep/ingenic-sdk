@@ -1327,7 +1327,7 @@ static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	ret += sensor_write(sd, 0x03fe, 0xf0), ret += sensor_write(sd, 0x03fe, 0xf0),
 		ret += sensor_write(sd, 0x03fe, 0x00), private_msleep(5);
 
-	ret = sensor_write_array(sd, wsize->regs);
+	ret += sensor_write_array(sd, wsize->regs);
 	ret += sensor_write_array(sd, sensor_stream_on);
 
 	return ret;

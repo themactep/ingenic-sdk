@@ -907,13 +907,13 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret = sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
 	/*set sensor analog gain*/
-	ret = sensor_write(sd, 0x02b3, val_lut[again].reg2b3);
-	ret = sensor_write(sd, 0x02b4, val_lut[again].reg2b4);
-	ret = sensor_write(sd, 0x02b8, val_lut[again].reg2b8);
-	ret = sensor_write(sd, 0x02b9, val_lut[again].reg2b9);
-	ret = sensor_write(sd, 0x0515, val_lut[again].reg515);
-	ret = sensor_write(sd, 0x0519, val_lut[again].reg519);
-	ret = sensor_write(sd, 0x02d9, val_lut[again].reg2d9);
+	ret += sensor_write(sd, 0x02b3, val_lut[again].reg2b3);
+	ret += sensor_write(sd, 0x02b4, val_lut[again].reg2b4);
+	ret += sensor_write(sd, 0x02b8, val_lut[again].reg2b8);
+	ret += sensor_write(sd, 0x02b9, val_lut[again].reg2b9);
+	ret += sensor_write(sd, 0x0515, val_lut[again].reg515);
+	ret += sensor_write(sd, 0x0519, val_lut[again].reg519);
+	ret += sensor_write(sd, 0x02d9, val_lut[again].reg2d9);
 
 	return ret;
 }

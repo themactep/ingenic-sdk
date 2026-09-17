@@ -899,8 +899,8 @@ static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	ret += sensor_write(sd, 0x12, 0x80);
 	private_msleep(5);
 
-	ret = sensor_write_array(sd, wsize->regs);
-	ret = sensor_write_array(sd, sensor_stream_on_mipi);
+	ret += sensor_write_array(sd, wsize->regs);
+	ret += sensor_write_array(sd, sensor_stream_on_mipi);
 	ret += sensor_write(sd, 0x00, 0x00);
 
 	ret += sensor_read(sd, 0x2f, &r2f_val);
