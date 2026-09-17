@@ -214,7 +214,7 @@ struct tx_isp_sensor_attribute jxf37pa_attr = {.name = "jxf37pa",
 	.chip_id = 0x841,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
-	.cbus_device = 0x40,
+	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP,
 	.dvp =
 		{
