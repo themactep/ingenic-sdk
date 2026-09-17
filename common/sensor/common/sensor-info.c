@@ -8,6 +8,7 @@
 #include <linux/proc_fs.h>
 #include <sensor-info.h>
 
+#ifndef SENSOR_PROC_OWNED_BY_ISP
 /* Per-sensor proc context for multi-sensor support */
 struct sensor_proc_ctx {
 	struct sensor_info *info;
@@ -104,8 +105,20 @@ static const struct file_operations i2c_adapter_fops = {
 
 /* Track if legacy flat paths have been created (for backward compatibility) */
 static int legacy_paths_created = 0;
+#endif /* !SENSOR_PROC_OWNED_BY_ISP */
 
 void sensor_common_init(struct sensor_info *info) {
+#ifdef SENSOR_PROC_OWNED_BY_ISP
+	/*
+	 * The ISP driver owns /proc/jz/sensor and publishes the indexed
+	 * sensorN/ registry (vendor tx-isp-sinfo.c, or open-tx-isp's
+	 * tx_isp_sinfo). This module must not create the node too: procfs
+	 * resolves a duplicated name to the last registrant, so the flat tree
+	 * below would shadow the ISP's sensorN/ and Raptor could not find the
+	 * active sensor. Registration only when the ISP owns the node.
+	 */
+	(void)info;
+#else
 	struct sensor_proc_ctx *ctx;
 	char path[80];
 
@@ -184,6 +197,7 @@ void sensor_common_init(struct sensor_info *info) {
 		proc_create_data("jz/sensor/video_interface", 0444, NULL, &video_interface_fops, ctx);
 		proc_create_data("jz/sensor/i2c_adapter", 0444, NULL, &i2c_adapter_fops, ctx);
 	}
+#endif /* SENSOR_PROC_OWNED_BY_ISP */
 }
 
 void sensor_common_update(struct sensor_info *info, int rst_gpio, int pwdn_gpio,
@@ -210,6 +224,7 @@ void sensor_common_exit(void) {
 	/* For now, we rely on the proc entries being cleaned up when the module unloads */
 }
 
+#ifndef SENSOR_PROC_OWNED_BY_ISP
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));
 	char buffer[128];
@@ -307,3 +322,4 @@ static ssize_t sensor_i2c_adapter_read(struct file *file, char __user *buf, size
 	int len = snprintf(buffer, sizeof(buffer), "%d\n", ctx->info->i2c_adapter);
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
+#endif /* !SENSOR_PROC_OWNED_BY_ISP */
