@@ -2055,7 +2055,7 @@ static __init int init_sensor(void) {
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 

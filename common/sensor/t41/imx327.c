@@ -739,7 +739,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x301c, hmax & 0xff);
 	ret += sensor_write(sd, 0x301d, (hmax >> 8) & 0xff);
 	if (0 != ret) {
-		ISP_INFO("err: %s_write err\n", SENSOR_NAME);
+		ISP_ERROR("err: %s_write err\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.attr->total_width = hmax >> 1;

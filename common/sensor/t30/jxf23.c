@@ -693,7 +693,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		break;
 	default:
 		ret = -1;
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -709,7 +709,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts |= val;
 	hts *= 2;
 	if (0 != ret) {
-		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -943,7 +943,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int ret;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 
@@ -953,7 +953,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	// *(volatile unsigned int*)(0xb0010134) = 0xc0000000;
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 
@@ -991,7 +991,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.one_line_expr_in_us = 59;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 324678;
 	sensor_attr.max_dgain = 0;
@@ -1056,7 +1056,7 @@ static __init int init_sensor(void) {
 	int ret = 0;
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	sensor_common_init(&sensor_info);

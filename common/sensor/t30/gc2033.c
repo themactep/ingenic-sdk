@@ -822,7 +822,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 		wsize->regs = sensor_init_regs_1920_1080_15fps_dvp;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	sensor->video.mbus.width = wsize->width;
@@ -875,7 +875,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -1132,14 +1132,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);
@@ -1177,7 +1177,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1124;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again =
 		283241; /*log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);*/
@@ -1245,7 +1245,7 @@ static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

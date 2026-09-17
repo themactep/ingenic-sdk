@@ -725,14 +725,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 
@@ -741,7 +741,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		struct clk *vpll;
 		vpll = clk_get(NULL, "vpll");
 		if (IS_ERR(vpll)) {
-			ISP_INFO("get vpll failed\n");
+			ISP_ERROR("get vpll failed\n");
 		} else {
 			rate = clk_get_rate(vpll);
 			if (((rate / 1000) % 27000) != 0) {
@@ -749,7 +749,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			}
 			ret = clk_set_parent(sensor->mclk, vpll);
 			if (ret < 0)
-				ISP_INFO("set mclk parent as epll err\n");
+				ISP_ERROR("set mclk parent as epll err\n");
 		}
 	}
 

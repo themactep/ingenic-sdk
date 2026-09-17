@@ -796,7 +796,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 			wsize->regs = sensor_init_regs_1920_1080_15fps_dvp;
 			break;
 		default:
-			ISP_INFO("Now we do not support this framerate!!!\n");
+			ISP_ERROR("Now we do not support this framerate!!!\n");
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->fps = 25 << 16 | 1;
@@ -855,7 +855,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 			break;
 		default:
 			ret = -1;
-			ISP_INFO("Now we do not support this framerate!!!\n");
+			ISP_ERROR("Now we do not support this framerate!!!\n");
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wpclk = SENSOR_SUPPORT_WPCLK_FPS_30;
@@ -1121,7 +1121,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 
@@ -1129,7 +1129,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
@@ -1178,7 +1178,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1124;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	sensor_attr.max_again = 453170;
@@ -1245,7 +1245,7 @@ static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

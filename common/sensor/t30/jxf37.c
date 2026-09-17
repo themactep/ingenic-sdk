@@ -695,7 +695,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 		wsize->regs = sensor_init_regs_1920_1080_25fps_dvp;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
@@ -751,7 +751,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		sclk = SENSOR_SUPPORT_25FPS_SCLK;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1015,7 +1015,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1121;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 259142;
 	sensor_attr.max_dgain = 0;

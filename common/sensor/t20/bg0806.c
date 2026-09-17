@@ -1334,7 +1334,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret += sensor_read(sd, 0x000f, &val);
 	hts |= val;
 	if (0 != ret) {
-		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1346,7 +1346,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret += sensor_read(sd, 0x0009, &val);
 	height |= val;
 	if (0 != ret) {
-		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -1562,7 +1562,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	int ret;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 
@@ -1570,7 +1570,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 

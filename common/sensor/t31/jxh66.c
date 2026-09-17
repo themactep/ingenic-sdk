@@ -695,7 +695,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 	if (ret < 0) {
-		ISP_INFO("err:sensor_write err\n");
+		ISP_ERROR("err:sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -926,14 +926,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	ag_last = -1;
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
@@ -1047,7 +1047,7 @@ static __init int init_sensor(void) {
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);

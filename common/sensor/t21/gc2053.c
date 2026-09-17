@@ -631,7 +631,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 			wsize->regs = sensor_init_regs_1920_1080_15fps_dvp;
 			break;
 		default:
-			ISP_INFO("Now we do not support this framerate!!!\n");
+			ISP_ERROR("Now we do not support this framerate!!!\n");
 		}
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		wsize->fps = 25 << 16 | 1;
@@ -689,7 +689,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		break;
 	default:
 		ret = -1;
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -966,7 +966,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_integration_time = 1124;
 		break;
 	default:
-		ISP_INFO("Now we do not support this framerate!!!\n");
+		ISP_ERROR("Now we do not support this framerate!!!\n");
 	}
 
 	sensor_attr.max_again = 453170;
