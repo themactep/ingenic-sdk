@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
  * imx219.c
- * IMX219 sensor driver for the Ingenic T31 tx-isp framework.
  * Ported from:
  *  - T31 framework glue: t31/sc2336.c (proven on 28 real boards)
  *  - 16-bit register read/write + split exposure/gain style: this session's
