@@ -825,7 +825,7 @@ static int sc1a4t_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
+			ISP_ERROR("gpio request failed %d\n", reset_gpio);
 		}
 	}
 	if (reset_gpio1 != -1) {
@@ -838,7 +838,7 @@ static int sc1a4t_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(reset_gpio1, 1);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", reset_gpio1);
+			ISP_ERROR("gpio request failed %d\n", reset_gpio1);
 		}
 	}
 	ret = sc1a4t_write(sd, 0x3004, 0x64);

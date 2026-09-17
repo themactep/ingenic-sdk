@@ -812,7 +812,7 @@ static int sc301iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", reset_gpio);
+			ISP_ERROR("gpio request failed %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -823,7 +823,7 @@ static int sc301iot_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_id
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
+			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
 	ret = sc301iot_detect(sd, &ident);

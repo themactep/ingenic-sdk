@@ -970,7 +970,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(rst_gpio, 1);
 			private_msleep(100);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", rst_gpio);
+			ISP_ERROR("gpio request failed %d\n", rst_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -981,7 +981,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			private_gpio_direction_output(pwdn_gpio, 0);
 			private_msleep(10);
 		} else {
-			ISP_ERROR("gpio requrest fail %d\n", pwdn_gpio);
+			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);

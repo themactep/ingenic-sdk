@@ -1181,7 +1181,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			msleep(50);
 			gpio_direction_output(pwdn_gpio, 0);
 		} else {
-			ISP_INFO("gpio request fail %d\n", pwdn_gpio);
+			ISP_INFO("gpio request failed %d\n", pwdn_gpio);
 		}
 	}*/
 	if (reset_gpio != -1) {
@@ -1194,7 +1194,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(reset_gpio, 1);
 			msleep(20);
 		} else {
-			ISP_INFO("gpio request fail %d\n", reset_gpio);
+			ISP_INFO("gpio request failed %d\n", reset_gpio);
 		}
 	}
 
