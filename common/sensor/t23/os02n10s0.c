@@ -872,7 +872,7 @@ static int os02n10_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	ISP_INFO("===================================================\n");
 
 	if (chip) {
-		memcpy(chip->name, "os02n10", sizeof("os02n10"));
+		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
