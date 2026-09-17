@@ -255,14 +255,14 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc835hai_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;
 
 	return isp_it;
 }
-unsigned int sc835hai_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
+unsigned int sensor_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;
@@ -366,7 +366,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	.sensor_ctrl.alloc_integration_time_short = sc835hai_alloc_integration_time_short,
+	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 };
 
 static struct regval_list sensor_init_regs_3840_2160_25fps_mipi[] = {

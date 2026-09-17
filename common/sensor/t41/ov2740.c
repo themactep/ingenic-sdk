@@ -914,7 +914,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int ov2740_frame_sync(struct tx_isp_subdev *sd, struct tx_isp_frame_sync *sync)
+static int sensor_frame_sync(struct tx_isp_subdev *sd, struct tx_isp_frame_sync *sync)
 {
 	sensor_write(sd, 0x381d, 0x00);
 	private_msleep(1);
@@ -1176,7 +1176,7 @@ static struct tx_isp_subdev_core_ops sensor_core_ops = {
 	.g_chip_ident = sensor_g_chip_ident,
 	.reset = sensor_reset,
 	.init = sensor_init,
-	//	.fsync = ov2740_frame_sync,
+	//	.fsync = sensor_frame_sync,
 	.g_register = sensor_g_register,
 	.s_register = sensor_s_register,
 };

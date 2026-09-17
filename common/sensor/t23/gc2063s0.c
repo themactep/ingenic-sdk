@@ -143,7 +143,7 @@ struct again_lut gc2063_again_lut[] = {
 
 struct tx_isp_sensor_attribute gc2063_attr;
 
-unsigned int gc2063_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = gc2063_again_lut;
 
 	while (lut->gain <= gc2063_attr.max_again) {
@@ -166,7 +166,7 @@ unsigned int gc2063_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int gc2063_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
@@ -238,8 +238,8 @@ struct tx_isp_sensor_attribute gc2063_attr = {.name = "gc2063",
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = gc2063_alloc_again,
-	.sensor_ctrl.alloc_dgain = gc2063_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 28,
 	.fsync_attr = {
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
@@ -1210,7 +1210,7 @@ static struct regval_list gc2063_stream_off_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-int gc2063_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	struct i2c_msg msg[2] = {[0] =
 					 {
@@ -1233,7 +1233,7 @@ int gc2063_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	return ret;
 }
 
-int gc2063_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
@@ -1255,7 +1255,7 @@ int gc2063_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 }
 
 #if 0
-static int gc2063_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -1263,7 +1263,7 @@ static int gc2063_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = gc2063_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1273,13 +1273,13 @@ static int gc2063_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int gc2063_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = gc2063_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -1289,20 +1289,20 @@ static int gc2063_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int gc2063_reset(struct tx_isp_subdev *sd, int val) {
+static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int gc2063_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
-	ret = gc2063_read(sd, 0xf0, &v);
+	ret = sensor_read(sd, 0xf0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	ret = gc2063_read(sd, 0xf1, &v);
+	ret = sensor_read(sd, 0xf1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -1314,7 +1314,7 @@ static int gc2063_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 }
 
 #if 0
-static int gc2063_set_expo(struct tx_isp_subdev *sd, int value)
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = value & 0xffff;
@@ -1322,29 +1322,29 @@ static int gc2063_set_expo(struct tx_isp_subdev *sd, int value)
 	struct again_lut *val_lut = gc2063_again_lut;
 
 	/*set sensor reg page*/
-	ret = gc2063_write(sd, 0xfe, 0x00);
+	ret = sensor_write(sd, 0xfe, 0x00);
 
 	/* set vts */
 	if(vtsn0 != vts0){
 		vts0 = vtsn0;
-		ret += gc2063_write(sd, 0x41, vtsn0);
+		ret += sensor_write(sd, 0x41, vtsn0);
 	}
 	if(vtsn1 != vts1){
 		vts1 = vtsn1;
-		ret += gc2063_write(sd, 0x42, vtsn1);
+		ret += sensor_write(sd, 0x42, vtsn1);
 	}
 
 	/*set integration time*/
-	ret += gc2063_write(sd, 0x04, it & 0xff);
-	ret += gc2063_write(sd, 0x03, (it & 0x3f00)>>8);
+	ret += sensor_write(sd, 0x04, it & 0xff);
+	ret += sensor_write(sd, 0x03, (it & 0x3f00)>>8);
 
 	/*set analog gain*/
-	ret += gc2063_write(sd, 0xb4, val_lut[again].regb4);
-	ret += gc2063_write(sd, 0xb3, val_lut[again].regb3);
-	ret += gc2063_write(sd, 0xb8, val_lut[again].dpc);
-	ret += gc2063_write(sd, 0xb9, val_lut[again].blc);
+	ret += sensor_write(sd, 0xb4, val_lut[again].regb4);
+	ret += sensor_write(sd, 0xb3, val_lut[again].regb3);
+	ret += sensor_write(sd, 0xb8, val_lut[again].dpc);
+	ret += sensor_write(sd, 0xb9, val_lut[again].blc);
 	if (ret < 0) {
-		ISP_ERROR("gc2063_write error  %d" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d" ,__LINE__ );
 		return ret;
 	}
 
@@ -1353,36 +1353,36 @@ static int gc2063_set_expo(struct tx_isp_subdev *sd, int value)
 
 #endif
 #if 1
-static int gc2063_set_integration_time(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	//ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
-	ret = gc2063_write(sd, 0x04, value & 0xff);
-	ret += gc2063_write(sd, 0x03, (value & 0x3f00) >> 8);
+	ret = sensor_write(sd, 0x04, value & 0xff);
+	ret += sensor_write(sd, 0x03, (value & 0x3f00) >> 8);
 	if (ret < 0) {
-		ISP_ERROR("gc2063_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
 
 	return 0;
 }
 
-static int gc2063_set_analog_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = gc2063_again_lut;
 	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	//ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
-	ret = gc2063_write(sd, 0xfe, 0x00);
-	ret += gc2063_write(sd, 0xb4, val_lut[value].regb4);
-	ret += gc2063_write(sd, 0xb3, val_lut[value].regb3);
-	//ret += gc2063_write(sd, 0xb2, val_lut[value].regb2);
-	ret += gc2063_write(sd, 0xb8, val_lut[value].dpc);
-	ret += gc2063_write(sd, 0xb9, val_lut[value].blc);
+	ret = sensor_write(sd, 0xfe, 0x00);
+	ret += sensor_write(sd, 0xb4, val_lut[value].regb4);
+	ret += sensor_write(sd, 0xb3, val_lut[value].regb3);
+	//ret += sensor_write(sd, 0xb2, val_lut[value].regb2);
+	ret += sensor_write(sd, 0xb8, val_lut[value].dpc);
+	ret += sensor_write(sd, 0xb9, val_lut[value].blc);
 	if (ret < 0) {
-		ISP_ERROR("gc2063_write error  %d", __LINE__);
+		ISP_ERROR("sensor_write error  %d", __LINE__);
 		return ret;
 	}
 
@@ -1390,15 +1390,15 @@ static int gc2063_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 }
 #endif
 
-static int gc2063_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int gc2063_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int gc2063_init(struct tx_isp_subdev *sd, int enable) {
+static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -1411,7 +1411,7 @@ static int gc2063_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = gc2063_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1420,21 +1420,21 @@ static int gc2063_init(struct tx_isp_subdev *sd, int enable) {
 	return 0;
 }
 
-static int gc2063_s_stream(struct tx_isp_subdev *sd, int enable) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = gc2063_write_array(sd, gc2063_stream_on_dvp);
+			ret = sensor_write_array(sd, gc2063_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = gc2063_write_array(sd, gc2063_stream_on_mipi);
+			ret = sensor_write_array(sd, gc2063_stream_on_mipi);
 		}
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = gc2063_write_array(sd, gc2063_stream_off_dvp);
+			ret = sensor_write_array(sd, gc2063_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = gc2063_write_array(sd, gc2063_stream_off_mipi);
+			ret = sensor_write_array(sd, gc2063_stream_off_mipi);
 		}
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
@@ -1442,7 +1442,7 @@ static int gc2063_s_stream(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int gc2063_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int wpclk = 0;
 	unsigned short vts = 0;
@@ -1480,10 +1480,10 @@ static int gc2063_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
-	ret = gc2063_write(sd, 0xfe, 0x0);
-	ret += gc2063_read(sd, 0x05, &tmp);
+	ret = sensor_write(sd, 0xfe, 0x0);
+	ret += sensor_read(sd, 0x05, &tmp);
 	hts = tmp;
-	ret += gc2063_read(sd, 0x06, &tmp);
+	ret += sensor_read(sd, 0x06, &tmp);
 	if (ret < 0)
 		return -1;
 	hts = ((hts << 8) + tmp) << 1;
@@ -1496,8 +1496,8 @@ static int gc2063_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vtsn0 = (unsigned char)((vts & 0x3f00) >> 8);
 	vtsn1 = (unsigned char)(vts & 0xff);
 
-	ret = gc2063_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
-	ret += gc2063_write(sd, 0x42, (unsigned char)(vts & 0xff));
+	ret = sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
+	ret += sensor_write(sd, 0x42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
 	sensor->video.fps = fps;
@@ -1510,33 +1510,33 @@ static int gc2063_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return 0;
 }
 
-static int gc2063_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = -1;
 
-	gc2063_write(sd, 0xfe, 0x00);
+	sensor_write(sd, 0xfe, 0x00);
 	switch (enable) {
 	case 0:
-		ret = gc2063_write(sd, 0x17, 0x00); /*normal*/
-		//gc2063_write(sd, 0xfe, 0x00);
+		ret = sensor_write(sd, 0x17, 0x00); /*normal*/
+		//sensor_write(sd, 0xfe, 0x00);
 		break;
 	case 1:
-		ret = gc2063_write(sd, 0x17, 0x01); /*mirror*/
-		//gc2063_write(sd, 0xfe, 0x02);
+		ret = sensor_write(sd, 0x17, 0x01); /*mirror*/
+		//sensor_write(sd, 0xfe, 0x02);
 		break;
 	case 2:
-		ret = gc2063_write(sd, 0x17, 0x02); /*flip*/
-		//gc2063_write(sd, 0xfe, 0x01);
+		ret = sensor_write(sd, 0x17, 0x02); /*flip*/
+		//sensor_write(sd, 0xfe, 0x01);
 		break;
 	case 3:
-		ret = gc2063_write(sd, 0x17, 0x03); /*mirror and flip*/
-		//gc2063_write(sd, 0xfe, 0x03);
+		ret = sensor_write(sd, 0x17, 0x03); /*mirror and flip*/
+		//sensor_write(sd, 0xfe, 0x03);
 		break;
 	}
 
 	return ret;
 }
 
-static int gc2063_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -1552,13 +1552,13 @@ static int gc2063_set_mode(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-static int gc2063_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "gc2063_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(20);
@@ -1583,7 +1583,7 @@ static int gc2063_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
-	ret = gc2063_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
@@ -1597,7 +1597,7 @@ static int gc2063_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	return 0;
 }
 
-static int gc2063_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
+static int sensor_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
 	uint8_t val;
 	uint16_t ret_val;
 
@@ -1607,27 +1607,27 @@ static int gc2063_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
 	case 0:
 		switch (fsync_mode) {
 		case 2:
-			gc2063_read(sd, 0x42, &val);
-			gc2063_write(sd, 0x42, val + 4);
-			gc2063_write(sd, 0xfe, 0x00);
-			gc2063_write(sd, 0x7f, 0x09);
-			gc2063_write(sd, 0x82, 0x01);
-			gc2063_write(sd, 0x83, 0x0c);
-			gc2063_write(sd, 0x84, 0x80);
+			sensor_read(sd, 0x42, &val);
+			sensor_write(sd, 0x42, val + 4);
+			sensor_write(sd, 0xfe, 0x00);
+			sensor_write(sd, 0x7f, 0x09);
+			sensor_write(sd, 0x82, 0x01);
+			sensor_write(sd, 0x83, 0x0c);
+			sensor_write(sd, 0x84, 0x80);
 			break;
 		case 3:
-			gc2063_read(sd, 0x41, &val);
+			sensor_read(sd, 0x41, &val);
 			ret_val = val << 8;
-			gc2063_read(sd, 0x42, &val);
+			sensor_read(sd, 0x42, &val);
 			ret_val |= val;
 			ret_val = ret_val * 8 / 3;
-			gc2063_write(sd, 0x41, ret_val >> 8);
-			gc2063_write(sd, 0x42, (ret_val & 0xff) + 4);
-			gc2063_write(sd, 0xfe, 0x00);
-			gc2063_write(sd, 0x7f, 0x09);
-			gc2063_write(sd, 0x82, 0x01);
-			gc2063_write(sd, 0x83, 0x7f);
-			gc2063_write(sd, 0x84, 0x04);
+			sensor_write(sd, 0x41, ret_val >> 8);
+			sensor_write(sd, 0x42, (ret_val & 0xff) + 4);
+			sensor_write(sd, 0xfe, 0x00);
+			sensor_write(sd, 0x7f, 0x09);
+			sensor_write(sd, 0x82, 0x01);
+			sensor_write(sd, 0x83, 0x7f);
+			sensor_write(sd, 0x84, 0x04);
 			break;
 		}
 		break;
@@ -1636,7 +1636,7 @@ static int gc2063_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
 	return 0;
 }
 
-static int gc2063_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -1647,34 +1647,34 @@ static int gc2063_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_EXPO:
 #if 0
 		if(arg)
-			ret = gc2063_set_expo(sd, *(int*)arg);
+			ret = sensor_set_expo(sd, *(int*)arg);
 #endif
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
-			ret = gc2063_set_integration_time(sd, *(int *)arg);
+			ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
-			ret = gc2063_set_analog_gain(sd, *(int *)arg);
+			ret = sensor_set_analog_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = gc2063_set_digital_gain(sd, *(int *)arg);
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = gc2063_get_black_pedestal(sd, *(int *)arg);
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = gc2063_set_mode(sd, *(int *)arg);
+			ret = sensor_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = gc2063_write_array(sd, gc2063_stream_off_dvp);
+			ret = sensor_write_array(sd, gc2063_stream_off_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = gc2063_write_array(sd, gc2063_stream_off_mipi);
+			ret = sensor_write_array(sd, gc2063_stream_off_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -1682,9 +1682,9 @@ static int gc2063_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
-			ret = gc2063_write_array(sd, gc2063_stream_on_dvp);
+			ret = sensor_write_array(sd, gc2063_stream_on_dvp);
 		} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = gc2063_write_array(sd, gc2063_stream_on_mipi);
+			ret = sensor_write_array(sd, gc2063_stream_on_mipi);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -1693,11 +1693,11 @@ static int gc2063_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = gc2063_set_fps(sd, *(int *)arg);
+			ret = sensor_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = gc2063_set_vflip(sd, *(int *)arg);
+			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -1706,7 +1706,7 @@ static int gc2063_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int gc2063_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -1717,14 +1717,14 @@ static int gc2063_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = gc2063_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int gc2063_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -1733,27 +1733,27 @@ static int gc2063_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	gc2063_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
 static struct tx_isp_subdev_core_ops gc2063_core_ops = {
-	.g_chip_ident = gc2063_g_chip_ident,
-	.reset = gc2063_reset,
-	.init = gc2063_init,
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
 	/*.ioctl = gc2063_ops_ioctl,*/
-	.g_register = gc2063_g_register,
-	.s_register = gc2063_s_register,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
 static struct tx_isp_subdev_video_ops gc2063_video_ops = {
-	.s_stream = gc2063_s_stream,
+	.s_stream = sensor_s_stream,
 };
 
 static struct tx_isp_subdev_sensor_ops gc2063_sensor_ops = {
-	.fsync = gc2063_fsync,
-	.ioctl = gc2063_sensor_ops_ioctl,
+	.fsync = sensor_fsync,
+	.ioctl = sensor_sensor_ops_ioctl,
 };
 
 static struct tx_isp_subdev_ops gc2063_ops = {
@@ -1869,7 +1869,7 @@ error:
 
 uint16_t theight_tmp;
 uint32_t fps_tmp;
-static int gc2063_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -2032,7 +2032,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int gc2063_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -2060,8 +2060,8 @@ static struct i2c_driver gc2063_driver = {
 			.owner = THIS_MODULE,
 			.name = "gc2063",
 		},
-	.probe = gc2063_probe,
-	.remove = gc2063_remove,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
 	.id_table = gc2063_id,
 };
 

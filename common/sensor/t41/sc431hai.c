@@ -255,7 +255,7 @@ struct again_lut sensor_again_lut[] = {
 
 struct tx_isp_sensor_attribute sensor_attr;
 
-unsigned int sc431hai_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 	*sensor_it = expo;

@@ -975,7 +975,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 }
 #endif /* SENSOR_I2C_REG_16BIT */
 
-static int sc231hai_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk) {
+static int sensor_clk_set(struct tx_isp_subdev *sd, struct clk *sclka, int mclk) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned long rate;
@@ -1146,7 +1146,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		goto err_get_mclk;
 	}
 
-	ret = sc231hai_clk_set(sd, sclka, SENSOR_MCLK);
+	ret = sensor_clk_set(sd, sclka, SENSOR_MCLK);
 	if (ret) {
 		ISP_ERROR("MCLK configuration failed!!!\n");
 	}
@@ -1482,7 +1482,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 #ifdef SENSOR_WDR_2_FRAME
 #ifdef SENSOR_EXPO
-static int sc231hai_set_expo_short(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo_short(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
 	return ret;
@@ -1599,7 +1599,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 #ifdef SENSOR_EXPO
 	case TX_ISP_EVENT_SENSOR_EXPO_SHORT:
 		if (arg)
-			ret = sc231hai_set_expo_short(sd, sensor_val->value);
+			ret = sensor_set_expo_short(sd, sensor_val->value);
 		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:

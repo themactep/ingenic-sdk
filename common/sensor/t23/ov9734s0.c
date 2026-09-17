@@ -154,7 +154,7 @@ struct again_lut ov9734_again_lut[] = {
 
 struct tx_isp_sensor_attribute ov9734_attr;
 
-unsigned int ov9734_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
+unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = ov9734_again_lut;
 	while (lut->gain <= ov9734_attr.max_again) {
 		if (isp_gain == 0) {
@@ -176,7 +176,7 @@ unsigned int ov9734_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	return isp_gain;
 }
 
-unsigned int ov9734_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
+unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
 
@@ -229,8 +229,8 @@ struct tx_isp_sensor_attribute ov9734_attr = {.name = "ov9734",
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
-	.sensor_ctrl.alloc_again = ov9734_alloc_again,
-	.sensor_ctrl.alloc_dgain = ov9734_alloc_dgain,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.fsync_attr = {
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
 		.call_times = 1,
@@ -484,7 +484,7 @@ static struct regval_list ov9734_stream_off[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-int ov9734_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
+int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_msg msg[2] = {[0] =
@@ -508,7 +508,7 @@ int ov9734_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	return ret;
 }
 
-int ov9734_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -526,7 +526,7 @@ int ov9734_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int ov9734_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
 	int ret;
 	unsigned char val;
@@ -534,7 +534,7 @@ static int ov9734_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = ov9734_read(sd, vals->reg_num, &val);
+			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
 		}
@@ -545,14 +545,14 @@ static int ov9734_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 }
 #endif
 
-static int ov9734_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
+static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
 		} else {
-			ret = ov9734_write(sd, vals->reg_num, vals->value);
+			ret = sensor_write(sd, vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -562,15 +562,15 @@ static int ov9734_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 	return 0;
 }
 
-static int ov9734_reset(struct tx_isp_subdev *sd, int val) {
+static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 	return 0;
 }
 
-static int ov9734_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
+static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
 
-	ret = ov9734_read(sd, 0x300a, &v);
+	ret = sensor_read(sd, 0x300a, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -578,7 +578,7 @@ static int ov9734_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = v;
 
-	ret = ov9734_read(sd, 0x300b, &v);
+	ret = sensor_read(sd, 0x300b, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -589,16 +589,16 @@ static int ov9734_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-static int ov9734_set_expo(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	ret += ov9734_write(sd, 0x3500, (unsigned char)((it >> 12) & 0x0f));
-	ret += ov9734_write(sd, 0x3501, (unsigned char)((it >> 4) & 0xff));
-	ret += ov9734_write(sd, 0x3502, (unsigned char)((it & 0x0f) << 4));
-	ret += ov9734_write(sd, 0x350a, (unsigned char)((again >> 8) & 0x03));
-	ret += ov9734_write(sd, 0x350b, (unsigned char)(again & 0xff));
+	ret += sensor_write(sd, 0x3500, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3501, (unsigned char)((it >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)((it & 0x0f) << 4));
+	ret += sensor_write(sd, 0x350a, (unsigned char)((again >> 8) & 0x03));
+	ret += sensor_write(sd, 0x350b, (unsigned char)(again & 0xff));
 
 	if (ret != 0) {
 		ISP_ERROR("err: ov9734 write err %d\n", __LINE__);
@@ -609,38 +609,38 @@ static int ov9734_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int ov9734_set_integration_time(struct tx_isp_subdev *sd, int value)
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += ov9734_write(sd, 0x3500, (unsigned char)((value >> 12) & 0x0f));
-	ret += ov9734_write(sd, 0x3501, (unsigned char)((value >> 4) & 0xff));
-	ret += ov9734_write(sd, 0x3502, (unsigned char)((value & 0x0f) << 4));
+	ret += sensor_write(sd, 0x3500, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3501, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3502, (unsigned char)((value & 0x0f) << 4));
 	if (ret < 0)
 		return ret;
 
 	return 0;
 }
 
-static int ov9734_set_analog_gain(struct tx_isp_subdev *sd, int value)
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-	ret += ov9734_write(sd, 0x350a, (unsigned char)((value >> 8) & 0x03));
-	ret += ov9734_write(sd, 0x350b, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x350a, (unsigned char)((value >> 8) & 0x03));
+	ret += sensor_write(sd, 0x350b, (unsigned char)(value & 0xff));
 	return 0;
 }
 #endif
 
-static int ov9734_set_digital_gain(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int ov9734_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
+static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
 
-static int ov9734_init(struct tx_isp_subdev *sd, int enable) {
+static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 
@@ -652,7 +652,7 @@ static int ov9734_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-	ret = ov9734_write_array(sd, wsize->regs);
+	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -661,12 +661,12 @@ static int ov9734_init(struct tx_isp_subdev *sd, int enable) {
 	return 0;
 }
 
-static int ov9734_s_stream(struct tx_isp_subdev *sd, int enable) {
+static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 
 	if (enable) {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = ov9734_write_array(sd, ov9734_stream_on);
+			ret = sensor_write_array(sd, ov9734_stream_on);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -674,7 +674,7 @@ static int ov9734_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = ov9734_write_array(sd, ov9734_stream_off);
+			ret = sensor_write_array(sd, ov9734_stream_off);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
@@ -684,7 +684,7 @@ static int ov9734_s_stream(struct tx_isp_subdev *sd, int enable) {
 	return ret;
 }
 
-static int ov9734_set_fps(struct tx_isp_subdev *sd, int fps) {
+static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;
@@ -702,9 +702,9 @@ static int ov9734_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%d) no in range\n", fps);
 		return -1;
 	}
-	ret = ov9734_read(sd, 0x380c, &tmp);
+	ret = sensor_read(sd, 0x380c, &tmp);
 	hts = tmp;
-	ret += ov9734_read(sd, 0x380d, &tmp);
+	ret += sensor_read(sd, 0x380d, &tmp);
 	hts = ((hts << 8) | tmp);
 	if (0 != ret) {
 		ISP_ERROR("err: ov9734 read err\n");
@@ -713,10 +713,10 @@ static int ov9734_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	ret += ov9734_write(sd, 0x380f, (unsigned char)(vts & 0xff));
-	ret += ov9734_write(sd, 0x380e, (unsigned char)(vts >> 8));
+	ret += sensor_write(sd, 0x380f, (unsigned char)(vts & 0xff));
+	ret += sensor_write(sd, 0x380e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
-		ISP_ERROR("err: ov9734_write err\n");
+		ISP_ERROR("err: sensor_write err\n");
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -729,13 +729,13 @@ static int ov9734_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return ret;
 }
 
-static int ov9734_set_vflip(struct tx_isp_subdev *sd, int enable) {
+static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = ov9734_read(sd, 0x3820, &val);
+	val = sensor_read(sd, 0x3820, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xF3;
@@ -750,13 +750,13 @@ static int ov9734_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val |= 0x0C;
 		break;
 	}
-	ov9734_write(sd, 0x3820, val);
+	sensor_write(sd, 0x3820, val);
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
 
-static int ov9734_set_mode(struct tx_isp_subdev *sd, int value) {
+static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
 
@@ -773,12 +773,12 @@ static int ov9734_set_mode(struct tx_isp_subdev *sd, int value) {
 	return ret;
 }
 
-static int ov9734_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
+static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	if (reset_gpio != -1) {
-		ret = private_gpio_request(reset_gpio, "ov9734_reset");
+		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
 			private_gpio_direction_output(reset_gpio, 1);
 			private_msleep(5);
@@ -801,7 +801,7 @@ static int ov9734_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
-	ret = ov9734_detect(sd, &ident);
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
@@ -817,7 +817,7 @@ static int ov9734_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	return 0;
 }
 
-static int ov9734_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
+static int sensor_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fsync) {
 	uint8_t val;
 	uint16_t ret_val;
 
@@ -828,39 +828,39 @@ static int ov9734_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
 		switch (fsync_mode) {
 		case 2:
 			ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
-			//ov9734_read(sd, 0x380e, &val);
+			//sensor_read(sd, 0x380e, &val);
 			//ret_val = val << 8;
-			//ov9734_read(sd, 0x380f, &val);
+			//sensor_read(sd, 0x380f, &val);
 			//ret_val |= val;
 			//ret_val = ret_val + 4;
-			//ov9734_write(sd, 0x380e, (ret_val >> 8));
-			//ov9734_write(sd, 0x380f, (ret_val & 0xff));
+			//sensor_write(sd, 0x380e, (ret_val >> 8));
+			//sensor_write(sd, 0x380f, (ret_val & 0xff));
 
-			ov9734_write(sd, 0x3001, 0x01);
-			ov9734_write(sd, 0x3007, 0x10);
-			ov9734_write(sd, 0x3816, 0x00);
-			ov9734_write(sd, 0x3817, 0x00);
-			ov9734_write(sd, 0x3818, 0x00);
-			ov9734_write(sd, 0x3819, 0x01);
-			ov9734_write(sd, 0x381c, 0x01);
+			sensor_write(sd, 0x3001, 0x01);
+			sensor_write(sd, 0x3007, 0x10);
+			sensor_write(sd, 0x3816, 0x00);
+			sensor_write(sd, 0x3817, 0x00);
+			sensor_write(sd, 0x3818, 0x00);
+			sensor_write(sd, 0x3819, 0x01);
+			sensor_write(sd, 0x381c, 0x01);
 			break;
 		case 3:
 			ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
-			ov9734_read(sd, 0x380e, &val);
+			sensor_read(sd, 0x380e, &val);
 			ret_val = val << 8;
-			ov9734_read(sd, 0x380f, &val);
+			sensor_read(sd, 0x380f, &val);
 			ret_val |= val;
 			ret_val = ret_val << 1;
-			ov9734_write(sd, 0x380e, (ret_val >> 8));
-			ov9734_write(sd, 0x380f, (ret_val & 0xff));
+			sensor_write(sd, 0x380e, (ret_val >> 8));
+			sensor_write(sd, 0x380f, (ret_val & 0xff));
 
-			ov9734_write(sd, 0x3001, 0x01);
-			ov9734_write(sd, 0x3007, 0x10);
-			ov9734_write(sd, 0x3816, 0x06);
-			ov9734_write(sd, 0x3817, 0x54);
-			ov9734_write(sd, 0x3818, 0x06);
-			ov9734_write(sd, 0x3819, 0x55);
-			ov9734_write(sd, 0x381c, 0x01);
+			sensor_write(sd, 0x3001, 0x01);
+			sensor_write(sd, 0x3007, 0x10);
+			sensor_write(sd, 0x3816, 0x06);
+			sensor_write(sd, 0x3817, 0x54);
+			sensor_write(sd, 0x3818, 0x06);
+			sensor_write(sd, 0x3819, 0x55);
+			sensor_write(sd, 0x381c, 0x01);
 			break;
 		}
 		break;
@@ -869,7 +869,7 @@ static int ov9734_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
 	return 0;
 }
 
-static int ov9734_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
+static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -878,33 +878,33 @@ static int ov9734_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			ret = ov9734_set_expo(sd, *(int *)arg);
+			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	/*
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if(arg)
-			ret = ov9734_set_integration_time(sd, *(int*)arg);
+			ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if(arg)
-			ret = ov9734_set_analog_gain(sd, *(int*)arg);
+			ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	*/
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
-			ret = ov9734_set_digital_gain(sd, *(int *)arg);
+			ret = sensor_set_digital_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			ret = ov9734_get_black_pedestal(sd, *(int *)arg);
+			ret = sensor_get_black_pedestal(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
-			ret = ov9734_set_mode(sd, *(int *)arg);
+			ret = sensor_set_mode(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = ov9734_write_array(sd, ov9734_stream_off);
+			ret = sensor_write_array(sd, ov9734_stream_off);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -912,7 +912,7 @@ static int ov9734_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
-			ret = ov9734_write_array(sd, ov9734_stream_on);
+			ret = sensor_write_array(sd, ov9734_stream_on);
 
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
@@ -921,11 +921,11 @@ static int ov9734_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:
 		if (arg)
-			ret = ov9734_set_fps(sd, *(int *)arg);
+			ret = sensor_set_fps(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			ret = ov9734_set_vflip(sd, *(int *)arg);
+			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	default:
 		break;
@@ -934,7 +934,7 @@ static int ov9734_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	return ret;
 }
 
-static int ov9734_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
+static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
@@ -945,14 +945,14 @@ static int ov9734_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	}
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	ret = ov9734_read(sd, reg->reg & 0xffff, &val);
+	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
 
 	return ret;
 }
 
-static int ov9734_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
+static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
 
 	len = strlen(sd->chip.name);
@@ -962,27 +962,27 @@ static int ov9734_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
 
-	ov9734_write(sd, reg->reg & 0xffff, reg->val & 0xff);
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
 	return 0;
 }
 
 static struct tx_isp_subdev_core_ops ov9734_core_ops = {
-	.g_chip_ident = ov9734_g_chip_ident,
-	.reset = ov9734_reset,
-	.init = ov9734_init,
+	.g_chip_ident = sensor_g_chip_ident,
+	.reset = sensor_reset,
+	.init = sensor_init,
 	/*.ioctl = ov9734_ops_ioctl,*/
-	.g_register = ov9734_g_register,
-	.s_register = ov9734_s_register,
+	.g_register = sensor_g_register,
+	.s_register = sensor_s_register,
 };
 
 static struct tx_isp_subdev_video_ops ov9734_video_ops = {
-	.s_stream = ov9734_s_stream,
+	.s_stream = sensor_s_stream,
 };
 
 static struct tx_isp_subdev_sensor_ops ov9734_sensor_ops = {
-	.ioctl = ov9734_sensor_ops_ioctl,
-	.fsync = ov9734_fsync,
+	.ioctl = sensor_sensor_ops_ioctl,
+	.fsync = sensor_fsync,
 };
 
 static struct tx_isp_subdev_ops ov9734_ops = {
@@ -1098,7 +1098,7 @@ error:
 
 uint16_t theight_tmp;
 uint32_t fps_tmp;
-static int ov9734_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
@@ -1164,7 +1164,7 @@ err_get_mclk:
 	return -1;
 }
 
-static int ov9734_remove(struct i2c_client *client) {
+static int sensor_remove(struct i2c_client *client) {
 	struct tx_isp_subdev *sd = private_i2c_get_clientdata(client);
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 
@@ -1190,8 +1190,8 @@ static struct i2c_driver ov9734_driver = {
 			.owner = THIS_MODULE,
 			.name = "ov9734",
 		},
-	.probe = ov9734_probe,
-	.remove = ov9734_remove,
+	.probe = sensor_probe,
+	.remove = sensor_remove,
 	.id_table = ov9734_id,
 };
 
