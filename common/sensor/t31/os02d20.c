@@ -18,8 +18,8 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-/* 1080p@30fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=30 */
-/* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
+/* 1080p@30fps: insmod sensor_os02d20_t31.ko sensor_resolution=200 sensor_max_fps=30 */
+/* 1080p@60fps: insmod sensor_os02d20_t31.ko sensor_resolution=200 sensor_max_fps=60 */
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0x232902

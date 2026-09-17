@@ -42,10 +42,10 @@
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
 //#define SENSOR_WITHOUT_INIT
 
-/* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
-/* 480x270@110fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200  */
-/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2  */
+/* VGA@70fps: insmod sensor_jxf37_t41zrt.ko data_type=0 data_interface=1 sensor_resolution=30 */
+/* 480x270@110fps: insmod sensor_jxf37_t41zrt.ko data_type=0 data_interface=1 sensor_resolution=13 */
+/* 1080p@25fps: insmod sensor_jxf37_t41zrt.ko data_type=0 data_interface=1 sensor_resolution=200  */
+/* DOL 1080p@15fps: insmod sensor_jxf37_t41zrt.ko data_interface=1 data_type=2  */
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;

@@ -45,11 +45,11 @@ typedef enum {
 	SENSOR_RES_200 = 200,
 } Sensor_RES;
 
-/* VGA@120fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
-/* 1080p@60fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
-/* 1712x1080@30fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=180 */
-/* 1712x1080@60fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=180 */
+/* VGA@120fps: insmod sensor_jxf35_t23.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
+/* 1080p@25fps: insmod sensor_jxf35_t23.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
+/* 1080p@60fps: insmod sensor_jxf35_t23.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
+/* 1712x1080@30fps: insmod sensor_jxf35_t23.ko data_interface=1 sensor_max_fps=30 sensor_resolution=180 */
+/* 1712x1080@60fps: insmod sensor_jxf35_t23.ko data_interface=1 sensor_max_fps=60 sensor_resolution=180 */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

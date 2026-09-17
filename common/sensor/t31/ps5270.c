@@ -43,9 +43,9 @@
 #define NEPLS_SCALE 32
 #define NE_NEP_CONST (0x1F4 + 0x64)
 
-/* VGA@110fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=110  */
-/* 1536x1536@25fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=200 sensor_max_fps=30  */
-/* 1440x1080@45.5fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=100 sensor_max_fps=45  */
+/* VGA@110fps: insmod sensor_ps5270_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=110  */
+/* 1536x1536@25fps: insmod sensor_ps5270_t31.ko data_interface=1 sensor_resolution=200 sensor_max_fps=30  */
+/* 1440x1080@45.5fps: insmod sensor_ps5270_t31.ko data_interface=1 sensor_resolution=100 sensor_max_fps=45  */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

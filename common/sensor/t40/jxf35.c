@@ -54,11 +54,11 @@ typedef enum {
 	PS5270_SENSOR_MAX_FPS_120 = 120,
 } Sensor_FPS;
 
-/* VGA@120fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
-/* 1080p@60fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
-/* 1728x972@15fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=15 sensor_resolution=180 */
-/* 1728x972@55fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=55 sensor_resolution=180 */
+/* VGA@120fps: insmod sensor_jxf35_t40.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
+/* 1080p@25fps: insmod sensor_jxf35_t40.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
+/* 1080p@60fps: insmod sensor_jxf35_t40.ko data_interface=1 sensor_max_fps=60 sensor_resolution=200 */
+/* 1728x972@15fps: insmod sensor_jxf35_t40.ko data_interface=1 sensor_max_fps=15 sensor_resolution=180 */
+/* 1728x972@55fps: insmod sensor_jxf35_t40.ko data_interface=1 sensor_max_fps=55 sensor_resolution=180 */
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

@@ -38,10 +38,10 @@
 #define SENSOR_VERSION "H20210331a"
 
 
-/* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
-/* 480x270@110fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200 */
-/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2 */
+/* VGA@70fps: insmod sensor_jxf37_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
+/* 480x270@110fps: insmod sensor_jxf37_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
+/* 1080p@25fps: insmod sensor_jxf37_t31.ko data_type=0 data_interface=1 sensor_resolution=200 */
+/* DOL 1080p@15fps: insmod sensor_jxf37_t31.ko data_interface=1 data_type=2 */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

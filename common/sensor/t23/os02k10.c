@@ -18,12 +18,12 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-/* VGA@120fps: insmod sensor_sensor_t31.ko sensor_resolution=30 sensor_max_fps=120 */
-/* 1080p@15fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=15 */
-/* 1080p@45fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=45 */
-/* 1080p@50fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=50 */
-/* 1080p@55fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=55 */
-/* 1080p@60fps: insmod sensor_sensor_t31.ko sensor_resolution=200 sensor_max_fps=60 */
+/* VGA@120fps: insmod sensor_os02k10_t23.ko sensor_resolution=30 sensor_max_fps=120 */
+/* 1080p@15fps: insmod sensor_os02k10_t23.ko sensor_resolution=200 sensor_max_fps=15 */
+/* 1080p@45fps: insmod sensor_os02k10_t23.ko sensor_resolution=200 sensor_max_fps=45 */
+/* 1080p@50fps: insmod sensor_os02k10_t23.ko sensor_resolution=200 sensor_max_fps=50 */
+/* 1080p@55fps: insmod sensor_os02k10_t23.ko sensor_resolution=200 sensor_max_fps=55 */
+/* 1080p@60fps: insmod sensor_os02k10_t23.ko sensor_resolution=200 sensor_max_fps=60 */
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)

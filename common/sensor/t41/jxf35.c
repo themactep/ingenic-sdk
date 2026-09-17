@@ -34,7 +34,7 @@
 #define SENSOR_VERSION "H20240829a"
 
 
-/* 1080p@30fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
+/* 1080p@30fps: insmod sensor_jxf35_t41.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
