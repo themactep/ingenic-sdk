@@ -719,7 +719,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_INFO("jxf37p stream on\n");
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -730,7 +730,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_INFO("jxf37p stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

@@ -736,11 +736,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
 
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-			ISP_INFO("sc5336p stream on\n");
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		ISP_INFO("sc5336p stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

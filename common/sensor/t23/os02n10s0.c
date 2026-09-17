@@ -958,13 +958,13 @@ static int os02n10_s_stream(struct tx_isp_subdev *sd, int enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = os02n10_write_array(sd, os02n10_stream_on_mipi);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_INFO("os02n10 stream on\n");
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 
 	} else {
 		ret = os02n10_write_array(sd, os02n10_stream_off_mipi);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_INFO("os02n10 stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

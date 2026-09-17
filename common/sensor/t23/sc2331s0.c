@@ -706,11 +706,11 @@ static int sc2331_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 	if (enable) {
 		ret = sc2331_write_array(sd, sc2331_stream_on_mipi);
-		ISP_INFO("sc2331 stream on\n");
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
 	} else {
 		ret = sc2331_write_array(sd, sc2331_stream_off_mipi);
-		ISP_INFO("sc2331 stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

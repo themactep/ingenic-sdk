@@ -1315,12 +1315,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_INFO("sc835hai stream on\n");
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
-		ISP_INFO("sc835hai stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

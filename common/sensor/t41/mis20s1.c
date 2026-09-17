@@ -1616,12 +1616,12 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			ret = sensor_write_array(sd, sensor_stream_on);
 			*((u32 *)0xb3380000) = 0x5;
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
-			ISP_INFO("mis20s1 stream on\n");
+			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		sensor->video.state = TX_ISP_MODULE_INIT;
-		ISP_INFO("mis20s1 stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;

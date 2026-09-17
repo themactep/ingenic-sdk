@@ -712,14 +712,14 @@ static int sc1a4t_s_stream(struct tx_isp_subdev *sd, int enable) {
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_INFO("sc1a4t stream on\n");
+		ISP_INFO("%s stream on\n", SENSOR_NAME);
 	} else {
 		if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sc1a4t_write_array(sd, sc1a4t_stream_off_mipi);
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
-		ISP_INFO("sc1a4t stream off\n");
+		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
 	return ret;
