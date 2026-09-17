@@ -282,7 +282,7 @@ struct tx_isp_sensor_attribute sensor_attr = {.name = "sc2336p",
 			.clk = 396,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,

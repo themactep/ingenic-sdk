@@ -240,7 +240,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 800,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12,
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -471,7 +471,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 25 << 16 | 1,
-		.mbus_code = TISP_VI_FMT_SGRBG12_1X12, // GRBG
+		.mbus_code = TISP_VI_FMT_SGRBG12_1X12,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_mipi,
 	}};
