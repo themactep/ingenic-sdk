@@ -620,7 +620,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ret = sensor_write(sd, 0x0515, val_lut[value].reg515);
 
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d" , __LINE__);
 		return ret;
 	}
 

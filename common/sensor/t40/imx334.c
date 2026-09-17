@@ -826,7 +826,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	if (((rate / 1000) % 37125) != 0) {
 		ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
 		if (ret != 0)
-			ISP_ERROR("%s %d set parent clk to epll err!\n",__func__,__LINE__);
+			ISP_ERROR("%s %d set parent clk to epll err!\n",__func__, __LINE__);
 		sclka = private_devm_clk_get(&client->dev, "epll");
 		if (IS_ERR(sclka)) {
 			ISP_ERROR("get sclka failed\n");

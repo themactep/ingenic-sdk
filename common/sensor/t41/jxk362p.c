@@ -484,7 +484,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 int ret = 0;
 ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 if (ret < 0)
-ISP_ERROR("%s %d, sensor reg write err!!\n",__func__,__LINE__);
+ISP_ERROR("%s %d, sensor reg write err!!\n",__func__, __LINE__);
 return ret;
 
 return 0;

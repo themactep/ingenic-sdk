@@ -288,7 +288,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint8_t reg, unsigned char value) {
 	/* return ret; */
 	int ret = 0;
 
-	//ISP_INFO("bf2253s1-x2-%s:%d-  \n", __func__, __LINE__ );
+	//ISP_INFO("bf2253s1-x2-%s:%d-  \n", __func__, __LINE__);
 
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	//ISP_INFO("bf2253s1--%s:%d-  client->addr =0x%x \n", __func__, __LINE__,client->addr );
