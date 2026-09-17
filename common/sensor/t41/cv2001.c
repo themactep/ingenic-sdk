@@ -42,8 +42,8 @@ static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
-	.min_fps = 5,
-	.max_fps = 30,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
@@ -396,7 +396,6 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
-
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 			ISP_INFO("%s stream on\n", SENSOR_NAME);
 		}
@@ -703,9 +702,9 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 }
 
 static struct tx_isp_subdev_core_ops sensor_core_ops = {
-	.g_chip_ident = sensor_g_chip_ident,
 	.reset = sensor_reset,
 	.init = sensor_init,
+	.g_chip_ident = sensor_g_chip_ident,
 	.g_register = sensor_g_register,
 	.s_register = sensor_s_register,
 };
@@ -747,8 +746,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
-	memset(sensor, 0, sizeof(*sensor));
 
+	memset(sensor, 0, sizeof(*sensor));
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->dev = &client->dev;

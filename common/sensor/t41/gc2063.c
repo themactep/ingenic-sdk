@@ -4,7 +4,7 @@
  * Copyright (C) 2022 Ingenic Semiconductor Co., Ltd.
  * Settings:
  * sboot        resolution      fps       interface              mode
- *   0          1920*1080       30          dvp                  linear
+ *   0          1920*1080       30        dvp                    linear
  *   1          1920*1080       30        mipi_2lane             linear
  *   2          1920*1080       15        mipi_2lane             linear
  */
@@ -46,7 +46,7 @@ static struct sensor_info sensor_info = {
 	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
-	.max_fps = 30,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
@@ -74,35 +74,35 @@ struct again_lut {
 
 struct again_lut sensor_again_lut[] = {
 	//inx, 0xb4 0xb3 0xb8 0xb9 gain
-	{0x0, 0x0, 0x0, 0x1, 0x0, 0},	       //  1.000000
-	{0x1, 0x0, 0x10, 0x1, 0xc, 13726},     //  1.156250
-	{0x2, 0x0, 0x20, 0x1, 0x1b, 31177},    //   1.390625
-	{0x3, 0x0, 0x30, 0x1, 0x2c, 44067},    //   1.593750
-	{0x4, 0x0, 0x40, 0x1, 0x3f, 64793},    //   1.984375
-	{0x5, 0x0, 0x50, 0x2, 0x16, 78621},    //   2.296875
-	{0x6, 0x0, 0x60, 0x2, 0x35, 96180},    //   2.765625
-	{0x7, 0x0, 0x70, 0x3, 0x16, 109138},   //    3.171875
-	{0x8, 0x0, 0x80, 0x4, 0x2, 132537},    //   4.062500
-	{0x9, 0x0, 0x90, 0x4, 0x31, 146067},   //    4.687500
-	{0xa, 0x0, 0xa0, 0x5, 0x32, 163567},   //    5.640625
-	{0xb, 0x0, 0xb0, 0x6, 0x35, 176747},   //    6.484375
-	{0xc, 0x0, 0xc0, 0x8, 0x4, 195118},    //   7.875000
-	{0xd, 0x0, 0x5a, 0x9, 0x19, 208560},   //    9.078125
-	{0xe, 0x0, 0x83, 0xb, 0xf, 229103},    //   11.281250
-	{0xf, 0x0, 0x93, 0xd, 0x12, 242511},   //    13.000000
-	{0x10, 0x0, 0x84, 0x10, 0x0, 262419},  //     16.046875
-	{0x11, 0x0, 0x94, 0x12, 0x3a, 275710}, //      18.468750
-	{0x12, 0x1, 0x2c, 0x1a, 0x2, 292252},  //     22.000000
-	{0x13, 0x1, 0x3c, 0x1b, 0x20, 305571}, //      25.328125
-	{0x14, 0x0, 0x8c, 0x20, 0xf, 324962},  //     31.093750
-	{0x15, 0x0, 0x9c, 0x26, 0x7, 338280},  //     35.796875
-	{0x16, 0x2, 0x64, 0x36, 0x21, 358923}, //      44.531250
-	{0x17, 0x2, 0x74, 0x37, 0x3a, 372267}, //      51.281250
-	{0x18, 0x0, 0xc6, 0x3d, 0x2, 392101},  //     63.250000
-	{0x19, 0x0, 0xdc, 0x3f, 0x3f, 415415}, //      80.937500
-	{0x1a, 0x2, 0x85, 0x3f, 0x3f, 421082}, //      85.937500
-	{0x1b, 0x2, 0x95, 0x3f, 0x3f, 440360}, //      105.375000
-	{0x1c, 0x0, 0xce, 0x3f, 0x3f, 444864}, //      110.515625
+	{0x0, 0x0, 0x0, 0x1, 0x0, 0},	       // 1.000000
+	{0x1, 0x0, 0x10, 0x1, 0xc, 13726},     // 1.156250
+	{0x2, 0x0, 0x20, 0x1, 0x1b, 31177},    // 1.390625
+	{0x3, 0x0, 0x30, 0x1, 0x2c, 44067},    // 1.593750
+	{0x4, 0x0, 0x40, 0x1, 0x3f, 64793},    // 1.984375
+	{0x5, 0x0, 0x50, 0x2, 0x16, 78621},    // 2.296875
+	{0x6, 0x0, 0x60, 0x2, 0x35, 96180},    // 2.765625
+	{0x7, 0x0, 0x70, 0x3, 0x16, 109138},   // 3.171875
+	{0x8, 0x0, 0x80, 0x4, 0x2, 132537},    // 4.062500
+	{0x9, 0x0, 0x90, 0x4, 0x31, 146067},   // 4.687500
+	{0xa, 0x0, 0xa0, 0x5, 0x32, 163567},   // 5.640625
+	{0xb, 0x0, 0xb0, 0x6, 0x35, 176747},   // 6.484375
+	{0xc, 0x0, 0xc0, 0x8, 0x4, 195118},    // 7.875000
+	{0xd, 0x0, 0x5a, 0x9, 0x19, 208560},   // 9.078125
+	{0xe, 0x0, 0x83, 0xb, 0xf, 229103},    // 11.281250
+	{0xf, 0x0, 0x93, 0xd, 0x12, 242511},   // 13.000000
+	{0x10, 0x0, 0x84, 0x10, 0x0, 262419},  // 16.046875
+	{0x11, 0x0, 0x94, 0x12, 0x3a, 275710}, // 18.468750
+	{0x12, 0x1, 0x2c, 0x1a, 0x2, 292252},  // 22.000000
+	{0x13, 0x1, 0x3c, 0x1b, 0x20, 305571}, // 25.328125
+	{0x14, 0x0, 0x8c, 0x20, 0xf, 324962},  // 31.093750
+	{0x15, 0x0, 0x9c, 0x26, 0x7, 338280},  // 35.796875
+	{0x16, 0x2, 0x64, 0x36, 0x21, 358923}, // 44.531250
+	{0x17, 0x2, 0x74, 0x37, 0x3a, 372267}, // 51.281250
+	{0x18, 0x0, 0xc6, 0x3d, 0x2, 392101},  // 63.250000
+	{0x19, 0x0, 0xdc, 0x3f, 0x3f, 415415}, // 80.937500
+	{0x1a, 0x2, 0x85, 0x3f, 0x3f, 421082}, // 85.937500
+	{0x1b, 0x2, 0x95, 0x3f, 0x3f, 440360}, // 105.375000
+	{0x1c, 0x0, 0xce, 0x3f, 0x3f, 444864}, // 110.515625
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -123,10 +123,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
-
 	return isp_gain;
 }
 
@@ -197,7 +195,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
-	/****system****/
+	/*system*/
 	{0xfe, 0x80},
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -211,7 +209,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-	/****CISCTL & ANALOG****/
+	/*CISCTL & ANALOG*/
 	{0xfe, 0x00},
 	{0x87, 0x18},
 	{0xee, 0x30},
@@ -735,14 +733,12 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 #endif
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
@@ -753,7 +749,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -764,7 +759,6 @@ static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	int ret;
 	unsigned char v;
-
 	ret = sensor_read(sd, 0xf0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -772,7 +766,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
 	*ident = v;
-
 	ret = sensor_read(sd, 0xf1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -837,7 +830,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0xb8, val_lut[value].dpc);
 	ret += sensor_write(sd, 0xb9, val_lut[value].blc);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n" ,__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
 
@@ -954,7 +947,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x42, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
-
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 8;
 	sensor->video.attr->integration_time_limit = vts - 8;
@@ -1174,7 +1166,6 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		chip->ident = ident;
 		chip->revision = SENSOR_VERSION;
 	}
-
 	return 0;
 }
 
@@ -1286,7 +1277,6 @@ static struct tx_isp_subdev_ops sensor_ops = {
 };
 
 static u64 tx_isp_module_dma_mask = ~(u64)0;
-
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -1321,9 +1311,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
-
 	return 0;
 }
 
@@ -1340,12 +1328,10 @@ static int sensor_remove(struct i2c_client *client) {
 	private_devm_clk_put(&client->dev, sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
-
 	return 0;
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

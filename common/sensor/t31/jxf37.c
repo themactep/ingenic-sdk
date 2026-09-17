@@ -19,7 +19,7 @@
 #include <txx-funcs.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_CHIP_ID 0xf37
+#define SENSOR_CHIP_ID 0x0f37
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x37)
 #define SENSOR_I2C_ADDRESS 0x40
@@ -40,8 +40,8 @@
 
 /* VGA@70fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=13 */
-/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200  */
-/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2  */
+/* 1080p@25fps: insmod sensor_sensor_t31.ko data_type=0 data_interface=1 sensor_resolution=200 */
+/* DOL 1080p@15fps: insmod sensor_sensor_t31.ko data_interface=1 data_type=2 */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
@@ -1237,7 +1237,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x48, 0x85},
 	{0x48, 0x05},
 #endif
-
 	{SENSOR_REG_END, 0x00},
 };
 

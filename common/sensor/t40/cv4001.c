@@ -18,6 +18,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define AGAIN_MAX_DB 0xB4
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H 0x40
@@ -31,8 +32,6 @@
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_REG_END 0xffff
 #define SENSOR_VERSION "H20230505a"
-
-#define AGAIN_MAX_DB 0xB4
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
@@ -215,6 +214,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
+
 	return ret;
 }
 
@@ -282,8 +282,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 }
 
 #if 0
-static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = value & 0xffff;
 	unsigned short exp;
@@ -454,14 +453,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	val = 0;
 	ret += sensor_read(sd, 0x302C, &val);
 	hts = ((hts << 8) | val);
-
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-
 	ret += sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3029, (unsigned char)((vts >> 8) & 0xff));
 	ret += sensor_write(sd, 0x302A, (unsigned char)((vts >> 16) & 0x0f));
@@ -505,7 +502,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val |= 0x03;
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
-	};
+	}
 	sensor->video.mbus_change = 1;
 	ret = sensor_write(sd, 0x3034, val);
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -575,9 +572,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 	sensor->video.state = TX_ISP_MODULE_INIT;
-
 	return 0;
-
 err_get_mclk:
 	return -1;
 }
@@ -611,7 +606,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
-	ret = sensor_detect(sd, &ident); //检查sensor id
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
 			client->addr,
@@ -640,7 +635,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		// if (arg)
+		//if (arg)
 		// 	ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:

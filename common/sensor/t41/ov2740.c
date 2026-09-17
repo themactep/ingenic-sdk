@@ -22,6 +22,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x27)
 #define SENSOR_CHIP_ID_L (0x40)
@@ -61,6 +62,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x84, 3344},

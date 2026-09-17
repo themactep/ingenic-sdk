@@ -45,7 +45,7 @@ static struct sensor_info sensor_info = {
 	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
-	.max_fps = 30,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
 	.width = SENSOR_MAX_WIDTH,
 	.height = SENSOR_MAX_HEIGHT,
@@ -728,7 +728,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
-	//      struct tx_isp_initarg *init = arg;
+	//struct tx_isp_initarg *init = arg;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -740,14 +740,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 		/*
-  case TX_ISP_EVENT_SENSOR_INT_TIME:
-  if (arg)
-  ret = sensor_set_integration_time(sd, sensor_val->value);
-  break;
-  case TX_ISP_EVENT_SENSOR_AGAIN:
-  if (arg)
-  ret = sensor_set_analog_gain(sd, sensor_val->value);
-  break;
+	case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if (arg)
+			ret = sensor_set_integration_time(sd, sensor_val->value);
+		break;
+	case TX_ISP_EVENT_SENSOR_AGAIN:
+		if (arg)
+			ret = sensor_set_analog_gain(sd, sensor_val->value);
+		break;
 */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

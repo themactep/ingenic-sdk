@@ -290,7 +290,7 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 300,
 	.lans = 2,
-	//	.index = 1,
+	//.index = 1,
 	.settle_time_apative_en = 1,
 	.image_twidth = 1920,
 	.image_theight = 1080,
@@ -1153,11 +1153,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x12, 0x20},
 	{0x48, 0x85},
 	{0x48, 0x05},
-
 	{0x00, 0x1f},
 	{0x01, 0x02},
 	{0x02, 0xff},
-
 #else
 	{0x12, 0x60},
 	{0x48, 0x85},
@@ -1250,7 +1248,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x48, 0x85},
 	{0x48, 0x05},
 #endif
-
 	{SENSOR_REG_END, 0x00},
 };
 

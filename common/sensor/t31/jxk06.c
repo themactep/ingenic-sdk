@@ -488,6 +488,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 	return 0;
 }
+
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int expo = (value & 0xffff);
@@ -504,8 +505,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;
 
@@ -515,7 +515,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 		return ret;
 
 	return 0;
-
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
@@ -623,6 +622,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_WARNING("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
+
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 #if 0
 	/*use group write*/

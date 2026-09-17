@@ -110,6 +110,7 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
+
 	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = 0;
@@ -187,8 +188,14 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	/*
-	 * version 0.2 mclk 27Mhz wpclk 216Mhz rpclk 172.2Mhz mipi 864Mbps/lane
-	 * cpclk 27Mhz vts = 1500 window 2560 1440
+	 * version 0.2
+	 * mclk 27Mhz
+	 * wpclk 216Mhz
+	 * rpclk 172.2Mhz
+	 * mipi 864Mbps/lane
+	 * cpclk 27Mhz
+	 * vts = 1500
+	 * window 2560 1440
 	 */
 	/*SYSTEM*/
 	{0x03fe, 0xf0},
@@ -563,8 +570,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 }
 
 #if 0
-static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = sensor_again_lut;
 
@@ -573,15 +579,13 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n",__LINE__ );
+		ISP_ERROR("sensor_write error  %d\n", __LINE__);
 		return ret;
 	}
 
 	/*gain*/
-
 	ret += sensor_write(sd, 0x0614, val_lut[value].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[value].reg615);
-
 	ret += sensor_write(sd, 0x0218, val_lut[value].reg218);
 	ret += sensor_write(sd, 0x1467, val_lut[value].reg1467);
 	ret += sensor_write(sd, 0x1468, val_lut[value].reg1468);
@@ -589,7 +593,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00b9, val_lut[value].regb9);
 
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d",__LINE__ );
+		ISP_ERROR("sensor_write error  %d", __LINE__);
 		return ret;
 	}
 
@@ -822,7 +826,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		private_clk_set_rate(sensor->mclk, 27000000);
 		private_clk_prepare_enable(sensor->mclk);
 		break;
-
 	case 1:
 		wsize = &sensor_win_sizes[1];
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
@@ -838,7 +841,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		private_clk_set_rate(sensor->mclk, 24000000);
 		private_clk_prepare_enable(sensor->mclk);
 		break;
-
 	default:
 		ISP_ERROR("Have no this setting!!!\n");
 	}
@@ -889,9 +891,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
-
 	return 0;
-
 err_get_mclk:
 	return -1;
 }
@@ -1079,6 +1079,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 	sensor->dev = &client->dev;
 	sd = &sensor->sd;
@@ -1092,7 +1093,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_i2c_set_clientdata(client, sd);
 
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
-
 	return 0;
 }
 

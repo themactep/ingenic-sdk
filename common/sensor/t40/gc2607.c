@@ -589,10 +589,10 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
-	//	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//	struct clk *sclka;
+	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	//struct clk *sclka;
 	unsigned long rate;
-	//	int ret = 0;
+	//int ret = 0;
 
 	switch (info->default_boot) {
 	case 0:
@@ -642,7 +642,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-
 #if 0
 	if (info->default_boot == 1) {
 		if (((rate / 1000) % 27000) != 0) {
@@ -734,7 +733,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
-	//	struct tx_isp_initarg *init = arg;
+	//struct tx_isp_initarg *init = arg;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);

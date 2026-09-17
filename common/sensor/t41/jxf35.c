@@ -18,6 +18,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x35)
@@ -33,7 +34,7 @@
 #define SENSOR_VERSION "H20240829a"
 
 
-/* 1080p@30fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
+/* 1080p@30fps: insmod sensor_sensor_t31.ko data_interface=1 sensor_max_fps=30 sensor_resolution=200 */
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);
@@ -402,6 +403,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 };
+
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -416,13 +418,13 @@ static struct regval_list sensor_stream_off_mipi[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
@@ -455,8 +457,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 }
 
 #if 0
-static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 
@@ -490,7 +491,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -524,9 +524,9 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int it_last = -1;
 static int ag_last = -1;
+
 #if 0
-static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	ret = sensor_write(sd,  0x01, (unsigned char)(value & 0xff));
@@ -537,8 +537,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	ret = sensor_write(sd, 0x05, (unsigned char)(value & 0xff));
@@ -548,18 +547,17 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	return 0;
 }
 
-static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	unsigned char tmp1;
 	unsigned char tmp2;
 	unsigned char tmp3;
 	int ret = 0;
 
-	if(value < 0x10){
+	if (value < 0x10) {
 		tmp1 = reg_2f | 0x20;
 		tmp2 = reg_0c | 0x40;
 		tmp3 = reg_82 | 0x02;
-	}else{
+	} else {
 		tmp1 = reg_2f & 0xdf;
 		tmp2 = reg_0c & 0xbf;
 		tmp3 = reg_82 & 0xfd;
@@ -568,7 +566,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
 	/*black sun cancellation strategy*/
-	if((((ag_last < 0x10) && (value >= 0x10)) || ((ag_last >= 0x10) && (value < 0x10))) || (ag_last == -1)){
+	if ((((ag_last < 0x10) && (value >= 0x10)) || ((ag_last >= 0x10) && (value < 0x10))) || (ag_last == -1)) {
 		ret = sensor_write(sd, 0x2f, tmp1);
 		ret += sensor_write(sd, 0x0c, tmp2);
 		ret += sensor_write(sd, 0x82, tmp3);
@@ -731,8 +729,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 #if 0
 static unsigned char val0,val1,val2;
-static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
-{
+
+static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
 
 	ret = sensor_write(sd, 0x12, 0x80);
@@ -748,8 +746,7 @@ static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en)
 	return 0;
 }
 
-static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
-{
+static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = 0;
 
@@ -800,6 +797,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en)
 	return 0;
 }
 #endif
+
 static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = ISP_SUCCESS;
@@ -1042,7 +1040,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (arg) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
-
 		} else {
 			ISP_ERROR("Don't support this Sensor Data interface\n");
 			ret = -1;

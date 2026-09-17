@@ -623,6 +623,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
+
 	/*get current hts*/
 	ret += sensor_read(sd, 0xd05, &tmp);
 	hts = tmp;
@@ -666,6 +667,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 }
 
 struct clk *sclka;
+
 static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	int ret;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -734,7 +736,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	}
 
 	rate = private_clk_get_rate(sensor->mclk);
-
 	if (((rate / 1000) % (MCLK / 1000)) != 0) {
 		ret = clk_set_parent(sclka, clk_get(NULL, "epll"));
 		sclka = private_devm_clk_get(&client->dev, "epll");
@@ -747,7 +748,6 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 			}
 		}
 	}
-
 	private_clk_set_rate(sensor->mclk, MCLK);
 	private_clk_prepare_enable(sensor->mclk);
 
@@ -819,7 +819,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val0 = 0x00;
 		val1 = 0x00;
 	}
-
 	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0d15, val0);
 	ret += sensor_write(sd, 0x0015, val1);

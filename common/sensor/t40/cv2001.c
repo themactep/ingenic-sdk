@@ -573,9 +573,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 	sensor->video.state = TX_ISP_MODULE_INIT;
-
 	return 0;
-
 err_get_mclk:
 	return -1;
 }
@@ -609,7 +607,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
 	}
-	ret = sensor_detect(sd, &ident); //检查sensor id
+	ret = sensor_detect(sd, &ident);
 	if (ret) {
 		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
 			client->addr,
@@ -638,8 +636,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		// if (arg)
-		// 	ret = sensor_set_expo(sd, sensor_val->value);
+		//if (arg)
+		//	ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

@@ -102,8 +102,7 @@ struct again_lut sensor_again_lut[] = {
 struct tx_isp_sensor_attribute sensor_attr;
 
 #if 0
-unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it)
-{
+unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
 
@@ -112,13 +111,10 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 	return isp_it;
 }
 
-unsigned int sensor_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it)
-{
+unsigned int sensor_alloc_integration_time_short(unsigned int it, unsigned char shift, unsigned int *sensor_it) {
 	unsigned int expo = it >> shift;
 	unsigned int isp_it = it;
-
 	*sensor_it = expo;
-
 	return isp_it;
 }
 #endif
@@ -466,22 +462,25 @@ static int sensor_reset(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret = 0;
+
 	ret += sensor_read(sd, 0x03f0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	*ident = v;
 
+	*ident = v;
 	ret += sensor_read(sd, 0x03f1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_M)
 		return -ENODEV;
-	*ident = (*ident << 8) | v;
 
+	*ident = (*ident << 8) | v;
 	ret += sensor_write(sd, 0x0370, 0xc0); //[7]OTP clk gate  [6]OTP_en
 	ret += sensor_write(sd, 0x0367, 0x2d); // OTP_access_addr[7:0]
 	ret += sensor_write(sd, 0x0368, 0x00); //[1:0] OTP_access_addr[9:8]
