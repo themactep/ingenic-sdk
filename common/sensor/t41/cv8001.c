@@ -1239,7 +1239,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	fps_n += ((fps >> 16) % (fps & 0xffff));
 
 	if (fps_n > (CV8001_MAX_FPS * 10) || fps_n < (CV8001_MIN_FPS * 10)) {
-		ISP_WARNING("warn: fps_n(%d.%d)not in range\n", fps_n / 10, fps_n % 10);
+		ISP_ERROR("warn: fps_n(%d.%d)not in range\n", fps_n / 10, fps_n % 10);
 		return -1;
 	}
 

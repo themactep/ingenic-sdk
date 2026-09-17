@@ -701,11 +701,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		sclk = 320 * 1575 * 30;
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 	default:
-		ISP_WARNING("warn: fps(%d) not in range\n", fps);
+		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 	}
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_WARNING("warn: fps(%d) not in range\n", fps);
+		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
 
