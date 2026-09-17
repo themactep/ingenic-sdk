@@ -311,11 +311,11 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.max_integration_time_native = 0xAA0 - 8,
-	.integration_time_limit = 0xAA0 - 8,
+	.max_integration_time_native = 0xaa0 - 8,
+	.integration_time_limit = 0xaa0 - 8,
 	.total_width = 2500,
-	.total_height = 0xAA0,
-	.max_integration_time = 0xAA0 - 8,
+	.total_height = 0xaa0,
+	.max_integration_time = 0xaa0 - 8,
 	.again = 0,
 	.integration_time = 0x700,
 };
@@ -771,10 +771,10 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val &= 0x99;
 		break;
 	case 1:
-		val = ((val & 0x9F) | 0x06);
+		val = ((val & 0x9f) | 0x06);
 		break;
 	case 2:
-		val = ((val & 0xF9) | 0x60);
+		val = ((val & 0xf9) | 0x60);
 		break;
 	case 3:
 		val &= 0x66;

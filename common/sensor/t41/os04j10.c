@@ -385,10 +385,10 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi[] = {
 	{0xd1, 0x01},
 	{0xd5, 0x01},
 	{0xd9, 0x01},
-	{0xd2, 0x0A},
-	{0xd6, 0x0A},
-	{0xda, 0x0A},
-	{0xbc, 0x3F},
+	{0xd2, 0x0a},
+	{0xd6, 0x0a},
+	{0xda, 0x0a},
+	{0xbc, 0x3f},
 	{0xfd, 0x09},
 	{0x9d, 0xc1},
 	{0x83, 0x08},
@@ -749,15 +749,15 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x12, &value);
 	switch (enable) {
 	case 0:
-		value &= 0xFC;
+		value &= 0xfc;
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-		value = ((value & 0xFE) | 0x02);
+		value = ((value & 0xfe) | 0x02);
 		sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
 		break;
 	case 2:
-		value = ((value & 0xFD) | 0x01);
+		value = ((value & 0xfd) | 0x01);
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
 		break;
 	case 3:

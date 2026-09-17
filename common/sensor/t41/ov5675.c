@@ -327,7 +327,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	//;max exposure is (VTS-4)/2
 	//;expo is twice as before. Ex. [3501,3502]=0040 means 8 Tline exposure.
 	{0x3500, 0x00},
-	{0x3501, 0x3E}, //;max expo= ([380e,380f]-4)/2.
+	{0x3501, 0x3e}, //;max expo= ([380e,380f]-4)/2.
 	{0x3502, 0x60},
 	//;8xgain,
 	{0x3503, 0x08}, //;[2]=0 real gain
@@ -373,7 +373,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3c96, 0x00},
 	//;for OTP autoload
 	{0x3d8c, 0x71}, //; Header address high byte
-	{0x3d8d, 0xE7}, //; Header address low byte
+	{0x3d8d, 0xe7}, //; Header address low byte
 
 	{0x37cb, 0x09},
 	{0x37cc, 0x15},

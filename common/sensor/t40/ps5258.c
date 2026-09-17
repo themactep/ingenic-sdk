@@ -230,43 +230,43 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
-	{0x010B, 0x07}, //Cmd_Sw_TriState[0]=1
+	{0x010b, 0x07}, //Cmd_Sw_TriState[0]=1
 	{0x0114, 0x09}, //Cmd_LineTime[12:0]=2400
 	{0x0115, 0x60}, //Cmd_LineTime[12:0]=2400
 	{0x0118, 0x02},
 	{0x0119, 0x32},
-	{0x0178, 0xB0}, //B06A: Version
-	{0x0179, 0x6A}, //B06A: Version
-	{0x020A, 0x33}, //T_ODACMODE=1, B04A - improve streaking
-	{0x020D, 0x01}, //T_GDACMODE=1, B04A - improve streaking
-	{0x022E, 0x0E}, //T_spll_predivider[5:0]=14
-	{0x022F, 0x19}, //T_spll_postdivider[5:0]=25
-	{0x022D, 0x01}, //T_spll_enh[0]=1
-	{0x021C, 0x00}, //T_FAE_CLK_SEL[0]=0
-	{0x023C, 0x37}, //T_clamp_offset_lvl[2:0]=3, B05A - improve streaking
+	{0x0178, 0xb0}, //B06A: Version
+	{0x0179, 0x6a}, //B06A: Version
+	{0x020a, 0x33}, //T_ODACMODE=1, B04A - improve streaking
+	{0x020d, 0x01}, //T_GDACMODE=1, B04A - improve streaking
+	{0x022e, 0x0e}, //T_spll_predivider[5:0]=14
+	{0x022f, 0x19}, //T_spll_postdivider[5:0]=25
+	{0x022d, 0x01}, //T_spll_enh[0]=1
+	{0x021c, 0x00}, //T_FAE_CLK_SEL[0]=0
+	{0x023c, 0x37}, //T_clamp_offset_lvl[2:0]=3, B05A - improve streaking
 	{0x0240, 0x15}, //T_compf_fast[2:0]=5, B03A - improve RTS noise & LowVol preformance
 	{0x0252, 0x16}, //T_pll_predivider[5:0]=22
 	{0x0254, 0x61}, //T_pll_enh[0]=1
-	{0x0659, 0x5E}, //R_comp_rst_r3[7:0]=94 - improve left/right display uniformity
+	{0x0659, 0x5e}, //R_comp_rst_r3[7:0]=94 - improve left/right display uniformity
 	{0x0684, 0x00}, //R_cout_reset_enl_f =2, B02A - improve straight line
 	{0x0685, 0x02}, //R_cout_reset_enl_f =2, B02A - improve straight line
-	{0x069A, 0x00}, //Cmd_INTREFHD_enH=0, B03A
-	{0x06AC, 0x04}, //Cmd_vbt_isel_R_G3[6:0]=4, B04A - improve streaking
-	{0x0B02, 0x02}, //Cmd_RClkDly_Sel[3:0]=2, B05A
-	{0x0B0C, 0x00}, //Cmd_MIPI_Clk_Gated[0]=0
-	{0x0E0C, 0x04}, //Cmd_WOI_VOffset=4
-	{0x0E0E, 0x38}, //Cmd_WOI_VSize=1080
-	{0x0E10, 0x07}, //Cmd_WOI_HOffset=4
-	{0x0E12, 0x80}, //Cmd_WOI_HSize=1920
-	{0x145B,
+	{0x069a, 0x00}, //Cmd_INTREFHD_enH=0, B03A
+	{0x06ac, 0x04}, //Cmd_vbt_isel_R_G3[6:0]=4, B04A - improve streaking
+	{0x0b02, 0x02}, //Cmd_RClkDly_Sel[3:0]=2, B05A
+	{0x0b0c, 0x00}, //Cmd_MIPI_Clk_Gated[0]=0
+	{0x0e0c, 0x04}, //Cmd_WOI_VOffset=4
+	{0x0e0e, 0x38}, //Cmd_WOI_VSize=1080
+	{0x0e10, 0x07}, //Cmd_WOI_HOffset=4
+	{0x0e12, 0x80}, //Cmd_WOI_HSize=1920
+	{0x145b,
 		0x10}, //R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
-	{0x14B0,
+	{0x14b0,
 		0x01}, //R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
-	{0x140F, 0x01}, //R_CSI2_enable=1
+	{0x140f, 0x01}, //R_CSI2_enable=1
 	{0x0116, 0x05},
 	{0x0117, 0x46},
 	{0x0111, 0x01}, //UpdateFlag
-	{0x010F, 0x01}, //Sensor_EnH=1
+	{0x010f, 0x01}, //Sensor_EnH=1
 	{SENSOR_REG_END, 0x00},
 };
 

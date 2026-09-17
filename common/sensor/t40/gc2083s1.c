@@ -201,7 +201,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	 * mclk=27mhz,mipi_rate=495Mbps/lane
 	 * rowtime=29.61616us
 	 * max frame rate:30fps,
-	 * hts=2932,vts=0X58A for 30fps,
+	 * hts=2932,vts=0x58a for 30fps,
 	 * bayer mode:RGGB
 	 * */
 	/****system****/
@@ -699,10 +699,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&sensor_attr.mipi, &sensor_mipi_linear, sizeof(sensor_mipi_linear));
 		sensor_attr.one_line_expr_in_us = 26;
 		sensor_attr.total_width = 0x540 * 2;
-		sensor_attr.total_height = 0X58A;
-		sensor_attr.max_integration_time_native = 0X58A - 8;
-		sensor_attr.integration_time_limit = 0X58A - 8;
-		sensor_attr.max_integration_time = 0X58A - 8;
+		sensor_attr.total_height = 0x58a;
+		sensor_attr.max_integration_time_native = 0x58a - 8;
+		sensor_attr.integration_time_limit = 0x58a - 8;
+		sensor_attr.max_integration_time = 0x58a - 8;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x627;
 		break;

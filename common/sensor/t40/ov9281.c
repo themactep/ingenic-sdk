@@ -202,11 +202,11 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.max_dgain = 0,
 	.min_integration_time = 2,
 	.min_integration_time_native = 2,
-	.max_integration_time_native = 0XE33 - 25,
-	.integration_time_limit = 0XE33 - 25,
+	.max_integration_time_native = 0xe33 - 25,
+	.integration_time_limit = 0xe33 - 25,
 	.total_width = 0x2d8,
 	.total_height = 0x38e,
-	.max_integration_time = 0XE33 - 25,
+	.max_integration_time = 0xe33 - 25,
 	.one_line_expr_in_us = 41,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
@@ -609,11 +609,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.image_twidth = 1280, sensor_attr.mipi.image_theight = 800,
 		sensor_attr.mipi.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE;
 		sensor_attr.mipi.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE;
-		sensor_attr.max_integration_time_native = 0XE33 - 25;
-		sensor_attr.integration_time_limit = 0XE33 - 25;
+		sensor_attr.max_integration_time_native = 0xe33 - 25;
+		sensor_attr.integration_time_limit = 0xe33 - 25;
 		sensor_attr.total_width = 0x2d8;  // 5152
 		sensor_attr.total_height = 0xe33; // 2542
-		sensor_attr.max_integration_time = 0XE33 - 25;
+		sensor_attr.max_integration_time = 0xe33 - 25;
 		sensor_attr.again = 0x80;
 		sensor_attr.integration_time = 0x901;
 		break;

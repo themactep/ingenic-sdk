@@ -203,8 +203,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xb9, 0x02},
 	{0xba, 0x00},
 	{0xbb, 0xb2},
-	{0x77, 0x8F},
-	{0xF7, 0x8F},
+	{0x77, 0x8f},
+	{0xf7, 0x8f},
 	{0xff, 0x13},
 	{0x07, 0x47},
 	{0x12, 0x04},
@@ -224,11 +224,11 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3f, 0x0f},
 	{0x70, 0x00},
 	{0x72, 0x05},
-	{0x7A, 0xf0},
+	{0x7a, 0xf0},
 	{0xff, 0x01},
 	{0x97, 0x00},
 	{0x97, 0x0f},
-	{0x7A, 0x0f},
+	{0x7a, 0x0f},
 	{0xff, 0x00}, //8x8 color block test pattern
 	{0x78, 0xba},
 	{0xff, 0x05},
@@ -244,7 +244,7 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 
 void sensor_set_chnmode_1080p_25(struct tx_isp_subdev *sd, unsigned char chn) {
 	unsigned char reg_0x54;
-	unsigned char reg_0xED;
+	unsigned char reg_0xed;
 	ISP_INFO("=====> sensor_set_chnmode_1080p_25\n");
 	sensor_write(sd, 0xff, 0x00);
 	sensor_write(sd, 0x08 + chn, 0x00);
@@ -265,8 +265,8 @@ void sensor_set_chnmode_1080p_25(struct tx_isp_subdev *sd, unsigned char chn) {
 	sensor_write(sd, 0xff, 0x01);
 	sensor_write(sd, 0x84 + chn, 0x00);
 	sensor_write(sd, 0x8c + chn, 0x40);
-	sensor_read(sd, 0xed, &reg_0xED);
-	sensor_write(sd, 0xed, reg_0xED & (~(0x01 << chn)));
+	sensor_read(sd, 0xed, &reg_0xed);
+	sensor_write(sd, 0xed, reg_0xed & (~(0x01 << chn)));
 
 	sensor_write(sd, 0xff, 0x05 + chn);
 	sensor_write(sd, 0x20, 0x84);
@@ -291,27 +291,27 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	unsigned char reg_1xCA;
 
 	ISP_INFO("=================> my_set_port_mode_1mux\n");
-	sensor_write(sd, 0xFF, 0x00); //bank
+	sensor_write(sd, 0xff, 0x00); //bank
 	sensor_read(sd, 0x54, &reg_0x54);
-	sensor_write(sd, 0x54, reg_0x54 & 0xFE);
-	sensor_write(sd, 0xFF, 0x01); //bank 1
-	sensor_read(sd, 0xC8, &reg_1xC8);
-	sensor_write(sd, 0xA0, 0x00);
-	sensor_write(sd, 0xC0, 0x00);
-	sensor_write(sd, 0xC1, 0x00);
-	reg_1xC8 &= (1 == port ? 0x0F : 0xF0);
-	sensor_write(sd, 0xC8, reg_1xC8); //
-	sensor_write(sd, 0xCC, regCC);
+	sensor_write(sd, 0x54, reg_0x54 & 0xfe);
+	sensor_write(sd, 0xff, 0x01); //bank 1
+	sensor_read(sd, 0xc8, &reg_1xC8);
+	sensor_write(sd, 0xa0, 0x00);
+	sensor_write(sd, 0xc0, 0x00);
+	sensor_write(sd, 0xc1, 0x00);
+	reg_1xC8 &= (1 == port ? 0x0f : 0xf0);
+	sensor_write(sd, 0xc8, reg_1xC8); //
+	sensor_write(sd, 0xcc, regCC);
 
-	sensor_write(sd, 0xA8 + port, 0x90 + (port * 0x10)); //h/v0 sync enabled
-	sensor_write(sd, 0xB3, 0x01);
+	sensor_write(sd, 0xa8 + port, 0x90 + (port * 0x10)); //h/v0 sync enabled
+	sensor_write(sd, 0xb3, 0x01);
 
-	sensor_write(sd, 0xE4, 0x00);
-	sensor_write(sd, 0xE5, 0x00);
+	sensor_write(sd, 0xe4, 0x00);
+	sensor_write(sd, 0xe5, 0x00);
 
-	sensor_read(sd, 0xCA, &reg_1xCA);
+	sensor_read(sd, 0xca, &reg_1xCA);
 	reg_1xCA |= (0x11 << port);
-	sensor_write(sd, 0xCA, reg_1xCA);
+	sensor_write(sd, 0xca, reg_1xCA);
 }
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {

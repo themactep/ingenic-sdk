@@ -358,7 +358,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 					.hblanking = 0,
 				},
 		},
-	.max_again = 0x5091D,
+	.max_again = 0x5091d,
 	.max_dgain = 0,
 	.min_integration_time = 1,
 	.min_integration_time_native = 1,

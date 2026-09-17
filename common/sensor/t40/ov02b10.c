@@ -425,7 +425,7 @@ static struct regval_list sensor_init_regs_1600_1200_15fps[] = {
 	{0x07, 0x20},
 	{0x09, 0xb0},
 	{0x14, 0x03},
-	{0x15, 0xF7},
+	{0x15, 0xf7},
 	{0xfb, 0x01},
 	{0xfd, 0x03},
 	{0xc2, 0x01},
@@ -701,7 +701,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x14, (vb >> 8) & 0xff);
 	ret += sensor_write(sd, 0x15, vb & 0xff);
-	ret += sensor_write(sd, 0xFE, 0x02);
+	ret += sensor_write(sd, 0xfe, 0x02);
 	if (0 != ret) {
 		ISP_ERROR("err: %s sensor_write err\n", __func__);
 		return ret;
@@ -724,13 +724,13 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x12, &val);
 	switch (enable) {
 	case 0:
-		val &= 0xFC;
+		val &= 0xfc;
 		break;
 	case 1:
-		val = ((val & 0xFD) | 0x01);
+		val = ((val & 0xfd) | 0x01);
 		break;
 	case 2:
-		val = ((val & 0xFE) | 0x02);
+		val = ((val & 0xfe) | 0x02);
 		break;
 	case 3:
 		val |= 0x03;

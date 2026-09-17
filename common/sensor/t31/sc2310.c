@@ -695,7 +695,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0x3018, 0x33}, //[7:5] lane_num-1
 	{0x3031, 0x0c}, //[3:0] bitmode
 	{0x3037, 0x40}, //[6:5] bitsel  40:12bit
-	{0x3001, 0xFE}, //[0] c_y
+	{0x3001, 0xfe}, //[0] c_y
 	{0x4603, 0x00}, //[0] data_fifo mipi mode
 	{0x4837, 0x35}, //[7:0] pclk period * 2
 	{0x36e9, 0x83},
@@ -1027,7 +1027,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi_dol[] = {
 	{0x3018, 0x33}, //[7:5] lane_num-1
 	{0x3031, 0x0c}, //[3:0] bitmode
 	{0x3037, 0x40}, //[6:5] bitsel  40:12bit
-	{0x3001, 0xFE}, //[0] c_y
+	{0x3001, 0xfe}, //[0] c_y
 	{0x4603, 0x00}, //[0] data_fifo mipi mode
 	{0x4837, 0x35}, //[7:0] pclk period * 2
 	{0x36e9, 0x83},

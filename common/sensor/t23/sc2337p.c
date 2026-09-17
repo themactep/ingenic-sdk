@@ -34,7 +34,7 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_REG_END 0xffff
-#define SENSOR_SUPPORT_25FPS_SCLK (79200000) /* 0x898 * 0X5a0 * 25 */
+#define SENSOR_SUPPORT_25FPS_SCLK (79200000) /* 0x898 * 0x5a0 * 25 */
 #define SENSOR_SUPPORT_30FPS_SCLK (74250000) /* 2200*1125*30 */
 #define SENSOR_VERSION "H20240926a"
 
@@ -319,7 +319,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.max_integration_time_native = 0x5a0 - 6,
 	.integration_time_limit = 0x5a0 - 6,
 	.total_width = 0x898,
-	.total_height = 0X5a0,
+	.total_height = 0x5a0,
 	.max_integration_time = 0x5a0 - 6,
 	.one_line_expr_in_us = 27,
 	.integration_time_apply_delay = 2,
@@ -1060,11 +1060,11 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		break;
 	case 1:
 		ISP_INFO("---mirror-----\n");
-		val = ((val & 0x9F) | 0x06);
+		val = ((val & 0x9f) | 0x06);
 		break;
 	case 2:
 		ISP_INFO("----flip---\n");
-		val = ((val & 0xF9) | 0x60);
+		val = ((val & 0xf9) | 0x60);
 		break;
 	case 3:
 		ISP_INFO("---mirror and flip-----\n");
@@ -1340,11 +1340,11 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		wsize = &sensor_win_sizes[0];
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_25fps), sizeof(sensor_mipi_25fps));
 		sensor_attr.min_integration_time = 1, sensor_attr.min_integration_time_native = 1,
-		sensor_attr.max_integration_time_native = 0X5a0 - 6;
-		sensor_attr.integration_time_limit = 0X5a0 - 6;
+		sensor_attr.max_integration_time_native = 0x5a0 - 6;
+		sensor_attr.integration_time_limit = 0x5a0 - 6;
 		sensor_attr.total_width = 2200;
 		sensor_attr.total_height = 0x5a0;
-		sensor_attr.max_integration_time = 0X5a0 - 6;
+		sensor_attr.max_integration_time = 0x5a0 - 6;
 		sensor_attr.one_line_expr_in_us = 25;
 		ISP_INFO("__%s_win_sizes[0]__,\n", SENSOR_NAME);
 	}

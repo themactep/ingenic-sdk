@@ -29,8 +29,8 @@
 #define SENSOR_EXPO
 #define SENSOR_HEIGHT 1440
 #define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_INIT_30FPS_HTS 0xC80
-#define SENSOR_INIT_30FPS_VTS 0x5DC
+#define SENSOR_INIT_30FPS_HTS 0xc80
+#define SENSOR_INIT_30FPS_VTS 0x5dc
 #define SENSOR_MAX_HEIGHT SENSOR_HEIGHT
 #define SENSOR_MAX_WIDTH SENSOR_WIDTH
 #define SENSOR_MCLK 24000000
@@ -328,37 +328,37 @@ struct again_lut sensor_again_lut[] = {
 	{0x3de, 321945},
 	{0x3df, 324769},
 	{0x3e0, 327680},
-	{0x3E1, 330682},
-	{0x3E2, 333782},
-	{0x3E3, 336987},
-	{0x3E4, 340305},
-	{0x3E5, 343744},
-	{0x3E6, 347312},
-	{0x3E7, 351020},
-	{0x3E8, 354880},
-	{0x3E9, 358904},
-	{0x3EA, 363107},
-	{0x3EB, 367505},
-	{0x3EC, 372118},
-	{0x3ED, 376968},
-	{0x3EE, 382080},
-	{0x3EF, 387484},
-	{0x3F0, 393216},
-	{0x3F1, 399318},
-	{0x3F2, 405841},
-	{0x3F3, 412848},
-	{0x3F4, 420416},
-	{0x3F5, 428643},
-	{0x3F6, 437654},
-	{0x3F7, 447616},
-	{0x3F8, 458752},
-	{0x3F9, 471377},
-	{0x3FA, 485952},
-	{0x3FB, 503190},
-	{0x3FC, 524288},
-	{0x3FD, 551488},
-	{0x3FE, 589824},
-	{0x3FF, 655360},
+	{0x3e1, 330682},
+	{0x3e2, 333782},
+	{0x3e3, 336987},
+	{0x3e4, 340305},
+	{0x3e5, 343744},
+	{0x3e6, 347312},
+	{0x3e7, 351020},
+	{0x3e8, 354880},
+	{0x3e9, 358904},
+	{0x3ea, 363107},
+	{0x3eb, 367505},
+	{0x3ec, 372118},
+	{0x3ed, 376968},
+	{0x3ee, 382080},
+	{0x3ef, 387484},
+	{0x3f0, 393216},
+	{0x3f1, 399318},
+	{0x3f2, 405841},
+	{0x3f3, 412848},
+	{0x3f4, 420416},
+	{0x3f5, 428643},
+	{0x3f6, 437654},
+	{0x3f7, 447616},
+	{0x3f8, 458752},
+	{0x3f9, 471377},
+	{0x3fa, 485952},
+	{0x3fb, 503190},
+	{0x3fc, 524288},
+	{0x3fd, 551488},
+	{0x3fe, 589824},
+	{0x3ff, 655360},
 };
 #endif /* SENSOR_AGAIN_TABLE */
 
@@ -457,8 +457,8 @@ static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
 	//Frame timing and frame rate:Linear 30Fps
 	//System clock frequency:144M
 	//Output interface and data rate:MIPI 2Lane RAW10 720Mbps
-	//HTS = 3107/3108 =0xC80
-	//VTS = 3105/3106 =0x5DC
+	//HTS = 3107/3108 =0xc80
+	//VTS = 3105/3106 =0x5dc
 	//Tline = 22.2222us
 
 	{0x302d, 0x01},
@@ -660,7 +660,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
 	{0x61a2, 0x01},
 	{0x61a5, 0xcc},
 	{0x61a4, 0x05},
-	{0x5400, 0x2B},
+	{0x5400, 0x2b},
 	{0x5403, 0x08},
 	{0x5406, 0x00},
 	{0x5407, 0x40},

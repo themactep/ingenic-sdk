@@ -28,8 +28,8 @@
 #define SENSOR_NAME "c2399s1"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_REG_DELAY 0xFFFE
-#define SENSOR_REG_END 0xFFFF
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
 #define SENSOR_SUPPORT_30FPS_SCLK (65600000)
 #define SENSOR_VERSION "H20210922a"
 
@@ -242,7 +242,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3222, 0x82},
 	{0x322c, 0x04},
 	{0x3c01, 0x13},
-	{0x3087, 0xB0},
+	{0x3087, 0xb0},
 	{0x3584, 0x02},
 	{0x3108, 0xef},
 	{0x3112, 0xe0},

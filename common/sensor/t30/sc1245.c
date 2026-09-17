@@ -879,8 +879,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 
-	//	*(volatile unsigned int*)(0xB0010100) = 0x01;
-	//	*(volatile unsigned int*)(0xB0010130) = 0xCAAAAAAA;
+	//	*(volatile unsigned int*)(0xb0010100) = 0x01;
+	//	*(volatile unsigned int*)(0xb0010130) = 0xcaaaaaaa;
 
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {

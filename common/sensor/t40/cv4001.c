@@ -18,7 +18,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-#define AGAIN_MAX_DB 0xB4
+#define AGAIN_MAX_DB 0xb4
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H 0x40
@@ -129,26 +129,26 @@ struct tx_isp_mipi_bus sensor_mipi = {
 
 static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3418, 0x97},
-	{0x341A, 0x4F},
-	{0x341C, 0x47},
-	{0x341E, 0x4F},
-	{0x341F, 0x01},
-	{0x3420, 0x4F},
+	{0x341a, 0x4f},
+	{0x341c, 0x47},
+	{0x341e, 0x4f},
+	{0x341f, 0x01},
+	{0x3420, 0x4f},
 	{0x3422, 0x97},
 	{0x3424, 0x47},
-	{0x3426, 0x7F},
-	{0x3428, 0x3F},
+	{0x3426, 0x7f},
+	{0x3428, 0x3f},
 	{0x3040, 0x01},
 	{0x3048, 0x04},
 	{0x3049, 0x00},
-	{0x304A, 0x80},
-	{0x304B, 0x0A},
+	{0x304a, 0x80},
+	{0x304b, 0x0a},
 	{0x3044, 0x04},
 	{0x3045, 0x00},
-	{0x3046, 0xF0},
+	{0x3046, 0xf0},
 	{0x3047, 0x05},
 	{0x3348, 0x00},
-	{0x316C, 0x64},
+	{0x316c, 0x64},
 	{0x3244, 0x08},
 	{0x3258, 0x02},
 	{0x3258, 0x03},
@@ -448,10 +448,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		return -1;
 	}
 
-	ret += sensor_read(sd, 0x302D, &val);
+	ret += sensor_read(sd, 0x302d, &val);
 	hts = val;
 	val = 0;
-	ret += sensor_read(sd, 0x302C, &val);
+	ret += sensor_read(sd, 0x302c, &val);
 	hts = ((hts << 8) | val);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
@@ -461,7 +461,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret += sensor_write(sd, 0x3028, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3029, (unsigned char)((vts >> 8) & 0xff));
-	ret += sensor_write(sd, 0x302A, (unsigned char)((vts >> 16) & 0x0f));
+	ret += sensor_write(sd, 0x302a, (unsigned char)((vts >> 16) & 0x0f));
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
@@ -485,16 +485,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_read(sd, 0x3034, &val);
 	switch (enable) {
 	case 0:
-		val &= 0xFC;
+		val &= 0xfc;
 		sensor->video.mbus.code = TISP_VI_FMT_SRGGB10_1X10;
 		break;
 	case 1:
-		val &= 0xFD;
+		val &= 0xfd;
 		val |= 0x01;
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
 		break;
 	case 2:
-		val &= 0xFE;
+		val &= 0xfe;
 		val |= 0x02;
 		sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
 		break;

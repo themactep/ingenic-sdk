@@ -223,7 +223,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x008d, 0x003f}, //
 	{0x008e, 0x0000}, //oen_ctrl,0c
 	{0x008f, 0x0000}, //io_sel_ctrl,03
-	{0x00fa, 0x008F}, //ispc,c7
+	{0x00fa, 0x008f}, //ispc,c7
 	{0x0391, 0x0001}, //mipi_ctrl1,(raw12)
 	{0x0392, 0x0000}, //mipi_ctrl2,default
 	{0x0393, 0x0001}, //mipi_ctrl3,default
@@ -1166,7 +1166,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	total_gain = sensor_clip(total_gain, 0x0040, 0x0f00);
 	vrefh = (128 << 6) / total_gain - 1;
-	vrefh = sensor_clip(vrefh, vrefh_min_tlb, 0x7F);
+	vrefh = sensor_clip(vrefh, vrefh_min_tlb, 0x7f);
 	again = (128 << 6) / (vrefh + 1);     //recalculate real again
 	dgain = total_gain * 512 / again;     // dgain
 	dgain = sensor_clip(dgain, 512, 512); //min=1x,max=8x
@@ -1196,14 +1196,14 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 			return ret;
 	}
 
-	ret += sensor_write(sd, 0x00B1, vrefh);
-	ret += sensor_write(sd, 0x00BC, 0xFF & (dgain >> 8));
-	ret += sensor_write(sd, 0x00BD, 0xFF & (dgain >> 0));
+	ret += sensor_write(sd, 0x00b1, vrefh);
+	ret += sensor_write(sd, 0x00bc, 0xff & (dgain >> 8));
+	ret += sensor_write(sd, 0x00bd, 0xff & (dgain >> 0));
 	ret += sensor_write(sd, 0x014a, 0x01);
 	if (ret < 0)
 		return ret;
 
-	ret += sensor_write(sd, 0x001D, 0x02);
+	ret += sensor_write(sd, 0x001d, 0x02);
 	if (ret < 0)
 		return ret;
 

@@ -1035,7 +1035,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO(" \nEnter sensor_set_fps !\n ");
 	switch (sensor->info.default_boot) {
 	case 0:
-		sclk = 0x640 * 0x708 * 30 * 2; /* 1600 * 0X708 * 30 * 2 */
+		sclk = 0x640 * 0x708 * 30 * 2; /* 1600 * 0x708 * 30 * 2 */
 		max_fps = 30;
 		break;
 	case 1:
@@ -1133,11 +1133,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0X708 - 8;
-		sensor_attr.integration_time_limit = 0X708 - 8;
+		sensor_attr.max_integration_time_native = 0x708 - 8;
+		sensor_attr.integration_time_limit = 0x708 - 8;
 		sensor_attr.total_width = 3200;
-		sensor_attr.total_height = 0X708;
-		sensor_attr.max_integration_time = 0X708 - 8;
+		sensor_attr.total_height = 0x708;
+		sensor_attr.max_integration_time = 0x708 - 8;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_native = 2;
 		sensor_attr.again = 0;
@@ -1316,11 +1316,11 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0X708 - 8;
-		sensor_attr.integration_time_limit = 0X708 - 8;
+		sensor_attr.max_integration_time_native = 0x708 - 8;
+		sensor_attr.integration_time_limit = 0x708 - 8;
 		sensor_attr.total_width = 3200;
-		sensor_attr.total_height = 0X708;
-		sensor_attr.max_integration_time = 0X708 - 8;
+		sensor_attr.total_height = 0x708;
+		sensor_attr.max_integration_time = 0x708 - 8;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_native = 2;
 		sensor_attr.again = 0;

@@ -683,16 +683,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x3821, &mirror_val);
 	switch (enable) {
 	case 0:
-		flip_val &= 0xBB;
-		mirror_val &= 0x0B;
+		flip_val &= 0xbb;
+		mirror_val &= 0x0b;
 		break;
 	case 1:
-		flip_val &= 0xBB;
+		flip_val &= 0xbb;
 		mirror_val |= 0x04;
 		break;
 	case 2:
 		flip_val |= 0x44;
-		mirror_val &= 0x0B;
+		mirror_val &= 0x0b;
 		break;
 	case 3:
 		flip_val |= 0x44;

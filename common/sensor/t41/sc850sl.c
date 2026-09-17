@@ -1939,11 +1939,11 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val &= 0x99;
 		break;
 	case 1:
-		val &= 0x9F;
+		val &= 0x9f;
 		val |= 0x06;
 		break;
 	case 2:
-		val &= 0xF9;
+		val &= 0xf9;
 		val |= 0x60;
 		break;
 	case 3:
@@ -1989,11 +1989,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0X8CA - 4;
-		sensor_attr.integration_time_limit = 0X8CA - 4;
+		sensor_attr.max_integration_time_native = 0x8ca - 4;
+		sensor_attr.integration_time_limit = 0x8ca - 4;
 		sensor_attr.total_width = 2200;
 		sensor_attr.total_height = 0x8ca;
-		sensor_attr.max_integration_time = 0X8CA - 4;
+		sensor_attr.max_integration_time = 0x8ca - 4;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x700;
 		break;
@@ -2004,11 +2004,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi_raw12, sizeof(sensor_mipi_raw12));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0X8CA - 4;
-		sensor_attr.integration_time_limit = 0X8CA - 4;
+		sensor_attr.max_integration_time_native = 0x8ca - 4;
+		sensor_attr.integration_time_limit = 0x8ca - 4;
 		sensor_attr.total_width = 2200;
 		sensor_attr.total_height = 0x8ca;
-		sensor_attr.max_integration_time = 0X8CA - 4;
+		sensor_attr.max_integration_time = 0x8ca - 4;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x700;
 		break;

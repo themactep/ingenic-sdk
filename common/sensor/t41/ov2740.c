@@ -472,7 +472,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3018, 0x32},
 	{0x3031, 0x0a},
 	{0x3080, 0x08},
-	{0x3083, 0xB4},
+	{0x3083, 0xb4},
 	{0x3103, 0x00},
 	{0x3104, 0x01},
 	{0x3106, 0x01},
@@ -1060,17 +1060,17 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 
 	switch (enable) {
 	case 0:
-		val &= 0xEF;
+		val &= 0xef;
 		val |= 0x08;
 		break;
 	case 1:
 		val |= 0x18;
 		break;
 	case 2:
-		val &= 0xE7;
+		val &= 0xe7;
 		break;
 	case 3:
-		val &= 0xF7;
+		val &= 0xf7;
 		val |= 0x10;
 		break;
 	}

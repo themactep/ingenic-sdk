@@ -331,7 +331,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x02a5, 0x02},
 	{0x0260, 0x0b},
 	{0x0216, 0x04},
-	{0x0299, 0x1C},
+	{0x0299, 0x1c},
 	{0x02bb, 0x0d},
 	{0x02a3, 0x02},
 	{0x02a4, 0x02},
@@ -1040,13 +1040,13 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	sensor_read(sd, 0x0101, &value);
 	switch (enable) {
 	case 0:
-		value &= 0xFC;
+		value &= 0xfc;
 		break;
 	case 1:
-		value = ((value & 0xFC) | 0x01);
+		value = ((value & 0xfc) | 0x01);
 		break;
 	case 2:
-		value = ((value & 0xFC) | 0x02);
+		value = ((value & 0xfc) | 0x02);
 		break;
 	case 3:
 		value |= 0x03;

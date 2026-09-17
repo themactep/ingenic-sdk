@@ -872,7 +872,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-/* Plain 16-bit line-count exposure across 0x015A(hi)/0x015B(lo) -- unlike
+/* Plain 16-bit line-count exposure across 0x015a(hi)/0x015b(lo) -- unlike
  * OV5647, IMX219 has no sub-line fraction bits, so no <<4 shift needed. */
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;

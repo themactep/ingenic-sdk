@@ -272,7 +272,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
-	//@@ 0 2 Res 3840X2160 4lane MIPI0720Mbps Linear10 30fps MCLK24M GAIA26
+	//@@ 0 2 Res 3840x2160 4lane MIPI0720Mbps Linear10 30fps MCLK24M GAIA26
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},
@@ -479,7 +479,7 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
-	//@@ 0 2 Res 3840X2160 4lane MIPI640Mbps Linear10 15fps MCLK24M
+	//@@ 0 2 Res 3840x2160 4lane MIPI640Mbps Linear10 15fps MCLK24M
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},

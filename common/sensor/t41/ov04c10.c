@@ -1231,11 +1231,11 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val_reg16 = 0x24;
 		break;
 	case 2:
-		val_foramt = 0xB0;
+		val_foramt = 0xb0;
 		val_reg16 = 0x04;
 		break;
 	case 3:
-		val_foramt = 0xB8;
+		val_foramt = 0xb8;
 		val_reg16 = 0x04;
 		break;
 	}

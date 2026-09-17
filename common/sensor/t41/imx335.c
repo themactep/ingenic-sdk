@@ -182,99 +182,99 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2592_1944_15fps_sensor_mipi_dol[] = {
-	{0x300C, 0x5B}, // BCWAIT_TIME[7:0]
-	{0x300D, 0x40}, // CPWAIT_TIME[7:0]
+	{0x300c, 0x5b}, // BCWAIT_TIME[7:0]
+	{0x300d, 0x40}, // CPWAIT_TIME[7:0]
 	{0x3030, 0x88}, // VMAX[19:0] 0x1388 = 5000
 	{0x3031, 0x13}, //
-	{0x3034, 0xEF}, // HMAX[15:0] 0x1EF = 495
+	{0x3034, 0xef}, // HMAX[15:0] 0x1ef = 495
 	{0x3035, 0x01}, //
 	{0x3048, 0x01}, // WDMODE[0]
 	{0x3049, 0x01}, // WDSEL[1:0]
-	{0x304A, 0x04}, // WD_SET1[2:0]
-	{0x304B, 0x03}, // WD_SET2[3:0]
-	{0x304C, 0x13}, // OPB_SIZE_V[5:0]
+	{0x304a, 0x04}, // WD_SET1[2:0]
+	{0x304b, 0x03}, // WD_SET2[3:0]
+	{0x304c, 0x13}, // OPB_SIZE_V[5:0]
 	{0x3050, 0x00}, // ADBIT[0]
 	{0x3058, 0x34}, // SHR0[19:0]
 	{0x3059, 0x21}, //
-	{0x3068, 0x72}, // RHS1[19:0] 0xAA
+	{0x3068, 0x72}, // RHS1[19:0] 0xaa
 	{0x3069, 0x02},
-	{0x315A, 0x02}, // INCKSEL2[1:0]
-	{0x316A, 0x7E}, // INCKSEL4[1:0]
-	{0x319D, 0x00}, // MDBIT
-	{0x31A1, 0x00}, // XVS_DRV[1:0]
-	{0x31D7, 0x01}, // XVSMSKCNT_INT[1:0]
+	{0x315a, 0x02}, // INCKSEL2[1:0]
+	{0x316a, 0x7e}, // INCKSEL4[1:0]
+	{0x319d, 0x00}, // MDBIT
+	{0x31a1, 0x00}, // XVS_DRV[1:0]
+	{0x31d7, 0x01}, // XVSMSKCNT_INT[1:0]
 	{0x3200, 0x00}, // FGAINEN 0 enable    1 disable
 	{0x3288, 0x21}, // -
-	{0x328A, 0x02}, // -
+	{0x328a, 0x02}, // -
 	{0x3414, 0x05}, // -
 	{0x3416, 0x18}, // -
-	{0x341C, 0xFF}, // ADBIT1[8:0]
-	{0x341D, 0x01}, //
+	{0x341c, 0xff}, // ADBIT1[8:0]
+	{0x341d, 0x01}, //
 	{0x3648, 0x01}, // -
-	{0x364A, 0x04}, // -
-	{0x364C, 0x04}, // -
+	{0x364a, 0x04}, // -
+	{0x364c, 0x04}, // -
 	{0x3678, 0x01}, // -
-	{0x367C, 0x31}, // -
-	{0x367E, 0x31}, // -
+	{0x367c, 0x31}, // -
+	{0x367e, 0x31}, // -
 	{0x3706, 0x10}, // -
 	{0x3708, 0x03}, // -
 	{0x3714, 0x02}, // -
 	{0x3715, 0x02}, // -
 	{0x3716, 0x01}, // -
 	{0x3717, 0x03}, // -
-	{0x371C, 0x3D}, // -
-	{0x371D, 0x3F}, // -
-	{0x372C, 0x00}, // -
-	{0x372D, 0x00}, // -
-	{0x372E, 0x46}, // -
-	{0x372F, 0x00}, // -
+	{0x371c, 0x3d}, // -
+	{0x371d, 0x3f}, // -
+	{0x372c, 0x00}, // -
+	{0x372d, 0x00}, // -
+	{0x372e, 0x46}, // -
+	{0x372f, 0x00}, // -
 	{0x3730, 0x89}, // -
 	{0x3731, 0x00}, // -
 	{0x3732, 0x08}, // -
 	{0x3733, 0x01}, // -
-	{0x3734, 0xFE}, // -
+	{0x3734, 0xfe}, // -
 	{0x3735, 0x05}, // -
 	{0x3740, 0x02}, // -
-	{0x375D, 0x00}, // -
-	{0x375E, 0x00}, // -
-	{0x375F, 0x11}, // -
+	{0x375d, 0x00}, // -
+	{0x375e, 0x00}, // -
+	{0x375f, 0x11}, // -
 	{0x3760, 0x01}, // -
-	{0x3768, 0x1A}, // -
-	{0x3769, 0x1A}, // -
-	{0x376A, 0x1A}, // -
-	{0x376B, 0x1A}, // -
-	{0x376C, 0x1A}, // -
-	{0x376D, 0x17}, // -
-	{0x376E, 0x0F}, // -
+	{0x3768, 0x1a}, // -
+	{0x3769, 0x1a}, // -
+	{0x376a, 0x1a}, // -
+	{0x376b, 0x1a}, // -
+	{0x376c, 0x1a}, // -
+	{0x376d, 0x17}, // -
+	{0x376e, 0x0f}, // -
 	{0x3776, 0x00}, // -
 	{0x3777, 0x00}, // -
 	{0x3778, 0x46}, // -
 	{0x3779, 0x00}, // -
-	{0x377A, 0x89}, // -
-	{0x377B, 0x00}, // -
-	{0x377C, 0x08}, // -
-	{0x377D, 0x01}, // -
-	{0x377E, 0x23}, // -
-	{0x377F, 0x02}, // -
-	{0x3780, 0xD9}, // -
+	{0x377a, 0x89}, // -
+	{0x377b, 0x00}, // -
+	{0x377c, 0x08}, // -
+	{0x377d, 0x01}, // -
+	{0x377e, 0x23}, // -
+	{0x377f, 0x02}, // -
+	{0x3780, 0xd9}, // -
 	{0x3781, 0x03}, // -
-	{0x3782, 0xF5}, // -
+	{0x3782, 0xf5}, // -
 	{0x3783, 0x06}, // -
-	{0x3784, 0xA5}, // -
-	{0x3788, 0x0F}, // -
-	{0x378A, 0xD9}, // -
-	{0x378B, 0x03}, // -
-	{0x378C, 0xEB}, // -
-	{0x378D, 0x05}, // -
-	{0x378E, 0x87}, // -
-	{0x378F, 0x06}, // -
-	{0x3790, 0xF5}, // -
+	{0x3784, 0xa5}, // -
+	{0x3788, 0x0f}, // -
+	{0x378a, 0xd9}, // -
+	{0x378b, 0x03}, // -
+	{0x378c, 0xeb}, // -
+	{0x378d, 0x05}, // -
+	{0x378e, 0x87}, // -
+	{0x378f, 0x06}, // -
+	{0x3790, 0xf5}, // -
 	{0x3792, 0x43}, // -
-	{0x3794, 0x7A}, // -
-	{0x3796, 0xA1}, // -
-	{0x3A01, 0x01}, // LANEMODE[2:0]
+	{0x3794, 0x7a}, // -
+	{0x3796, 0xa1}, // -
+	{0x3a01, 0x01}, // LANEMODE[2:0]
 	{0x3000, 0x00},
-	{0xfffe, 0x1E},
+	{0xfffe, 0x1e},
 	{0x3002, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
@@ -491,7 +491,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
 
-	ret = sensor_read(sd, 0x302E, &v);
+	ret = sensor_read(sd, 0x302e, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -501,7 +501,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 	*ident = v;
 
-	ret = sensor_read(sd, 0x302F, &v);
+	ret = sensor_read(sd, 0x302f, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -519,9 +519,9 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int rhs1 = 626;
 
 	shs1 = rhs1 - (value << 2);
-	ret += sensor_write(sd, 0x305C, (unsigned char)(shs1 & 0xff));
-	ret += sensor_write(sd, 0x305D, (unsigned char)((shs1 >> 8) & 0xff));
-	ret += sensor_write(sd, 0x305E, (unsigned char)((shs1 >> 16) & 0x03));
+	ret += sensor_write(sd, 0x305c, (unsigned char)(shs1 & 0xff));
+	ret += sensor_write(sd, 0x305d, (unsigned char)((shs1 >> 8) & 0xff));
+	ret += sensor_write(sd, 0x305e, (unsigned char)((shs1 >> 16) & 0x03));
 	return 0;
 }
 
@@ -535,14 +535,14 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		shs = vmax - value;
 		ret += sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3059, (unsigned char)((shs >> 8) & 0xff));
-		ret += sensor_write(sd, 0x305A, (unsigned char)((shs >> 16) & 0x0f));
+		ret += sensor_write(sd, 0x305a, (unsigned char)((shs >> 16) & 0x0f));
 	}
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		vmax = sensor_attr.total_height;
 		shs = (vmax << 1) - (value << 2);
 		ret += sensor_write(sd, 0x3058, (unsigned char)(shs & 0xff));
 		ret += sensor_write(sd, 0x3059, (unsigned char)((shs >> 8) & 0xff));
-		ret += sensor_write(sd, 0x305A, (unsigned char)((shs >> 16) & 0x0f));
+		ret += sensor_write(sd, 0x305a, (unsigned char)((shs >> 16) & 0x0f));
 	}
 	if (ret < 0)
 		return ret;
@@ -552,8 +552,8 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret += sensor_write(sd, 0x30EA, (unsigned char)(value & 0xff));
-	ret += sensor_write(sd, 0x30EB, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x30ea, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x30eb, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
@@ -562,8 +562,8 @@ static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	ret += sensor_write(sd, 0x30E8, (unsigned char)(value & 0xff));
-	ret += sensor_write(sd, 0x30E9, (unsigned char)((value >> 8) & 0xff));
+	ret += sensor_write(sd, 0x30e8, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x30e9, (unsigned char)((value >> 8) & 0xff));
 	if (ret < 0)
 		return ret;
 
@@ -688,47 +688,47 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char reg_3081 = 0x02;
 	unsigned char reg_3083 = 0x02;
 
-	unsigned char reg_3074 = 0xC4;
+	unsigned char reg_3074 = 0xc4;
 	unsigned char reg_3075 = 0x00;
 
-	ret += sensor_read(sd, 0x304E, &hreverse);
-	ret += sensor_read(sd, 0x304F, &vreverse);
+	ret += sensor_read(sd, 0x304e, &hreverse);
+	ret += sensor_read(sd, 0x304f, &vreverse);
 	switch (enable) {
 	case 0:
-		hreverse &= 0xFC;
-		vreverse &= 0xFC;
+		hreverse &= 0xfc;
+		vreverse &= 0xfc;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
-		reg_3074 = 0xC4;
+		reg_3074 = 0xc4;
 		reg_3075 = 0x00;
 		break;
 	case 1:
 		hreverse |= 0x01;
-		vreverse &= 0xFC;
+		vreverse &= 0xfc;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
-		reg_3074 = 0xC4;
+		reg_3074 = 0xc4;
 		reg_3075 = 0x00;
 		break;
 	case 2:
-		hreverse &= 0xFC;
+		hreverse &= 0xfc;
 		vreverse |= 0x01;
-		reg_3081 = 0xFE;
-		reg_3083 = 0xFE;
+		reg_3081 = 0xfe;
+		reg_3083 = 0xfe;
 		reg_3074 = 0x00;
 		reg_3075 = 0x10;
 		break;
 	case 3:
 		hreverse |= 0x01;
 		vreverse |= 0x01;
-		reg_3081 = 0xFE;
-		reg_3083 = 0xFE;
+		reg_3081 = 0xfe;
+		reg_3083 = 0xfe;
 		reg_3074 = 0x00;
 		reg_3075 = 0x10;
 		break;
 	}
-	ret += sensor_write(sd, 0x304E, hreverse);
-	ret += sensor_write(sd, 0x304F, vreverse);
+	ret += sensor_write(sd, 0x304e, hreverse);
+	ret += sensor_write(sd, 0x304f, vreverse);
 	ret += sensor_write(sd, 0x3081, reg_3081);
 	ret += sensor_write(sd, 0x3083, reg_3083);
 	ret += sensor_write(sd, 0x3074, reg_3074);

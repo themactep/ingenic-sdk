@@ -18,7 +18,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-#define SENSOR_AGAIN_MAX 0xB4
+#define SENSOR_AGAIN_MAX 0xb4
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0x3001
 #define SENSOR_CHIP_ID_H 0x30
@@ -132,9 +132,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_mipi[] = {
-	{0x301D, 0x00},
-	{0x3024, 0xDC}, //vts 0xADC = 2780
-	{0x3025, 0x0A},
+	{0x301d, 0x00},
+	{0x3024, 0xdc}, //vts 0xadc = 2780
+	{0x3025, 0x0a},
 	{0x3026, 0x00},
 	{0x3028, 0x88}, // hts 0x288 = 648
 	{0x3029, 0x02}, //
@@ -142,22 +142,22 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3033, 0x00},
 	{0x3300, 0x00},
 	{0x3401, 0x01},
-	{0x343E, 0x00},
+	{0x343e, 0x00},
 	{0x3806, 0x01},
-	{0x3908, 0x2D},
+	{0x3908, 0x2d},
 	{0x3909, 0x00},
-	{0x390A, 0x02},
+	{0x390a, 0x02},
 	{0x3034, 0x01},
 	{0x3038, 0x04},
 	{0x3039, 0x00},
-	{0x303A, 0x10},
-	{0x303B, 0x05},
-	{0x303C, 0x04},
-	{0x303D, 0x00},
-	{0x303E, 0x00},
-	{0x303F, 0x09},
+	{0x303a, 0x10},
+	{0x303b, 0x05},
+	{0x303c, 0x04},
+	{0x303d, 0x00},
+	{0x303e, 0x00},
+	{0x303f, 0x09},
 	{0x3338, 0x00},
-	{0x35B3, 0x0A},
+	{0x35b3, 0x0a},
 	{0x3168, 0x64},
 	{0x3871, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -304,7 +304,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	exp0 = (exp0 >> 1) << 1;
 	ret += sensor_write(sd, 0x3058, (unsigned char)(exp & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((exp >> 8) & 0xff));
-	ret += sensor_write(sd, 0x305A, (unsigned char)((exp >> 16) & 0x0f));
+	ret += sensor_write(sd, 0x305a, (unsigned char)((exp >> 16) & 0x0f));
 	ret += sensor_write(sd, 0x3160, (unsigned char)(again & 0xff));
 
 	ISP_INFO("%s set exp=0x%04x(%4d line) gain=0x%02x\n", SENSOR_NAME, exp, it, again);
@@ -324,7 +324,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	exp = (exp >> 1) << 1;
 	ret += sensor_write(sd, 0x3058, (unsigned char)(exp & 0xff));
 	ret += sensor_write(sd, 0x3059, (unsigned char)((exp >> 8) & 0xff));
-	ret += sensor_write(sd, 0x305A, (unsigned char)((exp >> 16) & 0x0f));
+	ret += sensor_write(sd, 0x305a, (unsigned char)((exp >> 16) & 0x0f));
 
 	//ISP_INFO("cv3001 set exp=0x%04x(%4d line)\n", exp0, it);
 
@@ -451,10 +451,10 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
 	case 0:
-		val &= 0xFC;
+		val &= 0xfc;
 		break;
 	case 1:
-		val &= 0xFC;
+		val &= 0xfc;
 		val |= 0x02;
 		break;
 	};

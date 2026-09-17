@@ -1240,16 +1240,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	sensor_read(sd, 0x3820, &val);
 	switch (enable) {
 	case 0:
-		val = ((val & 0xF9) | 0x02);
+		val = ((val & 0xf9) | 0x02);
 		break;
 	case 1:
-		val &= 0xF9;
+		val &= 0xf9;
 		break;
 	case 2:
 		val |= 0x06;
 		break;
 	case 3:
-		val = ((val & 0xF9) | 0x04);
+		val = ((val & 0xf9) | 0x04);
 		break;
 	}
 	sensor_write(sd, 0x3820, val);

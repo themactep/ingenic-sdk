@@ -1034,11 +1034,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.dvp), &sensor_dvp, sizeof(sensor_dvp));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
-		sensor_attr.max_integration_time_native = 0X546 - 8;
-		sensor_attr.integration_time_limit = 0X546 - 8;
-		sensor_attr.total_width = 0X44C * 2;
-		sensor_attr.total_height = 0X546;
-		sensor_attr.max_integration_time = 0X546 - 8;
+		sensor_attr.max_integration_time_native = 0x546 - 8;
+		sensor_attr.integration_time_limit = 0x546 - 8;
+		sensor_attr.total_width = 0x44c * 2;
+		sensor_attr.total_height = 0x546;
+		sensor_attr.max_integration_time = 0x546 - 8;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0xb201;
 		sensor_attr.one_line_expr_in_us = 29;

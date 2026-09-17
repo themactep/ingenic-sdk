@@ -663,15 +663,15 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x32, &value);
 	switch (enable) {
 	case 0:
-		value &= 0xFC;
+		value &= 0xfc;
 		sensor->video.mbus.code = TISP_VI_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-		value = ((value & 0xFD) | 0x01);
+		value = ((value & 0xfd) | 0x01);
 		sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
 		break;
 	case 2:
-		value = ((value & 0xFE) | 0x02);
+		value = ((value & 0xfe) | 0x02);
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
 		break;
 	case 3:

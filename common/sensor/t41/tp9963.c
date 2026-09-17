@@ -391,7 +391,7 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 		sensor_write(sd, 0x33, 0x90);
 
 		sensor_write(sd, 0x35, 0x05);
-		sensor_write(sd, 0x39, 0x0C);
+		sensor_write(sd, 0x39, 0x0c);
 
 		if (STD_HDA == std) {
 			sensor_write(sd, 0x02, 0x44);
@@ -457,7 +457,7 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 		sensor_write(sd, 0x33, 0x90);
 
 		sensor_write(sd, 0x35, 0x05);
-		sensor_write(sd, 0x39, 0x0C);
+		sensor_write(sd, 0x39, 0x0c);
 
 		if (STD_HDA == std) {
 			sensor_write(sd, 0x02, 0x44);

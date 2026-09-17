@@ -445,13 +445,13 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3105, 0x02},
 	{0x0100, 0x00}, //start up timing end
 
-	{0x301E, 0xB0}, // mode select
+	{0x301e, 0xb0}, // mode select
 
 	{0x320c, 0x03}, // hts=2000
 	{0x320d, 0xe8},
 	{0x3231, 0x24}, // half hts  to 2000
-	{0x320E, 0x04},
-	{0x320F, 0x65},
+	{0x320e, 0x04},
+	{0x320f, 0x65},
 	{0x3211, 0x08}, //x start 20160113 20160120
 	{0x3213, 0x10}, //y start
 
@@ -485,8 +485,8 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x330b, 0x90}, // count up
 	{0x3303, 0x30}, //ramp gap 20160307
 	{0x3309, 0x30}, //cnt up gap 20160307
-	{0x331E, 0x2c}, //integ 1st pos point 20160307
-	{0x331F, 0x2c}, //integ 2nd pos point 20160307
+	{0x331e, 0x2c}, //integ 1st pos point 20160307
+	{0x331f, 0x2c}, //integ 2nd pos point 20160307
 	{0x3320, 0x2e}, //ofs fine 1st pos point 20160307
 	{0x3321, 0x2e}, //ofs fine 2nd pos point 20160307
 	{0x3322, 0x2e}, //20160307
@@ -494,17 +494,17 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 
 	{0x3626, 0x03}, //memory readout delay 0613 0926
 	{0x3621, 0x28}, //counter clock div [3] column fpn 0926
-	{0x3F08, 0x04}, //WRITE TIME
-	{0x3F09, 0x44}, //WRITE/READ TIME GAP
+	{0x3f08, 0x04}, //WRITE TIME
+	{0x3f09, 0x44}, //WRITE/READ TIME GAP
 	{0x4500, 0x25}, //data delay 0926
 	{0x3c09, 0x08}, // Sram start position
 
-	{0x335D, 0x20}, //prechg tx auto ctrl [5]
+	{0x335d, 0x20}, //prechg tx auto ctrl [5]
 	{0x3368, 0x02}, //EXP1
 	{0x3369, 0x00},
-	{0x336A, 0x04}, //EXP2
+	{0x336a, 0x04}, //EXP2
 	{0x336b, 0x65},
-	{0x330E, 0x50}, // start value
+	{0x330e, 0x50}, // start value
 	{0x3367, 0x08}, // end value  12.14
 
 	{0x3f00, 0x06},

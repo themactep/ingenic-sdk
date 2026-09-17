@@ -996,7 +996,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val |= 0x06;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 	} else {
-		val &= 0xF9;
+		val &= 0xf9;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 	}
 	sensor->video.mbus_change = 1;

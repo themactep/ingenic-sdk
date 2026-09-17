@@ -333,7 +333,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	/*
-	 * @@ MIPI_SP2329_1920X1080_30FPS_V2b
+	 * @@ MIPI_SP2329_1920x1080_30FPS_V2b
 	 * PCLK=88.8M, Timer_clk=88.8M, Cnt_clk=348M, dac_clk=174M, Row_length=1338, Frame_length=2207
 	 */
 	{0xfd, 0x00},
@@ -462,7 +462,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 
 static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	/*
-	 * @@ MIPI_SP2329_1920X1080_60FPS_V2b
+	 * @@ MIPI_SP2329_1920x1080_60FPS_V2b
 	 * PCLK=88.8M, Timer_clk=88.8M, Cnt_clk=348M, dac_clk=174M, Row_length=1338, Frame_length=1103
 	 */
 	{0xfd, 0x00},

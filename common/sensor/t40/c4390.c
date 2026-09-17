@@ -592,7 +592,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	case 0:
 		wsize = &sensor_win_sizes[0];
 		sensor_attr.again = 0;
-		sensor_attr.integration_time = 0xF4;
+		sensor_attr.integration_time = 0xf4;
 		break;
 	default:
 		ISP_ERROR("not supported setting: %d!!!\n", info->default_boot);

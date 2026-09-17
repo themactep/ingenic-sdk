@@ -1207,19 +1207,19 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	sensor_read(sd, 0x12, &val);
 	switch (enable) {
 	case 0:
-		val &= 0xFC;
+		val &= 0xfc;
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-		val = ((val & 0xFC) | 0x02);
+		val = ((val & 0xfc) | 0x02);
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 		break;
 	case 2:
-		val = ((val & 0xFC) | 0x01);
+		val = ((val & 0xfc) | 0x01);
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SRGGB10_1X10;
 		break;
 	case 3:
-		val = ((val & 0xFC) | 0x03);
+		val = ((val & 0xfc) | 0x03);
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
 		break;
 	}

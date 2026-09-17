@@ -751,17 +751,17 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 
 	switch (enable) {
 	case 0:
-		val &= 0xEF;
+		val &= 0xef;
 		val |= 0x08;
 		break;
 	case 1:
-		val &= 0xE7;
+		val &= 0xe7;
 		break;
 	case 2:
 		val |= 0x18;
 		break;
 	case 3:
-		val &= 0xF7;
+		val &= 0xf7;
 		val |= 0x10;
 		break;
 	}
@@ -788,11 +788,11 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		sensor_attr.max_integration_time_native = 0X4A0 - 8;
-		sensor_attr.integration_time_limit = 0X4A0 - 8;
+		sensor_attr.max_integration_time_native = 0x4a0 - 8;
+		sensor_attr.integration_time_limit = 0x4a0 - 8;
 		sensor_attr.total_width = 0x278;
-		sensor_attr.total_height = 0X4A0;
-		sensor_attr.max_integration_time = 0X4A0 - 8;
+		sensor_attr.total_height = 0x4a0;
+		sensor_attr.max_integration_time = 0x4a0 - 8;
 		sensor_attr.again = 0x80;
 		sensor_attr.integration_time = 0x497;
 		break;

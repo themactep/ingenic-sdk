@@ -760,12 +760,12 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-		val = ((val & 0xF7) | 0x08); //mirror
+		val = ((val & 0xf7) | 0x08); //mirror
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 		break;
 	case 2:
 
-		val = ((val & 0xFb) | 0x04); //flip
+		val = ((val & 0xfb) | 0x04); //flip
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
 		break;
 	case 3:
