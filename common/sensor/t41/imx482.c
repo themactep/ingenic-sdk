@@ -69,8 +69,8 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again = 0;
-	uint32_t hcg = 166528;	   //5.82x
-	uint32_t hcg_thr = 196608; //20x 196608;//8x
+	uint32_t hcg = 166528;	   // 5.82x
+	uint32_t hcg_thr = 196608; // 20x 196608;//8x
 
 	if (isp_gain >= hcg_thr) {
 		isp_gain = isp_gain - hcg;
@@ -675,7 +675,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -739,7 +739,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t val;
 	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val &= 0xfc;
 		ret = sensor_write(sd, 0x3152, 0x1e);
 		ret = sensor_write(sd, 0x3154, 0xc2);
@@ -749,7 +749,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		ret = sensor_write(sd, 0x317a, 0x3b);
 		ret = sensor_write(sd, 0x317b, 0x00);
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val = ((val & 0xfd) | 0x01);
 		ret = sensor_write(sd, 0x3152, 0x1e);
 		ret = sensor_write(sd, 0x3154, 0xc2);
@@ -759,7 +759,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		ret = sensor_write(sd, 0x317a, 0x3b);
 		ret = sensor_write(sd, 0x317b, 0x00);
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val = ((val & 0xfe) | 0x02);
 		ret = sensor_write(sd, 0x3152, 0x20);
 		ret = sensor_write(sd, 0x3154, 0xc4);
@@ -769,7 +769,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		ret = sensor_write(sd, 0x317a, 0xc2);
 		ret = sensor_write(sd, 0x317b, 0x08);
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val |= 0x03;
 		ret = sensor_write(sd, 0x3152, 0x20);
 		ret = sensor_write(sd, 0x3154, 0xc4);
@@ -951,8 +951,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//      if (arg)
-		//	      ret = sensor_set_expo(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

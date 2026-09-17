@@ -232,7 +232,7 @@ static struct regval_list sensor_init_regs_640_480_30fps_mipi[] = {
 	{0x51, 0x50},
 	{0x52, 0x50},
 	{0x53, 0x50},
-	{0xe0, 0x06}, //MIPI CLK 120M
+	{0xe0, 0x06}, // MIPI CLK 120M
 	{0xe2, 0xac},
 	{0xe3, 0xcc},
 	{0xe5, 0x3b},
@@ -248,9 +248,9 @@ static struct regval_list sensor_init_regs_640_480_30fps_mipi[] = {
 	{0x5c, 0x98},
 	{0x5e, 0x78},
 	{0x5f, 0x49},
-	{0x28, 0xf4}, //vts = 500
+	{0x28, 0xf4}, // vts = 500
 	{0x29, 0x01}, //
-	{0x2b, 0x20}, //hts = 800
+	{0x2b, 0x20}, // hts = 800
 	{0x2c, 0x03}, //
 	{0x2d, 0x02},
 	{0x4f, 0x00},
@@ -534,7 +534,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp = 0;
 	int ret = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -746,14 +746,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_INT_TIME %d\n\n", __LINE__);
-		//if (arg)
-		//    ret = sensor_set_integration_time(sd, sensor_val->value);
+		// ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_INT_TIME %d\n\n", __LINE__);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_AGAIN %d\n\n", __LINE__);
-		//if (arg)
-		//    ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_AGAIN %d\n\n", __LINE__);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

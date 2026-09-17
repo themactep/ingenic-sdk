@@ -147,7 +147,7 @@ done:
 	gain_one1 = fix_point_mult2(gain_one_a,
 		(gain_one_d >> (TX_ISP_GAIN_FIXED_POINT - 8)) << (TX_ISP_GAIN_FIXED_POINT - 8));
 	*regs = (regsa << 8) | regsd;
-	//ISP_INFO("info:  gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", gain_one, gain_one1, *regs);
+	// ISP_INFO("info:  gain_one = 0x%08x, gain_one1 = 0x%08x, sensor_again = 0x%08x\n", gain_one, gain_one1, *regs);
 	return gain_one1;
 err_div:
 
@@ -245,7 +245,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3002, 0xff},
 	{0x3007, 0x00},
 #ifdef DRIVE_CAPABILITY_1
-	{0x3009, 0x03}, //pad driver
+	{0x3009, 0x03}, // pad driver
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x3009, 0x23},
 #elif defined(DRIVE_CAPABILITY_3)
@@ -354,7 +354,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3d87, 0x03},
 	{0x3d8b, 0x00},
 	{0x3d8f, 0x00},
-	{0x4001, 0xe0}, //BLC
+	{0x4001, 0xe0}, // BLC
 	{0x4004, 0x00},
 	{0x4005, 0x02},
 	{0x4006, 0x01},
@@ -383,7 +383,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x4f07, 0x00},
 	{0x4f08, 0x00},
 	{0x4f09, 0x00},
-	{0x5000, 0x0f}, //eanble dpc
+	{0x5000, 0x0f}, // eanble dpc
 	{0x500c, 0x00},
 	{0x500d, 0x00},
 	{0x500e, 0x00},
@@ -396,7 +396,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x5015, 0x00},
 	{0x5016, 0x00},
 	{0x5017, 0x00},
-	{0x5080, 0x00}, //color bar
+	{0x5080, 0x00}, // color bar
 	{0x5180, 0x01},
 	{0x5181, 0x00},
 	{0x5182, 0x01},
@@ -405,7 +405,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x5185, 0x00},
 	{0x5708, 0x06},
 	{0x5781, 0x00},
-	{0x5782, 0x77}, //decrease dpc strength
+	{0x5782, 0x77}, // decrease dpc strength
 	{0x5783, 0x0f},
 	{SENSOR_REG_END, 0x00},
 };
@@ -670,7 +670,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

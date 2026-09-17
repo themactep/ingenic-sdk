@@ -81,7 +81,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//cnt_gain = 161 cnt_reg = 161
+	// cnt_gain = 161 cnt_reg = 161
 	{0x80, 0},
 	{0x84, 2886},
 	{0x88, 5776},
@@ -692,11 +692,11 @@ static struct regval_list sensor_init_regs_640_360_15fps_mipi[] = {
 	{0x5afc, 0x28},
 	{0x5afd, 0x3c},
 	{0x5afe, 0x30},
-	{0x5aff, 0x28}, //15fps
+	{0x5aff, 0x28}, // 15fps
 	{0x3e01, 0x95},
 	{0x3e02, 0xa0},
 	{0x320e, 0x09},
-	{0x320f, 0x60}, //640x360
+	{0x320f, 0x60}, // 640x360
 	{0x3200, 0x02},
 	{0x3201, 0x74},
 	{0x3202, 0x01},
@@ -1024,14 +1024,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	//sensor analog gain
+	// sensor analog gain
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-	//sensor dig fine gain
+	// sensor dig fine gain
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d\n", __LINE__);
@@ -1157,7 +1157,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	max_fps = SENSOR_OUTPUT_MAX_FPS;
@@ -1324,14 +1324,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//			if (arg) {
-		//				ret = sensor_set_integration_time(sd, *(int *) arg);
-		//			}
+		// if (arg) {
+		// ret = sensor_set_integration_time(sd, *(int *) arg);
+		// }
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//			if (arg) {
-		//				ret = sensor_set_analog_gain(sd, *(int *) arg);
-		//			}
+		// if (arg) {
+		// ret = sensor_set_analog_gain(sd, *(int *) arg);
+		// }
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg) {

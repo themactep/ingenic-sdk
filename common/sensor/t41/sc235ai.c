@@ -40,7 +40,7 @@
 
 // #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
 // #define SENSOR_WDR_2_FRAME	 /**< WDR两帧融合 */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = xxx;
@@ -1362,7 +1362,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 

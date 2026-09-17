@@ -41,7 +41,7 @@
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
-static int wdr_bufsize = 2 * 4800 * 400; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2 * 4800 * 400; // cache lines corrponding on VPB1
 static int shvflip = 1;
 
 
@@ -74,7 +74,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//index,0614,0615, 0225, 1467, 1468, 00b8, 00b9, gain
+	// index,0614,0615, 0225, 1467, 1468, 00b8, 00b9, gain
 	{0x00, 0x00, 0x00, 0x04, 0x15, 0x15, 0x01, 0x00, 0},	  // 1.000000
 	{0x01, 0x90, 0x02, 0x04, 0x15, 0x15, 0x01, 0x0a, 13726},  // 1.156250
 	{0x02, 0x00, 0x00, 0x00, 0x15, 0x15, 0x01, 0x12, 23431},  // 1.281250
@@ -301,9 +301,9 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0315, 0x32},
 	{0x031c, 0xce},
 	{0x0219, 0x47},
-	{0x0342, 0x04}, //hts 0x4b0 = 1200
+	{0x0342, 0x04}, // hts 0x4b0 = 1200
 	{0x0343, 0xb0}, //
-	{0x0340, 0x08}, //vts 0x834 = 2100 25fps  0x6d6 -> 30fps
+	{0x0340, 0x08}, // vts 0x834 = 2100 25fps  0x6d6 -> 30fps
 	{0x0341, 0x34}, //
 	{0x0345, 0x02},
 	{0x0347, 0x02},
@@ -331,16 +331,16 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0907, 0x54},
 	{0x0908, 0x06},
 	{0x0903, 0x9d},
-	{0x072a, 0x1c}, //18
-	{0x072b, 0x1c}, //18
+	{0x072a, 0x1c}, // 18
+	{0x072b, 0x1c}, // 18
 	{0x0724, 0x2b},
 	{0x0727, 0x2b},
 	{0x1466, 0x18},
 	{0x1467, 0x15},
 	{0x1468, 0x15},
 	{0x1469, 0x70},
-	{0x146a, 0xe8}, //b8
-	//{0x1412, 0x20},
+	{0x146a, 0xe8}, // b8
+	// {0x1412, 0x20},
 	{0x0707, 0x07},
 	{0x0737, 0x0f},
 	{0x0704, 0x01},
@@ -348,7 +348,7 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0716, 0x02},
 	{0x0708, 0xc8},
 	{0x0718, 0xc8},
-	{0x061a, 0x02}, //03
+	{0x061a, 0x02}, // 03
 	{0x1430, 0x80},
 	{0x1407, 0x10},
 	{0x1408, 0x16},
@@ -356,11 +356,11 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x1438, 0x01},
 	{0x02ce, 0x03},
 	{0x0245, 0xc9},
-	{0x023a, 0x08}, //3B
+	{0x023a, 0x08}, // 3B
 	{0x02cd, 0x88},
 	{0x0612, 0x02},
 	{0x0613, 0xc7},
-	{0x0243, 0x03}, //06
+	{0x0243, 0x03}, // 06
 	{0x0089, 0x03},
 	{0x0002, 0xab},
 	{0x0040, 0xa3},
@@ -371,7 +371,7 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0052, 0x02},
 	{0x0076, 0x01},
 	{0x021a, 0x10},
-	{0x0049, 0x0f}, //darkrow select
+	{0x0049, 0x0f}, // darkrow select
 	{0x004a, 0x3c},
 	{0x004b, 0x00},
 	{0x0430, 0x25},
@@ -416,8 +416,8 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
 	{0x0a67, 0x00},
-	//{0x022c, 0x03},
-	//{0x0063, 0x03},
+	// {0x022c, 0x03},
+	// {0x0063, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -443,9 +443,9 @@ static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x0315, 0x32},
 	{0x031c, 0xce},
 	{0x0219, 0x47},
-	{0x0342, 0x03}, //hts 0x384 = 900
+	{0x0342, 0x03}, // hts 0x384 = 900
 	{0x0343, 0x84}, //
-	{0x0340, 0x09}, //vts 20fps -> 0x6d6 = 1720  15fps -> 0x91e = 2334
+	{0x0340, 0x09}, // vts 20fps -> 0x6d6 = 1720  15fps -> 0x91e = 2334
 	{0x0341, 0x1e}, //
 	{0x0345, 0x02},
 	{0x0347, 0x02},
@@ -459,7 +459,7 @@ static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x0097, 0x54},
 	{0x0099, 0x04},
 	{0x009b, 0x04},
-//bayer
+// bayer
 #if 1
 	{0x0099, 0x03},
 	{0x009b, 0x02},
@@ -567,8 +567,8 @@ static struct regval_list sensor_init_regs_2880_1620_15fps_mipi_dol[] = {
 	{0x0436, 0x59},
 	{0x0437, 0x59},
 	{0x0100, 0x09},
-	//{0x022c, 0x03},
-	//{0x0063, 0x03},
+	// {0x022c, 0x03},
+	// {0x0063, 0x03},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -594,9 +594,9 @@ static struct regval_list sensor_init_regs_2960_1666_25fps_mipi[] = {
 	{0x0315, 0x32},
 	{0x031c, 0xce},
 	{0x0219, 0x47},
-	{0x0342, 0x04}, //hts -> 0x4b0 = 1200
+	{0x0342, 0x04}, // hts -> 0x4b0 = 1200
 	{0x0343, 0xb0}, //
-	{0x0340, 0x08}, //vts -> 0x834 = 2100
+	{0x0340, 0x08}, // vts -> 0x834 = 2100
 	{0x0341, 0x34}, //
 	{0x0345, 0x02},
 	{0x0347, 0x02},
@@ -1012,7 +1012,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x0203, expo & 0xff);
 	ret += sensor_write(sd, 0x0202, expo >> 8);
 	/*set sensor analog gain*/
-	//return 0;
+	// return 0;
 	ret += sensor_write(sd, 0x031d, 0x2d);
 	ret += sensor_write(sd, 0x0614, val_lut[again].reg614);
 	ret += sensor_write(sd, 0x0615, val_lut[again].reg615);
@@ -1151,7 +1151,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int max_fps;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int short_time = 0;
 	unsigned char val = 0;
 	int ret = 0;
@@ -1252,7 +1252,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	}
 	otp_val = 0x60 | val;
 
-	//auto_load
+	// auto_load
 	ret = sensor_write(sd, 0x0a67, 0x80);
 	ret = sensor_write(sd, 0x0a54, 0x0e);
 	ret = sensor_write(sd, 0x0a65, 0x10);
@@ -1322,7 +1322,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.one_line_expr_in_us = 10;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 2;
-		//sensor_attr.max_again_short = 390142;
+		// sensor_attr.max_again_short = 390142;
 		sensor_attr.total_width = 1800;
 		sensor_attr.total_height = 2334;
 		sensor_attr.max_integration_time_native = 2334 - 16 - 102;
@@ -1555,12 +1555,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_integration_time_short(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

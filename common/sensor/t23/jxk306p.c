@@ -183,7 +183,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 216,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -447,7 +447,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
+			// ISP_INFO("write:{0x%4x,0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -574,7 +574,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 30;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

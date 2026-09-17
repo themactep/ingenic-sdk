@@ -40,7 +40,7 @@
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = GPIO_PA(19);
 
-static int wdr_bufsize = 5760000; //1000*2880*2
+static int wdr_bufsize = 5760000; // 1000*2880*2
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
 static unsigned char switch_wdr = 1;
 
@@ -1030,7 +1030,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	ISP_INFO(" \nEnter sensor_set_fps !\n ");
 	switch (sensor->info.default_boot) {
@@ -1287,7 +1287,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x0103, 0x01);
+	// ret = sensor_write(sd, 0x0103, 0x01);
 
 	if (wdr_en == 1) {
 		info->default_boot = 1;
@@ -1339,7 +1339,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
-	//	ISP_INFO("\n==========> set_wdr\n");
+	// ISP_INFO("\n==========> set_wdr\n");
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
@@ -1362,19 +1362,19 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)

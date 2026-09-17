@@ -324,9 +324,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
 	{0x301f, 0x08},
-	{0x320c, 0x08}, //hts 0x84c -> 2124
+	{0x320c, 0x08}, // hts 0x84c -> 2124
 	{0x320d, 0x4c}, //
-	{0x320e, 0x04}, //vts 0x46a -> 1130
+	{0x320e, 0x04}, // vts 0x46a -> 1130
 	{0x320f, 0x6a}, //
 	{0x3258, 0x0e},
 	{0x3301, 0x06},
@@ -691,7 +691,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -794,7 +794,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_prepare_enable(sensor->mclk);
 
-	//reset_gpio = info->rst_gpio;
+	// reset_gpio = info->rst_gpio;
 	pwdn_gpio = info->pwdn_gpio;
 
 	return 0;

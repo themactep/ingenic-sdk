@@ -445,8 +445,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
-	{0x3034, 0x81}, //pll2 bypass
-	{0x3039, 0xd4}, //pll1 bypass
+	{0x3034, 0x81}, // pll2 bypass
+	{0x3039, 0xd4}, // pll1 bypass
 	{0x3018, 0x1f},
 	{0x3019, 0xff},
 	{0x301c, 0xb4},
@@ -612,8 +612,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x57a1, 0x71},
 	{0x57a2, 0x01},
 	{0x57a3, 0xf1},
-	{0x3034, 0x01}, //pll2 enable
-	{0x3039, 0x24}, //pll1 enable
+	{0x3034, 0x01}, // pll2 enable
+	{0x3039, 0x24}, // pll1 enable
 	{SENSOR_REG_DELAY, 0x0a},
 	{SENSOR_REG_END, 0x00},
 };
@@ -823,7 +823,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	} else if (value >= 0x710 && value <= 0x71e) {
 		sensor_write(sd, 0x3301, 0x80);
 		sensor_write(sd, 0x3632, 0x08);
-	} else { //may be flick
+	} else { // may be flick
 		sensor_write(sd, 0x3301, 0x80);
 		sensor_write(sd, 0x3632, 0x48);
 	}
@@ -906,7 +906,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

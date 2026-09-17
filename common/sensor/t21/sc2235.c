@@ -684,7 +684,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x5781, 0x02);
 		sensor_write(sd, 0x5785, 0x04);
 		sensor_write(sd, 0x3812, 0x30);
-	} else { //may be flick
+	} else { // may be flick
 		sensor_write(sd, 0x3812, 0x00);
 		sensor_write(sd, 0x3301, 0xff);
 		sensor_write(sd, 0x3631, 0x88);
@@ -750,8 +750,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -1073,7 +1073,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 256041;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

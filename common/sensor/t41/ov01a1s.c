@@ -393,7 +393,7 @@ static struct regval_list sensor_init_regs_1280_720_60fps[] = {
 	{0x5004, 0x00},
 	{0x5080, 0x40},
 	{0x4800, 0x64},
-	{0x4880, 0x00}, //; write R4880 back to 0x00 after writing R4800 for pre-ECO chip
+	{0x4880, 0x00}, // ; write R4880 back to 0x00 after writing R4800 for pre-ECO chip
 	{0x5200, 0x18},
 	{0x4837, 0x11},
 	{0x0100, 0x01},
@@ -624,7 +624,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

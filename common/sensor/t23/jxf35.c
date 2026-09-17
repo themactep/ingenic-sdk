@@ -1179,7 +1179,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -1247,12 +1247,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += sensor_read(sd, 0x1f, &val);
-	//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group writefunction,  auto clean
+	val |= (1 << 7); // set bit[7],  register group writefunction,  auto clean
 	sensor_write(sd, 0x1f, val);
-	//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
@@ -1574,8 +1574,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			(sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[0];
 			sensor_info.max_fps = 25;
-			sensor_attr.total_width = 0x500 * 2; //2560
-			sensor_attr.total_height = 0x546;    //1350
+			sensor_attr.total_width = 0x500 * 2; // 2560
+			sensor_attr.total_height = 0x546;    // 1350
 			sensor_attr.max_integration_time_native = 0x465 - 4;
 			sensor_attr.integration_time_limit = 0x465 - 4;
 			sensor_attr.max_integration_time = 0x465 - 4;
@@ -1585,8 +1585,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			(sensor_max_fps == TX_SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[3];
 			sensor_info.max_fps = 60;
-			sensor_attr.total_width = 0x253 * 4; //2380
-			sensor_attr.total_height = 0x455;    //1109
+			sensor_attr.total_width = 0x253 * 4; // 2380
+			sensor_attr.total_height = 0x455;    // 1109
 			sensor_attr.max_integration_time_native = 0x455 - 4;
 			sensor_attr.integration_time_limit = 0x455 - 4;
 			sensor_attr.max_integration_time = 0x455 - 4;
@@ -1596,8 +1596,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			(sensor_max_fps == TX_SENSOR_MAX_FPS_30 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[5];
 			sensor_info.max_fps = 25;
-			sensor_attr.total_width = 0x500 * 2; //2560
-			sensor_attr.total_height = 0x546;    //1350
+			sensor_attr.total_width = 0x500 * 2; // 2560
+			sensor_attr.total_height = 0x546;    // 1350
 			sensor_attr.max_integration_time_native = 0x465 - 4;
 			sensor_attr.integration_time_limit = 0x465 - 4;
 			sensor_attr.max_integration_time = 0x465 - 4;
@@ -1609,8 +1609,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			(sensor_max_fps == TX_SENSOR_MAX_FPS_60 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[4];
 			sensor_info.max_fps = 60;
-			sensor_attr.total_width = 0x280 * 4; //2560
-			sensor_attr.total_height = 0x465;    //1125
+			sensor_attr.total_width = 0x280 * 4; // 2560
+			sensor_attr.total_height = 0x465;    // 1125
 			sensor_attr.max_integration_time_native = 0x465 - 4;
 			sensor_attr.integration_time_limit = 0x465 - 4;
 			sensor_attr.max_integration_time = 0x465 - 4;
@@ -1621,8 +1621,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_resolution == SENSOR_RES_30)) {
 			wsize = &sensor_win_sizes[2];
 			sensor_info.max_fps = 120;
-			sensor_attr.total_width = 0x2a2;  //674
-			sensor_attr.total_height = 0x216; //534
+			sensor_attr.total_width = 0x2a2;  // 674
+			sensor_attr.total_height = 0x216; // 534
 			sensor_attr.max_integration_time_native = 0x216 - 4;
 			sensor_attr.integration_time_limit = 0x216 - 4;
 			sensor_attr.max_integration_time = 0x216 - 4;

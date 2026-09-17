@@ -310,7 +310,7 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.clk = 400,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW12
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW12
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -578,8 +578,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 #if 0
 	{0x0103, 0x01},
 	{0x0100, 0x00},
-	{0x36e9, 0xa3},//bypass pll1
-	{0x36f9, 0x85},//bypass pll2
+	{0x36e9, 0xa3},// bypass pll1
+	{0x36f9, 0x85},// bypass pll2
 	{0x337f, 0x03},
 	{0x3368, 0x04},
 	{0x3369, 0x00},
@@ -630,9 +630,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x36ec, 0x0f},
 	{0x36ed, 0x03},
 	{0x36fb, 0x10},
-	{0x320c, 0x04},//1125
+	{0x320c, 0x04},// 1125
 	{0x320d, 0x65},
-	{0x320e, 0x05},//1440
+	{0x320e, 0x05},// 1440
 	{0x320f, 0xa0},
 	{0x3235, 0x09},
 	{0x3236, 0x5e},
@@ -900,7 +900,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	unsigned int expo = 0;
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
 		expo = value * 2;
-		//ret += sensor_write(sd, 0x3e00, (unsigned char)((expo >> 12) & 0x0f));
+		// ret += sensor_write(sd, 0x3e00, (unsigned char)((expo >> 12) & 0x0f));
 		ret += sensor_write(sd, 0x3e01, (unsigned char)((expo >> 4) & 0xff));
 		ret += sensor_write(sd, 0x3e02, (unsigned char)((expo & 0x0f) << 4));
 		if (value < 0x50) {
@@ -959,7 +959,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(value >> 8 & 0x3f));
-	//	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
+	// ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
 	if (ret < 0)
 		return ret;
 
@@ -1052,7 +1052,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	return 0;
 

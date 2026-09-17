@@ -222,7 +222,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_1600_1200_15fps[] = {
 #if 0
-	{0xfd, 0x00},//P0
+	{0xfd, 0x00},// P0
 	{0x24, 0x02},
 	{0x25, 0x06},
 	{0x29, 0x01},
@@ -237,7 +237,7 @@ static struct regval_list sensor_init_regs_1600_1200_15fps[] = {
 	{0x3e, 0x00},
 	{0x46, 0x01},
 	{0x6d, 0x03},
-	{0xfd, 0x01},//P1
+	{0xfd, 0x01},// P1
 	{0x0e, 0x02},
 	{0x0f, 0x1a},
 	{0x18, 0x00},
@@ -291,7 +291,7 @@ static struct regval_list sensor_init_regs_1600_1200_15fps[] = {
 	{0x94, 0x02},
 	{0x98, 0xd1},
 	{0xfe, 0x02},
-	{0xfd, 0x03},//P3
+	{0xfd, 0x03},// P3
 	{0x97, 0x78},
 	{0x98, 0x78},
 	{0x99, 0x78},
@@ -308,24 +308,24 @@ static struct regval_list sensor_init_regs_1600_1200_15fps[] = {
 	{0x92, 0x40},
 	{0x9b, 0x46},
 	{0xac, 0x40},
-	{0xfd, 0x00},//P0
+	{0xfd, 0x00},// P0
 	{0x5a, 0x15},
 	{0x74, 0x01},
-	{0xfd, 0x00},//P0
+	{0xfd, 0x00},// P0
 	{0x50, 0x40},
 	{0x52, 0xb0},
-	{0xfd, 0x01},//P1
+	{0xfd, 0x01},// P1
 	{0x03, 0x70},
 	{0x05, 0x10},
 	{0x07, 0x20},
 	{0x09, 0xb0},
-	{0xfd, 0x01},//P1
+	{0xfd, 0x01},// P1
 	{0x14, 0x04},
 	{0x15, 0xd2},
 	{0xfb, 0x01},
-	{0xfd, 0x03},//P3
+	{0xfd, 0x03},// P3
 	{0xc2, 0x01},
-	{0xfd, 0x01},//P1
+	{0xfd, 0x01},// P1
 #else
 	{0xfd, 0x00},
 	{0x24, 0x02},
@@ -656,7 +656,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb_init = 0;
 	unsigned int vts_init = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	sclk = SENSOR_SUPPORT_SCLK_FPS_15;
@@ -664,7 +664,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vb_init = 1244;
 	vts_init = 2454;
 
-	//ISP_INFO("\n fpsnum = 0x%x\n",fps);
+	// ISP_INFO("\n fpsnum = 0x%x\n",fps);
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -679,10 +679,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts |= val;
 
 	/* get vb old */
-	//ret += sensor_read(sd, 0x14, &val);
-	//vb = val<<8;
-	//ret += sensor_read(sd, 0x15, &val);
-	//vb |= val;
+	// ret += sensor_read(sd, 0x14, &val);
+	// vb = val<<8;
+	// ret += sensor_read(sd, 0x15, &val);
+	// vb |= val;
 
 	/* get vts old */
 	ret += sensor_read(sd, 0x27, &val);
@@ -882,7 +882,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

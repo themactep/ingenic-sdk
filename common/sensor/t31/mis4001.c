@@ -251,7 +251,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 1114,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -289,7 +289,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 1114,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -312,7 +312,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.sensor_fid_mode = 0,
 			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 		},
-	.max_again = 260651, //259138,
+	.max_again = 260651, // 259138,
 	.max_dgain = 0,
 	.min_integration_time = 2,
 	.min_integration_time_native = 2,
@@ -326,7 +326,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	//	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
+	// .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
@@ -735,7 +735,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	pclk = SENSOR_SUPPORT_RES_400_PCLK;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

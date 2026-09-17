@@ -244,7 +244,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 400,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -288,7 +288,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 400,
 			.lans = 2,
 		},
-	.max_again = 260651, //259138,
+	.max_again = 260651, // 259138,
 	.max_dgain = 0,
 	.min_integration_time = 2,
 	.min_integration_time_native = 2,
@@ -325,7 +325,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3907, 0x10},
 	{0x390a, 0xff},
 	{0x3909, 0x1f},
-	{0x390c, 0x83}, //c3
+	{0x390c, 0x83}, // c3
 	{0x390b, 0x03},
 	{0x390e, 0x77},
 	{0x390d, 0x00},
@@ -436,7 +436,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3a0f, 0x18},
 	{0x3a10, 0x20},
 	{0x3a11, 0x3c},
-	//MCLK=24Mhz,PCLK=76Mhz
+	// MCLK=24Mhz,PCLK=76Mhz
 	{0x3300, 0x26},
 	{0x3301, 0x00},
 	{0x3302, 0x02},
@@ -844,7 +844,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1137,7 +1137,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
-	sensor_attr.max_again = 260651; //259138;
+	sensor_attr.max_again = 260651; // 259138;
 	sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;

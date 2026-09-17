@@ -275,11 +275,11 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{
 		0x320e,
 		0x05,
-	}, //04
+	}, // 04
 	{
 		0x320f,
 		0x46,
-	}, //65
+	}, // 65
 	{
 		0x3214,
 		0x11,
@@ -745,7 +745,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

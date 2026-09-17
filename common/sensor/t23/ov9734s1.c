@@ -182,7 +182,7 @@ struct tx_isp_sensor_attribute sensor_attr = {.name = SENSOR_NAME,
 			.clk = 360,
 			.lans = 1,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -439,17 +439,17 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5783, 0x0f},
 	{0x3703, 0x0b},
 	{0x3705, 0x51},
-	//{0x3001, 0x00},
-	//{0x3007, 0x00},
-	//{0x3814, 0x00},
-	//{0x3815, 0x10},
-	//{0x3818, 0x06},
-	//{0x3819, 0x50},
-	//{0x381c, 0x24},
-	//{0x3822, 0x00},
-	//{0x3823, 0x10},
-	//{0x3824, 0x06},
-	//{0x3825, 0x50},
+	// {0x3001, 0x00},
+	// {0x3007, 0x00},
+	// {0x3814, 0x00},
+	// {0x3815, 0x10},
+	// {0x3818, 0x06},
+	// {0x3819, 0x50},
+	// {0x381c, 0x24},
+	// {0x3822, 0x00},
+	// {0x3823, 0x10},
+	// {0x3824, 0x06},
+	// {0x3825, 0x50},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
@@ -685,7 +685,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_PCLK_FPS_30;
@@ -1125,7 +1125,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.integration_time_limit = sensor_attr.total_height - 4;
 	sensor_attr.max_integration_time = sensor_attr.total_height - 4;
 	sensor_attr.max_again = 259142;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;

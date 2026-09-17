@@ -739,7 +739,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (sensor_max_fps) {
@@ -782,7 +782,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 

@@ -40,7 +40,7 @@
 
 /* 定义SENSOR_WITHOUT_INIT时表示boot阶段已进行sensor初始化，下sensor初始化配置，可节省初始化sensor时间。*/
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
-//#define SENSOR_WITHOUT_INIT
+// #define SENSOR_WITHOUT_INIT
 
 /* VGA@70fps: insmod sensor_jxf37_t41zrt.ko data_type=0 data_interface=1 sensor_resolution=30 */
 /* 480x270@110fps: insmod sensor_jxf37_t41zrt.ko data_type=0 data_interface=1 sensor_resolution=13 */
@@ -53,7 +53,7 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 static int sensor_resolution = TX_SENSOR_RES_200;
-static int wdr_bufsize = 1996800; //cache lines corrponding on VPB1
+static int wdr_bufsize = 1996800; // cache lines corrponding on VPB1
 static int shvflip = 0;
 
 static unsigned char reg_2f = 0x44;
@@ -241,7 +241,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 648,
 	.lans = 2,
-	//	.index = 1,
+	// .index = 1,
 	.settle_time_apative_en = 1,
 	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 	.mipi_sc.hcrop_diff_en = 0,
@@ -271,7 +271,7 @@ struct tx_isp_mipi_bus sensor_mipi_dol = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 300,
 	.lans = 2,
-	//	.index = 1,
+	// .index = 1,
 	.settle_time_apative_en = 1,
 	.image_twidth = 1920,
 	.image_theight = 1080,
@@ -481,8 +481,8 @@ static struct regval_list sensor_init_regs_vga_70fps_mipi[] = {
 	{0x21, 0x07},
 	{0x22, 0x42},
 	{0x23, 0x02},
-	{0x24, 0xe0},//482
-	{0x25, 0x20},//544
+	{0x24, 0xe0},// 482
+	{0x25, 0x20},// 544
 	{0x26, 0x21},
 	{0x27, 0xfc},
 	{0x28, 0x09},
@@ -821,7 +821,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x20, 0xc0},
 	{0x21, 0x06},
 	{0x22, 0xdc},
-	{0x23, 0x05}, //4e2
+	{0x23, 0x05}, // 4e2
 	{0x24, 0xc0},
 	{0x25, 0x38},
 	{0x26, 0x43},
@@ -1514,7 +1514,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 				sensor_write(sd, 0xc3, tmp2);
 				sensor_write(sd, 0xc4, 0x82);
 				sensor_write(sd, 0xc5, tmp3);
-				val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+				val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 				sensor_write(sd, 0x1f, val);
 			}
 		}
@@ -1620,7 +1620,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (data_interface) {
@@ -1689,7 +1689,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
@@ -1746,7 +1746,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.one_line_expr_in_us = 28;
 
 		sensor_attr.wdr_cache = wdr_bufsize;
-		sensor_attr.max_integration_time_native = 1883; //0x960*2 - 0xff * 2 - 3
+		sensor_attr.max_integration_time_native = 1883; // 0x960*2 - 0xff * 2 - 3
 		sensor_attr.integration_time_limit = 1883;
 		sensor_attr.total_width = 0x47e * 2;
 		sensor_attr.total_height = 0x960;
@@ -1833,7 +1833,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_mipi_dol));
 		sensor_attr.one_line_expr_in_us = 28;
 		sensor_attr.wdr_cache = wdr_bufsize;
-		sensor_attr.max_integration_time_native = 1883; //0x960 - 0xff * 2 - 3
+		sensor_attr.max_integration_time_native = 1883; // 0x960 - 0xff * 2 - 3
 		sensor_attr.integration_time_limit = 1883;
 		sensor_attr.total_width = 0x47e * 2;
 		sensor_attr.total_height = 0x960;
@@ -1846,8 +1846,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		wsize = &sensor_win_sizes[3];
 		sensor_attr.max_integration_time_native = 0x206 - 4;
 		sensor_attr.integration_time_limit = 0x206 - 4;
-		sensor_attr.total_width = 0x3e0;  //992
-		sensor_attr.total_height = 0x206; //518
+		sensor_attr.total_width = 0x3e0;  // 992
+		sensor_attr.total_height = 0x206; // 518
 		sensor_attr.max_integration_time = 0x206 - 4;
 		sensor_attr.mipi.clk = 360;
 		sensor_attr.mipi.settle_time_apative_en = 0;
@@ -1861,8 +1861,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		wsize = &sensor_win_sizes[4];
 		sensor_attr.max_integration_time_native = 0x140 - 4;
 		sensor_attr.integration_time_limit = 0x140 - 4;
-		sensor_attr.total_width = 0x730;  //1840
-		sensor_attr.total_height = 0x140; //320
+		sensor_attr.total_width = 0x730;  // 1840
+		sensor_attr.total_height = 0x140; // 320
 		sensor_attr.max_integration_time = 0x140 - 4;
 		sensor_attr.mipi.clk = 324;
 		sensor_attr.mipi.settle_time_apative_en = 0;

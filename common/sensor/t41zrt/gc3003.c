@@ -22,7 +22,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-//#define SENSOR_WITHOUT_INIT
+// #define SENSOR_WITHOUT_INIT
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
@@ -420,7 +420,7 @@ static struct regval_list sensor_init_regs_2304_1296_15fps_mipi[] = {
 	{0x0d05, 0x05},
 	{0x0d06, 0x40},
 	{0x0d76, 0x00},
-	{0x0d41, 0x0a}, //0x53c = 1340 0xa78=2480
+	{0x0d41, 0x0a}, // 0x53c = 1340 0xa78=2480
 	{0x0d42, 0x78}, //
 	{0x0d0a, 0x02},
 	{0x000c, 0x02},
@@ -685,10 +685,10 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
-	ret += sensor_write(sd, 0x0370, 0xc0); //[7]OTP clk gate  [6]OTP_en
+	ret += sensor_write(sd, 0x0370, 0xc0); // [7]OTP clk gate  [6]OTP_en
 	ret += sensor_write(sd, 0x0367, 0x2d); // OTP_access_addr[7:0]
-	ret += sensor_write(sd, 0x0368, 0x00); //[1:0] OTP_access_addr[9:8]
-	ret += sensor_write(sd, 0x0370, 0xc4); //[2]OTP read pulse
+	ret += sensor_write(sd, 0x0368, 0x00); // [1:0] OTP_access_addr[9:8]
+	ret += sensor_write(sd, 0x0370, 0xc4); // [2]OTP read pulse
 	ret += sensor_read(sd, 0x036a, &v);
 	v = v & 0x10;
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -764,7 +764,7 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 		sensor->video.state = TX_ISP_MODULE_DEINIT;
 	}
 
-	//ret = sensor_write_array(sd, wsize->regs);
+	// ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -807,7 +807,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned char sensor_max_fps;
 
 	int ret = 0;
@@ -988,8 +988,8 @@ err_get_mclk:
 
 static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	//struct tx_isp_sensor_register_info *info = &sensor->info;
+	// struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	// struct tx_isp_sensor_register_info *info = &sensor->info;
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 
@@ -1062,7 +1062,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
-	//	return 0;
+	// return 0;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -1074,12 +1074,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

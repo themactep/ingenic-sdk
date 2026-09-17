@@ -52,7 +52,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 2520000; //230400;
+static int wdr_bufsize = 2520000; // 230400;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -202,7 +202,7 @@ static struct regval_list sensor_init_regs_2688_1520_15fps_mipi_2lane_dol[] = {
 	{0x3057, 0x05}, //
 	{0x3058, 0xf4}, // SHR0[19:0]
 	{0x3059, 0x0a}, //
-	{0x3068, 0xc9}, //=======RHS1[19:0]0x3d = 61 -> 0xc9 = 201
+	{0x3068, 0xc9}, // =======RHS1[19:0]0x3d = 61 -> 0xc9 = 201
 	{0x3069, 0x00},
 	{0x3074, 0x44}, // AREA3_ST_ADR_1[12:0]
 	{0x3076, 0xf2}, // AREA3_WIDTH_1[12:0]
@@ -636,7 +636,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hmax = 0;
 	unsigned short vmax = 0;
 	unsigned char value = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_integration = 0;
 	unsigned char max_fps = 25;
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -685,7 +685,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vmax;
 	sensor->video.attr->max_integration_time = max_integration;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-	//ret = sensor_set_integration_time(sd,cur_int);
+	// ret = sensor_set_integration_time(sd,cur_int);
 	if (ret < 0)
 		return -1;
 
@@ -838,7 +838,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.again_apply_delay = 2;
 		sensor_attr.dgain_apply_delay = 0;
 		sensor_attr.again = 0;
-		//sensor_attr.integration_time = 0x148;
+		// sensor_attr.integration_time = 0x148;
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&mipi_2lane_dol), sizeof(mipi_2lane_dol));
 		break;
 	default:
@@ -991,7 +991,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

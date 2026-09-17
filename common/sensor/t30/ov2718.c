@@ -2067,7 +2067,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 
-#if 1 //84Mhz
+#if 1 // 84Mhz
 	{0x3013, 0x01},
 	{SENSOR_REG_DELAY, 20},
 	{0x3000, 0x02},
@@ -3905,19 +3905,19 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x30a9, 0x05},
 	{0x3252, 0x21},
 	{0x3012, 0x00},
-	{0x3196, 0x01}, //; fifo wait time = HTS - HSize - 9
+	{0x3196, 0x01}, // ; fifo wait time = HTS - HSize - 9
 	{0x3197, 0x1b},
 #endif
 
-#if 0 //84Mhz pclk href
+#if 0 // 84Mhz pclk href
 	{0x3013, 0x01},
 	{SENSOR_REG_DELAY, 20},
 	{0x3000, 0x02},
-	{0x3001, 0x1c}, //;20
+	{0x3001, 0x1c}, // ;20
 	{0x3002, 0x03},
 	{0x3003, 0x01},
 	{0x3004, 0x02},
-	{0x3005, 0x1a}, //;;1e
+	{0x3005, 0x1a}, // ;;1e
 	{0x3006, 0x00},
 	{0x3007, 0x07},
 	{0x3008, 0x01},
@@ -5744,19 +5744,19 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3404, 0x08},
 	{0x3250, 0xf7},
 	{0x3012, 0x01},
-	{0x3196, 0x01}, //; fifo wait time = HTS - HSize - 9
+	{0x3196, 0x01}, // ; fifo wait time = HTS - HSize - 9
 	{0x3197, 0x0f},
 #endif
 
-#if 0 //84Mhz pclk
+#if 0 // 84Mhz pclk
 	{0x3013, 0x01},
 	{SENSOR_REG_DELAY, 10},
 	{0x3000, 0x02},
-	{0x3001, 0x1c}, //;20
+	{0x3001, 0x1c}, // ;20
 	{0x3002, 0x03},
 	{0x3003, 0x01},
 	{0x3004, 0x02},
-	{0x3005, 0x1a}, //;;1e
+	{0x3005, 0x1a}, // ;;1e
 	{0x3006, 0x00},
 	{0x3007, 0x07},
 	{0x3008, 0x01},
@@ -7547,10 +7547,10 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x30ad, 0x80},
 	{0x30ae, 0x04},
 	{0x30af, 0x38},
-	{0x30b0, 0x09},//HTS H
-	{0x30b1, 0xb8},//HTS L
-	{0x30b2, 0x05},//VTS H
-	{0x30b3, 0x46},//VTS H
+	{0x30b0, 0x09},// HTS H
+	{0x30b1, 0xb8},// HTS L
+	{0x30b2, 0x05},// VTS H
+	{0x30b3, 0x46},// VTS H
 	{0x3196, 0x03},
 	{0x3197, 0x8b},
 	{0x3195, 0x27},
@@ -7583,11 +7583,11 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3404, 0x08},
 	{0x3250, 0xf7},
 	{0x3012, 0x00},
-	{0x3196, 0x01},//; fifo wait time = HTS - HSize - 9
+	{0x3196, 0x01},// ; fifo wait time = HTS - HSize - 9
 	{0x3197, 0x07},
 #endif
 
-#if 0 //93Mhz pclk
+#if 0 // 93Mhz pclk
 	{0x3013, 0x01},
 	{SENSOR_REG_DELAY, 10},
 	{0x0102, 0x85},
@@ -7926,7 +7926,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3250, 0x33},
 	{0x3251, 0x00},
 	{0x3252, 0x20},
-	{0x3253, 0x00},//test pattern
+	{0x3253, 0x00},// test pattern
 	{0x3254, 0x00},
 	{0x3255, 0x01},
 	{0x3256, 0x00},
@@ -9389,10 +9389,10 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x30ad, 0x80},
 	{0x30ae, 0x04},
 	{0x30af, 0x38},
-	{0x30b0, 0x0b},//HTS H
-	{0x30b1, 0x1c},//HTS L
-	{0x30b2, 0x05},//VTS H
-	{0x30b3, 0x46},//VTS H
+	{0x30b0, 0x0b},// HTS H
+	{0x30b1, 0x1c},// HTS L
+	{0x30b2, 0x05},// VTS H
+	{0x30b3, 0x46},// VTS H
 	{0x3196, 0x03},
 	{0x3197, 0x8b},
 	{0x3195, 0x27},
@@ -9658,7 +9658,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

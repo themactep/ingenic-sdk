@@ -324,9 +324,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
 	{0x301f, 0x08},
-	{0x320c, 0x08}, //hts 0x84c -> 2124
+	{0x320c, 0x08}, // hts 0x84c -> 2124
 	{0x320d, 0x4c}, //
-	{0x320e, 0x04}, //vts 0x46a -> 1130
+	{0x320e, 0x04}, // vts 0x46a -> 1130
 	{0x320f, 0x6a}, //
 	{0x3258, 0x0e},
 	{0x3301, 0x06},
@@ -540,7 +540,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			private_msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//ISP_INFO("Write:{0x%4x, 0x%2x}\n", vals->reg_num, vals->value);
+			// ISP_INFO("Write:{0x%4x, 0x%2x}\n", vals->reg_num, vals->value);
 			if (ret < 0)
 				return ret;
 		}
@@ -689,7 +689,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

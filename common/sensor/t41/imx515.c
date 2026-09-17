@@ -724,7 +724,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	switch (sensor->info.default_boot) {
 	case 0:
@@ -1036,7 +1036,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:

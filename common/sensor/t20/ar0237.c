@@ -439,7 +439,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3004, 0x0000},
 	{0x3006, 0x0437},
 	{0x3008, 0x077f},
-	{0x300a, 0x052f}, //vts
+	{0x300a, 0x052f}, // vts
 	{0x300c, 0x045e},
 	{0x3012, 0x0416},
 	{0x30a2, 0x0001},
@@ -495,12 +495,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on_dvp[] = {
-	{0x301a, 0x10dc}, //SENSOR_REGISTER
+	{0x301a, 0x10dc}, // SENSOR_REGISTER
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
-	{0x301a, 0x10d8}, //SENSOR_REGISTER
+	{0x301a, 0x10d8}, // SENSOR_REGISTER
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -711,7 +711,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts = 0;
 	unsigned short vts = 0;
 	unsigned char tmp[2];
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

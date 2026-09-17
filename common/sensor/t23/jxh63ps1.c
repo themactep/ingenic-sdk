@@ -35,7 +35,7 @@
 #define SENSOR_VERSION "H20240219a"
 
 
-static int reset_gpio = -1; //GPIO_PA(18);
+static int reset_gpio = -1; // GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
@@ -196,7 +196,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 216,
 	.lans = 1,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -259,7 +259,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.call_times = 1,
 			.sdelay = 1000,
 		}
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
@@ -279,8 +279,8 @@ static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
         {0x0d, 0xa0},
         {0x20, 0xc0},
         {0x21, 0x03},
-        {0x22, 0xca},	//;EE
-        {0x23, 0x08},	//;02
+        {0x22, 0xca},	// ;EE
+        {0x23, 0x08},	// ;02
         {0x24, 0x80},
         {0x25, 0xd0},
         {0x26, 0x22},
@@ -394,8 +394,8 @@ static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
 	{0x0d, 0x50},
 	{0x20, 0xc0},
 	{0x21, 0x03},
-	{0x22, 0xb8}, //;EE
-	{0x23, 0x0b}, //;02
+	{0x22, 0xb8}, // ;EE
+	{0x23, 0x0b}, // ;02
 	{0x24, 0x80},
 	{0x25, 0xd0},
 	{0x26, 0x22},
@@ -718,7 +718,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

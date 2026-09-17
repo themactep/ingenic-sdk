@@ -76,7 +76,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//0x00d0 0x0155 0x0410 0x0411 0x0412 0x0413 0x0414 0x0415 0x0416 0x0417 0x00b8 0x00b9 0x0dc1
+	// 0x00d0 0x0155 0x0410 0x0411 0x0412 0x0413 0x0414 0x0415 0x0416 0x0417 0x00b8 0x00b9 0x0dc1
 	{0x00, 0x00, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x00, 0x00, 0},      // 1.000000
 	{0x01, 0x10, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x0c, 0x00, 16247},  // 1.187500
 	{0x02, 0x01, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x1a, 0x00, 32233},  // 1.406250
@@ -607,7 +607,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
 	unsigned char sensor_min_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	return 0;
 	switch (sensor->info.default_boot) {
@@ -633,14 +633,14 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (ret < 0)
 		return -1;
 	hts = ((hts << 8) + tmp);
-	//<< 1;
+	// << 1;
 
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ISP_INFO("vts 0x%x hts 0x%x\n", vts, hts);
-	//ret += sensor_write(sd, 0x31d, 0x2e);
+	// ret += sensor_write(sd, 0x31d, 0x2e);
 	ret += sensor_write(sd, 0x0d41, (unsigned char)((vts & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x0d42, (unsigned char)(vts & 0xff));
-	//ret += sensor_write(sd, 0x31d, 0x28);
+	// ret += sensor_write(sd, 0x31d, 0x28);
 	if (ret < 0)
 		return -1;
 
@@ -969,7 +969,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	//sensor_attr.expo_fs = 0;
+	// sensor_attr.expo_fs = 0;
 	sensor->video.attr = &sensor_attr;
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);

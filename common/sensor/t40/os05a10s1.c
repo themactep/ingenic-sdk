@@ -44,7 +44,7 @@ static int sensor_gpio_func = DVP_PA_12BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
-static int wdr_bufsize = 10077696; //cache lines corrponding on VPB1
+static int wdr_bufsize = 10077696; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -251,7 +251,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 600,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -289,7 +289,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 600,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -329,9 +329,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	//	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
+	// .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
+	// .sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 };
 
 static struct regval_list sensor_init_regs_2592_1944_12fps[] = {
@@ -790,7 +790,7 @@ static struct regval_list sensor_init_regs_2592_1944_25fps[] = {
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},
-	{0x0305, 0x36}, //;5e
+	{0x0305, 0x36}, // ;5e
 	{0x0306, 0x00},
 	{0x0307, 0x00},
 	{0x0308, 0x03},
@@ -1487,14 +1487,14 @@ static struct regval_list sensor_init_regs_2592_1944_40fps[] = {
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},
-	{0x0305, 0x4a}, //;3c
+	{0x0305, 0x4a}, // ;3c
 	{0x0306, 0x00},
 	{0x0307, 0x00},
 	{0x0308, 0x03},
 	{0x0309, 0x04},
 	{0x032a, 0x00},
 	{0x031e, 0x09},
-	{0x0325, 0x48}, //;40
+	{0x0325, 0x48}, // ;40
 	{0x0328, 0x07},
 	{0x300d, 0x11},
 	{0x300e, 0x11},
@@ -1677,7 +1677,7 @@ static struct regval_list sensor_init_regs_2592_1944_40fps[] = {
 	{0x4854, 0x08},
 	{0x4855, 0x30},
 	{0x4800, 0x60},
-	{0x4837, 0x0d}, //;10
+	{0x4837, 0x0d}, // ;10
 	{0x484a, 0x3f},
 	{0x5000, 0xc9},
 	{0x5001, 0x43},
@@ -1712,10 +1712,10 @@ static struct regval_list sensor_init_regs_2592_1944_40fps[] = {
 	{0x3719, 0x1c},
 	{0x371a, 0x06},
 	{0x4000, 0x79},
-	{0x380c, 0x04}, //;09
+	{0x380c, 0x04}, // ;09
 	{0x380d, 0xe2},
-	{0x380e, 0x08}, //;09
-	{0x380f, 0x70}, //;c4
+	{0x380e, 0x08}, // ;09
+	{0x380f, 0x70}, // ;c4
 	{0x3501, 0x02},
 	{0x3502, 0xbc},
 	{0x4028, 0x6f},
@@ -1911,7 +1911,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
 	{0x4853, 0x8a},
 	{0x4854, 0x08},
 	{0x4855, 0x30},
-	{0x4800, 0x00}, //0x00
+	{0x4800, 0x00}, // 0x00
 	{0x4837, 0x0a},
 	{0x484a, 0x3f},
 	{0x5000, 0xc9},
@@ -1947,8 +1947,8 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_dol[] = {
 	{0x3719, 0x1c},
 	{0x371a, 0x06},
 	{0x4000, 0x79},
-	{0x380c, 0x05}, //;02
-	{0x380d, 0xa0}, //;d0
+	{0x380c, 0x05}, // ;02
+	{0x380d, 0xa0}, // ;d0
 	{0x380e, 0x09},
 	{0x380f, 0xc4},
 	{0x3501, 0x08},
@@ -2246,7 +2246,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
@@ -2343,7 +2343,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	ret = sensor_read(sd, 0x3511, &evs1);
 	ret = sensor_read(sd, 0x3512, &evs2);
 
-	//	ret = sensor_write(sd, 0x12, 0x40);
+	// ret = sensor_write(sd, 0x12, 0x40);
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[4];
 		sensor->video.vi_max_width = wsize->width;
@@ -2364,7 +2364,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;
@@ -2510,7 +2510,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;

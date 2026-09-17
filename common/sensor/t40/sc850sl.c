@@ -542,9 +542,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x04}, //hts 0x44c -> 1100
+	{0x320c, 0x04}, // hts 0x44c -> 1100
 	{0x320d, 0x4c}, //
-	{0x320e, 0x05}, //vts 0x546 -> 1350
+	{0x320e, 0x05}, // vts 0x546 -> 1350
 	{0x320f, 0x46}, //
 	{0x3211, 0x08},
 	{0x3213, 0x04},
@@ -957,7 +957,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1191,19 +1191,19 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

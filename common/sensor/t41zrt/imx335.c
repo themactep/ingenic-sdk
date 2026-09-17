@@ -717,7 +717,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int max_fps;
 	unsigned char tmp;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -987,9 +987,9 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//	if (arg)
-		//		ret = sensor_set_expo(sd, sensor_val->value);
-		//	break;
+		// if (arg)
+		// ret = sensor_set_expo(sd, sensor_val->value);
+		// break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
 			ret = sensor_set_integration_time(sd, sensor_val->value);

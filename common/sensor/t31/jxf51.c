@@ -60,7 +60,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 2596800; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2596800; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -279,8 +279,8 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-	//.clk = 648,
-	//.lans = 2,
+	// .clk = 648,
+	// .lans = 2,
 };
 
 struct tx_isp_dvp_bus sensor_dvp = {
@@ -821,7 +821,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (data_type) {
@@ -865,7 +865,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
@@ -1174,7 +1174,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	//	int ret;
+	// int ret;
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
@@ -1200,7 +1200,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.total_width = 2400;
 		sensor_attr.total_height = 2000;
 		sensor_attr.max_integration_time = 2000 - 4;
-		//sensor_attr.mipi.clk = 648;
+		// sensor_attr.mipi.clk = 648;
 		sensor_attr.mipi.settle_time_apative_en = 1;
 	} else if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		wsize = &sensor_win_sizes[1];

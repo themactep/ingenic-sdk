@@ -408,7 +408,7 @@ struct tx_isp_sensor_attribute sensor_attr_4m = {
 
 static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 
-#if 0 //1080p@30fps 1 lane ok
+#if 0 // 1080p@30fps 1 lane ok
 	/* @@ 0 35 RES_1920x1080_30fps_816Mbps  1Lane */
 	/* ;SCLK = 80MHz MIPI CLK = 816Mbps/lane Mipi PCLK = 102MHz */
 	/* ;HTS = 2294 VTS = 1162 */
@@ -666,7 +666,7 @@ static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 	{0x3638, 0x00},
 #endif
 
-#if 0 //1080p@30fps 2 lane
+#if 0 // 1080p@30fps 2 lane
 	/* @@ 0 35 RES_1920x1080_30fps_816Mbps  2Lane */
 	/* ;SCLK = 80MHz MIPI CLK = 816Mbps/lane Mipi PCLK = 102MHz */
 	/* ;HTS = 2294 VTS = 1162 */
@@ -1717,9 +1717,9 @@ static struct regval_list sensor_init_regs_2592_1520_30fps_mipi[] = {
 	{0x0103, 0x01},
 	{0x3638, 0x00},
 	{0x0300, 0x00},
-	{0x0302, 0x19}, //0x19
+	{0x0302, 0x19}, // 0x19
 	{0x0303, 0x00},
-	{0x0304, 0x03}, //0x03
+	{0x0304, 0x03}, // 0x03
 	{0x030b, 0x00},
 	{0x030d, 0x1e},
 	{0x030e, 0x04},
@@ -1869,7 +1869,7 @@ static struct regval_list sensor_init_regs_2592_1520_30fps_mipi[] = {
 	{0x380a, 0x05},
 	{0x380b, 0xf0},
 	{0x380c, 0x0a},
-	{0x380d, 0x82}, //0x18
+	{0x380d, 0x82}, // 0x18
 	{0x380e, 0x06},
 	{0x380f, 0xfb},
 	{0x3810, 0x00},
@@ -2179,7 +2179,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

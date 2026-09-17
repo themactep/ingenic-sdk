@@ -39,10 +39,10 @@
 #define SENSOR_VERSION "H20240321a"
 #define TVERSION "V20231127a"
 
-//#define SENSOR_TEST
+// #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
-//#define SENSOR_WDR_2_FRAME    /**< WDR两帧融合 */
+// #define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_WDR_2_FRAME    /**< WDR两帧融合 */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = xxx;
 #endif
@@ -521,9 +521,9 @@ static struct regval_list sensor_init_regs_2048_2048_30fps_mipi[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x08},
 	{0x380b, 0x00},
-	{0x380c, 0x06}, //hts = 0x650 = 1616
+	{0x380c, 0x06}, // hts = 0x650 = 1616
 	{0x380d, 0x50}, //
-	{0x380e, 0x08}, //vts = 0x874 = 2164
+	{0x380e, 0x08}, // vts = 0x874 = 2164
 	{0x380f, 0x74}, //
 	{0x3810, 0x00},
 	{0x3811, 0x08},
@@ -918,9 +918,9 @@ static struct regval_list sensor_init_regs_512_512_30fps_mipi[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x02},
 	{0x380b, 0x00},
-	{0x380c, 0x05}, //hts = 0x580 = 1408
+	{0x380c, 0x05}, // hts = 0x580 = 1408
 	{0x380d, 0x80}, //
-	{0x380e, 0x09}, //vts = 0x9b6 = 2486
+	{0x380e, 0x09}, // vts = 0x9b6 = 2486
 	{0x380f, 0xb6}, //
 	{0x3810, 0x00},
 	{0x3811, 0x02},
@@ -1704,7 +1704,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 

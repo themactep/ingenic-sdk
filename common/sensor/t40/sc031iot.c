@@ -569,7 +569,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-//	ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
+// ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
 	value *= 1;
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
@@ -584,7 +584,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-//	ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
+// ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
 	if (ret < 0)
@@ -664,7 +664,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -716,9 +716,9 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 
 struct clk *sclka;
 static int sensor_attr_check(struct tx_isp_subdev *sd) {
-	//	uint8_t i, ret;
+	// uint8_t i, ret;
 	unsigned long rate;
-	//	struct clk *tclk;
+	// struct clk *tclk;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);

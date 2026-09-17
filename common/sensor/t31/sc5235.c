@@ -827,34 +827,34 @@ static struct regval_list sensor_init_regs_2560_1440_13fps_mipi[] = {
 	{0x3029, 0x51},
 	{0x0100, 0x01},
 
-	{0x3301, 0x10}, //[c,12]    20180904
-	{0x3630, 0x30}, //20180706
-	{0x3633, 0x23}, //20180419
+	{0x3301, 0x10}, // [c,12]    20180904
+	{0x3630, 0x30}, // 20180706
+	{0x3633, 0x23}, // 20180419
 	{0x3622, 0xf6},
 	{0x363a, 0x83},
 
-	{0x3301, 0x16}, //[10,18]   20180904
-	{0x3630, 0x23}, //20180327
-	{0x3633, 0x33}, //20180419
+	{0x3301, 0x16}, // [10,18]   20180904
+	{0x3630, 0x23}, // 20180327
+	{0x3633, 0x33}, // 20180419
 	{0x3622, 0xf6},
 	{0x363a, 0x87},
 
-	{0x3301, 0x1a}, //[12,1a]     20180904
-	{0x3630, 0x24}, //1114
-	{0x3633, 0x33}, //20180419
+	{0x3301, 0x1a}, // [12,1a]     20180904
+	{0x3630, 0x24}, // 1114
+	{0x3633, 0x33}, // 20180419
 	{0x3622, 0xf6},
 	{0x363a, 0x9f},
 
-	{0x3301, 0x30}, //[15,a2]      20180904
+	{0x3301, 0x30}, // [15,a2]      20180904
 	{0x3630, 0x16},
-	{0x3633, 0x33}, //20180419
+	{0x3633, 0x33}, // 20180419
 	{0x3622, 0xf6},
 	{0x363a, 0x9f},
 
-	{0x3301, 0x44}, //  [13,a2]    20180904
-	{0x3630, 0x19}, //0f  1226
-	{0x3633, 0x45}, //0627
-	{0x3622, 0x16}, //0627
+	{0x3301, 0x44}, // [13,a2]    20180904
+	{0x3630, 0x19}, // 0f  1226
+	{0x3633, 0x45}, // 0627
+	{0x3622, 0x16}, // 0627
 	{0x363a, 0x9f},
 	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
@@ -1121,7 +1121,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 }
 
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
-	//	ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
+	// ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
 	int ret = 0;
 	unsigned int expo = 0;
 
@@ -1133,7 +1133,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 }
 
 static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
-	//	ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
+	// ISP_INFO("\n-----------------------------> %s [%d] <---------------------------\n", __func__, __LINE__);
 	int ret = 0;
 
 	ret += sensor_write(sd, 0x3e13, (unsigned char)(value & 0xff));
@@ -1268,7 +1268,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1416,8 +1416,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//if (arg)
-		//	ret = sensor_set_expo(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

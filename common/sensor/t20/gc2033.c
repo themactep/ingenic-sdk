@@ -333,7 +333,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 					.hblanking = 0,
 				},
 		},
-	.max_again = 276471, //321573,
+	.max_again = 276471, // 321573,
 	.max_dgain = 0,
 	.min_integration_time = 4,
 	.min_integration_time_native = 4,
@@ -363,20 +363,20 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xfe, 0x00},
 	{0x03, 0x03},
 	{0x04, 0xf6},
-	{0x05, 0x02}, //HB
+	{0x05, 0x02}, // HB
 	{0x06, 0xc6},
 	{0x86, 0x51},
 	{0x8e, 0x0c}, /*drop frame while change VB*/
 	{0x07, 0x00},
 	{0x08, 0xf8},
 	{0x09, 0x00},
-	{0x0a, 0x00}, //row start
+	{0x0a, 0x00}, // row start
 	{0x0b, 0x00},
-	{0x0c, 0x00}, //col start
+	{0x0c, 0x00}, // col start
 	{0x0d, 0x04},
-	{0x0e, 0x40}, //height 1088
+	{0x0e, 0x40}, // height 1088
 	{0x0f, 0x07},
-	{0x10, 0x88}, //width 1928
+	{0x10, 0x88}, // width 1928
 	{0x12, 0xe2},
 	{0x17, 0x54},
 	{0x18, 0x02},
@@ -425,9 +425,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x90, 0x01},
 	{0x92, 0x02},
 	{0x94, 0x02},
-	{0x95, 0x04}, //crop win height
+	{0x95, 0x04}, // crop win height
 	{0x96, 0x38},
-	{0x97, 0x07}, //crop win width
+	{0x97, 0x07}, // crop win width
 	{0x98, 0x80},
 	/*BLK*/
 	{0xfe, 0x00},
@@ -508,13 +508,13 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x07, 0x01},
 	{0x08, 0x30},
 	{0x09, 0x00},
-	{0x0a, 0x00}, //row start
+	{0x0a, 0x00}, // row start
 	{0x0b, 0x00},
-	{0x0c, 0x00}, //col start
+	{0x0c, 0x00}, // col start
 	{0x0d, 0x04},
-	{0x0e, 0x40}, //height 1088
+	{0x0e, 0x40}, // height 1088
 	{0x0f, 0x07},
-	{0x10, 0x88}, //width 1928
+	{0x10, 0x88}, // width 1928
 	{0x12, 0xe2},
 	{0x17, 0x54},
 	{0x18, 0x02},
@@ -563,9 +563,9 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x90, 0x01},
 	{0x92, 0x02},
 	{0x94, 0x02},
-	{0x95, 0x04}, //crop win height
+	{0x95, 0x04}, // crop win height
 	{0x96, 0x38},
-	{0x97, 0x07}, //crop win width
+	{0x97, 0x07}, // crop win width
 	{0x98, 0x80},
 	/*BLK*/
 	{0xfe, 0x00},
@@ -856,7 +856,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short vb = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1122,7 +1122,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	   convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again =
-		276471; //321573;/*log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);*/
+		276471; // 321573;/*log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);*/
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;

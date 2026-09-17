@@ -95,8 +95,8 @@ struct tx_isp_mipi_bus imx415_mipi = {
 	.mipi_sc.mipi_hcomp_en = 0,
 	.mipi_sc.line_sync_mode = 0,
 	.mipi_sc.work_start_flag = 0,
-	.image_twidth = 3840,  //PIX_HWIDTH[12:0] 3042,3043
-	.image_theight = 2160, //PIX_VWIDTH[12:0] {3046,3047/2}
+	.image_twidth = 3840,  // PIX_HWIDTH[12:0] 3042,3043
+	.image_theight = 2160, // PIX_VWIDTH[12:0] {3046,3047/2}
 	.mipi_sc.mipi_crop_start0x = 0,
 	.mipi_sc.mipi_crop_start0y = 0,
 	.mipi_sc.mipi_crop_start1x = 0,
@@ -135,9 +135,9 @@ static struct regval_list imx415_init_regs_3840_2160_30fps_mipi[] = {
 	{0x300a, 0x5b},
 	{0x301c, 0x04},
 	{0x3024, 0x75}, //
-	{0x3025, 0x09}, //vts=0x975 = 2421
+	{0x3025, 0x09}, // vts=0x975 = 2421
 	{0x3028, 0xfe}, //
-	{0x3029, 0x03}, //hts=1022
+	{0x3029, 0x03}, // hts=1022
 	{0x3031, 0x00},
 	{0x3032, 0x00},
 	{0x3033, 0x08},
@@ -278,16 +278,16 @@ static struct regval_list imx415_init_regs_3840_2160_20fps_mipi[] = {
 	{0x301c, 0x04},
 	{0x3024, 0xb2}, // VMAX[19:0] 0x8b = 2226
 	{0x3028, 0x84}, // HMAX[15:0]
-	{0x3029, 0x06}, //0x684 = 1688
+	{0x3029, 0x06}, // 0x684 = 1688
 	{0x3031, 0x00},
 	{0x3032, 0x00},
 	{0x3033, 0x05},
 	{0x3040, 0x0c},
-	{0x3042, 0x00}, //0xf00 =3840
+	{0x3042, 0x00}, // 0xf00 =3840
 	{0x3044, 0x20},
 	{0x3045, 0x00},
 	{0x3046, 0xe0}, //
-	{0x3047, 0x10}, //0x10e0 = 4320
+	{0x3047, 0x10}, // 0x10e0 = 4320
 	{0x3050, 0x08},
 	{0x30c1, 0x00},
 	{0x3116, 0x24},
@@ -643,7 +643,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -909,8 +909,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//      if (arg)
-		//              ret = imx415_set_expo(sd, sensor_val->value);
+		// if (arg)
+		// ret = imx415_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -943,8 +943,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		//      if (arg)
-		//              ret = sensor_set_vflip(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	default:
 		break;

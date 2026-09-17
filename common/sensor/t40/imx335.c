@@ -487,7 +487,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
-	.max_again = 404352, //458752
+	.max_again = 404352, // 458752
 	.max_again_short = 404352,
 	.max_dgain = 0,
 	.min_integration_time = 1,
@@ -514,7 +514,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3004, 0x00},
 	{0x300c, 0x5b},
 	{0x300d, 0x40},
-	{0x3018, 0x00}, //All-pixel
+	{0x3018, 0x00}, // All-pixel
 	{0x302c, 0x30},
 	{0x302d, 0x00},
 	{0x302e, 0x38},
@@ -731,16 +731,16 @@ static struct regval_list sensor_init_regs_2592_1944_25fps_mipi[] = {
 	{0x3004, 0x00},
 	{0x300c, 0x5b},
 	{0x300d, 0x40},
-	{0x3018, 0x00}, //All-pixel
+	{0x3018, 0x00}, // All-pixel
 	{0x302c, 0x30},
 	{0x302d, 0x00},
 	{0x302e, 0x38},
 	{0x302f, 0x0a},
 	{0x3030, 0x18}, //
-	{0x3031, 0x15}, //HMAX
+	{0x3031, 0x15}, // HMAX
 	{0x3032, 0x00},
 	{0x3034, 0x26}, //
-	{0x3035, 0x02}, //VMAX
+	{0x3035, 0x02}, // VMAX
 	{0x3050, 0x00},
 	{0x315a, 0x02},
 	{0x316a, 0x7e},
@@ -827,7 +827,7 @@ static struct regval_list sensor_init_regs_2592_1944_20fps_mipi_hdr[] = {
 	{0x3004, 0x00},
 	{0x300c, 0x5b},
 	{0x300d, 0x40},
-	{0x3018, 0x04}, //window crop
+	{0x3018, 0x04}, // window crop
 	{0x302c, 0x3c},
 	{0x302e, 0x20},
 	{0x3030, 0x40}, /*VMAX*/
@@ -841,9 +841,9 @@ static struct regval_list sensor_init_regs_2592_1944_20fps_mipi_hdr[] = {
 	{0x304c, 0x13},
 	{0x3050, 0x00},
 	{0x3056, 0x9c}, // Y_OUT_SIZE
-	{0x3058, 0x30}, //SHR0
+	{0x3058, 0x30}, // SHR0
 	{0x3059, 0x2a}, //
-	{0x3068, 0x22}, //RHS = 0x122 =290
+	{0x3068, 0x22}, // RHS = 0x122 =290
 	{0x3069, 0x01}, //
 	{0x3074, 0xc0},
 	{0x3076, 0x38},
@@ -852,7 +852,7 @@ static struct regval_list sensor_init_regs_2592_1944_20fps_mipi_hdr[] = {
 	{0x319d, 0x00},
 	{0x31a1, 0x00},
 	{0x31d7, 0x01},
-	{0x3200, 0x00}, //gain,gain1
+	{0x3200, 0x00}, // gain,gain1
 	{0x3288, 0x21},
 	{0x328a, 0x02},
 	{0x3414, 0x05},
@@ -936,7 +936,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = TISP_VI_FMT_SRGGB12_1X12,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2592_1944_15fps_mipi,
-	}, //[0]
+	}, // [0]
 	/* 2592*1944 */
 	{
 		.width = 2592,
@@ -945,7 +945,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2592_1944_25fps_mipi,
-	}, //[1]
+	}, // [1]
 	{
 		.width = 2592,
 		.height = 1944,
@@ -1030,14 +1030,14 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	//	unsigned char val;
+	// unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//ret = sensor_read(sd, vals->reg_num, &val);
-			//ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
+			// ret = sensor_read(sd, vals->reg_num, &val);
+			// ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1295,7 +1295,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (info->default_boot) {
@@ -1381,25 +1381,25 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x304e, &val_h);
 	ret += sensor_read(sd, 0x304f, &val_v);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val_h &= 0xfc;
 		val_v &= 0xfc;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val_h |= 0x01;
 		val_v &= 0xfc;
 		reg_3081 = 0x02;
 		reg_3083 = 0x02;
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val_h &= 0xfc;
 		val_v |= 0x01;
 		reg_3081 = 0xfe;
 		reg_3083 = 0xfe;
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val_h |= 0x01;
 		val_v |= 0x01;
 		reg_3081 = 0xfe;
@@ -1583,7 +1583,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 }
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
-	//	return 0;
+	// return 0;
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 	struct tx_isp_initarg *init = arg;
@@ -1598,12 +1598,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)

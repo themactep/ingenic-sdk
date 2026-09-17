@@ -774,7 +774,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3389, 0x27},
 	{0x338d, 0xb4},
 	{0x338e, 0x01},
-	//{SENSOR_REG_DELAY, 0x18},
+	// {SENSOR_REG_DELAY, 0x18},
 	{0x3002, 0x00},
 	{0x3000, 0x00},
 
@@ -990,7 +990,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short cur_int = 0;
 	unsigned short shs = 0;
 	unsigned char value = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

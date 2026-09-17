@@ -35,7 +35,7 @@
 #define SENSOR_VERSION "H20240219a"
 
 
-static int reset_gpio = -1; //GPIO_PA(18);
+static int reset_gpio = -1; // GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
 
@@ -192,7 +192,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 216,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -255,10 +255,10 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.call_times = 1,
 			.sdelay = 0,
 		}
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
-//12.5fps
+// 12.5fps
 static struct regval_list sensor_init_regs_1920_1080_12fps_mipi_sync3[] = {
 	{0x12, 0x40},
 	{0x48, 0x8a},
@@ -277,8 +277,8 @@ static struct regval_list sensor_init_regs_1920_1080_12fps_mipi_sync3[] = {
 	{0xa5, 0xc0},
 	{0x20, 0x00},
 	{0x21, 0x05},
-	{0x22, 0x8c}, //	;65
-	{0x23, 0x0a}, //	;04
+	{0x22, 0x8c}, // ;65
+	{0x23, 0x0a}, // ;04
 	{0x24, 0xc0},
 	{0x25, 0x38},
 	{0x26, 0x43},
@@ -381,7 +381,7 @@ static struct regval_list sensor_init_regs_1920_1080_12fps_mipi_sync3[] = {
 	{0x19, 0x20},
 	{0x1b, 0x4f},
 	{0x12, 0x00},
-	//0x;
+	// 0x;
 	{0x46, 0x01},
 	{0x47, 0x42},
 	{0x1e, 0x08},
@@ -610,7 +610,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 13;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -650,11 +650,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	return 0;
 }
 static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
-	//struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	// struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
 	unsigned char val;
-	//int ret = 0;
-	//unsigned char val = 0;
+	// int ret = 0;
+	// unsigned char val = 0;
 
 	ret += sensor_read(sd, 0x12, &val);
 

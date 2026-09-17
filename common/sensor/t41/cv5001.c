@@ -26,7 +26,7 @@
 #define SENSOR_I2C_ADDRESS 0x35
 #define SENSOR_MAX_HEIGHT 1620
 #define SENSOR_MAX_WIDTH 2880
-#define SENSOR_MCLK 24000000 //24M
+#define SENSOR_MCLK 24000000 // 24M
 #define SENSOR_NAME "cv5001"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -81,7 +81,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 1300,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -98,7 +98,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.mipi_crop_start3x = 0,
 	.mipi_sc.mipi_crop_start3y = 0,
 	.mipi_sc.data_type_en = 0,
-	.mipi_sc.data_type_value = RAW10, //RAW
+	.mipi_sc.data_type_value = RAW10, // RAW
 	.mipi_sc.del_start = 0,
 	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
 	.mipi_sc.sensor_fid_mode = 0,
@@ -128,10 +128,10 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_mipi[] = {
-	{0x3028, 0x5c}, //vts 0xd5c = 3420
+	{0x3028, 0x5c}, // vts 0xd5c = 3420
 	{0x3029, 0x0d}, //
 	{0x302a, 0x00}, //
-	{0x302c, 0x25}, //hts 0x325 = 805
+	{0x302c, 0x25}, // hts 0x325 = 805
 	{0x302d, 0x03}, //
 	{0x3030, 0x00},
 	{0x3035, 0x00},
@@ -180,7 +180,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.width = 2880,
 	.height = 1620,
 	.fps = 30 << 16 | 1,
-	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, //RAW
+	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, // RAW
 	.colorspace = TISP_COLORSPACE_SRGB,
 	.regs = sensor_init_regs_mipi,
 }};
@@ -418,7 +418,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -632,7 +632,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//ret = sensor_set_expo(sd, sensor_val->value);
+		// ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

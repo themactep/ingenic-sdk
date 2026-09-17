@@ -176,7 +176,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 360,
 	.lans = 2,
-	//	.index = 1,
+	// .index = 1,
 	.settle_time_apative_en = 0,
 	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
 	.mipi_sc.hcrop_diff_en = 0,
@@ -244,9 +244,9 @@ static struct regval_list sensor_init_regs_1536_1536_25fps_mipi[] = {
 	{0x60, 0x20},
 	{0x61, 0x08},
 	{0x07, 0x08},
-	{0x20, 0xd0}, //hts    25fps -> 0x2d0 = 720        30fps -> 0x258 = 600
+	{0x20, 0xd0}, // hts    25fps -> 0x2d0 = 720        30fps -> 0x258 = 600
 	{0x21, 0x02}, //
-	{0x22, 0xd0}, //vts    25fps -> 0x7d0 = 2000       30fps -> 0x7d0 = 2000
+	{0x22, 0xd0}, // vts    25fps -> 0x7d0 = 2000       30fps -> 0x7d0 = 2000
 	{0x23, 0x07}, //
 	{0x24, 0x80},
 	{0x25, 0x00},
@@ -365,12 +365,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x12, 0x20},
+	// {0x12, 0x20},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x12, 0x40},
+	// {0x12, 0x40},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -601,7 +601,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		//sensor->video.state = TX_ISP_MODULE_INIT;
+		// sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
@@ -616,7 +616,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (info->default_boot) {
@@ -703,7 +703,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.clk = 360;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		//sensor_attr.mipi.settle_time_apative_en = 0;
+		// sensor_attr.mipi.settle_time_apative_en = 0;
 		break;
 	default:
 		ISP_ERROR("Have no this MCLK Source!!!\n");
@@ -878,13 +878,13 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
 
-	//return 0;
+	// return 0;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
-	//return 0;
+	// return 0;
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_LOGIC:
 		if (arg)
@@ -925,8 +925,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_fps(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
-		//if (arg)
-		//	ret = sensor_set_vflip(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	default:
 		break;

@@ -316,7 +316,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x07}, //vts
+	{0x0340, 0x07}, // vts
 	{0x0341, 0x80},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -405,7 +405,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05}, //hts
+	{0x0342, 0x05}, // hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -549,7 +549,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{0x028c, 0x08},
 	{0x0532, 0x3f},
 	{0x0533, 0x02},
-	{0x0277, 0x70}, //tx_width
+	{0x0277, 0x70}, // tx_width
 	{0x0276, 0xc0},
 	{0x0239, 0xc0},
 	{0x0200, 0x00},
@@ -580,7 +580,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
 	{0x0100, 0x09},
-	//otp
+	// otp
 	{0x0129, 0x0a},
 	{0x0080, 0x02},
 	{0x0097, 0x0a},
@@ -926,7 +926,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 #ifndef SENSOR_WITHOUT_INIT
-			//When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
+			// When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
@@ -954,7 +954,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 #ifdef SENSOR_POWER_OFF
-		//Prepare for the next sleep.
+		// Prepare for the next sleep.
 		sensor->video.state = TX_ISP_MODULE_INIT;
 #endif /*SENSOR_POWER_OFF*/
 	}
@@ -969,7 +969,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1004,7 +1004,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x0341, (unsigned char)(vts & 0xff));
 	if (ret < 0)
 		return -1;
-	//for zeratul
+	// for zeratul
 	resume_vts = vts;
 
 	sensor->video.fps = fps;
@@ -1272,9 +1272,9 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.min_integration_time_short = 2;
 		sensor_attr.total_width = 2750;
 		sensor_attr.total_height = 1600;
-		sensor_attr.max_integration_time_native = 1920; //1504;
-		sensor_attr.integration_time_limit = 1920;	//1504;
-		sensor_attr.max_integration_time = 1920;	//1504;
+		sensor_attr.max_integration_time_native = 1920; // 1504;
+		sensor_attr.integration_time_limit = 1920;	// 1504;
+		sensor_attr.max_integration_time = 1920;	// 1504;
 		sensor_attr.max_integration_time_short = 94;
 	} else if (wdr_en == 0) {
 		info->default_boot = 0;
@@ -1329,12 +1329,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
@@ -1492,7 +1492,7 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-//MODULE_DEVICE_TABLE(i2c, sensor_id);
+// MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
 	.driver =

@@ -40,9 +40,9 @@
 #define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
 #define TVERSION "V20231127a"
 
-//#define SENSOR_TEST
+// #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = 1000;
 #endif
@@ -536,7 +536,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3007, 0x00},
 	{0x300a, 0x01},
 	{0x330c, 0x01},
-	{0x3300, 0x7c}, //6E  27M
+	{0x3300, 0x7c}, // 6E  27M
 	{0x3301, 0x01},
 	{0x3302, 0x02},
 	{0x3303, 0x07},
@@ -744,7 +744,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3a1a, 0x08},
 	{0x3a36, 0x01},
 	{0x3006, 0x00},
-	//{SENSOR_REG_DELAY, 0x10},
+	// {SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -756,7 +756,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi_dol[] = {
 	{0x3b00, 0x03},
 	{0x3b01, 0xff},
 	{0x3a00, 0x80},
-	{0x3300, 0x8d}, //7d   27M
+	{0x3300, 0x8d}, // 7d   27M
 	{0x3301, 0x01},
 	{0x3302, 0x01},
 	{0x3303, 0x03},
@@ -995,7 +995,7 @@ static struct regval_list sensor_init_regs_1920_1080_90fps_mipi[] = {
 	{0x3b01, 0xff},
 	{0x330c, 0x01},
 	{0x3a00, 0x80},
-	{0x3300, 0xb9}, //a5  27M
+	{0x3300, 0xb9}, // a5  27M
 	{0x3301, 0x03},
 	{0x3302, 0x00},
 	{0x3303, 0x00},
@@ -1265,12 +1265,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x3006, 0x00},
+	// {0x3006, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x3006, 0x02},
+	// {0x3006, 0x02},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1774,10 +1774,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			//ret = sensor_write_array(sd, wsize->regs);
-			//if (ret)
-			//        return ret;
-			//sensor->video.state = TX_ISP_MODULE_INIT;
+			// ret = sensor_write_array(sd, wsize->regs);
+			// if (ret)
+			// return ret;
+			// sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
@@ -1858,7 +1858,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 
@@ -2006,7 +2006,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 #endif /* SENSOR_EXPO */
 
 static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
-	//struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+	// struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = ISP_SUCCESS;
 
 	ret = sensor_write_array(sd, sensor_stream_off_mipi);

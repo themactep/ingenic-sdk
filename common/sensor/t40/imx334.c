@@ -440,12 +440,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -649,7 +649,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -723,25 +723,25 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	ret += sensor_read(sd, 0x304e, &val_h);
 	ret += sensor_read(sd, 0x304f, &val_v);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val_h &= 0xfc;
 		val_v &= 0xfc;
 		reg_3080 = 0x02;
 		reg_309b = 0x02;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val_h |= 0x01;
 		val_v &= 0xfc;
 		reg_3080 = 0x02;
 		reg_309b = 0x02;
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val_h &= 0xfc;
 		val_v |= 0x01;
 		reg_3080 = 0xfe;
 		reg_309b = 0xfe;
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val_h |= 0x01;
 		val_v |= 0x01;
 		reg_3080 = 0xfe;
@@ -760,10 +760,10 @@ struct clk *sclka;
 static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
-	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//struct clk *tclk;
+	// struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	// struct clk *tclk;
 	unsigned long rate;
-	//uint8_t i;
+	// uint8_t i;
 
 	memcpy(&(sensor_attr.mipi), &sensor_mipi, sizeof(sensor_mipi));
 	switch (info->default_boot) {

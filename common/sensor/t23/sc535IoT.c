@@ -319,7 +319,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 900,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -750,12 +750,12 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	//sensor analog gain
+	// sensor analog gain
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	if (ret < 0)
@@ -858,7 +858,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -999,12 +999,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -211,27 +211,27 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 // unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
 // {
-// 	struct again_lut *lut = sensor_again_lut;
-// 	while(lut->gain <= sensor_attr.max_again_short) {
-// 		if(isp_gain == 0) {
-// 			*sensor_again = 0;
-// 			return 0;
-// 		}
-// 		else if(isp_gain < lut->gain) {
-// 			*sensor_again = (lut - 1)->value;
-// 			return (lut - 1)->gain;
-// 		}
-// 		else{
-// 			if((lut->gain == sensor_attr.max_again_short) && (isp_gain >= lut->gain)) {
-// 				*sensor_again = lut->value;
-// 				return lut->gain;
-// 			}
-// 		}
+// struct again_lut *lut = sensor_again_lut;
+// while(lut->gain <= sensor_attr.max_again_short) {
+// if(isp_gain == 0) {
+// *sensor_again = 0;
+// return 0;
+// }
+// else if(isp_gain < lut->gain) {
+// *sensor_again = (lut - 1)->value;
+// return (lut - 1)->gain;
+// }
+// else{
+// if((lut->gain == sensor_attr.max_again_short) && (isp_gain >= lut->gain)) {
+// *sensor_again = lut->value;
+// return lut->gain;
+// }
+// }
 
-// 		lut++;
-// 	}
+// lut++;
+// }
 
-// 	return isp_gain;
+// return isp_gain;
 // }
 
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
@@ -243,7 +243,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 216,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -291,7 +291,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.one_line_expr_in_us = 30,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
@@ -674,7 +674,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 	} else {
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
-		//sensor->video.state = TX_ISP_MODULE_INIT;
+		// sensor->video.state = TX_ISP_MODULE_INIT;
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
 
@@ -688,7 +688,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -764,7 +764,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.one_line_expr_in_us = 28;
 
 		sensor_attr.wdr_cache = wdr_bufsize;
-		sensor_attr.max_integration_time_native = 1883;//0x960*2 - 0xff * 2 - 3
+		sensor_attr.max_integration_time_native = 1883;// 0x960*2 - 0xff * 2 - 3
 		sensor_attr.integration_time_limit = 1883;
 		sensor_attr.total_width = 0x47e * 2;
 		sensor_attr.total_height = 0x960;
@@ -1009,16 +1009,16 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		/* 		ret = sensor_set_integration_time(sd, sensor_val->value); */
 		/* 	break; */
 		// case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		// 	if(arg)
-		// 		ret = sensor_set_integration_time_short(sd, sensor_val->value);
-		// 	break;
+		// if(arg)
+		// ret = sensor_set_integration_time_short(sd, sensor_val->value);
+		// break;
 		/* case TX_ISP_EVENT_SENSOR_AGAIN: */
 		/* 	if(arg) */
 		/* 		ret = sensor_set_analog_gain(sd, sensor_val->value); */
 		/* 	break; */
 		// case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		// if(arg)
-		// 	ret = sensor_set_analog_gain_short(sd, sensor_val->value);
+		// ret = sensor_set_analog_gain_short(sd, sensor_val->value);
 		// break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
@@ -1054,11 +1054,11 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_vflip(sd, sensor_val->value);
 		break;
 	// case TX_ISP_EVENT_SENSOR_WDR:
-	// 	ret = sensor_set_wdr(sd, init->enable);
-	// 	break;
+	// ret = sensor_set_wdr(sd, init->enable);
+	// break;
 	// case TX_ISP_EVENT_SENSOR_WDR_STOP:
-	// 	ret = sensor_set_wdr_stop(sd, init->enable);
-	// 	break;
+	// ret = sensor_set_wdr_stop(sd, init->enable);
+	// break;
 	default:
 		break;
 	}

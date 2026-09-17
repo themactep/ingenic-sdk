@@ -945,11 +945,11 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		// if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		// if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

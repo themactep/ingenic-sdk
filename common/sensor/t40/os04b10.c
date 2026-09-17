@@ -230,7 +230,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_2560_1440_25fps[] = {
 #if 0
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 
 	{SENSOR_REG_DELAY, 0x10},
 	{0xfd, 0x00},
@@ -356,7 +356,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps[] = {
 #else
 	/*max 25fps*/
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 	{SENSOR_REG_DELAY, 0x10},
 
 	{0xfd, 0x00},
@@ -489,7 +489,7 @@ static struct regval_list sensor_init_regs_2560_1440_20fps[] = {
 /*for T31N/L 1 buff*/
 #if 0
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 	{0xfd, 0x00},
 	{0x34, 0x71},
 	{0x32, 0x01},
@@ -609,7 +609,7 @@ static struct regval_list sensor_init_regs_2560_1440_20fps[] = {
 	{0xb1, 0x03},
 #else
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 
 	{SENSOR_REG_DELAY, 0x10},
 	{0xfd, 0x00},
@@ -991,7 +991,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb_init = 0;
 	unsigned int vts_init = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

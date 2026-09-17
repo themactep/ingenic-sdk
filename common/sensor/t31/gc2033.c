@@ -388,18 +388,18 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x03, 0x03},
 	{0x04, 0xf6},
-	{0x05, 0x02}, //HB
+	{0x05, 0x02}, // HB
 	{0x06, 0xc6},
-	{0x07, 0x00}, //VB
+	{0x07, 0x00}, // VB
 	{0x08, 0x10},
 	{0x09, 0x00},
-	{0x0a, 0x00}, //row start
+	{0x0a, 0x00}, // row start
 	{0x0b, 0x00},
-	{0x0c, 0x00}, //col start
+	{0x0c, 0x00}, // col start
 	{0x0d, 0x04},
-	{0x0e, 0x40}, //height 1088
+	{0x0e, 0x40}, // height 1088
 	{0x0f, 0x07},
-	{0x10, 0x88}, //width 1928
+	{0x10, 0x88}, // width 1928
 	{0x12, 0xe2},
 	{0x17, 0x54},
 	{0x18, 0x02},
@@ -450,11 +450,11 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x88, 0x73},
 	{0x89, 0x03},
 	{0x90, 0x01},
-	{0x92, 0x04}, //2<= y <=6
-	{0x94, 0x04}, //2<= x <=6
-	{0x95, 0x04}, //crop win height
+	{0x92, 0x04}, // 2<= y <=6
+	{0x94, 0x04}, // 2<= x <=6
+	{0x95, 0x04}, // crop win height
 	{0x96, 0x38},
-	{0x97, 0x07}, //crop win width
+	{0x97, 0x07}, // crop win width
 	{0x98, 0x80},
 	////////////////////////////////////////////////////
 	/////////////////////   BLK   //////////////////////
@@ -510,7 +510,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x03, 0x9a},
 	{0x10, 0x91},
 	{0x11, 0x2b},
-	{0x12, 0x60}, //lwc 1920*5/4
+	{0x12, 0x60}, // lwc 1920*5/4
 	{0x13, 0x09},
 	{0x15, 0x06},
 	{0x36, 0x88},
@@ -738,10 +738,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS; //the format is 24.8
+	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS; // the format is 24.8
 	unsigned int pclk = SENSOR_SUPPORT_30FPS_SCLK;
 	unsigned short win_high = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned short hb = 0;

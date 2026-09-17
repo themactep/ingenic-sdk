@@ -228,8 +228,8 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x3f, 0x08},
 	{0x1d, 0x55},
 	{0x1e, 0x55},
-	//{0x38, 0x00},
-	//{0x55, 0x00},
+	// {0x38, 0x00},
+	// {0x55, 0x00},
 
 	{0xfd, 0x01},
 	{0x15, 0x00},
@@ -281,8 +281,8 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x33, 0x03},
 	{0x34, 0x80},
 	{0x35, 0x00},
-	{0x30, 0x00}, //auto blc 0x09
-	{0x80, 0x0f}, //bad pixel
+	{0x30, 0x00}, // auto blc 0x09
+	{0x80, 0x0f}, // bad pixel
 	{0x81, 0x1b},
 	{0x92, 0x20},
 
@@ -585,7 +585,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short vblank;
 	unsigned short vts = 0;
 	unsigned char tmp, tmp1, tmp2;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned char page = 0;
 	/* fps=PCLK*1000000/(vts*hts) */
@@ -742,10 +742,10 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = sensor_set_mode(sensor, ctrl->value);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_off);
+		// ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_on);
+		// ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
 		ret = sensor_set_fps(sensor, ctrl->value);

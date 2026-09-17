@@ -298,7 +298,7 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x380c, 0x07}, /* hts */
 	{0x380d, 0x97},
 	{0x380e, 0x03}, /* vts */
-	{0x380f, 0xdc}, //0xdc
+	{0x380f, 0xdc}, // 0xdc
 	{0x3810, 0x00},
 	{0x3811, 0x08},
 	{0x3812, 0x00},
@@ -820,7 +820,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

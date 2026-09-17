@@ -33,7 +33,7 @@
 #define SENSOR_SUPPORT_PCLK (43200 * 1000)
 #define SENSOR_VERSION "H20201205a"
 
-//#define SENSOR_SUPPORT_PCLK (36*1000*1000)
+// #define SENSOR_SUPPORT_PCLK (36*1000*1000)
 #define DRIVE_CAPABILITY_1
 
 static struct sensor_info sensor_info = {
@@ -372,10 +372,10 @@ static struct regval_list sensor_init_regs_1280_960_30fps_dvp[] = {
 	{0x57, 0x60},
 	{0x20, 0xd0},
 	{0x21, 0x02},
-	//	{0x22, 0xe8}, //30
-	//	{0x23, 0x03}, //30
-	{0x22, 0xb0}, //25
-	{0x23, 0x04}, //25
+	// {0x22, 0xe8}, //30
+	// {0x23, 0x03}, //30
+	{0x22, 0xb0}, // 25
+	{0x23, 0x04}, // 25
 
 	{0x24, 0x80},
 	{0x25, 0xc0},
@@ -410,7 +410,7 @@ static struct regval_list sensor_init_regs_1280_960_30fps_dvp[] = {
 	{0x3a, 0xa0},
 	{0x3b, 0x00},
 	{0x3c, 0x40},
-	//	{0x46, 0x90},
+	// {0x46, 0x90},
 	{0x46, 0x10},
 	{0x56, 0x1a},
 	{0x59, 0x3c},
@@ -454,7 +454,7 @@ static struct regval_list sensor_init_regs_1280_960_30fps_dvp[] = {
 	{0x12, 0x00},
 	{0x48, 0x85},
 	{0x48, 0x05},
-	//	{SENSOR_REG_DELAY,100},
+	// {SENSOR_REG_DELAY,100},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -675,7 +675,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

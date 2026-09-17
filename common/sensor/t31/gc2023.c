@@ -386,18 +386,18 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0xfe, 0x00},
 	{0x03, 0x03},
 	{0x04, 0xf6},
-	{0x05, 0x02}, //HB
+	{0x05, 0x02}, // HB
 	{0x06, 0xc6},
-	{0x07, 0x00}, //VB
+	{0x07, 0x00}, // VB
 	{0x08, 0xe0},
 	{0x09, 0x00},
-	{0x0a, 0x00}, //row start
+	{0x0a, 0x00}, // row start
 	{0x0b, 0x00},
-	{0x0c, 0x00}, //col start
+	{0x0c, 0x00}, // col start
 	{0x0d, 0x04},
-	{0x0e, 0x40}, //height 1088
+	{0x0e, 0x40}, // height 1088
 	{0x0f, 0x07},
-	{0x10, 0x88}, //width 1928
+	{0x10, 0x88}, // width 1928
 	{0x17, 0x54},
 	{0x18, 0x02},
 	{0x19, 0x0d},
@@ -441,11 +441,11 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x88, 0x73},
 	{0x89, 0x03},
 	{0x90, 0x01},
-	{0x92, 0x04}, //2<= y <=6
-	{0x94, 0x04}, //2<= x <=6
-	{0x95, 0x04}, //crop win height
+	{0x92, 0x04}, // 2<= y <=6
+	{0x94, 0x04}, // 2<= x <=6
+	{0x95, 0x04}, // crop win height
 	{0x96, 0x38},
-	{0x97, 0x07}, //crop win width
+	{0x97, 0x07}, // crop win width
 	{0x98, 0x80},
 	//////////////////////////////
 	//////////   BLK   ///////////
@@ -737,8 +737,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vb = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {

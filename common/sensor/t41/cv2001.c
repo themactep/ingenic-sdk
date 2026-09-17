@@ -26,7 +26,7 @@
 #define SENSOR_I2C_ADDRESS 0x35
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MCLK 24000000 //24M
+#define SENSOR_MCLK 24000000 // 24M
 #define SENSOR_NAME "cv2001"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
@@ -81,7 +81,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 420,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -98,7 +98,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.mipi_crop_start3x = 0,
 	.mipi_sc.mipi_crop_start3y = 0,
 	.mipi_sc.data_type_en = 0,
-	.mipi_sc.data_type_value = RAW10, //RAW
+	.mipi_sc.data_type_value = RAW10, // RAW
 	.mipi_sc.del_start = 0,
 	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
 	.mipi_sc.sensor_fid_mode = 0,
@@ -175,7 +175,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 	.width = 1920,
 	.height = 1080,
 	.fps = 30 << 16 | 1,
-	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, //RAW
+	.mbus_code = TISP_VI_FMT_SRGGB10_1X10, // RAW
 	.colorspace = TISP_COLORSPACE_SRGB,
 	.regs = sensor_init_regs_mipi,
 }};
@@ -328,7 +328,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3050, (unsigned char)(exp0 & 0xff));
 	ret += sensor_write(sd, 0x3051, (unsigned char)((exp0 >> 8) & 0xff));
 
-	//ISP_INFO("cv2001 set exp=0x%04x(%4d line)\n", exp0, it);
+	// ISP_INFO("cv2001 set exp=0x%04x(%4d line)\n", exp0, it);
 
 	return ret;
 }
@@ -339,7 +339,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret = sensor_write(sd, 0x3084, again);
 
-	//ISP_INFO("cv2001 set gain0=0x%02x(%03d)\n", again, again);
+	// ISP_INFO("cv2001 set gain0=0x%02x(%03d)\n", again, again);
 
 	return ret;
 }
@@ -414,7 +414,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -628,7 +628,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//ret = sensor_set_expo(sd, sensor_val->value);
+		// ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

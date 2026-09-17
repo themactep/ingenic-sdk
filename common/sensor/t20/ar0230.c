@@ -442,20 +442,20 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3ee6, 0x2263},
 	{0x30e0, 0x4283},
 	{0x30f0, 0x1283},
-	{0x301a, 0x10d8}, //SENSOR_REGISTER
-	{0x30b0, 0x0118}, //DIGITAL_TEST enable low power
+	{0x301a, 0x10d8}, // SENSOR_REGISTER
+	{0x30b0, 0x0118}, // DIGITAL_TEST enable low power
 	{0x31ac, 0x0c0c},
-	{0x302a, 0x0008}, //VT_PIX_CLK_DIV
-	{0x302c, 0x0001}, //VT_SYS_CLK_DIV
-	{0x302e, 0x0002}, //PRE_PLL_CLK_DIV
-	{0x3030, 0x002c}, //PLL_MULTIPLIER
-	{0x3036, 0x000c}, //OP_PIX_CLK_DIV
-	{0x3038, 0x0001}, //OP_SYS_CLK_DIV
-	{0x3002, 0x0000}, //Y_ADDR_START
-	{0x3004, 0x0008}, //X_ADDR_START
-	{0x3006, 0x0437}, //Y_ADDR_END {0x3008, 0x0787}, //X_ADDR_END {0x300a, 0x0546}, //1125 vts
-	{0x300c, 0x044c}, //1100 hts
-	{0x3012, 0x0416}, //1046
+	{0x302a, 0x0008}, // VT_PIX_CLK_DIV
+	{0x302c, 0x0001}, // VT_SYS_CLK_DIV
+	{0x302e, 0x0002}, // PRE_PLL_CLK_DIV
+	{0x3030, 0x002c}, // PLL_MULTIPLIER
+	{0x3036, 0x000c}, // OP_PIX_CLK_DIV
+	{0x3038, 0x0001}, // OP_SYS_CLK_DIV
+	{0x3002, 0x0000}, // Y_ADDR_START
+	{0x3004, 0x0008}, // X_ADDR_START
+	{0x3006, 0x0437}, // Y_ADDR_END {0x3008, 0x0787}, //X_ADDR_END {0x300a, 0x0546}, //1125 vts
+	{0x300c, 0x044c}, // 1100 hts
+	{0x3012, 0x0416}, // 1046
 	{0x30a2, 0x0001},
 	{0x30a6, 0x0001},
 	{0x3040, 0x0000},
@@ -483,9 +483,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3202, 0x0080},
 	{0x3200, 0x0002},
 	{0x3100, 0x0000},
-	{0x3064, 0x1802}, //Disable Embedded Data and Stats
-	{0x31c6, 0x0400}, //HISPI_CONTROL_STATUS: HispiSP
-	{0x306e, 0x9210}, //DATAPATH_SELECT[9]=1 VDD_SLVS=1.8V
+	{0x3064, 0x1802}, // Disable Embedded Data and Stats
+	{0x31c6, 0x0400}, // HISPI_CONTROL_STATUS: HispiSP
+	{0x306e, 0x9210}, // DATAPATH_SELECT[9]=1 VDD_SLVS=1.8V
 	{0x3060, 0x000f},
 	{0x305e, 0x0080},
 	{0x3012, 0xffff},
@@ -510,12 +510,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on_dvp[] = {
-	{0x301a, 0x10dc}, //SENSOR_REGISTER
+	{0x301a, 0x10dc}, // SENSOR_REGISTER
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_dvp[] = {
-	{0x301a, 0x10d8}, //SENSOR_REGISTER
+	{0x301a, 0x10d8}, // SENSOR_REGISTER
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -726,7 +726,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts = 0;
 	unsigned short vts = 0;
 	unsigned char tmp[2];
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

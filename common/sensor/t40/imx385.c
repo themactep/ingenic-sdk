@@ -811,7 +811,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 }
 
 struct tx_isp_mipi_bus sensor_mipi = {
-	.mode = SENSOR_MIPI_OTHER_MODE, //SENSOR_MIPI_SONY_MODE
+	.mode = SENSOR_MIPI_OTHER_MODE, // SENSOR_MIPI_SONY_MODE
 	.clk = 800,
 	.lans = 2,
 	.settle_time_apative_en = 1,
@@ -876,10 +876,10 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3014, 0x00},
 	{0x3015, 0x00},
 	{0x3016, 0x08},
-	{0x3018, 0x65}, //vts 0x465 = 1125
+	{0x3018, 0x65}, // vts 0x465 = 1125
 	{0x3019, 0x04},
 	{0x301a, 0x00},
-	{0x301b, 0x30}, //hts 0x1130 = 4400
+	{0x301b, 0x30}, // hts 0x1130 = 4400
 	{0x301c, 0x11},
 	{0x3020, 0x00},
 	{0x3021, 0x00},
@@ -1155,7 +1155,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1215,16 +1215,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sensor_read(sd, 0x3007, &val);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val &= 0xfc;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val = ((val & 0xfd) | 0x01);
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val = ((val & 0xfe) | 0x02);
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val |= 0x03;
 		break;
 	}

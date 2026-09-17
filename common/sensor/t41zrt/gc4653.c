@@ -38,8 +38,8 @@
 
 /* 定义SENSOR_WITHOUT_INIT时表示boot阶段已进行sensor初始化，下sensor初始化配置，可节省初始化sensor时间。*/
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
-//#define SENSOR_WITHOUT_INIT
-static int wdr_bufsize = 2 * 3000 * 188; //cache lines corrponding on VPB1
+// #define SENSOR_WITHOUT_INIT
+static int wdr_bufsize = 2 * 3000 * 188; // cache lines corrponding on VPB1
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -294,7 +294,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x07}, //vts
+	{0x0340, 0x07}, // vts
 	{0x0341, 0x80},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -383,7 +383,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05}, //hts
+	{0x0342, 0x05}, // hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -859,7 +859,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
 	unsigned char sensor_min_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1072,7 +1072,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ISP_WARNING("Description Failed to synchronize the attributes of sensor!!!");
 	}
 
-	//sensor_set_attr(sd, wsize);
+	// sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
 
 	sensor_common_update(&sensor_info,
@@ -1211,7 +1211,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	struct tx_isp_sensor_value *sensor_val = arg;
 	struct tx_isp_initarg *init = arg;
 
-	//	return 0;
+	// return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
@@ -1390,7 +1390,7 @@ static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
 static struct i2c_driver sensor_driver = {
 	.driver =
 		{
-			.owner = NULL, //THIS_MODULE,
+			.owner = NULL, // THIS_MODULE,
 			.name = SENSOR_NAME,
 		},
 	.probe = sensor_probe,

@@ -665,7 +665,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -936,7 +936,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 260655;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

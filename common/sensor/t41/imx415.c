@@ -272,7 +272,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_dol[] = {
 	{0x3116, 0x24}, // INCKSEL2[7:0]
 	{0x3118, 0xa0}, // INCKSEL3[10:0]
 	{0x311e, 0x24}, // INCKSEL5[7:0]
-	{0x3260, 0x00}, //GAIN_PGC_FIDMD
+	{0x3260, 0x00}, // GAIN_PGC_FIDMD
 	{0x32d4, 0x21},
 	{0x32ec, 0xa1},
 	{0x344c, 0x2b},
@@ -397,9 +397,9 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x300a, 0x5b},
 	{0x301c, 0x04},
 	{0x3024, 0x75}, //
-	{0x3025, 0x09}, //vts=0x975 = 2421
+	{0x3025, 0x09}, // vts=0x975 = 2421
 	{0x3028, 0xfe}, //
-	{0x3029, 0x03}, //hts=1022
+	{0x3029, 0x03}, // hts=1022
 	{0x3031, 0x00},
 	{0x3032, 0x00},
 	{0x3033, 0x08},
@@ -1076,7 +1076,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1142,16 +1142,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val &= 0xfc;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val |= 0x01;
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val |= 0x02;
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val |= 0x03;
 		break;
 	}

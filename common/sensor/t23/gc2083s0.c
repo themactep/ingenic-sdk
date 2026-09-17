@@ -90,7 +90,7 @@ struct again_lut {
 };
 
 struct again_lut gc2083_again_lut[] = {
-	//0x00d0 0x0155 0x0410 0x0411 0x0412 0x0413 0x0414 0x0415 0x0416 0x0417 0x00b8 0x00b9 0x0dc1
+	// 0x00d0 0x0155 0x0410 0x0411 0x0412 0x0413 0x0414 0x0415 0x0416 0x0417 0x00b8 0x00b9 0x0dc1
 	{0x00, 0x00, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x00, 0x00, 0},      // 1.000000
 	{0x01, 0x10, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x0c, 0x00, 16247},  // 1.187500
 	{0x02, 0x01, 0x03, 0x11, 0x11, 0x11, 0x11, 0x6f, 0x6f, 0x6f, 0x6f, 0x01, 0x1a, 0x00, 32233},  // 1.406250
@@ -162,7 +162,7 @@ struct tx_isp_sensor_attribute gc2083_attr = {.name = "gc2083",
 			.clk = 675,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -247,7 +247,7 @@ static struct regval_list gc2083_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0d73, 0x92},
 	{0x0076, 0x00},
 	{0x0d76, 0x00},
-	{0x0d41, 0x04}, //vts -> 0x4d8 = 1240
+	{0x0d41, 0x04}, // vts -> 0x4d8 = 1240
 	{0x0d42, 0xd8}, //
 	{0x0d7a, 0x10},
 	{0x0d19, 0x31},
@@ -611,7 +611,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -783,12 +783,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

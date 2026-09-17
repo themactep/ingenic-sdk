@@ -217,7 +217,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
-	//1080p@25fps
+	// 1080p@25fps
 	{0x0103, 0x00},
 	{0x5227, 0x74},
 	{0x030b, 0x11},
@@ -238,9 +238,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x4026, 0xbb},
 	{0x0202, 0x02},
 	{0x0203, 0xec},
-	{0x0340, 0x05}, //vts
+	{0x0340, 0x05}, // vts
 	{0x0341, 0x34},
-	{0x0342, 0x09}, //hts
+	{0x0342, 0x09}, // hts
 	{0x0343, 0x02},
 	{0x0344, 0x00},
 	{0x0345, 0x04},
@@ -778,7 +778,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		return -1;

@@ -557,17 +557,17 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	if (ret < 0)
 		return ret;
 
-	//	sensor_write(sd, 0x3812, 0x00);
+	// sensor_write(sd, 0x3812, 0x00);
 	/* denoise logic */
-	if (again < 0x720) { //<2
+	if (again < 0x720) { // <2
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x88);
 		sensor_write(sd, 0x3636, 0x25);
-	} else if (again >= 0x720 && again < 0xf20) { //>=2 <4
+	} else if (again >= 0x720 && again < 0xf20) { // >=2 <4
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x8e);
 		sensor_write(sd, 0x3636, 0x25);
-	} else if (again >= 0xf20 && again < 0x1f20) { //>=2 <8
+	} else if (again >= 0xf20 && again < 0x1f20) { // >=2 <8
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x80);
 		sensor_write(sd, 0x3636, 0x65);
@@ -576,7 +576,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x3631, 0x80);
 		sensor_write(sd, 0x3636, 0x65);
 	}
-	//sensor_write(sd, 0x3812, 0x30);
+	// sensor_write(sd, 0x3812, 0x30);
 
 	return 0;
 }
@@ -603,15 +603,15 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	/* denoise logic */
 	sensor_write(sd, 0x3812, 0x00);
-	if (value < 0x720) { //<2
+	if (value < 0x720) { // <2
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x88);
 		sensor_write(sd, 0x3636, 0x25);
-	} else if (value >= 0x720 && value < 0xf20) {//>=2 <4
+	} else if (value >= 0x720 && value < 0xf20) {// >=2 <4
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x8e);
 		sensor_write(sd, 0x3636, 0x25);
-	} else if (value >= 0xf20 && value < 0x1f20) {//>=2 <8
+	} else if (value >= 0xf20 && value < 0x1f20) {// >=2 <8
 		sensor_write(sd, 0x3632, 0x18);
 		sensor_write(sd, 0x3631, 0x80);
 		sensor_write(sd, 0x3636, 0x65);
@@ -692,7 +692,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -712,10 +712,10 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = ((hts << 8) + tmp);
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	//	ret += sensor_write(sd, 0x3812, 0x00);
+	// ret += sensor_write(sd, 0x3812, 0x00);
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
-	//	ret += sensor_write(sd, 0x3812, 0x30);
+	// ret += sensor_write(sd, 0x3812, 0x30);
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
@@ -824,12 +824,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//			ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -324,20 +324,20 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x5b05, 0x6c},
 	{0x5e10, 0xfc},
 
-	//;max exposure is (VTS-4)/2
-	//;expo is twice as before. Ex. [3501,3502]=0040 means 8 Tline exposure.
+	// ;max exposure is (VTS-4)/2
+	// ;expo is twice as before. Ex. [3501,3502]=0040 means 8 Tline exposure.
 	{0x3500, 0x00},
-	{0x3501, 0x3e}, //;max expo= ([380e,380f]-4)/2.
+	{0x3501, 0x3e}, // ;max expo= ([380e,380f]-4)/2.
 	{0x3502, 0x60},
-	//;8xgain,
-	{0x3503, 0x08}, //;[2]=0 real gain
-	{0x3508, 0x04}, //;
-	{0x3509, 0x00}, //;[3508,3509]=0x0080 is 1xgain
-	//;Vsync
-	{0x3832, 0x48}, //; [7:4]vsync_width ; R3002[5] p_fsin_oen
-	//;MIPI
-	{0x3c90, 0x00}, //;MIPI Continuous mode (07 Gated mode)
-	//;Strong DPC1.53
+	// ;8xgain,
+	{0x3503, 0x08}, // ;[2]=0 real gain
+	{0x3508, 0x04}, // ;
+	{0x3509, 0x00}, // ;[3508,3509]=0x0080 is 1xgain
+	// ;Vsync
+	{0x3832, 0x48}, // ; [7:4]vsync_width ; R3002[5] p_fsin_oen
+	// ;MIPI
+	{0x3c90, 0x00}, // ;MIPI Continuous mode (07 Gated mode)
+	// ;Strong DPC1.53
 	{0x5780, 0x3e},
 	{0x5781, 0x0f},
 	{0x5782, 0x44},
@@ -359,9 +359,9 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x5792, 0x00},
 	{0x5793, 0x52},
 	{0x5794, 0xa3},
-	//;BLC target 0x40
+	// ;BLC target 0x40
 	{0x4003, 0x40},
-	//;Keep clock on during dummy lines
+	// ;Keep clock on during dummy lines
 	{0x3107, 0x01},
 	{0x3c80, 0x08},
 	{0x3c83, 0xb1},
@@ -371,16 +371,16 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3c94, 0x00},
 	{0x3c95, 0x00},
 	{0x3c96, 0x00},
-	//;for OTP autoload
-	{0x3d8c, 0x71}, //; Header address high byte
-	{0x3d8d, 0xe7}, //; Header address low byte
+	// ;for OTP autoload
+	{0x3d8c, 0x71}, // ; Header address high byte
+	{0x3d8d, 0xe7}, // ; Header address low byte
 
 	{0x37cb, 0x09},
 	{0x37cc, 0x15},
 	{0x37cd, 0x1f},
 	{0x37ce, 0x1f},
 
-	//slaveo
+	// slaveo
 	{0x3663, 0x20},
 	{0x3002, 0x21},
 	{0x3822, 0x74},
@@ -643,7 +643,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	return 0;
 
@@ -895,12 +895,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

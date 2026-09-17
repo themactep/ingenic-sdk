@@ -189,12 +189,12 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_960_25fps[] = {
-	{0x3003, 0x01}, //manualstreamenbale
-	{0x3000, 0x00}, //softreset
+	{0x3003, 0x01}, // manualstreamenbale
+	{0x3000, 0x00}, // softreset
 	{0x3400, 0x53},
 	{0x3416, 0xc0},
 	{0x3d08, 0x03},
@@ -203,17 +203,17 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x3630, 0x58},
 	{0x3612, 0x00},
 	{0x3632, 0x41},
-	{0x3635, 0x00}, //20160328
+	{0x3635, 0x00}, // 20160328
 	{0x3620, 0x44},
-	{0x3633, 0x7f}, //20160422
+	{0x3633, 0x7f}, // 20160422
 	{0x3780, 0x0b},
 	{0x3300, 0x33},
 	{0x3301, 0x38},
 	{0x3302, 0x30},
-	{0x3303, 0x80}, //20160307B  20160412
+	{0x3303, 0x80}, // 20160307B  20160412
 	{0x3304, 0x18},
 	{0x3305, 0x72},
-	{0x331e, 0x30}, //20160512
+	{0x331e, 0x30}, // 20160512
 	{0x321e, 0x00},
 	{0x321f, 0x0a},
 	{0x3216, 0x0a},
@@ -222,26 +222,26 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x3622, 0x26},
 	{0x3907, 0x02},
 	{0x3908, 0x00},
-	{0x3601, 0x1a}, //20160422
-	{0x3315, 0x44}, //bl_en all high,cancel column fpn
+	{0x3601, 0x1a}, // 20160422
+	{0x3315, 0x44}, // bl_en all high,cancel column fpn
 	{0x3308, 0x40},
-	{0x3223, 0x22}, //vysncmode[5]
-	{0x3e0e, 0x50}, //12bit exp
+	{0x3223, 0x22}, // vysncmode[5]
+	{0x3e0e, 0x50}, // 12bit exp
 	/*DPC*/
 	{0x3211, 0x60},
 	{0x5780, 0xff},
-	{0x5781, 0x04}, //20160328
-	{0x5785, 0x0c}, //20160328
+	{0x5781, 0x04}, // 20160328
+	{0x5785, 0x0c}, // 20160328
 	{0x5000, 0x00},
 
 	{0x3e0f, 0x90},
 	{0x3631, 0x80},
 	{0x3310, 0x83},
-	{0x3336, 0x01}, //4
-	{0x3337, 0xc8}, //e8
-	{0x3338, 0x04}, //7
-	{0x3339, 0xb0}, //d0
-	{0x3335, 0x06}, //20160418
+	{0x3336, 0x01}, // 4
+	{0x3337, 0xc8}, // e8
+	{0x3338, 0x04}, // 7
+	{0x3339, 0xb0}, // d0
+	{0x3335, 0x06}, // 20160418
 	{0x3880, 0x00},
 
 	/*SC1135_960P_Sensor_init*/
@@ -252,16 +252,16 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x3610, 0x2b},
 
 	/*configFramelengthandwidth*/
-	{0x320c, 0x07}, //hts 1800
+	{0x320c, 0x07}, // hts 1800
 	{0x320d, 0x08},
-	{0x320e, 0x04}, //vts 1200
+	{0x320e, 0x04}, // vts 1200
 	{0x320f, 0xb0},
 
 	/*configOutputwindowposition*/
 	{0x3210, 0x00},
 	{0x3211, 0x60},
 	{0x3212, 0x00},
-	{0x3213, 0x04}, //for BGGR out format 20160412
+	{0x3213, 0x04}, // for BGGR out format 20160412
 
 	/*configOutputimagesize*/
 	{0x3208, 0x05},
@@ -270,20 +270,20 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x320b, 0xc0},
 
 	/*configFramestartphysicalposition*/
-	{0x3202, 0x00}, //phy add
+	{0x3202, 0x00}, // phy add
 	{0x3203, 0x08},
 	{0x3206, 0x03},
 	{0x3207, 0xcf},
 
 	/*powerconsumptionreduction*/
-	{0x3330, 0x0d}, //sa1timing for 1650 vts
+	{0x3330, 0x0d}, // sa1timing for 1650 vts
 	{0x3320, 0x06},
 	{0x3321, 0xd8},
 	{0x3322, 0x01},
 	{0x3323, 0xc0},
 	{0x3600, 0x54},
 #ifdef DRIVE_CAPABILITY_1
-	{0x3640, 0x00}, //drv
+	{0x3640, 0x00}, // drv
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x3640, 0x01},
 #endif
@@ -534,7 +534,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -664,10 +664,10 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = sensor_set_mode(sensor, ctrl->value);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_off);
+		// ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_on);
+		// ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
 		ret = sensor_set_fps(sensor, ctrl->value);

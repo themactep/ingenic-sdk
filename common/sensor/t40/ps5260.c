@@ -479,7 +479,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x07, 0x01},
 	{0x08, 0x46},
 	{0x0a, 0x05},
-	{0x0b, 0x45}, //8c9 for 15fps
+	{0x0b, 0x45}, // 8c9 for 15fps
 	{0x0c, 0x00},
 	{0x0d, 0x03},
 	{0x0e, 0x11},
@@ -582,14 +582,14 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x40, 0x16},
 	{0x41, 0x12},
 	/*0x1a,560Mbps*/ /*0x16,480Mbps*/
-	/*0x12,400Mbps*/ //raw10 available for 560/480/400m, raw12 avilable for 560/480m,
+	/*0x12,400Mbps*/ // raw10 available for 560/480/400m, raw12 avilable for 560/480m,
 	{0x43, 0x02},
 	{0x44, 0x01},
 	{0x4a, 0x02},
 	{0x4f, 0x01},
 	{0x5b, 0x10},
 	{0x94, 0x04},
-	{0xb0, 0x01}, //disable short packet
+	{0xb0, 0x01}, // disable short packet
 	{0xb1, 0x00},
 	{0xed, 0x01},
 	{0xef, 0x06},
@@ -928,7 +928,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int Cur_OffNy = 0;
 	unsigned int Cur_ExpLine = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (data_interface) {

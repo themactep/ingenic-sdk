@@ -207,7 +207,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 44,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
@@ -391,8 +391,8 @@ static int sensor_write_array(struct v4l2_subdev *sd, struct regval_list *vals) 
 			if (ret < 0)
 				return ret;
 		}
-		//ISP_INFO("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value);
-		//mdelay(200);
+		// ISP_INFO("vals->reg_num:%x, vals->value:%x\n",vals->reg_num, vals->value);
+		// mdelay(200);
 		vals++;
 	}
 	return 0;
@@ -504,7 +504,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -528,7 +528,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	if (ret < 0)
 		return -1;
 
-	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 	sensor->video.fps = fps;
 

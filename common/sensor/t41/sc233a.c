@@ -41,7 +41,7 @@
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;
-static int wdr_bufsize = 3840000; //1000*1920*2
+static int wdr_bufsize = 3840000; // 1000*1920*2
 static int shvflip = 1;
 static unsigned char switch_wdr = 1;
 static int data_type = TX_SENSOR_DATA_TYPE_WDR_DOL;
@@ -417,9 +417,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x37f9, 0x80},
 	{0x301f, 0x09},
 	{0x30b8, 0x44},
-	{0x320c, 0x08}, //2250  hts
+	{0x320c, 0x08}, // 2250  hts
 	{0x320d, 0xca}, //
-	{0x320e, 0x05}, //1440  vts
+	{0x320e, 0x05}, // 1440  vts
 	{0x320f, 0xa0}, //
 	{0x3253, 0x0c},
 	{0x3281, 0x80},
@@ -609,9 +609,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi_dol[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x08}, //2200  hts
+	{0x320c, 0x08}, // 2200  hts
 	{0x320d, 0x98}, //
-	{0x320e, 0x09}, //2400  vts
+	{0x320e, 0x09}, // 2400  vts
 	{0x320f, 0x60}, //
 	{0x3210, 0x00},
 	{0x3211, 0x04},
@@ -986,7 +986,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	//	ISP_INFO("\n==============> short_time = 0x%x\n", value);
+	// ISP_INFO("\n==============> short_time = 0x%x\n", value);
 	ret = sensor_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
 	ret = sensor_write(sd, 0x3e05, (unsigned char)(value & 0x0f) << 4);
 
@@ -1078,7 +1078,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned int short_time;
 	unsigned char val;
@@ -1361,7 +1361,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x0103, 0x01);
+	// ret = sensor_write(sd, 0x0103, 0x01);
 
 	if (wdr_en == 1) {
 		info->default_boot = 1;
@@ -1404,7 +1404,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
-	//	ISP_INFO("\n==========> set_wdr\n");
+	// ISP_INFO("\n==========> set_wdr\n");
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
@@ -1435,12 +1435,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

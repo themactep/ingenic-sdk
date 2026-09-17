@@ -41,7 +41,7 @@ static int reset_gpio = GPIO_PB(6);
 static int pwr_gpio = GPIO_PA(24);
 static int sensor_gpio_func = DVP_PA_LOW_8BIT;
 static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
-static int sensor_max_fps = 5; //TX_SENSOR_MAX_FPS_20;
+static int sensor_max_fps = 5; // TX_SENSOR_MAX_FPS_20;
 static int shvflip = 0;
 
 #if 1
@@ -229,7 +229,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x97, 0x00},
 	{0x97, 0x0f},
 	{0x7a, 0x0f},
-	{0xff, 0x00}, //8x8 color block test pattern
+	{0xff, 0x00}, // 8x8 color block test pattern
 	{0x78, 0xba},
 	{0xff, 0x05},
 	{0x2c, 0x08},
@@ -291,10 +291,10 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	unsigned char reg_1xCA;
 
 	ISP_INFO("=================> my_set_port_mode_1mux\n");
-	sensor_write(sd, 0xff, 0x00); //bank
+	sensor_write(sd, 0xff, 0x00); // bank
 	sensor_read(sd, 0x54, &reg_0x54);
 	sensor_write(sd, 0x54, reg_0x54 & 0xfe);
-	sensor_write(sd, 0xff, 0x01); //bank 1
+	sensor_write(sd, 0xff, 0x01); // bank 1
 	sensor_read(sd, 0xc8, &reg_1xC8);
 	sensor_write(sd, 0xa0, 0x00);
 	sensor_write(sd, 0xc0, 0x00);
@@ -303,7 +303,7 @@ static void my_set_port_mode_1mux(struct tx_isp_subdev *sd, unsigned char port, 
 	sensor_write(sd, 0xc8, reg_1xC8); //
 	sensor_write(sd, 0xcc, regCC);
 
-	sensor_write(sd, 0xa8 + port, 0x90 + (port * 0x10)); //h/v0 sync enabled
+	sensor_write(sd, 0xa8 + port, 0x90 + (port * 0x10)); // h/v0 sync enabled
 	sensor_write(sd, 0xb3, 0x01);
 
 	sensor_write(sd, 0xe4, 0x00);
@@ -347,8 +347,8 @@ int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *valu
 	if (ret > 0)
 		ret = 0;
 
-	//	ISP_INFO("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
-	//	private_msleep(5);
+	// ISP_INFO("	{0x%x, 0x%x}\n",*(msg[0].buf), *(msg[1].buf));
+	// private_msleep(5);
 	return ret;
 }
 
@@ -365,8 +365,8 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
-	//	ISP_INFO("	{0x%x, 0x%x}\n",buf[0], buf[1]);
-	//	private_msleep(5);
+	// ISP_INFO("	{0x%x, 0x%x}\n",buf[0], buf[1]);
+	// private_msleep(5);
 	return ret;
 }
 
@@ -391,11 +391,11 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals, int len) {
 	int ret;
-	//	unsigned char val;
+	// unsigned char val;
 	while (len--) {
 		ret = sensor_write(sd, vals->reg_num, vals->value);
-		//		ret = sensor_read(sd, vals->reg_num, &val);
-		//		ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
+		// ret = sensor_read(sd, vals->reg_num, &val);
+		// ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		if (ret < 0)
 			return ret;
 		vals++;
@@ -510,13 +510,13 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_DVP;
 		memcpy((void *)(&(sensor_attr.dvp)), (void *)(&sensor_dvp), sizeof(sensor_dvp));
-		//		memcpy((void*)(&(sensor_attr.bt601bus)),(void*)(&sensor_bt601),sizeof(sensor_bt601));
-		sensor_max_fps = 5; //TX_SENSOR_MAX_FPS_25;
+		// memcpy((void*)(&(sensor_attr.bt601bus)),(void*)(&sensor_bt601),sizeof(sensor_bt601));
+		sensor_max_fps = 5; // TX_SENSOR_MAX_FPS_25;
 		ret = set_sensor_gpio_function(sensor_gpio_func);
 		if (ret < 0)
 			goto err_set_sensor_gpio;
 		sensor_attr.dvp.gpio = sensor_gpio_func;
-		//		sensor_attr.bt601bus.gpio = SENSOR_BT_8BIT,
+		// sensor_attr.bt601bus.gpio = SENSOR_BT_8BIT,
 		sensor_attr.max_integration_time_native = 1080;
 		sensor_attr.integration_time_limit = 1080;
 		sensor_attr.total_width = 1920;
@@ -573,7 +573,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	private_clk_prepare_enable(sensor->mclk);
 
 	reset_gpio = info->rst_gpio;
-	//	pwr_gpio = info->pwr_gpio;
+	// pwr_gpio = info->pwr_gpio;
 
 	sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
@@ -591,7 +591,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	int ret = ISP_SUCCESS;
 
 	sensor_attr_check(sd);
-//	private_jzgpio_set_func(GPIO_PORT_A, GPIO_OUTPUT1, 0x01000000);
+// private_jzgpio_set_func(GPIO_PORT_A, GPIO_OUTPUT1, 0x01000000);
 #if 1
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");

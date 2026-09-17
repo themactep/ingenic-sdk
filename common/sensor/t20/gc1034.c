@@ -405,11 +405,11 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x88, 0x23},
 	{0x89, 0x03},
 	{0x90, 0x01},
-	{0x92, 0x02}, //crop win 2<=y<=4
-	{0x94, 0x03}, //crop win 2<=x<=5
-	{0x95, 0x02}, //crop win height
+	{0x92, 0x02}, // crop win 2<=y<=4
+	{0x94, 0x03}, // crop win 2<=x<=5
+	{0x95, 0x02}, // crop win height
 	{0x96, 0xd0},
-	{0x97, 0x05}, //crop win width
+	{0x97, 0x05}, // crop win width
 	{0x98, 0x00},
 
 	/* BLK */
@@ -442,7 +442,7 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x0c, 0x3e},
 	{0x0d, 0x56},
 	{0xfe, 0x02},
-	{0xb0, 0x00}, //col_gain[11:8]
+	{0xb0, 0x00}, // col_gain[11:8]
 	{0xb1, 0x00},
 	{0xb2, 0x00},
 	{0xb3, 0x11},
@@ -450,9 +450,9 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0xb5, 0x54},
 	{0xb6, 0xb8},
 	{0xb7, 0x60},
-	{0xb9, 0x00}, //col_gain[12]
+	{0xb9, 0x00}, // col_gain[12]
 	{0xba, 0xc0},
-	{0xc0, 0x20}, //col_gain[7:0]
+	{0xc0, 0x20}, // col_gain[7:0]
 	{0xc1, 0x2d},
 	{0xc2, 0x40},
 	{0xc3, 0x5b},
@@ -740,7 +740,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short vb = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

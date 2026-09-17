@@ -511,7 +511,7 @@ static struct regval_list sensor_init_regs_2592_1944_15fps_mipi[] = {
 	{0x3303, 0x00},
 	{0x3414, 0x05},
 	{0x3416, 0x18},
-	{0x341c, 0xff}, //0xff},
+	{0x341c, 0xff}, // 0xff},
 	{0x341d, 0x01},
 	{0x3648, 0x01},
 	{0x364a, 0x04},
@@ -625,7 +625,7 @@ static struct regval_list sensor_init_regs_2592_1944_25fps_mipi[] = {
 	{0x302e, 0x38},
 	{0x302f, 0x0a},
 	{0x3030, 0x18},
-	{0x3031, 0x15}, //1518
+	{0x3031, 0x15}, // 1518
 	{0x3032, 0x00},
 	{0x3034, 0x26},
 	{0x3035, 0x02},
@@ -718,7 +718,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2592_1944_15fps_mipi,
-	}, //[0]
+	}, // [0]
 	/* 2592*1944 */
 	{
 		.width = 2592,
@@ -727,7 +727,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2592_1944_25fps_mipi,
-	} //[1]
+	} // [1]
 
 };
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
@@ -943,7 +943,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	wpclk = SENSOR_SUPPORT_SCLK;
@@ -1056,14 +1056,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		break;

@@ -148,7 +148,7 @@ struct tx_isp_mipi_bus sensor_mipi_3MP = {
 	.clk = 500,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -177,7 +177,7 @@ struct tx_isp_mipi_bus sensor_mipi_1296 = {
 	.clk = 632,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -206,7 +206,7 @@ struct tx_isp_mipi_bus sensor_mipi_2MP = {
 	.clk = 632,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -248,7 +248,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
-	//mclk=27mhz,frame rate=30fps
+	// mclk=27mhz,frame rate=30fps
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
@@ -268,7 +268,7 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
 	{0x0d05, 0x05},
 	{0x0d06, 0x40},
 	{0x0d76, 0x00},
-	{0x0d41, 0x05}, //vts = 0x53c = 1340
+	{0x0d41, 0x05}, // vts = 0x53c = 1340
 	{0x0d42, 0x3c}, //
 	{0x0d0a, 0x02},
 	{0x000c, 0x02},
@@ -425,7 +425,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0d05, 0x05},
 	{0x0d06, 0x40},
 	{0x0d76, 0x00},
-	{0x0d41, 0x05}, //vts = 0x53c = 1340
+	{0x0d41, 0x05}, // vts = 0x53c = 1340
 	{0x0d42, 0x3c},
 	{0x0d0a, 0x02},
 	{0x000c, 0x02},
@@ -676,7 +676,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x042c, 0x0b},
 	{0x042d, 0x0b},
 	{0x042e, 0x0b},
-	{0x042f, 0x0b}, //b_use
+	{0x042f, 0x0b}, // b_use
 	{0x0430, 0x05},
 	{0x0431, 0x05},
 	{0x0432, 0x05},
@@ -684,7 +684,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x0434, 0x04},
 	{0x0435, 0x04},
 	{0x0436, 0x04},
-	{0x0437, 0x04}, //a_use
+	{0x0437, 0x04}, // a_use
 	{0x0438, 0x18},
 	{0x0439, 0x18},
 	{0x043a, 0x18},
@@ -692,7 +692,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x043c, 0x1d},
 	{0x043d, 0x20},
 	{0x043e, 0x22},
-	{0x043f, 0x24}, //d_use
+	{0x043f, 0x24}, // d_use
 	{0x0468, 0x04},
 	{0x0469, 0x04},
 	{0x046a, 0x04},
@@ -700,7 +700,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x046c, 0x04},
 	{0x046d, 0x04},
 	{0x046e, 0x04},
-	{0x046f, 0x04}, //c_use
+	{0x046f, 0x04}, // c_use
 	{0x0108, 0xf0},
 	{0x0109, 0x80},
 	{0x0d03, 0x05},
@@ -867,10 +867,10 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
-	ret += sensor_write(sd, 0x0370, 0xc0); //[7]OTP clk gate  [6]OTP_en
+	ret += sensor_write(sd, 0x0370, 0xc0); // [7]OTP clk gate  [6]OTP_en
 	ret += sensor_write(sd, 0x0367, 0x2d); // OTP_access_addr[7:0]
-	ret += sensor_write(sd, 0x0368, 0x00); //[1:0] OTP_access_addr[9:8]
-	ret += sensor_write(sd, 0x0370, 0xc4); //[2]OTP read pulse
+	ret += sensor_write(sd, 0x0368, 0x00); // [1:0] OTP_access_addr[9:8]
+	ret += sensor_write(sd, 0x0370, 0xc4); // [2]OTP read pulse
 	ret += sensor_read(sd, 0x036a, &v);
 	v = v & 0x10;
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -982,7 +982,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_resolution) {
@@ -1054,8 +1054,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
-			//private_gpio_direction_output(reset_gpio, 1);
-			//private_msleep(10);
+			// private_gpio_direction_output(reset_gpio, 1);
+			// private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
@@ -1137,12 +1137,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
@@ -1355,8 +1355,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	//unsigned long rate = 0;
-	//int ret = -1;
+	// unsigned long rate = 0;
+	// int ret = -1;
 
 	switch (sensor_resolution) {
 	case TX_SENSOR_RES_200:

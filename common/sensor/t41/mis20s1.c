@@ -68,7 +68,7 @@
 #endif /* SENSOR_I2C_REG_16BIT */
 
 // define 30fps linear setting
-//end define
+// end define
 
 #ifdef SENSOR_WDR_2_FRAME
 #define SENSOR_WDR_MCLK 27000000
@@ -449,7 +449,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	.max_again = 596378, //327680,//393216,
+	.max_again = 596378, // 327680,//393216,
 	.max_dgain = 0,
 	.min_integration_time = 0,
 	.min_integration_time_native = 0,
@@ -466,7 +466,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 #ifdef SENSOR_WDR_2_FRAME
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
-	.max_again_short = 596378, //327680,//393216,
+	.max_again_short = 596378, // 327680,//393216,
 	.max_dgain_short = 0,
 #endif /* SENSOR_WDR_2_FRAME */
 };
@@ -587,7 +587,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x390b, 0x1f},
 	{0x3a05, 0xfd},
 	{0x3a06, 0x52},
-	{0x3a08, 0x37}, //0x3f->0x37 修改电压优化黑点
+	{0x3a08, 0x37}, // 0x3f->0x37 修改电压优化黑点
 	{0x3a1b, 0x7f},
 	{0x3a1c, 0x3f},
 	{0x3a1d, 0x0f},
@@ -625,25 +625,25 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3006, 0x00},
 
 	{SENSOR_REG_DELAY, 0x01},
-	{0x300c, 0x01}, //拉高IMG_EN
+	{0x300c, 0x01}, // 拉高IMG_EN
 
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_dol2_mipi[] = {
-	//NO7_PIS2308_1920x1080_VTS1250_HTS2200_VCO1980_PCLK165_BITCLK990_ACLK396_2LANE_raw12_dol2_20250114_AD10_RAW12
-	//Sensir revision:Mis20S1
-	//Input clock frequency:27M
-	//Image output size:1920x1080
-	//Frame timing and frame rate: DOL2 30Fps
-	//System clock frequency:165M
-	//Output interface and data rate:MIPI 2Lane raw12 990Mbps
-	//HTS = 310e/310f =0x898
-	//VTS = 3110/3111 =0x4e2
-	//Tline = 26.6us
+	// NO7_PIS2308_1920x1080_VTS1250_HTS2200_VCO1980_PCLK165_BITCLK990_ACLK396_2LANE_raw12_dol2_20250114_AD10_RAW12
+	// Sensir revision:Mis20S1
+	// Input clock frequency:27M
+	// Image output size:1920x1080
+	// Frame timing and frame rate: DOL2 30Fps
+	// System clock frequency:165M
+	// Output interface and data rate:MIPI 2Lane raw12 990Mbps
+	// HTS = 310e/310f =0x898
+	// VTS = 3110/3111 =0x4e2
+	// Tline = 26.6us
 
 	{0x3006, 0x01},
-	{SENSOR_REG_DELAY, 0x01}, //delay 1ms
+	{SENSOR_REG_DELAY, 0x01}, // delay 1ms
 	{0x3006, 0x02},
 	{0x310f, 0xe2},
 	{0x3113, 0x04},
@@ -836,8 +836,8 @@ static struct regval_list sensor_init_regs_1920_1080_dol2_mipi[] = {
 	{0x3a1c, 0x00},
 	{0x3a1d, 0x7f},
 	{0x3a1e, 0xdf},
-	//0x3a0e, 0x06  //
-	{0x311c, 0x01}, //RD1_ST_PNT, when wdr, expo1 < RD1_ST_PNT-2 , wg lpf
+	// 0x3a0e, 0x06  //
+	{0x311c, 0x01}, // RD1_ST_PNT, when wdr, expo1 < RD1_ST_PNT-2 , wg lpf
 	{0x311d, 0x95},
 
 	{0x3031, 0x0c},
@@ -847,14 +847,14 @@ static struct regval_list sensor_init_regs_1920_1080_dol2_mipi[] = {
 	{0x3031, 0x0c},
 	{0x3c1a, 0x01},
 	{0x3006, 0x00},
-	{SENSOR_REG_DELAY, 0x01}, //delay 1ms
+	{SENSOR_REG_DELAY, 0x01}, // delay 1ms
 	{0x300c, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3006, 0x01},
-	{SENSOR_REG_DELAY, 0x01}, //delay 1ms
+	{SENSOR_REG_DELAY, 0x01}, // delay 1ms
 	{0x3006, 0x02},
 	{0x310f, 0xe2},
 	{0x3113, 0x04},
@@ -1047,14 +1047,14 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3a1c, 0x00},
 	{0x3a1d, 0x7f},
 	{0x3a1e, 0xdf},
-	//0x3a0e, 0x06  //90C高温满井不饱和 20250114 hql    需评估影响是否使用逻辑控制
+	// 0x3a0e, 0x06  //90C高温满井不饱和 20250114 hql    需评估影响是否使用逻辑控制
 	{0x3031, 0x0c},
 
 	{0x3008, 0x01},
 	{0x3031, 0x0c},
 	{0x3c1a, 0x01},
 	{0x3006, 0x00},
-	{SENSOR_REG_DELAY, 0x01}, //delay 1ms
+	{SENSOR_REG_DELAY, 0x01}, // delay 1ms
 	{0x300c, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
@@ -1588,10 +1588,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			//ret = sensor_write_array(sd, wsize->regs);
-			//if (ret)
-			//        return ret;
-			//sensor->video.state = TX_ISP_MODULE_INIT;
+			// ret = sensor_write_array(sd, wsize->regs);
+			// if (ret)
+			// return ret;
+			// sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on);
@@ -1631,7 +1631,7 @@ static int mis20s1_temp_status(struct tx_isp_subdev *sd, int *again) {
 			ret += sensor_write(sd, 0x410f, 0x3a);
 		}
 
-		if (temperature > 0xa38) { //65 start DPC en
+		if (temperature > 0xa38) { // 65 start DPC en
 			if (*again < 0x380) {
 				ret += sensor_write(sd, 0x4402, 0x00);
 				ret += sensor_write(sd, 0x3008, 0x01);
@@ -1678,7 +1678,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #else
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	//unsigned int exp = value & 0xffff;
+	// unsigned int exp = value & 0xffff;
 
 	ret += sensor_write(sd, 0x3100, (unsigned char)((value >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(value & 0xff));
@@ -1689,17 +1689,17 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	//unsigned int temperature = 0;
-	//unsigned int temp = 0;
+	// unsigned int temperature = 0;
+	// unsigned int temp = 0;
 
 	ret += sensor_write(sd, 0x3106, (unsigned char)((value >> 8) & 0x03));
 	ret += sensor_write(sd, 0x3107, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3008, 0x01);
 
-	//ret += sensor_read(sd, 0x3504, &tmp);
-	//temperature = tmp;
-	//ret += sensor_read(sd, 0x3505, &tmp);
-	//temperature = (temperature << 8) | tmp;
+	// ret += sensor_read(sd, 0x3504, &tmp);
+	// temperature = tmp;
+	// ret += sensor_read(sd, 0x3505, &tmp);
+	// temperature = (temperature << 8) | tmp;
 
 	return ret;
 }
@@ -1730,7 +1730,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 	switch (info->default_boot) {
@@ -1775,7 +1775,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x310e, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x3008, 0x01);
 
-	//  \*((u32 *)0xb3380000) = 0x05;
+	// \*((u32 *)0xb3380000) = 0x05;
 
 	if (0 != ret) {
 		ISP_ERROR("err: sensor_write err\n");
@@ -1861,8 +1861,8 @@ static int mis20s1_set_expo_short(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3102, (unsigned char)((short_exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3103, (unsigned char)(short_exp & 0xff));
 
-	//ret += sensor_write(sd, 0x3108, (unsigned char)((again >> 8) & 0x03));
-	//ret += sensor_write(sd, 0x3109, (unsigned char)(again & 0xff));
+	// ret += sensor_write(sd, 0x3108, (unsigned char)((again >> 8) & 0x03));
+	// ret += sensor_write(sd, 0x3109, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3008, 0x01);
 
 	return ret;
@@ -1882,7 +1882,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 #endif /* SENSOR_EXPO */
 
 static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
-	//struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
+	// struct tx_isp_sensor *sensor = tx_isp_get_subdev_hostdata(sd);
 	int ret = ISP_SUCCESS;
 
 	ret = sensor_write_array(sd, sensor_stream_off);

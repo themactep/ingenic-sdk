@@ -58,7 +58,7 @@
 #endif /* SENSOR_I2C_REG_16BIT */
 
 // define 30fps setting
-//end define
+// end define
 
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -450,16 +450,16 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
-	//NO18_PIS2103_30fps_Pclk144_Aclk288_MIPI740_FW3200FH1500_2Lane_RAW10_SLP_PAC_ManualMipi_20240506.ini
-	//Sensor revision:Mis40c1
-	//Input clock frequency:24M
-	//Image output size:2560x1440
-	//Frame timing and frame rate:Linear 30Fps
-	//System clock frequency:144M
-	//Output interface and data rate:MIPI 2Lane RAW10 720Mbps
-	//HTS = 3107/3108 =0xc80
-	//VTS = 3105/3106 =0x5dc
-	//Tline = 22.2222us
+	// NO18_PIS2103_30fps_Pclk144_Aclk288_MIPI740_FW3200FH1500_2Lane_RAW10_SLP_PAC_ManualMipi_20240506.ini
+	// Sensor revision:Mis40c1
+	// Input clock frequency:24M
+	// Image output size:2560x1440
+	// Frame timing and frame rate:Linear 30Fps
+	// System clock frequency:144M
+	// Output interface and data rate:MIPI 2Lane RAW10 720Mbps
+	// HTS = 3107/3108 =0xc80
+	// VTS = 3105/3106 =0x5dc
+	// Tline = 22.2222us
 
 	{0x302d, 0x01},
 	{SENSOR_REG_DELAY, 0x50},
@@ -1207,10 +1207,10 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			//ret = sensor_write_array(sd, wsize->regs);
-			//if (ret)
-			//        return ret;
-			//sensor->video.state = TX_ISP_MODULE_INIT;
+			// ret = sensor_write_array(sd, wsize->regs);
+			// if (ret)
+			// return ret;
+			// sensor->video.state = TX_ISP_MODULE_INIT;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, sensor_stream_on);
@@ -1280,7 +1280,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 	switch (info->default_boot) {
@@ -1312,12 +1312,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 
-	//ret = sensor_write(sd, 0x3006, 0x02); 20c1 40c1 not need
-	//private_msleep(50);
+	// ret = sensor_write(sd, 0x3006, 0x02); 20c1 40c1 not need
+	// private_msleep(50);
 	ret += sensor_write(sd, 0x3106, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x3105, (unsigned char)(vts >> 8));
 	ret += sensor_write(sd, 0x300c, 0x01);
-	//ret += sensor_write(sd, 0x3006, 0x00);
+	// ret += sensor_write(sd, 0x3006, 0x00);
 	*((u32 *)0xb3380000) = 0x05;
 
 	if (0 != ret) {
@@ -1525,7 +1525,7 @@ static int sensor_remove(struct i2c_client *client) {
 		private_gpio_free(info->pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
-	//private_clk_put(sensor->mclk);
+	// private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

@@ -526,9 +526,9 @@ static struct regval_list sensor_init_regs_2880_1620_25fps_mipi[] = {
 	{0x3019, 0x0c},
 	{0x301f, 0xe3},
 	{0x320c, 0x06}, //
-	{0x320d, 0x14}, //0x614 = 1556
+	{0x320d, 0x14}, // 0x614 = 1556
 	{0x320e, 0x07}, //
-	{0x320f, 0xf4}, //0x7f4 = 2036
+	{0x320f, 0xf4}, // 0x7f4 = 2036
 	{0x3253, 0x0a},
 	{0x3301, 0x0a},
 	{0x3302, 0x18},
@@ -647,9 +647,9 @@ static struct regval_list sensor_init_regs_2880_1620_20fps_mipi_dol[] = {
 	{0x3019, 0x0c},
 	{0x301f, 0x0a},
 	{0x3106, 0x01},
-	{0x320c, 0x09}, //hts 0x960 = 2400
+	{0x320c, 0x09}, // hts 0x960 = 2400
 	{0x320d, 0x60}, //
-	{0x320e, 0x0d}, //vts 0xd30 = 3376
+	{0x320e, 0x0d}, // vts 0xd30 = 3376
 	{0x320f, 0x30}, //
 	{0x3220, 0x53},
 	{0x3250, 0xff},
@@ -736,7 +736,7 @@ static struct regval_list sensor_init_regs_2880_1620_20fps_mipi_dol[] = {
 	{0x3e02, 0x00},
 	{0x3e04, 0x18},
 	{0x3e05, 0xc0},
-	{0x3e23, 0x00}, //RHS 0xcc = 204
+	{0x3e23, 0x00}, // RHS 0xcc = 204
 	{0x3e24, 0xcc}, //
 	{0x4500, 0x88},
 	{0x4509, 0x20},
@@ -1260,7 +1260,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int short_time = 0;
 	unsigned int sensor_max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned char val = 0;
 
@@ -1550,7 +1550,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x0103, 0x01);
+	// ret = sensor_write(sd, 0x0103, 0x01);
 
 	if (wdr_en == 1) {
 		info->default_boot = 1;
@@ -1592,7 +1592,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
-	//	ISP_INFO("\n==========> set_wdr\n");
+	// ISP_INFO("\n==========> set_wdr\n");
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
@@ -1623,12 +1623,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -87,7 +87,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//cnt_gain = 80 cnt_reg = 80
+	// cnt_gain = 80 cnt_reg = 80
 	{0x00, 0},
 	{0x01, 5731},
 	{0x02, 11136},
@@ -888,7 +888,7 @@ static int sensor_setting_select(struct tx_isp_subdev *sd, int deboot) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.max_again = 324673;
 		sensor_attr.min_integration_time = 2;
-		sensor_attr.max_integration_time = 4500 - 70 - 4; //FH {Reg23, Reg22} – Reg06 *2 - 4
+		sensor_attr.max_integration_time = 4500 - 70 - 4; // FH {Reg23, Reg22} – Reg06 *2 - 4
 		sensor_attr.total_width = 2560;
 		sensor_attr.total_height = 4500;
 		sensor_attr.integration_time_apply_delay = 2;
@@ -901,7 +901,7 @@ static int sensor_setting_select(struct tx_isp_subdev *sd, int deboot) {
 #ifdef SENSOR_WDR_2_FRAME
 		sensor_attr.max_again_short = 324673;
 		sensor_attr.min_integration_time_short = 1;
-		sensor_attr.max_integration_time_short = 70 - 4; //reg06 * 2 – 4
+		sensor_attr.max_integration_time_short = 70 - 4; // reg06 * 2 – 4
 		sensor_attr.wdr_cache = wdr_line * sensor_attr.total_width;
 #endif /* SENSOR_WDR_2_FRAME */
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_attr.mipi));
@@ -1136,7 +1136,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	// set sensor again
-	ret = sensor_write(sd, 0x00, (unsigned char)(again & 0xff)); //(again & 0x7f));
+	ret = sensor_write(sd, 0x00, (unsigned char)(again & 0xff)); // (again & 0x7f));
 
 	// set integration_time
 	ret += sensor_write(sd, 0x01, (unsigned char)(it & 0xff));
@@ -1196,7 +1196,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 

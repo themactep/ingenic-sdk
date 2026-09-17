@@ -1761,7 +1761,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_2[] = {
 	{0x598f, 0x68},
 	{0x36e9, 0x2a},
 	{0x36f9, 0x2b},
-	//	{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -2158,14 +2158,14 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	//	unsigned char val;
+	// unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//ret = sensor_read(sd, vals->reg_num, &val);
-			//ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
+			// ret = sensor_read(sd, vals->reg_num, &val);
+			// ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -2352,7 +2352,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -2496,8 +2496,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.max_integration_time_native = 0x4e2 - 4;
 		sensor_attr.integration_time_limit = 0x4e2 - 4;
-		sensor_attr.total_width = 0x460 * 2; //992
-		sensor_attr.total_height = 0x4e2;    //518
+		sensor_attr.total_width = 0x460 * 2; // 992
+		sensor_attr.total_height = 0x4e2;    // 518
 		sensor_attr.max_integration_time = 0x4e2 - 4;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x08c0;
@@ -2508,8 +2508,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.max_integration_time_native = 2245;
 		sensor_attr.integration_time_limit = 2245;
-		sensor_attr.total_width = 2080 * 2; //4160
-		sensor_attr.total_height = 2250;    //2250
+		sensor_attr.total_width = 2080 * 2; // 4160
+		sensor_attr.total_height = 2250;    // 2250
 		sensor_attr.max_integration_time = 2245;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x118a;
@@ -2521,8 +2521,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.max_integration_time_native = 2245;
 		sensor_attr.integration_time_limit = 2245;
-		sensor_attr.total_width = 2080 * 2; //4160
-		sensor_attr.total_height = 2250;    //2250
+		sensor_attr.total_width = 2080 * 2; // 4160
+		sensor_attr.total_height = 2250;    // 2250
 		sensor_attr.max_integration_time = 2245;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x118a;
@@ -2665,7 +2665,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
-	//	return 0;
+	// return 0;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
@@ -2677,12 +2677,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

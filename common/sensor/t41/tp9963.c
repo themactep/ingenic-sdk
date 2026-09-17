@@ -272,12 +272,12 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	return 0;
 }
 
-//static int vic_num = 0;
+// static int vic_num = 0;
 static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 #if 0
 	if (vic_num < 1) {
-//		if (vic_num % 2 == 0)
+// if (vic_num % 2 == 0)
 			*((u32 *)0xb3380000) = 0x05;
 		vic_num++;
 	}
@@ -325,17 +325,17 @@ enum {
 };
 
 enum {
-	STD_TVI, //TVI
-	STD_HDA, //AHD
+	STD_TVI, // TVI
+	STD_HDA, // AHD
 };
 
 enum {
 	FHD25,
-	FHD30, //1920x1080
+	FHD30, // 1920x1080
 };
 
 enum {
-	MIPI_2CH2LANE_594M, //up to 2x1080p25/30
+	MIPI_2CH2LANE_594M, // up to 2x1080p25/30
 	MIPI_1CH2LANE_594M,
 };
 
@@ -345,8 +345,8 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 	const unsigned char MASK42_43[] = {0xfe, 0xfd, 0xff, 0xff, 0xfc};
 
 	sensor_write(sd, 0x40, ch);
-	sensor_write(sd, 0x06, 0x12); //default value
-	sensor_write(sd, 0x50, 0x00); //VIN1/3
+	sensor_write(sd, 0x06, 0x12); // default value
+	sensor_write(sd, 0x50, 0x00); // VIN1/3
 	sensor_write(sd, 0x51, 0x00); //
 	sensor_write(sd, 0x54, 0x03);
 
@@ -372,7 +372,7 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 		sensor_write(sd, 0x19, 0x38);
 		sensor_write(sd, 0x1a, 0x47);
 
-		sensor_write(sd, 0x1c, 0x0a); //1920*1080, 25fps
+		sensor_write(sd, 0x1c, 0x0a); // 1920*1080, 25fps
 		sensor_write(sd, 0x1d, 0x50); //
 
 		sensor_write(sd, 0x20, 0x30);
@@ -438,7 +438,7 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 		sensor_write(sd, 0x18, 0x29);
 		sensor_write(sd, 0x19, 0x38);
 		sensor_write(sd, 0x1a, 0x47);
-		sensor_write(sd, 0x1c, 0x08); //1920*1080, 30fps
+		sensor_write(sd, 0x1c, 0x08); // 1920*1080, 30fps
 		sensor_write(sd, 0x1d, 0x98); //
 
 		sensor_write(sd, 0x20, 0x30);
@@ -487,8 +487,8 @@ void sensor_decoder_init(struct tx_isp_subdev *sd, unsigned char ch, unsigned ch
 }
 
 void sensor_mipi_out(struct tx_isp_subdev *sd, unsigned char output) {
-	//mipi setting
-	sensor_write(sd, 0x40, SENSOR_PAGE); //MIPI page
+	// mipi setting
+	sensor_write(sd, 0x40, SENSOR_PAGE); // MIPI page
 	sensor_write(sd, 0x02, 0x78);
 	sensor_write(sd, 0x03, 0x70);
 	sensor_write(sd, 0x04, 0x70);
@@ -544,7 +544,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
-			//N_setting
+			// N_setting
 			sensor_decoder_init(sd, CH_ALL, FHD30, STD_HDA);
 			sensor_mipi_out(sd, MIPI_2CH2LANE_594M);
 

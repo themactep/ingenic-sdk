@@ -670,7 +670,7 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 	{0x598f, 0x68},
 	{0x36e9, 0x2a},
 	{0x36f9, 0x2b},
-	//	{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -954,7 +954,7 @@ static struct regval_list sensor_init_regs_3840_2160_20fps_mipi[] = {
 	{0x3037, 0x20},
 	{0x3038, 0x44},
 	{0x320c, 0x08}, //
-	{0x320d, 0x55}, //hts = 2133
+	{0x320d, 0x55}, // hts = 2133
 	{0x3241, 0x00},
 	{0x3243, 0x03},
 	{0x3248, 0x04},
@@ -1176,7 +1176,7 @@ static struct regval_list sensor_init_regs_3840_2160_20fps_mipi[] = {
 	{0x3e01, 0x18}, //
 	{0x3e02, 0xa0}, //
 	{0x3e08, 0x03}, //
-	{0x3e09, 0x40}, //0x340
+	{0x3e09, 0x40}, // 0x340
 	{0x3e0e, 0x09},
 	{0x3e14, 0x31},
 	{0x3e16, 0x00},
@@ -1771,7 +1771,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1883,8 +1883,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
 		sensor_attr.max_integration_time_native = 2250 * 2 - 10;
 		sensor_attr.integration_time_limit = 2250 * 2 - 10;
-		sensor_attr.total_width = 4400;	 //4460
-		sensor_attr.total_height = 2250; //2250
+		sensor_attr.total_width = 4400;	 // 4460
+		sensor_attr.total_height = 2250; // 2250
 		sensor_attr.max_integration_time = 2250 * 2 - 10;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x118a;
@@ -1897,8 +1897,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 		sensor_attr.max_integration_time_native = 2250 * 2 - 10;
 		sensor_attr.integration_time_limit = 2250 * 2 - 10;
-		sensor_attr.total_width = 4200;	 //4200
-		sensor_attr.total_height = 2250; //2250
+		sensor_attr.total_width = 4200;	 // 4200
+		sensor_attr.total_height = 2250; // 2250
 		sensor_attr.max_integration_time = 2250 * 2 - 10;
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x118a;
@@ -1911,8 +1911,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
 		sensor_attr.max_integration_time_native = 2250 * 2 - 10;
 		sensor_attr.integration_time_limit = 2250 * 2 - 10;
-		sensor_attr.total_width = 4266;	 //4200
-		sensor_attr.total_height = 2250; //2250
+		sensor_attr.total_width = 4266;	 // 4200
+		sensor_attr.total_height = 2250; // 2250
 		sensor_attr.max_integration_time = 2250 * 2 - 10;
 		sensor_attr.again = 0x340;
 		sensor_attr.integration_time = 0x118a;
@@ -2082,12 +2082,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

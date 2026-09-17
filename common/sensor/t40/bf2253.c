@@ -177,21 +177,21 @@ static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
 	{0x01, 0x14},
 	{0x03, 0x98},
 
-	{0x26, 0x06}, //add panhl    行长调节  def 1780
-	{0x25, 0xf4}, //add panhl
+	{0x26, 0x06}, // add panhl    行长调节  def 1780
+	{0x25, 0xf4}, // add panhl
 	{0x27, 0x21},
 	{0x29, 0x20},
 	{0x59, 0x10},
 	{0x5a, 0x10},
 	{0x5c, 0x11},
 	{0x5d, 0x73},
-	{0x6a, 0x2f}, //0x0f - 0x4f   增益
-	//{0x6a, 0x3f}, //0x0f - 0x4f   增益
+	{0x6a, 0x2f}, // 0x0f - 0x4f   增益
+	// {0x6a, 0x3f}, //0x0f - 0x4f   增益
 
-	{0x6b, 0x0e}, //H  //曝光时间     def 02h
-	{0x6c, 0x7e}, //L                 def afh
+	{0x6b, 0x0e}, // H  //曝光时间     def 02h
+	{0x6c, 0x7e}, // L                 def afh
 
-	//{0xd0, 0x01},//add panhl 丢帧设置
+	// {0xd0, 0x01},//add panhl 丢帧设置
 
 	{0x6f, 0x10},
 	{0x70, 0x08},
@@ -204,17 +204,17 @@ static struct regval_list sensor_init_regs_2304_1296_25fps_mipi[] = {
 	{0x77, 0x03},
 	{0x78, 0x0e},
 	{0x79, 0x08},
-	//{0x7a, 0x2a},//add panhl  RAW8
-	//{0x7e, 0x00},//add panhl  bit[4]=0 raw8 enable
-	{0xe7, 0x09}, //sync two 2253
+	// {0x7a, 0x2a},//add panhl  RAW8
+	// {0x7e, 0x00},//add panhl  bit[4]=0 raw8 enable
+	{0xe7, 0x09}, // sync two 2253
 	{0xe0, 0x00},
 
-	//{0x07, 0xdc},
-	//{0x08, 0x0a},
+	// {0x07, 0xdc},
+	// {0x08, 0x0a},
 
 	// {0xea, 0xff},
 	// {0x7d, 0x0e},
-	//{0xe7, 0x09}, //sync two 2253
+	// {0xe7, 0x09}, //sync two 2253
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -288,10 +288,10 @@ int sensor_write(struct tx_isp_subdev *sd, uint8_t reg, unsigned char value) {
 	/* return ret; */
 	int ret = 0;
 
-	//ISP_INFO("bf2253-x2-%s:%d-  \n", __func__, __LINE__);
+	// ISP_INFO("bf2253-x2-%s:%d-  \n", __func__, __LINE__);
 
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//ISP_INFO("bf2253--%s:%d-  client->addr =0x%x \n", __func__, __LINE__,client->addr );
+	// ISP_INFO("bf2253--%s:%d-  client->addr =0x%x \n", __func__, __LINE__,client->addr );
 	unsigned char buf[2] = {reg, value};
 	struct i2c_msg msg = {
 		.addr = client->addr,
@@ -299,7 +299,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint8_t reg, unsigned char value) {
 		.len = 2,
 		.buf = buf,
 	};
-	//int ret;
+	// int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
@@ -376,7 +376,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	int Rvalue = 0;
-	//ISP_INFO("bf2253--%s:%d-  value=%d  (30 ,2048 )\n", __func__, __LINE__ ,expo);
+	// ISP_INFO("bf2253--%s:%d-  value=%d  (30 ,2048 )\n", __func__, __LINE__ ,expo);
 	if (expo < 30) {
 		Rvalue = 30;
 	} else if (expo > 2048) {
@@ -385,7 +385,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		Rvalue = expo;
 	}
 
-	//ISP_INFO("bf2253--%s:%d- Not_implemented  value =%d \n", __func__, __LINE__ , expo);
+	// ISP_INFO("bf2253--%s:%d- Not_implemented  value =%d \n", __func__, __LINE__ , expo);
 	ret += sensor_write(sd, 0x6c, expo & 0xff);
 	ret += sensor_write(sd, 0x6b, (expo & 0x3f00) >> 8);
 	if (ret < 0) {
@@ -509,7 +509,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp = 0;
 	int ret = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -728,14 +728,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_INT_TIME %d\n\n", __LINE__);
-		//if (arg)
-		//    ret = sensor_set_integration_time(sd, sensor_val->value);
+		// ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_INT_TIME %d\n\n", __LINE__);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_AGAIN %d\n\n", __LINE__);
-		//if (arg)
-		//    ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// ISP_INFO("\n\n into TX_ISP_EVENT_SENSOR_AGAIN %d\n\n", __LINE__);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

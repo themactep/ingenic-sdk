@@ -314,7 +314,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.lans = 2,
 	.index = 0,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -367,9 +367,9 @@ static struct regval_list sensor_init_regs_3840_2160_25fps_mipi[] = {
 	{0x3019, 0x0c},
 	{0x301f, 0x07},
 	{0x30b8, 0x44},
-	{0x320c, 0x08}, //hts = 0x834 = 2100
+	{0x320c, 0x08}, // hts = 0x834 = 2100
 	{0x320d, 0x34}, //
-	{0x320e, 0x09}, //vts = 0x960 = 2400
+	{0x320e, 0x09}, // vts = 0x960 = 2400
 	{0x320f, 0x60}, //
 	{0x3221, 0x60},
 	{0x3301, 0x0a},
@@ -529,8 +529,8 @@ static struct regval_list sensor_init_regs_3840_2160_25fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
-	//Cleaned_0x3c_SC835HAI_MIPI_24Minput_2lane_10bit_360Mbps_1920x1080_25fps_hsum_vbin
-	//VTS=1350.000000,HTS=2133.333333,SCLK=70.875000,PCLK=72.000000,MipiCLK=360.000000,Tline=29.629630us,TExp_step=0.5*Tline=14.814815us,TExp_offset=4.684303us
+	// Cleaned_0x3c_SC835HAI_MIPI_24Minput_2lane_10bit_360Mbps_1920x1080_25fps_hsum_vbin
+	// VTS=1350.000000,HTS=2133.333333,SCLK=70.875000,PCLK=72.000000,MipiCLK=360.000000,Tline=29.629630us,TExp_step=0.5*Tline=14.814815us,TExp_offset=4.684303us
 	{0x0103, 0x01},
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
@@ -542,9 +542,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x08}, //hts = 0x834 = 2100
+	{0x320c, 0x08}, // hts = 0x834 = 2100
 	{0x320d, 0x34}, //
-	{0x320e, 0x05}, //vts = 0x546 = 1350
+	{0x320e, 0x05}, // vts = 0x546 = 1350
 	{0x320f, 0x46}, //
 	{0x3211, 0x02},
 	{0x3213, 0x02},
@@ -709,8 +709,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_2160_25fps_mipi[] = {
-	//Cleaned_0x46_SC835HAI_MIPI_24Minput_2lane_10bit_720Mbps_1920x2160_25fps_hsum
-	//VTS=2700.000000,HTS=2133.333333,SCLK=141.750000,PCLK=144.000000,MipiCLK=720.000000,Tline=14.814815us,TExp_step=0.5*Tline=7.407407us,TExp_offset=2.342152us
+	// Cleaned_0x46_SC835HAI_MIPI_24Minput_2lane_10bit_720Mbps_1920x2160_25fps_hsum
+	// VTS=2700.000000,HTS=2133.333333,SCLK=141.750000,PCLK=144.000000,MipiCLK=720.000000,Tline=14.814815us,TExp_step=0.5*Tline=7.407407us,TExp_offset=2.342152us
 	{0x0103, 0x01},
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
@@ -720,9 +720,9 @@ static struct regval_list sensor_init_regs_1920_2160_25fps_mipi[] = {
 	{0x30b8, 0x44},
 	{0x3208, 0x07},
 	{0x3209, 0x80},
-	{0x320c, 0x08}, //hts = 0x834 = 2100
+	{0x320c, 0x08}, // hts = 0x834 = 2100
 	{0x320d, 0x34}, //
-	{0x320e, 0x0a}, //vts = 0xa8c = 2700
+	{0x320e, 0x0a}, // vts = 0xa8c = 2700
 	{0x320f, 0x8c}, //
 	{0x3211, 0x02},
 	{0x3301, 0x0a},
@@ -884,8 +884,8 @@ static struct regval_list sensor_init_regs_1920_2160_25fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
-	//Cleaned_0x4f_SC835HAI_MIPI_24Minput_2lane_10bit_1350Mbps_3840x2160_30fps
-	//VTS=2250.000000,HTS=4000.000000,SCLK=141.750000,PCLK=270.000000,MipiCLK=1350.000000,Tline=14.814815us,TExp_step=0.5*Tline=7.407407us,TExp_offset=2.313933us
+	// Cleaned_0x4f_SC835HAI_MIPI_24Minput_2lane_10bit_1350Mbps_3840x2160_30fps
+	// VTS=2250.000000,HTS=4000.000000,SCLK=141.750000,PCLK=270.000000,MipiCLK=1350.000000,Tline=14.814815us,TExp_step=0.5*Tline=7.407407us,TExp_offset=2.313933us
 	{0x0103, 0x01},
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
@@ -893,9 +893,9 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x3019, 0x0c},
 	{0x301f, 0x4f},
 	{0x30b8, 0x44},
-	{0x320c, 0x08}, //hts=0x834=2100
+	{0x320c, 0x08}, // hts=0x834=2100
 	{0x320d, 0x34}, //
-	{0x320e, 0x08}, //vts=0x8ca=2250
+	{0x320e, 0x08}, // vts=0x8ca=2250
 	{0x320f, 0xca}, //
 	{0x3301, 0x0e},
 	{0x3302, 0x18},
@@ -1322,7 +1322,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned char val;
 
@@ -1558,7 +1558,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
-	//sensor->video.mbus.code = wsize->mbus_code;
+	// sensor->video.mbus.code = wsize->mbus_code;
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;

@@ -598,7 +598,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		tmp2 = 0x24;
 	}
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
-	//complement the steak
+	// complement the steak
 	if (value <= 0x40) {
 		tmp99 = (unsigned char)(val_99 & 0x0f);
 		tmp9b = (unsigned char)(val_9b & 0x0f);
@@ -680,7 +680,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_25:
@@ -723,7 +723,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	if (ret < 0)
 		return -1;
 
-	val |= (1 << 7); //set bit[7], register group write function, auto clean
+	val |= (1 << 7); // set bit[7], register group write function, auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 	if (0 != ret) {
@@ -949,8 +949,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
-	//	*(volatile unsigned int*)(0xb0010100) = 0x01;
-	//	*(volatile unsigned int*)(0xb0010134) = 0xc0000000;
+	// *(volatile unsigned int*)(0xb0010100) = 0x01;
+	// *(volatile unsigned int*)(0xb0010134) = 0xc0000000;
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
 		ISP_INFO("Cannot get sensor input clock cgu_cim\n");

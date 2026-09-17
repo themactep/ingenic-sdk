@@ -38,7 +38,7 @@
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 /*buf size = ((short exp start point / 2) * image wide pixel * 16bit / 2) byte */
-static int wdr_bufsize = 2048 * 400; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2048 * 400; // cache lines corrponding on VPB1
 static int shvflip = 1;
 
 static struct sensor_info sensor_info = {
@@ -771,12 +771,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[1];
 
 static struct regval_list sensor_stream_on[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1028,7 +1028,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp = 0;
 	unsigned int se_start_point = 200;
 	unsigned int min_fps = SENSOR_OUTPUT_MIN_FPS;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if (sensor_attr.data_type == TX_SENSOR_DATA_TYPE_LINEAR) {

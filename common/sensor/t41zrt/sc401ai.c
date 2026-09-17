@@ -513,9 +513,9 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x05},
 	{0x320b, 0xa0},
-	{0x320c, 0x05}, //hts -> 0x5dc = 1500
+	{0x320c, 0x05}, // hts -> 0x5dc = 1500
 	{0x320d, 0xdc}, //
-	{0x320e, 0x0a}, //vts -> 0xa50 = 2640
+	{0x320e, 0x0a}, // vts -> 0xa50 = 2640
 	{0x320f, 0x50}, //
 	{0x3214, 0x11},
 	{0x3215, 0x11},
@@ -705,11 +705,11 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x3908, 0x41},
 	{0x396c, 0x0e},
 	{0x3e00, 0x00}, //
-	{0x3e01, 0xb6}, //0xb60
+	{0x3e01, 0xb6}, // 0xb60
 	{0x3e02, 0x00}, //
 	{0x3e03, 0x0b},
 	{0x3e08, 0x03}, //
-	{0x3e09, 0x40}, //0x340
+	{0x3e09, 0x40}, // 0x340
 	{0x3e1b, 0x2a},
 	{0x4509, 0x30},
 	{0x4819, 0x06},
@@ -744,9 +744,9 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_27M_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x05},
 	{0x320b, 0xa0},
-	{0x320c, 0x05}, //hts 0x5dc = 1500
+	{0x320c, 0x05}, // hts 0x5dc = 1500
 	{0x320d, 0xdc}, //
-	{0x320e, 0x0a}, //vts 0xa50 = 2640
+	{0x320e, 0x0a}, // vts 0xa50 = 2640
 	{0x320f, 0x50}, //
 	{0x3214, 0x11},
 	{0x3215, 0x11},
@@ -948,15 +948,15 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	//	unsigned char val;
+	// unsigned char val;
 
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//			ret = sensor_read(sd, vals->reg_num, &val);
-			//			ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
+			// ret = sensor_read(sd, vals->reg_num, &val);
+			// ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 			if (ret < 0)
 				return ret;
 		}
@@ -1123,7 +1123,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 #ifndef SENSOR_WITHOUT_INIT
-			//When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
+			// When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
@@ -1150,7 +1150,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		ret = sensor_write_array(sd, sensor_stream_off_mipi);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 #ifdef SENSOR_POWER_OFF
-		//Prepare for the next sleep.
+		// Prepare for the next sleep.
 		sensor->video.state = TX_ISP_MODULE_INIT;
 #endif
 	}
@@ -1165,7 +1165,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1460,12 +1460,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -381,7 +381,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_24Mmipi[] = {
 	{0x146a, 0xbc},
 	{0x0707, 0x07},
 	{0x0737, 0x0f},
-	{0x061a, 0x02}, //buffer
+	{0x061a, 0x02}, // buffer
 	{0x1430, 0x80},
 	{0x1407, 0x10},
 	{0x1408, 0x16},
@@ -703,7 +703,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
 	unsigned char sensor_min_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1085,7 +1085,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;
-	//sensor_attr.expo_fs = 0;
+	// sensor_attr.expo_fs = 0;
 	sensor->video.attr = &sensor_attr;
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);

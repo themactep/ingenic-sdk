@@ -461,10 +461,10 @@ static struct regval_list sensor_init_regs_2560_1920_20fps_mipi[] = {
 	{0x68, 0xfa},
 	{0x69, 0xc8},
 	{0x75, 0x56},
-	{0xa4, 0x22}, //0E
-	{0xa6, 0x80}, //A8
-	{0xa8, 0x18}, //00
-	{0xaa, 0x00}, //30
+	{0xa4, 0x22}, // 0E
+	{0xa6, 0x80}, // A8
+	{0xa8, 0x18}, // 00
+	{0xaa, 0x00}, // 30
 	{0xae, 0x50},
 	{0xb0, 0x50},
 	{0xc4, 0x54},
@@ -659,7 +659,7 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			msleep(vals->value);
 		} else {
 			ret = sensor_write(sd, vals->reg_num, vals->value);
-			//ISP_INFO("  {0x%x, 0x%x}\n",vals->reg_num,vals->value);
+			// ISP_INFO("  {0x%x, 0x%x}\n",vals->reg_num,vals->value);
 			if (ret < 0) {
 				ISP_INFO("sensor_write error %d\n", __LINE__);
 				return ret;
@@ -826,7 +826,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int Cur_OffNy = 0;
 	unsigned int Cur_ExpLine = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_resolution) {
@@ -882,7 +882,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->max_integration_time = vts - 3;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
-	//	ret = sensor_set_integration_time(sd, Cur_ExpLine);
+	// ret = sensor_set_integration_time(sd, Cur_ExpLine);
 	if (ret < 0)
 		return -1;
 
@@ -989,12 +989,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//			ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

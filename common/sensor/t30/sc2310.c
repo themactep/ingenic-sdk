@@ -495,8 +495,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
-	{0x36e9, 0xa3}, //bypass pll1
-	{0x36f9, 0x85}, //bypass pll2
+	{0x36e9, 0xa3}, // bypass pll1
+	{0x36f9, 0x85}, // bypass pll2
 	{0x337f, 0x03},
 	{0x3368, 0x04},
 	{0x3369, 0x00},
@@ -674,8 +674,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x0103, 0x01},
 	{0x0100, 0x00},
-	{0x36e9, 0xa3}, //bypass pll1
-	{0x36f9, 0x85}, //bypass pll2
+	{0x36e9, 0xa3}, // bypass pll1
+	{0x36f9, 0x85}, // bypass pll2
 	{0x337f, 0x03},
 	{0x3368, 0x04},
 	{0x3369, 0x00},
@@ -1015,7 +1015,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(value >> 8 & 0x3f));
-	//	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
+	// ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 << 2) | 0x03));
 	if (ret < 0)
 		return ret;
 	return 0;
@@ -1086,7 +1086,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

@@ -54,8 +54,8 @@ static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
-//static unsigned char reg_0c = 0x40;
-//static unsigned char reg_82 = 0x01;
+// static unsigned char reg_0c = 0x40;
+// static unsigned char reg_82 = 0x01;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -202,7 +202,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 800,
 			.lans = 2,
 			.settle_time_apative_en = 1,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -260,7 +260,7 @@ static struct regval_list sensor_init_2304_1296_mipi_25fps[] = {
 	{0x20, 0x84},
 	{0x21, 0x03},
 	{0x22, 0x40},
-	{0x23, 0x06}, //535
+	{0x23, 0x06}, // 535
 	{0x24, 0x40},
 	{0x25, 0x10},
 	{0x26, 0x52},
@@ -679,8 +679,8 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	ret = sensor_write_array(sd, wsize->regs);
 
-	//ret += sensor_read(sd, 0x2f, &reg_0c);
-	//ret += sensor_read(sd, 0x82, &reg_82);
+	// ret += sensor_read(sd, 0x2f, &reg_0c);
+	// ret += sensor_read(sd, 0x82, &reg_82);
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
@@ -710,7 +710,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	sclk = SENSOR_SUPPORT_SCLK;
@@ -865,7 +865,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
-			//ret = sensor_set_integration_time_short(sd, *(int*)arg);
+			// ret = sensor_set_integration_time_short(sd, *(int*)arg);
 			break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)

@@ -81,7 +81,7 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.clk = 570,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -98,7 +98,7 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 	.mipi_sc.mipi_crop_start3x = 0,
 	.mipi_sc.mipi_crop_start3y = 0,
 	.mipi_sc.data_type_en = 0,
-	.mipi_sc.data_type_value = RAW10, //RAW
+	.mipi_sc.data_type_value = RAW10, // RAW
 	.mipi_sc.del_start = 0,
 	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
 	.mipi_sc.sensor_fid_mode = 0,
@@ -146,9 +146,9 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{0x3426, 0x67},
 	{0x3428, 0x37},
 	{0x3908, 0x53},
-	{0x3028, 0x68}, //vts 0xb68 = 2920
+	{0x3028, 0x68}, // vts 0xb68 = 2920
 	{0x3029, 0x0b}, //
-	{0x302c, 0xc6}, //hts 0x2c6 = 710
+	{0x302c, 0xc6}, // hts 0x2c6 = 710
 	{0x302d, 0x02}, //
 	{0x3020, 0x04},
 	{0x3054, 0x04},
@@ -190,13 +190,13 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 2560,
 		.height = 1440,
 		.fps = 30 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10, //RAW
+		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10, // RAW
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_mipi,
 	},
 };
 
-struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0]; //default linear mode
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0]; // default linear mode
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
@@ -350,7 +350,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3061, (unsigned char)((exp >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3062, (unsigned char)((exp >> 16) & 0x0f));
 
-	//ISP_INFO("cv4001 set exp=0x%04x(%4d line)\n", exp0, it);
+	// ISP_INFO("cv4001 set exp=0x%04x(%4d line)\n", exp0, it);
 
 	return ret;
 }
@@ -361,7 +361,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x3164, (unsigned char)(again & 0xff));
 
-	//ISP_INFO("cv4001 set gain0=0x%02x(%03d)\n", again, again);
+	// ISP_INFO("cv4001 set gain0=0x%02x(%03d)\n", again, again);
 
 	return ret;
 }
@@ -422,7 +422,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = 62196000; /* 710 * 2920 * 30 */
@@ -564,7 +564,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		// if (arg)
-		// 	ret = sensor_set_expo(sd, *(int*)arg);
+		// ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -692,7 +692,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-	private_clk_set_rate(sensor->mclk, 24000000); //MCLK 24MHz
+	private_clk_set_rate(sensor->mclk, 24000000); // MCLK 24MHz
 	private_clk_enable(sensor->mclk);
 
 	wsize = &sensor_win_sizes[0];

@@ -203,7 +203,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
-	//mclk=27mhz,frame rate=30fps
+	// mclk=27mhz,frame rate=30fps
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
@@ -485,10 +485,10 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
-	ret += sensor_write(sd, 0x0370, 0xc0); //[7]OTP clk gate  [6]OTP_en
+	ret += sensor_write(sd, 0x0370, 0xc0); // [7]OTP clk gate  [6]OTP_en
 	ret += sensor_write(sd, 0x0367, 0x2d); // OTP_access_addr[7:0]
-	ret += sensor_write(sd, 0x0368, 0x00); //[1:0] OTP_access_addr[9:8]
-	ret += sensor_write(sd, 0x0370, 0xc4); //[2]OTP read pulse
+	ret += sensor_write(sd, 0x0368, 0x00); // [1:0] OTP_access_addr[9:8]
+	ret += sensor_write(sd, 0x0370, 0xc4); // [2]OTP read pulse
 	ret += sensor_read(sd, 0x036a, &v);
 	v = v & 0x10;
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -602,7 +602,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned char sensor_max_fps;
 	unsigned char sensor_min_fps;
 	int ret = 0;
@@ -782,10 +782,10 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	if (pwdn_gpio != -1) {
 		ret = private_gpio_request(pwdn_gpio, "sensor_pwdn");
 		if (!ret) {
-			//private_gpio_direction_output(pwdn_gpio, 0);
-			//private_msleep(10);
-			//private_gpio_direction_output(pwdn_gpio, 1);
-			//private_msleep(10);
+			// private_gpio_direction_output(pwdn_gpio, 0);
+			// private_msleep(10);
+			// private_gpio_direction_output(pwdn_gpio, 1);
+			// private_msleep(10);
 		} else {
 			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
 		}
@@ -843,12 +843,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -517,7 +517,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	wpclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -786,7 +786,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/* if (ret < 0) */
 	/* 	goto err_set_sensor_gpio; */
 
-	//	sensor_attr.dvp.gpio = sensor_gpio_func;
+	// sensor_attr.dvp.gpio = sensor_gpio_func;
 
 	/*
 	  convert sensor-gain into isp-gain,

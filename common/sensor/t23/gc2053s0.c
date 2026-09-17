@@ -99,36 +99,36 @@ struct again_lut {
 };
 
 struct again_lut gc2053_again_lut[] = {
-	//inx, 0xb4 0xb3 0xb8 0xb9 gain
-	{0x00, 0x00, 0x00, 0x01, 0x00, 0},	       //  1.000000
-	{0x01, 0x00, 0x10, 0x01, 0x0c, 13726},     //  1.156250
-	{0x02, 0x00, 0x20, 0x01, 0x1b, 31177},    //   1.390625
-	{0x03, 0x00, 0x30, 0x01, 0x2c, 44067},    //   1.593750
-	{0x04, 0x00, 0x40, 0x01, 0x3f, 64793},    //   1.984375
-	{0x05, 0x00, 0x50, 0x02, 0x16, 78621},    //   2.296875
-	{0x06, 0x00, 0x60, 0x02, 0x35, 96180},    //   2.765625
-	{0x07, 0x00, 0x70, 0x03, 0x16, 109138},   //    3.171875
-	{0x08, 0x00, 0x80, 0x04, 0x02, 132537},    //   4.062500
-	{0x09, 0x00, 0x90, 0x04, 0x31, 146067},   //    4.687500
-	{0x0a, 0x00, 0xa0, 0x05, 0x32, 163567},   //    5.640625
-	{0x0b, 0x00, 0xb0, 0x06, 0x35, 176747},   //    6.484375
-	{0x0c, 0x00, 0xc0, 0x08, 0x04, 195118},    //   7.875000
-	{0x0d, 0x00, 0x5a, 0x09, 0x19, 208560},   //    9.078125
-	{0x0e, 0x00, 0x83, 0x0b, 0x0f, 229103},    //   11.281250
-	{0x0f, 0x00, 0x93, 0x0d, 0x12, 242511},   //    13.000000
-	{0x10, 0x00, 0x84, 0x10, 0x00, 262419},  //     16.046875
-	{0x11, 0x00, 0x94, 0x12, 0x3a, 275710}, //      18.468750
-	{0x12, 0x01, 0x2c, 0x1a, 0x02, 292252},  //     22.000000
-	{0x13, 0x01, 0x3c, 0x1b, 0x20, 305571}, //      25.328125
-	{0x14, 0x00, 0x8c, 0x20, 0x0f, 324962},  //     31.093750
-	{0x15, 0x00, 0x9c, 0x26, 0x07, 338280},  //     35.796875
-	{0x16, 0x02, 0x64, 0x36, 0x21, 358923}, //      44.531250
-	{0x17, 0x02, 0x74, 0x37, 0x3a, 372267}, //      51.281250
-	{0x18, 0x00, 0xc6, 0x3d, 0x02, 392101},  //     63.250000
-	{0x19, 0x00, 0xdc, 0x3f, 0x3f, 415415}, //      80.937500
-	{0x1a, 0x02, 0x85, 0x3f, 0x3f, 421082}, //      85.937500
-	{0x1b, 0x02, 0x95, 0x3f, 0x3f, 440360}, //      105.375000
-	{0x1c, 0x00, 0xce, 0x3f, 0x3f, 444864}, //      110.515625
+	// inx, 0xb4 0xb3 0xb8 0xb9 gain
+	{0x00, 0x00, 0x00, 0x01, 0x00, 0},	       // 1.000000
+	{0x01, 0x00, 0x10, 0x01, 0x0c, 13726},     // 1.156250
+	{0x02, 0x00, 0x20, 0x01, 0x1b, 31177},    // 1.390625
+	{0x03, 0x00, 0x30, 0x01, 0x2c, 44067},    // 1.593750
+	{0x04, 0x00, 0x40, 0x01, 0x3f, 64793},    // 1.984375
+	{0x05, 0x00, 0x50, 0x02, 0x16, 78621},    // 2.296875
+	{0x06, 0x00, 0x60, 0x02, 0x35, 96180},    // 2.765625
+	{0x07, 0x00, 0x70, 0x03, 0x16, 109138},   // 3.171875
+	{0x08, 0x00, 0x80, 0x04, 0x02, 132537},    // 4.062500
+	{0x09, 0x00, 0x90, 0x04, 0x31, 146067},   // 4.687500
+	{0x0a, 0x00, 0xa0, 0x05, 0x32, 163567},   // 5.640625
+	{0x0b, 0x00, 0xb0, 0x06, 0x35, 176747},   // 6.484375
+	{0x0c, 0x00, 0xc0, 0x08, 0x04, 195118},    // 7.875000
+	{0x0d, 0x00, 0x5a, 0x09, 0x19, 208560},   // 9.078125
+	{0x0e, 0x00, 0x83, 0x0b, 0x0f, 229103},    // 11.281250
+	{0x0f, 0x00, 0x93, 0x0d, 0x12, 242511},   // 13.000000
+	{0x10, 0x00, 0x84, 0x10, 0x00, 262419},  // 16.046875
+	{0x11, 0x00, 0x94, 0x12, 0x3a, 275710}, // 18.468750
+	{0x12, 0x01, 0x2c, 0x1a, 0x02, 292252},  // 22.000000
+	{0x13, 0x01, 0x3c, 0x1b, 0x20, 305571}, // 25.328125
+	{0x14, 0x00, 0x8c, 0x20, 0x0f, 324962},  // 31.093750
+	{0x15, 0x00, 0x9c, 0x26, 0x07, 338280},  // 35.796875
+	{0x16, 0x02, 0x64, 0x36, 0x21, 358923}, // 44.531250
+	{0x17, 0x02, 0x74, 0x37, 0x3a, 372267}, // 51.281250
+	{0x18, 0x00, 0xc6, 0x3d, 0x02, 392101},  // 63.250000
+	{0x19, 0x00, 0xdc, 0x3f, 0x3f, 415415}, // 80.937500
+	{0x1a, 0x02, 0x85, 0x3f, 0x3f, 421082}, // 85.937500
+	{0x1b, 0x02, 0x95, 0x3f, 0x3f, 440360}, // 105.375000
+	{0x1c, 0x00, 0xce, 0x3f, 0x3f, 444864}, // 110.515625
 };
 
 struct tx_isp_sensor_attribute gc2053_attr;
@@ -165,7 +165,7 @@ struct tx_isp_mipi_bus gc2053_mipi = {
 	.clk = 600,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -238,8 +238,8 @@ struct tx_isp_sensor_attribute gc2053_attr = {.name = "gc2053",
 	}};
 
 static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
-	//mclk=24mhz,mipi data rate=624mbps/lane
-	//wpclk=156mhz,row_time=28.2us frame length=1418,25fps
+	// mclk=24mhz,mipi data rate=624mbps/lane
+	// wpclk=156mhz,row_time=28.2us frame length=1418,25fps
 	/*system*/
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -538,8 +538,8 @@ static struct regval_list gc2053_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 static struct regval_list gc2053_init_regs_1920_1080_15fps_mipi[] = {
-	//mclk=24mhz,mipi data rate=312mbps/lane
-	//wpclk=156mhz,row_time=56.4us frame length=1418,15fps
+	// mclk=24mhz,mipi data rate=312mbps/lane
+	// wpclk=156mhz,row_time=56.4us frame length=1418,15fps
 	/*system*/
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -859,8 +859,8 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x04, 0x60},
 	{0x05, 0x04},
 	{0x06, 0x4c},
-	{0x07, 0x04}, //[13:8]vb
-	{0x08, 0x72}, //[7:0]vb
+	{0x07, 0x04}, // [13:8]vb
+	{0x08, 0x72}, // [7:0]vb
 	{0x09, 0x00},
 	{0x0a, 0x02},
 	{0x0b, 0x00},
@@ -891,8 +891,8 @@ static struct regval_list gc2053_init_regs_1920_1080_15fps_dvp[] = {
 	{0x8c, 0x12},
 	{0x8d, 0x92},
 	{0x90, 0x00},
-	{0x41, 0x04}, //VTS[13:8]
-	{0x42, 0x65}, //VTS[7:0]
+	{0x41, 0x04}, // VTS[13:8]
+	{0x42, 0x65}, // VTS[7:0]
 	{0x9d, 0x10},
 	{0xce, 0x7c},
 	{0xd2, 0x41},
@@ -1346,8 +1346,8 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
+	// struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	// ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
 	ret = sensor_write(sd, 0x04, value & 0xff);
 	ret += sensor_write(sd, 0x03, (value & 0x3f00) >> 8);
@@ -1362,13 +1362,13 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	struct again_lut *val_lut = gc2053_again_lut;
-	//struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
+	// struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	// ISP_INFO("-- [%s,0x%x] --\n",__func__,client->addr);
 
 	ret = sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_write(sd, 0xb4, val_lut[value].regb4);
 	ret += sensor_write(sd, 0xb3, val_lut[value].regb3);
-	//ret += sensor_write(sd, 0xb2, val_lut[value].regb2);
+	// ret += sensor_write(sd, 0xb2, val_lut[value].regb2);
 	ret += sensor_write(sd, 0xb8, val_lut[value].dpc);
 	ret += sensor_write(sd, 0xb9, val_lut[value].blc);
 	if (ret < 0) {
@@ -1439,7 +1439,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
@@ -1507,19 +1507,19 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	switch (enable) {
 	case 0:
 		ret = sensor_write(sd, 0x17, 0x00); /*normal*/
-		//sensor_write(sd, 0xfe, 0x00);
+		// sensor_write(sd, 0xfe, 0x00);
 		break;
 	case 1:
 		ret = sensor_write(sd, 0x17, 0x01); /*mirror*/
-		//sensor_write(sd, 0xfe, 0x02);
+		// sensor_write(sd, 0xfe, 0x02);
 		break;
 	case 2:
 		ret = sensor_write(sd, 0x17, 0x02); /*flip*/
-		//sensor_write(sd, 0xfe, 0x01);
+		// sensor_write(sd, 0xfe, 0x01);
 		break;
 	case 3:
 		ret = sensor_write(sd, 0x17, 0x03); /*mirror and flip*/
-		//sensor_write(sd, 0xfe, 0x03);
+		// sensor_write(sd, 0xfe, 0x03);
 		break;
 	}
 

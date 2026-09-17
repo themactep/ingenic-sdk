@@ -293,12 +293,12 @@ static struct regval_list sensor_init_regs_1920_1080_15fps[] = {
 	{0x92, 0x80},
 	{0xa3, 0x00},
 	{0xa4, 0x0e},
-	{0xa5, 0x04}, //440
+	{0xa5, 0x04}, // 440
 	{0xa6, 0x38},
 	{0xa7, 0x00},
 	{0xa8, 0x00},
 	{0xa9, 0x07},
-	{0xaa, 0x80}, //788
+	{0xaa, 0x80}, // 788
 	{0xab, 0x04},
 	{0xae, 0x28},
 	{0xb0, 0x28},
@@ -620,7 +620,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int Cur_OffNy = 0;
 	unsigned int Cur_ExpLine = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -898,7 +898,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 327675;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

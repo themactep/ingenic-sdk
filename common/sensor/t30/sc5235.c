@@ -1163,7 +1163,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	if ((sensor_resolution == SENSOR_RES_500) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		sclk = SENSOR_SUPPORT_SCLK_5M_FPS_15;
@@ -1449,8 +1449,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/*
 	  convert sensor-gain into isp-gain,
 	*/
-	//sensor_attr.max_again = 260651;
-	//sensor_attr.max_dgain = 0;
+	// sensor_attr.max_again = 260651;
+	// sensor_attr.max_dgain = 0;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	switch (sensor_resolution) {

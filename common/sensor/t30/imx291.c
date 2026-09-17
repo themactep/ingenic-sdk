@@ -118,9 +118,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	/* inclk 37.125M clk*/
 	{0x3000, 0x01},
-	{0x3002, 0x00}, //MODE
+	{0x3002, 0x00}, // MODE
 	{0x3005, 0x01},
-	{0x3007, 0x00}, //1080p
+	{0x3007, 0x00}, // 1080p
 	{0x3009, 0x02},
 	{0x300a, 0xf0},
 	{0x300f, 0x00},
@@ -384,7 +384,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hmax = 0;
 	unsigned int vmax = 0;
 	unsigned char value = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

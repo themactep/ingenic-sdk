@@ -74,8 +74,8 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again = 0;
-	uint32_t hcg = 166528;	   //5.82x
-	uint32_t hcg_thr = 196608; //20x 196608;//8x
+	uint32_t hcg = 166528;	   // 5.82x
+	uint32_t hcg_thr = 196608; // 20x 196608;//8x
 
 	if (isp_gain >= hcg_thr) {
 		isp_gain = isp_gain - hcg;
@@ -98,8 +98,8 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 
 unsigned int sensor_alloc_again_short(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again = 0;
-	uint32_t hcg = 166528;	   //5.82x
-	uint32_t hcg_thr = 196608; //20x 196608;//8x
+	uint32_t hcg = 166528;	   // 5.82x
+	uint32_t hcg_thr = 196608; // 20x 196608;//8x
 
 	if (isp_gain >= hcg_thr) {
 		isp_gain = isp_gain - hcg;
@@ -414,76 +414,76 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_2688_1520_20fps_mipi_dol[] = {
-	{0x3000, 0x01}, //STANDBY
-	{0x3001, 0x00}, //REGHOLD
-	{0x3002, 0x01}, //XMSTA
-	{0x3014, 0x01}, //INCK_SEL[3:0]
-	{0x3015, 0x02}, //DATARATE_SEL[3:0]
-	{0x3018, 0x00}, //WINMODE[3:0]
-	{0x301a, 0x01}, //WDMODE[7:0]
-	{0x301b, 0x00}, //ADDMODE[1:0]
-	{0x301c, 0x01}, //THIN_V_EN[7:0]
-	{0x301e, 0x01}, //VCMODE[7:0]
-	{0x3020, 0x00}, //HREVERSE
-	{0x3021, 0x00}, //VREVERSE
-	{0x3022, 0x00}, //ADBIT[1:0]
-	{0x3023, 0x00}, //MDBIT
-	{0x3028, 0xaa}, //VMAX[19:0] 0x9aa = 2474
-	{0x3029, 0x09}, //VMAX[19:0]
-	{0x302a, 0x00}, //VMAX[19:0]
-	{0x302c, 0xee}, //HMAX[15:0] 0x2ee = 750
-	{0x302d, 0x02}, //HMAX[15:0]
-	{0x3030, 0x00}, //FDG_SEL0[1:0]
-	{0x3031, 0x00}, //FDG_SEL1[1:0]
-	{0x3032, 0x00}, //FDG_SEL2[1:0]
-	{0x303c, 0x00}, //PIX_HST[12:0]
-	{0x303d, 0x00}, //PIX_HST[12:0]
-	{0x303e, 0x90}, //PIX_HWIDTH[12:0]
-	{0x303f, 0x0a}, //PIX_HWIDTH[12:0]
-	{0x3040, 0x01}, //LANEMODE[2:0]
-	{0x3044, 0x00}, //PIX_VST[11:0]
-	{0x3045, 0x00}, //PIX_VST[11:0]
-	{0x3046, 0x04}, //PIX_VWIDTH[11:0]
-	{0x3047, 0x06}, //PIX_VWIDTH[11:0]
-	{0x304c, 0x00}, //GAIN_HG0[10:0]
-	{0x304d, 0x00}, //GAIN_HG0[10:0]
-	{0x3050, 0x74}, //SHR0[19:0]
-	{0x3051, 0x0f}, //SHR0[19:0]
-	{0x3052, 0x00}, //SHR0[19:0]
-	{0x3054, 0x0a}, //SHR1[19:0]
-	{0x3055, 0x00}, //SHR1[19:0]
-	{0x3056, 0x00}, //SHR1[19:0]
-	{0x3058, 0x4c}, //SHR2[19:0]
-	{0x3059, 0x00}, //SHR2[19:0]
-	{0x305a, 0x00}, //SHR2[19:0]
-	{0x3060, 0x36}, //RHS1[19:0] 0x6e = 110 -> 0x136 = 310
-	{0x3061, 0x01}, //RHS1[19:0]
-	{0x3062, 0x00}, //RHS1[19:0]
-	{0x3064, 0x6a}, //RHS2[19:0]
-	{0x3065, 0x00}, //RHS2[19:0]
-	{0x3066, 0x00}, //RHS2[19:0]
-	{0x3070, 0x00}, //GAIN_0[10:0]
-	{0x3071, 0x00}, //GAIN_0[10:0]
-	{0x3072, 0x00}, //GAIN_1[10:0]
-	{0x3073, 0x00}, //GAIN_1[10:0]
-	{0x3074, 0x00}, //GAIN_2[10:0]
-	{0x3075, 0x00}, //GAIN_2[10:0]
-	{0x30a4, 0xaa}, //XVSOUTSEL[1:0]
-	{0x30a6, 0x00}, //XVS_DRV[1:0]
+	{0x3000, 0x01}, // STANDBY
+	{0x3001, 0x00}, // REGHOLD
+	{0x3002, 0x01}, // XMSTA
+	{0x3014, 0x01}, // INCK_SEL[3:0]
+	{0x3015, 0x02}, // DATARATE_SEL[3:0]
+	{0x3018, 0x00}, // WINMODE[3:0]
+	{0x301a, 0x01}, // WDMODE[7:0]
+	{0x301b, 0x00}, // ADDMODE[1:0]
+	{0x301c, 0x01}, // THIN_V_EN[7:0]
+	{0x301e, 0x01}, // VCMODE[7:0]
+	{0x3020, 0x00}, // HREVERSE
+	{0x3021, 0x00}, // VREVERSE
+	{0x3022, 0x00}, // ADBIT[1:0]
+	{0x3023, 0x00}, // MDBIT
+	{0x3028, 0xaa}, // VMAX[19:0] 0x9aa = 2474
+	{0x3029, 0x09}, // VMAX[19:0]
+	{0x302a, 0x00}, // VMAX[19:0]
+	{0x302c, 0xee}, // HMAX[15:0] 0x2ee = 750
+	{0x302d, 0x02}, // HMAX[15:0]
+	{0x3030, 0x00}, // FDG_SEL0[1:0]
+	{0x3031, 0x00}, // FDG_SEL1[1:0]
+	{0x3032, 0x00}, // FDG_SEL2[1:0]
+	{0x303c, 0x00}, // PIX_HST[12:0]
+	{0x303d, 0x00}, // PIX_HST[12:0]
+	{0x303e, 0x90}, // PIX_HWIDTH[12:0]
+	{0x303f, 0x0a}, // PIX_HWIDTH[12:0]
+	{0x3040, 0x01}, // LANEMODE[2:0]
+	{0x3044, 0x00}, // PIX_VST[11:0]
+	{0x3045, 0x00}, // PIX_VST[11:0]
+	{0x3046, 0x04}, // PIX_VWIDTH[11:0]
+	{0x3047, 0x06}, // PIX_VWIDTH[11:0]
+	{0x304c, 0x00}, // GAIN_HG0[10:0]
+	{0x304d, 0x00}, // GAIN_HG0[10:0]
+	{0x3050, 0x74}, // SHR0[19:0]
+	{0x3051, 0x0f}, // SHR0[19:0]
+	{0x3052, 0x00}, // SHR0[19:0]
+	{0x3054, 0x0a}, // SHR1[19:0]
+	{0x3055, 0x00}, // SHR1[19:0]
+	{0x3056, 0x00}, // SHR1[19:0]
+	{0x3058, 0x4c}, // SHR2[19:0]
+	{0x3059, 0x00}, // SHR2[19:0]
+	{0x305a, 0x00}, // SHR2[19:0]
+	{0x3060, 0x36}, // RHS1[19:0] 0x6e = 110 -> 0x136 = 310
+	{0x3061, 0x01}, // RHS1[19:0]
+	{0x3062, 0x00}, // RHS1[19:0]
+	{0x3064, 0x6a}, // RHS2[19:0]
+	{0x3065, 0x00}, // RHS2[19:0]
+	{0x3066, 0x00}, // RHS2[19:0]
+	{0x3070, 0x00}, // GAIN_0[10:0]
+	{0x3071, 0x00}, // GAIN_0[10:0]
+	{0x3072, 0x00}, // GAIN_1[10:0]
+	{0x3073, 0x00}, // GAIN_1[10:0]
+	{0x3074, 0x00}, // GAIN_2[10:0]
+	{0x3075, 0x00}, // GAIN_2[10:0]
+	{0x30a4, 0xaa}, // XVSOUTSEL[1:0]
+	{0x30a6, 0x00}, // XVS_DRV[1:0]
 	{0x30cc, 0x00},
 	{0x30cd, 0x00},
-	{0x30dc, 0x32}, //BLKLEVEL[9:0]
-	{0x30dd, 0x40}, //BLKLEVEL[9:0]
+	{0x30dc, 0x32}, // BLKLEVEL[9:0]
+	{0x30dd, 0x40}, // BLKLEVEL[9:0]
 	{0x310c, 0x01},
 	{0x3130, 0x01},
 	{0x3148, 0x00},
 	{0x315e, 0x10},
-	{0x3400, 0x00}, //GAIN_PGC_FIDMD 0x01 -> 0x00
+	{0x3400, 0x00}, // GAIN_PGC_FIDMD 0x01 -> 0x00
 	{0x3412, 0x01},
 	{0x3460, 0x21},
 	{0x3492, 0x08},
-	{0x3890, 0x08}, //HFR_EN[3:0]
-	{0x3891, 0x00}, //HFR_EN[3:0]
+	{0x3890, 0x08}, // HFR_EN[3:0]
+	{0x3891, 0x00}, // HFR_EN[3:0]
 	{0x3893, 0x00},
 	{0x3930, 0x01},
 	{0x3b1d, 0x17},
@@ -747,7 +747,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ret = sensor_write(sd, 0x3000, 0x00);
 	private_msleep(40);
 	ret = sensor_read(sd, 0x4d1d, &v);
-	//ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	// ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -756,7 +756,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	*ident = v;
 
 	ret = sensor_read(sd, 0x4d1c, &v);
-	//ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
+	// ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret,v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
@@ -907,7 +907,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int rhs1 = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {

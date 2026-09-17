@@ -523,9 +523,9 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x3018, 0x32},
 	{0x3019, 0x0c},
 	{0x301f, 0x1d},
-	{0x320c, 0x08}, //2100
+	{0x320c, 0x08}, // 2100
 	{0x320d, 0x34},
-	{0x320e, 0x08}, //2250
+	{0x320e, 0x08}, // 2250
 	{0x320f, 0xca},
 	{0x3281, 0x80},
 	{0x3301, 0x0e},
@@ -717,9 +717,9 @@ static struct regval_list sensor_init_regs_2560_1440_60fps_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x05},
 	{0x320b, 0xa0},
-	{0x320c, 0x07}, //0x7e9 -> 2025
+	{0x320c, 0x07}, // 0x7e9 -> 2025
 	{0x320d, 0xe9}, //
-	{0x320e, 0x05}, //0x5dc -> 1500
+	{0x320e, 0x05}, // 0x5dc -> 1500
 	{0x320f, 0xdc}, //
 	{0x3210, 0x02},
 	{0x3211, 0x88},
@@ -1106,9 +1106,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_dol[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x08}, //0x0834  2100 hts
+	{0x320c, 0x08}, // 0x0834  2100 hts
 	{0x320d, 0x34}, //
-	{0x320e, 0x08}, //0x08ca  2250 vts
+	{0x320e, 0x08}, // 0x08ca  2250 vts
 	{0x320f, 0xca}, //
 	{0x3211, 0x04},
 	{0x3213, 0x04},
@@ -1245,7 +1245,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_dol[] = {
 	{0x3e05, 0x40},
 	{0x3e09, 0x40},
 	{0x3e23, 0x00},
-	{0x3e24, 0x90}, //144*2-9 =279
+	{0x3e24, 0x90}, // 144*2-9 =279
 	{0x440e, 0x02},
 	{0x450d, 0x27},
 	{0x4814, 0x2a},
@@ -1316,9 +1316,9 @@ static struct regval_list sensor_init_regs_1280_720_60fps_mipi_dol[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x02},
 	{0x320b, 0xd0},
-	{0x320c, 0x07}, //0x7e9 -> 2025
+	{0x320c, 0x07}, // 0x7e9 -> 2025
 	{0x320d, 0xe9}, //
-	{0x320e, 0x05}, //0x5dc -> 1500
+	{0x320e, 0x05}, // 0x5dc -> 1500
 	{0x320f, 0xdc}, //
 	{0x3210, 0x01},
 	{0x3211, 0x44},
@@ -1716,9 +1716,9 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	//	ISP_INFO("\n==============> short_time = 0x%x\n", value);
+	// ISP_INFO("\n==============> short_time = 0x%x\n", value);
 
-	value = (value << 2) + 3; //64*4+3 = 259
+	value = (value << 2) + 3; // 64*4+3 = 259
 	ret = sensor_write(sd, 0x3e22, (unsigned char)((value >> 12) & 0x0f));
 	ret = sensor_write(sd, 0x3e04, (unsigned char)((value >> 4) & 0xff));
 	ret = sensor_write(sd, 0x3e05, (unsigned char)(value & 0x0f) << 4);
@@ -1815,7 +1815,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned int short_time;
 	unsigned char val;
@@ -2089,7 +2089,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.vi_max_height = wsize->height;
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
-	//sensor->video.mbus.code = wsize->mbus_code;
+	// sensor->video.mbus.code = wsize->mbus_code;
 	sensor->video.mbus.field = TISP_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
@@ -2255,7 +2255,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
-	//	ISP_INFO("\n==========> set_wdr\n");
+	// ISP_INFO("\n==========> set_wdr\n");
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
@@ -2287,12 +2287,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)

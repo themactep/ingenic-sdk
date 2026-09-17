@@ -533,16 +533,16 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	}};
 
 static struct regval_list sensor_stream_on[] = {
-	//{0xfe, 0x03},
-	//{0x10, 0x90},
-	//{0xfe, 0x00},
+	// {0xfe, 0x03},
+	// {0x10, 0x90},
+	// {0xfe, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{0xfe, 0x03},
-	//{0x10, 0x80},
-	//{0xfe, 0x00},
+	// {0xfe, 0x03},
+	// {0x10, 0x80},
+	// {0xfe, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -743,7 +743,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vb = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -992,7 +992,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	/* convert sensor-gain into isp-gain, */
 	sensor_attr.max_again = 262850;
-	//private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
+	// private_log2_fixed_to_fixed(sensor_attr.max_again, TX_ISP_GAIN_FIXED_POINT, LOG2_GAIN_SHIFT);
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;

@@ -384,8 +384,8 @@ static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
         {0x0d, 0xa0},
         {0x20, 0xc0},
         {0x21, 0x03},
-        {0x22, 0xca},	//;EE 30 //DC 15
-        {0x23, 0x08},	//;02    //05
+        {0x22, 0xca},	// ;EE 30 //DC 15
+        {0x23, 0x08},	// ;02    //05
         {0x24, 0x80},
         {0x25, 0xd0},
         {0x26, 0x22},
@@ -496,8 +496,8 @@ static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
 	{0x0d, 0x50},
 	{0x20, 0xc0},
 	{0x21, 0x03},
-	{0x22, 0xb8}, //;EE
-	{0x23, 0x0b}, //;02
+	{0x22, 0xb8}, // ;EE
+	{0x23, 0x0b}, // ;02
 	{0x24, 0x80},
 	{0x25, 0xd0},
 	{0x26, 0x22},
@@ -815,7 +815,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -838,7 +838,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 
 	sensor->video.fps = fps;

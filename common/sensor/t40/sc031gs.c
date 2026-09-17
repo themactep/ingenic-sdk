@@ -328,7 +328,7 @@ static struct regval_list sensor_init_regs_640_480_120fps_mipi[] = {
 	{0x363d, 0x00},
 	{0x363e, 0xf8},
 	{0x3640, 0x00},
-	{0x3641, 0x01}, //驱动能力调节，0x02 /0x03
+	{0x3641, 0x01}, // 驱动能力调节，0x02 /0x03
 	{0x36e9, 0x00},
 	{0x36ea, 0x3b},
 	{0x36eb, 0x0e},
@@ -341,14 +341,14 @@ static struct regval_list sensor_init_regs_640_480_120fps_mipi[] = {
 	{0x3d08, 0x01},
 #if 1
 	{0x3e00, 0x00},
-	//{0x3e01, 0x2a},//曝光
-	//{0x3e02, 0x50},
-	{0x3e01, 0x0f}, //曝光
+	// {0x3e01, 0x2a},//曝光
+	// {0x3e02, 0x50},
+	{0x3e01, 0x0f}, // 曝光
 	{0x3e02, 0xa0},
 	{0x3e06, 0x0c},
-	//{0x3e08, 0x00},//模拟增益
-	//{0x3e09, 0x16},
-	{0x3e08, 0x04}, //模拟增益3
+	// {0x3e08, 0x00},//模拟增益
+	// {0x3e09, 0x16},
+	{0x3e08, 0x04}, // 模拟增益3
 	{0x3e09, 0x18},
 #endif
 #if 0
@@ -734,7 +734,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-//	ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
+// ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
 	value *= 1;
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
@@ -749,7 +749,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 
-//	ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
+// ISP_INFO("---------[%s]:%d--------------\n",__func__, __LINE__);
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
 	if (ret < 0)
@@ -829,7 +829,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1034,12 +1034,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//			ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//			ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

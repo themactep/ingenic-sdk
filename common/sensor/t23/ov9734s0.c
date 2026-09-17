@@ -182,7 +182,7 @@ struct tx_isp_sensor_attribute ov9734_attr = {.name = "ov9734",
 			.clk = 360,
 			.lans = 1,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -274,9 +274,9 @@ static struct regval_list ov9734_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x02},
 	{0x380b, 0xd0},
-	{0x380c, 0x05}, //hts = 0x5c6 = 1478
+	{0x380c, 0x05}, // hts = 0x5c6 = 1478
 	{0x380d, 0xc6}, //
-	{0x380e, 0x03}, //vts = 0x32a = 810
+	{0x380e, 0x03}, // vts = 0x32a = 810
 	{0x380f, 0x2a}, //
 	{0x3810, 0x00},
 	{0x3811, 0x04},
@@ -439,13 +439,13 @@ static struct regval_list ov9734_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5783, 0x0f},
 	{0x3703, 0x0b},
 	{0x3705, 0x51},
-	//{0x3001, 0x01},
-	//{0x3007, 0x10},
-	//{0x3816, 0x00},
-	//{0x3817, 0x00},
-	//{0x3818, 0x00},
-	//{0x3819, 0x01},
-	//{0x381c, 0x01},
+	// {0x3001, 0x01},
+	// {0x3007, 0x10},
+	// {0x3816, 0x00},
+	// {0x3817, 0x00},
+	// {0x3818, 0x00},
+	// {0x3819, 0x01},
+	// {0x381c, 0x01},
 	{0x0100, 0x01},
 	{SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
@@ -681,7 +681,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_PCLK_FPS_30;
@@ -818,13 +818,13 @@ static int sensor_fsync(struct tx_isp_subdev *sd, struct tx_isp_sensor_fsync *fs
 		switch (fsync_mode) {
 		case 2:
 			ISP_INFO("===================>> %s %d\n", __func__, __LINE__);
-			//sensor_read(sd, 0x380e, &val);
-			//ret_val = val << 8;
-			//sensor_read(sd, 0x380f, &val);
-			//ret_val |= val;
-			//ret_val = ret_val + 4;
-			//sensor_write(sd, 0x380e, (ret_val >> 8));
-			//sensor_write(sd, 0x380f, (ret_val & 0xff));
+			// sensor_read(sd, 0x380e, &val);
+			// ret_val = val << 8;
+			// sensor_read(sd, 0x380f, &val);
+			// ret_val |= val;
+			// ret_val = ret_val + 4;
+			// sensor_write(sd, 0x380e, (ret_val >> 8));
+			// sensor_write(sd, 0x380f, (ret_val & 0xff));
 
 			sensor_write(sd, 0x3001, 0x01);
 			sensor_write(sd, 0x3007, 0x10);
@@ -1122,7 +1122,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	ov9734_attr.max_integration_time = ov9734_attr.total_height - 4;
 
 	ov9734_attr.max_again = 259142;
-	ov9734_attr.max_dgain = 0; //ov9734_attr.max_dgain;
+	ov9734_attr.max_dgain = 0; // ov9734_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;

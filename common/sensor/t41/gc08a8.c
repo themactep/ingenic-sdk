@@ -35,7 +35,7 @@
 #define SENSOR_VERSION "H20250304a"
 
 
-static int reset_gpio = -1; //GPIO_PA(18);
+static int reset_gpio = -1; // GPIO_PA(18);
 static int pwdn_gpio = -1;
 static int shvflip = 1;
 

@@ -230,41 +230,41 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2560_1920_15fps_mipi[] = {
-	{0x010b, 0x07}, //Cmd_Sw_TriState[0]=1
-	{0x0114, 0x09}, //Cmd_LineTime[12:0]=2400
-	{0x0115, 0x60}, //Cmd_LineTime[12:0]=2400
-	{0x0178, 0xb0}, //B06A: Version
-	{0x0179, 0x6a}, //B06A: Version
-	{0x020a, 0x33}, //T_ODACMODE=1, B04A - improve streaking
-	{0x020d, 0x01}, //T_GDACMODE=1, B04A - improve streaking
-	{0x022e, 0x0e}, //T_spll_predivider[5:0]=14
-	{0x022f, 0x19}, //T_spll_postdivider[5:0]=25
-	{0x022d, 0x01}, //T_spll_enh[0]=1
-	{0x021c, 0x00}, //T_FAE_CLK_SEL[0]=0
-	{0x023c, 0x37}, //T_clamp_offset_lvl[2:0]=3, B05A - improve streaking
-	{0x0240, 0x15}, //T_compf_fast[2:0]=5, B03A - improve RTS noise & LowVol preformance
-	{0x0252, 0x16}, //T_pll_predivider[5:0]=22
-	{0x0254, 0x61}, //T_pll_enh[0]=1
-	{0x0659, 0x5e}, //R_comp_rst_r3[7:0]=94 - improve left/right display uniformity
-	{0x0684, 0x00}, //R_cout_reset_enl_f =2, B02A - improve straight line
-	{0x0685, 0x02}, //R_cout_reset_enl_f =2, B02A - improve straight line
-	{0x069a, 0x00}, //Cmd_INTREFHD_enH=0, B03A
-	{0x06ac, 0x04}, //Cmd_vbt_isel_R_G3[6:0]=4, B04A - improve streaking
-	{0x0b02, 0x02}, //Cmd_RClkDly_Sel[3:0]=2, B05A
-	{0x0b0c, 0x00}, //Cmd_MIPI_Clk_Gated[0]=0
-	{0x0e0c, 0x04}, //Cmd_WOI_VOffset=4
-	{0x0e0e, 0x38}, //Cmd_WOI_VSize=1080
-	{0x0e10, 0x07}, //Cmd_WOI_HOffset=4
-	{0x0e12, 0x80}, //Cmd_WOI_HSize=1920
+	{0x010b, 0x07}, // Cmd_Sw_TriState[0]=1
+	{0x0114, 0x09}, // Cmd_LineTime[12:0]=2400
+	{0x0115, 0x60}, // Cmd_LineTime[12:0]=2400
+	{0x0178, 0xb0}, // B06A: Version
+	{0x0179, 0x6a}, // B06A: Version
+	{0x020a, 0x33}, // T_ODACMODE=1, B04A - improve streaking
+	{0x020d, 0x01}, // T_GDACMODE=1, B04A - improve streaking
+	{0x022e, 0x0e}, // T_spll_predivider[5:0]=14
+	{0x022f, 0x19}, // T_spll_postdivider[5:0]=25
+	{0x022d, 0x01}, // T_spll_enh[0]=1
+	{0x021c, 0x00}, // T_FAE_CLK_SEL[0]=0
+	{0x023c, 0x37}, // T_clamp_offset_lvl[2:0]=3, B05A - improve streaking
+	{0x0240, 0x15}, // T_compf_fast[2:0]=5, B03A - improve RTS noise & LowVol preformance
+	{0x0252, 0x16}, // T_pll_predivider[5:0]=22
+	{0x0254, 0x61}, // T_pll_enh[0]=1
+	{0x0659, 0x5e}, // R_comp_rst_r3[7:0]=94 - improve left/right display uniformity
+	{0x0684, 0x00}, // R_cout_reset_enl_f =2, B02A - improve straight line
+	{0x0685, 0x02}, // R_cout_reset_enl_f =2, B02A - improve straight line
+	{0x069a, 0x00}, // Cmd_INTREFHD_enH=0, B03A
+	{0x06ac, 0x04}, // Cmd_vbt_isel_R_G3[6:0]=4, B04A - improve streaking
+	{0x0b02, 0x02}, // Cmd_RClkDly_Sel[3:0]=2, B05A
+	{0x0b0c, 0x00}, // Cmd_MIPI_Clk_Gated[0]=0
+	{0x0e0c, 0x04}, // Cmd_WOI_VOffset=4
+	{0x0e0e, 0x38}, // Cmd_WOI_VSize=1080
+	{0x0e10, 0x07}, // Cmd_WOI_HOffset=4
+	{0x0e12, 0x80}, // Cmd_WOI_HSize=1920
 	{0x145b,
-		0x10}, //R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
+		0x10}, // R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
 	{0x14b0,
-		0x01}, //R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
-	{0x140f, 0x01}, //R_CSI2_enable=1
+		0x01}, // R_MIPI_line_num_en=0, R_MIPI_frm_num_en=0, R_MIPI_skip_line_sp=1,  B04A - work-around MIPI display
+	{0x140f, 0x01}, // R_CSI2_enable=1
 	{0x0116, 0x05},
 	{0x0117, 0x46},
-	{0x0111, 0x01}, //UpdateFlag
-	{0x010f, 0x01}, //Sensor_EnH=1
+	{0x0111, 0x01}, // UpdateFlag
+	{0x010f, 0x01}, // Sensor_EnH=1
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -285,12 +285,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//	{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -414,7 +414,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int gain = value;
-	//return 0;
+	// return 0;
 
 	ret += sensor_write(sd, 0x012b, (unsigned char)(gain & 0xff));
 	ret += sensor_write(sd, 0x0111, 0x01);
@@ -475,7 +475,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -582,8 +582,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//		if (arg)
-		//			ret = sensor_set_expo(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_expo(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

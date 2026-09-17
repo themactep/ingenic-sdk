@@ -576,9 +576,9 @@ static struct regval_list sensor_init_regs_dol_2048_1536_15fps_mipi[] = {
 	{0x320c, 0x04},
 	{0x320d, 0x65},
 	{0x320e, 0x19},
-	{0x320f, 0x00}, //15fps
-	//{0x320e, 0x0c},
-	//{0x320f, 0x80}, //30fps
+	{0x320f, 0x00}, // 15fps
+	// {0x320e, 0x0c},
+	// {0x320f, 0x80}, //30fps
 	{0x3214, 0x11},
 	{0x3215, 0x11},
 	{0x3223, 0xc0},
@@ -856,14 +856,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	//sensor analog gain
+	// sensor analog gain
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-	//sensor dig fine gain
+	// sensor dig fine gain
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	if (ret < 0)
 		return ret;
@@ -983,7 +983,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
@@ -1181,12 +1181,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//			ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//			ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

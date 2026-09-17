@@ -551,9 +551,9 @@ static struct regval_list sensor_init_regs_1280_720_25fps_binning_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x02},
 	{0x320b, 0xd0},
-	{0x320c, 0x06}, //1600
+	{0x320c, 0x06}, // 1600
 	{0x320d, 0x40},
-	{0x320e, 0x07}, //1500
+	{0x320e, 0x07}, // 1500
 	{0x320f, 0x08},
 	{0x3211, 0x04},
 	{0x3213, 0x02},
@@ -1349,7 +1349,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x36e9, 0x24},
 	{0x36f9, 0x23},
 	{0x0100, 0x01},
-	//      {SENSOR_REG_DELAY, 0x10},
+	// {SENSOR_REG_DELAY, 0x10},
 	{SENSOR_REG_END, 0x00},
 };
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
@@ -1681,7 +1681,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1950,20 +1950,20 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		//      if (arg)
-		//              ret = sensor_set_logic(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_logic(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//      ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//      ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -66,7 +66,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 10077696; //cache lines corrponding on VPB1
+static int wdr_bufsize = 10077696; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -345,9 +345,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	//	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
+	// .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
+	// .sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 };
 
 static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
@@ -1500,7 +1500,7 @@ static struct regval_list sensor_init_regs_2448_1520_30fps[] = {
 	{0x0103, 0x01},
 	{0x0301, 0x84},
 	{0x0303, 0x01},
-	{0x0305, 0x3e}, //;5b
+	{0x0305, 0x3e}, // ;5b
 	{0x0306, 0x00},
 	{0x0307, 0x17},
 	{0x0323, 0x04},
@@ -1749,14 +1749,14 @@ static struct regval_list sensor_init_regs_2448_1520_30fps[] = {
 	{0x3805, 0x8f},
 	{0x3806, 0x05},
 	{0x3807, 0xff},
-	{0x3808, 0x09}, //;0a
-	{0x3809, 0x90}, //;80
+	{0x3808, 0x09}, // ;0a
+	{0x3809, 0x90}, // ;80
 	{0x380a, 0x05},
 	{0x380b, 0xf0},
-	{0x380c, 0x08}, //;04
-	{0x380d, 0x5e}, //;2e
-	{0x380e, 0x0c}, //;06
-	{0x380f, 0x4c}, //;26
+	{0x380c, 0x08}, // ;04
+	{0x380d, 0x5e}, // ;2e
+	{0x380e, 0x0c}, // ;06
+	{0x380f, 0x4c}, // ;26
 	{0x3811, 0x08},
 	{0x3813, 0x08},
 	{0x3814, 0x01},
@@ -1793,7 +1793,7 @@ static struct regval_list sensor_init_regs_1224_760_110fps[] = {
 	{0x0103, 0x01},
 	{0x0301, 0x84},
 	{0x0303, 0x01},
-	{0x0305, 0x32}, //;5b
+	{0x0305, 0x32}, // ;5b
 	{0x0306, 0x00},
 	{0x0307, 0x17},
 	{0x0323, 0x04},
@@ -2043,13 +2043,13 @@ static struct regval_list sensor_init_regs_1224_760_110fps[] = {
 	{0x3806, 0x05},
 	{0x3807, 0xff},
 	{0x3808, 0x04},
-	{0x3809, 0xc8}, //;00
+	{0x3809, 0xc8}, // ;00
 	{0x380a, 0x02},
-	{0x380b, 0xf8}, //;d0
+	{0x380b, 0xf8}, // ;d0
 	{0x380c, 0x03},
 	{0x380d, 0xef},
 	{0x380e, 0x03},
-	{0x380f, 0x91}, //;13
+	{0x380f, 0x91}, // ;13
 	{0x3811, 0x04},
 	{0x3813, 0x04},
 	{0x3814, 0x03},
@@ -2281,8 +2281,8 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3509, (unsigned char)((again & 0xff)));
 	ret += sensor_write(sd, 0x3508, (unsigned char)((again >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3208, 0x10);
-	ret += sensor_write(sd, 0x320d, 0x00); //manual laucch on
-	ret += sensor_write(sd, 0x3208, 0xe0); //quick launch
+	ret += sensor_write(sd, 0x320d, 0x00); // manual laucch on
+	ret += sensor_write(sd, 0x3208, 0xe0); // quick launch
 	if (ret < 0)
 		return ret;
 
@@ -2386,7 +2386,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
@@ -2504,7 +2504,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	ret = sensor_read(sd, 0x3511, &evs1);
 	ret = sensor_read(sd, 0x3512, &evs2);
 
-	//	ret = sensor_write(sd, 0x12, 0x40);
+	// ret = sensor_write(sd, 0x12, 0x40);
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[2];
 		sensor_info.max_fps = 15;
@@ -2526,7 +2526,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;
@@ -2644,16 +2644,16 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
 		if (arg)
 			ret = sensor_set_integration_time_short(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN_SHORT:
 		if (arg)
@@ -2885,7 +2885,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;

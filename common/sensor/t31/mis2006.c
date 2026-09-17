@@ -203,7 +203,7 @@ struct again_lut sensor_again_lut[] = {
 	{0x7c, 256038},
 	{0x7d, 257600},
 	{0x7e, 259138},
-	//{0x7f, 260651},
+	// {0x7f, 260651},
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -240,7 +240,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 800,
 	.lans = 2,
 	.settle_time_apative_en = 1,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -441,7 +441,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3300, 0x24},
 	{0x3301, 0x00},
 	{0x3302, 0x02},
-	{0x3303, 0x04}, //20201125
+	{0x3303, 0x04}, // 20201125
 	{0x330b, 0x01},
 	{0x330d, 0x00},
 	{0x3201, 0x65},
@@ -604,7 +604,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x330b, 0x01},
 	{0x330d, 0x00},
 	{0x3201, 0x65},
-	{0x3200, 0x04}, //20201125
+	{0x3200, 0x04}, // 20201125
 	{0x3203, 0x00},
 	{0x3202, 0x0a},
 	{0x3205, 0x08},
@@ -626,7 +626,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 25 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12, //GRBG
+		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12, // GRBG
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_mipi,
 	},
@@ -634,7 +634,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 25 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12, //GRBG
+		.mbus_code = V4L2_MBUS_FMT_SGRBG12_1X12, // GRBG
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_dvp,
 	}};
@@ -853,7 +853,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -966,14 +966,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		if (arg)
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
-	//case TX_ISP_EVENT_SENSOR_INT_TIME:
-	//	if (arg)
-	//		ret = sensor_set_integration_time(sd, *(int*)arg);
-	//	break;
-	//case TX_ISP_EVENT_SENSOR_AGAIN:
-	//	if (arg)
-	//		ret = sensor_set_analog_gain(sd, *(int*)arg);
-	//	break;
+	// case TX_ISP_EVENT_SENSOR_INT_TIME:
+	// if (arg)
+	// ret = sensor_set_integration_time(sd, *(int*)arg);
+	// break;
+	// case TX_ISP_EVENT_SENSOR_AGAIN:
+	// if (arg)
+	// ret = sensor_set_analog_gain(sd, *(int*)arg);
+	// break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
 			ret = sensor_set_digital_gain(sd, *(int *)arg);
@@ -1012,7 +1012,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			//			ret = sensor_set_vflip(sd, *(int*)arg);
+			// ret = sensor_set_vflip(sd, *(int*)arg);
 			break;
 	default:
 		break;

@@ -654,7 +654,7 @@ static struct regval_list sensor_init_regs_2320_1744_30fps_mipi[] = {
 	{0x6f12, 0x0001},
 	{0x6028, 0x4000},
 	{0x602a, 0x0114},
-	{0x6f12, 0x0100}, //2lane
+	{0x6f12, 0x0100}, // 2lane
 	{0x6028, 0x4000},
 	{0x602a, 0x6214},
 	{0x6f12, 0x7971},
@@ -1345,11 +1345,11 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 	ret = sensor_write(sd, 0x6028, 0x4000);
 
-	//it
+	// it
 	ret = sensor_write(sd, 0x602a, 0x0202);
 	ret = sensor_write(sd, 0x6f12, it);
 
-	//again
+	// again
 	ret = sensor_write(sd, 0x602a, 0x0204);
 	ret = sensor_write(sd, 0x6f12, again);
 
@@ -1359,11 +1359,11 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
-	//        value &= 0xffff;
-	//        sensor_write(sd, 0xfd, 0x01);
-	//        sensor_write(sd, 0x0e, value >> 8);
-	//        sensor_write(sd, 0x0f, value & 0xff);
-	//        sensor_write(sd, 0xfe, 0x02);
+	// value &= 0xffff;
+	// sensor_write(sd, 0xfd, 0x01);
+	// sensor_write(sd, 0x0e, value >> 8);
+	// sensor_write(sd, 0x0f, value & 0xff);
+	// sensor_write(sd, 0xfe, 0x02);
 
 	return ret;
 }
@@ -1371,9 +1371,9 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
 
-	//        sensor_write(sd, 0xfd, 0x01);
-	//        sensor_write(sd, 0x24, value & 0xff);
-	//        sensor_write(sd, 0xfe, 0x02);
+	// sensor_write(sd, 0xfd, 0x01);
+	// sensor_write(sd, 0x24, value & 0xff);
+	// sensor_write(sd, 0xfe, 0x02);
 
 	return ret;
 }
@@ -1403,7 +1403,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 

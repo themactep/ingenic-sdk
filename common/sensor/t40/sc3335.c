@@ -412,7 +412,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	//.sensor_fsync_mode = TX_SENSOR_FSYNC_SLAVE_MODE,
+	// .sensor_fsync_mode = TX_SENSOR_FSYNC_SLAVE_MODE,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
@@ -426,8 +426,8 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
 	{0x301f, 0x10},
 	{0x320c, 0x04},
 	{0x320d, 0xe2},
-	{0x320e, 0x06}, //0x05,
-	{0x320f, 0x60}, //0x50, 25fps
+	{0x320e, 0x06}, // 0x05,
+	{0x320f, 0x60}, // 0x50, 25fps
 	{0x3253, 0x04},
 	{0x3301, 0x04},
 	{0x3302, 0x10},
@@ -815,9 +815,9 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	}
 
 	/*DPC strength*/
-	if (gain_val >= 0xf60) { //6x
+	if (gain_val >= 0xf60) { // 6x
 		ret += sensor_write(sd, 0x5799, 0x07);
-	} else if (gain_val <= 0xf40) { //4x
+	} else if (gain_val <= 0xf40) { // 4x
 		ret += sensor_write(sd, 0x5799, 0x00);
 	}
 
@@ -933,7 +933,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -1184,12 +1184,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//			ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//			ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

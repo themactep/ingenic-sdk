@@ -317,7 +317,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xa6, 0x03},
 	{0xa7, 0xc0},
 	{0xfd, 0x03},
-	{0xc0, 0x01}, //OTP transf
+	{0xc0, 0x01}, // OTP transf
 	{0xfd, 0x04},
 	{0x22, 0x14},
 	{0x23, 0x14},
@@ -365,7 +365,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x1c, 0xea},
 	{0x16, 0x0c},
 	{0x21, 0x00},
-	{0x11, 0xe8}, //	;63
+	{0x11, 0xe8}, // ;63
 	{0x19, 0xc3},
 	{0x26, 0xda},
 	{0x29, 0x01},
@@ -375,8 +375,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xd0, 0x02},
 	{0xd1, 0x01},
 	{0xd2, 0x20},
-	{0xd3, 0x03}, //	;04
-	{0xd4, 0xa4}, //	;2a
+	{0xd3, 0x03}, // ;04
+	{0xd4, 0xa4}, // ;2a
 	{0x50, 0x00},
 	{0x51, 0x2c},
 	{0x52, 0x29},
@@ -400,25 +400,25 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x8a, 0x77},
 	{0x8b, 0x77},
 	{0xfd, 0x01},
-	{0xb1, 0x82}, //;DPHY enable 8b
-	{0xb3, 0x0b}, //;0b;09;1d
-	{0xb4, 0x14}, //;MIPI PLL enable;14;35;36
-	{0x9d, 0x40}, //;mipi hs dc level 40/03/55
-	{0xa1, 0x05}, //;speed/03
-	{0x94, 0x44}, //;dphy time
-	{0x95, 0x33}, //;dphy time
-	{0x96, 0x1f}, //;dphy time
-	{0x98, 0x45}, //;dphy time
-	{0x9c, 0x10}, //;dphy time
-	{0xb5, 0x70}, //;30
-	{0xa0, 0x00}, //;mipi enable
+	{0xb1, 0x82}, // ;DPHY enable 8b
+	{0xb3, 0x0b}, // ;0b;09;1d
+	{0xb4, 0x14}, // ;MIPI PLL enable;14;35;36
+	{0x9d, 0x40}, // ;mipi hs dc level 40/03/55
+	{0xa1, 0x05}, // ;speed/03
+	{0x94, 0x44}, // ;dphy time
+	{0x95, 0x33}, // ;dphy time
+	{0x96, 0x1f}, // ;dphy time
+	{0x98, 0x45}, // ;dphy time
+	{0x9c, 0x10}, // ;dphy time
+	{0xb5, 0x70}, // ;30
+	{0xa0, 0x00}, // ;mipi enable
 	{0x25, 0xe0},
 	{0x20, 0x7b},
 	{0x8f, 0x88},
 	{0x91, 0x40},
 	{0xfd, 0x01},
 	{0xfd, 0x02},
-	{0x36, 0x08}, //	;invert Vsync polarity
+	{0x36, 0x08}, // ;invert Vsync polarity
 	{0x5e, 0x03},
 	{0xfd, 0x02},
 	{0xa1, 0x04},
@@ -437,35 +437,35 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xf2, 0x40},
 	{0xf3, 0x40},
 	{0xfd, 0x02},
-	{0x36, 0x08}, //	;invert Vsync polarity for Gaia
-	{0xa0, 0x00}, //	;Image vertical start MSB3bits
-	{0xa1, 0x08}, //	;Image vertical start LSB8bits
-	{0xa2, 0x04}, //	;image vertical size  MSB8bits
-	{0xa3, 0x38}, //	;image vertical size  LSB8bits
+	{0x36, 0x08}, // ;invert Vsync polarity for Gaia
+	{0xa0, 0x00}, // ;Image vertical start MSB3bits
+	{0xa1, 0x08}, // ;Image vertical start LSB8bits
+	{0xa2, 0x04}, // ;image vertical size  MSB8bits
+	{0xa3, 0x38}, // ;image vertical size  LSB8bits
 	{0xa4, 0x00},
-	{0xa5, 0x04}, //	;H start 8Lsb
+	{0xa5, 0x04}, // ;H start 8Lsb
 	{0xa6, 0x03},
-	{0xa7, 0xc0}, //	;Half H size Lsb8bits
+	{0xa7, 0xc0}, // ;Half H size Lsb8bits
 	{0xfd, 0x03},
-	{0xc0, 0x01}, //	;enable transfer OTP BP information
+	{0xc0, 0x01}, // ;enable transfer OTP BP information
 	{0xfd, 0x04},
 	{0x21, 0x14},
 	{0x22, 0x14},
-	{0x23, 0x14}, //	;enhance normal and dummy BPC
+	{0x23, 0x14}, // ;enhance normal and dummy BPC
 	{0xfd, 0x01},
 	{0x05, 0x06},
-	{0x06, 0x11}, //;e0	;insert dummy line , the frame rate is 30.01.
-	{0x01, 0x01}, //	;
+	{0x06, 0x11}, // ;e0	;insert dummy line , the frame rate is 30.01.
+	{0x01, 0x01}, // ;
 	{0xfd, 0x00},
-	{0x1b, 0x00}, //	;enable output
-	{0xfd, 0x01}, //	;
-	{0x03, 0x03}, //Mirror_Off_Flip_Off
+	{0x1b, 0x00}, // ;enable output
+	{0xfd, 0x01}, // ;
+	{0x03, 0x03}, // Mirror_Off_Flip_Off
 	{0xfd, 0x01},
 	{0x3f, 0x00}, // 03
 	{0xf8, 0x00}, // 02
 	{0x01, 0x01},
 	{0xfd, 0x02},
-	{0x62, 0x01}, //	;full size mode flip off row start for OTP BPC
+	{0x62, 0x01}, // ;full size mode flip off row start for OTP BPC
 	{0x63, 0x00},
 	{0xfd, 0x01},
 	{0x0d, 0x10},
@@ -481,19 +481,19 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 15 << 16 | 1,
-		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10, //V4L2_MBUS_FMT_SGBRG10_1X10,
+		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10, // V4L2_MBUS_FMT_SGBRG10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_15fps_dvp,
 	}};
 
-//static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
-//	V4L2_MBUS_FMT_SBGGR10_1X10,//V4L2_MBUS_FMT_SGBRG10_1X10,
-//};
+// static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
+// V4L2_MBUS_FMT_SBGGR10_1X10,//V4L2_MBUS_FMT_SGBRG10_1X10,
+// };
 
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
-	{0x37, 0x00}, //fake stream on
+	{0x37, 0x00}, // fake stream on
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -501,7 +501,7 @@ static struct regval_list sensor_stream_on[] = {
 static struct regval_list sensor_stream_off[] = {
 	{0xfd, 0x00},
 	{0x36, 0x01},
-	{0x37, 0x01}, //fake stream off
+	{0x37, 0x01}, // fake stream off
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -703,7 +703,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = 0;
 

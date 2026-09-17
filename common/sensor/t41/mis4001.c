@@ -471,7 +471,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
 	{0x3110, 0x00},
 	{0x3113, 0x9d},
 	{0x3112, 0x06},
-	//{0x300a, 0x01},
+	// {0x300a, 0x01},
 	{0x3006, 0x00},
 
 	{SENSOR_REG_END, 0x00},
@@ -769,7 +769,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int sensor_max_fps;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor->info.default_boot) {
 	case 0:
@@ -820,11 +820,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
-	//uint8_t val;
+	// uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	//val = sensor_read(sd, 0x3007, &val);
+	// val = sensor_read(sd, 0x3007, &val);
 	switch (enable) {
 	case 0:
 		sensor_write(sd, 0x3007, 0x00);
@@ -1189,7 +1189,7 @@ static int sensor_remove(struct i2c_client *client) {
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
-	//private_clk_put(sensor->mclk);
+	// private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

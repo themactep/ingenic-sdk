@@ -39,7 +39,7 @@
 
 uint8_t dismode;
 static int rst_gpio = GPIO_PA(18);
-//static int pwdn_gpio = -1;
+// static int pwdn_gpio = -1;
 
 static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
@@ -728,11 +728,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
-	//vts = vts >> 2;
+	// vts = vts >> 2;
 	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif

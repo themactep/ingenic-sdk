@@ -558,7 +558,7 @@ static struct regval_list sensor_init_regs_2880_1620_30fps_mipi_4lane[] = {
 };
 
 static struct regval_list sensor_init_regs_2880_1620_30fps_mipi_2lane[] = {
-	//2lane
+	// 2lane
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -672,7 +672,7 @@ static struct regval_list sensor_init_regs_2880_1620_30fps_mipi_2lane[] = {
 	{0x320f, 0xbc},
 	{0x36e9, 0x20},
 	{0x36f9, 0x57},
-	//	{SENSOR_REG_DELAY, 0x50},
+	// {SENSOR_REG_DELAY, 0x50},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -979,7 +979,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_PCLK_FPS_30;

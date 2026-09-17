@@ -584,9 +584,9 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x3209, 0x80},
 	{0x320a, 0x04},
 	{0x320b, 0x38},
-	{0x320c, 0x04}, //{0x320c, 0x320d}default = 0x44c     hts = 2*{0x320c, 0x320d}
+	{0x320c, 0x04}, // {0x320c, 0x320d}default = 0x44c     hts = 2*{0x320c, 0x320d}
 	{0x320d, 0x4c},
-	{0x320e, 0x04}, //vts -> 0x4b0 = 1200
+	{0x320e, 0x04}, // vts -> 0x4b0 = 1200
 	{0x320f, 0xb0}, //
 	{0x3210, 0x00},
 	{0x3211, 0x04},
@@ -734,7 +734,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_dol[] = {
 	{0x36e9, 0x80},
 	{0x36f9, 0x80},
 	{0x301f, 0x65},
-	{0x320e, 0x09}, //vts = 0x9c4 = 2500
+	{0x320e, 0x09}, // vts = 0x9c4 = 2500
 	{0x320f, 0xc4}, //
 	{0x3220, 0x53},
 	{0x3243, 0x01},
@@ -826,7 +826,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_dol[] = {
 	{0x3e13, 0x40},
 	{0x3e16, 0x00},
 	{0x3e17, 0x80},
-	{0x3e23, 0x00}, //SEF = 0x97 = 151
+	{0x3e23, 0x00}, // SEF = 0x97 = 151
 	{0x3e24, 0x97}, //
 	{0x3f09, 0x48},
 	{0x4816, 0xb1},
@@ -1157,7 +1157,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int short_time = 0;
 	unsigned int sensor_max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned char val = 0;
 
@@ -1447,7 +1447,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	struct tx_isp_sensor_register_info *info = &sensor->info;
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x0103, 0x01);
+	// ret = sensor_write(sd, 0x0103, 0x01);
 	ret = sensor_write(sd, 0x0100, 0x00);
 	if (wdr_en == 1) {
 		info->default_boot = 1;
@@ -1489,7 +1489,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
-	//	ISP_INFO("\n==========> set_wdr\n");
+	// ISP_INFO("\n==========> set_wdr\n");
 	private_gpio_direction_output(reset_gpio, 1);
 	private_msleep(1);
 	private_gpio_direction_output(reset_gpio, 0);
@@ -1519,12 +1519,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

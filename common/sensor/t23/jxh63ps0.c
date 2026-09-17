@@ -196,7 +196,7 @@ struct tx_isp_mipi_bus jxh63p_mipi = {
 	.clk = 216,
 	.lans = 1,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -275,8 +275,8 @@ static struct regval_list jxh63p_init_regs_1280_720_15fps_mipi[] = {
         {0x0d, 0xa0},
         {0x20, 0xc0},
         {0x21, 0x03},
-        {0x22, 0xca},	//;EE 30 //DC 15
-        {0x23, 0x08},	//;02    //05
+        {0x22, 0xca},	// ;EE 30 //DC 15
+        {0x23, 0x08},	// ;02    //05
         {0x24, 0x80},
         {0x25, 0xd0},
         {0x26, 0x22},
@@ -387,8 +387,8 @@ static struct regval_list jxh63p_init_regs_1280_720_15fps_mipi[] = {
 	{0x0d, 0x50},
 	{0x20, 0xc0},
 	{0x21, 0x03},
-	{0x22, 0xb8}, //;EE
-	{0x23, 0x0b}, //;02
+	{0x22, 0xb8}, // ;EE
+	{0x23, 0x0b}, // ;02
 	{0x24, 0x80},
 	{0x25, 0xd0},
 	{0x26, 0x22},
@@ -704,7 +704,7 @@ static int jxh63p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

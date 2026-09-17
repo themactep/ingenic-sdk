@@ -67,7 +67,7 @@ static int sensor_resolution = TX_SENSOR_RES_200;
 module_param(sensor_resolution, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_resolution, "Sensor Resolution");
 
-static int wdr_bufsize = 1996800; //cache lines corrponding on VPB1
+static int wdr_bufsize = 1996800; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -488,8 +488,8 @@ static struct regval_list sensor_init_regs_vga_70fps_mipi[] = {
 	{0x21, 0x07},
 	{0x22, 0x42},
 	{0x23, 0x02},
-	{0x24, 0xe0},//482
-	{0x25, 0x20},//544
+	{0x24, 0xe0},// 482
+	{0x25, 0x20},// 544
 	{0x26, 0x21},
 	{0x27, 0xfc},
 	{0x28, 0x09},
@@ -828,7 +828,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x20, 0xc0},
 	{0x21, 0x06},
 	{0x22, 0xdc},
-	{0x23, 0x05}, //4e2
+	{0x23, 0x05}, // 4e2
 	{0x24, 0xc0},
 	{0x25, 0x38},
 	{0x26, 0x43},
@@ -1528,7 +1528,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (data_interface) {
@@ -1597,7 +1597,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
@@ -1654,7 +1654,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.one_line_expr_in_us = 28;
 
 		sensor_attr.wdr_cache = wdr_bufsize;
-		sensor_attr.max_integration_time_native = 1883; //0x960*2 - 0xff * 2 - 3
+		sensor_attr.max_integration_time_native = 1883; // 0x960*2 - 0xff * 2 - 3
 		sensor_attr.integration_time_limit = 1883;
 		sensor_attr.total_width = 0x47e * 2;
 		sensor_attr.total_height = 0x960;
@@ -1942,8 +1942,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_info.max_fps = 70;
 			sensor_attr.max_integration_time_native = 0x206 - 4;
 			sensor_attr.integration_time_limit = 0x206 - 4;
-			sensor_attr.total_width = 0x3e0;  //992
-			sensor_attr.total_height = 0x206; //518
+			sensor_attr.total_width = 0x3e0;  // 992
+			sensor_attr.total_height = 0x206; // 518
 			sensor_attr.max_integration_time = 0x206 - 4;
 			sensor_attr.mipi.clk = 360;
 			sensor_attr.mipi.settle_time_apative_en = 0;
@@ -1955,8 +1955,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_info.max_fps = 110;
 			sensor_attr.max_integration_time_native = 0x140 - 4;
 			sensor_attr.integration_time_limit = 0x140 - 4;
-			sensor_attr.total_width = 0x730;  //1840
-			sensor_attr.total_height = 0x140; //320
+			sensor_attr.total_width = 0x730;  // 1840
+			sensor_attr.total_height = 0x140; // 320
 			sensor_attr.max_integration_time = 0x140 - 4;
 			sensor_attr.mipi.clk = 324;
 			sensor_attr.mipi.settle_time_apative_en = 0;
@@ -1970,7 +1970,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_dol), sizeof(sensor_mipi_dol));
 		sensor_attr.one_line_expr_in_us = 28;
 		sensor_attr.wdr_cache = wdr_bufsize;
-		sensor_attr.max_integration_time_native = 1883; //0x960 - 0xff * 2 - 3
+		sensor_attr.max_integration_time_native = 1883; // 0x960 - 0xff * 2 - 3
 		sensor_attr.integration_time_limit = 1883;
 		sensor_attr.total_width = 0x47e * 2;
 		sensor_attr.total_height = 0x960;

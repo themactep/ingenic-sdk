@@ -44,7 +44,7 @@ static int pwdn_gpio = -1;
 module_param(pwdn_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
 
-static int wdr_bufsize = 4073600; //1451520;
+static int wdr_bufsize = 4073600; // 1451520;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -499,15 +499,15 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
 	.max_again = 327680,
 	.max_again_short = 327680,
-	//.min_integration_time = 1,
-	//.min_integration_time_short = 1,
-	//.max_integration_time_short = 0x82,
-	//.min_integration_time_native = 1,
-	//.max_integration_time_native = 2110,
-	//.integration_time_limit = 2110,
-	//.total_width = 0x898,
-	//.total_height = 0x465 * 2,
-	//.max_integration_time = 2110,
+	// .min_integration_time = 1,
+	// .min_integration_time_short = 1,
+	// .max_integration_time_short = 0x82,
+	// .min_integration_time_native = 1,
+	// .max_integration_time_native = 2110,
+	// .integration_time_limit = 2110,
+	// .total_width = 0x898,
+	// .total_height = 0x465 * 2,
+	// .max_integration_time = 2110,
 	.integration_time_apply_delay = 2,
 	.expo_fs = 1,
 	.again_apply_delay = 2,
@@ -526,7 +526,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 #if 0
-	//raw12
+	// raw12
 	{0x330c, 0x01},
 	{0x3020, 0x01},
 	{0x3021, 0x02},
@@ -759,7 +759,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x210b, 0x00},
 	{0x3021, 0x00},
 #else
-	//raw10
+	// raw10
 	{0x300b, 0x01},
 	{0x3006, 0x02},
 	{SENSOR_REG_DELAY, 50},
@@ -1586,7 +1586,7 @@ static struct regval_list sensor_init_regs_1280_720_120fps_mipi_linear_raw10[] =
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
-	//[0]
+	// [0]
 	{
 		.width = 1920,
 		.height = 1080,
@@ -1595,7 +1595,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_dvp,
 	},
-	//[1]
+	// [1]
 	{
 		.width = 1920,
 		.height = 1080,
@@ -1604,7 +1604,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
-	//[2]
+	// [2]
 	{
 		.width = 1920,
 		.height = 1080,
@@ -1613,7 +1613,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_mipi_dol,
 	},
-	//[3]
+	// [3]
 	{
 		.width = 1920,
 		.height = 1080,
@@ -1622,7 +1622,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_90fps_mipi_linear_raw10,
 	},
-	//[4] 720p
+	// [4] 720p
 	{
 		.width = 1280,
 		.height = 720,
@@ -1908,7 +1908,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (info->default_boot) {
@@ -2210,7 +2210,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			//ret = sensor_get_black_pedestal(sd, sensor_val->value);
+			// ret = sensor_get_black_pedestal(sd, sensor_val->value);
 			break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)
@@ -2354,7 +2354,7 @@ static int sensor_remove(struct i2c_client *client) {
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
-	//private_devm_clk_put(&client->dev, sensor->mclk);
+	// private_devm_clk_put(&client->dev, sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

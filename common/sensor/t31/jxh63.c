@@ -484,7 +484,7 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on[] = {
-	//	{0x12, 0x00},
+	// {0x12, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -671,7 +671,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -694,7 +694,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 
 	sensor->video.fps = fps;

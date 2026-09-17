@@ -182,7 +182,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 					.hblanking = 0,
 				},
 		},
-	//.expo_fs = 1,
+	// .expo_fs = 1,
 	.max_again = 195119,
 	.max_dgain = 0,
 	.total_width = 816,
@@ -200,7 +200,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_640_480[] = {
-	//	{0x12, 0x80},
+	// {0x12, 0x80},
 	{0x09, 0x55},
 	{0x15, 0x02},
 	{0x1e, 0x40},
@@ -250,10 +250,10 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x01, 0x0b},
 	{0x02, 0x0b},
 	{0x8c, 0x02},
-	//	{0x8d, 0x4c},
-	{0x8d, 0x64}, //jz
+	// {0x8d, 0x4c},
+	{0x8d, 0x64}, // jz
 	{0x87, 0x16},
-	//	{0x87, 0xff},//jz
+	// {0x87, 0xff},//jz
 	{SENSOR_REG_END, 0x00},
 };
 

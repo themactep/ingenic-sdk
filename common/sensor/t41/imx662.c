@@ -57,7 +57,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 230400; //cache lines corrponding on VPB1
+static int wdr_bufsize = 230400; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -89,8 +89,8 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	uint16_t again = 0;
-	uint32_t hcg = 166528;	   //5.82x
-	uint32_t hcg_thr = 196608; //20x 196608;//8x
+	uint32_t hcg = 166528;	   // 5.82x
+	uint32_t hcg_thr = 196608; // 20x 196608;//8x
 
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL) {
 		hcg = 0;
@@ -281,8 +281,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 		},
 
 	.max_again =
-		655360, //30db->31.6x->327675, 72db->3981x->786432, 60.2db->1024x->657544,  54.2db->512x->591849 1024x->655360
-	.max_again_short = 655360, //786432,
+		655360, // 30db->31.6x->327675, 72db->3981x->786432, 60.2db->1024x->657544,  54.2db->512x->591849 1024x->655360
+	.max_again_short = 655360, // 786432,
 	.max_dgain = 0,
 	.min_integration_time = 1,
 	.min_integration_time_native = 1,
@@ -290,8 +290,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.min_integration_time_short = 1,
 	.max_integration_time_short = 98,
 	.integration_time_limit = 2496,
-	.total_width = 990,   //hmax
-	.total_height = 2500, //9c4 vmax
+	.total_width = 990,   // hmax
+	.total_height = 2500, // 9c4 vmax
 	.max_integration_time = 2496,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
@@ -300,7 +300,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.wdr_cache = 0,
-	//      void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 #if 0
@@ -310,7 +310,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 #endif
 
 static struct regval_list sensor_init_regs_960_540_30fps_mipi[] = {
-	//  IMX662-AAQR 2/2-line binning CSI-2_2lane 24MHz AD:10bit Output:12bit 1440Mbps Master Mode LCG Mode 30fps Integration Time 33.298ms
+	// IMX662-AAQR 2/2-line binning CSI-2_2lane 24MHz AD:10bit Output:12bit 1440Mbps Master Mode LCG Mode 30fps Integration Time 33.298ms
 	{0x3000, 0x01}, // STANDBY
 	{0x3001, 0x00}, // REGHOLD
 	{0x3002, 0x01}, // XMSTA
@@ -479,8 +479,8 @@ static struct regval_list sensor_init_regs_960_540_30fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
-	//  IMX662-AAQR Window cropping 1920x1084 CSI-2_2lane 24MHz AD:12bit Output:12bit 1440Mbps Master Mode LCG Mode 30fps Integration Time 33.28ms
-	//  Ver4.0
+	// IMX662-AAQR Window cropping 1920x1084 CSI-2_2lane 24MHz AD:12bit Output:12bit 1440Mbps Master Mode LCG Mode 30fps Integration Time 33.28ms
+	// Ver4.0
 
 	{0x3000, 0x01}, // STANDBY
 	{0x3001, 0x00}, // REGHOLD
@@ -803,7 +803,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int ret = 0;
 	unsigned short shs1 = 0;
 
-	//short frame use shs1
+	// short frame use shs1
 	shs1 = rhs1 - value - 1;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
@@ -824,7 +824,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x3051, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3052, (unsigned char)((shs >> 16) & 0x03));
 	} else {
-		//long frame use shs2
+		// long frame use shs2
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
 		ret += sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
@@ -938,7 +938,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short cur_int = 0;
 	unsigned short shs = 0;
 	unsigned char value = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		return 0;
@@ -1001,7 +1001,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.data_type = data_type;
 		sensor_attr.wdr_cache = wdr_bufsize;
 
-		sensor_attr.max_again = 655360; //786432,
+		sensor_attr.max_again = 655360; // 786432,
 		sensor_attr.max_again_short = 655360;
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 1;

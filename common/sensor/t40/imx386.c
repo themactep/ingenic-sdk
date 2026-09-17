@@ -1108,7 +1108,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (info->default_boot) {
@@ -1178,16 +1178,16 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sensor_read(sd, 0x0101, &val);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val &= 0xfc;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val |= 0x01;
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val |= 0x02;
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val |= 0x03;
 		break;
 	}
@@ -1344,9 +1344,9 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		return -EINVAL;
 	}
 	switch (cmd) {
-		//case TX_ISP_EVENT_SENSOR_EXPO:
-		//	if (arg)
-		//		ret = sensor_set_expo(sd, sensor_val->value);
+		// case TX_ISP_EVENT_SENSOR_EXPO:
+		// if (arg)
+		// ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

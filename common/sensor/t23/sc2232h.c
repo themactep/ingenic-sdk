@@ -503,7 +503,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x391d, 0x04},
 	{0x391e, 0x00},
 	{0x3641, 0x01},
-	{0x3213, 0x08}, //04
+	{0x3213, 0x08}, // 04
 	{0x3614, 0x80},
 	{0x363a, 0x9f},
 	{0x3630, 0x9c},
@@ -569,9 +569,9 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x395e, 0xc0},
 	{0x3962, 0x89},
 	{0x3802, 0x00},
-	{0x3209, 0x80}, //88
-	{0x320b, 0x38}, //40
-	{0x3211, 0x08}, //4
+	{0x3209, 0x80}, // 88
+	{0x320b, 0x38}, // 40
+	{0x3211, 0x08}, // 4
 	{0x3963, 0x80},
 	{0x301f, 0x04},
 	{0x363b, 0x26},
@@ -985,7 +985,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x3301, 0x64);
 		sensor_write(sd, 0x3632, 0x08);
 		sensor_write(sd, 0x3812, 0x30);
-	} else { //may be flick
+	} else { // may be flick
 		sensor_write(sd, 0x3812, 0x00);
 		sensor_write(sd, 0x3301, 0x64);
 		sensor_write(sd, 0x3632, 0x48);
@@ -1028,7 +1028,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	} else if (again >= 0x710 && again <= 0x71e) {
 		ret += sensor_write(sd, 0x3301, 0x64);
 		ret += sensor_write(sd, 0x3632, 0x08);
-	} else { //may be flick
+	} else { // may be flick
 		ret += sensor_write(sd, 0x3301, 0x64);
 		ret += sensor_write(sd, 0x3632, 0x48);
 	}
@@ -1107,7 +1107,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

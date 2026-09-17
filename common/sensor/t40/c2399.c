@@ -216,7 +216,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
@@ -517,8 +517,8 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 
 	{0x0101, 0x01},
 	{0x3009, 0x05},
-	{0x300b, 0x10}, //for bayer=BGGR
-	{0x0100, 0x01}, //stream on
+	{0x300b, 0x10}, // for bayer=BGGR
+	{0x0100, 0x01}, // stream on
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -761,7 +761,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	wpclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -943,12 +943,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

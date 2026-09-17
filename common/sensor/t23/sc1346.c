@@ -54,8 +54,8 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-//static unsigned short int dpc_flag = 1;
-//static unsigned int gain_val = 0x37e;
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -312,7 +312,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 225,
 			.lans = 1,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -358,7 +358,7 @@ struct tx_isp_mipi_bus sensor_mipi_15fps = {
 	.clk = 225,
 	.lans = 1,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -387,7 +387,7 @@ struct tx_isp_mipi_bus sensor_mipi_30fps = {
 	.clk = 405,
 	.lans = 1,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -745,20 +745,20 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 
 // static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 // {
-// 	int ret;
-// 	unsigned char val;
-// 	while (vals->reg_num != SENSOR_REG_END) {
-// 		if (vals->reg_num == SENSOR_REG_DELAY) {
-// 			private_msleep(vals->value);
-// 		} else {
-// 			ret = sensor_read(sd, vals->reg_num, &val);
-// 			if (ret < 0)
-// 				return ret;
-// 		}
-// 		vals++;
-// 	}
+// int ret;
+// unsigned char val;
+// while (vals->reg_num != SENSOR_REG_END) {
+// if (vals->reg_num == SENSOR_REG_DELAY) {
+// private_msleep(vals->value);
+// } else {
+// ret = sensor_read(sd, vals->reg_num, &val);
+// if (ret < 0)
+// return ret;
+// }
+// vals++;
+// }
 
-// 	return 0;
+// return 0;
 // }
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
@@ -816,7 +816,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	if (ret < 0)
 		return ret;
-	//	gain_val = again;
+	// gain_val = again;
 
 	return 0;
 }
@@ -912,7 +912,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
@@ -954,8 +954,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor->video.attr->total_height = vts;
 	sensor->video.attr->max_integration_time = vts - 6;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
-	//   ISP_INFO("....vts=%d\n",vts);
-	//   ISP_INFO(".....ret=%d\n",ret);
+	// ISP_INFO("....vts=%d\n",vts);
+	// ISP_INFO(".....ret=%d\n",ret);
 	return ret;
 }
 
@@ -1055,12 +1055,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

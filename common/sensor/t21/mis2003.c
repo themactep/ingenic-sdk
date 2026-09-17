@@ -195,7 +195,7 @@ struct again_lut sensor_again_lut[] = {
 	{0x7c, 256038},
 	{0x7d, 257600},
 	{0x7e, 259138},
-	//{0x7f, 260651},
+	// {0x7f, 260651},
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -271,7 +271,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x370e, 0x01}, // 连续 (2^0x370e)帧变化 Target值才响应
 	{0x3800, 0x00}, // DRNC  ARNC全开
 	{0x3b00, 0x01}, // no overflow
-	{0x3400, 0x0b}, //下降沿采样
+	{0x3400, 0x0b}, // 下降沿采样
 	{0x3d00, 0x01},
 	{0x410c, 0x42},
 	{0x400e, 0x24},
@@ -286,12 +286,12 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x4111, 0x0f},
 	{0x4110, 0x48},
 	{0x410e, 0x02}, // 太阳黑子 LM模式
-	{0x4104, 0x2d}, //太阳黑子消除 20180112
+	{0x4104, 0x2d}, // 太阳黑子消除 20180112
 	{0x4101, 0x01}, // CPN = OFF    20180118 by songbo
-	{0x3100, 0x04}, //曝光时间调整寄存器
+	{0x3100, 0x04}, // 曝光时间调整寄存器
 	{0x3101, 0x64},
-	{0x3102, 0x00}, //PGA调整寄存器 1x,2x,4x,8x
-	{0x3103, 0x0f}, //ADC 调整寄存器 1x～8(1+31/32)xx
+	{0x3102, 0x00}, // PGA调整寄存器 1x,2x,4x,8x
+	{0x3103, 0x0f}, // ADC 调整寄存器 1x～8(1+31/32)xx
 	/*CIS_IN=24Mhz PCLK=72Mhz*/
 	{0x3300, 0x48},
 	{0x3301, 0x02},
@@ -550,7 +550,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -813,7 +813,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 259138;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

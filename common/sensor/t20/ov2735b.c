@@ -311,7 +311,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xa6, 0x03},
 	{0xa7, 0xc0},
 	{0xfd, 0x03},
-	{0xc0, 0x01}, //OTP transf
+	{0xc0, 0x01}, // OTP transf
 	{0xfd, 0x04},
 	{0x22, 0x14},
 	{0x23, 0x14},
@@ -439,7 +439,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xa6, 0x03},
 	{0xa7, 0xc0},
 	{0xfd, 0x03},
-	{0xc0, 0x01}, //OTP transf
+	{0xc0, 0x01}, // OTP transf
 	{0xfd, 0x04},
 	{0x22, 0x14},
 	{0x23, 0x14},
@@ -475,7 +475,7 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
-	{0x37, 0x00}, //fake stream on
+	{0x37, 0x00}, // fake stream on
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -483,7 +483,7 @@ static struct regval_list sensor_stream_on[] = {
 static struct regval_list sensor_stream_off[] = {
 	{0xfd, 0x00},
 	{0x36, 0x01},
-	{0x37, 0x01}, //fake stream off
+	{0x37, 0x01}, // fake stream off
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -700,8 +700,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -738,7 +738,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret = 0;
 	ISP_INFO("vts is %d\n", vts);
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x0d, 0x10); //frame_exp_seperate_en
+	ret += sensor_write(sd, 0x0d, 0x10); // frame_exp_seperate_en
 	ret += sensor_write(sd, 0x0e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x0f, vts & 0xff);
 	ret += sensor_write(sd, 0x01, 0x01);

@@ -41,7 +41,7 @@
 
 static int reset_gpio = SENSOR_RESET_GPIO;
 static int pwdn_gpio = -1;
-static int wdr_bufsize = 2 * 3000 * 188; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2 * 3000 * 188; // cache lines corrponding on VPB1
 static int shvflip = 1;
 
 static struct sensor_info sensor_info = {
@@ -290,7 +290,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x07}, //vts
+	{0x0340, 0x07}, // vts
 	{0x0341, 0x80},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -379,7 +379,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05}, //hts
+	{0x0342, 0x05}, // hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -857,7 +857,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
 	unsigned char sensor_min_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1185,7 +1185,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	struct tx_isp_sensor_value *sensor_val = arg;
 	struct tx_isp_initarg *init = arg;
 
-	//	return 0;
+	// return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;

@@ -511,7 +511,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
-	//complement the steak
+	// complement the steak
 	if (value <= 0x40) {
 		ret += sensor_write(sd, 0x99, (unsigned char)(val_99 & 0x0f));
 		ret += sensor_write(sd, 0x9b, (unsigned char)(val_9b & 0x0f));
@@ -599,7 +599,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor->info.default_boot) {
 	case 0 ... 1:
@@ -638,7 +638,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else

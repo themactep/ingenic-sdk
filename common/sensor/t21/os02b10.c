@@ -207,19 +207,19 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x1f, 0xa4},
 	{0x33, 0x60},
 	{0x12, 0x04},
-	{0x13, 0x60}, //signal num:+10
+	{0x13, 0x60}, // signal num:+10
 	{0x1a, 0xfb},
 	{0x20, 0x03},
 	{0x25, 0xbe},
 	{0x26, 0x09},
 	{0x29, 0x0b},
-	{0x2a, 0x6d}, //adc_range:0.88v
+	{0x2a, 0x6d}, // adc_range:0.88v
 	{0x2c, 0x60},
 	{0x2e, 0x02},
 	{0x44, 0x03},
-	{0x45, 0xfe}, //cnt_dds:+10
-	{0x55, 0x0d}, //rst:+10
-	{0x57, 0x20}, //tx on >1us
+	{0x45, 0xfe}, // cnt_dds:+10
+	{0x55, 0x0d}, // rst:+10
+	{0x57, 0x20}, // tx on >1us
 	{0x59, 0xef},
 	{0x5a, 0xff},
 	{0x5b, 0x01},
@@ -227,7 +227,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x66, 0x34},
 	{0x68, 0x36},
 	{0x71, 0x4a},
-	{0x73, 0x35}, //tx on d3
+	{0x73, 0x35}, // tx on d3
 	{0x7c, 0xbb},
 	{0x8a, 0x55},
 	{0x8b, 0x55},
@@ -489,8 +489,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_SCLK_FPS_30;
@@ -515,7 +515,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	vts = sclk * (fps & 0xffff) / 2 / hts / ((fps & 0xffff0000) >> 16);
 	ret = 0;
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x0d, 0x10); //frame_exp_seperate_en
+	ret += sensor_write(sd, 0x0d, 0x10); // frame_exp_seperate_en
 	ret += sensor_write(sd, 0x0e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x0f, vts & 0xff);
 	ret += sensor_write(sd, 0x01, 0x01);

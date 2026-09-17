@@ -1188,7 +1188,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
@@ -1261,12 +1261,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += sensor_read(sd, 0x1f, &val);
-	//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group writefunction,  auto clean
+	val |= (1 << 7); // set bit[7],  register group writefunction,  auto clean
 	sensor_write(sd, 0x1f, val);
-	//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
@@ -1429,8 +1429,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	switch (info->default_boot) {
 	case 0:
 		wsize = &sensor_win_sizes[0];
-		sensor_attr.total_width = 0x500 * 2; //2560
-		sensor_attr.total_height = 0x546;    //1350
+		sensor_attr.total_width = 0x500 * 2; // 2560
+		sensor_attr.total_height = 0x546;    // 1350
 		sensor_attr.max_integration_time_native = 0x465 - 4;
 		sensor_attr.integration_time_limit = 0x465 - 4;
 		sensor_attr.max_integration_time = 0x465 - 4;
@@ -1451,8 +1451,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	case 2:
 		wsize = &sensor_win_sizes[2];
-		sensor_attr.total_width = 0x2a2;  //674
-		sensor_attr.total_height = 0x216; //534
+		sensor_attr.total_width = 0x2a2;  // 674
+		sensor_attr.total_height = 0x216; // 534
 		sensor_attr.max_integration_time_native = 0x216 - 4;
 		sensor_attr.integration_time_limit = 0x216 - 4;
 		sensor_attr.max_integration_time = 0x216 - 4;
@@ -1462,8 +1462,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	case 3:
 		wsize = &sensor_win_sizes[3];
-		sensor_attr.total_width = 0x253 * 4; //2380
-		sensor_attr.total_height = 0x455;    //1109
+		sensor_attr.total_width = 0x253 * 4; // 2380
+		sensor_attr.total_height = 0x455;    // 1109
 		sensor_attr.max_integration_time_native = 0x455 - 4;
 		sensor_attr.integration_time_limit = 0x455 - 4;
 		sensor_attr.max_integration_time = 0x455 - 4;
@@ -1474,8 +1474,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	case 4:
 		wsize = &sensor_win_sizes[4];
-		sensor_attr.total_width = 0x280 * 4; //2560
-		sensor_attr.total_height = 0x465;    //1125
+		sensor_attr.total_width = 0x280 * 4; // 2560
+		sensor_attr.total_height = 0x465;    // 1125
 		sensor_attr.max_integration_time_native = 0x465 - 4;
 		sensor_attr.integration_time_limit = 0x465 - 4;
 		sensor_attr.max_integration_time = 0x465 - 4;
@@ -1488,8 +1488,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		break;
 	case 5:
 		wsize = &sensor_win_sizes[5];
-		sensor_attr.total_width = 0xa00;  //2560
-		sensor_attr.total_height = 0x465; //1350
+		sensor_attr.total_width = 0xa00;  // 2560
+		sensor_attr.total_height = 0x465; // 1350
 		sensor_attr.max_integration_time_native = 0x465 - 4;
 		sensor_attr.integration_time_limit = 0x465 - 4;
 		sensor_attr.max_integration_time = 0x465 - 4;

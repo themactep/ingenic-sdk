@@ -652,7 +652,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -939,7 +939,7 @@ static struct tx_isp_subdev_core_ops sensor_core_ops = {
 	.g_chip_ident = sensor_g_chip_ident,
 	.reset = sensor_reset,
 	.init = sensor_init,
-	//	.fsync = sensor_frame_sync,
+	// .fsync = sensor_frame_sync,
 	.g_register = sensor_g_register,
 	.s_register = sensor_s_register,
 };

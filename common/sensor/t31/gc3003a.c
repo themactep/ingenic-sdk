@@ -190,7 +190,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
-	//mclk=27mhz,frame rate=30fps
+	// mclk=27mhz,frame rate=30fps
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
 	{0x03fe, 0xf0},
@@ -363,12 +363,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x023e, 0x99},
+	// {0x023e, 0x99},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x023e, 0x00},
+	// {0x023e, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -471,10 +471,10 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
 
-	ret += sensor_write(sd, 0x0370, 0xc0); //[7]OTP clk gate  [6]OTP_en
+	ret += sensor_write(sd, 0x0370, 0xc0); // [7]OTP clk gate  [6]OTP_en
 	ret += sensor_write(sd, 0x0367, 0x2d); // OTP_access_addr[7:0]
-	ret += sensor_write(sd, 0x0368, 0x00); //[1:0] OTP_access_addr[9:8]
-	ret += sensor_write(sd, 0x0370, 0xc4); //[2]OTP read pulse
+	ret += sensor_write(sd, 0x0368, 0x00); // [1:0] OTP_access_addr[9:8]
+	ret += sensor_write(sd, 0x0370, 0xc4); // [2]OTP read pulse
 	ret += sensor_read(sd, 0x036a, &v);
 	v = v | 0x10;
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
@@ -585,7 +585,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -640,8 +640,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
-			//private_gpio_direction_output(reset_gpio, 1);
-			//private_msleep(10);
+			// private_gpio_direction_output(reset_gpio, 1);
+			// private_msleep(10);
 			private_gpio_direction_output(reset_gpio, 0);
 			private_msleep(5);
 			private_gpio_direction_output(reset_gpio, 1);
@@ -714,12 +714,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

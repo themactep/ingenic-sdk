@@ -30,7 +30,7 @@
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfe
 #define SENSOR_REG_END 0xff
-#define SENSOR_SUPPORT_SCLK_4M (86400000) //(172800000)
+#define SENSOR_SUPPORT_SCLK_4M (86400000) // (172800000)
 #define SENSOR_VERSION "H20220329a"
 
 
@@ -351,7 +351,7 @@ static struct regval_list sensor_init_regs_2560_1920_25fps_mipi_4m[] = {
 	{0x48, 0x86},
 	{0x48, 0x06},
 	{0x00, 0x10},
-	//{SENSOR_REG_DELAY, 0x15},
+	// {SENSOR_REG_DELAY, 0x15},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -381,12 +381,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x12, 0x00},
+	// {0x12, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x12, 0x40},
+	// {0x12, 0x40},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -592,7 +592,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor_max_fps) {
 	case TX_SENSOR_MAX_FPS_15:
@@ -634,7 +634,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else

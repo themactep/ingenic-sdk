@@ -331,9 +331,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3809, 0x80},
 	{0x380a, 0x04},
 	{0x380b, 0x38},
-	{0x380c, 0x07}, //hts -> 0x78c = 1932
+	{0x380c, 0x07}, // hts -> 0x78c = 1932
 	{0x380d, 0x8c}, //
-	{0x380e, 0x09}, //vts -> 0x9c0 = 2496
+	{0x380e, 0x09}, // vts -> 0x9c0 = 2496
 	{0x380f, 0xc0}, //
 	{0x3810, 0x00},
 	{0x3811, 0x10},
@@ -874,7 +874,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned char max_fps = 30;
 
 	switch (sensor_resolution) {

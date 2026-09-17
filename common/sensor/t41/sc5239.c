@@ -1081,7 +1081,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 }
 
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
-	//unsigned int short_time;
+	// unsigned int short_time;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int sclk = 0;
 	unsigned int hts = 0;

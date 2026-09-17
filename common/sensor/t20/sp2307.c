@@ -699,8 +699,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -736,7 +736,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	ret = 0;
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x0d, 0x10); //frame_exp_seperate_en
+	ret += sensor_write(sd, 0x0d, 0x10); // frame_exp_seperate_en
 	ret += sensor_write(sd, 0x0e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x0f, vts & 0xff);
 	ret += sensor_write(sd, 0x01, 0x01);

@@ -121,17 +121,17 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x0113, 0x0c},
 	{0x0340, 0x05},
 	{0x0341, 0x46},
-	{0x0342, 0x04}, //LINE_LENGTH 30fps 0x44c
-	{0x0343, 0x4c}, //LINE_LENGTH
-	{0x3002, 0x0f}, //MODE
+	{0x0342, 0x04}, // LINE_LENGTH 30fps 0x44c
+	{0x0343, 0x4c}, // LINE_LENGTH
+	{0x3002, 0x0f}, // MODE
 	{0x3005, 0x65},
 	{0x3027, 0x20},
-	{0x3011, 0x00}, //date rete 00 1x inclk 01 2x inclk
+	{0x3011, 0x00}, // date rete 00 1x inclk 01 2x inclk
 	{0x3012, 0x82},
 	{0x3016, 0x3c},
 	{0x3017, 0x00},
 	{0x301f, 0x73},
-	{0x3021, 0x00}, //modify
+	{0x3021, 0x00}, // modify
 	{0x3022, 0x40},
 	{0x3027, 0x20},
 	{0x3117, 0x0d},
@@ -139,15 +139,15 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x303f, 0x0a},
 	{0x307a, 0x00},
 	{0x307b, 0x00},
-	{0x309a, 0x26}, //30fps 26
+	{0x309a, 0x26}, // 30fps 26
 	{0x309b, 0x02},
-	{0x30ce, 0x16}, //PRES
-	{0x30cf, 0x82}, //DRES
-	{0x30d0, 0x00}, //DRES
+	{0x30ce, 0x16}, // PRES
+	{0x30cf, 0x82}, // DRES
+	{0x30d0, 0x00}, // DRES
 	{0x302c, 0x00},
-	{0x301e, 0x00}, //gain
+	{0x301e, 0x00}, // gain
 	{0x0202, 0x01},
-	{0x0203, 0x00}, //expo
+	{0x0203, 0x00}, // expo
 	/* {0x3008, 0x00}, */
 	/* {0x3009, 0x00}, */
 	{0x0100, 0x00},
@@ -346,7 +346,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
-	//	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
+	// sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
 }
 
@@ -367,7 +367,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int vts = 0;
 	unsigned int vts_old = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int shs = 0;
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

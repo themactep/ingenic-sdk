@@ -869,10 +869,10 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 
-	if ((again >= 0x3f7f) && dpc_flag) { //24x
+	if ((again >= 0x3f7f) && dpc_flag) { // 24x
 		ret += sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
-	} else if ((again <= 0x3f69) && (!dpc_flag)) { //20x
+	} else if ((again <= 0x3f69) && (!dpc_flag)) { // 20x
 		ret += sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
@@ -906,10 +906,10 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8 & 0xff)));
-	if ((again >= 0x3f7f) && dpc_flag) {//24x
+	if ((again >= 0x3f7f) && dpc_flag) {// 24x
 		ret += sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = false;
-	} else if ((again <= 0x3f69) && (!dpc_flag)) {//20x
+	} else if ((again <= 0x3f69) && (!dpc_flag)) {// 20x
 		ret += sensor_write(sd, 0x5799, 0x00);
 		dpc_flag = true;
 	}
@@ -984,7 +984,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

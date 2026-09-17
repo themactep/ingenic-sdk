@@ -557,9 +557,9 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x3809, 0x80},
 	{0x380a, 0x05},
 	{0x380b, 0xf0},
-	{0x380c, 0x0a}, //hts 0xa18 = 2584
+	{0x380c, 0x0a}, // hts 0xa18 = 2584
 	{0x380d, 0x18}, //
-	{0x380e, 0x06}, //vts 0x612 = 1554
+	{0x380e, 0x06}, // vts 0x612 = 1554
 	{0x380f, 0x12}, //
 	{0x3810, 0x00},
 	{0x3811, 0x08},
@@ -830,9 +830,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3809, 0x80},
 	{0x380a, 0x04},
 	{0x380b, 0x38},
-	{0x380c, 0x0f}, //hts 0xf50 = 3920
+	{0x380c, 0x0f}, // hts 0xf50 = 3920
 	{0x380d, 0x50}, //
-	{0x380e, 0x04}, //vts 0x48a = 1162
+	{0x380e, 0x04}, // vts 0x48a = 1162
 	{0x380f, 0x8a}, //
 	{0x3810, 0x00},
 	{0x3811, 0x08},
@@ -1182,7 +1182,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (info->default_boot) {
 	case 0:
@@ -1462,7 +1462,7 @@ static struct tx_isp_subdev_core_ops sensor_core_ops = {
 	.g_chip_ident = sensor_g_chip_ident,
 	.reset = sensor_reset,
 	.init = sensor_init,
-	//	.fsync = sensor_frame_sync,
+	// .fsync = sensor_frame_sync,
 	.g_register = sensor_g_register,
 	.s_register = sensor_s_register,
 };

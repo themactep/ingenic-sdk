@@ -71,8 +71,8 @@ struct regval_list {
 	uint16_t value;
 };
 
-//static unsigned short int dpc_flag = 1;
-//static unsigned int gain_val = 0x37e;
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
 
 struct again_lut {
 	unsigned int value;
@@ -1221,8 +1221,8 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2lane[] = {
 	{0x4509, 0x20},
 	{0x4603, 0x00},
 	{0x4800, 0x24},
-	//{0x4818, 0x00},//
-	//{0x4819, 0x47},//
+	// {0x4818, 0x00},//
+	// {0x4819, 0x47},//
 	{0x4826, 0x00}, //
 	{0x4827, 0x37}, //
 	{0x4837, 0x2b},
@@ -1377,7 +1377,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	if (ret < 0)
 		return ret;
-	//	gain_val = again;
+	// gain_val = again;
 
 	return 0;
 }
@@ -1405,7 +1405,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
-//	gain_val = value;
+// gain_val = value;
 
 	return 0;
 }
@@ -1433,11 +1433,11 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value)
 	} else {
 		ret += sensor_write(sd, 0x363c, 0x07);
 	}
-	if (gain_val >= 0xf60) { //6x
+	if (gain_val >= 0xf60) { // 6x
 		ret += sensor_write(sd, 0x5799, 0x07);
 		dpc_flag = 2;
 	}
-	else if (gain_val <= 0xf40) {//4x
+	else if (gain_val <= 0xf40) {// 4x
 		ret += sensor_write(sd, 0x5799, 0x00);
 	}
 	if (ret < 0)
@@ -1505,7 +1505,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned short vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if (lans == 1) {
@@ -1691,8 +1691,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_vflip(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_LOGIC:
-		//		if (arg)
-		//			ret = sensor_set_logic(sd, *(int*)arg);
+		// if (arg)
+		// ret = sensor_set_logic(sd, *(int*)arg);
 		break;
 	default:
 		break;

@@ -254,7 +254,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0102, 0x89},
 	{0x0104, 0x01},
 	{0x0158, 0x00},
-	{0x0026, 0x20}, //blk 23 //[4]写0，全n mode  /* blk
+	{0x0026, 0x20}, // blk 23 //[4]写0，全n mode  /* blk
 	{0x0142, 0x00},
 	{0x0149, 0x1e},
 	{0x014a, 0x07},
@@ -264,12 +264,12 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0415, 0x7e},
 	{0x0416, 0x7e},
 	{0x0417, 0x7e},
-	{0x0192, 0x02}, //00 //win y1
-	{0x0194, 0x03}, //win x1
+	{0x0192, 0x02}, // 00 //win y1
+	{0x0194, 0x03}, // win x1
 	{0x0195, 0x04},
-	{0x0196, 0x38}, //[10:0]out_height
+	{0x0196, 0x38}, // [10:0]out_height
 	{0x0197, 0x07},
-	{0x0198, 0x80}, //[11:0]out_width
+	{0x0198, 0x80}, // [11:0]out_width
 	{0x019a, 0x06},
 	{0x007b, 0x2a},
 	{0x0023, 0x2d},
@@ -278,7 +278,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x0203, 0xce},
 	{0x0212, 0x80},
 	{0x0213, 0x07},
-	//0x0215, 0x12
+	// 0x0215, 0x12
 	{0x003e, 0x91},
 	{SENSOR_REG_END, 0x00},
 };
@@ -480,7 +480,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char val;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	clk = SENSOR_SUPPORT_30FPS_SCLK;

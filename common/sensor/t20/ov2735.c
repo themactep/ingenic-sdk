@@ -203,7 +203,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 
 	{0xfd, 0x00},
-	/*{0x20, 0x00},*/ //soft reset enable, cause i2c error
+	/*{0x20, 0x00},*/ // soft reset enable, cause i2c error
 	{SENSOR_REG_DELAY, 0x05},
 	{0xfd, 0x00},
 	{0x2f, 0x10},
@@ -277,7 +277,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x98, 0x45},
 	{0x9c, 0x10},
 	{0xb5, 0x70},
-	{0xa0, 0x00}, //mipi enable
+	{0xa0, 0x00}, // mipi enable
 	{0x25, 0xe0},
 	{0x20, 0x7b},
 	{0x8f, 0x88},
@@ -301,18 +301,18 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xf2, 0x40},
 	{0xf3, 0x40},
 	{0xfd, 0x02},
-	{0x36, 0x08}, //invert Vsync polarity for Gaia
-	{0xa0, 0x00}, //Image vertical start MSB3bits
-	{0xa1, 0x08}, //LSB8bits
-	{0xa2, 0x04}, //image vertical size  MSB8bits
-	{0xa3, 0x38}, //LSB8bits
+	{0x36, 0x08}, // invert Vsync polarity for Gaia
+	{0xa0, 0x00}, // Image vertical start MSB3bits
+	{0xa1, 0x08}, // LSB8bits
+	{0xa2, 0x04}, // image vertical size  MSB8bits
+	{0xa3, 0x38}, // LSB8bits
 	{0xa4, 0x00},
-	{0xa5, 0x08}, //H start 8Lsb
+	{0xa5, 0x08}, // H start 8Lsb
 	{0xa6, 0x03},
-	{0xa7, 0xc0}, //Half H size Lsb8bits
+	{0xa7, 0xc0}, // Half H size Lsb8bits
 
 	{0xfd, 0x01},
-	{0x06, 0xe0}, //insert dummy line , the frame rate is 30.01.
+	{0x06, 0xe0}, // insert dummy line , the frame rate is 30.01.
 	{0x01, 0x01},
 
 	{0xfd, 0x01},
@@ -400,7 +400,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x98, 0x45},
 	{0x9c, 0x10},
 	{0xb5, 0x70},
-	{0xa0, 0x00}, //mipi enable
+	{0xa0, 0x00}, // mipi enable
 	{0x25, 0xe0},
 	{0x20, 0x7b},
 	{0x8f, 0x88},
@@ -424,18 +424,18 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xf2, 0x40},
 	{0xf3, 0x40},
 	{0xfd, 0x02},
-	{0x36, 0x08}, //invert Vsync polarity for Gaia
-	{0xa0, 0x00}, //Image vertical start MSB3bits
-	{0xa1, 0x08}, //LSB8bits
-	{0xa2, 0x04}, //image vertical size  MSB8bits
-	{0xa3, 0x38}, //LSB8bits
+	{0x36, 0x08}, // invert Vsync polarity for Gaia
+	{0xa0, 0x00}, // Image vertical start MSB3bits
+	{0xa1, 0x08}, // LSB8bits
+	{0xa2, 0x04}, // image vertical size  MSB8bits
+	{0xa3, 0x38}, // LSB8bits
 	{0xa4, 0x00},
-	{0xa5, 0x08}, //H start 8Lsb
+	{0xa5, 0x08}, // H start 8Lsb
 	{0xa6, 0x03},
-	{0xa7, 0xc0}, //Half H size Lsb8bits
+	{0xa7, 0xc0}, // Half H size Lsb8bits
 
 	{0xfd, 0x01},
-	{0x06, 0xe0}, //insert dummy line , the frame rate is 30.01.
+	{0x06, 0xe0}, // insert dummy line , the frame rate is 30.01.
 	{0x01, 0x01},
 	/* {0x39, 0xff}, */
 
@@ -466,7 +466,7 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 static struct regval_list sensor_stream_on[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
-	{0x37, 0x00}, //fake stream on
+	{0x37, 0x00}, // fake stream on
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -474,7 +474,7 @@ static struct regval_list sensor_stream_on[] = {
 static struct regval_list sensor_stream_off[] = {
 	{0xfd, 0x00},
 	{0x36, 0x01},
-	{0x37, 0x01}, //fake stream off
+	{0x37, 0x01}, // fake stream off
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -691,8 +691,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -728,7 +728,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	vts = sclk * (fps & 0xffff) / 2 / hts / ((fps & 0xffff0000) >> 16);
 	ret = 0;
 	ret += sensor_write(sd, 0xfd, 0x01);
-	ret += sensor_write(sd, 0x0d, 0x10); //frame_exp_seperate_en
+	ret += sensor_write(sd, 0x0d, 0x10); // frame_exp_seperate_en
 	ret += sensor_write(sd, 0x0e, (vts >> 8) & 0xff);
 	ret += sensor_write(sd, 0x0f, vts & 0xff);
 	ret += sensor_write(sd, 0x01, 0x01);

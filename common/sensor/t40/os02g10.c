@@ -183,7 +183,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.mipi =
 		{
 			.mode = SENSOR_MIPI_OTHER_MODE,
-			.clk = 696, //800 abby
+			.clk = 696, // 800 abby
 			.lans = 2,
 			.settle_time_apative_en = 0,
 			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10,
@@ -232,13 +232,13 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
 	{0xfd, 0x00},
-	//	{0x20, 0x00},
+	// {0x20, 0x00},
 	{SENSOR_REG_DELAY, 5},
 	{0xfd, 0x00},
 	{0xfd, 0x00},
 	{0x2e, 0x1a},
 	{0x30, 0x0a},
-	{0x35, 0x02}, //04 abby
+	{0x35, 0x02}, // 04 abby
 	{0x38, 0x11},
 	{0x41, 0x06},
 	{0x43, 0x01},
@@ -250,7 +250,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x24, 0x30},
 	{0x01, 0x01},
 	{0x19, 0x50},
-	//	{0x0d, 0x01},开启color bar
+	// {0x0d, 0x01},开启color bar
 	{0x1a, 0x0c},
 	{0x1b, 0x0d},
 	{0x1c, 0x00},
@@ -286,10 +286,10 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x7b, 0x10},
 	{0x8f, 0x80},
 	{0x91, 0x38},
-	//	{0x92, 0x02}, 抗干扰，功耗会增加，原0x02，最高0x07
-	{0x92, 0x0a}, //get mode
+	// {0x92, 0x02}, 抗干扰，功耗会增加，原0x02，最高0x07
+	{0x92, 0x0a}, // get mode
 	{0x9d, 0x03},
-	{0x9e, 0x5f}, //0x55 abby
+	{0x9e, 0x5f}, // 0x55 abby
 	{0xb8, 0x70},
 	{0xb9, 0x70},
 	{0xba, 0x70},
@@ -321,7 +321,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x03, 0x67},
 	{0x00, 0x59},
 	{0x04, 0x11},
-	{0x05, 0x05}, //04 H_start
+	{0x05, 0x05}, // 04 H_start
 	{0x06, 0x0c},
 	{0x07, 0x08},
 	{0x08, 0x08},
@@ -348,7 +348,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xb1, 0x01},
 	{0xfd, 0x01},
 	{0xb1, 0x01},
-	{0xfd, 0x01}, //Nomal
+	{0xfd, 0x01}, // Nomal
 	{0x3f, 0x00},
 	{0xfd, 0x02},
 	{0x5e, 0x22},
@@ -506,7 +506,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;
 
-	//ISP_INFO("ace  debug   integration time = %d\n",expo);
+	// ISP_INFO("ace  debug   integration time = %d\n",expo);
 
 	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x04, (unsigned char)(expo & 0xff));
@@ -521,7 +521,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	//ISP_INFO("ace debug  analog gain = %d\n",value);
+	// ISP_INFO("ace debug  analog gain = %d\n",value);
 
 	ret += sensor_write(sd, 0xfd, 0x01);
 	ret += sensor_write(sd, 0x24, value);
@@ -603,7 +603,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb = 0;
 	unsigned int vts_init = SENSOR_VTS_30_FPS;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

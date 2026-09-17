@@ -339,7 +339,7 @@ static struct regval_list sensor_init_regs_1280_720_15fps[] = {
 	{0x3a, 0x08},
 	{0x56, 0x02},
 	{0x60, 0x01},
-	{0x0d, 0x50}, //drv
+	{0x0d, 0x50}, // drv
 	{0x57, 0x80},
 	{0x58, 0x33},
 	{0x5a, 0x04},
@@ -594,7 +594,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 	switch (sensor_max_fps) {
@@ -603,7 +603,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 		break;
 	case TX_SENSOR_MAX_FPS_15:
-		pclk = SENSOR_SUPPORT_15FPS_PCLK; //24MHz
+		pclk = SENSOR_SUPPORT_15FPS_PCLK; // 24MHz
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
@@ -632,7 +632,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
-	tmp |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 
 	sensor->video.fps = fps;
@@ -837,7 +837,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct tx_isp_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = NULL; //&sensor_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = NULL; // &sensor_win_sizes[0];
 	enum v4l2_mbus_pixelcode mbus;
 	int i = 0;
 	int ret;

@@ -298,7 +298,7 @@ struct tx_isp_sensor_attribute sc301iot_attr = {.name = "sc301iot",
 			.clk = 1080,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -355,9 +355,9 @@ static struct regval_list sc301iot_init_regs_2048_1536_30fps_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x06},
 	{0x320b, 0x00},
-	{0x320c, 0x04}, //hts = 0x465 = 1125
+	{0x320c, 0x04}, // hts = 0x465 = 1125
 	{0x320d, 0x65}, //
-	{0x320e, 0x0c}, //60fps => vts = 0x640 = 1600
+	{0x320e, 0x0c}, // 60fps => vts = 0x640 = 1600
 	{0x320f, 0x80}, //
 	{0x3214, 0x11},
 	{0x3215, 0x11},
@@ -485,7 +485,7 @@ static struct regval_list sc301iot_init_regs_2048_1536_30fps_mipi[] = {
 	{0x4509, 0x10},
 	{0x5001, 0x40},
 	{0x5007, 0x80},
-	{0x300a, 0x24}, //master fsync
+	{0x300a, 0x24}, // master fsync
 	{0x3032, 0xa0},
 	{0x36e9, 0x24},
 	{0x37f9, 0x24},
@@ -624,14 +624,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret = sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	//sensor analog gain
+	// sensor analog gain
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-	//sensor dig fine gain
+	// sensor dig fine gain
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	if (ret < 0)
 		return ret;
@@ -733,7 +733,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;

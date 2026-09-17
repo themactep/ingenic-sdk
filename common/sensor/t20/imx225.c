@@ -77,7 +77,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 			remainder = 3;
 		*sensor_again = gain * 3 + remainder;
 	}
-	//	ISP_INFO("isp_gain = 0x%08x  0x%08x again = 0x%08x\n",isp_gain, gain, *sensor_again);
+	// ISP_INFO("isp_gain = 0x%08x  0x%08x again = 0x%08x\n",isp_gain, gain, *sensor_again);
 	return isp_gain;
 }
 
@@ -103,7 +103,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 				},
 		},
 	.max_again = 786420,
-	//	.max_again = ((0x2d0 / 3) * (1 << LOG2_GAIN_SHIFT))/20,
+	// .max_again = ((0x2d0 / 3) * (1 << LOG2_GAIN_SHIFT))/20,
 	.max_dgain = 0,
 	.min_integration_time = 1,
 	.min_integration_time_native = 1,
@@ -123,10 +123,10 @@ struct tx_isp_sensor_attribute sensor_attr = {
 static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 #if 0
 	/* 720P is ok */
-	{0x3002, 0x01}, //add
-	{0x3005, 0x01}, //add
+	{0x3002, 0x01}, // add
+	{0x3005, 0x01}, // add
 	{0x3007, 0x10},
-//	{0x3009, 0x02},
+// {0x3009, 0x02},
 	{0x3009, 0x01}, // modify
 	{0x320c, 0xcf},
 	{0x300f, 0x00},
@@ -177,12 +177,12 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x30b8, 0x10},
 	{0x30c2, 0x01},
 	{0x31ed, 0x38},
-	{0x3054, 0x67}, //add
-	{0x3000, 0x30}, //STANDBY = 0
+	{0x3054, 0x67}, // add
+	{0x3000, 0x30}, // STANDBY = 0
 #else
 	/* 960p ok */
-	{0x3002, 0x01}, //add
-	{0x3005, 0x01}, //add
+	{0x3002, 0x01}, // add
+	{0x3005, 0x01}, // add
 	{0x3006, 0x00},
 	{0x3007, 0x00},
 	{0x3009, 0x01}, // modify
@@ -237,8 +237,8 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x30b8, 0x10},
 	{0x30c2, 0x01},
 	{0x31ed, 0x38},
-	{0x3054, 0x67}, //add
-	{0x3000, 0x30}, //STANDBY = 0
+	{0x3054, 0x67}, // add
+	{0x3000, 0x30}, // STANDBY = 0
 #endif
 	{SENSOR_REG_DELAY, 0x14},
 	{SENSOR_REG_END, 0x00},
@@ -449,7 +449,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
-	//	sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
+	// sensor_read_array(sd, sensor_init_regs_1280_960_25fps);
 	return ret;
 }
 
@@ -473,7 +473,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	ISP_INFO("functiong:%s, line:%d\n", __func__, __LINE__);

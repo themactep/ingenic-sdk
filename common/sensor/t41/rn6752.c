@@ -42,7 +42,7 @@
 #define USE_CVBS_ONE_FIELD 1
 
 static int reset_gpio = GPIO_PA(18);
-//static int pwdn_gpio = -1;
+// static int pwdn_gpio = -1;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -350,7 +350,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps_mipi[] = {
 	{0x88, 0x40},
 
 	{0xff, 0x00},
-	{0x00, 0x20}, //20->80彩条模式
+	{0x00, 0x20}, // 20->80彩条模式
 	{0x06, 0x08},
 	{0x07, 0x63},
 	{0x2a, 0x01},
@@ -676,7 +676,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg, value};
 
-	//	ISP_INFO("wangtg______>%s addr:0x%x reg:0x%x value:%d", __func__, client->addr, reg, value);
+	// ISP_INFO("wangtg______>%s addr:0x%x reg:0x%x value:%d", __func__, client->addr, reg, value);
 
 	struct i2c_msg msg = {
 		.addr = client->addr,
@@ -715,7 +715,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
-	//	unsigned char val;
+	// unsigned char val;
 
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
@@ -725,8 +725,8 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 			if (ret < 0)
 				return ret;
 		}
-		//ret = sensor_read(sd, vals->reg_num, &val);
-		//ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
+		// ret = sensor_read(sd, vals->reg_num, &val);
+		// ISP_INFO("	{0x%x, 0x%x}\n", vals->reg_num, val);
 		vals++;
 	}
 
@@ -753,7 +753,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.image_twidth = 720, sensor_attr.mipi.image_theight = 240,
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		//memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		// memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 		break;
 	case 1:
 		wsize = &sensor_win_sizes[1];
@@ -766,7 +766,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.max_integration_time_native = 288;
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		sensor_attr.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI;
-		//memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
+		// memcpy((void*)(&(sensor_attr.mipi)),(void*)(&sensor_mipi),sizeof(sensor_mipi));
 		break;
 	case 2:
 		wsize = &sensor_win_sizes[2];
@@ -831,10 +831,10 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		(info->video_interface ? "DVP" : "MIPI"),
 		info->mclk);
 	reset_gpio = info->rst_gpio;
-	//pwdn_gpio = info->pwdn_gpio;
+	// pwdn_gpio = info->pwdn_gpio;
 
 	reset_gpio = info->rst_gpio;
-	//pwdn_gpio = info->pwdn_gpio;
+	// pwdn_gpio = info->pwdn_gpio;
 	private_clk_prepare_enable(sensor->mclk);
 	sensor->video.vi_max_width = wsize->width;
 	sensor->video.vi_max_height = wsize->height;
@@ -863,7 +863,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
-	//	unsigned char val;
+	// unsigned char val;
 	int ret;
 	ret = sensor_write(sd, 0xff, 0x01);
 	if (ret < 0) {
@@ -871,12 +871,12 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	}
 	msleep(10);
 	ret = sensor_read(sd, 0xfe, &v);
-	//	ISP_INFO("ret = %d, v = 0x%02x\n", ret, v);
+	// ISP_INFO("ret = %d, v = 0x%02x\n", ret, v);
 	if (ret < 0 || v != SENSOR_CHIP_ID_H)
 		return ret;
 	*ident = v;
 	ret = sensor_read(sd, 0xfd, &v);
-	//	ISP_INFO("ret = %d, v = 0x%02x\n", ret, v);
+	// ISP_INFO("ret = %d, v = 0x%02x\n", ret, v);
 	if (ret < 0 || v != SENSOR_CHIP_ID_L)
 		return ret;
 	*ident = (*ident << 8) | v;
@@ -934,7 +934,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 		return ret;
 	}
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
-	//	ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
+	// ISP_INFO("sensor driver version %s\n",SENSOR_VERSION);
 	if (chip) {
 		memcpy(chip->name, SENSOR_NAME, sizeof(SENSOR_NAME));
 		chip->ident = ident;

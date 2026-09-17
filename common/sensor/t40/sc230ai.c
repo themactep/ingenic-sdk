@@ -440,7 +440,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_60fps_mipi_2lane[] = {
-	//2lane
+	// 2lane
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -614,8 +614,8 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi_2lane[] = {
 	{0x5afe, 0x3c},
 	{0x5aff, 0x2c},
 	////output fsync
-	//0x300a, 0x24,
-	//0x3032, 0xa0,
+	// 0x300a, 0x24,
+	// 0x3032, 0xa0,
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
 	{0x0100, 0x01},
@@ -885,7 +885,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	sclk = SENSOR_SUPPORT_PCLK_FPS_60;

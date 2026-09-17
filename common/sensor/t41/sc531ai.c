@@ -413,7 +413,7 @@ static struct tx_isp_sensor_attribute sensor_attr = {
 	.total_width = 0x640 * 2,
 	.total_height = 0x339,
 	.max_integration_time = 0x339 - 5,
-	//.one_line_expr_in_us = 20,
+	// .one_line_expr_in_us = 20,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
@@ -745,7 +745,7 @@ static struct regval_list sensor_init_regs_1440_810_60fps_mipi[] = {
 	{0x36e9, 0x57},
 	{0x37f9, 0x33},
 	{SENSOR_REG_DELAY, 0x10},
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 
 };
@@ -772,12 +772,12 @@ struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_DELAY, 0x10},
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1018,9 +1018,9 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
-	//316800000
+	// 316800000
 	return 0;
 	switch (info->default_boot) {
 	case 0:
@@ -1131,8 +1131,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.integration_time_limit = 0x339 - 5;
 		sensor_attr.total_width = 0x640 * 2;
 		sensor_attr.total_height = 0x339;
-		sensor_attr.total_width = 2880;	 //4200
-		sensor_attr.total_height = 1620; //2250
+		sensor_attr.total_width = 2880;	 // 4200
+		sensor_attr.total_height = 1620; // 2250
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0xcda;
 		sensor_attr.max_integration_time = 0x339 - 5;
@@ -1150,7 +1150,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.total_width = 0x640 * 2;
 		sensor_attr.total_height = 0x339;
 		sensor_attr.mipi.image_twidth = 1440, sensor_attr.mipi.image_theight = 810, sensor_attr.again = 0;
-		//sensor_attr.integration_time = 0xcda;
+		// sensor_attr.integration_time = 0xcda;
 		sensor_attr.max_integration_time = 0x339 - 5;
 		sensor_attr.min_integration_time = 3;
 		ISP_INFO("=================> 60fps linear is ok");
@@ -1277,12 +1277,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

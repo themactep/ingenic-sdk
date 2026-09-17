@@ -199,7 +199,7 @@ struct again_lut sensor_again_lut[] = {
 	{0x7c, 256038},
 	{0x7d, 257600},
 	{0x7e, 259138},
-	//{0x7f, 260651},
+	// {0x7f, 260651},
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -236,7 +236,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 800,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -402,7 +402,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3601, 0x02},
 	{0x360f, 0x00},
 	{0x360e, 0x00},
-	{0x3610, 0x02}, //修改高温高增益blc跟随快慢
+	{0x3610, 0x02}, // 修改高温高增益blc跟随快慢
 	{0x3707, 0x00},
 	{0x3708, 0x40},
 	{0x3709, 0x00},
@@ -426,15 +426,15 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3a0f, 0x18},
 	{0x3a10, 0x20},
 	{0x3a11, 0x3c},
-	//MCLK=24Mhz,PCLK=72Mhz
+	// MCLK=24Mhz,PCLK=72Mhz
 	{0x3300, 0x24},
 	{0x3301, 0x00},
 	{0x3302, 0x02},
-	{0x3303, 0x04}, //0x06
+	{0x3303, 0x04}, // 0x06
 	{0x330d, 0x00},
 	{0x330b, 0x01},
 	{0x330f, 0x07},
-	//Windows（2560*1125）
+	// Windows（2560*1125）
 	{0x3201, 0x65},
 	{0x3200, 0x04},
 	{0x3203, 0x55},
@@ -741,7 +741,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int sensor_max_fps;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor->info.default_boot) {
 	case 0:
@@ -788,11 +788,11 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
-	//uint8_t val;
+	// uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	//val = sensor_read(sd, 0x3007, &val);
+	// val = sensor_read(sd, 0x3007, &val);
 	switch (enable) {
 	case 0:
 		sensor_write(sd, 0x3007, 0x00);
@@ -996,8 +996,8 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_EXPO:
-		//if (arg)
-		//	ret = sensor_set_expo(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -1155,7 +1155,7 @@ static int sensor_remove(struct i2c_client *client) {
 		private_gpio_free(pwdn_gpio);
 
 	private_clk_disable_unprepare(sensor->mclk);
-	//private_clk_put(sensor->mclk);
+	// private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
 

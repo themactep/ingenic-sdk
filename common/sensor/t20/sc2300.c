@@ -332,7 +332,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 
 	{0x0100, 0x00},
 	{0x3e03, 0x03},
-	{0x3620, 0x44}, //gain>2 0x46
+	{0x3620, 0x44}, // gain>2 0x46
 	{0x3627, 0x04},
 	{0x3621, 0x28},
 	{0x3641, 0x03},
@@ -342,21 +342,21 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3e03, 0x0b},
 	{0x3635, 0x88},
 	{0x320c, 0x0a},
-	{0x320d, 0x50}, //2640 hts for 25fps
+	{0x320d, 0x50}, // 2640 hts for 25fps
 	{0x320e, 0x04},
 	{0x320f, 0x65},
-	{0x3e0f, 0x05}, //11bit
+	{0x3e0f, 0x05}, // 11bit
 	{0x3305, 0x00},
 	{0x3306, 0xd0},
 	{0x330a, 0x02},
 	{0x330b, 0x38},
-	{0x363a, 0x06}, //NVDD fullwell
-	{0x3632, 0x42}, //TXVDD fpn
-	{0x3622, 0x02}, //blksun
+	{0x363a, 0x06}, // NVDD fullwell
+	{0x3632, 0x42}, // TXVDD fpn
+	{0x3622, 0x02}, // blksun
 	{0x3630, 0x48},
 	{0x3631, 0x80},
 	{0x3334, 0xc0},
-	{0x3e0e, 0x06}, //[1] 1:dcg gain in 3e08[5]
+	{0x3e0e, 0x06}, // [1] 1:dcg gain in 3e08[5]
 	{0x3637, 0x83},
 	{0x3638, 0x83},
 	{0x3620, 0x46},
@@ -365,7 +365,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3416, 0x44},
 	{0x363a, 0x04},
 	{0x3e09, 0x20}, // 1x gain
-	{0x337f, 0x03}, //new auto precharge  330e in 3372
+	{0x337f, 0x03}, // new auto precharge  330e in 3372
 	{0x3368, 0x04},
 	{0x3369, 0x00},
 	{0x336a, 0x00},
@@ -394,17 +394,17 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3632, 0x00},
 	{0x3630, 0x4f},
 	{0x3637, 0x84},
-	{0x3670, 0x20}, //bit[5] for auto 3635 in 0x36a5
-	{0x3683, 0x88}, //3630 value <gain0
-	{0x3684, 0x84}, //3630 value between gain0 and gain1
-	{0x3685, 0x80}, //3630 value > gain1
-	{0x369a, 0x07}, //gain0
-	{0x369b, 0x0f}, //gain1
-	{0x330e, 0x30}, //auto_precharge
+	{0x3670, 0x20}, // bit[5] for auto 3635 in 0x36a5
+	{0x3683, 0x88}, // 3630 value <gain0
+	{0x3684, 0x84}, // 3630 value between gain0 and gain1
+	{0x3685, 0x80}, // 3630 value > gain1
+	{0x369a, 0x07}, // gain0
+	{0x369b, 0x0f}, // gain1
+	{0x330e, 0x30}, // auto_precharge
 	{0x3208, 0x07},
-	{0x3209, 0x80}, //1920
+	{0x3209, 0x80}, // 1920
 	{0x320a, 0x04},
-	{0x320b, 0x38}, //1080
+	{0x320b, 0x38}, // 1080
 	{0x320c, 0x0a},
 	{0x320d, 0x00},
 	{0x3039, 0x31},
@@ -641,7 +641,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -897,7 +897,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	   convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 409347;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

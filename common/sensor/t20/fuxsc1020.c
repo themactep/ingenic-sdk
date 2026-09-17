@@ -99,7 +99,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 44,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
@@ -303,10 +303,10 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 		ret = sensor_set_mode(sensor, ctrl->value);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_PREPARE_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_off);
+		// ret = sensor_write_array(sd, sensor_stream_off);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
-		//	ret = sensor_write_array(sd, sensor_stream_on);
+		// ret = sensor_write_array(sd, sensor_stream_on);
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
 		ret = sensor_set_fps(sensor, ctrl->value);

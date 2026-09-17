@@ -574,7 +574,7 @@ static struct regval_list sensor_init_regs_2688_1520_20fps_mipi_dol[] = {
 	{0x5000, 0xf9},
 	{0x3624, 0x00},
 
-#if 0 //HCG
+#if 0 // HCG
 	{0x320d, 0x00},
 	{0x3208, 0x00},
 	{0x3698, 0x42},
@@ -1484,7 +1484,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned char val;
 	unsigned int short_time;
@@ -1611,7 +1611,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.total_height = 1682;
 		sensor_attr.max_integration_time_native = 1405;
 		sensor_attr.integration_time_limit = 1405;
-		sensor_attr.max_integration_time = 1405; //1670
+		sensor_attr.max_integration_time = 1405; // 1670
 		sensor_attr.max_integration_time_short = 264;
 		sensor_attr.again = 0x80;
 		sensor_attr.integration_time = 0x308;
@@ -1791,7 +1791,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 			sensor_attr.total_height = 1682;
 			sensor_attr.max_integration_time_native = 1405;
 			sensor_attr.integration_time_limit = 1405;
-			sensor_attr.max_integration_time = 1405; //1670
+			sensor_attr.max_integration_time = 1405; // 1670
 			sensor_attr.max_integration_time_short = 264;
 			ISP_INFO("\n-------------------------switch wdr@30fps ok ----------------------\n");
 		}
@@ -1849,12 +1849,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

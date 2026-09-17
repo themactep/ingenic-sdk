@@ -229,7 +229,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
 	{0xfd, 0x00},
-	//	{0x20, 0x00},
+	// {0x20, 0x00},
 	{SENSOR_REG_DELAY, 5},
 	{0xfd, 0x00},
 	{0xfd, 0x00},
@@ -564,7 +564,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb = 0;
 	unsigned int vts_init = SENSOR_VTS_30_FPS;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

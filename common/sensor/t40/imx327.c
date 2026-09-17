@@ -49,7 +49,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 230400; //cache lines corrponding on VPB1
+static int wdr_bufsize = 230400; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -222,50 +222,50 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
-	//add
-	{0x3000, 0x01}, //standy
+	// add
+	{0x3000, 0x01}, // standy
 	{0x3001, 0x01},
-	{0x3002, 0x01}, //Master stop
-			//	{SENSOR_REG_DELAY, 0x18},
-			//	{0x3002, 0x00},
-	{0x3005, 0x01}, //ADBIT 01:12bit
-	{0x3007, 0x40}, //WINMODE[6:4]
-	{0x3009, 0x01}, //FRSEL[1:0]
+	{0x3002, 0x01}, // Master stop
+			// {SENSOR_REG_DELAY, 0x18},
+			// {0x3002, 0x00},
+	{0x3005, 0x01}, // ADBIT 01:12bit
+	{0x3007, 0x40}, // WINMODE[6:4]
+	{0x3009, 0x01}, // FRSEL[1:0]
 	{0x300a, 0xf0},
-	{0x300c, 0x11}, //WDMODE[0] WDSEL[5:4]
-	{0x3010, 0x61}, //FPGC gain for each gain
-	{0x30f0, 0x64}, //FPGC1 gain for each gain
+	{0x300c, 0x11}, // WDMODE[0] WDSEL[5:4]
+	{0x3010, 0x61}, // FPGC gain for each gain
+	{0x30f0, 0x64}, // FPGC1 gain for each gain
 	{0x3011, 0x02},
-	{0x3018, 0x6e}, //Vmax FSC=vmax*2
-	{0x3019, 0x05}, //0x486
-	{0x301c, 0x58}, //Hmax
+	{0x3018, 0x6e}, // Vmax FSC=vmax*2
+	{0x3019, 0x05}, // 0x486
+	{0x301c, 0x58}, // Hmax
 	{0x301d, 0x08},
 #if 0
-	{0x3018, 0x86},//Vmax FSC=vmax*2
-	{0x3019, 0x04},//0x486  1158  60.04fps
-	{0x301c, 0x05},//Hmax   2136 0x858
+	{0x3018, 0x86},// Vmax FSC=vmax*2
+	{0x3019, 0x04},// 0x486  1158  60.04fps
+	{0x301c, 0x05},// Hmax   2136 0x858
 	{0x301d, 0x0a},
 #endif
-	{0x3020, 0x02}, //SHS1 S
+	{0x3020, 0x02}, // SHS1 S
 	{0x3021, 0x00},
 	{0x3022, 0x00},
-	{0x3024, 0x73}, //SHS2 L
+	{0x3024, 0x73}, // SHS2 L
 	{0x3025, 0x04},
-	{0x3028, 0x00}, //SHS3
+	{0x3028, 0x00}, // SHS3
 	{0x3029, 0x00},
 	{0x302a, 0x00},
-	{0x3030, 0x65}, //RHS1
+	{0x3030, 0x65}, // RHS1
 	{0x3031, 0x00},
 	{0x3032, 0x00},
-	{0x3034, 0x00}, //RHS2
+	{0x3034, 0x00}, // RHS2
 	{0x3035, 0x00},
 	{0x3036, 0x00},
-	{0x303c, 0x04}, //WINPV[7:0]
-	{0x303d, 0x00}, //WINPV[2:0]
-	{0x303e, 0x41}, //WINWV[7:0]
-	{0x303f, 0x04}, //WINWV[2:0]
+	{0x303c, 0x04}, // WINPV[7:0]
+	{0x303d, 0x00}, // WINPV[2:0]
+	{0x303e, 0x41}, // WINWV[7:0]
+	{0x303f, 0x04}, // WINWV[2:0]
 	{0x3045, 0x05},
-	{0x3046, 0x01}, //ODBIT[1:0]
+	{0x3046, 0x01}, // ODBIT[1:0]
 	{0x304b, 0x0a},
 	{0x305c, 0x18},
 	{0x305d, 0x03},
@@ -293,10 +293,10 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 	{0x3344, 0x38},
 	{0x3405, 0x00},
 	{0x3407, 0x01},
-	{0x3414, 0x00}, //OPB_SIZE_V[5:0]
-	{0x3415, 0x00}, //NULL0_SIZE_V[5:0]
-	{0x3418, 0x7a}, //Y_OUT_SIZE[7:0]
-	{0x3419, 0x09}, //Y_OUT_SIZE[4:0]
+	{0x3414, 0x00}, // OPB_SIZE_V[5:0]
+	{0x3415, 0x00}, // NULL0_SIZE_V[5:0]
+	{0x3418, 0x7a}, // Y_OUT_SIZE[7:0]
+	{0x3419, 0x09}, // Y_OUT_SIZE[4:0]
 	{0x3441, 0x0c},
 	{0x3442, 0x0c},
 	{0x3443, 0x01},
@@ -318,25 +318,25 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
 	{0x3453, 0x00},
 	{0x3454, 0x37},
 	{0x3455, 0x00},
-	{0x346a, 0x9c}, //EBD
+	{0x346a, 0x9c}, // EBD
 	{0x346b, 0x07},
 	{0x3472, 0xa0},
 	{0x3473, 0x07},
 	{0x347b, 0x23},
 	{0x3480, 0x49},
-	//	{SENSOR_REG_DELAY, 0x18},
-	{0x3001, 0x00}, //standy cancel
-	{0x3002, 0x00}, //Master start
-	{0x3000, 0x01}, //standy cancel
+	// {SENSOR_REG_DELAY, 0x18},
+	{0x3001, 0x00}, // standy cancel
+	{0x3002, 0x00}, // Master start
+	{0x3000, 0x01}, // standy cancel
 	{SENSOR_REG_END, 0x00},
 
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
-	{0x3000, 0x01}, //standy
+	{0x3000, 0x01}, // standy
 	{0x3001, 0x01},
-	{0x3002, 0x01}, //Master stop
-			//	{SENSOR_REG_DELAY, 0x18},
+	{0x3002, 0x01}, // Master stop
+			// {SENSOR_REG_DELAY, 0x18},
 	{0x3005, 0x01},
 	{0x3007, 0x00},
 	{0x3009, 0x02},
@@ -348,7 +348,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3018, 0x65}, // 1125
 	{0x3019, 0x04},
 	{0x301a, 0x00},
-	{0x301c, 0xa0}, //0x1130:30fps 0x14a0:25fps
+	{0x301c, 0xa0}, // 0x1130:30fps 0x14a0:25fps
 	{0x301d, 0x14},
 	{0x3022, 0x00},
 	{0x3046, 0x01},
@@ -383,7 +383,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3447, 0x00},
 	{0x3448, 0x37},
 	{0x3449, 0x00},
-	{0x344a, 0x2f}, //1f
+	{0x344a, 0x2f}, // 1f
 	{0x344b, 0x00},
 	{0x344c, 0x1f},
 	{0x344d, 0x00},
@@ -395,15 +395,15 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x3453, 0x00},
 	{0x3454, 0x17},
 	{0x3455, 0x00},
-	{0x346a, 0x9c}, //EBD
+	{0x346a, 0x9c}, // EBD
 	{0x346b, 0x07},
 	{0x3472, 0x9c},
 	{0x3473, 0x07},
 	{0x3480, 0x49},
-	//	{SENSOR_REG_DELAY, 0x18},
-	{0x3001, 0x00}, //standy cancel
-	{0x3002, 0x00}, //Master start
-	{0x3000, 0x01}, //standy cancel
+	// {SENSOR_REG_DELAY, 0x18},
+	{0x3001, 0x00}, // standy cancel
+	{0x3002, 0x00}, // Master start
+	{0x3000, 0x01}, // standy cancel
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -547,7 +547,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	int ret = 0;
 	unsigned short shs1 = 0;
 
-	//short frame use shs1
+	// short frame use shs1
 	shs1 = rhs1 - value - 1;
 	ret += sensor_write(sd, 0x3020, (unsigned char)(shs1 & 0xff));
 	ret += sensor_write(sd, 0x3021, (unsigned char)((shs1 >> 8) & 0xff));
@@ -568,7 +568,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x3021, (unsigned char)((shs >> 8) & 0xff));
 		ret += sensor_write(sd, 0x3022, (unsigned char)((shs >> 16) & 0x03));
 	} else {
-		//long frame use shs2
+		// long frame use shs2
 		vmax = sensor_attr.total_height;
 		shs = vmax - value - 1;
 		ret += sensor_write(sd, 0x3024, (unsigned char)(shs & 0xff));
@@ -670,7 +670,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short cur_int = 0;
 	unsigned short shs = 0;
 	unsigned char value = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	if (data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
 		return 0;

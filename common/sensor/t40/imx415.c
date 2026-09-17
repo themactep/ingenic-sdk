@@ -762,7 +762,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -833,16 +833,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	/* 2'b01:mirror,2'b10:filp */
 	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val &= 0xfc;
 		break;
-	case 1: //sensor mirror
+	case 1: // sensor mirror
 		val |= 0x01;
 		break;
-	case 2: //sensor flip
+	case 2: // sensor flip
 		val |= 0x02;
 		break;
-	case 3: //sensor mirror&flip
+	case 3: // sensor mirror&flip
 		val |= 0x03;
 		break;
 	}

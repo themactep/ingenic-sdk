@@ -465,7 +465,7 @@ struct tx_isp_mipi_bus sensor_mipi_raw12 = {
 	.clk = 1440,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -494,7 +494,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 1440,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -523,7 +523,7 @@ struct tx_isp_mipi_bus sensor_mipi_binning = {
 	.clk = 1080,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -552,7 +552,7 @@ struct tx_isp_mipi_bus sensor_mipi_binning_sum = {
 	.clk = 1080,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -1404,9 +1404,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_binning_sum[] = 
 };
 
 static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_raw12[] = {
-	//Cleaned_0x8e_SC850SL_MIPI_24Minput_1C2D_1080Mbps_12bit_3840x2160_15fps_one_expo
-	//[gain<2x]  {0x363c, 0x05},
-	//[gain>=2x] {0x363c, 0x07},
+	// Cleaned_0x8e_SC850SL_MIPI_24Minput_1C2D_1080Mbps_12bit_3840x2160_15fps_one_expo
+	// [gain<2x]  {0x363c, 0x05},
+	// [gain>=2x] {0x363c, 0x07},
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -1432,9 +1432,9 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi_raw12[] = {
 	{0x3033, 0x22},
 	{0x3037, 0x00},
 	{0x303e, 0xb4},
-	{0x320c, 0x08}, //hts = 0x898 = 2200
+	{0x320c, 0x08}, // hts = 0x898 = 2200
 	{0x320d, 0x98}, //
-	{0x320e, 0x08}, //vts = 0x8ca = 2250
+	{0x320e, 0x08}, // vts = 0x8ca = 2250
 	{0x320f, 0xca}, //
 	{0x3211, 0x10},
 	{0x3213, 0x08},
@@ -1867,7 +1867,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -2180,12 +2180,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if(arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if(arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -365,7 +365,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 
-#if 0 //1080p@30fps 1 lane ok
+#if 0 // 1080p@30fps 1 lane ok
 	/* @@ 0 35 RES_1920x1080_30fps_816Mbps  1Lane */
 	/* ;SCLK = 80MHz MIPI CLK = 816Mbps/lane Mipi PCLK = 102MHz */
 	/* ;HTS = 2294 VTS = 1162 */
@@ -623,7 +623,7 @@ static struct regval_list sensor_init_regs_2048_1520_30fps_mipi[] = {
 	{0x3638, 0x00},
 #endif
 
-#if 0 //1080p@30fps 2 lane
+#if 0 // 1080p@30fps 2 lane
 	/* @@ 0 35 RES_1920x1080_30fps_816Mbps  2Lane */
 	/* ;SCLK = 80MHz MIPI CLK = 816Mbps/lane Mipi PCLK = 102MHz */
 	/* ;HTS = 2294 VTS = 1162 */
@@ -1876,7 +1876,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

@@ -44,7 +44,7 @@
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 /*buf size = ((short exp start point / 2) * image wide pixel * 16bit / 2) byte */
-static int wdr_bufsize = 2048 * 400; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2048 * 400; // cache lines corrponding on VPB1
 static int shvflip = 1;
 
 static struct sensor_info sensor_info = {
@@ -449,7 +449,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.total_width = 2250,
 	.total_height = 1920,
 	.max_integration_time = 1920 - 4,
-	//.one_line_expr_in_us = 28,
+	// .one_line_expr_in_us = 28,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
@@ -474,9 +474,9 @@ static struct regval_list sensor_init_regs_2048_1536_25fps_mipi[] = {
 	{0x320a, 0x06},
 	{0x320b, 0x00},
 	{0x320c, 0x04},
-	{0x320d, 0x65}, //465 1125*2
+	{0x320d, 0x65}, // 465 1125*2
 	{0x320e, 0x07},
-	{0x320f, 0x80}, //780 1920
+	{0x320f, 0x80}, // 780 1920
 	{0x3214, 0x11},
 	{0x3215, 0x11},
 	{0x3223, 0xc0},
@@ -619,9 +619,9 @@ static struct regval_list sensor_init_regs_2048_1536_25fps_hdr_mipi[] = {
 	{0x320a, 0x06},
 	{0x320b, 0x00},
 	{0x320c, 0x04},
-	{0x320d, 0x65}, //0x465 1125 -> 2250
+	{0x320d, 0x65}, // 0x465 1125 -> 2250
 	{0x320e, 0x0f},
-	{0x320f, 0x00}, //0xf00 3840
+	{0x320f, 0x00}, // 0xf00 3840
 	{0x3214, 0x11},
 	{0x3215, 0x11},
 	{0x3223, 0xd0},
@@ -747,7 +747,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps_hdr_mipi[] = {
 	{0x3e05, 0x00},
 	{0x3e1b, 0x2a},
 	{0x3e23, 0x00},
-	{0x3e24, 0xe5}, //0xe5 229
+	{0x3e24, 0xe5}, // 0xe5 229
 	{0x4407, 0x34},
 	{0x440e, 0x02},
 	{0x4509, 0x10},
@@ -772,9 +772,9 @@ static struct regval_list sensor_init_regs_2048_1536_30fps_mipi[] = {
 	{0x3209, 0x00},
 	{0x320a, 0x06},
 	{0x320b, 0x00},
-	{0x320c, 0x04}, //hts -> 0x465 = 1125
+	{0x320c, 0x04}, // hts -> 0x465 = 1125
 	{0x320d, 0x65}, //
-	{0x320e, 0x06}, //vts -> 0x640 = 1600
+	{0x320e, 0x06}, // vts -> 0x640 = 1600
 	{0x320f, 0x40}, //
 	{0x3214, 0x11},
 	{0x3215, 0x11},
@@ -939,12 +939,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1059,14 +1059,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	//sensor analog gain
+	// sensor analog gain
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-	//sensor dig fine gain
+	// sensor dig fine gain
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	if (ret < 0)
 		return ret;
@@ -1201,7 +1201,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 	unsigned int max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1583,7 +1583,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
-			//	ret = sc301i0t_set_expo(sd, sensor_val->value);
+			// ret = sc301i0t_set_expo(sd, sensor_val->value);
 			break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

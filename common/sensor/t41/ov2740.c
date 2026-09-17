@@ -835,7 +835,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 	unsigned int sensor_max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	switch (info->default_boot) {
 	case 0:
 		sclk = SENSOR_SUPPORT_SCLK_MIPI;
@@ -1168,7 +1168,7 @@ static struct tx_isp_subdev_core_ops sensor_core_ops = {
 	.g_chip_ident = sensor_g_chip_ident,
 	.reset = sensor_reset,
 	.init = sensor_init,
-	//	.fsync = sensor_frame_sync,
+	// .fsync = sensor_frame_sync,
 	.g_register = sensor_g_register,
 	.s_register = sensor_s_register,
 };

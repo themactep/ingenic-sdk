@@ -38,10 +38,10 @@
 #define SENSOR_VERSION "H20241011a"
 #define TVERSION "V20231226a"
 
-//#define SENSOR_TEST
+// #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
-//#define SENSOR_WDR_2_FRAME	/**< WDR两帧融合 */
+// #define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_WDR_2_FRAME	/**< WDR两帧融合 */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = xxx;
 #endif
@@ -530,8 +530,8 @@ static struct regval_list sensor_init_regs_3264_2448_30fps_mipi[] = {
 	{0x59fd, 0x3f},
 	{0x59fe, 0x38},
 	{0x59ff, 0x30},
-	//{0x320e, 0x13},
-	//{0x320f, 0x88},
+	// {0x320e, 0x13},
+	// {0x320f, 0x88},
 	{0x0100, 0x01},
 	{0x302d, 0x00},
 	{SENSOR_REG_END, 0x00},
@@ -1097,7 +1097,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	int ret = ISP_SUCCESS;
 

@@ -41,9 +41,9 @@
 #define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
 #define TVERSION "V20231226a"
 
-//#define SENSOR_TEST
+// #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = 1200 * 2;
 #endif
@@ -412,7 +412,7 @@ struct tx_isp_mipi_bus sensor_mipi_wdr = {
 	.image_twidth = 2560,
 	.image_theight = 1440,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -1320,7 +1320,7 @@ static int sensor_setting_select(struct tx_isp_subdev *sd, int deboot) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_linear), sizeof(sensor_mipi_linear));
 		break;
-	case 1: //todo
+	case 1: // todo
 		info->default_boot = 1;
 		wsize = &sensor_win_sizes[1];
 		sensor_attr.max_dgain = 0;
@@ -1626,7 +1626,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int sensor_max_fps = 0;
 	int ret = ISP_SUCCESS;
 	switch (info->default_boot) {

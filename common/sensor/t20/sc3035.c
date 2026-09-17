@@ -442,14 +442,14 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3662, 0x82},
 	{0x3d0d, 0x00},
 	{0x3039, 0x20},
-	{0x303a, 0x35}, //74.25M pclk
+	{0x303a, 0x35}, // 74.25M pclk
 	{0x303b, 0x00},
 	{0x3306, 0x46},
 	{0x330b, 0xa0},
-	{0x3038, 0xf8}, //pump clk div
+	{0x3038, 0xf8}, // pump clk div
 	{0x320c, 0x05},
 	{0x320d, 0xdc},
-	{0x320e, 0x06},  //vts=1584
+	{0x320e, 0x06},  // vts=1584
 	{0x320f, 0x30},
 	{0x3202, 0x00}, // ystart=48
 	{0x3203, 0x00},
@@ -461,7 +461,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3205, 0x0f},
 	{0x3211, 0x04},  // xstart
 	{0x3213, 0x04},  // ystart
-	{0x3208, 0x08},  //2048x1536
+	{0x3208, 0x08},  // 2048x1536
 	{0x3209, 0x00},
 	{0x320a, 0x06},
 	{0x320b, 0x00},
@@ -483,9 +483,9 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x330e, 0x17},
 	{0x3d08, 0x01}, // pclk inv
 	{0x303f, 0x82},
-	{0x3c03, 0x28}, //fifo sram read position
+	{0x3c03, 0x28}, // fifo sram read position
 	{0x3c00, 0x45}, // Dig SRAM reset
-	{0x3c03, 0x02}, //anti smear
+	{0x3c03, 0x02}, // anti smear
 	{0x3211, 0x06},
 	{0x3213, 0x06},
 	{0x3620, 0x82},
@@ -493,11 +493,11 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3635, 0x60},
 	{0x3630, 0x67},
 	{0x3626, 0x11},
-	{0x363c, 0x88}, //fine gain correction
+	{0x363c, 0x88}, // fine gain correction
 	{0x3312, 0x00},
 	{0x3333, 0x80},
 	{0x3334, 0xa0},
-	{0x3620, 0x62},  //0xd2
+	{0x3620, 0x62},  // 0xd2
 	{0x3300, 0x10},
 	{0x3627, 0x06},
 	{0x3312, 0x06},
@@ -509,7 +509,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3320, 0x18},
 	{0x3321, 0x18},
 	{0x3039, 0x30},
-	{0x303a, 0x2a}, //118.8M pclk
+	{0x303a, 0x2a}, // 118.8M pclk
 	{0x303b, 0x00},
 	{0x3640, 0x00},
 	{0x3641, 0x01},
@@ -611,14 +611,14 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3662, 0x82},
 	{0x3d0d, 0x00}, // close random code
 	{0x3039, 0x20},
-	{0x303a, 0x35}, //74.25M pclk
+	{0x303a, 0x35}, // 74.25M pclk
 	{0x303b, 0x00},
 	{0x3306, 0x46},
 	{0x330b, 0xa0},
-	{0x3038, 0xf8}, //pump clk div
-	{0x320c, 0x04}, //hts=2500
+	{0x3038, 0xf8}, // pump clk div
+	{0x320c, 0x04}, // hts=2500
 	{0x320d, 0xe2},
-	{0x320e, 0x06}, //vts=1650
+	{0x320e, 0x06}, // vts=1650
 	{0x320f, 0x30},
 	{0x3202, 0x00}, // ystart=48
 	{0x3203, 0x00},
@@ -630,7 +630,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3205, 0x0f},
 	{0x3211, 0x04}, // xstart
 	{0x3213, 0x04}, // ystart
-	{0x3208, 0x08}, //2048x1536
+	{0x3208, 0x08}, // 2048x1536
 	{0x3209, 0x00},
 	{0x320a, 0x06},
 	{0x320b, 0x00},
@@ -652,9 +652,9 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x330e, 0x17},
 	{0x3d08, 0x01}, // pclk inv
 	{0x303f, 0x82},
-	{0x3c03, 0x28}, //fifo sram read position
+	{0x3c03, 0x28}, // fifo sram read position
 	{0x3c00, 0x45}, // Dig SRAM reset
-	{0x3c03, 0x02}, //anti smear
+	{0x3c03, 0x02}, // anti smear
 	{0x3211, 0x06},
 	{0x3213, 0x06},
 	{0x3620, 0x82},
@@ -691,7 +691,7 @@ static struct regval_list sensor_init_regs_2048_1536_25fps[] = {
 	{0x3306, 0x46},
 	{0x3035, 0xba},
 	{0x3343, 0xe0},
-	{0x334b, 0xe0}, //{0x5040, 0x80}, //color bar
+	{0x334b, 0xe0}, // {0x5040, 0x80}, //color bar
 #endif
 	{SENSOR_REG_END, 0x00},
 };
@@ -757,11 +757,11 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{0x3662, 0x82},
 	{0x3d0d, 0x00}, // close random code
 	{0x3039, 0x00},
-	{0x303a, 0x32}, //75.6M pclk
+	{0x303a, 0x32}, // 75.6M pclk
 	{0x303b, 0x02},
 	{0x3306, 0x46},
 	{0x330b, 0xa0},
-	{0x3038, 0xf8}, //pump clk div
+	{0x3038, 0xf8}, // pump clk div
 	{0x320c, 0x03}, // hts=1920
 	{0x320d, 0xc0},
 	{0x320e, 0x06}, // vts=1575
@@ -798,9 +798,9 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{0x330e, 0x17},
 	{0x3d08, 0x00}, // pclk inv
 	{0x303f, 0x82},
-	{0x3c03, 0x28}, //fifo sram read position
+	{0x3c03, 0x28}, // fifo sram read position
 	{0x3c00, 0x45}, // Dig SRAM reset
-	{0x3c03, 0x02}, //anti smear
+	{0x3c03, 0x02}, // anti smear
 	{0x3211, 0x06},
 	{0x3213, 0x06},
 	{0x3620, 0x82},
@@ -808,7 +808,7 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{0x3635, 0x60},
 	{0x3630, 0x67},
 	{0x3626, 0x11},
-	{0x363c, 0x88}, //fine gain correction
+	{0x363c, 0x88}, // fine gain correction
 	{0x3312, 0x00},
 	{0x3333, 0x80},
 	{0x3334, 0xa0},
@@ -829,7 +829,7 @@ static struct regval_list sensor_init_regs_1536_1536_25fps[] = {
 	{0x3343, 0xa8},
 	{0x334b, 0xa8},
 	{0x331f, 0x10},
-	{0x3633, 0x3d}, //for better dark current
+	{0x3633, 0x3d}, // for better dark current
 	{0x363a, 0x04},
 	{0x3208, 0x06},
 	{0x3209, 0x00},
@@ -1110,7 +1110,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short vts = 0;
 	unsigned short drop_frame_reg = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned int max_fps = 0;
 
@@ -1358,7 +1358,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct v4l2_subdev *sd;
 	struct tx_isp_video_in *video;
 	struct tx_isp_sensor *sensor;
-	struct tx_isp_sensor_win_setting *wsize = NULL; //&sensor_win_sizes[0];
+	struct tx_isp_sensor_win_setting *wsize = NULL; // &sensor_win_sizes[0];
 	enum v4l2_mbus_pixelcode mbus;
 	int i = 0;
 	int ret;
@@ -1427,7 +1427,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	  convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 262144;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

@@ -617,8 +617,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -879,8 +879,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 
-	//	*(volatile unsigned int*)(0xb0010100) = 0x01;
-	//	*(volatile unsigned int*)(0xb0010130) = 0xcaaaaaaa;
+	// *(volatile unsigned int*)(0xb0010100) = 0x01;
+	// *(volatile unsigned int*)(0xb0010130) = 0xcaaaaaaa;
 
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
@@ -923,7 +923,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 256041;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

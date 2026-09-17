@@ -206,7 +206,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	.one_line_expr_in_us = 44,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_720_25fps[] = {
@@ -223,7 +223,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	/* INI Start*/
 	{0x12, 0x40},
 	/* INI Start*/
-	{0x0c, 0x00}, //0x41 test mode, 0x40 DVP output
+	{0x0c, 0x00}, // 0x41 test mode, 0x40 DVP output
 /* DVP Setting */
 #ifdef DRIVE_CAPABILITY_1
 	{0x0d, 0x40},
@@ -237,9 +237,9 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 	{0x10, 0x1e},
 	{0x11, 0x80},
 	/* Frame/Window */
-	{0x20, 0x40}, //hts
+	{0x20, 0x40}, // hts
 	{0x21, 0x06},
-	{0x22, 0x84}, //vts
+	{0x22, 0x84}, // vts
 	{0x23, 0x03},
 	{0x24, 0x00},
 	{0x25, 0xd0},
@@ -557,7 +557,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -793,7 +793,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	if (ret < 0)
 		goto err_set_sensor_gpio;
 
-	//	sensor_attr.dvp.gpio = sensor_gpio_func;
+	// sensor_attr.dvp.gpio = sensor_gpio_func;
 	sensor_attr.dvp.gpio = sensor_gpio_func;
 	switch (sensor_gpio_func) {
 	case DVP_PA_LOW_8BIT:

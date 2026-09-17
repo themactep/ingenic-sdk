@@ -475,9 +475,9 @@ static struct regval_list sensor_init_regs_2688_1520_25fps_mipi[] = {
 	{0x3809, 0x80},
 	{0x380a, 0x05},
 	{0x380b, 0xf0},
-	{0x380c, 0x06}, //0x6dc -> 1756
+	{0x380c, 0x06}, // 0x6dc -> 1756
 	{0x380d, 0xdc}, //
-	{0x380e, 0x06}, //0x658 -> 1624
+	{0x380e, 0x06}, // 0x658 -> 1624
 	{0x380f, 0x58}, //
 	{0x3811, 0x08},
 	{0x3813, 0x08},
@@ -837,9 +837,9 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x05},
 	{0x380b, 0xa0},
-	{0x380c, 0x06}, //hts 0x6dc -> 1756
+	{0x380c, 0x06}, // hts 0x6dc -> 1756
 	{0x380d, 0xdc}, //
-	{0x380e, 0x06}, //vts 0x658 -> 1624
+	{0x380e, 0x06}, // vts 0x658 -> 1624
 	{0x380f, 0x58}, //
 	{0x3811, 0x08},
 	{0x3813, 0x08},
@@ -1196,9 +1196,9 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_RAW12[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x05},
 	{0x380b, 0xa0},
-	{0x380c, 0x05}, //hts = 0x5c4 = 1476
+	{0x380c, 0x05}, // hts = 0x5c4 = 1476
 	{0x380d, 0xc4}, //
-	{0x380e, 0x06}, //vts = 0x658 = 1624
+	{0x380e, 0x06}, // vts = 0x658 = 1624
 	{0x380f, 0x58}, //
 	{0x3811, 0x08},
 	{0x3813, 0x08},
@@ -1503,9 +1503,9 @@ static struct regval_list sensor_init_regs_1280_720_30fps_mipi_RAW12[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x02},
 	{0x380b, 0xd0},
-	{0x380c, 0x05}, //hts = 0x5c4 = 1476
+	{0x380c, 0x05}, // hts = 0x5c4 = 1476
 	{0x380d, 0xc4}, //
-	{0x380e, 0x09}, //vts = 0x984 = 2436
+	{0x380e, 0x09}, // vts = 0x984 = 2436
 	{0x380f, 0x84}, //
 	{0x3811, 0x04},
 	{0x3813, 0x02},
@@ -1904,7 +1904,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -2207,12 +2207,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

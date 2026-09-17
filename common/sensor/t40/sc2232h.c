@@ -17,7 +17,7 @@
 #include <sensor-common.h>
 #include <sensor-info.h>
 #include <txx-funcs.h>
-//#include <tx-isp-debug.h>
+// #include <tx-isp-debug.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
@@ -503,7 +503,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x391d, 0x04},
 	{0x391e, 0x00},
 	{0x3641, 0x01},
-	{0x3213, 0x08}, //04
+	{0x3213, 0x08}, // 04
 	{0x3614, 0x80},
 	{0x363a, 0x9f},
 	{0x3630, 0x9c},
@@ -569,9 +569,9 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x395e, 0xc0},
 	{0x3962, 0x89},
 	{0x3802, 0x00},
-	{0x3209, 0x80}, //88
-	{0x320b, 0x38}, //40
-	{0x3211, 0x08}, //4
+	{0x3209, 0x80}, // 88
+	{0x320b, 0x38}, // 40
+	{0x3211, 0x08}, // 4
 	{0x3963, 0x80},
 	{0x301f, 0x04},
 	{0x363b, 0x26},
@@ -999,7 +999,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 		sensor_write(sd, 0x3632, 0x08);
 		sensor_write(sd, 0x3812, 0x30);
 	}
-	else { //may be flick
+	else { // may be flick
 		sensor_write(sd, 0x3812, 0x00);
 		sensor_write(sd, 0x3301, 0x64);
 		sensor_write(sd, 0x3632, 0x48);
@@ -1020,7 +1020,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int again = (value & 0xffff0000) >> 16;
 
 	/*set integration time*/
-	//ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	// ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
@@ -1043,7 +1043,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	} else if (again >= 0x710 && again <= 0x71e) {
 		ret += sensor_write(sd, 0x3301, 0x64);
 		ret += sensor_write(sd, 0x3632, 0x08);
-	} else { //may be flick
+	} else { // may be flick
 		ret += sensor_write(sd, 0x3301, 0x64);
 		ret += sensor_write(sd, 0x3632, 0x48);
 	}
@@ -1134,7 +1134,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -1215,24 +1215,24 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.again = 0;
 		sensor_attr.integration_time = 0x9c0;
 		ISP_WARNING("To use mipi, please modify --vi to 1");
-		//            ret = set_sensor_gpio_function(sensor_gpio_func);
-		//            if (ret < 0)
-		//                goto err_set_sensor_gpio;
-		//            sensor_attr.dvp.gpio = sensor_gpio_func;
-		//            mbus = sensor_mbus_code[0];
-		//            wsize->regs = sensor_init_regs_1920_1080_25fps_dvp;
-		//            memcpy((void*)(&(sensor_attr.dvp)),(void*)(&sensor_dvp),sizeof(sensor_dvp));
-		//            sensor_attr.dbus_type = data_interface;
-		//            sensor_attr.data_type = data_type;
-		//            sensor_attr.dvp.gpio = sensor_gpio_func;
-		//            if (sensor_max_fps == TX_SENSOR_MAX_FPS_15) {
-		//                wsize = &sensor_win_sizes[2];
-		//                sensor_attr.max_integration_time_native = 1498;
-		//                sensor_attr.integration_time_limit = 1498;
-		//                sensor_attr.total_width = 2400;
-		//                sensor_attr.total_height = 1500;
-		//                sensor_attr.max_integration_time = 1498;
-		//            }
+		// ret = set_sensor_gpio_function(sensor_gpio_func);
+		// if (ret < 0)
+		// goto err_set_sensor_gpio;
+		// sensor_attr.dvp.gpio = sensor_gpio_func;
+		// mbus = sensor_mbus_code[0];
+		// wsize->regs = sensor_init_regs_1920_1080_25fps_dvp;
+		// memcpy((void*)(&(sensor_attr.dvp)),(void*)(&sensor_dvp),sizeof(sensor_dvp));
+		// sensor_attr.dbus_type = data_interface;
+		// sensor_attr.data_type = data_type;
+		// sensor_attr.dvp.gpio = sensor_gpio_func;
+		// if (sensor_max_fps == TX_SENSOR_MAX_FPS_15) {
+		// wsize = &sensor_win_sizes[2];
+		// sensor_attr.max_integration_time_native = 1498;
+		// sensor_attr.integration_time_limit = 1498;
+		// sensor_attr.total_width = 2400;
+		// sensor_attr.total_height = 1500;
+		// sensor_attr.max_integration_time = 1498;
+		// }
 		break;
 	default:
 		ISP_ERROR("Have no this setting!!!\n");

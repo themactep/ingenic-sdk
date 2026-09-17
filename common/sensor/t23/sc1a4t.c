@@ -71,8 +71,8 @@ struct regval_list {
 	uint16_t value;
 };
 
-//static unsigned short int dpc_flag = 1;
-//static unsigned int gain_val = 0x37e;
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
 
 struct again_lut {
 	unsigned int value;
@@ -649,7 +649,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		return ret;
 	}
 
-	//	gain_val = again;
+	// gain_val = again;
 	return 0;
 }
 
@@ -765,7 +765,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	hts = ((hts << 8) + val);
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-	//if (fsync_mode == 2 || fsync_mode == 3) {}
+	// if (fsync_mode == 2 || fsync_mode == 3) {}
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
@@ -1022,7 +1022,7 @@ static struct tx_isp_subdev_video_ops sensor_video_ops = {
 
 static struct tx_isp_subdev_sensor_ops sensor_sensor_ops = {
 	.ioctl = sensor_sensor_ops_ioctl,
-	//	.fsync = sensor_fsync,
+	// .fsync = sensor_fsync,
 };
 
 static struct tx_isp_subdev_ops sensor_ops = {
@@ -1102,7 +1102,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor_attr.total_height = 0xbb8;
 	sensor_attr.max_integration_time = 0xbb8 - 6;
 
-	//sensor_attr.fsync_attr.mode = fsync_mode;
+	// sensor_attr.fsync_attr.mode = fsync_mode;
 
 	/* Convert sensor-gain into isp-gain, */
 	sensor_attr.max_again = 391733;

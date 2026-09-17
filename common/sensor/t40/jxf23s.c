@@ -446,8 +446,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{SENSOR_REG_DELAY, 250},
 	{0x48, 0x05},
 	{0x1f, 0x01},
-	//	{0x99, 0x0f},
-	//	{0x9b, 0x0f},
+	// {0x99, 0x0f},
+	// {0x9b, 0x0f},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -619,7 +619,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 
-	//complement the steak
+	// complement the steak
 	if (value <= 0x40) {
 		ret += sensor_write(sd, 0x99, (unsigned char)(val_99 & 0x0f));
 		ret += sensor_write(sd, 0x9b, (unsigned char)(val_9b & 0x0f));
@@ -676,7 +676,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_DVP) {
-				//ret = sensor_write_array(sd, sensor_stream_on_dvp);
+				// ret = sensor_write_array(sd, sensor_stream_on_dvp);
 			} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
@@ -688,7 +688,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		}
 	} else {
 		if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_DVP) {
-			//ret = sensor_write_array(sd, sensor_stream_off_dvp);
+			// ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
@@ -708,7 +708,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_register_info *info = &sensor->info;
@@ -748,12 +748,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += sensor_read(sd, 0x1f, &val);
-	//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
-	//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
+	// ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
 		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
@@ -957,7 +957,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_PREPARE_CHANGE:
 		if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_DVP) {
-			//ret = sensor_write_array(sd, sensor_stream_off_dvp);
+			// ret = sensor_write_array(sd, sensor_stream_off_dvp);
 		} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
@@ -967,7 +967,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
 		if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_DVP) {
-			//ret = sensor_write_array(sd, sensor_stream_on_dvp);
+			// ret = sensor_write_array(sd, sensor_stream_on_dvp);
 		} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 

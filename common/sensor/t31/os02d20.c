@@ -66,7 +66,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 960000; //cache lines corrponding on VPB1
+static int wdr_bufsize = 960000; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -444,7 +444,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0xae, 0x38},
 	{0xaf, 0x07},
 	{0xb0, 0x80},
-	{0x34, 0xff}, //otp dpc en
+	{0x34, 0xff}, // otp dpc en
 	{0x6c, 0x01},
 	{0x6d, 0x3b},
 	{0x6e, 0x1c},
@@ -455,7 +455,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x82, 0x18},
 	{0x9f, 0x18},
 	{0xfd, 0x00},
-	{0xb1, 0x03}, //mipi en
+	{0xb1, 0x03}, // mipi en
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -573,7 +573,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0xae, 0x38},
 	{0xaf, 0x07},
 	{0xb0, 0x80},
-	{0x34, 0xff}, //otp dpc en
+	{0x34, 0xff}, // otp dpc en
 	{0x6c, 0x01},
 	{0x6d, 0x3b},
 	{0x6e, 0x1c},
@@ -584,7 +584,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0x82, 0x18},
 	{0x9f, 0x18},
 	{0xfd, 0x00},
-	{0xb1, 0x03}, //mipi en
+	{0xb1, 0x03}, // mipi en
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -601,7 +601,7 @@ static struct regval_list sensor_init_regs_1920_1080_hdr_30fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 	{SENSOR_REG_DELAY, 0x05},
 	{0x2e, 0x22},
 	{0x33, 0x01},
@@ -707,7 +707,7 @@ static struct regval_list sensor_init_regs_1920_1080_hdr_30fps[] = {
 	{0x82, 0x18},
 	{0x9f, 0x18},
 	{0xfd, 0x00},
-	{0xb1, 0x03}, //mipi en
+	{0xb1, 0x03}, // mipi en
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -982,7 +982,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb_init = 0;
 	unsigned int vts_init = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
@@ -1067,7 +1067,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 static int sensor_set_wdr(struct tx_isp_subdev *sd, int wdr_en) {
 	int ret = 0;
 
-	//ret = sensor_write(sd, 0x36, 0x01);
+	// ret = sensor_write(sd, 0x36, 0x01);
 	private_gpio_direction_output(reset_gpio, 0);
 	private_msleep(2);
 	private_gpio_direction_output(reset_gpio, 1);
@@ -1117,7 +1117,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 2;
-		sensor_attr.max_integration_time_short = 69; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 69; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 0x44f - 4;
 		sensor_attr.integration_time_limit = 0x44f - 4;
 		sensor_attr.total_width = 0x53a;
@@ -1408,7 +1408,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 2;
-		sensor_attr.max_integration_time_short = 69; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 69; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 0x454 - 4;
 		sensor_attr.integration_time_limit = 0x454 - 4;
 		sensor_attr.total_width = 0x53a;

@@ -57,7 +57,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 10077696; //cache lines corrponding on VPB1
+static int wdr_bufsize = 10077696; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -337,9 +337,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	//	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
+	// .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//	.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
+	// .sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 };
 
 static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
@@ -1458,7 +1458,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
@@ -1561,7 +1561,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 	ret = sensor_read(sd, 0x3511, &evs1);
 	ret = sensor_read(sd, 0x3512, &evs2);
 
-	//	ret = sensor_write(sd, 0x12, 0x40);
+	// ret = sensor_write(sd, 0x12, 0x40);
 	if (wdr_en == 1) {
 		wsize = &sensor_win_sizes[2];
 		sensor->video.vi_max_width = wsize->width;
@@ -1582,7 +1582,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;
@@ -1890,7 +1890,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		sensor_attr.max_dgain = 0;
 		sensor_attr.min_integration_time = 2;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 147; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 147; // exposure ratio 16
 		sensor_attr.max_integration_time_native = 2345;
 		sensor_attr.integration_time_limit = 2345;
 		sensor_attr.total_width = 0x5a0 * 2;

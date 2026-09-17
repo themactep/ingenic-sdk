@@ -421,8 +421,8 @@ static struct regval_list sensor_init_regs_2304_1296_30fps_mipi_master[] = {
 	{0x320e, 0x06},
 	{0x320f, 0x30},
 
-	{0x3230, 0x00}, //trig pulse width
-	{0x3231, 0x10}, //0x04
+	{0x3230, 0x00}, // trig pulse width
+	{0x3231, 0x10}, // 0x04
 
 	{0x3253, 0x10},
 	{0x325f, 0x20},
@@ -805,11 +805,11 @@ static struct regval_list sensor_init_regs_2304_1296_40fps_mipi_master[] = {
 	{0x30b8, 0x33},
 	{0x320c, 0x04},
 	{0x320d, 0xe2},
-	{0x320e, 0x05}, //45fps:vts = 0x528 = 1320 -> 40fps:0x5cd = 1485 -> 20fps:0xb9a = 2970
+	{0x320e, 0x05}, // 45fps:vts = 0x528 = 1320 -> 40fps:0x5cd = 1485 -> 20fps:0xb9a = 2970
 	{0x320f, 0xd4},
 
-	{0x3230, 0x00}, //trig pulse width
-	{0x3231, 0x10}, //0x04
+	{0x3230, 0x00}, // trig pulse width
+	{0x3231, 0x10}, // 0x04
 
 	{0x3253, 0x10},
 	{0x325f, 0x20},
@@ -1011,7 +1011,7 @@ static struct regval_list sensor_init_regs_2304_1296_40fps_mipi_slave[] = {
 	{0x30b8, 0x33},
 	{0x320c, 0x04},
 	{0x320d, 0xe2},
-	{0x320e, 0x05}, //vts = 0x528 = 1320 -> 0x5cd = 1485
+	{0x320e, 0x05}, // vts = 0x528 = 1320 -> 0x5cd = 1485
 	{0x320f, 0xcd},
 	{0x3222, 0x01},
 	{0x3223, 0xc8},
@@ -1475,7 +1475,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1773,12 +1773,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

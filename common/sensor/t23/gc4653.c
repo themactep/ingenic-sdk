@@ -182,16 +182,16 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
-#if 0 //fixed the ver steak
+#if 0 // fixed the ver steak
 /****************************************/
-//version 6
-//mclk 24Mhz
-//mipiclk 648Mhz
-//framelength 1500
-//linelength 4800
-//pclk 216Mhz
-//rowtime 22.2222us
-//pattern grbg
+// version 6
+// mclk 24Mhz
+// mipiclk 648Mhz
+// framelength 1500
+// linelength 4800
+// pclk 216Mhz
+// rowtime 22.2222us
+// pattern grbg
 /****************************************/
 /*SYSTEM*/
 /****************************************/
@@ -314,16 +314,16 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x0100, 0x09},
 #endif
 
-#if 1 //27mhz all ok
+#if 1 // 27mhz all ok
 	/****************************************/
-	//version 6.8
-	//mclk 27Mhz
-	//mipiclk 648Mhz
-	//framelength 1500
-	//linelength 4800
-	//pclk 216Mhz
-	//rowtime 22.2222us
-	//pattern grbg
+	// version 6.8
+	// mclk 27Mhz
+	// mipiclk 648Mhz
+	// framelength 1500
+	// linelength 4800
+	// pclk 216Mhz
+	// rowtime 22.2222us
+	// pattern grbg
 	/****************************************/
 	/*SYSTEM*/
 	/****************************************/
@@ -345,7 +345,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x07}, //vts
+	{0x0340, 0x07}, // vts
 	{0x0341, 0x08},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -429,7 +429,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x02b0, 0x90},
 	{0x0002, 0xa9},
 	{0x0004, 0x01},
-	{0x0342, 0x06}, //hts
+	{0x0342, 0x06}, // hts
 	{0x0343, 0x40},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -646,7 +646,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char val;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	clk = SENSOR_SUPPORT_30FPS_SCLK;
 	max_fps = SENSOR_OUTPUT_MAX_FPS;

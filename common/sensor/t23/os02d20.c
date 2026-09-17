@@ -346,7 +346,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0xfd, 0x00},
 	{0x36, 0x00},
 	{0xfd, 0x00},
-	//{0x20, 0x00},
+	// {0x20, 0x00},
 	{SENSOR_REG_DELAY, 0x05},
 	{0x2e, 0x22},
 	{0x33, 0x01},
@@ -488,12 +488,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{0x0100, 0x00},
+	// {0x0100, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -699,7 +699,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vb_init = 0;
 	unsigned int vts_init = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {

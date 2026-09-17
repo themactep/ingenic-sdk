@@ -247,7 +247,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 
-#if 0 //5fps 400Mbps
+#if 0 // 5fps 400Mbps
 	{0x3103, 0x93},
 	{0x3008, 0x82},
 	{0x3017, 0x7f},
@@ -316,7 +316,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x380f, 0xf0},
 #endif
 
-#if 0 //15fps 800Mbps
+#if 0 // 15fps 800Mbps
 	{0x3103, 0x93},
 	{0x3008, 0x82},
 	{0x3017, 0x7f},
@@ -385,7 +385,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x380f, 0x50},
 #endif
 
-#if 1 //30fps 800Mbps
+#if 1 // 30fps 800Mbps
 	{0x3103, 0x93},
 	{0x3008, 0x82},
 	{0x3008, 0x42},
@@ -483,10 +483,10 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 #if 0
-	{0x302c,}, //drive capability [7:6]
-	{0x3212,}, //Group Access
-	{0x503d,}, //[7] [5:4]
-	{0x3503,}, //[1]agc manual [0]aec manual
+	{0x302c,}, // drive capability [7:6]
+	{0x3212,}, // Group Access
+	{0x503d,}, // [7] [5:4]
+	{0x3503,}, // [1]agc manual [0]aec manual
 #endif
 
 	{0x3103, 0x93},
@@ -556,35 +556,35 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 #elif defined(DRIVE_CAPABILITY_4)
 	{0x302c, 0xc0},
 #endif
-	{0x3503, 0x07}, //Manual,AEC[0],AGC[1],VTS manual enable[2]
-	{0x3500, 0x00}, //integration time
+	{0x3503, 0x07}, // Manual,AEC[0],AGC[1],VTS manual enable[2]
+	{0x3500, 0x00}, // integration time
 	{0x3501, 0x03},
 	{0x3502, 0x03},
-	{0x350a, 0x00}, //Gain
+	{0x350a, 0x00}, // Gain
 	{0x350b, 0x00},
-	{0x4000, 0x01}, //BLC[0]
-	{0x4006, 0x00}, //target
-	{0x4007, 0x10}, //target
-	{0x401d, 0x22}, //BLC frame control
+	{0x4000, 0x01}, // BLC[0]
+	{0x4006, 0x00}, // target
+	{0x4007, 0x10}, // target
+	{0x401d, 0x22}, // BLC frame control
 	/* /\* {0x380c, 0x09}, *\/ //HTS */
 	/* /\* {0x380d, 0x74}, *\/  */
 	/* /\* {0x380e, 0x04}, *\/ //VTS */
 	/* /\* {0x380f, 0x50}, *\/ */
-	{0x5000, 0x00}, //lenc & dpc
-	{0x5001, 0x00}, //awb
+	{0x5000, 0x00}, // lenc & dpc
+	{0x5001, 0x00}, // awb
 			/* {0x5002, 0x00}, //vap:not to change it, will be Broken Screen */
 			/* {0x5003, 0x00}, //?? */
 			/* {0x5004, 0x00}, //??:not to change it, will be Broken Screen */
 			/* {0x5005, 0x00}, //awb bias */
 
-#if 0 //1080p@10fps
+#if 0 // 1080p@10fps
 	{0x380c, 0x09},
 	{0x380d, 0x74},
 	{0x380e, 0x04},
 	{0x380f, 0x50},
 	{0x3010, 0x20},
 #endif
-#if 0 //1080p@30fps
+#if 0 // 1080p@30fps
 	{0x380c, 0x09},
 	{0x380d, 0x74},
 	{0x380e, 0x04},
@@ -592,7 +592,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x3010, 0x00},
 #endif
 
-#if 1 //1080p@25fps
+#if 1 // 1080p@25fps
 	{0x380c, 0x09},
 	{0x380d, 0x74},
 	{0x380e, 0x05},
@@ -849,7 +849,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

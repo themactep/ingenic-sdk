@@ -43,7 +43,7 @@ static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
 static int sensor_max_fps = 15;
 
-static int wdr_bufsize = 2400000; //cache lines corrponding on VPB1
+static int wdr_bufsize = 2400000; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -272,11 +272,11 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
-	//@@ 0 2 Res 3840x2160 4lane MIPI0720Mbps Linear10 30fps MCLK24M GAIA26
+	// @@ 0 2 Res 3840x2160 4lane MIPI0720Mbps Linear10 30fps MCLK24M GAIA26
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},
-	{0x0305, 0x2d}, //;32
+	{0x0305, 0x2d}, // ;32
 	{0x0306, 0x00},
 	{0x0308, 0x03},
 	{0x0309, 0x04},
@@ -436,7 +436,7 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x4826, 0x30},
 	{0x4831, 0x40},
 	{0x4833, 0x18},
-	{0x4837, 0x16}, //;14
+	{0x4837, 0x16}, // ;14
 	{0x483b, 0x00},
 	{0x484b, 0x03},
 	{0x4850, 0x7c},
@@ -464,10 +464,10 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 	{0x4d05, 0x25},
 	{0x4700, 0x2b},
 	{0x4e00, 0x2b},
-	{0x380c, 0x04}, //;07
-	{0x380d, 0x0c}, //;10
-	{0x380e, 0x0a}, //;0a
-	{0x380f, 0xd9}, //;5e
+	{0x380c, 0x04}, // ;07
+	{0x380d, 0x0c}, // ;10
+	{0x380e, 0x0a}, // ;0a
+	{0x380f, 0xd9}, // ;5e
 	{0x3501, 0x0a},
 	{0x3502, 0x4e},
 	{0x0100, 0x01},
@@ -479,7 +479,7 @@ static struct regval_list sensor_init_regs_3840_2160_30fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
-	//@@ 0 2 Res 3840x2160 4lane MIPI640Mbps Linear10 15fps MCLK24M
+	// @@ 0 2 Res 3840x2160 4lane MIPI640Mbps Linear10 15fps MCLK24M
 	{0x0100, 0x00},
 	{0x0103, 0x01},
 	{0x0303, 0x01},
@@ -1356,7 +1356,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if (sensor_attr.data_type == TX_SENSOR_DATA_TYPE_WDR_DOL)
@@ -1442,7 +1442,7 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.wdr_cache = wdr_bufsize;
 
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 148; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 148; // exposure ratio 16
 		sensor_attr.mipi.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE;
 		sensor_attr.max_integration_time_native = 2376;
 		sensor_attr.integration_time_limit = 2376;
@@ -1468,11 +1468,11 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.wdr_cache = 0;
 		sensor_attr.max_integration_time_native = 0xad9 - 8;
 		sensor_attr.integration_time_limit = 0xad9 - 8;
-		sensor_attr.total_width = 0x40c * 4; //4144
-		sensor_attr.total_height = 0xad9;    //2777
+		sensor_attr.total_width = 0x40c * 4; // 4144
+		sensor_attr.total_height = 0xad9;    // 2777
 		sensor_attr.max_integration_time = 0xad9 - 8;
-		sensor_attr.total_width = 0x40c * 4; //4144
-		sensor_attr.total_height = 0xad9;    //2777
+		sensor_attr.total_width = 0x40c * 4; // 4144
+		sensor_attr.total_height = 0xad9;    // 2777
 
 		sensor->video.mbus.width = wsize->width;
 		sensor->video.mbus.height = wsize->height;
@@ -1549,8 +1549,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE;
 		sensor_attr.max_integration_time_native = 0x9ee - 8;
 		sensor_attr.integration_time_limit = 0x9ee - 8;
-		sensor_attr.total_width = 0xa10 * 2; //5152
-		sensor_attr.total_height = 0x9ee;    //2542
+		sensor_attr.total_width = 0xa10 * 2; // 5152
+		sensor_attr.total_height = 0x9ee;    // 2542
 		sensor_attr.max_integration_time = 0x9ee - 8;
 		sensor_attr.again = 0x80;
 		sensor_attr.integration_time = 0x901;
@@ -1563,8 +1563,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE;
 		sensor_attr.max_integration_time_native = 0xad9 - 8;
 		sensor_attr.integration_time_limit = 0xad9 - 8;
-		sensor_attr.total_width = 0x40c * 4; //4144
-		sensor_attr.total_height = 0xad9;    //2777
+		sensor_attr.total_width = 0x40c * 4; // 4144
+		sensor_attr.total_height = 0xad9;    // 2777
 		sensor_attr.max_integration_time = 0xad9 - 8;
 		sensor_attr.again = 0x80;
 		sensor_attr.integration_time = 0xa4e;
@@ -1575,7 +1575,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.mipi.clk = 720;
 		sensor_attr.mipi.mipi_sc.sensor_frame_mode = TX_SENSOR_WDR_2_FRAME_MODE;
 		sensor_attr.min_integration_time_short = 4;
-		sensor_attr.max_integration_time_short = 148; //exposure ratio 16
+		sensor_attr.max_integration_time_short = 148; // exposure ratio 16
 		sensor_attr.mipi.mipi_sc.sensor_mode = TX_SENSOR_VC_MODE;
 		sensor_attr.max_integration_time_native = 2376;
 		sensor_attr.integration_time_limit = 2376;

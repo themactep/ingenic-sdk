@@ -594,7 +594,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -843,7 +843,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	/* convert sensor-gain into isp-gain */
 	sensor_attr.max_again = 256041;
-	sensor_attr.max_dgain = 0; //sc1245a_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sc1245a_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

@@ -55,8 +55,8 @@ static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
-//static unsigned short int dpc_flag = 1;
-//static unsigned int gain_val = 0x37e;
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -312,7 +312,7 @@ struct tx_isp_sensor_attribute sc1346_attr = {.name = "sc1346",
 			.clk = 720,
 			.lans = 1,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -627,7 +627,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	if (ret < 0)
 		return ret;
-	//	gain_val = again;
+	// gain_val = again;
 
 	return 0;
 }
@@ -722,7 +722,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -878,12 +878,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

@@ -33,7 +33,7 @@
 #define SENSOR_SUPPORT_25FPS_SCLK 1800 * 2800 * 25
 #define SENSOR_VERSION "H20221230a"
 
-//#define SENSOR_WITHOUT_INIT
+// #define SENSOR_WITHOUT_INIT
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = -1;
@@ -670,7 +670,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {

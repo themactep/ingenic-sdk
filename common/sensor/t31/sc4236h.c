@@ -903,7 +903,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x3630, 0x80);
 		sensor_write(sd, 0x3622, 0xf6);
 		sensor_write(sd, 0x3812, 0x30);
-	} else { //may be flick
+	} else { // may be flick
 		sensor_write(sd, 0x3812, 0x00);
 		sensor_write(sd, 0x3301, 0x3c);
 		sensor_write(sd, 0x3633, 0x44);
@@ -964,8 +964,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int pclk = 0;
 	unsigned short hts;
 	unsigned short vts = 0;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 	unsigned char val = 0;
 

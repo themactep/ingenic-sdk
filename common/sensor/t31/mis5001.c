@@ -253,7 +253,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 600,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -291,7 +291,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 600,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -314,7 +314,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.sensor_fid_mode = 0,
 			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 		},
-	.max_again = 260651, //259138,
+	.max_again = 260651, // 259138,
 	.max_dgain = 0,
 	.min_integration_time = 2,
 	.min_integration_time_native = 2,
@@ -328,7 +328,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	//	.sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
+	// .sensor_ctrl.alloc_integration_time = sensor_alloc_integration_time,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
@@ -798,8 +798,8 @@ static struct regval_list sensor_init_regs_2592_1944_30fps[] = {
 	{0x3124, 0x09},
 	{0x4200, 0x09},
 	{0x4201, 0x00},
-	{0x420e, 0x69}, //69
-	{0x420f, 0x26}, //06
+	{0x420e, 0x69}, // 69
+	{0x420f, 0x26}, // 06
 	{0x4240, 0x8c},
 	{0x4242, 0x03},
 	{0x4224, 0x20},
@@ -855,7 +855,7 @@ static struct regval_list sensor_init_regs_2592_1944_30fps[] = {
 	{0x4009, 0x09},
 	{0x400a, 0x48},
 	{0x3f0c, 0x30},
-	//pll
+	// pll
 	{0x3306, 0x03},
 	{0x3307, 0xa5},
 	{0x3309, 0x00},
@@ -863,11 +863,11 @@ static struct regval_list sensor_init_regs_2592_1944_30fps[] = {
 	{0x330a, 0x04},
 	{0x330b, 0x09},
 	{0x3302, 0x00},
-	//windows
-	{0x310f, 0x4f}, //a6
-	{0x310e, 0x12}, //e
+	// windows
+	{0x310f, 0x4f}, // a6
+	{0x310e, 0x12}, // e
 	{0x310d, 0xbc},
-	{0x310c, 0x07}, //vts
+	{0x310c, 0x07}, // vts
 	{0x3115, 0x00},
 	{0x3114, 0x00},
 	{0x3117, 0x1f},
@@ -1096,7 +1096,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	switch (sensor_resolution) {
 	case TX_SENSOR_RES_400:

@@ -316,12 +316,12 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x8c, 0xff},
 	{0x8d, 0xc7},
 	{0x8b, 0x01},
-	{0x0c, 0x00}, //40/*bit[6] black sun disable*/
+	{0x0c, 0x00}, // 40/*bit[6] black sun disable*/
 	{0x69, 0x7c},
-	{0x6a, 0x42}, //4c
-	{0x65, 0x02}, //05
-	{0x80, 0x03}, //02
-	{0x81, 0x91}, //91
+	{0x6a, 0x42}, // 4c
+	{0x65, 0x02}, // 05
+	{0x80, 0x03}, // 02
+	{0x81, 0x91}, // 91
 	{0x19, 0x20},
 	{0x12, 0x00},
 	{0x39, 0xc1},
@@ -408,7 +408,7 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x80, 0x03},
 	{0x81, 0x91},
 	{0x19, 0x20},
-	//	{0x12, 0x00},
+	// {0x12, 0x00},
 	{0x39, 0xc1},
 	{0x39, 0x81},
 	{0x17, 0x00},
@@ -653,7 +653,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (sensor_max_fps) {
@@ -662,7 +662,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		max_fps = TX_SENSOR_MAX_FPS_30;
 		break;
 	case TX_SENSOR_MAX_FPS_15:
-		pclk = SENSOR_SUPPORT_15FPS_PCLK; //24MHz
+		pclk = SENSOR_SUPPORT_15FPS_PCLK; // 24MHz
 		max_fps = TX_SENSOR_MAX_FPS_15;
 		break;
 	default:
@@ -696,7 +696,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 

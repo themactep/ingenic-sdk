@@ -54,7 +54,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int wdr_bufsize = 737280; //cache lines corrponding on VPB1
+static int wdr_bufsize = 737280; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -837,7 +837,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -869,12 +869,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += sensor_read(sd, 0x1f, &val);
-//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
+// ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
-//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
+// ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
 	ret += sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));

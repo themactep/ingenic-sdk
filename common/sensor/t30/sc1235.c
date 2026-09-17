@@ -363,13 +363,13 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.total_width = 1800,
 	.total_height = 1200,
 	.max_integration_time = 1196,
-	//.one_line_expr_in_us = 33,
+	// .one_line_expr_in_us = 33,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1280_960_25fps[] = {
@@ -454,7 +454,7 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {
 	{0x3e03, 0x03},
 	{0x3e08, 0x00},
 #ifdef DRIVE_CAPABILITY_1
-	{0x3640, 0x00}, //drv
+	{0x3640, 0x00}, // drv
 #elif defined(DRIVE_CAPABILITY_2)
 	{0x3640, 0x01},
 #endif
@@ -711,7 +711,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

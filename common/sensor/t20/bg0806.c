@@ -150,58 +150,58 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	  @@ DVP interface 1920*1080 30fps
 	*/
 	{0x0200, 0x0001},
-	{0x000e, 0x0008}, //0806_4times_74.25M_30fps
-	{0x000f, 0x00ae}, //row time F_W=2200 //0x0098
+	{0x000e, 0x0008}, // 0806_4times_74.25M_30fps
+	{0x000f, 0x00ae}, // row time F_W=2200 //0x0098
 	{0x0013, 0x0001},
 	{0x0021, 0x0001},
-	{0x0022, 0x000e}, //vblank //0025
+	{0x0022, 0x000e}, // vblank //0025
 	{0x0028, 0x0000},
 	{0x0029, 0x0030},
 	{0x002a, 0x0000},
 	{0x002b, 0x0030},
 	{0x0030, 0x0000},
-	{0x0031, 0x00d0}, //rstb2rmp1 gap
+	{0x0031, 0x00d0}, // rstb2rmp1 gap
 	{0x0034, 0x0000},
-	{0x0035, 0x00d0}, //tx2rmp2 gap
+	{0x0035, 0x00d0}, // tx2rmp2 gap
 	{0x003c, 0x0001},
-	{0x003d, 0x0084}, //rmp1_w@pclk domain  //0x80
-	{0x003e, 0x0005}, //ncp
+	{0x003d, 0x0084}, // rmp1_w@pclk domain  //0x80
+	{0x003e, 0x0005}, // ncp
 	{0x0042, 0x0001},
-	{0x005c, 0x0000}, //lsh_io ctrlbit for 1.8VDDIO
+	{0x005c, 0x0000}, // lsh_io ctrlbit for 1.8VDDIO
 	{0x0061, 0x0004},
-	{0x0062, 0x005c}, //rmp2_w@pclk domain //0x50
+	{0x0062, 0x005c}, // rmp2_w@pclk domain //0x50
 	{0x0064, 0x0000},
-	{0x0065, 0x0080}, //rmp1_w@rmpclk domain
+	{0x0065, 0x0080}, // rmp1_w@rmpclk domain
 	{0x0067, 0x0001},
-	{0x0068, 0x0090}, //rmp2_w@rmpclk domain
-	{0x006c, 0x0003}, //pd mipi dphy&dphy ldo
+	{0x0068, 0x0090}, // rmp2_w@rmpclk domain
+	{0x006c, 0x0003}, // pd mipi dphy&dphy ldo
 	{0x007f, 0x0000},
-	{0x0080, 0x0001}, //dot en disable
+	{0x0080, 0x0001}, // dot en disable
 	{0x0081, 0x0000},
 	{0x0082, 0x000b},
 	{0x0084, 0x0008},
-	{0x0088, 0x0005}, //pclk dly
+	{0x0088, 0x0005}, // pclk dly
 	{0x008e, 0x0000},
 	{0x008f, 0x0000},
-	{0x0090, 0x0001}, //hxb 20170210  change system voltage 2.8V to 3.3V
-	{0x0094, 0x0001}, //rmp div1
-	{0x0095, 0x0001}, //rmp div4
-	{0x009e, 0x0003}, //4 times
-	{0x009f, 0x0020}, //rmp2gap@rmpclk
+	{0x0090, 0x0001}, // hxb 20170210  change system voltage 2.8V to 3.3V
+	{0x0094, 0x0001}, // rmp div1
+	{0x0095, 0x0001}, // rmp div4
+	{0x009e, 0x0003}, // 4 times
+	{0x009f, 0x0020}, // rmp2gap@rmpclk
 	{0x00b1, 0x002f},
 	{0x00b2, 0x0002},
 	{0x00bc, 0x0002},
 	{0x00bd, 0x0000},
-	{0x0120, 0x0001}, //blc on 01 direct
+	{0x0120, 0x0001}, // blc on 01 direct
 
-	{0x0132, 0x0001}, //k
+	{0x0132, 0x0001}, // k
 	{0x0206, 0x0002},
 	{0x006e, 0x0000},
 
 	{0x0139, 0x0007},
 	{0x0139, 0x00ff},
 	{0x013b, 0x0008},
-	{0x01a5, 0x0007}, //row noise on 07
+	{0x01a5, 0x0007}, // row noise on 07
 	{0x0160, 0x0000},
 	{0x0161, 0x0030},
 	{0x0162, 0x0000},
@@ -211,24 +211,24 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	{0x0166, 0x0000},
 	{0x0167, 0x0030},
 	{0x00f3, 0x0000},
-	{0x00f4, 0x0049}, //plm
-	{0x00f5, 0x0002}, //pln, 445.5M pll
+	{0x00f4, 0x0049}, // plm
+	{0x00f5, 0x0002}, // pln, 445.5M pll
 
-	{0x0053, 0x0000}, //hxb20161121
-	{0x0054, 0x0028}, //hxb20161121
-	{0x0055, 0x0000}, //hxb20161121
+	{0x0053, 0x0000}, // hxb20161121
+	{0x0054, 0x0028}, // hxb20161121
+	{0x0055, 0x0000}, // hxb20161121
 
-	{0x006d, 0x000c}, //pclk_ctrl, 03 for 1p25,0c for 1p5
-	{0x006c, 0x0000}, //ldo_ctrl,00
+	{0x006d, 0x000c}, // pclk_ctrl, 03 for 1p25,0c for 1p5
+	{0x006c, 0x0000}, // ldo_ctrl,00
 	{0x008d, 0x003f}, //
-	{0x008e, 0x0000}, //oen_ctrl,0c
-	{0x008f, 0x0000}, //io_sel_ctrl,03
-	{0x00fa, 0x008f}, //ispc,c7
-	{0x0391, 0x0001}, //mipi_ctrl1,(raw12)
-	{0x0392, 0x0000}, //mipi_ctrl2,default
-	{0x0393, 0x0001}, //mipi_ctrl3,default
-	{0x0398, 0x0008}, //28(25M),14(50M),0a(100M),08(111.375)
-	{0x0390, 0x0000}, //mipi_ctrl0,bit[1],mipi enable
+	{0x008e, 0x0000}, // oen_ctrl,0c
+	{0x008f, 0x0000}, // io_sel_ctrl,03
+	{0x00fa, 0x008f}, // ispc,c7
+	{0x0391, 0x0001}, // mipi_ctrl1,(raw12)
+	{0x0392, 0x0000}, // mipi_ctrl2,default
+	{0x0393, 0x0001}, // mipi_ctrl3,default
+	{0x0398, 0x0008}, // 28(25M),14(50M),0a(100M),08(111.375)
+	{0x0390, 0x0000}, // mipi_ctrl0,bit[1],mipi enable
 	{0x001d, 0x0001},
 	{SENSOR_REG_END, 0x00},
 };
@@ -1160,17 +1160,17 @@ static unsigned int sensor_clip(unsigned int value, unsigned int limit_l, unsign
 
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	unsigned char vrefh;
-	unsigned char vrefh_min_tlb = 0x0c; //hxb 20170210  change system voltage 2.8V to 3.3V
+	unsigned char vrefh_min_tlb = 0x0c; // hxb 20170210  change system voltage 2.8V to 3.3V
 	unsigned int dgain = 0, again;
 	unsigned int total_gain = value;
 	int ret = 0;
 	total_gain = sensor_clip(total_gain, 0x0040, 0x0f00);
 	vrefh = (128 << 6) / total_gain - 1;
 	vrefh = sensor_clip(vrefh, vrefh_min_tlb, 0x7f);
-	again = (128 << 6) / (vrefh + 1);     //recalculate real again
+	again = (128 << 6) / (vrefh + 1);     // recalculate real again
 	dgain = total_gain * 512 / again;     // dgain
-	dgain = sensor_clip(dgain, 512, 512); //min=1x,max=8x
-					      //	temp = (128<<6)%(total_gain+1);
+	dgain = sensor_clip(dgain, 512, 512); // min=1x,max=8x
+					      // temp = (128<<6)%(total_gain+1);
 
 	if ((vrefh > vrefh_min_tlb) && (vrefh <= 0x7f)) {
 		ret += sensor_write(sd, 0x002b, 0x30);
@@ -1239,7 +1239,7 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	if (ret)
 		return ret;
 
-//dsc_k blcc_k different with chip pid
+// dsc_k blcc_k different with chip pid
 #define BG0806A 0x01
 #define BG0806C1 0x07
 #define BG0806C2 0x0b
@@ -1319,7 +1319,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 	unsigned int height = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_INFO("warn: fps(%d) not in range\n", fps);

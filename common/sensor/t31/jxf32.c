@@ -387,9 +387,9 @@ static struct regval_list sensor_init_regs_1280_720_60fps_mipi[] = {
 	{0x58, 0x18},
 	{0x57, 0x60},
 	{0x64, 0xe0},
-	{0x20, 0x58}, //0x258  600
+	{0x20, 0x58}, // 0x258  600
 	{0x21, 0x02},
-	{0x22, 0x6d}, //0x46d  1133
+	{0x22, 0x6d}, // 0x46d  1133
 	{0x23, 0x04},
 	{0x24, 0x40},
 	{0x25, 0xd0},
@@ -797,7 +797,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	switch (sensor_resolution) {
@@ -824,8 +824,8 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x21, &val);
 	hts = val;
 	ret += sensor_read(sd, 0x20, &val);
-	//	hts |= val;
-	//	hts *= 2;
+	// hts |= val;
+	// hts *= 2;
 	if (0 != ret) {
 		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
@@ -945,7 +945,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
-	//	return 0;
+	// return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;

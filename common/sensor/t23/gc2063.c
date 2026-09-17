@@ -93,7 +93,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//inx, 0xb4 0xb3 0xb8 0xb9 gain
+	// inx, 0xb4 0xb3 0xb8 0xb9 gain
 	{0x00, 0x00, 0x00, 0x01, 0x00, 0},	       // 1.000000
 	{0x01, 0x00, 0x10, 0x01, 0x0c, 13726},     // 1.156250
 	{0x02, 0x00, 0x20, 0x01, 0x1b, 31177},    // 1.390625
@@ -228,8 +228,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
-	//mclk=24mhz,mipi data rate=624mbps/lane
-	//wpclk=156mhz,row_time=28.2us frame length=1418,25fps
+	// mclk=24mhz,mipi data rate=624mbps/lane
+	// wpclk=156mhz,row_time=28.2us frame length=1418,25fps
 	/*system*/
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -526,8 +526,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
-	//mclk=24mhz,mipi data rate=312mbps/lane
-	//wpclk=156mhz,row_time=56.4us frame length=1418,15fps
+	// mclk=24mhz,mipi data rate=312mbps/lane
+	// wpclk=156mhz,row_time=56.4us frame length=1418,15fps
 	/*system*/
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -845,8 +845,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x04, 0x60},
 	{0x05, 0x04},
 	{0x06, 0x4c},
-	{0x07, 0x04}, //[13:8]vb
-	{0x08, 0x72}, //[7:0]vb
+	{0x07, 0x04}, // [13:8]vb
+	{0x08, 0x72}, // [7:0]vb
 	{0x09, 0x00},
 	{0x0a, 0x02},
 	{0x0b, 0x00},
@@ -877,8 +877,8 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0x8c, 0x12},
 	{0x8d, 0x92},
 	{0x90, 0x00},
-	{0x41, 0x04}, //VTS[13:8]
-	{0x42, 0x65}, //VTS[7:0]
+	{0x41, 0x04}, // VTS[13:8]
+	{0x42, 0x65}, // VTS[7:0]
 	{0x9d, 0x10},
 	{0xce, 0x7c},
 	{0xd2, 0x41},
@@ -1262,7 +1262,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
@@ -1326,19 +1326,19 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	switch (enable) {
 	case 0:
 		ret = sensor_write(sd, 0x17, 0x00); /*normal*/
-		//sensor_write(sd, 0xfe, 0x00);
+		// sensor_write(sd, 0xfe, 0x00);
 		break;
 	case 1:
 		ret = sensor_write(sd, 0x17, 0x01); /*mirror*/
-		//sensor_write(sd, 0xfe, 0x02);
+		// sensor_write(sd, 0xfe, 0x02);
 		break;
 	case 2:
 		ret = sensor_write(sd, 0x17, 0x02); /*flip*/
-		//sensor_write(sd, 0xfe, 0x01);
+		// sensor_write(sd, 0xfe, 0x01);
 		break;
 	case 3:
 		ret = sensor_write(sd, 0x17, 0x03); /*mirror and flip*/
-		//sensor_write(sd, 0xfe, 0x03);
+		// sensor_write(sd, 0xfe, 0x03);
 		break;
 	}
 	return ret;
@@ -1421,12 +1421,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, *(int *)arg);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, *(int *)arg);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

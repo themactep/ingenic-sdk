@@ -359,45 +359,45 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x20, 0x01},
 	{0x21, 0x78},
 	{0x22, 0xb0},
-	{0x23, 0x04}, //0x06  20140519 GC0328C
+	{0x23, 0x04}, // 0x06  20140519 GC0328C
 	{0x24, 0x11},
-	{0x24, 0x3f}, //jx
+	{0x24, 0x3f}, // jx
 	{0x26, 0x00},
-	{0x50, 0x01}, //crop mode
-	//global gain for range
+	{0x50, 0x01}, // crop mode
+	// global gain for range
 	{0x70, 0xff},
 	{0x71, 0x40},
 	{0x72, 0xff},
 /////////////banding/////////////
 #if 0
-	{0x11, 0x2a},//sh_delay
-	{0x05, 0x01},//hb  225¨°?¨¦?
+	{0x11, 0x2a},// sh_delay
+	{0x05, 0x01},// hb  225¨°?¨¦?
 	{0x06, 0x06},//
-	{0x07, 0x00},//vb
+	{0x07, 0x00},// vb
 	{0x08, 0x0c},//
 #else
-	{0x11, 0x2a}, //sh_delay
-	{0x05, 0x00}, //hb  225¨°?¨¦?
+	{0x11, 0x2a}, // sh_delay
+	{0x05, 0x00}, // hb  225¨°?¨¦?
 	{0x06, 0x80}, //
-	{0x07, 0x00}, //vb
+	{0x07, 0x00}, // vb
 	{0x08, 0x60}, //
 #endif
-	{0x11, 0x2a}, //sh_delay
-	{0x05, 0x01}, //hb  225¨°?¨¦?
+	{0x11, 0x2a}, // sh_delay
+	{0x05, 0x01}, // hb  225¨°?¨¦?
 	{0x06, 0x06}, //
-	{0x07, 0x00}, //vb
+	{0x07, 0x00}, // vb
 	{0x08, 0x8b}, //
 	//////////
 	{0xfe, 0x01}, //
-	{0x29, 0x00}, //anti-flicker step [11:8]
-	{0x2a, 0x78}, //anti-flicker step [7:0]
-	{0x2b, 0x01}, //exp level 0  25fps
+	{0x29, 0x00}, // anti-flicker step [11:8]
+	{0x2a, 0x78}, // anti-flicker step [7:0]
+	{0x2b, 0x01}, // exp level 0  25fps
 	{0x2c, 0xe0},
-	{0x2d, 0x01}, //exp level 1  25fps
+	{0x2d, 0x01}, // exp level 1  25fps
 	{0x2e, 0xe0},
-	{0x2f, 0x01}, //exp level 2  25fps
+	{0x2f, 0x01}, // exp level 2  25fps
 	{0x30, 0xe0},
-	{0x31, 0x01}, //exp level 3  25fps
+	{0x31, 0x01}, // exp level 3  25fps
 	{0x32, 0xe0},
 	{0xfe, 0x00},
 	//////////// BLK//////////////////////
@@ -420,10 +420,10 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x40, 0x00},
 	{0x41, 0x00},
 	{0x42, 0x00},
-	{0x44, 0xb8}, //yuv//0x44=0xb8
+	{0x44, 0xb8}, // yuv//0x44=0xb8
 	{0x45, 0x00},
 	{0x46, 0x02},
-	{0x49, 0x03}, //0x44=0xb9 0x70/0x71/0x72ÎÞÐ§¹û£»
+	{0x49, 0x03}, // 0x44=0xb9 0x70/0x71/0x72ÎÞÐ§¹û£»
 	{0x4f, 0x00},
 	{0x4b, 0x01},
 	{0x50, 0x01},
@@ -505,12 +505,12 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			//			if (vals->reg_num == SENSOR_PAGE_REG) {
-			//				val &= 0xf8;
-			//				val |= (vals->value & 0x07);
-			//				ret = sensor_write(sd, vals->reg_num, val);
-			//				ret = sensor_read(sd, vals->reg_num, &val);
-			//			}
+			// if (vals->reg_num == SENSOR_PAGE_REG) {
+			// val &= 0xf8;
+			// val |= (vals->value & 0x07);
+			// ret = sensor_write(sd, vals->reg_num, val);
+			// ret = sensor_read(sd, vals->reg_num, &val);
+			// }
 		}
 		vals++;
 	}
@@ -652,7 +652,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vb = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -900,7 +900,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
-	//	private_clk_set_rate(sensor->mclk, 24000000);
+	// private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_set_rate(sensor->mclk, 12000000);
 	private_clk_enable(sensor->mclk);
 

@@ -219,9 +219,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x320c, 0x08},
 	{0x320d, 0x98},
 	{0x3364, 0x05}, // [2] 1: write at sampling ending
-	{0x363c, 0x28}, //bypass nvdd
-	{0x363b, 0x0a}, //HVDD
-	{0x3635, 0xa0}, //TXVDD
+	{0x363c, 0x28}, // bypass nvdd
+	{0x363b, 0x0a}, // HVDD
+	{0x3635, 0xa0}, // TXVDD
 	{0x4500, 0x59},
 	{0x3d08, 0x01}, /*pclk polarity*/
 	{0x3908, 0x11},
@@ -238,22 +238,22 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x3341, 0x50},
 	{0x3342, 0x02},
 	{0x3343, 0x60},
-	{0x3632, 0x88}, //anti sm
+	{0x3632, 0x88}, // anti sm
 	{0x3309, 0xa0},
 	{0x331f, 0x8d},
 	{0x3321, 0x8f},
-	{0x335e, 0x01}, //ana dithering
+	{0x335e, 0x01}, // ana dithering
 	{0x335f, 0x03},
 	{0x337c, 0x04},
 	{0x337d, 0x06},
 	{0x33a0, 0x05},
 	{0x3301, 0x05},
-	{0x3670, 0x08}, //[3]:3633 logic ctrl  real value in 3682
-	{0x367e, 0x07}, //gain0
-	{0x367f, 0x0f}, //gain1
-	{0x3677, 0x2f}, //<gain0
-	{0x3678, 0x22}, //gain0 - gain1
-	{0x3679, 0x43}, //>gain1
+	{0x3670, 0x08}, // [3]:3633 logic ctrl  real value in 3682
+	{0x367e, 0x07}, // gain0
+	{0x367f, 0x0f}, // gain1
+	{0x3677, 0x2f}, // <gain0
+	{0x3678, 0x22}, // gain0 - gain1
+	{0x3679, 0x43}, // >gain1
 	{0x337f, 0x03},
 	{0x3369, 0x00},
 	{0x336a, 0x00},
@@ -265,7 +265,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps[] = {
 	{0x363b, 0x09},
 	{0x363c, 0x07},
 	{0x391e, 0x00},
-	{0x3637, 0x14}, //fullwell 7K
+	{0x3637, 0x14}, // fullwell 7K
 	{0x3306, 0x54},
 	{0x330b, 0xd8},
 	{0x366e, 0x08}, // ofs auto en [3]
@@ -505,7 +505,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		sensor_write(sd, 0x5781, 0x02);
 		sensor_write(sd, 0x5785, 0x18);
 		sensor_write(sd, 0x3812, 0x30);
-	} else { //may be flick
+	} else { // may be flick
 		sensor_write(sd, 0x3812, 0x00);
 		sensor_write(sd, 0x3301, 0xff);
 		sensor_write(sd, 0x3631, 0x88);
@@ -593,8 +593,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -888,7 +888,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 256041;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

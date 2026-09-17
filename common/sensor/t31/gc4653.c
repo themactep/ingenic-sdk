@@ -58,7 +58,7 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-static int wdr_bufsize = 10077696 * 2; //cache lines corrponding on VPB1
+static int wdr_bufsize = 10077696 * 2; // cache lines corrponding on VPB1
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -316,7 +316,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x06}, //vts
+	{0x0340, 0x06}, // vts
 	{0x0341, 0x40},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -405,7 +405,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05}, //hts
+	{0x0342, 0x05}, // hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -782,7 +782,7 @@ static struct regval_list sensor_init_regs_1920_1080_60fps_mipi[] = {
 	{0x034a, 0x04},
 	{0x034b, 0x48},
 
-	{0x0351, 0x00}, //crop
+	{0x0351, 0x00}, // crop
 	{0x0352, 0x08},
 	{0x0353, 0x00},
 	{0x0354, 0x08},
@@ -1195,7 +1195,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int max_fps = 0;
 	unsigned char val = 0;
 	unsigned short short_time = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	clk = SENSOR_SUPPORT_386RES_30FPS_SCLK;

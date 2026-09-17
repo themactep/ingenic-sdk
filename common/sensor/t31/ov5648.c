@@ -873,7 +873,7 @@ static struct regval_list sensor_init_regs_1280_720_60fps[] = {
 	{0x4521, 0x00},
 	{0x4511, 0x22},
 	{0x4801, 0x0f},
-	{0x4802, 0x84},//add
+	{0x4802, 0x84},// add
 	{0x4814, 0x2a},
 	{0x4819, 0xa0},/*hs zero*/
 	{0x481f, 0x3c},
@@ -1164,10 +1164,10 @@ static struct regval_list sensor_init_regs_1280_960_30fps[] = {
 	{0x3809, 0x00},
 	{0x380a, 0x03},
 	{0x380b, 0xc0},
-	{0x380c, 0x09}, //;05
-	{0x380d, 0x80}, //;80
-	{0x380e, 0x04}, //;05
-	{0x380f, 0x7e}, //;28
+	{0x380c, 0x09}, // ;05
+	{0x380d, 0x80}, // ;80
+	{0x380e, 0x04}, // ;05
+	{0x380f, 0x7e}, // ;28
 	{0x3810, 0x00},
 	{0x3811, 0x10},
 	{0x3812, 0x00},
@@ -1425,12 +1425,12 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value << 4;
 
-	//ret += sensor_write(sd, 0x3208, 0x00);
+	// ret += sensor_write(sd, 0x3208, 0x00);
 	ret += sensor_write(sd, 0x3502, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3501, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3500, (unsigned char)((expo >> 16) & 0xff));
-	//ret += sensor_write(sd, 0x3208, 0x10);
-	//ret += sensor_write(sd, 0x3208, 0xa0);
+	// ret += sensor_write(sd, 0x3208, 0x10);
+	// ret += sensor_write(sd, 0x3208, 0xa0);
 	if (ret < 0)
 		return ret;
 
@@ -1440,11 +1440,11 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
-	//ret += sensor_write(sd, 0x3208, 0x01);
+	// ret += sensor_write(sd, 0x3208, 0x01);
 	ret += sensor_write(sd, 0x350b, (unsigned char)((value & 0xff)));
 	ret += sensor_write(sd, 0x350a, (unsigned char)((value >> 8) & 0x03));
-	//ret += sensor_write(sd, 0x3208, 0x11);
-	//ret += sensor_write(sd, 0x3208, 0xa1);
+	// ret += sensor_write(sd, 0x3208, 0x11);
+	// ret += sensor_write(sd, 0x3208, 0xa1);
 	if (ret < 0)
 		return ret;
 
@@ -1501,7 +1501,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_resolution) {

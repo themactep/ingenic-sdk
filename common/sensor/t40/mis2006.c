@@ -203,7 +203,7 @@ struct again_lut sensor_again_lut[] = {
 	{0x7c, 256038},
 	{0x7d, 257600},
 	{0x7e, 259138},
-	//{0x7f, 260651},
+	// {0x7f, 260651},
 };
 
 struct tx_isp_sensor_attribute sensor_attr;
@@ -240,7 +240,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.clk = 800,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW12, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -471,7 +471,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.width = 1920,
 		.height = 1080,
 		.fps = 25 << 16 | 1,
-		.mbus_code = TISP_VI_FMT_SGRBG12_1X12, //GRBG
+		.mbus_code = TISP_VI_FMT_SGRBG12_1X12, // GRBG
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_mipi,
 	}};
@@ -689,7 +689,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -926,7 +926,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_VFLIP:
 		if (arg)
-			//			ret = sensor_set_vflip(sd, sensor_val->value);
+			// ret = sensor_set_vflip(sd, sensor_val->value);
 			break;
 	default:
 		break;

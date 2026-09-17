@@ -627,12 +627,12 @@ static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 };
 
 static struct regval_list sensor_stream_on[] = {
-	//{ 0xf2, 0x8f},
+	// { 0xf2, 0x8f},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off[] = {
-	//{ 0xf2, 0x80},
+	// { 0xf2, 0x80},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -847,7 +847,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {

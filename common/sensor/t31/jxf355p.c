@@ -124,8 +124,8 @@ struct again_lut sensor_again_lut[] = {
 	{0x3c, 249518},
 	{0x3d, 252836},
 	{0x3e, 256041},
-	{0x3f, 259142}, //15.5x
-	{0x40, 262144}, //16x
+	{0x3f, 259142}, // 15.5x
+	{0x40, 262144}, // 16x
 			/* 17x
         {0x41, 267875},
         {0x42, 273280},
@@ -216,7 +216,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.min_integration_time_native = 1,
 	.max_integration_time_native = 1200 - 1,
 	.integration_time_limit = 1200 - 1,
-	.total_width = 2400, //1200 * 2
+	.total_width = 2400, // 1200 * 2
 	.total_height = 1200,
 	.max_integration_time = 1200 - 1,
 	.integration_time_apply_delay = 2,
@@ -242,9 +242,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5f, 0x41},
 	{0x60, 0x20},
 	{0x20, 0xb0}, //
-	{0x21, 0x04}, //hts= 0x4b0 = 1200
+	{0x21, 0x04}, // hts= 0x4b0 = 1200
 	{0x22, 0xb0}, //
-	{0x23, 0x04}, //vts = 0x4b0 = 1200
+	{0x23, 0x04}, // vts = 0x4b0 = 1200
 	{0x24, 0xc0},
 	{0x25, 0x38},
 	{0x26, 0x43},
@@ -550,7 +550,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = SENSOR_OUTPUT_MAX_FPS;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -679,7 +679,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
-	//return 0;
+	// return 0;
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;

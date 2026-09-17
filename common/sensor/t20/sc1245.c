@@ -513,35 +513,35 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		return ret;
 
 	if (0x03 == val) {
-		if (value < 0x110) { //2x
+		if (value < 0x110) { // 2x
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x46);
 			sensor_write(sd, 0x3301, 0x03);
 			sensor_write(sd, 0x3622, 0xd6);
 			sensor_write(sd, 0x3635, 0x89);
 			sensor_write(sd, 0x3812, 0x30);
-		} else if (value >= 0x110 && value < 0x310) { //4x
+		} else if (value >= 0x110 && value < 0x310) { // 4x
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x42);
 			sensor_write(sd, 0x3301, 0x0a);
 			sensor_write(sd, 0x3622, 0xd6);
 			sensor_write(sd, 0x3635, 0x86);
 			sensor_write(sd, 0x3812, 0x30);
-		} else if (value >= 0x310 && value < 0x710) { //8x
+		} else if (value >= 0x310 && value < 0x710) { // 8x
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x42);
 			sensor_write(sd, 0x3301, 0x0b);
 			sensor_write(sd, 0x3622, 0xd6);
 			sensor_write(sd, 0x3635, 0x84);
 			sensor_write(sd, 0x3812, 0x30);
-		} else if (value >= 0x710 && value <= 0x71e) { //15x
+		} else if (value >= 0x710 && value <= 0x71e) { // 15x
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x42);
 			sensor_write(sd, 0x3301, 0x0c);
 			sensor_write(sd, 0x3622, 0x16);
 			sensor_write(sd, 0x3635, 0x82);
 			sensor_write(sd, 0x3812, 0x30);
-		} else { //may be flick 15.5x
+		} else { // may be flick 15.5x
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x42);
 			sensor_write(sd, 0x3301, 0x32);
@@ -574,7 +574,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 			sensor_write(sd, 0x3301, 0x07);
 			sensor_write(sd, 0x3622, 0x16);
 			sensor_write(sd, 0x3812, 0x30);
-		} else { //may be flick
+		} else { // may be flick
 			sensor_write(sd, 0x3812, 0x00);
 			sensor_write(sd, 0x3633, 0x42);
 			sensor_write(sd, 0x3301, 0x32);
@@ -670,8 +670,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts;
 	unsigned short vts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
-	unsigned int max_fps = 0;   //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
+	unsigned int max_fps = 0;   // the format is 24.8
 	int ret = 0;
 
 	switch (sensor_max_fps) {
@@ -953,7 +953,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_INFO("Now we do not support this framerate!!!\n");
 	}
 	sensor_attr.max_again = 256041;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

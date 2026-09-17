@@ -43,9 +43,9 @@
 #define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
 #define TVERSION "V20231226a"
 
-//#define SENSOR_TEST
+// #define SENSOR_TEST
 
-//#define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
+// #define SENSOR_I2C_REG_8BIT	/**< 选择Sensor寄存器地址位宽(8bit/16bit) */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = 699 * 2;
 #endif
@@ -426,7 +426,7 @@ struct tx_isp_mipi_bus sensor_mipi_2592_1944_dol = {
 	.clk = 900,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -455,7 +455,7 @@ struct tx_isp_mipi_bus sensor_mipi_2688_1520_dol = {
 	.clk = 1080,
 	.lans = 2,
 	.settle_time_apative_en = 0,
-	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+	.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 	.mipi_sc.hcrop_diff_en = 0,
 	.mipi_sc.mipi_vcomp_en = 0,
 	.mipi_sc.mipi_hcomp_en = 0,
@@ -773,13 +773,13 @@ static struct regval_list sensor_init_regs_2688_1520_30fps_mipi[] = {
 	{0x3202, 0x00},
 	{0x3203, 0x00},
 	{0x3204, 0x0a},
-	{0x3205, 0x87}, //2695
+	{0x3205, 0x87}, // 2695
 	{0x3206, 0x07},
-	{0x3207, 0x9f}, //1951
+	{0x3207, 0x9f}, // 1951
 	{0x3208, 0x0a},
-	{0x3209, 0x80}, //2688
+	{0x3209, 0x80}, // 2688
 	{0x320a, 0x07},
-	{0x320b, 0x98}, //1944
+	{0x320b, 0x98}, // 1944
 	{0x3210, 0x00},
 	{0x3211, 0x04},
 	{0x3212, 0x00},
@@ -2089,7 +2089,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int sensor_max_fps = 0;
 	int ret = ISP_SUCCESS;
 	switch (info->default_boot) {

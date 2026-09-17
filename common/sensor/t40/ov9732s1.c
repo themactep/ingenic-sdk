@@ -244,7 +244,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	//.sensor_fsync_mode = TX_SENSOR_FSYNC_MSLAVE_MODE,
+	// .sensor_fsync_mode = TX_SENSOR_FSYNC_MSLAVE_MODE,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
@@ -546,7 +546,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || fps < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -601,7 +601,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 }
 
 static int sensor_frame_sync(struct tx_isp_subdev *sd, struct tx_isp_frame_sync *sync) {
-	//sensor_write(sd, 0x381d, 0x04);
+	// sensor_write(sd, 0x381d, 0x04);
 
 	sensor_write(sd, 0x381d, 0x00);
 	private_msleep(1);

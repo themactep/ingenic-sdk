@@ -621,7 +621,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -662,16 +662,16 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	enable &= 0x03;
 
 	switch (enable) {
-	case 0: //normal
+	case 0: // normal
 		val = 0x80;
 		break;
-	case 1: //mirror
+	case 1: // mirror
 		val = 0x81;
 		break;
-	case 2: //flip
+	case 2: // flip
 		val = 0x82;
 		break;
-	case 3: //mirror & flip
+	case 3: // mirror & flip
 		val = 0x83;
 		break;
 	}
@@ -838,12 +838,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//if (arg)
-		//	ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//if (arg)
-		//	ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

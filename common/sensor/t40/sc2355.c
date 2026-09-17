@@ -362,15 +362,15 @@ static struct regval_list sensor_init_regs_640_360_60fps_mipi[] = {
 	{0x5900, 0xf1},
 	{0x5901, 0x04},
 
-	//vbin_QC
+	// vbin_QC
 	{0x3215, 0x22},
 	{0x337e, 0xa0},
 	{0x3905, 0x9c},
 	{0x3032, 0x60},
-	//hbin_QC
+	// hbin_QC
 	{0x5900, 0xf5},
 
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_DELAY, 10},
 	{SENSOR_REG_END, 0x00},
 };
@@ -623,7 +623,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
@@ -830,12 +830,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//		if (arg)
-		//			ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//		if (arg)
-		//			ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

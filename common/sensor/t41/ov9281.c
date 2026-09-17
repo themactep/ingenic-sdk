@@ -41,7 +41,7 @@
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;
-//static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
+// static int data_interface = TX_SENSOR_DATA_INTERFACE_MIPI;
 
 struct tx_isp_sensor_attribute sensor_attr;
 
@@ -217,7 +217,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
-	//.sensor_fsync_mode = TX_SENSOR_FSYNC_MSLAVE_MODE,
+	// .sensor_fsync_mode = TX_SENSOR_FSYNC_MSLAVE_MODE,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
@@ -513,7 +513,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//{0x0100, 0x01},
+	// {0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -708,7 +708,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char val = 0;
 	struct tx_isp_sensor_register_info *info = &sensor->info;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 
 	switch (info->default_boot) {
@@ -779,7 +779,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	unsigned long rate, ret;
 	struct clk *sclka;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	//unsigned long rate;
+	// unsigned long rate;
 	switch (info->default_boot) {
 	case 0:
 		wsize = &sensor_win_sizes[0];
@@ -840,7 +840,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
 
-	//rate = private_clk_get_rate(sensor->mclk);
+	// rate = private_clk_get_rate(sensor->mclk);
 	rate = private_clk_get_rate(sensor->mclk);
 	if (IS_ERR(sensor->mclk)) {
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
@@ -862,7 +862,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 	sensor->video.max_fps = wsize->fps;
 	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 	sensor->priv = wsize;
-	//ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+	// ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor_common_update(&sensor_info,
 		info->rst_gpio,
 		info->pwdn_gpio,
@@ -926,7 +926,7 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
 	uint8_t val_m;
 	uint8_t val_f;
-	//struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
+	// struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
 	ret += sensor_read(sd, 0x3821, &val_m);
@@ -939,10 +939,10 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		break;
 	case 1:
 		ret += sensor_write(sd, 0x3821, (val_m | 0x04));
-		//ret=sensor_write(sd, 0x3820, val_f);
+		// ret=sensor_write(sd, 0x3820, val_f);
 		break;
 	case 2:
-		//ret=sensor_write(sd, 0x3821,val_m);
+		// ret=sensor_write(sd, 0x3821,val_m);
 		ret += sensor_write(sd, 0x3820, (val_f | 0x04));
 		break;
 	case 3:
@@ -950,9 +950,9 @@ static int sensor_set_hvflip(struct tx_isp_subdev *sd, int enable) {
 		ret += sensor_write(sd, 0x3820, (val_f | 0x04));
 		break;
 	}
-	//ret += sensor_write(sd, 0x00eb, 0x01);
-	//if (!ret)
-	//ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
+	// ret += sensor_write(sd, 0x00eb, 0x01);
+	// if (!ret)
+	// ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
 	return ret;
 }

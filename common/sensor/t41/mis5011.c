@@ -40,7 +40,7 @@
 
 
 static int reset_gpio = GPIO_PC(18);
-static int pwdn_gpio = -1; //GPIO_PA(19);
+static int pwdn_gpio = -1; // GPIO_PA(19);
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -1198,9 +1198,9 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.sensor_fid_mode = 0,
 			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 		},
-	//.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	.max_again = 393210,	   //262144 327680
-	.max_again_short = 393210, //262144 327680
+	// .data_type = TX_SENSOR_DATA_TYPE_LINEAR,
+	.max_again = 393210,	   // 262144 327680
+	.max_again_short = 393210, // 262144 327680
 	.min_integration_time = 1,
 	.min_integration_time_short = 1,
 	.max_integration_time_short = 0x784 - 3,
@@ -1216,13 +1216,13 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 0,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_again_short = sensor_alloc_again_short,
-	//.sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
+	// .sensor_ctrl.alloc_integration_time_short = sensor_alloc_integration_time_short,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_2960_1632_30fps_mipi[] = {
-	//raw10
+	// raw10
 
 	{0x300b, 0x01},
 	{0x3c70, 0xee},
@@ -1449,11 +1449,11 @@ static struct regval_list sensor_init_regs_2960_1632_30fps_mipi[] = {
 	{0x3c00, 0x00},
 	{0x3c01, 0x04},
 
-	{0x3c0c, 0x28}, //prepare 0x428
+	{0x3c0c, 0x28}, // prepare 0x428
 	{0x3c0d, 0x14}, //
-	{0x3c0e, 0x69}, //zero 0x669
+	{0x3c0e, 0x69}, // zero 0x669
 	{0x3c0f, 0x16}, //
-	{0x3c14, 0x62}, //lxp 0x0032
+	{0x3c14, 0x62}, // lxp 0x0032
 	{0x3c15, 0x00}, //
 
 	{0x3c18, 0x01}, //
@@ -1465,23 +1465,23 @@ static struct regval_list sensor_init_regs_2960_1632_30fps_mipi[] = {
 	{0x3307, 0x00},
 	{0x3309, 0x01},
 	{0x3201, 0x84}, //
-	{0x3200, 0x07}, //VTS
+	{0x3200, 0x07}, // VTS
 	{0x3203, 0xb4}, //
-	{0x3202, 0x0e}, //HTS
+	{0x3202, 0x0e}, // HTS
 
 	{0x3205, 0x02}, //
-	{0x3204, 0x00}, //H_ST
+	{0x3204, 0x00}, // H_ST
 	{0x3207, 0x61}, //
-	{0x3206, 0x06}, //H_END {0x3209,   0x0c},//
-	{0x3208, 0x00}, //V_ST
+	{0x3206, 0x06}, // H_END {0x3209,   0x0c},//
+	{0x3208, 0x00}, // V_ST
 	{0x320b, 0x9b}, //
-	{0x320a, 0x0b}, //V_END {0x3006,   0x00},
+	{0x320a, 0x0b}, // V_END {0x3006,   0x00},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1920*1080 */
-	//[0]30fps linear
+	// [0]30fps linear
 	{
 		.width = 2960,
 		.height = 1632,
@@ -1623,12 +1623,12 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int expo = (value & 0xffff);
-	//	int again = (value & 0xffff0000) >> 16;
+	// int again = (value & 0xffff0000) >> 16;
 
 	ret += sensor_write(sd, 0x3100, (unsigned char)((expo >> 8) & 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(expo & 0xff));
-	//	ret += sensor_write(sd, 0x3109, (unsigned char)((again >> 8)& 0x03));
-	//	ret += sensor_write(sd, 0x310a, (unsigned char)(again & 0xff));
+	// ret += sensor_write(sd, 0x3109, (unsigned char)((again >> 8)& 0x03));
+	// ret += sensor_write(sd, 0x310a, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x300c, 0x01);
 
 	if (ret < 0)
@@ -1699,7 +1699,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
-			//ret = sensor_write_array(sd, wsize->regs);
+			// ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
@@ -1707,11 +1707,11 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_DVP) {
 				ret = sensor_write_array(sd, sensor_stream_on_dvp);
-				//ISP_INFO("*******DVP******\n");//add
+				// ISP_INFO("*******DVP******\n");//add
 			} else if (sensor_attr.dbus_type == TX_SENSOR_DATA_INTERFACE_MIPI) {
 				ret = sensor_write_array(sd, sensor_stream_on_mipi);
 				*((u32 *)0xb3380000) = 0x05;
-				//ISP_INFO("*******MIPI******\n");//add
+				// ISP_INFO("*******MIPI******\n");//add
 			} else {
 				ISP_ERROR("Don't support this Sensor Data interface\n");
 			}
@@ -1741,7 +1741,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (info->default_boot) {
@@ -1837,7 +1837,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		sensor_attr.total_width = 0xeb4;
 		sensor_attr.total_height = 0x784;
 		sensor_attr.max_integration_time = 0x784 - 3;
-		//ISP_INFO(SENSOR_NAME init set.../n");//add
+		// ISP_INFO(SENSOR_NAME init set.../n");//add
 		break;
 
 	default:
@@ -1975,7 +1975,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	case TX_ISP_EVENT_SENSOR_BLACK_LEVEL:
 		if (arg)
-			//ret = sensor_get_black_pedestal(sd, sensor_val->value);
+			// ret = sensor_get_black_pedestal(sd, sensor_val->value);
 			break;
 	case TX_ISP_EVENT_SENSOR_RESIZE:
 		if (arg)

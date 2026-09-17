@@ -50,7 +50,7 @@ static int sensor_max_fps = TX_SENSOR_MAX_FPS_25;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
-static int wdr_bufsize = 4073600; //1451520;
+static int wdr_bufsize = 4073600; // 1451520;
 module_param(wdr_bufsize, int, S_IRUGO);
 MODULE_PARM_DESC(wdr_bufsize, "Wdr Buf Size");
 
@@ -698,7 +698,7 @@ static struct regval_list sensor_init_regs_1080p_2to1_30fps_mipi[] = {
 	{0x380f, 0x08},
 	{0x034f, 0x38},
 	{0x300b, 0x02},
-	{0x0100, 0x01}, //stream on
+	{0x0100, 0x01}, // stream on
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -938,7 +938,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	wpclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -1179,7 +1179,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	/* if (ret < 0) */
 	/* 	goto err_set_sensor_gpio; */
 
-	//	sensor_attr.dvp.gpio = sensor_gpio_func;
+	// sensor_attr.dvp.gpio = sensor_gpio_func;
 
 	/*
 	  convert sensor-gain into isp-gain,

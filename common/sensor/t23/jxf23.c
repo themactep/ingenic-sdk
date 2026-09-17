@@ -473,9 +473,9 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x58, 0x12},
 	{0x57, 0x60},
 	{0x9d, 0x00},
-	{0x20, 0x00}, //1280
+	{0x20, 0x00}, // 1280
 	{0x21, 0x05},
-	{0x22, 0x46}, //1125
+	{0x22, 0x46}, // 1125
 	{0x23, 0x05},
 	{0x24, 0xc0},
 	{0x25, 0x38},
@@ -1104,8 +1104,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{SENSOR_REG_DELAY, 250},
 	{0x48, 0x05},
 	{0x1f, 0x01},
-	//	{0x99, 0x0f},
-	//	{0x9b, 0x0f},
+	// {0x99, 0x0f},
+	// {0x9b, 0x0f},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1390,7 +1390,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	unsigned int expo = value;
 	expo = expo / 2;
 	ret = sensor_write(sd, 0x05, (unsigned char)(expo & 0xfe));
-	//	ISP_INFO("#############It short is 0x%x\n",value);
+	// ISP_INFO("#############It short is 0x%x\n",value);
 	if (ret < 0)
 		return ret;
 
@@ -1484,7 +1484,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	switch (sensor_max_fps) {
@@ -1526,12 +1526,12 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	sensor_write(sd, 0xc2, 0x23);
 	sensor_write(sd, 0xc3, (unsigned char)(vts >> 8));
 	ret += sensor_read(sd, 0x1f, &val);
-//	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
+// ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
-//	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
+// ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 #else
 	sensor_write(sd, 0x22, (unsigned char)(vts & 0xff));
 	sensor_write(sd, 0x23, (unsigned char)(vts >> 8));

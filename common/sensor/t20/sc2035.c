@@ -430,20 +430,20 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.total_width = 2000,
 	.total_height = 1125,
 	.max_integration_time = 1121,
-	.one_line_expr_in_us = 30, //29.6us
+	.one_line_expr_in_us = 30, // 29.6us
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
-	{0x3105, 0x02}, //start up timing begin
+	{0x3105, 0x02}, // start up timing begin
 	{0x0103, 0x01}, // reset all registers
 	{0x3105, 0x02},
-	{0x0100, 0x00}, //start up timing end
+	{0x0100, 0x00}, // start up timing end
 
 	{0x301e, 0xb0}, // mode select
 
@@ -452,57 +452,57 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3231, 0x24}, // half hts  to 2000
 	{0x320e, 0x04},
 	{0x320f, 0x65},
-	{0x3211, 0x08}, //x start 20160113 20160120
-	{0x3213, 0x10}, //y start
+	{0x3211, 0x08}, // x start 20160113 20160120
+	{0x3213, 0x10}, // y start
 
-	{0x3e03, 0x03}, //AEC AGC 03 : close aec/agc 00: open aec/agc
-	{0x3e01, 0x46}, //exp time
-	{0x3e08, 0x00}, //gain 1x
-	{0x3e09, 0x10}, //10-1f,16step->1/16
+	{0x3e03, 0x03}, // AEC AGC 03 : close aec/agc 00: open aec/agc
+	{0x3e01, 0x46}, // exp time
+	{0x3e08, 0x00}, // gain 1x
+	{0x3e09, 0x10}, // 10-1f,16step->1/16
 	{0x3518, 0x03},
 	{0x5025, 0x09},
 
-	{0x3908, 0xc0}, //BLC RNCincrease blc target for rnc
-	{0x3907, 0x01}, //12.14
-	{0x3928, 0x01}, //20160315
-	{0x3416, 0x12}, //20160113
-	{0x3401, 0x1e}, //12.11
-	{0x3402, 0x0c}, //12.11
-	{0x3403, 0x70}, //12.11
+	{0x3908, 0xc0}, // BLC RNCincrease blc target for rnc
+	{0x3907, 0x01}, // 12.14
+	{0x3928, 0x01}, // 20160315
+	{0x3416, 0x12}, // 20160113
+	{0x3401, 0x1e}, // 12.11
+	{0x3402, 0x0c}, // 12.11
+	{0x3403, 0x70}, // 12.11
 	{0x3e0f, 0x90},
 
-	{0x3638, 0x84}, //RAMP config  20160113B
-	{0x3637, 0xbc}, //1018 20160113 20160120
+	{0x3638, 0x84}, // RAMP config  20160113B
+	{0x3637, 0xbc}, // 1018 20160113 20160120
 	{0x3639, 0x98},
-	{0x3035, 0x01}, //count clk
-	{0x3034, 0xc2}, //1111   20160120
+	{0x3035, 0x01}, // count clk
+	{0x3034, 0xc2}, // 1111   20160120
 
-	{0x3300, 0x30}, //eq  20160307
-	{0x3301, 0x08}, //cmprst  20160120 20160307
+	{0x3300, 0x30}, // eq  20160307
+	{0x3301, 0x08}, // cmprst  20160120 20160307
 	{0x3308, 0x30}, // tx 1111 20160307
 	{0x3306, 0x3a}, // count down 1111 20160120
 	{0x330a, 0x00},
 	{0x330b, 0x90}, // count up
-	{0x3303, 0x30}, //ramp gap 20160307
-	{0x3309, 0x30}, //cnt up gap 20160307
-	{0x331e, 0x2c}, //integ 1st pos point 20160307
-	{0x331f, 0x2c}, //integ 2nd pos point 20160307
-	{0x3320, 0x2e}, //ofs fine 1st pos point 20160307
-	{0x3321, 0x2e}, //ofs fine 2nd pos point 20160307
-	{0x3322, 0x2e}, //20160307
-	{0x3323, 0x2e}, //20160307
+	{0x3303, 0x30}, // ramp gap 20160307
+	{0x3309, 0x30}, // cnt up gap 20160307
+	{0x331e, 0x2c}, // integ 1st pos point 20160307
+	{0x331f, 0x2c}, // integ 2nd pos point 20160307
+	{0x3320, 0x2e}, // ofs fine 1st pos point 20160307
+	{0x3321, 0x2e}, // ofs fine 2nd pos point 20160307
+	{0x3322, 0x2e}, // 20160307
+	{0x3323, 0x2e}, // 20160307
 
-	{0x3626, 0x03}, //memory readout delay 0613 0926
-	{0x3621, 0x28}, //counter clock div [3] column fpn 0926
-	{0x3f08, 0x04}, //WRITE TIME
-	{0x3f09, 0x44}, //WRITE/READ TIME GAP
-	{0x4500, 0x25}, //data delay 0926
+	{0x3626, 0x03}, // memory readout delay 0613 0926
+	{0x3621, 0x28}, // counter clock div [3] column fpn 0926
+	{0x3f08, 0x04}, // WRITE TIME
+	{0x3f09, 0x44}, // WRITE/READ TIME GAP
+	{0x4500, 0x25}, // data delay 0926
 	{0x3c09, 0x08}, // Sram start position
 
-	{0x335d, 0x20}, //prechg tx auto ctrl [5]
-	{0x3368, 0x02}, //EXP1
+	{0x335d, 0x20}, // prechg tx auto ctrl [5]
+	{0x3368, 0x02}, // EXP1
 	{0x3369, 0x00},
-	{0x336a, 0x04}, //EXP2
+	{0x336a, 0x04}, // EXP2
 	{0x336b, 0x65},
 	{0x330e, 0x50}, // start value
 	{0x3367, 0x08}, // end value  12.14
@@ -512,42 +512,42 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3f05, 0xdf}, // 1111  20160113 20160120 20160307
 	{0x3905, 0x1c},
 
-	{0x5780, 0x7f}, //DPC
-	{0x5781, 0x0a}, //12.17 20160307
-	{0x5782, 0x0a}, //12.17 20160307
-	{0x5783, 0x08}, //12.17  20160307  20160317
-	{0x5784, 0x08}, //12.17  20160307  20160317
-	{0x5785, 0x18}, //12.11 ; 20160112 20160307
-	{0x5786, 0x18}, //12.11 ; 20160112 20160307
-	{0x5787, 0x18}, //12.11 20160307 20160317
+	{0x5780, 0x7f}, // DPC
+	{0x5781, 0x0a}, // 12.17 20160307
+	{0x5782, 0x0a}, // 12.17 20160307
+	{0x5783, 0x08}, // 12.17  20160307  20160317
+	{0x5784, 0x08}, // 12.17  20160307  20160317
+	{0x5785, 0x18}, // 12.11 ; 20160112 20160307
+	{0x5786, 0x18}, // 12.11 ; 20160112 20160307
+	{0x5787, 0x18}, // 12.11 20160307 20160317
 	{0x5788, 0x18}, // 20160307  20160317
-	{0x5789, 0x01}, //12.11
-	{0x578a, 0x0f}, //12.11
+	{0x5789, 0x01}, // 12.11
+	{0x578a, 0x0f}, // 12.11
 	{0x5000, 0x06},
 
-	{0x3632, 0x44}, //bypass NVDD analog config  20160113
-	{0x3622, 0x0e}, //enable sa1/ecl blksun
-	{0x3627, 0x08}, //0921 20160307
-	{0x3630, 0xb4}, //94 1111  20160113  20160120
-	{0x3633, 0x97}, //vrhlp voltage 14~24 could be choosed 20160113
-	{0x3620, 0x62}, //comp and bitline current 20160307
-	{0x363a, 0x0c}, //sa1 common voltage
+	{0x3632, 0x44}, // bypass NVDD analog config  20160113
+	{0x3622, 0x0e}, // enable sa1/ecl blksun
+	{0x3627, 0x08}, // 0921 20160307
+	{0x3630, 0xb4}, // 94 1111  20160113  20160120
+	{0x3633, 0x97}, // vrhlp voltage 14~24 could be choosed 20160113
+	{0x3620, 0x62}, // comp and bitline current 20160307
+	{0x363a, 0x0c}, // sa1 common voltage
 	{0x3333, 0x10}, // 20160307
-	{0x3334, 0x20}, //column fpn 20160307
-	{0x3312, 0x06}, //20160307
-	{0x3340, 0x03}, //20160307
-	{0x3341, 0xb0}, //20160307
-	{0x3342, 0x02}, //20160307
-	{0x3343, 0x20}, //20160307
+	{0x3334, 0x20}, // column fpn 20160307
+	{0x3312, 0x06}, // 20160307
+	{0x3340, 0x03}, // 20160307
+	{0x3341, 0xb0}, // 20160307
+	{0x3342, 0x02}, // 20160307
+	{0x3343, 0x20}, // 20160307
 
-	{0x303f, 0x81}, //format
+	{0x303f, 0x81}, // format
 	{0x501f, 0x00},
 	{0x3b00, 0xf8},
 	{0x3b01, 0x40},
 	{0x3c01, 0x14},
 	{0x4000, 0x00},
 
-	{0x3d08, 0x01}, //data output DVP CLK INV
+	{0x3d08, 0x01}, // data output DVP CLK INV
 	{0x3640, 0x00}, // pad driver
 
 	/*24M input 69M PCLK */
@@ -560,9 +560,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	{0x3300, 0x10},
 	{0x3306, 0x3b},
 
-	{0x3208, 0x07}, //1920
+	{0x3208, 0x07}, // 1920
 	{0x3209, 0x80},
-	{0x320a, 0x04}, //1080
+	{0x320a, 0x04}, // 1080
 	{0x320b, 0x38},
 	/* 24M config end */
 
@@ -570,11 +570,11 @@ static struct regval_list sensor_init_regs_1920_1080_30fps[] = {
 	/*{0x303a, 0x07}, PLL  67.5M pclk */
 	/*{0x3039, 0x8e),*/
 	{0x303f, 0x82},
-	{0x3636, 0x88}, //lpDVDD
-	{0x3631, 0x80}, //0820  20160113  20160120
-	{0x3635, 0x66}, //1018  20160113  20160120
-	{0x3105, 0x04}, //1018
-	{0x3105, 0x04}, //1018
+	{0x3636, 0x88}, // lpDVDD
+	{0x3631, 0x80}, // 0820  20160113  20160120
+	{0x3635, 0x66}, // 1018  20160113  20160120
+	{0x3105, 0x04}, // 1018
+	{0x3105, 0x04}, // 1018
 
 	{SENSOR_REG_END, 0x00},
 };
@@ -834,7 +834,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short vts = 0;
 	unsigned short drop_frame_reg = 0;
 	unsigned char tmp;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
@@ -1102,7 +1102,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	   convert sensor-gain into isp-gain,
 	*/
 	sensor_attr.max_again = 262144;
-	sensor_attr.max_dgain = 0; //sc2135_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sc2135_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.attr = &sensor_attr;

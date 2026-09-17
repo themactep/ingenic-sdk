@@ -715,8 +715,8 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
 			ret = sensor_write_array(sd, wsize->regs);
 
-			//ret += sensor_read(sd, 0x2f, &reg_0c);
-			//ret += sensor_read(sd, 0x82, &reg_82);
+			// ret += sensor_read(sd, 0x2f, &reg_0c);
+			// ret += sensor_read(sd, 0x82, &reg_82);
 			if (ret)
 				return ret;
 			sensor->video.state = TX_ISP_MODULE_INIT;
@@ -742,7 +742,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;
 
 	sclk = SENSOR_SUPPORT_30FPS_SCLK;
@@ -863,7 +863,7 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("Have no this MCLK Source!!!\n");
 	}
 
-	//rate = private_clk_get_rate(sensor->mclk);
+	// rate = private_clk_get_rate(sensor->mclk);
 	if (IS_ERR(sensor->mclk)) {
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
@@ -953,7 +953,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	struct tx_isp_sensor_value *sensor_val = arg;
-	//struct tx_isp_initarg *init = arg;
+	// struct tx_isp_initarg *init = arg;
 
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);

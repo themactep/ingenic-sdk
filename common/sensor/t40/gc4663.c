@@ -291,7 +291,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0087, 0x50},
 	{0x029d, 0x08},
 	{0x0290, 0x00},
-	{0x0340, 0x07}, //vts
+	{0x0340, 0x07}, // vts
 	{0x0341, 0x80},
 	{0x0345, 0x06},
 	{0x034b, 0xb0},
@@ -380,7 +380,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0021, 0x03},
 	{0x0022, 0x00},
 	{0x0023, 0x04},
-	{0x0342, 0x05}, //hts
+	{0x0342, 0x05}, // hts
 	{0x0343, 0xdc},
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
@@ -513,7 +513,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{0x0021, 0x05},
 	{0x0022, 0xc0},
 	{0x0023, 0x08},
-	//tony_add
+	// tony_add
 	{0x0098, 0x10},
 	{0x009a, 0xb0},
 	{0x02bb, 0x0d},
@@ -524,7 +524,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{0x028c, 0x08},
 	{0x0532, 0x3f},
 	{0x0533, 0x02},
-	{0x0277, 0x70}, //tx_width
+	{0x0277, 0x70}, // tx_width
 	{0x0276, 0xc0},
 	{0x0239, 0xc0},
 	{0x0200, 0x00},
@@ -555,7 +555,7 @@ static struct regval_list sensor_init_regs_2560_1440_30fps_mipi_dol[] = {
 	{0x03fe, 0x10},
 	{0x03fe, 0x00},
 	{0x0100, 0x09},
-	//otp
+	// otp
 	{0x0080, 0x02},
 	{0x0097, 0x0a},
 	{0x0098, 0x10},
@@ -877,7 +877,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned short hts = 0;
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	switch (sensor->info.default_boot) {
@@ -1149,9 +1149,9 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.min_integration_time_short = 5;
 		sensor_attr.total_width = 2750;
 		sensor_attr.total_height = 1600;
-		sensor_attr.max_integration_time_native = 1920; //1504;
-		sensor_attr.integration_time_limit = 1920;	//1504;
-		sensor_attr.max_integration_time = 1920;	//1504;
+		sensor_attr.max_integration_time_native = 1920; // 1504;
+		sensor_attr.integration_time_limit = 1920;	// 1504;
+		sensor_attr.max_integration_time = 1920;	// 1504;
 		sensor_attr.max_integration_time_short = 94;
 		ISP_INFO("\n-------------------------switch wdr ok ----------------------\n");
 	} else if (wdr_en == 0) {
@@ -1207,12 +1207,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if (arg)
-		//		ret = sensor_set_integration_time(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_integration_time(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if (arg)
-		//		ret = sensor_set_analog_gain(sd, sensor_val->value);
+		// if (arg)
+		// ret = sensor_set_analog_gain(sd, sensor_val->value);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

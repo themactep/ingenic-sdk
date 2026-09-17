@@ -46,8 +46,8 @@ static int fsync_mode = 3;
 module_param(fsync_mode, int, S_IRUGO);
 MODULE_PARM_DESC(fsync_mode, "Sensor Indicates the frame synchronization mode");
 
-//static unsigned short int dpc_flag = 1;
-//static unsigned int gain_val = 0x37e;
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
@@ -640,7 +640,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 		return ret;
 	}
 
-	//	gain_val = again;
+	// gain_val = again;
 	return 0;
 }
 

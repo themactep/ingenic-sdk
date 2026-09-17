@@ -50,8 +50,8 @@ static int pwdn_gpio = -1;
 /* 不定义SENSOR_WITHOUT_INIT时，debug使用，在驱动里重新初始化sensor，重新下初始化配置*/
 #define SENSOR_WITHOUT_INIT
 static int shvflip = 1;
-//module_param(shvflip, int, S_IRUGO);
-//MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+// module_param(shvflip, int, S_IRUGO);
+// MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
 static unsigned char ht_gain = 24;
 static unsigned char gain_flag = 0;
@@ -291,7 +291,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.dgain_apply_delay = 2,
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
-	//      void priv; /* point to struct tx_isp_sensor_board_info */
+	// void priv; /* point to struct tx_isp_sensor_board_info */
 };
 
 static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
@@ -302,8 +302,8 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	/*window 2560 1440*/
 	/*row time=26.666us*/
 	/*bayer order  rggb*/
-	//row time=26.66us
-	//bayer order  rggb
+	// row time=26.66us
+	// bayer order  rggb
 	/*SYSTEM*/
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
@@ -455,7 +455,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_mipi[] = {
 	{0x0a75, 0x41},
 	{0x0a70, 0x03},
 	{0x0a5a, 0x80},
-	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, // delay 20ms
 	{0x05be, 0x01},
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
@@ -625,7 +625,7 @@ static struct regval_list sensor_init_regs_2560_1440_25fps_24Mmipi[] = {
 	{0x0a75, 0x41},
 	{0x0a70, 0x03},
 	{0x0a5a, 0x80},
-	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, // delay 20ms
 	{0x05be, 0x01},
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
@@ -642,8 +642,8 @@ static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
 	/*window 2560 1440*/
 	/*row time=22.22us*/
 	/*bayer order  rggb*/
-	//row time=22.22us
-	//bayer order  rggb
+	// row time=22.22us
+	// bayer order  rggb
 	/*SYSTEM*/
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
@@ -669,7 +669,7 @@ static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
 	{0x0343, 0xb0},
 	{0x0259, 0x05},
 	{0x025a, 0xa0},
-	{0x0340, 0x08}, //vts -> 0x5dc = 1500
+	{0x0340, 0x08}, // vts -> 0x5dc = 1500
 	{0x0341, 0xca}, //
 	{0x0347, 0x02},
 	{0x0348, 0x0a},
@@ -795,7 +795,7 @@ static struct regval_list sensor_init_regs_2560_1440_20fps_mipi[] = {
 	{0x0a75, 0x41},
 	{0x0a70, 0x03},
 	{0x0a5a, 0x80},
-	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, // delay 20ms
 	{0x05be, 0x01},
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
@@ -813,8 +813,8 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	/*window 2560 1440*/
 	/*row time=22.22us*/
 	/*bayer order  rggb*/
-	//row time=22.22us
-	//bayer order  rggb
+	// row time=22.22us
+	// bayer order  rggb
 	/*SYSTEM*/
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
@@ -840,7 +840,7 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0343, 0xb0},
 	{0x0259, 0x05},
 	{0x025a, 0xa0},
-	{0x0340, 0x0b}, //vts -> 1500
+	{0x0340, 0x0b}, // vts -> 1500
 	{0x0341, 0xb8}, //
 	{0x0347, 0x02},
 	{0x0348, 0x0a},
@@ -966,7 +966,7 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 	{0x0a75, 0x41},
 	{0x0a70, 0x03},
 	{0x0a5a, 0x80},
-	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, // delay 20ms
 	{0x05be, 0x01},
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
@@ -976,13 +976,13 @@ static struct regval_list sensor_init_regs_2560_1440_15fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_1280_360_120fps_24M_mipi[] = {
-	//version 0.5
-	//mclk 24Mhz
-	//mipi 2 lane 351Mbps/lane
-	//vts = 400
-	//window 1280 360
-	//row time=20.833us,120FPS
-	//bayer order RGGB
+	// version 0.5
+	// mclk 24Mhz
+	// mipi 2 lane 351Mbps/lane
+	// vts = 400
+	// window 1280 360
+	// row time=20.833us,120FPS
+	// bayer order RGGB
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
 	{0x03fe, 0x10},
@@ -1004,11 +1004,11 @@ static struct regval_list sensor_init_regs_1280_360_120fps_24M_mipi[] = {
 	{0x0315, 0x00},
 	{0x031c, 0xce},
 	{0x0219, 0x47},
-	{0x0342, 0x04}, //hts -> 0x465 = 1125
+	{0x0342, 0x04}, // hts -> 0x465 = 1125
 	{0x0343, 0x65}, //
 	{0x0259, 0x01},
 	{0x025a, 0x8a},
-	{0x0340, 0x01}, //vts -> 0x190 = 400
+	{0x0340, 0x01}, // vts -> 0x190 = 400
 	{0x0341, 0x90}, //
 	{0x0346, 0x01},
 	{0x0347, 0x68},
@@ -1141,7 +1141,7 @@ static struct regval_list sensor_init_regs_1280_360_120fps_24M_mipi[] = {
 	{0x0a75, 0x41},
 	{0x0a70, 0x03},
 	{0x0a5a, 0x80},
-	{SENSOR_REG_DELAY, 0x14}, //delay 20ms
+	{SENSOR_REG_DELAY, 0x14}, // delay 20ms
 	{0x05be, 0x01},
 	{0x0a70, 0x00},
 	{0x0080, 0x02},
@@ -1379,7 +1379,7 @@ static int sensor_resume(struct tx_isp_subdev *sd) {
 		ISP_ERROR("sensor_write error %d", __LINE__);
 		return ret;
 	}
-	//set fps
+	// set fps
 	if (resume_vts) {
 		ret += sensor_write(sd, 0x0340, (unsigned char)((resume_vts & 0x3f00) >> 8));
 		ret += sensor_write(sd, 0x0341, (unsigned char)(resume_vts & 0xff));
@@ -1440,10 +1440,10 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 		return ret;
 
 	if (reg_410 > 0x1a)
-		gain_flag = 1; //0x1d
+		gain_flag = 1; // 0x1d
 
 	if (gain_flag == 1) {
-		if (reg_410 > 0x16) //0x14
+		if (reg_410 > 0x16) // 0x14
 		{
 			ht_gain = ht_gain - 1;
 			if (ht_gain < 21)
@@ -1475,9 +1475,9 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x00b9, val_lut[ag_last].regb9);
 	}
 
-	//  ISP_INFO("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
+	// ISP_INFO("gc4653_set_logic:gain_flag=%d,ag_last=%d\n",gain_flag,ag_last);
 
-	//  ISP_INFO("gc4653_set_logic:reg_410=%d,gain_flag=%d,ag_last=%d,ht_gain=%d\n",reg_410,gain_flag,ag_last,ht_gain);
+	// ISP_INFO("gc4653_set_logic:reg_410=%d,gain_flag=%d,ag_last=%d,ht_gain=%d\n",reg_410,gain_flag,ag_last,ht_gain);
 	return 0;
 }
 
@@ -1526,7 +1526,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 #ifndef SENSOR_WITHOUT_INIT
-			//When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
+			// When SENSOR_WITHOUT_INIT is enabled, the sensor will not be initialized by default.
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
@@ -1554,7 +1554,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 #ifdef SENSOR_POWER_OFF
-		//Prepare for the next sleep.
+		// Prepare for the next sleep.
 		sensor->video.state = TX_ISP_MODULE_INIT;
 #endif
 	}
@@ -1569,7 +1569,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned char tmp;
 	unsigned int sensor_max_fps;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	/* return 0; */
@@ -1778,9 +1778,9 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 		ISP_ERROR("Have no this Interface Source!!!\n");
 	}
 #ifndef SENSOR_WITHOUT_INIT
-	//struct clk *tclk;
-	//struct clk *sclka;
-	//unsigned long rate;
+	// struct clk *tclk;
+	// struct clk *sclka;
+	// unsigned long rate;
 	switch (info->mclk) {
 	case TISP_SENSOR_MCLK0:
 	case TISP_SENSOR_MCLK1:
@@ -2077,7 +2077,7 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-//MODULE_DEVICE_TABLE(i2c, sensor_id);
+// MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
 	.driver =

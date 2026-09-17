@@ -299,7 +299,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 743,
 			.lans = 2,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -348,9 +348,9 @@ static struct regval_list sensor_init_regs_2304_1296_45fps_mipi[] = {
 	{0x301f, 0x11},
 	{0x3032, 0xa0},
 	{0x30b8, 0x33},
-	{0x320c, 0x04}, //hts = 0x4e2 = 1250
+	{0x320c, 0x04}, // hts = 0x4e2 = 1250
 	{0x320d, 0xe2}, //
-	{0x320e, 0x05}, //30fps@vts = 0x7bc = 1980
+	{0x320e, 0x05}, // 30fps@vts = 0x7bc = 1980
 	{0x320f, 0x28}, //
 	{0x3253, 0x10},
 	{0x325f, 0x20},
@@ -545,15 +545,15 @@ static struct regval_list sensor_init_regs_2304_1296_45fps_mipi[] = {
 };
 
 static struct regval_list sensor_init_regs_2304_1296_30fps_mipi[] = {
-	//cleaned_0x02_SC3336p_MIPI_24Minput_2Lane_10bit_495Mbps_2304x1296_30fps
+	// cleaned_0x02_SC3336p_MIPI_24Minput_2Lane_10bit_495Mbps_2304x1296_30fps
 	{0x0103, 0x01},
 	{0x36e9, 0x80},
 	{0x37f9, 0x80},
 	{0x301f, 0x02},
 	{0x30b8, 0x33},
-	{0x320c, 0x04}, //hts = 0x4e2 = 1250
+	{0x320c, 0x04}, // hts = 0x4e2 = 1250
 	{0x320d, 0xe2}, //
-	{0x320e, 0x05}, //vts = 0x528 = 1320
+	{0x320e, 0x05}, // vts = 0x528 = 1320
 	{0x320f, 0x28}, //
 	{0x3253, 0x10},
 	{0x325f, 0x20},
@@ -966,7 +966,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int max_fps = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	switch (default_boot) {
 	case 0:
@@ -1366,7 +1366,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 
 	sensor_attr.max_again = 365791;
-	sensor_attr.max_dgain = 0; //sensor_attr.max_dgain;
+	sensor_attr.max_dgain = 0; // sensor_attr.max_dgain;
 	sd = &sensor->sd;
 	video = &sensor->video;
 	sensor->video.shvflip = shvflip;

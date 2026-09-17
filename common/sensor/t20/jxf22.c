@@ -230,8 +230,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x60, 0x0a},
 	{0x19, 0x20},
 	{0x48, 0x05},
-	{0x20, 0xb0}, //HTS L
-	{0x21, 0x04}, //HTS H
+	{0x20, 0xb0}, // HTS L
+	{0x21, 0x04}, // HTS H
 	{0x22, 0x46},
 	{0x23, 0x05},
 	/*{0x22, 0x56},*/
@@ -271,7 +271,7 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3f, 0x00},
 	{0x40, 0x00},
 	{0x6f, 0x03},
-	{0x0d, 0x14}, //Driver Capability
+	{0x0d, 0x14}, // Driver Capability
 	{0x56, 0x32},
 	{0x5a, 0x20},
 	{0x5b, 0xb3},
@@ -533,7 +533,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char val = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
@@ -564,7 +564,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ISP_INFO("before register 0x1f value : 0x%02x\n", val);
 	if (ret < 0)
 		return -1;
-	val |= (1 << 7); //set bit[7],  register group write function,  auto clean
+	val |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, val);
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 

@@ -75,7 +75,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	//cnt_gain = 161 cnt_reg = 161
+	// cnt_gain = 161 cnt_reg = 161
 	{0x000f, 0},
 	{0x0010, 5732},
 	{0x0011, 11136},
@@ -360,7 +360,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.clk = 360,
 			.lans = 1,
 			.settle_time_apative_en = 0,
-			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, //RAW10
+			.mipi_sc.sensor_csi_fmt = TX_SENSOR_RAW10, // RAW10
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
@@ -559,13 +559,13 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	//integration time
+	// integration time
 	ret = sensor_write(sd, 0x6b, (unsigned char)((it >> 8) & 0xff));
 	ret += sensor_write(sd, 0x6c, (unsigned char)((it & 0xff)));
 
-	//sensor analog gain
+	// sensor analog gain
 	// ret += sensor_write(sd, 0x6a, (unsigned char)(((again >> 8) & 0xff)));
-	//sensor dig fine gain
+	// sensor dig fine gain
 	ret += sensor_write(sd, 0x6a, (unsigned char)(again & 0xff));
 
 	if (ret < 0)
@@ -639,7 +639,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int hts = 0;
 	unsigned int vts = 0;
 	unsigned char tmp = 0;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned int vts_base = 0;
 	unsigned int vb = 0;
 	int ret = 0;
@@ -760,12 +760,12 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SBGGR10_1X10;
 		break;
 	case 1:
-		val = ((val & 0xf7) | 0x08); //mirror
+		val = ((val & 0xf7) | 0x08); // mirror
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGBRG10_1X10;
 		break;
 	case 2:
 
-		val = ((val & 0xfb) | 0x04); //flip
+		val = ((val & 0xfb) | 0x04); // flip
 		sensor->video.mbus.code = V4L2_MBUS_FMT_SGRBG10_1X10;
 		break;
 	case 3:
@@ -793,12 +793,12 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		//	if(arg)
-		//		ret = sensor_set_integration_time(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		//	if(arg)
-		//		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		// if(arg)
+		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)

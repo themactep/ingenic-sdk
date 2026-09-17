@@ -506,16 +506,16 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x3172, 0x0206}, // ANALOG_CONTROL2
 	{0x317a, 0x516e}, // ANALOG_CONTROL6
 	{0x3f3c, 0x0003}, // ANALOG_CONTROL9
-	{0x0400, 0x01},	  //Scaling Enabling: 0= disable, = x-dir
-	{0x0404, 0x20},	  //Scale_M = 32
+	{0x0400, 0x01},	  // Scaling Enabling: 0= disable, = x-dir
+	{0x0404, 0x20},	  // Scale_M = 32
 	{0x32c8, 0x030c}, // PDAF_SEQ_START
 	{0x32ca, 0x08a6}, // PDAF_ODP_LLENGTH
 	{0x0342, 0x22f4}, // LINE_LENGTH_PCK
 	{0x0340, 0x066d}, // FRAME_LENGTH_LINES
 	{0x0202, 0x066c}, // COARSE_INTEGRATION_TIME
 	{0x30ec, 0xfb08}, // CTX_RD_DATA
-	{0x31d6, 0x336b}, //MIPI_JPEG_PN9_DATA_TYPE
-	{0x32c2, 0x03fc}, //pdaf_dma_start=PDAF_ZONE_PER_LINE*(PDAF_NUMBER_OF_CC + 1)*4 = 1020 = 0x03fc
+	{0x31d6, 0x336b}, // MIPI_JPEG_PN9_DATA_TYPE
+	{0x32c2, 0x03fc}, // pdaf_dma_start=PDAF_ZONE_PER_LINE*(PDAF_NUMBER_OF_CC + 1)*4 = 1020 = 0x03fc
 	{0x32c4, 0x0f30}, // PDAF_DMA_SIZE
 	{0x32c6, 0x0a00}, // PDAF_DMA_Y
 	{0x32c8, 0x0342}, // PDAF_SEQ_START
@@ -2876,12 +2876,12 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
-	//	{0x301a, 0x021c},
+	// {0x301a, 0x021c},
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_stream_off_mipi[] = {
-	//	{0x301a, 0x0218},
+	// {0x301a, 0x0218},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -3122,7 +3122,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int vts = 0;
 	unsigned char tmp[2];
 	unsigned int pclk = SENSOR_SUPPORT_25FPS_SCLK;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

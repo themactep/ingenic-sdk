@@ -107,29 +107,29 @@ struct again_lut sensor_again_lut[] = {
 	{0x00, 0x3e, 62534},
 	{0x00, 0x3f, 64047},
 	{0x10, 0x20, 65536},
-	//{0x00, 0x41,67001},
+	// {0x00, 0x41,67001},
 	{0x10, 0x21, 68445},
-	//{0x00, 0x43,69867},
+	// {0x00, 0x43,69867},
 	{0x10, 0x22, 71267},
-	//{0x00, 0x45,72648},
+	// {0x00, 0x45,72648},
 	{0x10, 0x23, 74008},
-	//{0x00, 0x47,75349},
+	// {0x00, 0x47,75349},
 	{0x10, 0x24, 76672},
-	//{0x00, 0x49,77976},
+	// {0x00, 0x49,77976},
 	{0x10, 0x25, 79262},
-	//{0x00, 0x4b,80531},
+	// {0x00, 0x4b,80531},
 	{0x10, 0x26, 81784},
-	//{0x00, 0x4d,83020},
+	// {0x00, 0x4d,83020},
 	{0x10, 0x27, 84240},
-	//{0x00, 0x4f,85444},
+	// {0x00, 0x4f,85444},
 	{0x10, 0x28, 86633},
-	//{0x00, 0x51,87808},
+	// {0x00, 0x51,87808},
 	{0x10, 0x29, 88968},
-	//{0x00, 0x53,90114},
+	// {0x00, 0x53,90114},
 	{0x10, 0x2a, 91246},
-	//{0x00, 0x55,92365},
+	// {0x00, 0x55,92365},
 	{0x10, 0x2b, 93471},
-	//{0x00, 0x57,94564},
+	// {0x00, 0x57,94564},
 	{0x10, 0x2c, 95645},
 };
 
@@ -365,8 +365,8 @@ struct again_lut sensor_again_dcg_lut[] = {
 /* }; */
 
 struct tx_isp_sensor_attribute sensor_attr;
-//#define AR0130IR_MAX_DIGITAL_GAIN ((1 << 8) - 1)   // x15.992
-//#define AR0130IR_MAX_ANALOGL_GAIN ((3 << LOG2_GAIN_SHIFT) + (8 << (LOG2_GAIN_SHIFT - 4)))	// Limited to x12.0 (x8*x1.5) as recommended in data sheet 192 81
+// #define AR0130IR_MAX_DIGITAL_GAIN ((1 << 8) - 1)   // x15.992
+// #define AR0130IR_MAX_ANALOGL_GAIN ((3 << LOG2_GAIN_SHIFT) + (8 << (LOG2_GAIN_SHIFT - 4)))	// Limited to x12.0 (x8*x1.5) as recommended in data sheet 192 81
 
 /*
  * the configure of gpio should be in accord with product-board.
@@ -387,10 +387,10 @@ struct tx_isp_sensor_attribute sensor_attr;
 /* }; */
 static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x301a, 0x0001},	 // SENSOR_REGISTER
-	{SENSOR_REG_DELAY, 100}, //ms
+	{SENSOR_REG_DELAY, 100}, // ms
 	{0x301a, 0x10d8},	 // SENSOR_REGISTER
-				 //Linear Mode Setup
-				 //AR0130 Rev1 Linear sequencer load 8-2-2011
+				 // Linear Mode Setup
+				 // AR0130 Rev1 Linear sequencer load 8-2-2011
 	{0x3088, 0x8000},	 // SEQ_CTRL_PORT
 	{0x3086, 0x0225},	 // SEQ_DATA_PORT
 	{0x3086, 0x5050},	 // SEQ_DATA_PORT
@@ -477,13 +477,13 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x30e0, 0x5470},	 // ADC_BITS_2_3
 	{0x30e6, 0xc4cc},	 // ADC_CONFIG1
 	{0x30e8, 0x8050},	 // ADC_CONFIG2
-	{SENSOR_REG_DELAY, 200}, //ms
+	{SENSOR_REG_DELAY, 200}, // ms
 
 	{0x30ea, 0x8c00},
 	{0x30ba, 0x000b},
 
 	{0x3082, 0x0029}, // OPERATION_MODE_CTRL
-	//AR0130 Rev1 Optimized settings 8-2-2011
+	// AR0130 Rev1 Optimized settings 8-2-2011
 	{0x301e, 0x00c8},	 // DATA_PEDESTAL
 	{0x3eda, 0x0f03},	 // DAC_LD_14_15
 	{0x3ede, 0xc005},	 // DAC_LD_18_19
@@ -505,28 +505,28 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	/* {0x3044, 0x000}, // DARK_CONTROL */
 
 	{0x3012, 0x0160}, // COARSE_INTEGRATION_TIME
-	//720p 25fps Setup
+	// 720p 25fps Setup
 	{0x3032, 0x0000}, // DIGITAL_BINNING
-	{0x3002, 0x0002}, //Y_ADDR_START = 2
-	{0x3004, 0x0000}, //X_ADDR_START = 0
+	{0x3002, 0x0002}, // Y_ADDR_START = 2
+	{0x3004, 0x0000}, // X_ADDR_START = 0
 	/* {0x3006, 0x02d1}, //Y_ADDR_END = 721 */
 	{0x3006, 0x03c1},
-	{0x3008, 0x04ff}, //X_ADDR_END = 1279
-	{0x300a, 0x04bc}, //FRAME_LENGTH_LINES = 1212
-	{0x300c, 0x0672}, //LINE_LENGTH_PCK = 1650
-	//Enable Parallel Mode
+	{0x3008, 0x04ff}, // X_ADDR_END = 1279
+	{0x300a, 0x04bc}, // FRAME_LENGTH_LINES = 1212
+	{0x300c, 0x0672}, // LINE_LENGTH_PCK = 1650
+	// Enable Parallel Mode
 	{0x301a, 0x10d8}, // SENSOR_REGISTER
 	{0x31d0, 0x0001}, // HDR_COMP
 	{0x3064, 0x1802}, // Diable embeded data
-	//PLL Enabled 24Mhz to 50Mhz
+	// PLL Enabled 24Mhz to 50Mhz
 	{0x306e, 0x9211},
 	{0x302c, 0x0001},	 // VT_SYS_CLK_DIV //
 	{0x302a, 0x000c},	 // VT_PIX_CLK_DIV
-	{0x302e, 0x0002},	 //0x0003 // PRE_PLL_CLK_DIV
+	{0x302e, 0x0002},	 // 0x0003 // PRE_PLL_CLK_DIV
 	{0x3030, 0x0032},	 // PLL_MULTIPLIER//
 	{0x30b0, 0x1300},	 // DIGITAL_TEST
-	{SENSOR_REG_DELAY, 100}, //ms
-	/* {0x3070, 0x02}, */	 //color bar
+	{SENSOR_REG_DELAY, 100}, // ms
+	/* {0x3070, 0x02}, */	 // color bar
 	{SENSOR_REG_END, 0x0000},
 };
 /* static struct regval_list sensor_init_regs_25_fps[] = { */
@@ -878,7 +878,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	unsigned short hts = 0;
 	unsigned short vts = 0;
 	unsigned char tmp[2];
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));

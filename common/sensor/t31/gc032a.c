@@ -421,7 +421,7 @@ static struct regval_list sensor_init_regs_640_480[] = {
 	{0x41, 0x00},
 	{0x42, 0x00},
 	{0x43, 0x00},
-	{0x44, 0x89}, //raw 输出
+	{0x44, 0x89}, // raw 输出
 	{0x46, 0x22},
 	{0x49, 0x03},
 	{0x52, 0x02},
@@ -508,12 +508,12 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			ret = sensor_read(sd, vals->reg_num, &val);
 			if (ret < 0)
 				return ret;
-			//			if (vals->reg_num == SENSOR_PAGE_REG) {
-			//				val &= 0xf8;
-			//				val |= (vals->value & 0x07);
-			//				ret = sensor_write(sd, vals->reg_num, val);
-			//				ret = sensor_read(sd, vals->reg_num, &val);
-			//			}
+			// if (vals->reg_num == SENSOR_PAGE_REG) {
+			// val &= 0xf8;
+			// val |= (vals->value & 0x07);
+			// ret = sensor_write(sd, vals->reg_num, val);
+			// ret = sensor_read(sd, vals->reg_num, &val);
+			// }
 		}
 		vals++;
 	}
@@ -654,7 +654,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int pclk = SENSOR_SUPPORT_PCLK;
-	unsigned int newformat = 0; //the format is 24.8
+	unsigned int newformat = 0; // the format is 24.8
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned short hb = 0;
@@ -676,7 +676,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x11, &tmp);
 	hb += tmp;
 
-	//	vts = vb + 488;
+	// vts = vb + 488;
 	hts = hb + 652;
 
 	vts = pclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
