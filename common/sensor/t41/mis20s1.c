@@ -2004,7 +2004,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	}
 
-	return 0;
+	return ret;
 }
 
 static struct tx_isp_subdev_core_ops sensor_core_ops = {

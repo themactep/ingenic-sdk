@@ -783,7 +783,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	default:
 		break;
 	}
-	return 0;
+	return ret;
 }
 
 static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_register *reg) {

@@ -2384,7 +2384,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		break;
 	}
 
-	return 0;
+	return ret;
 }
 #endif /* SENSOR_TEST */
 
