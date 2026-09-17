@@ -69,17 +69,29 @@ static inline int set_sensor_gpio_function(int func_set) {
 /*
  * Open ISP stack: open-tx-isp's tx_isp_sinfo publishes the pre-bind sensor
  * registry (/proc/jz/sensor/sensorN/) that Raptor reads before it binds the
- * sensor (rvd's RSS_HAL_CALL(init) comes after the config read). The real
- * private_i2c_add_driver() publishes a hardcoded default I2C address of 0, so
- * the slot reported 0 until the sensor was bound. Pass the driver's own
- * SENSOR_I2C_ADDRESS instead, evaluated at the call site where the driver's
- * define is in scope. Only defined for the open stack; the proprietary ISP
- * has no such registry and keeps the flat tree the sensor module publishes.
+ * sensor. The raw private_i2c_add_driver() registers only with the I2C core,
+ * so publish the driver to the registry with its own SENSOR_I2C_ADDRESS -
+ * otherwise sensorN/i2c_addr reads 0 pre-bind and rvd's autodetect fails.
+ * tx_isp_sinfo_driver_add() merges a repeat call for the same driver (t31's
+ * wrapper publishes the legacy 0 first), so one macro serves every family.
+ * Only defined for the open stack; the proprietary ISP has no registry and
+ * keeps the flat tree the sensor module publishes.
  */
-int private_i2c_add_driver_addr(struct i2c_driver *drv,
-				unsigned short default_i2c_addr);
+int tx_isp_sinfo_driver_add(struct i2c_driver *drv, int def_i2c_addr,
+			    struct module *owner);
+
+static inline int __sinfo_i2c_add_driver(struct i2c_driver *drv,
+					 int def_i2c_addr,
+					 struct module *owner)
+{
+	int ret = (private_i2c_add_driver)(drv);
+	if (!ret)
+		tx_isp_sinfo_driver_add(drv, def_i2c_addr, owner);
+	return ret;
+}
+
 #define private_i2c_add_driver(drv) \
-	private_i2c_add_driver_addr((drv), SENSOR_I2C_ADDRESS)
-#endif
+	__sinfo_i2c_add_driver((drv), SENSOR_I2C_ADDRESS, THIS_MODULE)
+#endif /* SENSOR_PROC_OWNED_BY_ISP */
 
 #endif // __TX_SENSOR_COMMON_H__
