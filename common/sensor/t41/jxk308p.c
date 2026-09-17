@@ -1353,5 +1353,5 @@ static __exit void exit_jxk308p(void) {
 module_init(init_jxk308p);
 module_exit(exit_jxk308p);
 
-MODULE_DESCRIPTION("A low-level driver for jxk308p sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -1101,5 +1101,5 @@ static __exit void exit_jxf38ps1(void) {
 module_init(init_jxf38ps1);
 module_exit(exit_jxf38ps1);
 
-MODULE_DESCRIPTION("A low-level driver for galaxycore jxf38ps1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -993,5 +993,5 @@ static __exit void exit_jxk362p(void) {
 module_init(init_jxk362p);
 module_exit(exit_jxk362p);
 
-MODULE_DESCRIPTION("A low-level driver for SOI jxk362p sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

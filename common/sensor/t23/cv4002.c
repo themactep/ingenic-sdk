@@ -1197,5 +1197,5 @@ static __exit void exit_cv4002(void) {
 module_init(init_cv4002);
 module_exit(exit_cv4002);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens cv4002 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -1679,5 +1679,5 @@ static __exit void exit_s5k3p3(void) {
 module_init(init_s5k3p3);
 module_exit(exit_s5k3p3);
 
-MODULE_DESCRIPTION("A low-level driver for OV s5k3p3 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

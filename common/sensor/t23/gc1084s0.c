@@ -1081,5 +1081,5 @@ static __exit void exit_gc1084(void) {
 module_init(init_gc1084);
 module_exit(exit_gc1084);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens gc1084 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

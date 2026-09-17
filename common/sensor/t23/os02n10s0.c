@@ -1311,5 +1311,5 @@ static __exit void exit_os02n10(void) {
 module_init(init_os02n10);
 module_exit(exit_os02n10);
 
-MODULE_DESCRIPTION("A low-level driver for OV os02n10 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

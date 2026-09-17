@@ -1550,5 +1550,5 @@ static __exit void exit_sc223a(void) {
 module_init(init_sc223a);
 module_exit(exit_sc223a);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc223a sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

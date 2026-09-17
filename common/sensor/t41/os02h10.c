@@ -1290,5 +1290,5 @@ static __exit void exit_os02h10(void) {
 module_init(init_os02h10);
 module_exit(exit_os02h10);
 
-MODULE_DESCRIPTION("A low-level driver for SOI os02h10 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

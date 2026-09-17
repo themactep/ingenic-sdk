@@ -1196,5 +1196,5 @@ static __exit void exit_sc431hai(void) {
 module_init(init_sc431hai);
 module_exit(exit_sc431hai);
 
-MODULE_DESCRIPTION("A low-level driver for sc431hai sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

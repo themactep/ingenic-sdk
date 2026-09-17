@@ -1585,5 +1585,5 @@ static __exit void exit_cv5003(void) {
 module_init(init_cv5003);
 module_exit(exit_cv5003);
 
-MODULE_DESCRIPTION("A low-level driver for cv5003 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

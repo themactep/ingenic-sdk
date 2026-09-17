@@ -2489,5 +2489,5 @@ static __exit void exit_sc535iot(void) {
 module_init(init_sc535iot);
 module_exit(exit_sc535iot);
 
-MODULE_DESCRIPTION("A low-level driver for sc535iot sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

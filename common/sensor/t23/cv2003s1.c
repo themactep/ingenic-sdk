@@ -1196,5 +1196,5 @@ static __exit void exit_cv2003s1(void) {
 module_init(init_cv2003s1);
 module_exit(exit_cv2003s1);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens cv2003s1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

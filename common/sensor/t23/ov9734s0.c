@@ -1214,5 +1214,5 @@ static __exit void exit_ov9734(void) {
 module_init(init_ov9734);
 module_exit(exit_ov9734);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens ov9734 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

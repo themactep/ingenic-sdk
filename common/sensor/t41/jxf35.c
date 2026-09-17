@@ -1225,5 +1225,5 @@ static __exit void exit_jxf35(void) {
 module_init(init_jxf35);
 module_exit(exit_jxf35);
 
-MODULE_DESCRIPTION("A low-level driver for Sonic jxf35 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

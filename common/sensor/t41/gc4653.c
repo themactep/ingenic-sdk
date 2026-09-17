@@ -1327,5 +1327,5 @@ static __exit void exit_gc4653(void) {
 module_init(init_gc4653);
 module_exit(exit_gc4653);
 
-MODULE_DESCRIPTION("A low-level driver for Sony gc4653 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

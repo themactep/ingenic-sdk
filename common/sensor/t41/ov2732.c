@@ -1111,5 +1111,5 @@ static __exit void exit_ov2732(void) {
 module_init(init_ov2732);
 module_exit(exit_ov2732);
 
-MODULE_DESCRIPTION("A low-level driver for ov2732 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

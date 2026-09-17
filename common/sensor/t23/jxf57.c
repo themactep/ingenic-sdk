@@ -1050,5 +1050,5 @@ static __exit void exit_jxf57(void) {
 module_init(init_jxf57);
 module_exit(exit_jxf57);
 
-MODULE_DESCRIPTION("A low-level driver for galaxycore jxf57 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

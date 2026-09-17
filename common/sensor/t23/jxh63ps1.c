@@ -1228,5 +1228,5 @@ static __exit void exit_jxh63ps1(void) {
 module_init(init_jxh63ps1);
 module_exit(exit_jxh63ps1);
 
-MODULE_DESCRIPTION("A low-level driver for galaxycore jxh63ps1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

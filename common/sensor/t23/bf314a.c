@@ -1065,5 +1065,5 @@ static __exit void exit_bf314a(void) {
 module_init(init_bf314a);
 module_exit(exit_bf314a);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens bf314a sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

@@ -1138,5 +1138,5 @@ static __exit void exit_sc202cs(void) {
 module_init(init_sc202cs);
 module_exit(exit_sc202cs);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc202cs sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

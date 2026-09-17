@@ -1200,5 +1200,5 @@ static __exit void exit_jxq03p(void) {
 module_init(init_jxq03p);
 module_exit(exit_jxq03p);
 
-MODULE_DESCRIPTION("A low-level driver for SOI jxq03p sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

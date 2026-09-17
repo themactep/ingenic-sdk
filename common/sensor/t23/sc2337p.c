@@ -1442,5 +1442,5 @@ static __exit void exit_sc2337p(void) {
 module_init(init_sc2337p);
 module_exit(exit_sc2337p);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc2337p sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

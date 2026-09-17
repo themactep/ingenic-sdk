@@ -2009,5 +2009,5 @@ static __exit void exit_sc485sl(void) {
 module_init(init_sc485sl);
 module_exit(exit_sc485sl);
 
-MODULE_DESCRIPTION("A low-level driver for sc485sl sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

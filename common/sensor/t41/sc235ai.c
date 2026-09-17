@@ -1727,5 +1727,5 @@ static __exit void exit_sc235ai(void) {
 module_init(init_sc235ai);
 module_exit(exit_sc235ai);
 
-MODULE_DESCRIPTION("A low-level driver for Sony sc235ai sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

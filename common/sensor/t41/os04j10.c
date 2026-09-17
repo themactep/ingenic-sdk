@@ -1110,5 +1110,5 @@ static __exit void exit_os04j10(void) {
 module_init(init_os04j10);
 module_exit(exit_os04j10);
 
-MODULE_DESCRIPTION("A low-level driver for os04j10 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

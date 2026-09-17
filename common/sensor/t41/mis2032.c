@@ -2253,5 +2253,5 @@ static __exit void exit_mis2032(void) {
 module_init(init_mis2032);
 module_exit(exit_mis2032);
 
-MODULE_DESCRIPTION("A low-level driver for Sony mis2032 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

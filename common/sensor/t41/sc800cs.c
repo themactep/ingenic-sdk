@@ -1461,5 +1461,5 @@ static __exit void exit_sc800cs(void) {
 module_init(init_sc800cs);
 module_exit(exit_sc800cs);
 
-MODULE_DESCRIPTION("A low-level driver for Sony sc800cs sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

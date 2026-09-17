@@ -1131,5 +1131,5 @@ static __exit void exit_gc2083(void) {
 module_init(init_gc2083);
 module_exit(exit_gc2083);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens gc2083 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

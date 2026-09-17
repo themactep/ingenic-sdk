@@ -1574,5 +1574,5 @@ static __exit void exit_jxk251(void) {
 module_init(init_jxk251);
 module_exit(exit_jxk251);
 
-MODULE_DESCRIPTION("A low-level driver for jxk251 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

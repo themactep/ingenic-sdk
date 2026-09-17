@@ -2077,5 +2077,5 @@ static __exit void exit_os04e10(void) {
 module_init(init_os04e10);
 module_exit(exit_os04e10);
 
-MODULE_DESCRIPTION("A low-level driver for Sony os04e10 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

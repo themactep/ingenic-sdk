@@ -1667,5 +1667,5 @@ static __exit void exit_cv8001(void) {
 module_init(init_cv8001);
 module_exit(exit_cv8001);
 
-MODULE_DESCRIPTION("A low-level driver for cv8001 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

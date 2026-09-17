@@ -1279,5 +1279,5 @@ static __exit void exit_ov2740(void) {
 module_init(init_ov2740);
 module_exit(exit_ov2740);
 
-MODULE_DESCRIPTION("A low-level driver for OmniVision ov2740 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

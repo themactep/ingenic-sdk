@@ -1835,5 +1835,5 @@ static __exit void exit_os08c10(void) {
 module_init(init_os08c10);
 module_exit(exit_os08c10);
 
-MODULE_DESCRIPTION("A low-level driver for Sony os08c10 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

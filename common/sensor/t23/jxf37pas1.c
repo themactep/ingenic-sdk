@@ -1114,5 +1114,5 @@ static __exit void exit_jxf37pas1(void) {
 module_init(init_jxf37pas1);
 module_exit(exit_jxf37pas1);
 
-MODULE_DESCRIPTION("A low-level driver for galaxycore jxf37pas1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

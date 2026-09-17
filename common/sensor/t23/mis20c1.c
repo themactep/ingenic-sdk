@@ -1380,5 +1380,5 @@ static __exit void exit_mis20c1(void) {
 module_init(init_mis20c1);
 module_exit(exit_mis20c1);
 
-MODULE_DESCRIPTION("A low-level driver for ImageDesign mis20c1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

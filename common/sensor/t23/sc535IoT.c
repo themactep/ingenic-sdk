@@ -1329,5 +1329,5 @@ static __exit void exit_sc535IoT(void) {
 module_init(init_sc535IoT);
 module_exit(exit_sc535IoT);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc535IoT sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

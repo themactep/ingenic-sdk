@@ -1255,5 +1255,5 @@ static __exit void exit_sc301iots1(void) {
 module_init(init_sc301iots1);
 module_exit(exit_sc301iots1);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc301iots1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

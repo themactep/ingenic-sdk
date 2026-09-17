@@ -1528,5 +1528,5 @@ static __exit void exit_os03a10(void) {
 module_init(init_os03a10);
 module_exit(exit_os03a10);
 
-MODULE_DESCRIPTION("A low-level driver for Sony os03a10 sensor");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

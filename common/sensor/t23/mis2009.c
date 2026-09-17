@@ -1544,5 +1544,5 @@ static __exit void exit_mis2009(void) {
 module_init(init_mis2009);
 module_exit(exit_mis2009);
 
-MODULE_DESCRIPTION("A low-level driver for ImageDesign mis2009 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

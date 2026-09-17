@@ -2075,5 +2075,5 @@ static __exit void exit_gc2063s1(void) {
 module_init(init_gc2063s1);
 module_exit(exit_gc2063s1);
 
-MODULE_DESCRIPTION("A low-level driver for galaxycore gc2063s1 sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

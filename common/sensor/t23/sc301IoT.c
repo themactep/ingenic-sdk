@@ -1745,5 +1745,5 @@ static __exit void exit_sc301IoT(void) {
 module_init(init_sc301IoT);
 module_exit(exit_sc301IoT);
 
-MODULE_DESCRIPTION("A low-level driver for SmartSens sc301IoT sensors");
+MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");
