@@ -65,4 +65,21 @@ static inline int set_sensor_gpio_function(int func_set) {
 	return ret;
 }
 
+#ifdef SENSOR_PROC_OWNED_BY_ISP
+/*
+ * Open ISP stack: open-tx-isp's tx_isp_sinfo publishes the pre-bind sensor
+ * registry (/proc/jz/sensor/sensorN/) that Raptor reads before it binds the
+ * sensor (rvd's RSS_HAL_CALL(init) comes after the config read). The real
+ * private_i2c_add_driver() publishes a hardcoded default I2C address of 0, so
+ * the slot reported 0 until the sensor was bound. Pass the driver's own
+ * SENSOR_I2C_ADDRESS instead, evaluated at the call site where the driver's
+ * define is in scope. Only defined for the open stack; the proprietary ISP
+ * has no such registry and keeps the flat tree the sensor module publishes.
+ */
+int private_i2c_add_driver_addr(struct i2c_driver *drv,
+				unsigned short default_i2c_addr);
+#define private_i2c_add_driver(drv) \
+	private_i2c_add_driver_addr((drv), SENSOR_I2C_ADDRESS)
+#endif
+
 #endif // __TX_SENSOR_COMMON_H__
