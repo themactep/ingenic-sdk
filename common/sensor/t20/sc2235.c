@@ -163,7 +163,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 }
 
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
-	return isp_gain;
+	return 0;
 }
 
 struct tx_isp_sensor_attribute sensor_attr = {
