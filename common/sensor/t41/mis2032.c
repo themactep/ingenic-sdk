@@ -23,36 +23,30 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define TVERSION "V20231127a"
-#define SENSOR_NAME "mis2032"
-#define SENSOR_VERSION "H20240102a"
-#define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x09)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_EXPO
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MCLK 24000000
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
+#define SENSOR_NAME "mis2032"
+#define SENSOR_OUTPUT_MAX_FPS 25
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20240102a"
+#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
+#define TVERSION "V20231127a"
 
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 //#define SENSOR_TEST
 
 //#define SENSOR_I2C_REG_8BIT   /**< 选择Sensor寄存器地址位宽(8bit/16bit) */
-#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
-#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 #ifdef SENSOR_WDR_2_FRAME
 static int wdr_line = 1000;
 #endif
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -65,12 +59,6 @@ static int wdr_line = 1000;
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 25
-#define SENSOR_MCLK 24000000
 
 struct tx_isp_sensor_attribute sensor_attr;
 

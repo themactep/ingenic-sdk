@@ -18,45 +18,23 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "gc2053"
-#define SENSOR_VERSION "H20190708a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0x2053
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0x53)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x37
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0x00
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_WPCLK_FPS_30 (74250000)
-#define SENSOR_SUPPORT_WPCLK_FPS_15 (48000000)
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_NAME "gc2053"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define SENSOR_PAGE_REG 0xfe
+#define SENSOR_REG_DELAY 0x00
+#define SENSOR_REG_END 0xff
+#define SENSOR_SUPPORT_WPCLK_FPS_15 (48000000)
+#define SENSOR_SUPPORT_WPCLK_FPS_30 (74250000)
+#define SENSOR_VERSION "H20190708a"
+
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,

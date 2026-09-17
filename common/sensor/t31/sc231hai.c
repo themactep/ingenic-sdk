@@ -19,40 +19,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "sc231hai"
-#define SENSOR_VERSION "H20220125a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0xcb6a
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x6a)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-/* Vendor value; 396 Mbps x 2 lanes / 10 bit = 79.2 MHz pixel clock. */
-#define SENSOR_SUPPORT_30FPS_SCLK (0x4b87f00)
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_NAME "sc231hai"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 1
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_30FPS_SCLK (0x4b87f00)
+#define SENSOR_VERSION "H20220125a"
+
+/* Vendor value; 396 Mbps x 2 lanes / 10 bit = 79.2 MHz pixel clock. */
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

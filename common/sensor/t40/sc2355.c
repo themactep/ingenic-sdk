@@ -18,45 +18,27 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "sc2355"
-#define SENSOR_VERSION "H20220609a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xeb)
 #define SENSOR_CHIP_ID_L (0x2c)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
-#define SENSOR_MAX_WIDTH 640
 #define SENSOR_MAX_HEIGHT 360
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_60FPS_SCLK (72000000)
+#define SENSOR_MAX_WIDTH 640
+#define SENSOR_NAME "sc2355"
 #define SENSOR_OUTPUT_MAX_FPS 60
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_60FPS_SCLK (72000000)
+#define SENSOR_VERSION "H20220609a"
+#define SENSOR_WITHOUT_INIT 1
 
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define DRIVE_CAPABILITY_1
 #define MCLK 24000000
 #define DUAL_CAMERA_MODE 1
 #define MAIN_SENSOR 1
 #define SECOND_SENSOR 0
-#define SENSOR_WITHOUT_INIT 1
 
 static int reset_gpio = GPIO_PC(28);
 static int pwdn_gpio = -1;

@@ -25,39 +25,25 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "sc830ai"
-#define SENSOR_MAX_WIDTH 3840
-#define SENSOR_MAX_HEIGHT 2160
-#define SENSOR_VERSION "H202300505a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xc1)
 #define SENSOR_CHIP_ID_L (0x43)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
+#define SENSOR_MAX_HEIGHT 2160
+#define SENSOR_MAX_WIDTH 3840
+#define SENSOR_NAME "sc830ai"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_LINEAR_1080P_60FPS_SCLK 141750000 /* 2100 * 1125 *60 */
 #define SENSOR_SUPPORT_LINEAR_30FPS_SCLK 141750000	 /*  2100 * 2250 * 30 */
 #define SENSOR_SUPPORT_LINEAR_60FPS_SCLK 182250000	 /*  2025 * 1500 * 60 */
-#define SENSOR_SUPPORT_LINEAR_1080P_60FPS_SCLK 141750000 /* 2100 * 1125 *60 */
 #define SENSOR_SUPPORT_WDR_30FPS_SCLK 141750000		 /*  2100 * 2250 * 30 */
 #define SENSOR_SUPPORT_WDR_60FPS_SCLK 182250000		 /*  2025 * 1500 * 60 */
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_VERSION "H202300505a"
+
 #define MCLK 27000000
 #define LINEAR_TO_WDR 3
 #define WDR_TO_LINEAR 0

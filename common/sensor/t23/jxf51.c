@@ -19,29 +19,19 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "jxf51"
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x0f)
 #define SENSOR_CHIP_ID_L (0x51)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x40
-#define SENSOR_MAX_WIDTH 1536
 #define SENSOR_MAX_HEIGHT 1536
+#define SENSOR_MAX_WIDTH 1536
+#define SENSOR_NAME "jxf51"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
 #define SENSOR_VERSION "H20250718a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

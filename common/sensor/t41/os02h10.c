@@ -22,32 +22,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os02h10"
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 24) | (SENSOR_CHIP_ID_M0 << 16) | (SENSOR_CHIP_ID_M1 << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_L (0x10)
 #define SENSOR_CHIP_ID_M0 (0x02)
 #define SENSOR_CHIP_ID_M1 (0x48)
-#define SENSOR_CHIP_ID_L (0x10)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 24) | (SENSOR_CHIP_ID_M0 << 16) | (SENSOR_CHIP_ID_M1 << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x3c
-#define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-#define SENSOR_VERSION "H20240223a"
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_30FPS_SCLK 4000 * 2250 * 15
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_NAME "os02h10"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_SUPPORT_30FPS_SCLK 4000 * 2250 * 15
+#define SENSOR_VERSION "H20240223a"
+
 
 uint8_t dismode;
 static int rst_gpio = GPIO_PA(18);

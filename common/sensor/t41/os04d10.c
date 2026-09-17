@@ -21,31 +21,21 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os04d10"
-#define SENSOR_CHIP_ID_H (0x53)
-#define SENSOR_CHIP_ID_M (0x04)
-#define SENSOR_CHIP_ID_L (0x44)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_L (0x44)
+#define SENSOR_CHIP_ID_M (0x04)
 #define SENSOR_I2C_ADDRESS 0x3c
-#define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_NAME "os04d10"
+#define SENSOR_OUTPUT_MAX_FPS 25
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_REG_PAGE 0xfd
 #define SENSOR_VERSION "H20240401a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-#define SENSOR_REG_PAGE 0xfd
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 25
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

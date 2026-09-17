@@ -22,22 +22,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define TVERSION "V20230103a"
-#define SENSOR_NAME "s5k3p3"
-#define SENSOR_VERSION "H20240926a"
-#define SENSOR_I2C_ADDRESS 0x10
-#define SENSOR_MAX_WIDTH 2320
-#define SENSOR_MAX_HEIGHT 1744
+#define SENSOR_AGAIN_TABLE
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x31)
 #define SENSOR_CHIP_ID_L (0x03)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_EXPO
+#define SENSOR_I2C_ADDRESS 0x10
+#define SENSOR_MAX_HEIGHT 1744
+#define SENSOR_MAX_WIDTH 2320
+#define SENSOR_MCLK 24000000
+#define SENSOR_MIR_FLIP
+#define SENSOR_NAME "s5k3p3"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20240926a"
+#define TVERSION "V20230103a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -50,19 +50,6 @@
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_MCLK 24000000
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_AGAIN_TABLE
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP
 
 static int rst_gpio = GPIO_PA(18);
 module_param(rst_gpio, int, S_IRUGO);

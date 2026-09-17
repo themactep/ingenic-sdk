@@ -23,38 +23,24 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os04c10"
-#define SENSOR_VERSION "H20220105a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_L (0x04)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 2688
 #define SENSOR_MAX_HEIGHT 1520
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0x0000
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_20FPS_SCLK_HDR (1070 * 20 * 2523)
-#define SENSOR_SUPPORT_30FPS_SCLK_HDR (1070 * 30 * 1682)
-#define SENSOR_SUPPORT_30FPS_SCLK_LINEAR (1070 * 30 * 3151)
+#define SENSOR_MAX_WIDTH 2688
+#define SENSOR_NAME "os04c10"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MAX_FPS_DOL 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0x0000
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_20FPS_SCLK_HDR (1070 * 20 * 2523)
+#define SENSOR_SUPPORT_30FPS_SCLK_HDR (1070 * 30 * 1682)
+#define SENSOR_SUPPORT_30FPS_SCLK_LINEAR (1070 * 30 * 3151)
+#define SENSOR_VERSION "H20220105a"
+
 #define MCLK 24000000
 
 static int reset_gpio = GPIO_PC(27);

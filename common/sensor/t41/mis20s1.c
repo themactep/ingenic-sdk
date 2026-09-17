@@ -23,30 +23,38 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define TVERSION "H20250116a"
-#define SENSOR_NAME "mis20s1"
-#define SENSOR_MAX_WIDTH SENSOR_WIDTH
-#define SENSOR_MAX_HEIGHT SENSOR_HEIGHT
-#define SENSOR_VERSION "H20250430a"
-#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_60FPPS_SUPPORT_RES_BITCLCK 990
+#define SENSOR_60FPS_OUTPUT_INIT_FPS 60
+#define SENSOR_60FPS_OUTPUT_MIN_FPS 5
+#define SENSOR_60FPS_SUPPORT_RES_PCLK (165000000)
+#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
+#define SENSOR_CHIP_ID 0x20e1
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0xe1)
-#define SENSOR_CHIP_ID 0x20e1
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_WIDTH 1920
+#define SENSOR_EXPO
 #define SENSOR_HEIGHT 1080
-#define SENSOR_WDR_WIDTH 1920
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_INIT_30FPS_HTS 0x898
+#define SENSOR_INIT_30FPS_VTS 0x465
+#define SENSOR_INIT_60FPS_HTS 0x898
+#define SENSOR_INIT_60FPS_VTS 0x4e2
+#define SENSOR_MAX_HEIGHT SENSOR_HEIGHT
+#define SENSOR_MAX_WIDTH SENSOR_WIDTH
+#define SENSOR_MCLK 27000000
+#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
+#define SENSOR_NAME "mis20s1"
+#define SENSOR_OUTPUT_INIT_FPS 30
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_SUPPORT_RES_BITCLCK 371
+#define SENSOR_SUPPORT_RES_PCLK (74250000)
+#define SENSOR_VERSION "H20250430a"
+#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
 #define SENSOR_WDR_HEIGHT 1080
+#define SENSOR_WDR_WIDTH 1920
+#define SENSOR_WIDTH 1920
+#define TVERSION "H20250116a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -59,31 +67,9 @@
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_MCLK 27000000
 // define 30fps linear setting
-#define SENSOR_SUPPORT_RES_PCLK (74250000)
-#define SENSOR_SUPPORT_RES_BITCLCK 371
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_INIT_FPS 30
-#define SENSOR_INIT_30FPS_VTS 0x465
-#define SENSOR_INIT_30FPS_HTS 0x898
 //end define
 
-#define SENSOR_60FPS_SUPPORT_RES_PCLK (165000000)
-#define SENSOR_60FPPS_SUPPORT_RES_BITCLCK 990
-#define SENSOR_60FPS_OUTPUT_MIN_FPS 5
-#define SENSOR_60FPS_OUTPUT_INIT_FPS 60
-#define SENSOR_INIT_60FPS_VTS 0x4e2
-#define SENSOR_INIT_60FPS_HTS 0x898
-
-#define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
-#define SENSOR_WDR_2_FRAME /**< WDR两帧融合 */
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP /**< 镜像翻转功能开关 */
 
 #ifdef SENSOR_WDR_2_FRAME
 #define SENSOR_WDR_MCLK 27000000

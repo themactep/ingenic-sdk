@@ -24,34 +24,20 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "rn6752"
-#define SENSOR_MAX_WIDTH 720
-#define SENSOR_MAX_HEIGHT 240
-#define SENSOR_VERSION "H20221205a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x26)
 #define SENSOR_CHIP_ID_L (0x01)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x2c
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
+#define SENSOR_MAX_HEIGHT 240
+#define SENSOR_MAX_WIDTH 720
+#define SENSOR_NAME "rn6752"
+#define SENSOR_OUTPUT_MAX_FPS 25
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfd
 #define SENSOR_REG_END 0xfa
+#define SENSOR_VERSION "H20221205a"
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 25
 
 // ============================================================================
 // SPECIAL FEATURES

@@ -18,38 +18,20 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "gc0328"
-#define SENSOR_CHIP_ID (0x9d)
-#define SENSOR_VERSION "H20200116a"
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID (0x9d)
 #define SENSOR_I2C_ADDRESS 0x21
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 640
 #define SENSOR_MAX_HEIGHT 480
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0x00
-#define SENSOR_REG_DELAY 0xff
-#define SENSOR_PAGE_REG 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_PCLK (6 * 1000 * 1000)
+#define SENSOR_MAX_WIDTH 640
+#define SENSOR_NAME "gc0328"
 #define SENSOR_OUTPUT_MAX_FPS 10
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_PAGE_REG 0xfe
+#define SENSOR_REG_DELAY 0xff
+#define SENSOR_REG_END 0x00
+#define SENSOR_SUPPORT_PCLK (6 * 1000 * 1000)
+#define SENSOR_VERSION "H20200116a"
+
 
 // ============================================================================
 // SPECIAL FEATURES

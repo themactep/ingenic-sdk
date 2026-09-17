@@ -18,37 +18,23 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "ps5260"
-#define SENSOR_VERSION "H20170911a"
+#define SENSOR_BANK_REG 0xef
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x52)
 #define SENSOR_CHIP_ID_L (0x60)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x48
-#define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0xfe
-#define SENSOR_BANK_REG 0xef
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_PCLK_DVP (38002500)
-#define SENSOR_SUPPORT_PCLK_MIPI (152010000)
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_NAME "ps5260"
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_SUPPORT_PCLK_DVP (38002500)
+#define SENSOR_SUPPORT_PCLK_MIPI (152010000)
+#define SENSOR_VERSION "H20170911a"
+
 
 // ============================================================================
 // SPECIAL FEATURES

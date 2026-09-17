@@ -23,39 +23,21 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "gc3003a"
-#define SENSOR_CHIP_ID_H (0x30)
-#define SENSOR_CHIP_ID_M (0x03)
-#define SENSOR_CHIP_ID_L (0x10)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
-#define SENSOR_VERSION "H20240219a"
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
+#define SENSOR_CHIP_ID_H (0x30)
+#define SENSOR_CHIP_ID_L (0x10)
+#define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_I2C_ADDRESS 0x37
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MAX_HEIGHT 1296
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_30FPS_SCLK (108057600)
+#define SENSOR_MAX_WIDTH 2304
+#define SENSOR_NAME "gc3003a"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_30FPS_SCLK (108057600)
+#define SENSOR_VERSION "H20240219a"
+
 
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);

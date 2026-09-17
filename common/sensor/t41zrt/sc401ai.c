@@ -23,38 +23,20 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "sc401ai"
-#define SENSOR_VERSION "H20230722a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xcd)
 #define SENSOR_CHIP_ID_L (0x2e)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-#define SENSOR_MAX_WIDTH 2560
-#define SENSOR_MAX_HEIGHT 1440
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x30
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_MAX_HEIGHT 1440
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_NAME "sc401ai"
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_VERSION "H20230722a"
 #define SENSOR_WITHOUT_INIT
+
 
 /* CONFIG_SENSOR_SUSPEND:支持Sensor suspend功能
  * SENSOR_POWER_OFF :选择Sensor断电

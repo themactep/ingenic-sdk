@@ -23,31 +23,24 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define TVERSION "V20231121a"
-#define SENSOR_NAME "os02n10s1"
-#define SENSOR_VERSION "H20240219a"
-#define SENSOR_I2C_ADDRESS 0x3c
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_AGAIN_TABLE
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_HH << 24) | (SENSOR_CHIP_ID_HL << 16) | (SENSOR_CHIP_ID_LH << 8) | SENSOR_CHIP_ID_LL)
 #define SENSOR_CHIP_ID_HH (0x53)
 #define SENSOR_CHIP_ID_HL (0x02)
 #define SENSOR_CHIP_ID_LH (0x4e)
 #define SENSOR_CHIP_ID_LL (0x10)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_HH << 24) | (SENSOR_CHIP_ID_HL << 16) | (SENSOR_CHIP_ID_LH << 8) | SENSOR_CHIP_ID_LL)
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_I2C_REG_8BIT
-#define SENSOR_AGAIN_TABLE
 #define SENSOR_EXPO
+#define SENSOR_I2C_ADDRESS 0x3c
+#define SENSOR_I2C_REG_8BIT
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MCLK 27000000
+#define SENSOR_NAME "os02n10s1"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20240219a"
+#define TVERSION "V20231121a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -60,12 +53,6 @@
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_MCLK 27000000
 
 static int rst_gpio = -1;
 module_param(rst_gpio, int, S_IRUGO);

@@ -21,29 +21,19 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "jxk362p"
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0x47)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x40
-#define SENSOR_MAX_WIDTH 3200
 #define SENSOR_MAX_HEIGHT 1800
-#define SENSOR_VERSION "H20250513a"
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_MAX_WIDTH 3200
+#define SENSOR_NAME "jxk362p"
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_VERSION "H20250513a"
+
 
 static int rst_gpio = GPIO_PA(18);
 //static int pwdn_gpio = -1;

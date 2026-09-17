@@ -17,43 +17,21 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "ov9732"
-#define SENSOR_VERSION "20180320"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0x9732
 #define SENSOR_CHIP_ID_H (0x97)
 #define SENSOR_CHIP_ID_L (0x32)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x36
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 1280
 #define SENSOR_MAX_HEIGHT 720
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_NAME "ov9732"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
 #define SENSOR_SUPPORT_MCLK (24 * 1000 * 1000)
+#define SENSOR_VERSION "20180320"
+
 #define DRIVE_CAPABILITY_1
 #define OV9732_USE_AGAIN_ONLY
 

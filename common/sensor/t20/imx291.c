@@ -17,39 +17,21 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "imx291"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0xa0b2
 #define SENSOR_CHIP_ID_H (0xA0)
 #define SENSOR_CHIP_ID_L (0xB2)
-#define SENSOR_VERSION "H20180416a"
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x1a
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 1920
 #define SENSOR_MAX_HEIGHT 1080
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_PCLK (74250 * 1000)
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_NAME "imx291"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 15
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_PCLK (74250 * 1000)
+#define SENSOR_VERSION "H20180416a"
+
 #define AGAIN_MAX_DB 0x50
 #define DGAIN_MAX_DB 0x3c
 

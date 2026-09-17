@@ -18,35 +18,21 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "gc02m2"
-#define SENSOR_VERSION "H20220627a"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x02)
 #define SENSOR_CHIP_ID_L (0xf0)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x37
-#define SENSOR_MAX_WIDTH 1600
 #define SENSOR_MAX_HEIGHT 1200
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0x00
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_30FPS_MIPI_SCLK (83383680)
+#define SENSOR_MAX_WIDTH 1600
+#define SENSOR_NAME "gc02m2"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0x00
+#define SENSOR_REG_END 0xff
+#define SENSOR_SUPPORT_30FPS_MIPI_SCLK (83383680)
+#define SENSOR_VERSION "H20220627a"
+
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;

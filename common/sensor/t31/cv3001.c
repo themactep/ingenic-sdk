@@ -23,44 +23,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "cv3001"
-#define SENSOR_VERSION "H20230512a"
-#define SENSOR_CHIP_ID_L 0x01
+#define SENSOR_AGAIN_MAX 0xB4
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID 0x3001
 #define SENSOR_CHIP_ID_H 0x30
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID_L 0x01
 #define SENSOR_I2C_ADDRESS 0x35
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MAX_HEIGHT 1296
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_MAX_WIDTH 2304
 #define SENSOR_MIN_FPS 5
-#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_NAME "cv3001"
 #define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_VERSION "H20230512a"
 
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_AGAIN_MAX 0xB4
 
 static int reset_gpio = GPIO_PA(18);
 static int pwdn_gpio = -1;

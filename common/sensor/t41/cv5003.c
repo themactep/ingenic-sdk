@@ -24,30 +24,20 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_CHIP_ID_L 0x50
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-#define SENSOR_I2C_ADDRESS 0x35
-#define SENSOR_MAX_WIDTH 2880
-#define SENSOR_MAX_HEIGHT 1620
-#define SENSOR_NAME "cv5003"
 #define SENSOR_CHIP_ID_H 0x02
-#define SENSOR_VERSION "H20250624a"
+#define SENSOR_CHIP_ID_L 0x50
+#define SENSOR_I2C_ADDRESS 0x35
+#define SENSOR_MAX_HEIGHT 1620
+#define SENSOR_MAX_WIDTH 2880
+#define SENSOR_MCLK 24000000 //24M
+#define SENSOR_NAME "cv5003"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_VERSION "H20250624a"
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_MCLK 24000000 //24M
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

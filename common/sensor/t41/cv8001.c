@@ -18,36 +18,23 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "cv8001"
-#define SENSOR_MAX_WIDTH CV8001_W_SIZE
-#define SENSOR_MAX_HEIGHT CV8001_H_SIZE
-#define SENSOR_VERSION "CVSENS.CV8001.forxunmei.30fps.V01.20250805"
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_I2C_ADDRESS 0x35
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H 0x80
 #define SENSOR_CHIP_ID_L 0x01
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_I2C_ADDRESS 0x35
+#define SENSOR_MAX_HEIGHT CV8001_H_SIZE
+#define SENSOR_MAX_WIDTH CV8001_W_SIZE
+#define SENSOR_MCLK 24000000 //24M
+#define SENSOR_NAME "cv8001"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_VERSION "CVSENS.CV8001.forxunmei.30fps.V01.20250805"
 
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
 #define CV8001_W_SIZE 3840
 #define CV8001_H_SIZE 2160
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_MCLK 24000000 //24M
 #define CV8001_30FPS_VTS 0x1324
 #define CV8001_MAX_FPS 30
 #define CV8001_MIN_FPS 10

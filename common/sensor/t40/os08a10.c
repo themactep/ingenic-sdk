@@ -18,38 +18,24 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os08a10"
-#define SENSOR_VERSION "H20211019a"
-#define SENSOR_CHIP_ID_H (0x53)
-#define SENSOR_CHIP_ID_M (0x08)
-#define SENSOR_CHIP_ID_L (0x41)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_L (0x41)
+#define SENSOR_CHIP_ID_M (0x08)
 #define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 3840
 #define SENSOR_MAX_HEIGHT 2160
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
+#define SENSOR_MAX_WIDTH 3840
+#define SENSOR_NAME "os08a10"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_REG_END 0xffff
 #define SENSOR_SUPPORT_SCLK_8M_FPS_15 (98222880)
 #define SENSOR_SUPPORT_SCLK_8M_FPS_30 (71924300)
 #define SENSOR_SUPPORT_SCLK_8M_FPS_30_2lane (2314 * 2072 * 30)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20211019a"
+
 #define DRIVE_CAPABILITY_1
 #define MCLK 24000000
 

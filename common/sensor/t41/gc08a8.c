@@ -21,29 +21,19 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "gc08a8"
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x08)
 #define SENSOR_CHIP_ID_L (0xa8)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x31
-#define SENSOR_MAX_WIDTH 3264
 #define SENSOR_MAX_HEIGHT 2448
+#define SENSOR_MAX_WIDTH 3264
+#define SENSOR_NAME "gc08a8"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0x0000
+#define SENSOR_REG_END 0xffff
 #define SENSOR_VERSION "H20250304a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
-#define SENSOR_REG_DELAY 0x0000
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
 
 static int reset_gpio = -1; //GPIO_PA(18);
 static int pwdn_gpio = -1;

@@ -18,37 +18,23 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os04d10s1"
-#define SENSOR_VERSION "H20230614a"
-#define SENSOR_CHIP_ID_H (0x53)
-#define SENSOR_CHIP_ID_M (0x04)
-#define SENSOR_CHIP_ID_L (0x44)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_L (0x44)
+#define SENSOR_CHIP_ID_M (0x04)
 #define SENSOR_I2C_ADDRESS 0x3d
-#define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE 0xfd
-#define SENSOR_REG_DELAY 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_SCLK_FPS_30 (35946240)
+#define SENSOR_MAX_WIDTH 2560
+#define SENSOR_NAME "os04d10s1"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_PAGE 0xfd
+#define SENSOR_SUPPORT_SCLK_FPS_30 (35946240)
+#define SENSOR_VERSION "H20230614a"
+
 
 static int reset_gpio = GPIO_PC(28);
 module_param(reset_gpio, int, S_IRUGO);

@@ -18,41 +18,27 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "os05a10"
-#define SENSOR_VERSION "H20220616a"
-#define SENSOR_CHIP_ID_H (0x53)
-#define SENSOR_CHIP_ID_M (0x05)
-#define SENSOR_CHIP_ID_L (0x41)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID_H (0x53)
+#define SENSOR_CHIP_ID_L (0x41)
+#define SENSOR_CHIP_ID_M (0x05)
 #define SENSOR_I2C_ADDRESS 0x36
-#define SENSOR_MAX_WIDTH 2592
 #define SENSOR_MAX_HEIGHT 1944
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
+#define SENSOR_MAX_WIDTH 2592
+#define SENSOR_NAME "os05a10"
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfffe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
+#define SENSOR_REG_END 0xffff
+#define SENSOR_SUPPORT_SCLK_FPS_12 (107969400)
+#define SENSOR_SUPPORT_SCLK_FPS_15 (107827200)
 #define SENSOR_SUPPORT_SCLK_FPS_25 (107289600)
 #define SENSOR_SUPPORT_SCLK_FPS_30 (104417280)
 #define SENSOR_SUPPORT_SCLK_FPS_40 (95969280)
-#define SENSOR_SUPPORT_SCLK_FPS_12 (107969400)
-#define SENSOR_SUPPORT_SCLK_FPS_15 (107827200)
 #define SENSOR_SUPPORT_SCLK_WDR (54000000)
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_VERSION "H20220616a"
+
 
 static int sensor_gpio_func = DVP_PA_12BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);

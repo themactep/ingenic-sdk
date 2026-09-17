@@ -18,36 +18,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "sc031iot"
-#define SENSOR_VERSION "H20220524b"
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x9a)
 #define SENSOR_CHIP_ID_L (0x46)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_I2C_ADDRESS 0x68
-#define SENSOR_MAX_WIDTH 640
 #define SENSOR_MAX_HEIGHT 480
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_PAGE 0xf0
-#define SENSOR_REG_DELAY 0x04
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_15FPS_SCLK (13500 * 1000)
+#define SENSOR_MAX_WIDTH 640
+#define SENSOR_NAME "sc031iot"
 #define SENSOR_OUTPUT_MAX_FPS 15
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0x04
+#define SENSOR_REG_END 0xff
+#define SENSOR_REG_PAGE 0xf0
+#define SENSOR_SUPPORT_15FPS_SCLK (13500 * 1000)
+#define SENSOR_VERSION "H20220524b"
+
 #define MCLK 12000000
 
 static int reset_gpio = -1;

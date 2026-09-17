@@ -18,40 +18,22 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "cv2001"
-#define SENSOR_MAX_WIDTH 1920
-#define SENSOR_MAX_HEIGHT 1080
-#define SENSOR_CHIP_ID_L 0x01
-#define SENSOR_CHIP_ID_H 0x20
+#define SENSOR_AGAIN_MAX 0xB4
+#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-#define SENSOR_VERSION "H20230505a"
+#define SENSOR_CHIP_ID_H 0x20
+#define SENSOR_CHIP_ID_L 0x01
+#define SENSOR_I2C_ADDRESS 0x35
+#define SENSOR_MAX_HEIGHT 1080
+#define SENSOR_MAX_WIDTH 1920
+#define SENSOR_MCLK 24000000 //24M
+#define SENSOR_NAME "cv2001"
 #define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
-#define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_I2C_ADDRESS 0x35
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xffff
 #define SENSOR_REG_DELAY 0xfffe
+#define SENSOR_REG_END 0xffff
+#define SENSOR_VERSION "H20230505a"
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_MCLK 24000000 //24M
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_AGAIN_MAX 0xB4
 
 static int reset_gpio = -1;
 static int pwdn_gpio = -1;

@@ -22,28 +22,29 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define TVERSION "V20231127a"
-#define SENSOR_NAME "mis40c1"
-#define SENSOR_MAX_WIDTH SENSOR_WIDTH
-#define SENSOR_MAX_HEIGHT SENSOR_HEIGHT
-#define SENSOR_VERSION "H20240926a"
-#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_AGAIN_TABLE /**Sensor AGain */
+#define SENSOR_CHIP_ID 0x0004
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x04)
-#define SENSOR_CHIP_ID 0x0004
-
-// ============================================================================
-// SENSOR CAPABILITIES
-// ============================================================================
-#define SENSOR_WIDTH 2560
+#define SENSOR_EXPO
 #define SENSOR_HEIGHT 1440
+#define SENSOR_I2C_ADDRESS 0x30
+#define SENSOR_INIT_30FPS_HTS 0xC80
+#define SENSOR_INIT_30FPS_VTS 0x5DC
+#define SENSOR_MAX_HEIGHT SENSOR_HEIGHT
+#define SENSOR_MAX_WIDTH SENSOR_WIDTH
+#define SENSOR_MCLK 24000000
+#define SENSOR_MIR_FLIP
+#define SENSOR_NAME "mis40c1"
+#define SENSOR_OUTPUT_INIT_FPS 30
+#define SENSOR_OUTPUT_MAX_FPS 30
+#define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_SUPPORT_RES_BITCLCK 720
+#define SENSOR_SUPPORT_RES_PCLK (144000000)
+#define SENSOR_VERSION "H20240926a"
+#define SENSOR_WIDTH 2560
+#define TVERSION "V20231127a"
 
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
 #ifndef SENSOR_I2C_REG_8BIT
 #define SENSOR_I2C_REG_16BIT
 #endif /* SENSOR_I2C_REG_8BIT */
@@ -56,26 +57,9 @@
 #define SENSOR_REG_DELAY 0xfffe
 #endif /* SENSOR_I2C_REG_16BIT */
 
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_MCLK 24000000
 // define 30fps setting
-#define SENSOR_SUPPORT_RES_PCLK (144000000)
-#define SENSOR_SUPPORT_RES_BITCLCK 720
-#define SENSOR_OUTPUT_MIN_FPS 5
-#define SENSOR_OUTPUT_MAX_FPS 30
-#define SENSOR_OUTPUT_INIT_FPS 30
-#define SENSOR_INIT_30FPS_VTS 0x5DC
-#define SENSOR_INIT_30FPS_HTS 0xC80
 //end define
 
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
-#define SENSOR_AGAIN_TABLE /**Sensor AGain */
-#define SENSOR_EXPO
-#define SENSOR_MIR_FLIP
 
 struct tx_isp_sensor_attribute sensor_attr;
 

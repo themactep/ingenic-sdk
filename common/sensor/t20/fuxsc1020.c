@@ -16,34 +16,19 @@
 #include <sensor-info.h>
 #include <apical-isp/apical_math.h>
 
-// ============================================================================
-// SENSOR IDENTIFICATION
-// ============================================================================
-#define SENSOR_NAME "fuxsc1020"
-#define SENSOR_VERSION "20180320"
-#define SENSOR_CHIP_ID 0xa042
-
-// ============================================================================
-// HARDWARE INTERFACE
-// ============================================================================
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID 0xa042
 #define SENSOR_I2C_ADDRESS 0x30
-
-// ============================================================================
-// REGISTER DEFINITIONS
-// ============================================================================
-#define SENSOR_REG_END 0xff
-#define SENSOR_REG_DELAY 0xfe
-
-// ============================================================================
-// TIMING AND PERFORMANCE
-// ============================================================================
-#define SENSOR_SUPPORT_PCLK (74 * 1000 * 1000)
+#define SENSOR_MAX_HEIGHT 720
+#define SENSOR_MAX_WIDTH 1280
+#define SENSOR_NAME "fuxsc1020"
 #define SENSOR_OUTPUT_MAX_FPS 25
 #define SENSOR_OUTPUT_MIN_FPS 5
+#define SENSOR_REG_DELAY 0xfe
+#define SENSOR_REG_END 0xff
+#define SENSOR_SUPPORT_PCLK (74 * 1000 * 1000)
+#define SENSOR_VERSION "20180320"
 
-#define SENSOR_MAX_WIDTH 1280
-#define SENSOR_MAX_HEIGHT 720
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
