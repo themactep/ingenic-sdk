@@ -307,7 +307,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	unsigned short exp;
 	unsigned int vmax = 1125;
 	int again = (value >> 16) & 0x0000ffff;
@@ -328,7 +328,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	unsigned short exp0;
 	unsigned int vmax = 1125;
 

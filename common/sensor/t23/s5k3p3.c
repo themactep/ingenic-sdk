@@ -1341,7 +1341,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 #ifdef SENSOR_EXPO
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 	ret = sensor_write(sd, 0x6028, 0x4000);
 

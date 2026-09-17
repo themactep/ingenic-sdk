@@ -734,7 +734,7 @@ static unsigned int resume_vts = 0;
 
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 	struct again_lut *val_lut = sensor_again_lut;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -777,7 +777,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 static int sensor_resume(struct tx_isp_subdev *sd) {
 	int ret = 0;
-	int it = resume_expo_value & 0xffff;
+	int it = (resume_expo_value & 0xffff);
 	int again = (resume_expo_value & 0xffff0000) >> 16;
 	struct again_lut *val_lut = sensor_again_lut;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);

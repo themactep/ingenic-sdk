@@ -960,7 +960,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
 	ret += sensor_write(sd, 0x0202, (unsigned char)((it >> 8) & 0xff));

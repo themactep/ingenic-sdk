@@ -1066,7 +1066,7 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = ISP_SUCCESS;
-	int it = value & 0xffff;
+	int it = (value & 0xffff);
 	int index = (value & 0xffff0000) >> 16;
 	int shr0 = 0;
 	struct again_lut *lut = sensor_again_lut;
