@@ -526,7 +526,7 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x3030, 0x0032},	 // PLL_MULTIPLIER//
 	{0x30B0, 0x1300},	 // DIGITAL_TEST
 	{SENSOR_REG_DELAY, 100}, //ms
-	/* {0x3070, 0x2}, */	 //color bar
+	/* {0x3070, 0x02}, */	 //color bar
 	{SENSOR_REG_END, 0x0000},
 };
 /* static struct regval_list sensor_init_regs_25_fps[] = { */

@@ -86,7 +86,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	{0x0, 0},
+	{0x00, 0},
 	{0x10, 1465},
 	{0x20, 2998},
 	{0x30, 4506},

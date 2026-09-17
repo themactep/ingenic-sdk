@@ -72,7 +72,7 @@ struct again_lut {
 unsigned int final_vrefl = 0;
 
 struct again_lut sensor_again_lut[] = {
-	{0x10, 0x0, 0},
+	{0x10, 0x00, 0},
 	{0x11, 0x05, 5731},
 	{0x12, 0x0a, 11136},
 	{0x13, 0x12, 16248},
