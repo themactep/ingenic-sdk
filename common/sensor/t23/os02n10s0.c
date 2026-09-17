@@ -1298,18 +1298,18 @@ static struct i2c_driver os02n10_driver = {
 	.id_table = os02n10_id,
 };
 
-static __init int init_os02n10(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	return private_i2c_add_driver(&os02n10_driver);
 }
 
-static __exit void exit_os02n10(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&os02n10_driver);
 }
 
-module_init(init_os02n10);
-module_exit(exit_os02n10);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

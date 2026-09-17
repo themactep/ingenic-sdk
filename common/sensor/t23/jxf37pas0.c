@@ -1070,7 +1070,7 @@ static struct i2c_driver jxf37pa_driver = {
 	.id_table = jxf37pa_id,
 };
 
-static __init int init_jxf37pa(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1081,13 +1081,13 @@ static __init int init_jxf37pa(void) {
 	return private_i2c_add_driver(&jxf37pa_driver);
 }
 
-static __exit void exit_jxf37pa(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&jxf37pa_driver);
 }
 
-module_init(init_jxf37pa);
-module_exit(exit_jxf37pa);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

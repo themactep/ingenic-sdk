@@ -1232,7 +1232,7 @@ static struct i2c_driver sc301iot_driver = {
 	.id_table = sc301iot_id,
 };
 
-static __init int init_sc301iot(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1243,13 +1243,13 @@ static __init int init_sc301iot(void) {
 	return private_i2c_add_driver(&sc301iot_driver);
 }
 
-static __exit void exit_sc301iot(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&sc301iot_driver);
 }
 
-module_init(init_sc301iot);
-module_exit(exit_sc301iot);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

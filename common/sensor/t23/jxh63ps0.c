@@ -1194,7 +1194,7 @@ static struct i2c_driver jxh63p_driver = {
 	.id_table = jxh63p_id,
 };
 
-static __init int init_jxh63p(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1205,13 +1205,13 @@ static __init int init_jxh63p(void) {
 	return private_i2c_add_driver(&jxh63p_driver);
 }
 
-static __exit void exit_jxh63p(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&jxh63p_driver);
 }
 
-module_init(init_jxh63p);
-module_exit(exit_jxh63p);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

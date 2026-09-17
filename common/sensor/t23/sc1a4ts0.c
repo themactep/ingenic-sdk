@@ -1192,7 +1192,7 @@ static struct i2c_driver sc1a4t_driver = {
 	.id_table = sc1a4t_id,
 };
 
-static __init int init_sc1a4t(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1203,13 +1203,13 @@ static __init int init_sc1a4t(void) {
 	return private_i2c_add_driver(&sc1a4t_driver);
 }
 
-static __exit void exit_sc1a4t(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&sc1a4t_driver);
 }
 
-module_init(init_sc1a4t);
-module_exit(exit_sc1a4t);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

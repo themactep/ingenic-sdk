@@ -1077,7 +1077,7 @@ static struct i2c_driver sensor_driver = {
 	.id_table = sensor_id,
 };
 
-static __init int init_gc1084s1(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1088,13 +1088,13 @@ static __init int init_gc1084s1(void) {
 	return private_i2c_add_driver(&sensor_driver);
 }
 
-static __exit void exit_gc1084s1(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&sensor_driver);
 }
 
-module_init(init_gc1084s1);
-module_exit(exit_gc1084s1);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

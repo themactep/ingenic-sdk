@@ -1353,7 +1353,7 @@ static struct i2c_driver mis20c1_driver = {
 	.id_table = mis20c1_id,
 };
 
-static __init int init_mis20c1(void) {
+static __init int init_sensor(void) {
 	int ret;
 
 	sensor_common_init(&sensor_info);
@@ -1372,13 +1372,13 @@ static __init int init_mis20c1(void) {
 	return ret;
 }
 
-static __exit void exit_mis20c1(void) {
+static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&mis20c1_driver);
 	sensor_common_exit();
 }
 
-module_init(init_mis20c1);
-module_exit(exit_mis20c1);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");

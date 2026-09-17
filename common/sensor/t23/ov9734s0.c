@@ -1195,7 +1195,7 @@ static struct i2c_driver ov9734_driver = {
 	.id_table = ov9734_id,
 };
 
-static __init int init_ov9734(void) {
+static __init int init_sensor(void) {
 	sensor_common_init(&sensor_info);
 	int ret = 0;
 	ret = private_driver_get_interface();
@@ -1206,13 +1206,13 @@ static __init int init_ov9734(void) {
 	return private_i2c_add_driver(&ov9734_driver);
 }
 
-static __exit void exit_ov9734(void) {
+static __exit void exit_sensor(void) {
 	sensor_common_exit();
 	private_i2c_del_driver(&ov9734_driver);
 }
 
-module_init(init_ov9734);
-module_exit(exit_ov9734);
+module_init(init_sensor);
+module_exit(exit_sensor);
 
 MODULE_DESCRIPTION("A low-level driver for " SENSOR_NAME " sensor");
 MODULE_LICENSE("GPL");
