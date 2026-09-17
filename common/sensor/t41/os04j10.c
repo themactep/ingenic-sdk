@@ -28,7 +28,7 @@
 #define SENSOR_CHIP_ID_H (0x53)
 #define SENSOR_CHIP_ID_M (0x04)
 #define SENSOR_CHIP_ID_L (0x4a)
-#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_I2C_ADDRESS 0x3c
 #define SENSOR_MAX_WIDTH 2560
 #define SENSOR_MAX_HEIGHT 1440
@@ -196,7 +196,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x53044a,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x3c,
