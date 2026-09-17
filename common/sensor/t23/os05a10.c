@@ -91,8 +91,8 @@ static struct sensor_info sensor_info = {
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
-	.width = 0,
-	.height = 0,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
 };
 
 struct regval_list {

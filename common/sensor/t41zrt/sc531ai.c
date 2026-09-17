@@ -29,6 +29,8 @@
 #define SENSOR_CHIP_ID_H (0x9e)
 #define SENSOR_CHIP_ID_L (0x39)
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_MAX_WIDTH 2880
+#define SENSOR_MAX_HEIGHT 1620
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -65,8 +67,8 @@ static struct sensor_info sensor_info = {
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
 	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
-	.width = 2880,
-	.height = 1620,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
 	.rst_gpio = GPIO_PA(18),
 	.pwdn_gpio = -1,
 	.boot = 0,
