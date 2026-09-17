@@ -1021,7 +1021,7 @@ static int mis20c1_set_fps(struct tx_isp_subdev *sd, int fps) {
 	newformat = (numerator / denominator) << 8;
 	newformat += ((numerator % denominator) << 8) / denominator;
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_ERROR("warn: fps(%d) no in range\n", fps);
+		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -ERANGE;
 	}
 
