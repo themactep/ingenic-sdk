@@ -1474,7 +1474,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an sc485sl chip.\n", client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 
@@ -1482,7 +1482,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	ISP_INFO("sc485sl version is %s\n", TVERSION);
 	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
 	ISP_INFO("Sensor name is %s\n", sensor_attr.name);
-	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_INFO("Sensor video interface is %d\n", info->video_interface);
 	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
 		info->default_boot,

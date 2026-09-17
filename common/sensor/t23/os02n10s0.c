@@ -866,7 +866,7 @@ static int os02n10_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	}
 	ret = os02n10_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an os02n10 chip.\n", client->addr, client->adapter->name);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
 		return ret;
 	}
 
@@ -874,7 +874,7 @@ static int os02n10_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ide
 	ISP_INFO("Template version is %s\n", TVERSION);
 	ISP_INFO("Sensor driver version is %s\n", SENSOR_VERSION);
 	ISP_INFO("Sensor name is %s\n", os02n10_attr.name);
-	ISP_INFO("Sensor chip found @ 0x%02x (%s)\n", client->addr, client->adapter->name);
+	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
 	ISP_INFO("Sensor video interface is %d\n", data_interface);
 	ISP_INFO("Sensor default boot is [%d-->%dx%d@(%d/%d)fps]\n",
 		default_boot,
