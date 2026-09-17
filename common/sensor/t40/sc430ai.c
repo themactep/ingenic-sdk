@@ -1216,7 +1216,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 	unsigned int short_time;
-	unsigned char val;
+	unsigned char val = 0;
 
 	switch (sensor->info.default_boot) {
 	case 0:
