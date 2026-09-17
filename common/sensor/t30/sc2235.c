@@ -747,8 +747,8 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned int pclk = 0;
-	unsigned short hts;
-	unsigned short vts = 0;
+	unsigned int hts = 0;
+	unsigned int vts = 0;
 	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	unsigned int max_fps = 0;   // the format is 24.8
