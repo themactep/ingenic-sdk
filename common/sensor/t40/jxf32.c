@@ -535,9 +535,7 @@ struct tx_isp_dvp_bus sensor_dvp = {
 			.hblanking = 0,
 		},
 };
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
 		.width = 1920,

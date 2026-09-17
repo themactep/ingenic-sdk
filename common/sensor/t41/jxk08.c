@@ -456,8 +456,6 @@ static struct regval_list sensor_init_regs_3840_2160_15fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution]. */
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* [0] 2560*1440@30fps linear */
 	{

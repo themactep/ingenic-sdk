@@ -974,9 +974,7 @@ static struct regval_list sensor_init_regs_1536_1536_linear_30fps[] = {
 	{SENSOR_REG_END, 0x00},
 
 };
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1536*1536 @20fps linear*/
 	{

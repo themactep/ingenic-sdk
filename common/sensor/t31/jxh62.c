@@ -355,9 +355,6 @@ static struct regval_list sensor_init_regs_1280_720_25fps_dvp[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-/*
- * the order of the sensor_win_sizes is [full_resolution, preview_resolution].
- */
 static struct regval_list sensor_init_regs_1280_720_25fps_mipi[] = {
 	{0x12, 0x40},
 	{0x0E, 0x11},
