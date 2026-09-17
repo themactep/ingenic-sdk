@@ -20,7 +20,7 @@
 #include <sensor-info.h>
 #include <txx-funcs.h>
 
-#define SENSOR_CHIP_ID 0x20c1
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H 0x20
 #define SENSOR_CHIP_ID_L 0xc1
 #define SENSOR_I2C_ADDRESS 0x30

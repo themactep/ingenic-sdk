@@ -28,7 +28,7 @@
 #define SENSOR_60FPS_OUTPUT_MIN_FPS 5
 #define SENSOR_60FPS_SUPPORT_RES_PCLK (165000000)
 #define SENSOR_AGAIN_TABLE /**< 选择Sensor AGain匹配方式(AGain表/非AGain表) */
-#define SENSOR_CHIP_ID 0x20e1
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x20)
 #define SENSOR_CHIP_ID_L (0xe1)
 #define SENSOR_EXPO

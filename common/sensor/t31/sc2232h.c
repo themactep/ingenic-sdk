@@ -20,7 +20,7 @@
 #include <tx-isp-debug.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_CHIP_ID 0xcb0701
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_CHIP_ID_M (0x07)

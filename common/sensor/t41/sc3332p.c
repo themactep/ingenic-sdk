@@ -22,7 +22,7 @@
 #include <txx-funcs.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_CHIP_ID 0xcc44
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xcc)
 #define SENSOR_CHIP_ID_L (0x44)
 #define SENSOR_I2C_ADDRESS 0x30

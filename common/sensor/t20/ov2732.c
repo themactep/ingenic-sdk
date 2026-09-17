@@ -18,7 +18,7 @@
 #include <apical-isp/apical_math.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_CHIP_ID 0x2732
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0x00)
 #define SENSOR_CHIP_ID_L (0x32)
 #define SENSOR_CHIP_ID_M (0x27)
