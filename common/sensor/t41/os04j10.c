@@ -703,7 +703,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x15, &val);
 	vb_old = ((vb_old << 8) | val);
 	if (0 != ret) {
-		ISP_ERROR("err: %s read err\n", SENSOR_NAME);
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return -1;
 	}
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);

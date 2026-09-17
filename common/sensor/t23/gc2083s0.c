@@ -625,7 +625,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sensor_read(sd, 0x0d06, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: gc2083 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = (((hts << 8) + tmp) << 1);

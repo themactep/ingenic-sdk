@@ -1050,7 +1050,7 @@ static int os02n10_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += os02n10_read(sd, 0x26, &val);
 	hts |= val;
 	if (0 != ret) {
-		ISP_ERROR("err: os02n10 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 

@@ -697,7 +697,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x380d, &tmp);
 	hts = ((hts << 8) | tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: ov9734 read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 

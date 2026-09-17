@@ -594,7 +594,7 @@ static int jxf38p_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts |= val;
 	hts *= 2;
 	if (0 != ret) {
-		ISP_ERROR("err: jxf38p read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 

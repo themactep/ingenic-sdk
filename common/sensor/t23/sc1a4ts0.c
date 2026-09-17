@@ -737,7 +737,7 @@ static int sc1a4t_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts = tmp;
 	ret += sc1a4t_read(sd, 0x320d, &tmp);
 	if (0 != ret) {
-		ISP_ERROR("err: sc1a4t read err\n");
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 	hts = (hts << 8) + tmp;
