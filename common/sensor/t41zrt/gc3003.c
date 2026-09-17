@@ -32,6 +32,7 @@
 #define SENSOR_CHIP_ID_H (0x30)
 #define SENSOR_CHIP_ID_M (0x03)
 #define SENSOR_CHIP_ID_L (0x10)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -58,7 +59,7 @@ static int shvflip = 0;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -227,7 +228,7 @@ struct tx_isp_mipi_bus sensor_mipi_15FPS_linear = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

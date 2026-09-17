@@ -248,7 +248,7 @@ struct tx_isp_dvp_bus sensor_dvp = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x4653,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x29,

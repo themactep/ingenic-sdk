@@ -436,7 +436,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xc143,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

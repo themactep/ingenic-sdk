@@ -28,6 +28,7 @@
 #define SENSOR_CHIP_ID_H (0x56)
 #define SENSOR_CHIP_ID_M (0x01)
 #define SENSOR_CHIP_ID_L (0x41)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -53,7 +54,7 @@ static int pwdn_gpio = -1;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -215,7 +216,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 16) | (SENSOR_CHIP_ID_M << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

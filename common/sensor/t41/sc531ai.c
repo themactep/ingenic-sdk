@@ -30,6 +30,7 @@
 #define SENSOR_VERSION "H20230914a-roy"
 #define SENSOR_CHIP_ID_H (0x9e)
 #define SENSOR_CHIP_ID_L (0x39)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -56,7 +57,7 @@ static int shvflip = 1;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -411,7 +412,7 @@ static struct tx_isp_mipi_bus sensor_mipi = {
 
 static struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x9e39,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

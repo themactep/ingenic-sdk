@@ -25,6 +25,7 @@
 #define SENSOR_VERSION "H20191205a"
 #define SENSOR_CHIP_ID_H (0xa0)
 #define SENSOR_CHIP_ID_L (0x62)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -62,7 +63,7 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -192,7 +193,7 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xa062,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

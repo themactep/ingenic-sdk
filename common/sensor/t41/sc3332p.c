@@ -55,7 +55,7 @@ static int pwdn_gpio = GPIO_PA(19);
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = 15,

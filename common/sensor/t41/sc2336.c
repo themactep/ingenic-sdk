@@ -30,6 +30,7 @@
 #define SENSOR_VERSION "H20231116a"
 #define SENSOR_CHIP_ID_H (0xcb)
 #define SENSOR_CHIP_ID_L (0x3a)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -69,7 +70,7 @@ MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -317,7 +318,7 @@ struct tx_isp_mipi_bus sensor_mipi = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xcb3a,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

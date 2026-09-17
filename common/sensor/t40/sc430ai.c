@@ -412,7 +412,7 @@ struct tx_isp_mipi_bus sensor_mipi_linear = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xce39,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,

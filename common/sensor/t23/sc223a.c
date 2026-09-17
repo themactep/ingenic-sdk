@@ -399,7 +399,7 @@ struct tx_isp_mipi_bus sc301IoT_mipi_2line = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xcb3e,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = 0x30,

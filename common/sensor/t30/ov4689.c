@@ -397,7 +397,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 struct tx_isp_sensor_attribute sensor_attr_4m = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x4688,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

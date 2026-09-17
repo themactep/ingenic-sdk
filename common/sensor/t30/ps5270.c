@@ -441,7 +441,7 @@ struct tx_isp_sensor_attribute sensor_attr_linear_30fps = {
 
 struct tx_isp_sensor_attribute sensor_attr_wdr_20fps = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x5270,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

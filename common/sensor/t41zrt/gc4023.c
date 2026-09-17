@@ -25,6 +25,7 @@
 #define SENSOR_VERSION "H20230719"
 #define SENSOR_CHIP_ID_H (0x40)
 #define SENSOR_CHIP_ID_L (0x23)
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 
 // ============================================================================
 // HARDWARE INTERFACE
@@ -70,7 +71,7 @@ static unsigned char ag_last = 0;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = 30,
@@ -285,7 +286,7 @@ struct tx_isp_mipi_bus sensor_mipi_120fps_linear = {
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x4023,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
