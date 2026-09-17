@@ -319,7 +319,6 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x320e, 0x05},
 	{0x320f, 0x46}, /*vts for 25fps*/
 	{0x0100, 0x01},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -876,7 +875,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
-
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
@@ -905,7 +903,6 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

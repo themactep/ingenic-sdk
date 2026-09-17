@@ -183,18 +183,17 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 #if 0 // fixed the ver steak
-/****************************************/
-// version 6
-// mclk 24Mhz
-// mipiclk 648Mhz
-// framelength 1500
-// linelength 4800
-// pclk 216Mhz
-// rowtime 22.2222us
-// pattern grbg
-/****************************************/
-/*SYSTEM*/
-/****************************************/
+/*
+ * version 6
+ * mclk 24Mhz
+ * mipiclk 648Mhz
+ * framelength 1500
+ * linelength 4800
+ * pclk 216Mhz
+ * rowtime 22.2222us
+ * pattern grbg
+ */
+	/* SYS */
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
 	{0x0317, 0x00},
@@ -315,18 +314,17 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 #endif
 
 #if 1 // 27mhz all ok
-	/****************************************/
-	// version 6.8
-	// mclk 27Mhz
-	// mipiclk 648Mhz
-	// framelength 1500
-	// linelength 4800
-	// pclk 216Mhz
-	// rowtime 22.2222us
-	// pattern grbg
-	/****************************************/
-	/*SYSTEM*/
-	/****************************************/
+	/*
+	 * version 6.8
+	 * mclk 27Mhz
+	 * mipiclk 648Mhz
+	 * framelength 1500
+	 * linelength 4800
+	 * pclk 216Mhz
+	 * rowtime 22.2222us
+	 * pattern grbg
+	 */
+	/* SYS */
 	{0x03fe, 0xf0},
 	{0x03fe, 0x00},
 	{0x0317, 0x00},
@@ -650,6 +648,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	int ret = 0;
 	clk = SENSOR_SUPPORT_30FPS_SCLK;
 	max_fps = SENSOR_OUTPUT_MAX_FPS;
+
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {

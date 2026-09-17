@@ -87,7 +87,7 @@ struct again_lut {
 };
 
 struct again_lut sensor_again_lut[] = {
-	/*index    00d1  00d0  0080  0155  00b8  00b9 ispgain */
+	/*index 0x00d1 0x00d0 0x0080 0x0155 0x00b8 0x00b9 ispgain */
 	{0x00, 0x00, 0x00, 0x05, 0x01, 0x01, 0x00, 0},	    // 1.000000
 	{0x01, 0x0a, 0x00, 0x06, 0x01, 0x01, 0x0c, 16247},  // 1.187500
 	{0x02, 0x00, 0x01, 0x06, 0x01, 0x01, 0x1a, 32233},  // 1.406250
@@ -729,6 +729,7 @@ static struct regval_list sensor_init_regs_1296_1296_30fps_mipi[] = {
 	{0x03fe, 0x00},
 	{SENSOR_REG_END, 0x00},
 };
+
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	{
 		.width = 2304,
@@ -755,6 +756,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1296_1296_30fps_mipi,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -807,9 +809,9 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 
 	return ret;
 }
-/**
-static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+
+/*
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -826,6 +828,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	return 0;
 }
 */
+
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -1137,11 +1140,11 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
-		// if(arg)
+		// if (arg)
 		// ret = sensor_set_integration_time(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
-		// if(arg)
+		// if (arg)
 		// ret = sensor_set_analog_gain(sd, *(int*)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_DGAIN:
@@ -1496,6 +1499,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

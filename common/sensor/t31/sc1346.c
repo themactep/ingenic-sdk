@@ -50,6 +50,9 @@ static int shvflip = 0;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
+// static unsigned short int dpc_flag = 1;
+// static unsigned int gain_val = 0x37e;
+
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
@@ -65,9 +68,6 @@ struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
 };
-
-// static unsigned short int dpc_flag = 1;
-// static unsigned int gain_val = 0x37e;
 
 struct again_lut {
 	unsigned int value;
@@ -477,7 +477,6 @@ static struct regval_list sensor_init_regs_1280_720_15fps_mipi[] = {
 	{0x36e9, 0x28},
 	{0x37f9, 0x20},
 	{0x0100, 0x01},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -491,6 +490,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720_15fps_mipi,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {

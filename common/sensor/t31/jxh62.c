@@ -656,6 +656,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
 		return -1;
+
 	switch (data_interface) {
 	case TX_SENSOR_DATA_INTERFACE_DVP:
 		sclk = SENSOR_SUPPORT_PCLK_DVP;
@@ -673,6 +674,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x20, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hts = (hts << 8) + tmp;
 	vts = sclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	sensor_write(sd, 0xc0, 0x22);
@@ -994,7 +996,6 @@ err_set_sensor_gpio:
 	private_clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 

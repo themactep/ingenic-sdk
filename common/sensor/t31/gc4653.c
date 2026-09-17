@@ -1023,7 +1023,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 			if (ret < 0)
 				return ret;
 		}
-		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n",vals->reg_num, val);
+		ISP_INFO("vals->reg_num:0x%x, vals->value:0x%02x\n", vals->reg_num, val);
 		vals++;
 	}
 	return 0;
@@ -1445,10 +1445,10 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 	switch (cmd) {
 #if 0
-		case TX_ISP_EVENT_SENSOR_EXPO:
-			if (arg)
-				ret = sensor_set_expo(sd, *(int*)arg);
-			break;
+	case TX_ISP_EVENT_SENSOR_EXPO:
+		if (arg)
+			ret = sensor_set_expo(sd, *(int*)arg);
+		break;
 #else
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)

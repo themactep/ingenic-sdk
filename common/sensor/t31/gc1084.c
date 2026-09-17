@@ -177,7 +177,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
 		},
 	.data_type = TX_SENSOR_DATA_TYPE_LINEAR,
-	// .max_again = 393216,    // - 64x
+	// .max_again = 393216, // - 64x
 	// .max_again = 456839,
 	.max_again = 744532, // - 128x
 	.max_dgain = 0,
@@ -428,7 +428,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	*ident = v;
-
 	ret = sensor_read(sd, 0x03f1, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)

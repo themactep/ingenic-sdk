@@ -627,15 +627,15 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	unsigned char tmp1;
 	unsigned char tmp2;
 
-	if(value < 0x10){
+	if (value < 0x10) {
 		tmp1 = reg_0c | 0x40;
 		tmp2 = reg_82 | 0x02;
-	}else{
+	} else {
 		tmp1 = reg_0c & 0xbf;
 		tmp2 = reg_82 & 0xfd;
 	}
 	ret += sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
-	if(value < 0x10) {
+	if (value < 0x10) {
 		ret += sensor_write(sd, 0x0c, tmp1);
 		ret += sensor_write(sd, 0x3b, 0x00);
 		ret += sensor_write(sd, 0x82, tmp2);
@@ -750,7 +750,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x23, (unsigned char)(vts >> 8));
 #endif
 	if (0 != ret) {
-		ISP_ERROR("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -808,7 +808,10 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	}
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n", client->addr, client->adapter->name, SENSOR_NAME);
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
+			client->addr,
+			client->adapter->name,
+			SENSOR_NAME);
 		return ret;
 	}
 	ISP_INFO("%s chip found @ 0x%02x (%s)\n", SENSOR_NAME, client->addr, client->adapter->name);
@@ -864,9 +867,9 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_integration_time(sd, *(int *)arg);
 		break;
 	case TX_ISP_EVENT_SENSOR_INT_TIME_SHORT:
-		if (arg)
-			// ret = sensor_set_integration_time_short(sd, *(int*)arg);
-			break;
+		// if (arg)
+		// ret = sensor_set_integration_time_short(sd, *(int*)arg);
+		break;
 	case TX_ISP_EVENT_SENSOR_AGAIN:
 		if (arg)
 			ret = sensor_set_analog_gain(sd, *(int *)arg);
@@ -1173,6 +1176,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

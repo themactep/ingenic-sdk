@@ -1898,9 +1898,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
-
 	return 0;
-
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
@@ -1909,7 +1907,6 @@ err_get_mclk:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	kfree(sensor);
-
 	return -1;
 }
 

@@ -48,11 +48,11 @@ typedef enum {
 } Sensor_RES;
 
 typedef enum {
-	PS5270_SENSOR_MAX_FPS_15 = 15,
-	PS5270_SENSOR_MAX_FPS_30 = 30,
-	PS5270_SENSOR_MAX_FPS_55 = 55,
-	PS5270_SENSOR_MAX_FPS_60 = 60,
-	PS5270_SENSOR_MAX_FPS_120 = 120,
+	SENSOR_MAX_FPS_15 = 15,
+	SENSOR_MAX_FPS_30 = 30,
+	SENSOR_MAX_FPS_55 = 55,
+	SENSOR_MAX_FPS_60 = 60,
+	SENSOR_MAX_FPS_120 = 120,
 } Sensor_FPS;
 
 /* VGA@120fps: insmod sensor_jxf35_t31.ko data_interface=1 sensor_resolution=30 sensor_max_fps=120  */
@@ -81,7 +81,7 @@ static int data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 module_param(data_type, int, S_IRUGO);
 MODULE_PARM_DESC(data_type, "Sensor Date Type");
 
-static int sensor_max_fps = PS5270_SENSOR_MAX_FPS_30;
+static int sensor_max_fps = SENSOR_MAX_FPS_30;
 module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
@@ -1260,6 +1260,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 		.len = 2,
 		.buf = buf,
 	};
+
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
@@ -1414,13 +1415,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	if (data_interface == TX_SENSOR_DATA_INTERFACE_DVP) {
 		switch (sensor_max_fps) {
-		case PS5270_SENSOR_MAX_FPS_30:
+		case SENSOR_MAX_FPS_30:
 			sclk = SENSOR_SUPPORT_30FPS_SCLK;
 			max_fps = SENSOR_OUTPUT_MAX_FPS;
 			break;
-		case PS5270_SENSOR_MAX_FPS_15:
+		case SENSOR_MAX_FPS_15:
 			sclk = SENSOR_SUPPORT_15FPS_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_15;
+			max_fps = SENSOR_MAX_FPS_15;
 			break;
 		default:
 			ret = -1;
@@ -1429,25 +1430,25 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	} else if (data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) {
 		switch (sensor_max_fps) {
-		case PS5270_SENSOR_MAX_FPS_15:
+		case SENSOR_MAX_FPS_15:
 			sclk = SENSOR_SUPPORT_15FPS_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_15;
+			max_fps = SENSOR_MAX_FPS_15;
 			break;
-		case PS5270_SENSOR_MAX_FPS_30:
+		case SENSOR_MAX_FPS_30:
 			sclk = SENSOR_SUPPORT_30FPS_MIPI_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_30;
+			max_fps = SENSOR_MAX_FPS_30;
 			break;
-		case PS5270_SENSOR_MAX_FPS_55:
+		case SENSOR_MAX_FPS_55:
 			sclk = SENSOR_SUPPORT_55FPS_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_55;
+			max_fps = SENSOR_MAX_FPS_55;
 			break;
-		case PS5270_SENSOR_MAX_FPS_60:
+		case SENSOR_MAX_FPS_60:
 			sclk = SENSOR_SUPPORT_60FPS_MIPI_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_60;
+			max_fps = SENSOR_MAX_FPS_60;
 			break;
-		case PS5270_SENSOR_MAX_FPS_120:
+		case SENSOR_MAX_FPS_120:
 			sclk = SENSOR_SUPPORT_VGA_SCLK;
-			max_fps = PS5270_SENSOR_MAX_FPS_120;
+			max_fps = SENSOR_MAX_FPS_120;
 			break;
 		default:
 			ret = -1;
@@ -1804,7 +1805,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_clk_enable(sensor->mclk);
 
 	if (data_type == TX_SENSOR_DATA_TYPE_LINEAR) {
-		if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == PS5270_SENSOR_MAX_FPS_30) &&
+		if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == SENSOR_MAX_FPS_30) &&
 			(sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[0];
 			sensor_info.max_fps = 25;
@@ -1816,7 +1817,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_mipi.clk = 430;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_60) && (sensor_resolution == SENSOR_RES_200)) {
 			wsize = &sensor_win_sizes[3];
 			sensor_info.max_fps = 60;
 			sensor_attr.total_width = 0x253 * 4; // 2380
@@ -1827,7 +1828,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_mipi.clk = 792;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_180)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[5];
 			sensor_info.max_fps = 15;
 			sensor_attr.total_width = 0xa00;  // 2560
@@ -1840,7 +1841,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_mipi.image_theight = 972;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_180)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_180)) {
 			wsize = &sensor_win_sizes[4];
 			sensor_info.max_fps = 55;
 			sensor_attr.total_width = 0x280 * 4; // 2560
@@ -1853,7 +1854,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_mipi.image_theight = 972;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_186)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_15 && sensor_resolution == SENSOR_RES_186)) {
 			wsize = &sensor_win_sizes[6];
 			sensor_info.max_fps = 15;
 			sensor_attr.total_width = 0x280 * 4;
@@ -1866,7 +1867,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_mipi.image_theight = 1080;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi), sizeof(sensor_mipi));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_186)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_55 && sensor_resolution == SENSOR_RES_186)) {
 			wsize = &sensor_win_sizes[7];
 			sensor_info.max_fps = 55;
 			sensor_attr.total_width = 0x280 * 4;
@@ -1888,7 +1889,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 			sensor_attr.max_integration_time = 0x216 - 4;
 			memcpy((void *)(&(sensor_attr.mipi)), (void *)(&sensor_mipi_vga), sizeof(sensor_mipi_vga));
 		} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) &&
-			(sensor_max_fps == PS5270_SENSOR_MAX_FPS_30)) {
+			(sensor_max_fps == SENSOR_MAX_FPS_30)) {
 			wsize = &sensor_win_sizes[1];
 			sensor_info.max_fps = 25;
 			memcpy((void *)(&(sensor_attr.dvp)), (void *)(&sensor_dvp), sizeof(sensor_dvp));

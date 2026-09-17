@@ -585,7 +585,6 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0x9f, 0x18},
 	{0xfd, 0x00},
 	{0xb1, 0x03}, // mipi en
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -708,7 +707,6 @@ static struct regval_list sensor_init_regs_1920_1080_hdr_30fps[] = {
 	{0x9f, 0x18},
 	{0xfd, 0x00},
 	{0xb1, 0x03}, // mipi en
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -1459,7 +1457,6 @@ static int sensor_remove(struct i2c_client *client) {
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
-
 	return 0;
 }
 

@@ -80,6 +80,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x10, 0},
 	{0x11, 5731},
@@ -447,7 +448,6 @@ static struct regval_list sensor_init_regs_1920_1080_60fps[] = {
 	{0x9f, 0x18},
 	{0xfd, 0x00},
 	{0xb1, 0x03},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -666,7 +666,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
 	ret = sensor_write_array(sd, wsize->regs);
-
 	if (ret)
 		return ret;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1061,6 +1060,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
