@@ -503,7 +503,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x0203, value & 0xff);
 	ret += sensor_write(sd, 0x0202, value >> 8);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error %d\n" , __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 
@@ -519,7 +519,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x00b9, val_lut[value].regb9);
 
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error %d" , __LINE__);
+		ISP_ERROR("sensor_write error %d", __LINE__);
 		return ret;
 	}
 
@@ -736,7 +736,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	ret += sensor_write(sd, 0x0201, value & 0xff);
 	ret += sensor_write(sd, 0x0200, (value>>8)&0x3f);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error %d\n" , __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 

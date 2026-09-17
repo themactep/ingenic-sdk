@@ -1420,7 +1420,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
     ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
 
     if (ret < 0) {
-	ISP_ERROR("sensor_write error %d" , __LINE__);
+	ISP_ERROR("sensor_write error %d", __LINE__);
 	return ret;
     }
 
