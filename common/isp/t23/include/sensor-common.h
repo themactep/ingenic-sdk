@@ -93,5 +93,34 @@ static inline int __sinfo_i2c_add_driver(struct i2c_driver *drv,
 
 #define private_i2c_add_driver(drv) \
 	__sinfo_i2c_add_driver((drv), SENSOR_I2C_ADDRESS, THIS_MODULE)
+
+/*
+ * The T23 ISP never calls tx_isp_sinfo_sensor_bind() itself, so the registry
+ * keeps the driver_add slot but no subdev: width/height/fps/chip_id read
+ * empty and status stays "loaded". Bind at the sensor's tx_isp_subdev_init()
+ * instead - its probe is where the subdev and its attributes become valid.
+ */
+int tx_isp_sinfo_sensor_bind(void *subdev, struct module *owner);
+void tx_isp_sinfo_sensor_unbind(void *subdev, struct module *owner);
+
+static inline int __sinfo_subdev_init(struct platform_device *pdev,
+				      struct tx_isp_subdev *sd,
+				      struct tx_isp_subdev_ops *ops)
+{
+	int ret = (tx_isp_subdev_init)(pdev, sd, ops);
+	if (!ret)
+		tx_isp_sinfo_sensor_bind(sd, THIS_MODULE);
+	return ret;
+}
+
+static inline void __sinfo_subdev_deinit(struct tx_isp_subdev *sd)
+{
+	tx_isp_sinfo_sensor_unbind(sd, THIS_MODULE);
+	(tx_isp_subdev_deinit)(sd);
+}
+
+#define tx_isp_subdev_init(pdev, sd, ops) \
+	__sinfo_subdev_init((pdev), (sd), (ops))
+#define tx_isp_subdev_deinit(sd) __sinfo_subdev_deinit((sd))
 #endif /* SENSOR_PROC_OWNED_BY_ISP */
 #endif// __TX_SENSOR_COMMON_H__
