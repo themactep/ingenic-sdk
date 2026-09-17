@@ -396,19 +396,19 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	ret = sensor_write(sd, 0xfe, 0x01);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error\n");
+		ISP_ERROR("sensor_write error\n");
 		return ret;
 	}
 
 	ret = sensor_write(sd, 0x0f, value & 0xff);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error\n");
+		ISP_ERROR("sensor_write error\n");
 		return ret;
 	}
 
 	ret = sensor_write(sd, 0x0e, (value & 0xff00) >> 8);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error\n");
+		ISP_ERROR("sensor_write error\n");
 		return ret;
 	}
 
@@ -504,7 +504,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 
 	ret += sensor_write(sd, 0xfe, 0x00);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error\n");
+		ISP_ERROR("sensor_write error\n");
 		return ret;
 	}
 
