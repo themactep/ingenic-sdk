@@ -499,7 +499,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	uint8_t val;
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	/* 2'b01:mirror,2'b10:filp */
-	val = sensor_read(sd, 0x3034, &val);
+	ret = sensor_read(sd, 0x3034, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xFC;
@@ -511,7 +511,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		sensor->video.mbus.code = TISP_VI_FMT_SGRBG10_1X10;
 		break;
 	case 2:
-		val &= 0xFC;
+		val &= 0xFE;
 		val |= 0x02;
 		sensor->video.mbus.code = TISP_VI_FMT_SGBRG10_1X10;
 		break;
