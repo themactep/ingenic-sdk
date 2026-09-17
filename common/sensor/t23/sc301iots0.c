@@ -1014,7 +1014,6 @@ static struct tx_isp_subdev_ops sc301iot_ops = {
 	.sensor = &sc301iot_sensor_ops,
 };
 
-/* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "sc301iot",

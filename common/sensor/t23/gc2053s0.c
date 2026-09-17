@@ -1752,7 +1752,6 @@ static struct tx_isp_subdev_ops gc2053_ops = {
 	.sensor = &gc2053_sensor_ops,
 };
 
-/* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "gc2053",

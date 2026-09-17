@@ -1212,7 +1212,6 @@ static struct tx_isp_subdev_ops os02n10_ops = {
 	.sensor = &os02n10_sensor_ops,
 };
 
-/* It's the sensor device */
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 struct platform_device sensor_platform_device = {
 	.name = "os02n10",
