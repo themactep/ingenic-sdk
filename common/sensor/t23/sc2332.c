@@ -483,10 +483,8 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		sensor_write(sd, 0x3634, 0x24);
 	}
 	sensor_write(sd, 0x3812, 0x30);
-
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)((value >> 8) & 0xff));
-
 	if (ret < 0)
 		return ret;
 

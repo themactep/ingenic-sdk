@@ -1073,6 +1073,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	unsigned char val = 0;
 	int len = 0;
 	int ret = 0;
+
 	len = strlen(sd->chip.name);
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
@@ -1089,6 +1090,7 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 
 static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_register *reg) {
 	int len = 0;
+
 	len = strlen(sd->chip.name);
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
@@ -1234,7 +1236,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_i2c_set_clientdata(client, sd);
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
-
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);

@@ -567,6 +567,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -899,12 +900,10 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	unsigned char val = 0x00;
 
 	ret += sensor_read(sd, 0x3221, &val);
-
 	if (enable & 0x02)
 		val |= 0x60;
 	else
 		val &= 0x9f;
-
 	ret += sensor_write(sd, 0x3221, val);
 
 	if (!ret)

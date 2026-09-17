@@ -97,6 +97,7 @@ struct again_lut {
 	unsigned int value;
 	unsigned int gain;
 };
+
 struct again_lut sensor_again_lut[] = {
 	{0x80, 0},
 	{0x88, 5731},
@@ -2080,6 +2081,7 @@ static struct regval_list sensor_init_regs_1224_760_110fps[] = {
 	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
+
 static struct regval_list sensor_init_regs_2560_1440_15fps_dol[] = {
 	{SENSOR_REG_END, 0x00},
 };
@@ -2288,6 +2290,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 
 	return 0;
 }
+
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int expo = value;

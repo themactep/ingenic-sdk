@@ -605,7 +605,6 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x15, 0x12},
 	{0xfe, 0x00},
 	{0x3e, 0x91},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -710,7 +709,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -739,7 +737,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 		return -ENODEV;
 
 	*ident = (*ident << 8) | v;
-
 	return 0;
 }
 
@@ -752,7 +749,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
-
 	return 0;
 }
 
@@ -767,10 +763,9 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, unsigned int value) 
 	ret += sensor_write(sd, 0xb8, val_lut[value].dpc);
 	ret += sensor_write(sd, 0xb9, val_lut[value].blc);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error %d", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
-
 	return 0;
 }
 
@@ -822,7 +817,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
-
 	return 0;
 }
 
@@ -836,7 +830,6 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
-
 	return ret;
 }
 
@@ -1064,7 +1057,6 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
-
 	return ret;
 }
 
@@ -1080,7 +1072,6 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 		return -EPERM;
 
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
-
 	return 0;
 }
 

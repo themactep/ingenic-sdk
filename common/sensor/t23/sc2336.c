@@ -319,9 +319,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
-	/*
-     * cleaned 0x02 24Mmclk 2lane 405Mbps 10bit 1080p@30fps
-     */
+	/* cleaned 0x02 24Mmclk 2lane 405Mbps 10bit 1080p@30fps */
 	{0x0103, 0x01},
 	{0x0100, 0x00},
 	{0x36e9, 0x80},
@@ -634,30 +632,30 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
-    int ret = 0;
+	int ret = 0;
 
-    value *= 2;
-    ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-    ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-    ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
-    if (ret < 0)
-        return ret;
+	value *= 2;
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	if (ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
-    int ret = 0;
+	int ret = 0;
 
-    ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-    ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
-    if (ret < 0)
-        return ret;
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)(((value >> 8) & 0xff)));
+	if (ret < 0)
+		return ret;
 
-    gain_val = value;
+	gain_val = value;
 
-    return 0;
+	return 0;
 }
 #endif
 
@@ -689,22 +687,21 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret) {
 		return ret;
 	}
 
 	/* Board-level mount compensation: shvflip=1 (module param, e.g. from
-     * BR2_SENSOR_1_PARAMS) means this sensor is physically mounted
-     * rotated 180 deg relative to its housing. Apply the full H+V flip
-     * directly here so every IMP client gets an already-corrected image
-     * from the first frame, independent of which ISP tuning API (if
-     * any) a given streamer calls. Must run after the mode table above
-     * (register 0x0103 in that table resets the sensor and would wipe
-     * this) and is safe to fail softly - a write error here shouldn't
-     * block streaming, just leave the image un-mirrored.
-     */
+	 * BR2_SENSOR_1_PARAMS) means this sensor is physically mounted
+	 * rotated 180 deg relative to its housing. Apply the full H+V flip
+	 * directly here so every IMP client gets an already-corrected image
+	 * from the first frame, independent of which ISP tuning API (if
+	 * any) a given streamer calls. Must run after the mode table above
+	 * (register 0x0103 in that table resets the sensor and would wipe
+	 * this) and is safe to fail softly - a write error here shouldn't
+	 * block streaming, just leave the image un-mirrored.
+	 */
 	if (shvflip) {
 		ret = sensor_set_vflip(sd, 3);
 		if (ret)
@@ -773,7 +770,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	sensor->video.fps = fps;
-
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
 	sensor->video.attr->total_height = vts;
@@ -794,7 +790,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 		sensor->video.mbus.field = V4L2_FIELD_NONE;
 		sensor->video.mbus.colorspace = wsize->colorspace;
 		sensor->video.fps = wsize->fps;
-
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	}
 
@@ -882,6 +877,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
+
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
@@ -1062,7 +1058,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	tx_isp_subdev_init(&sensor_platform_device, sd, &sensor_ops);
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
@@ -1131,7 +1126,6 @@ static __init int init_sensor(void) {
 
 static __exit void exit_sensor(void) {
 	private_i2c_del_driver(&sensor_driver);
-
 }
 
 module_init(init_sensor);

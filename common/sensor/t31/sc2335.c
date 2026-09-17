@@ -376,6 +376,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
+			.mipi_sc.line_sync_mode = 0,
+			.mipi_sc.work_start_flag = 0,
 			.image_twidth = 1920,
 			.image_theight = 1080,
 			.mipi_sc.mipi_crop_start0x = 0,
@@ -386,8 +388,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.mipi_crop_start2y = 0,
 			.mipi_sc.mipi_crop_start3x = 0,
 			.mipi_sc.mipi_crop_start3y = 0,
-			.mipi_sc.line_sync_mode = 0,
-			.mipi_sc.work_start_flag = 0,
 			.mipi_sc.data_type_en = 0,
 			.mipi_sc.data_type_value = RAW10,
 			.mipi_sc.del_start = 0,
@@ -518,7 +518,6 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
 	{0x36e9, 0x59},
 	{0x36f9, 0x5b},
 	{0x0100, 0x01},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -654,18 +653,15 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	int it = (value & 0xffff) * 2;
 	int again = (value & 0xffff0000) >> 16;
-
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again & 0xff));
 	ret += sensor_write(sd, 0x3e08, (unsigned char)(((again >> 8) & 0xff)));
 	if (ret < 0)
 		return ret;
 
 	gain_val = again;
-
 	return 0;
 }
 
@@ -716,12 +712,14 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	} else {
 		ret += sensor_write(sd, 0x363c, 0x07);
 	}
+
 	/* DPC Setting */
 	if (gain_val >= 0xf60) { // 6x
 		ret += sensor_write(sd, 0x5799, 0x07);
 	} else if (gain_val <= 0xf40) { // 4x
 		ret += sensor_write(sd, 0x5799, 0x00);
 	}
+
 	if (ret < 0)
 		return ret;
 
@@ -808,7 +806,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	hts = ((hts << 8) + val) << 1;
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
@@ -1035,7 +1032,6 @@ static struct tx_isp_subdev_ops sensor_ops = {
 };
 
 static u64 tx_isp_module_dma_mask = ~(u64)0;
-
 struct platform_device sensor_platform_device = {
 	.name = SENSOR_NAME,
 	.id = -1,
@@ -1119,7 +1115,6 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

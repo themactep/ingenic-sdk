@@ -1160,7 +1160,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	if (ret < 0)
 		return ret;
 #if 0
-	if (g_vrefh == Vrefh_min_tlb) {  // 增益最大
+	if (g_vrefh == Vrefh_min_tlb) {  // Maximum gain
 		ISP_INFO("sensor_set_integration_time:expo = %d\n", expo);
 		if (expo > 2400 ) {
 			// low fps

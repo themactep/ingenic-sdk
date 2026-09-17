@@ -1073,7 +1073,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 
 	if (ret)
@@ -1431,6 +1430,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

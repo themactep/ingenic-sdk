@@ -36,22 +36,6 @@
 #define SENSOR_VERSION "H20190708a"
 
 
-static struct sensor_info sensor_info = {
-	.name = SENSOR_NAME,
-	.chip_id = SENSOR_CHIP_ID,
-	.version = SENSOR_VERSION,
-	.min_fps = SENSOR_OUTPUT_MIN_FPS,
-	.max_fps = SENSOR_OUTPUT_MAX_FPS,
-	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
-	.width = SENSOR_MAX_WIDTH,
-	.height = SENSOR_MAX_HEIGHT,
-};
-
-struct regval_list {
-	uint16_t reg_num;
-	uint16_t value;
-};
-
 static int reset_gpio = GPIO_PA(18);
 module_param(reset_gpio, int, S_IRUGO);
 MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
@@ -73,6 +57,22 @@ module_param(sensor_max_fps, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_max_fps, "Sensor Max Fps set interface");
 
 struct tx_isp_sensor_attribute sensor_attr;
+
+static struct sensor_info sensor_info = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.version = SENSOR_VERSION,
+	.min_fps = SENSOR_OUTPUT_MIN_FPS,
+	.max_fps = SENSOR_OUTPUT_MAX_FPS,
+	.chip_i2c_addr = SENSOR_I2C_ADDRESS,
+	.width = SENSOR_MAX_WIDTH,
+	.height = SENSOR_MAX_HEIGHT,
+};
+
+struct regval_list {
+	uint16_t reg_num;
+	uint16_t value;
+};
 
 struct again_lut {
 	int index;
@@ -282,7 +282,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
  * max 30fps
  */
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
-	/****system****/
+	/* SYS */
 	{0xfe, 0x80},
 	{0xfe, 0x80},
 	{0xfe, 0x80},
@@ -296,7 +296,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xf8, 0x63},
 	{0xf9, 0x40},
 	{0xfc, 0x8e},
-	/****CISCTL & ANALOG****/
+
+	/* ANALOG & CISCTL */
 	{0xfe, 0x00},
 	{0x87, 0x18},
 	{0xee, 0x30},
@@ -344,7 +345,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xd2, 0x41},
 	{0xd3, 0xdc},
 	{0xe6, 0x50},
-	/*gain*/
+
+	/* GAIN */
 	{0xb6, 0xc0},
 	{0xb0, 0x70},
 	{0xb1, 0x01},
@@ -353,7 +355,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xb4, 0x00},
 	{0xb8, 0x01},
 	{0xb9, 0x00},
-	/*blk*/
+
+	/* BLK */
 	{0x26, 0x30},
 	{0xfe, 0x01},
 	{0x40, 0x23},
@@ -364,7 +367,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x15, 0x78},
 	{0x16, 0x78},
 	{0x17, 0x78},
-	/*window*/
+
+	/* WINDOW */
 	{0xfe, 0x01},
 	{0x92, 0x00},
 	{0x94, 0x03},
@@ -372,7 +376,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x96, 0x38},
 	{0x97, 0x07},
 	{0x98, 0x80},
-	/*ISP*/
+
+	/* ISP */
 	{0xfe, 0x01},
 	{0x01, 0x05},
 	{0x02, 0x89},
@@ -411,7 +416,8 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0x3d, 0x62},
 	{0x3e, 0x62},
 	{0x3f, 0x62},
-	/****DVP & MIPI****/
+
+	/* DVP & MIPI */
 	{0xfe, 0x01},
 	{0x9a, 0x06},
 	{0xfe, 0x00},
@@ -430,12 +436,10 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 };
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
-
 	{SENSOR_REG_END, 0x00},
 };
 
 static struct regval_list sensor_init_regs_1920_1080_25fps_mipi[] = {
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -550,6 +554,7 @@ static int sensor_reset(struct tx_isp_subdev *sd, int val) {
 static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 	int ret;
+
 	ret = sensor_read(sd, 0xf0, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
@@ -797,6 +802,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -918,6 +924,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
@@ -982,7 +989,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	private_i2c_set_clientdata(client, sd);
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
-
 err_set_sensor_gpio:
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);

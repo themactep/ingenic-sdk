@@ -613,6 +613,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 	return 0;

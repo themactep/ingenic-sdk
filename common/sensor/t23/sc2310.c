@@ -515,6 +515,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1920_1080_30fps_mipi,
 	},
 };
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {

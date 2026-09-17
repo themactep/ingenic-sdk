@@ -843,8 +843,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 }
 
 #if 0
-static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
-{
+static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	unsigned char val;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -932,8 +931,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
@@ -945,8 +943,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	return 0;
 }
 
-static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
-{
+static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
 	unsigned int again = value;
 
@@ -1426,6 +1423,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

@@ -280,6 +280,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.hcrop_diff_en = 0,
 			.mipi_sc.mipi_vcomp_en = 0,
 			.mipi_sc.mipi_hcomp_en = 0,
+			.mipi_sc.line_sync_mode = 0,
+			.mipi_sc.work_start_flag = 0,
 			.image_twidth = 1920,
 			.image_theight = 1080,
 			.mipi_sc.mipi_crop_start0x = 0,
@@ -290,8 +292,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 			.mipi_sc.mipi_crop_start2y = 0,
 			.mipi_sc.mipi_crop_start3x = 0,
 			.mipi_sc.mipi_crop_start3y = 0,
-			.mipi_sc.line_sync_mode = 0,
-			.mipi_sc.work_start_flag = 0,
 			.mipi_sc.data_type_en = 0,
 			.mipi_sc.data_type_value = RAW10,
 			.mipi_sc.del_start = 0,
@@ -468,7 +468,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
 	{0x0100, 0x01},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -744,7 +743,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	hts = ((hts << 8) + val);
 	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
-
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (0 != ret) {
@@ -828,8 +826,8 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 }
 
 static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = -1;
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	unsigned char val = 0x00;
 
 	ret += sensor_read(sd, 0x3221, &val);
@@ -838,7 +836,6 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	} else {
 		val &= 0x9f;
 	}
-
 	ret += sensor_write(sd, 0x3221, val);
 	if (!ret) {
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
@@ -1067,9 +1064,11 @@ static int sensor_remove(struct i2c_client *client) {
 	if (reset_gpio != -1) {
 		private_gpio_free(reset_gpio);
 	}
+
 	if (pwdn_gpio != -1) {
 		private_gpio_free(pwdn_gpio);
 	}
+
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);

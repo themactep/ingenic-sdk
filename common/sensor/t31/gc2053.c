@@ -1154,7 +1154,6 @@ static struct regval_list sensor_init_regs_1920_1080_40fps_mipi[] = {
 	{0x15, 0x10},
 	{0xfe, 0x00},
 	{0x3e, 0x91},
-
 	{SENSOR_REG_END, 0x00},
 };
 

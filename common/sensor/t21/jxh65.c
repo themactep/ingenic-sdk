@@ -35,6 +35,18 @@
 
 #define DRIVE_CAPABILITY_1
 
+static int reset_gpio = GPIO_PA(18);
+module_param(reset_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
+
+static int pwdn_gpio = -1;
+module_param(pwdn_gpio, int, S_IRUGO);
+MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
+
+static int sensor_gpio_func = DVP_PA_LOW_10BIT;
+module_param(sensor_gpio_func, int, S_IRUGO);
+MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
+
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
@@ -50,18 +62,6 @@ struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
 };
-
-static int reset_gpio = GPIO_PA(18);
-module_param(reset_gpio, int, S_IRUGO);
-MODULE_PARM_DESC(reset_gpio, "Reset GPIO NUM");
-
-static int pwdn_gpio = -1;
-module_param(pwdn_gpio, int, S_IRUGO);
-MODULE_PARM_DESC(pwdn_gpio, "Power down GPIO NUM");
-
-static int sensor_gpio_func = DVP_PA_LOW_10BIT;
-module_param(sensor_gpio_func, int, S_IRUGO);
-MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 struct again_lut {
 	unsigned int value;

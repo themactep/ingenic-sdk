@@ -490,8 +490,9 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
-	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8))
+	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		return -1;
+	}
 
 	ret += sensor_read(sd, 0x21, &tmp);
 	hts = tmp;
@@ -568,6 +569,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	return ret;
 }
+
 static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_ident *chip) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned int ident = 0;

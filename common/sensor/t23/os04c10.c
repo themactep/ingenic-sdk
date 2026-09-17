@@ -1489,7 +1489,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		sclk = SENSOR_SUPPORT_SCLK_WDR;
 		max_fps = TX_SENSOR_MAX_FPS_15;
 	}
-
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
 		ISP_ERROR("warn: fps(%d) not in range\n", fps);
@@ -1961,6 +1960,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

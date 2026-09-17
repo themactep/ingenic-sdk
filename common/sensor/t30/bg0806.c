@@ -1730,6 +1730,7 @@ static __init int init_sensor(void) {
 		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
+
 	return private_i2c_add_driver(&sensor_driver);
 }
 

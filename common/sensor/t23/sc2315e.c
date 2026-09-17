@@ -859,7 +859,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 
 	if (ret)
@@ -1067,7 +1066,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	default:
 		break;
 	}
-
 	return ret;
 }
 
@@ -1080,12 +1078,13 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
-
 	return ret;
 }
 
@@ -1096,10 +1095,11 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	if (len && strncmp(sd->chip.name, reg->name, len)) {
 		return -EINVAL;
 	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
@@ -1230,9 +1230,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
-
 	return 0;
 err_set_sensor_data_interface:
 err_set_sensor_gpio:
@@ -1278,6 +1276,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);

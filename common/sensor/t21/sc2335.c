@@ -51,6 +51,10 @@ static int data_interface = TX_SENSOR_DATA_INTERFACE_DVP;
 module_param(data_interface, int, S_IRUGO);
 MODULE_PARM_DESC(data_interface, "Sensor Date interface");
 
+static unsigned short int frmcnt = 0;
+static unsigned short int dpc_flag = 1;
+static unsigned int gain_val = 0x37e;
+
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
 	.chip_id = SENSOR_CHIP_ID,
@@ -66,10 +70,6 @@ struct regval_list {
 	uint16_t reg_num;
 	uint16_t value;
 };
-
-static unsigned short int frmcnt = 0;
-static unsigned short int dpc_flag = 1;
-static unsigned int gain_val = 0x37e;
 
 struct again_lut {
 	unsigned int value;

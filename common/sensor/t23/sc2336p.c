@@ -1594,7 +1594,6 @@ static int sensor_remove(struct i2c_client *client) {
 		private_gpio_free(reset_gpio);
 	if (pwdn_gpio != -1)
 		private_gpio_free(pwdn_gpio);
-
 	private_clk_disable(sensor->mclk);
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
@@ -1621,6 +1620,7 @@ static struct i2c_driver sensor_driver = {
 static __init int init_sensor(void) {
 	int ret = 0;
 	sensor_common_init(&sensor_info);
+
 	ret = private_driver_get_interface();
 	if (ret) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
