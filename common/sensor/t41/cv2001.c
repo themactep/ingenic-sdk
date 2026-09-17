@@ -486,7 +486,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	/* 2'b01:mirror,2'b10:filp */
-	val = sensor_read(sd, 3030, &val);
+	ret = sensor_read(sd, 0x3030, &val);
 	switch (enable) {
 	case 0:
 		val &= 0xFC;
@@ -503,8 +503,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 		val |= 0x03;
 		break;
 	}
-	sensor_write(sd, 3030, val);
-
+	ret = sensor_write(sd, 0x3030, val);
 	if (!ret)
 		ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 
