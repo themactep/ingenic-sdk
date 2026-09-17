@@ -754,12 +754,12 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	int ret = 0;
 	ret = sensor_write(sd, 0x4, value & 0xff);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 	ret = sensor_write(sd, 0x3, (value & 0x1f00) >> 8);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -773,7 +773,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0xb1, (value >> 8) & 0xf);
 	ret += sensor_write(sd, 0xb2, (value << 2) & 0xff);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error  %d", __LINE__);
+		ISP_INFO("sensor_write error %d", __LINE__);
 		return ret;
 	}
 	/*** dark sun ***/

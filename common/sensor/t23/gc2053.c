@@ -1212,7 +1212,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0xb8, val_lut[again].dpc);
 	ret += sensor_write(sd, 0xb9, val_lut[again].blc);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 

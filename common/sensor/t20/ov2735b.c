@@ -607,7 +607,7 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3, (unsigned char)((value & 0xff00) >> 8));
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -619,7 +619,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x24, (unsigned char)value);
 	ret += sensor_write(sd, 0x01, 0x01);
 	if (ret < 0) {
-		ISP_INFO("sensor_write error  %d\n", __LINE__);
+		ISP_INFO("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 	return 0;

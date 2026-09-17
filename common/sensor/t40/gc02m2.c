@@ -524,7 +524,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	/*set analog gain*/
 	ret += sensor_write(sd, 0xb6, val_lut[again_index].sensor_again);
 	if (ret < 0)
-		ISP_ERROR("sensor_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 
 	return ret;
 }
@@ -537,7 +537,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0x04, value&0xff);
 	ret += sensor_write(sd, 0x03, (value&0x3f00)>>8);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n" , __LINE__);
+		ISP_ERROR("sensor_write error %d\n" , __LINE__);
 		return ret;
 	}
 
@@ -552,7 +552,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd, 0xfe, 0x00);
 	ret += sensor_write(sd, 0xb6, val_lut[value].sensor_again);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n" , __LINE__);
+		ISP_ERROR("sensor_write error %d\n" , __LINE__);
 		return ret;
 	}
 
@@ -677,7 +677,7 @@ static int sensor_set_vflip(struct tx_isp_subdev *sd, int enable) {
 	}
 	ret += sensor_write(sd, 0x17, val);
 	if (ret != 0)
-		ISP_ERROR("sensor_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 
 	return ret;
 }

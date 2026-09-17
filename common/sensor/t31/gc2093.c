@@ -1039,7 +1039,7 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x04, (unsigned char)(value & 0xff));
 	ret += sensor_write(sd, 0x03, (unsigned char)(value >> 8) & 0x3f);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -1057,7 +1057,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0xcf, val_lut[value].regb6);
 	ret += sensor_write(sd, 0xd9, val_lut[value].regb7);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d", __LINE__);
+		ISP_ERROR("sensor_write error %d", __LINE__);
 		return ret;
 	}
 	return 0;
@@ -1313,7 +1313,7 @@ static int sensor_set_integration_time_short(struct tx_isp_subdev *sd, int value
 	ret += sensor_write(sd, 0x02, value & 0xff);
 	ret += sensor_write(sd, 0x01, (value >> 8) & 0x3f);
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 

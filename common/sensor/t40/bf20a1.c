@@ -411,7 +411,7 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x6a, (unsigned char)(again & 0x3f));
 
 	if (ret < 0) {
-		ISP_ERROR("sensor_write error  %d\n", __LINE__);
+		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
 
