@@ -1281,8 +1281,8 @@ static __init int init_sensor(void) {
 }
 
 static __exit void exit_sensor(void) {
-	sensor_common_exit();
 	private_i2c_del_driver(&imx327_driver);
+	sensor_common_exit();
 }
 
 module_init(init_sensor);
