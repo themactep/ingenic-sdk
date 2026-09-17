@@ -629,7 +629,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	ret += sensor_write(sd, 0x320f, (unsigned char)(vts & 0xff));
 	ret += sensor_write(sd, 0x320e, (unsigned char)(vts >> 8));
 	if (ret < 0) {
-		ISP_INFO("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 
