@@ -1336,7 +1336,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	ISP_INFO("---------->> integration_time: %d\n", sensor->video.attr->max_integration_time);
 
-	ISP_INFO("\n probe ok ------->sc1346\n");
+	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 
 	return 0;
 
