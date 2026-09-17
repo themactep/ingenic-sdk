@@ -1305,29 +1305,29 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
-	unsigned int clk = 0;
+	unsigned int wpclk = 0;
 	unsigned short vts = 0;
 	unsigned short hts = 0;
 	unsigned int max_fps = 0;
-	unsigned char val = 0;
+	unsigned char tmp = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
 
 	if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
-		clk = SENSOR_SUPPORT_30FPS_DVP_SCLK;
+		wpclk = SENSOR_SUPPORT_30FPS_DVP_SCLK;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_DVP) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		max_fps = TX_SENSOR_MAX_FPS_15;
-		clk = SENSOR_SUPPORT_15FPS_DVP_SCLK;
+		wpclk = SENSOR_SUPPORT_15FPS_DVP_SCLK;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
-		clk = SENSOR_SUPPORT_30FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_30FPS_MIPI_SCLK;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		max_fps = TX_SENSOR_MAX_FPS_25;
-		clk = SENSOR_SUPPORT_25FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_25FPS_MIPI_SCLK;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_15)) {
 		max_fps = TX_SENSOR_MAX_FPS_15;
-		clk = SENSOR_SUPPORT_15FPS_MIPI_SCLK;
+		wpclk = SENSOR_SUPPORT_15FPS_MIPI_SCLK;
 	} else {
 		ISP_ERROR("Cannot support this data interface and fps!!!\n");
 	}
@@ -1340,14 +1340,14 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	}
 
 	ret += sensor_write(sd, 0xfe, 0x00);
-	ret += sensor_read(sd, 0x05, &val);
-	hts = val;
-	ret += sensor_read(sd, 0x06, &val);
+	ret += sensor_read(sd, 0x05, &tmp);
+	hts = tmp;
+	ret += sensor_read(sd, 0x06, &tmp);
 	if (ret < 0)
 		return -1;
 
-	hts = ((hts << 8) + val) << 1;
-	vts = clk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
+	hts = ((hts << 8) + tmp) << 1;
+	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vtsn0 = (unsigned char)((vts & 0x3f00) >> 8);
 	vtsn1 = (unsigned char)(vts & 0xff);
 	ret += sensor_write(sd, 0x41, (unsigned char)((vts & 0x3f00) >> 8));
