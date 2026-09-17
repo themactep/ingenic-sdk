@@ -70,7 +70,6 @@
 // define 30fps linear setting
 //end define
 
-
 #ifdef SENSOR_WDR_2_FRAME
 #define SENSOR_WDR_MCLK 27000000
 #define SENSOR_WDR_SUPPORT_RES_PCLK (165000000)
@@ -81,10 +80,6 @@
 #define SENSOR_WDR_INIT_30FPS_HTS 0x898
 static int wdr_line = 1000;
 #endif
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 
 struct tx_isp_sensor_attribute sensor_attr;
 

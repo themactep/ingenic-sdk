@@ -34,10 +34,6 @@
 #define SENSOR_REG_END 0xffff
 #define SENSOR_VERSION "H20241221a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define AGAIN_MAX_DB 0x64
 #define DGAIN_MAX_DB 0x64
 #define LOG2_GAIN_SHIFT 16

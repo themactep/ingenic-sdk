@@ -39,10 +39,6 @@
 #define SENSOR_SUPPORT_SCLK_25FPS (37125000) /* 1100*2250*25 */
 #define SENSOR_VERSION "H20250712a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define DRIVE_CAPABILITY_1
 
 static int reset_gpio = GPIO_PC(27);

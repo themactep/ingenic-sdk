@@ -38,10 +38,6 @@
 #define SENSOR_REG_END 0xfa
 #define SENSOR_VERSION "H20221205a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define USE_BLUE_SCREEN 1
 #define USE_CVBS_ONE_FIELD 1
 

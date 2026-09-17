@@ -32,10 +32,6 @@
 #define SENSOR_SUPPORT_PCLK (6 * 1000 * 1000)
 #define SENSOR_VERSION "H20200116a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define DRIVE_CAPABILITY_2
 
 static struct sensor_info sensor_info = {

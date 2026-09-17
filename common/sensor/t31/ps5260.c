@@ -35,10 +35,6 @@
 #define SENSOR_SUPPORT_PCLK_MIPI (152010000)
 #define SENSOR_VERSION "H20210705a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define AG_HS_MODE (32) // 4.0x
 #define AG_LS_MODE (24) // 3.0x
 #define NEPLS_LB (25)

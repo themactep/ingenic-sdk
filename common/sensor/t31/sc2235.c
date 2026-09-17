@@ -35,10 +35,6 @@
 #define SENSOR_SUPPORT_PCLK_FPS_30 (81000 * 1000)
 #define SENSOR_VERSION "H20180627a"
 
-
-// ============================================================================
-// SPECIAL FEATURES
-// ============================================================================
 #define DRIVE_CAPABILITY_1
 
 static int reset_gpio = GPIO_PA(18);
