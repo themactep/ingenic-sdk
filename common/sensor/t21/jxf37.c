@@ -757,7 +757,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (max_fps << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
-		ISP_INFO("warn: fps(%d) not in range\n", fps);
+		ISP_ERROR("warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
 	val = 0;
@@ -768,7 +768,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	hts |= val;
 	hts *= 2;
 	if (0 != ret) {
-		ISP_INFO("Error: %s read error\n", SENSOR_NAME);
+		ISP_ERROR("Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
 
@@ -787,7 +787,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ISP_INFO("after register 0x1f value : 0x%02x\n", val);
 
 	if (0 != ret) {
-		ISP_INFO("err: sensor_write err\n");
+		ISP_ERROR("Error: %s write error\n", SENSOR_NAME);
 		return ret;
 	}
 	sensor->video.fps = fps;
@@ -854,7 +854,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 	ret = sensor_detect(sd, &ident);
 	if (ret) {
-		ISP_INFO("chip found @ 0x%x (%s) is not an %s chip.\n",
+		ISP_ERROR("chip found @ 0x%x (%s) is not an %s chip.\n",
 			client->addr,
 			client->adapter->name,
 			SENSOR_NAME);
@@ -874,7 +874,7 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
 	if (IS_ERR_OR_NULL(sd)) {
-		ISP_INFO("[%d]The pointer is invalid!\n", __LINE__);
+		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
 	switch (cmd) {
@@ -990,13 +990,13 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_INFO("Failed to allocate sensor subdev.\n");
+		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_INFO("Cannot get sensor input clock cgu_cim\n");
+		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	private_clk_set_rate(sensor->mclk, 24000000);
@@ -1088,7 +1088,7 @@ static __init int init_sensor(void) {
 
 	ret = private_driver_get_interface();
 	if (ret) {
-		ISP_INFO("Failed to init %s driver.\n", SENSOR_NAME);
+		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
 	return private_i2c_add_driver(&sensor_driver);
