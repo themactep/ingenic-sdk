@@ -247,7 +247,7 @@ struct tx_isp_dvp_bus os02n10_dvp = {
 };
 
 struct tx_isp_sensor_attribute os02n10_attr = {.name = "os02n10",
-	.chip_id = 0x53024e10,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = TX_SENSOR_CONTROL_INTERFACE_I2C,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,

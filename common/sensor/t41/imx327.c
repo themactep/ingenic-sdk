@@ -24,6 +24,7 @@
 #include <txx-funcs.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
 #define SENSOR_CHIP_ID_H (0xb2)
 #define SENSOR_CHIP_ID_L (0x01)
 #define SENSOR_I2C_ADDRESS 0x1a
@@ -61,7 +62,7 @@ static int rhs1 = 101;
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -190,7 +191,7 @@ struct tx_isp_mipi_bus mipi_linear = {
 
 struct tx_isp_sensor_attribute imx327_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xb201,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
