@@ -514,7 +514,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
@@ -525,7 +525,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
@@ -707,7 +707,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FINISH_CHANGE:
@@ -717,7 +717,7 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_EVENT_SENSOR_FPS:

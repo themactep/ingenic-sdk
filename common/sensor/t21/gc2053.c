@@ -637,7 +637,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 		wsize->fps = 25 << 16 | 1;
 		wsize->regs = sensor_init_regs_1920_1080_25fps_mipi;
 	} else {
-		ISP_INFO("Don't support this Sensor Data interface\n");
+		ISP_ERROR("Don't support this Sensor Data interface\n");
 	}
 
 	sensor->video.mbus.width = wsize->width;

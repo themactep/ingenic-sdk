@@ -802,7 +802,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 		wsize->fps = 25 << 16 | 1;
 		wsize->regs = sensor_init_regs_1920_1080_25fps_mipi;
 	} else {
-		ISP_INFO("Don't support this Sensor Data interface\n");
+		ISP_ERROR("Don't support this Sensor Data interface\n");
 	}
 
 	sensor->video.mbus.width = wsize->width;
@@ -861,7 +861,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		wpclk = SENSOR_SUPPORT_WPCLK_FPS_30;
 		max_fps = SENSOR_OUTPUT_MAX_FPS;
 	} else {
-		ISP_INFO("Don't support this Sensor Data interface\n");
+		ISP_ERROR("Don't support this Sensor Data interface\n");
 	}
 
 	/* the format of fps is 16/16. for example 25 << 16 | 2, the value is 25/2 fps. */

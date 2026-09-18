@@ -499,7 +499,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
 
@@ -510,7 +510,7 @@ static int sensor_s_stream(struct v4l2_subdev *sd, int enable) {
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
@@ -681,7 +681,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = sensor_write_array(sd, sensor_stream_off_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SUBDEV_FINISH_CHANGE:
@@ -691,7 +691,7 @@ static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_pr
 			ret = sensor_write_array(sd, sensor_stream_on_mipi);
 
 		} else {
-			ISP_INFO("Don't support this Sensor Data interface\n");
+			ISP_ERROR("Don't support this Sensor Data interface\n");
 		}
 		break;
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_FPS:
