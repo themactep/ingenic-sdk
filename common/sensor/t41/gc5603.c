@@ -1416,6 +1416,8 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	sensor_set_attr(sd, wsize);
 	sensor->priv = wsize;
+	sensor->video.max_fps = wsize->fps;
+	sensor->video.min_fps = SENSOR_OUTPUT_MIN_FPS << 16 | 1;
 
 	return 0;
 }
