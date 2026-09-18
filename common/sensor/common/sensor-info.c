@@ -8,7 +8,7 @@
 #include <linux/proc_fs.h>
 #include <sensor-info.h>
 
-#ifndef SENSOR_PROC_OWNED_BY_ISP
+#if !defined(SENSOR_PROC_OWNED_BY_ISP) || defined(SENSOR_PROC_PUBLISH_FLAT_TREE)
 /* Per-sensor proc context for multi-sensor support */
 struct sensor_proc_ctx {
 	struct sensor_info *info;
@@ -105,10 +105,10 @@ static const struct file_operations i2c_adapter_fops = {
 
 /* Track if legacy flat paths have been created (for backward compatibility) */
 static int legacy_paths_created = 0;
-#endif /* !SENSOR_PROC_OWNED_BY_ISP */
+#endif /* !SENSOR_PROC_OWNED_BY_ISP || SENSOR_PROC_PUBLISH_FLAT_TREE */
 
 void sensor_common_init(struct sensor_info *info) {
-#ifdef SENSOR_PROC_OWNED_BY_ISP
+#if defined(SENSOR_PROC_OWNED_BY_ISP) && !defined(SENSOR_PROC_PUBLISH_FLAT_TREE)
 	/*
 	 * The ISP driver owns /proc/jz/sensor and publishes the indexed
 	 * sensorN/ registry (vendor tx-isp-sinfo.c, or open-tx-isp's
@@ -219,7 +219,7 @@ void sensor_common_update(struct sensor_info *info, int rst_gpio, int pwdn_gpio,
 	info->i2c_adapter = i2c_adapter;
 }
 
-#ifndef SENSOR_PROC_OWNED_BY_ISP
+#if !defined(SENSOR_PROC_OWNED_BY_ISP) || defined(SENSOR_PROC_PUBLISH_FLAT_TREE)
 static ssize_t sensor_name_read(struct file *file, char __user *buf, size_t count, loff_t *ppos) {
 	struct sensor_proc_ctx *ctx = PDE_DATA(file_inode(file));
 	char buffer[128];
@@ -317,4 +317,4 @@ static ssize_t sensor_i2c_adapter_read(struct file *file, char __user *buf, size
 	int len = snprintf(buffer, sizeof(buffer), "%d\n", ctx->info->i2c_adapter);
 	return simple_read_from_buffer(buf, count, ppos, buffer, len);
 }
-#endif /* !SENSOR_PROC_OWNED_BY_ISP */
+#endif /* !SENSOR_PROC_OWNED_BY_ISP || SENSOR_PROC_PUBLISH_FLAT_TREE */
