@@ -431,22 +431,23 @@ static struct regval_list sensor_stream_off[] = {
 };
 
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
-	struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	int ret;
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_client *client = tx_isp_get_subdevdata(sd);
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
-	int ret;
+		},
+	};
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
 		ret = 0;
@@ -455,6 +456,7 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 }
 
 int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
+	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[3] = {(reg >> 8) & 0xff, reg & 0xff, value};
 	struct i2c_msg msg = {
@@ -463,7 +465,6 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 		.len = 3,
 		.buf = buf,
 	};
-	int ret;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
@@ -525,7 +526,6 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
 	*ident = (*ident << 8) | v;
-
 	return 0;
 }
 
@@ -535,7 +535,6 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
-
 	/* EXP logic */
 	if (value < 0x50) {
 		ret += sensor_write(sd, 0x3314, 0x12);

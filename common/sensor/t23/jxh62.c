@@ -304,6 +304,7 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720_25fps,
 	},
 };
+
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR8_1X8,
 	V4L2_MBUS_FMT_SBGGR10_1X10,
@@ -426,11 +427,13 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 
 	return 0;
 }
+
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	/* 0x00 bit[6:0] */
 	sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 	return 0;
 }
+
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
 	return 0;
 }
@@ -443,9 +446,9 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
-
 	if (!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
@@ -462,7 +465,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 
 static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 	int ret = 0;
-
 	if (enable) {
 		ret = sensor_write_array(sd, sensor_stream_on);
 		ISP_INFO("%s stream on\n", SENSOR_NAME);
@@ -502,6 +504,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x1f, &tmp);
 	if (ret < 0)
 		return -1;
+
 	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 	sensor->video.fps = fps;
@@ -517,7 +520,6 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
-
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
 		sensor_info.max_fps = 25;

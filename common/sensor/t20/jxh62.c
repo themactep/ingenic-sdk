@@ -294,7 +294,7 @@ static struct regval_list sensor_init_regs_1280_720_25fps[] = {
 };
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
-	/* 1280*800 */
+	/* 1280*720 */
 	{
 		.width = 1280,
 		.height = 720,
@@ -302,7 +302,9 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	},
+};
+
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR8_1X8,
 	V4L2_MBUS_FMT_SBGGR10_1X10,
@@ -426,7 +428,6 @@ static int sensor_detect(struct v4l2_subdev *sd, unsigned int *ident) {
 static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 	unsigned int expo = value;
 	int ret = 0;
-	/* ISP_INFO("sensor expo write value 0x%x\n",expo); */
 	sensor_write(sd, 0x01, (unsigned char)(expo & 0xff));
 	sensor_write(sd, 0x02, (unsigned char)((expo >> 8) & 0xff));
 	if (ret < 0)
@@ -437,7 +438,6 @@ static int sensor_set_integration_time(struct v4l2_subdev *sd, int value) {
 
 static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 	/* 0x00 bit[6:0] */
-	/* ISP_INFO("sensor again write value 0x%x\n",value); */
 	sensor_write(sd, 0x00, (unsigned char)(value & 0x7f));
 	return 0;
 }
@@ -456,7 +456,6 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
 	unsigned char val;
-
 	if (!enable)
 		return ISP_SUCCESS;
 
@@ -466,7 +465,6 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
@@ -531,7 +529,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 	tmp |= (1 << 7); // set bit[7],  register group write function,  auto clean
 	sensor_write(sd, 0x1f, tmp);
 	sensor->video.fps = fps;
-
 	sensor->video.attr->max_integration_time_native = vts - 1;
 	sensor->video.attr->integration_time_limit = vts - 1;
 	sensor->video.attr->total_height = vts;
@@ -563,7 +560,6 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 				sensor->priv = wsize;
 		}
 		sensor->video.fps = wsize->fps;
-
 		arg.value = (int)&sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	}
@@ -798,7 +794,6 @@ static int sensor_remove(struct i2c_client *client) {
 }
 
 static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
-
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
