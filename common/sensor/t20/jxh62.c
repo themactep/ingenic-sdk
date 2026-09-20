@@ -581,7 +581,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(reset_gpio, 1);
 			msleep(1);
 		} else {
-			ISP_ERROR("gpio request failed %d\n", reset_gpio);
+			ISP_PRINT(ISP_ERROR_LEVEL, "gpio request failed %d\n", reset_gpio);
 		}
 	}
 	if (pwdn_gpio != -1) {
@@ -592,7 +592,7 @@ static int sensor_g_chip_ident(struct v4l2_subdev *sd, struct v4l2_dbg_chip_iden
 			gpio_direction_output(pwdn_gpio, 0);
 			msleep(10);
 		} else {
-			ISP_ERROR("gpio request failed %d\n", pwdn_gpio);
+			ISP_PRINT(ISP_ERROR_LEVEL, "gpio request failed %d\n", pwdn_gpio);
 		}
 	}
 	ret = sensor_detect(sd, &ident);
@@ -724,14 +724,14 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 
 	sensor = (struct tx_isp_sensor *)kzalloc(sizeof(*sensor), GFP_KERNEL);
 	if (!sensor) {
-		ISP_ERROR("Failed to allocate sensor subdev.\n");
+		ISP_PRINT(ISP_ERROR_LEVEL, "Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
 	if (IS_ERR(sensor->mclk)) {
-		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
+		ISP_PRINT(ISP_ERROR_LEVEL, "Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
 	clk_set_rate(sensor->mclk, 24000000);
