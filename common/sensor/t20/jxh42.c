@@ -61,6 +61,19 @@ static int sensor_gpio_func = DVP_PA_LOW_10BIT;
 module_param(sensor_gpio_func, int, S_IRUGO);
 MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
+/* Board-level mount compensation: shvflip=1 means the sensor is mounted
+ * rotated 180 deg, so mirror+flip it in the sensor itself (BR2_SENSOR_1_PARAMS).
+ * Preferred over the ISP hflip on the T10: its mirror block corrupts the last
+ * four output columns (a flickering strip at the right edge). Default off. */
+static int shvflip = 0;
+module_param(shvflip, int, S_IRUGO);
+MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
+
+/* 0x12 is the mode register: bit6 = soft sleep, bit5 = H mirror, bit4 = V flip.
+ * The flip bits have to ride along on every sleep/wake write. */
+#define SENSOR_REG_MODE 0x12
+#define SENSOR_MODE_FLIP_MASK 0x30
+
 struct tx_isp_sensor_attribute sensor_attr;
 
 struct again_lut {
@@ -338,6 +351,14 @@ static struct regval_list sensor_stream_off[] = {
 	{0x12, 0x40},
 	{SENSOR_REG_END, 0x00},
 };
+
+static void sensor_patch_flip_regs(struct regval_list *vals, unsigned char flip) {
+	while (vals->reg_num != SENSOR_REG_END) {
+		if (vals->reg_num == SENSOR_REG_MODE)
+			vals->value = (vals->value & ~SENSOR_MODE_FLIP_MASK) | flip;
+		vals++;
+	}
+}
 
 int sensor_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -811,6 +832,22 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	}
 	for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
 		sensor_win_sizes[i].mbus_code = mbus;
+	/* Mirror+flip reverse both the row and the column order: GBRG -> GRBG.
+	 * Must be decided here, the ISP samples the Bayer pattern from the probe-time
+	 * mbus code. */
+	if (shvflip) {
+		if (mbus == V4L2_MBUS_FMT_SGBRG10_1X10) {
+			sensor_patch_flip_regs(sensor_init_regs_1280_720_25fps, SENSOR_MODE_FLIP_MASK);
+			sensor_patch_flip_regs(sensor_stream_on, SENSOR_MODE_FLIP_MASK);
+			sensor_patch_flip_regs(sensor_stream_off, SENSOR_MODE_FLIP_MASK);
+			mbus = V4L2_MBUS_FMT_SGRBG10_1X10;
+			for (i = 0; i < ARRAY_SIZE(sensor_win_sizes); i++)
+				sensor_win_sizes[i].mbus_code = mbus;
+			ISP_INFO("%s: shvflip enabled (mirror+flip in the sensor)\n", SENSOR_NAME);
+		} else {
+			ISP_PRINT(ISP_ERROR_LEVEL, "%s: shvflip needs 10-bit DVP mode, ignored\n", SENSOR_NAME);
+		}
+	}
 	sensor_attr.max_again = 324678;
 	sensor_attr.max_dgain = sensor_attr.max_dgain;
 	sd = &sensor->sd;
