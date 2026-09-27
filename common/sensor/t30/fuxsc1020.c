@@ -21,8 +21,8 @@
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
 #define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
-#define SENSOR_CHIP_ID_H (0x00)
-#define SENSOR_CHIP_ID_L (0x00)
+#define SENSOR_CHIP_ID_H (0xa0)
+#define SENSOR_CHIP_ID_L (0x42)
 #define SENSOR_I2C_ADDRESS 0x30
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_MAX_WIDTH 1280
@@ -49,7 +49,7 @@ MODULE_PARM_DESC(sensor_gpio_func, "Sensor GPIO function");
 
 static struct sensor_info sensor_info = {
 	.name = SENSOR_NAME,
-	.chip_id = (SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L,
+	.chip_id = SENSOR_CHIP_ID,
 	.version = SENSOR_VERSION,
 	.min_fps = SENSOR_OUTPUT_MIN_FPS,
 	.max_fps = SENSOR_OUTPUT_MAX_FPS,
@@ -72,9 +72,10 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
+
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0xa042,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = V4L2_SBUS_MASK_SAMPLE_8BITS | V4L2_SBUS_MASK_ADDR_8BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
@@ -119,7 +120,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_YUYV8_1X16,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	},
+};
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
@@ -179,7 +181,6 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	sensor->video.fps = wsize->fps;
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
-
 	return ret;
 }
 
@@ -204,6 +205,7 @@ static int sensor_set_mode(struct tx_isp_subdev *sd, int value) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
+
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
 	} else if (value == TX_ISP_SENSOR_PREVIEW_RES_MAX_FPS) {
@@ -273,10 +275,12 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
 	long ret = 0;
+
 	if (IS_ERR_OR_NULL(sd)) {
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch (cmd) {
 	case TX_ISP_EVENT_SENSOR_INT_TIME:
 		if (arg)
@@ -326,15 +330,15 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
-
 	return ret;
 }
 
@@ -342,13 +346,13 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
-	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 
+	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
 
@@ -399,6 +403,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
@@ -406,9 +411,9 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_ERROR("Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
+
 	private_clk_set_rate(sensor->mclk, 37125000);
 	private_clk_enable(sensor->mclk);
-
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)
 		goto err_set_sensor_gpio;
@@ -432,16 +437,13 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
-
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);
 	clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 
@@ -458,11 +460,12 @@ static int sensor_remove(struct i2c_client *client) {
 	private_clk_put(sensor->mclk);
 	tx_isp_subdev_deinit(sd);
 	kfree(sensor);
-
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

@@ -242,7 +242,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 #if 0
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi_2dol_lcg[] = {
-        {SENSOR_REG_END, 0x00},
+		{SENSOR_REG_END, 0x00},
 
 };
 #endif
@@ -629,19 +629,20 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -670,19 +671,19 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 #if 0
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
-        int ret;
-        unsigned char val;
-        while (vals->reg_num != SENSOR_REG_END) {
-                if (vals->reg_num == SENSOR_REG_DELAY) {
-                        private_msleep(vals->value);
-                } else {
-                        ret = sensor_read(sd, vals->reg_num, &val);
-                        if (ret < 0)
-                                return ret;
-                }
-                vals++;
-        }
-        return 0;
+		int ret;
+		unsigned char val;
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
+						private_msleep(vals->value);
+				} else {
+						ret = sensor_read(sd, vals->reg_num, &val);
+						if (ret < 0)
+								return ret;
+				}
+				vals++;
+		}
+		return 0;
 }
 #endif
 
@@ -1037,25 +1038,25 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 	rate = private_clk_get_rate(sensor->mclk);
 	/**   if (((rate / 1000) % (MCLK / 1000)) != 0) {
-        uint8_t sclk_name_num = sizeof(sclk_name)/sizeof(sclk_name[0]);
-        for (i=0; i < sclk_name_num; i++) {
-            tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
-            ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
-            if (IS_ERR(tclk)) {
-                ISP_ERROR("get sclka failed\n");
-            } else {
-                rate = private_clk_get_rate(tclk);
-                if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
-                    if (((MCLK / 1000) % 27000) != 0 || ((MCLK / 1000) % 37125) != 0)
-                        private_clk_set_rate(tclk, 891000000);
-                    else if (((MCLK / 1000) % 24000) != 0)
-                        private_clk_set_rate(tclk, 1200000000);
-                } else if (((rate / 1000) % (MCLK / 1000)) == 0) {
-                    break;
-                }
-            }
-        }
-    }
+		uint8_t sclk_name_num = sizeof(sclk_name)/sizeof(sclk_name[0]);
+		for (i=0; i < sclk_name_num; i++) {
+			tclk = private_devm_clk_get(&client->dev, sclk_name[i]);
+			ret = clk_set_parent(sclka, clk_get(NULL, sclk_name[i]));
+			if (IS_ERR(tclk)) {
+				ISP_ERROR("get sclka failed\n");
+			} else {
+				rate = private_clk_get_rate(tclk);
+				if (i == sclk_name_num - 1 && ((rate / 1000) % (MCLK / 1000)) != 0) {
+					if (((MCLK / 1000) % 27000) != 0 || ((MCLK / 1000) % 37125) != 0)
+						private_clk_set_rate(tclk, 891000000);
+					else if (((MCLK / 1000) % 24000) != 0)
+						private_clk_set_rate(tclk, 1200000000);
+				} else if (((rate / 1000) % (MCLK / 1000)) == 0) {
+					break;
+				}
+			}
+		}
+	}
 */
 	private_clk_set_rate(sensor->mclk, 24000000);
 	private_clk_prepare_enable(sensor->mclk);
@@ -1296,7 +1297,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

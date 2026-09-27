@@ -41,10 +41,10 @@
 
 static int reset_gpio = GPIO_PC(27);
 static int pwdn_gpio = -1;
-static int shvflip = 1;
 
 struct proc_dir_entry *g_sinfo_proc;
 
+static int shvflip = 1;
 module_param(shvflip, int, S_IRUGO);
 MODULE_PARM_DESC(shvflip, "Sensor HV Flip Enable interface");
 
@@ -1217,19 +1217,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1396,6 +1397,7 @@ static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
 	ret += sensor_read(sd, 0x0410, &reg_410);
 	if (ret < 0)
 		return ret;
+
 	if (reg_410 > 0x1a)
 		gain_flag = 1; // 0x1d
 
@@ -1472,14 +1474,15 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 }
 
 static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_INIT) {
 			ret = sensor_write_array(sd, wsize->regs);
 			if (ret)
 				return ret;
+
 			sensor->video.state = TX_ISP_MODULE_RUNNING;
 		}
 		if (sensor->video.state == TX_ISP_MODULE_RUNNING) {
@@ -1490,7 +1493,6 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 		ret = sensor_write_array(sd, sensor_stream_off);
 		ISP_INFO("%s stream off\n", SENSOR_NAME);
 	}
-
 	return ret;
 }
 
@@ -1994,7 +1996,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

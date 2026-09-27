@@ -164,7 +164,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SRGGB10_1X10,
@@ -184,19 +185,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -318,18 +320,20 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	struct tx_isp_notify_argument arg;
 	struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 	int ret = 0;
+
 	if (!enable)
 		return ISP_SUCCESS;
+
 	sensor->video.mbus.width = wsize->width;
 	sensor->video.mbus.height = wsize->height;
 	sensor->video.mbus.code = wsize->mbus_code;
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
@@ -374,8 +378,8 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_PRINT(ISP_ERROR_LEVEL, "warn: fps(%d) not in range\n", fps);
 		return -1;
 	}
-	pclk = SENSOR_SUPPORT_SCLK;
 
+	pclk = SENSOR_SUPPORT_SCLK;
 	val = 0;
 	ret += sensor_read(sd, 0x0342, &val);
 	hts = val << 8;
@@ -386,6 +390,7 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		ISP_PRINT(ISP_ERROR_LEVEL, "Error: %s read error\n", SENSOR_NAME);
 		return ret;
 	}
+
 	val = 0;
 	ret += sensor_read(sd, 0x0340, &val);
 	vts_old = val << 8;
@@ -401,7 +406,6 @@ static int sensor_set_fps(struct tx_isp_sensor *sensor, int fps) {
 		return ret;
 	}
 	sensor->video.fps = fps;
-
 	sensor->video.attr->max_integration_time_native = vts - 1;
 	sensor->video.attr->integration_time_limit = vts - 1;
 	sensor->video.attr->total_height = vts;
@@ -687,7 +691,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

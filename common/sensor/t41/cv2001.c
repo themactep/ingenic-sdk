@@ -76,6 +76,28 @@ unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsi
 	return 0;
 }
 
+struct tx_isp_sensor_attribute sensor_attr = {
+	.name = SENSOR_NAME,
+	.chip_id = SENSOR_CHIP_ID,
+	.cbus_type = SENSOR_BUS_TYPE,
+	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
+	.cbus_device = SENSOR_I2C_ADDRESS,
+	.total_width = 1245,
+	.total_height = 1125,
+	.max_again = 589824,
+	.max_dgain = 0,
+	.min_integration_time = 4,
+	.max_integration_time = 1119, /* 1125 - 6 */
+	.min_integration_time_native = 4,
+	.max_integration_time_native = 1119,
+	.integration_time_limit = 1119,
+	.integration_time_apply_delay = 2,
+	.again_apply_delay = 2,
+	.dgain_apply_delay = 0,
+	.sensor_ctrl.alloc_again = sensor_alloc_again,
+	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
+};
+
 struct tx_isp_mipi_bus sensor_mipi = {
 	.mode = SENSOR_MIPI_OTHER_MODE,
 	.clk = 420,
@@ -103,28 +125,6 @@ struct tx_isp_mipi_bus sensor_mipi = {
 	.mipi_sc.sensor_frame_mode = TX_SENSOR_DEFAULT_FRAME_MODE,
 	.mipi_sc.sensor_fid_mode = 0,
 	.mipi_sc.sensor_mode = TX_SENSOR_DEFAULT_MODE,
-};
-
-struct tx_isp_sensor_attribute sensor_attr = {
-	.name = SENSOR_NAME,
-	.chip_id = SENSOR_CHIP_ID,
-	.cbus_type = SENSOR_BUS_TYPE,
-	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
-	.cbus_device = SENSOR_I2C_ADDRESS,
-	.total_width = 1245,
-	.total_height = 1125,
-	.max_again = 589824,
-	.max_dgain = 0,
-	.min_integration_time = 4,
-	.max_integration_time = 1119, /* 1125 - 6 */
-	.min_integration_time_native = 4,
-	.max_integration_time_native = 1119,
-	.integration_time_limit = 1119,
-	.integration_time_apply_delay = 2,
-	.again_apply_delay = 2,
-	.dgain_apply_delay = 0,
-	.sensor_ctrl.alloc_again = sensor_alloc_again,
-	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
 
 static struct regval_list sensor_init_regs_mipi[] = {
@@ -171,14 +171,17 @@ static struct regval_list sensor_init_regs_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
-	.width = 1920,
-	.height = 1080,
-	.fps = 30 << 16 | 1,
-	.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
-	.colorspace = TISP_COLORSPACE_SRGB,
-	.regs = sensor_init_regs_mipi,
-}};
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
+	{
+		.width = 1920,
+		.height = 1080,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SRGGB10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_mipi,
+	},
+};
+
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -194,19 +197,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -277,20 +281,24 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	unsigned char v;
 
 	return 0;
+
 	ret = sensor_read(sd, 0x3001, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_H)
 		return -ENODEV;
-	*ident = v;
 
+	*ident = v;
 	ret = sensor_read(sd, 0x3000, &v);
 	ISP_INFO("-----%s: %d ret = %d, v = 0x%02x\n", __func__, __LINE__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID_L)
 		return -ENODEV;
+
 	*ident = (*ident << 8) | v;
 	return 0;
 }
@@ -781,7 +789,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

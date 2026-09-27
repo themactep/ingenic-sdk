@@ -235,7 +235,8 @@ struct tx_isp_sensor_attribute gc2053_attr = {.name = "gc2053",
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
 		.call_times = 1,
 		.sdelay = 1000,
-	}};
+	},
+};
 
 static struct regval_list gc2053_init_regs_1920_1080_30fps_mipi[] = {
 	// mclk=24mhz,mipi data rate=624mbps/lane
@@ -1202,19 +1203,20 @@ static struct regval_list gc2053_stream_off_mipi[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1237,7 +1239,7 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 	if (ret > 0)
 		ret = 0;
 #if 0
-        msg.addr =  0x3f;
+		msg.addr =  0x3f;
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 #endif
 
@@ -1821,7 +1823,7 @@ static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_r
 					goto error;
 				} else {
 					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
-						    "!!!\n",
+							"!!!\n",
 						__func__,
 						__LINE__,
 						ppll,
@@ -2037,7 +2039,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id gc2053_id[] = {{"gc2053", 0}, {}};
+static const struct i2c_device_id gc2053_id[] = {
+	{"gc2053", 0}, {},
+};
 MODULE_DEVICE_TABLE(i2c, gc2053_id);
 
 static struct i2c_driver gc2053_driver = {

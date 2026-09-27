@@ -783,19 +783,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -836,13 +837,13 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 #endif
 
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
+
 	while (vals->reg_num != SENSOR_REG_END) {
 		if (vals->reg_num == SENSOR_REG_DELAY) {
 			private_msleep(vals->value);
@@ -853,7 +854,6 @@ static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals
 		}
 		vals++;
 	}
-
 	return 0;
 }
 
@@ -905,7 +905,6 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 
 	return 0;
 }
-
 #else
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
@@ -953,7 +952,6 @@ static int sensor_set_analog_gain_short(struct tx_isp_subdev *sd, int value) {
 
 	return 0;
 }
-
 #endif
 
 static int sensor_set_logic(struct tx_isp_subdev *sd, int value) {
@@ -1322,11 +1320,11 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.data_type = TX_SENSOR_DATA_TYPE_LINEAR;
 		wsize = &sensor_win_sizes[0];
 		sensor_attr.one_line_expr_in_us = 21;
+		sensor_attr.integration_time_limit = 1920 - 4;
+		sensor_attr.max_integration_time_native = 1920 - 4;
+		sensor_attr.max_integration_time = 1920 - 4;
 		sensor_attr.total_width = 2250;
 		sensor_attr.total_height = 1920;
-		sensor_attr.max_integration_time_native = 1920 - 4;
-		sensor_attr.integration_time_limit = 1920 - 4;
-		sensor_attr.max_integration_time = 1920 - 4;
 		ISP_INFO("-----------------------------> switch linear is ok <-----------------------\n");
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
@@ -1348,8 +1346,9 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 		ISP_ERROR("[%d]The pointer is invalid!\n", __LINE__);
 		return -EINVAL;
 	}
+
 	switch (cmd) {
-		/*
+/*
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			ret = sensor_set_expo(sd, sensor_val->value);
@@ -1533,7 +1532,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

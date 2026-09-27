@@ -264,7 +264,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 
 static struct regval_list sensor_init_regs_1280_720_30fps_mipi[] = {
 	/*
-	  @@ mipi interface 1280*720 25fps
+	@@ mipi interface 1280*720 25fps
 	*/
 	{0x0103, 0x01},
 	{0x0100, 0x00},
@@ -847,7 +847,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

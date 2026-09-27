@@ -766,19 +766,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1110,14 +1111,14 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 			ret = sensor_set_expo(sd, *(int *)arg);
 		break;
 		/*
-		   case TX_ISP_EVENT_SENSOR_INT_TIME:
-		   if(arg)
-		   ret = sensor_set_integration_time(sd, *(int*)arg);
-		   break;
-		   case TX_ISP_EVENT_SENSOR_AGAIN:
-		   if(arg)
-		   ret = sensor_set_analog_gain(sd, *(int*)arg);
-		   break;
+		case TX_ISP_EVENT_SENSOR_INT_TIME:
+		if(arg)
+		ret = sensor_set_integration_time(sd, *(int*)arg);
+		break;
+		case TX_ISP_EVENT_SENSOR_AGAIN:
+		if(arg)
+		ret = sensor_set_analog_gain(sd, *(int*)arg);
+		break;
 		   */
 	case TX_ISP_EVENT_SENSOR_DGAIN:
 		if (arg)
@@ -1288,7 +1289,7 @@ static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_r
 					goto error;
 				} else {
 					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
-						    "!!!\n",
+							"!!!\n",
 						__func__,
 						__LINE__,
 						ppll,
@@ -1414,7 +1415,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

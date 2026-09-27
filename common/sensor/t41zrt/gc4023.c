@@ -1206,19 +1206,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1393,36 +1394,36 @@ static int sensor_resume(struct tx_isp_subdev *sd) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
-    int ret = 0;
+	int ret = 0;
 
-    ret += sensor_write(sd, 0x0203, value & 0xff);
-    ret += sensor_write(sd, 0x0202, value >> 8);
-    if (ret < 0) {
+	ret += sensor_write(sd, 0x0203, value & 0xff);
+	ret += sensor_write(sd, 0x0202, value >> 8);
+	if (ret < 0) {
 	ISP_ERROR("sensor_write error %d\n", __LINE__);
 	return ret;
-    }
+	}
 
 	return 0;
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
-    int ret = 0;
-    struct again_lut *val_lut = sensor_again_lut;
+	int ret = 0;
+	struct again_lut *val_lut = sensor_again_lut;
 
-    ret = sensor_write(sd, 0x0614, val_lut[value].reg614);
-    ret = sensor_write(sd, 0x0615, val_lut[value].reg615);
+	ret = sensor_write(sd, 0x0614, val_lut[value].reg614);
+	ret = sensor_write(sd, 0x0615, val_lut[value].reg615);
 
-    ret = sensor_write(sd, 0x0218, val_lut[value].reg218);
-    ret = sensor_write(sd, 0x1467, val_lut[value].reg1467);
-    ret = sensor_write(sd, 0x1468, val_lut[value].reg1468);
-    ret = sensor_write(sd, 0x00b8, val_lut[value].regb8);
-    ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
+	ret = sensor_write(sd, 0x0218, val_lut[value].reg218);
+	ret = sensor_write(sd, 0x1467, val_lut[value].reg1467);
+	ret = sensor_write(sd, 0x1468, val_lut[value].reg1468);
+	ret = sensor_write(sd, 0x00b8, val_lut[value].regb8);
+	ret = sensor_write(sd, 0x00b9, val_lut[value].regb9);
 
-    if (ret < 0) {
+	if (ret < 0) {
 	ISP_ERROR("sensor_write error %d", __LINE__);
 	return ret;
-    }
+	}
 
 	return 0;
 }
@@ -2076,7 +2077,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 // MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

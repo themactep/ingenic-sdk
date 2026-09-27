@@ -19,7 +19,9 @@
 #include <txx-funcs.h>
 
 #define SENSOR_BUS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
-#define SENSOR_CHIP_ID 0x01
+#define SENSOR_CHIP_ID ((SENSOR_CHIP_ID_H << 8) | SENSOR_CHIP_ID_L)
+#define SENSOR_CHIP_ID_H 0x20
+#define SENSOR_CHIP_ID_L 0x01
 #define SENSOR_I2C_ADDRESS 0x35
 #define SENSOR_MAX_HEIGHT 1080
 #define SENSOR_MAX_WIDTH 1920
@@ -74,11 +76,13 @@ unsigned int sensor_alloc_integration_time(unsigned int it, unsigned char shift,
 
 struct tx_isp_sensor_attribute sensor_attr = {
 	.name = SENSOR_NAME,
-	.chip_id = 0x2001,
+	.chip_id = SENSOR_CHIP_ID,
 	.cbus_type = SENSOR_BUS_TYPE,
 	.cbus_mask = TISP_SBUS_MASK_SAMPLE_8BITS | TISP_SBUS_MASK_ADDR_16BITS,
 	.cbus_device = SENSOR_I2C_ADDRESS,
 	.dbus_type = TX_SENSOR_DATA_INTERFACE_MIPI,
+	.total_width = 1245,
+	.total_height = 1125,
 	.max_again = 589824,
 	.max_dgain = 0,
 	.min_integration_time = 4,
@@ -87,8 +91,6 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.min_integration_time_native = 4,
 	.max_integration_time_native = 1119,
 	.integration_time_limit = 1119,
-	.total_width = 1245,
-	.total_height = 1125,
 	.integration_time_apply_delay = 2,
 	.again_apply_delay = 2,
 	.dgain_apply_delay = 0,
@@ -180,7 +182,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_mipi,
 	},
 };
-struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0]; // 默认线性模式
+
+struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
 	{0x3000, 0x00},
@@ -195,19 +198,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -229,6 +233,7 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 	ret = private_i2c_transfer(client->adapter, &msg, 1);
 	if (ret > 0)
 		ret = 0;
+
 	return ret;
 }
 
@@ -280,10 +285,11 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 	ISP_INFO("%s: ret = %d, v = 0x%02x\n", __func__, ret, v);
 	if (ret < 0)
 		return ret;
+
 	if (v != SENSOR_CHIP_ID)
 		return -ENODEV;
-	*ident = v;
 
+	*ident = v;
 	return ret;
 }
 
@@ -345,8 +351,7 @@ static int sensor_get_black_pedestal(struct tx_isp_subdev *sd, int value) {
 }
 
 #if 0
-static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise)
-{
+static int sensor_set_attr(struct tx_isp_subdev *sd, struct tx_isp_sensor_win_setting *wise) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	sensor->video.vi_max_width = wsize->width;
@@ -799,7 +804,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

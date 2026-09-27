@@ -389,8 +389,8 @@ static struct regval_list sensor_init_regs_1280_720[] = {
 	{0x301a, 0x0001},	 // SENSOR_REGISTER
 	{SENSOR_REG_DELAY, 100}, // ms
 	{0x301a, 0x10d8},	 // SENSOR_REGISTER
-				 // Linear Mode Setup
-				 // AR0130 Rev1 Linear sequencer load 8-2-2011
+				// Linear Mode Setup
+				// AR0130 Rev1 Linear sequencer load 8-2-2011
 	{0x3088, 0x8000},	 // SEQ_CTRL_PORT
 	{0x3086, 0x0225},	 // SEQ_DATA_PORT
 	{0x3086, 0x5050},	 // SEQ_DATA_PORT
@@ -550,7 +550,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.regs = sensor_init_regs_1280_720,
 		/* .fast = sensor_init_regs_25_fps, */
 		/* .slow = sensor_init_regs_30_fps, */
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG10_1X10,
@@ -572,19 +573,20 @@ int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 2,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 
 	ret = i2c_transfer(client->adapter, msg, 2);
@@ -1163,7 +1165,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

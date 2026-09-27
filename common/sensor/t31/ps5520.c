@@ -587,19 +587,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -730,38 +731,38 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 }
 
 /*
-   static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
-   {
-   int ret = 0;
-   unsigned int Cmd_OffNy = 0;
-   unsigned int IntNep = 0;
-   unsigned int IntNe = 0;
-   unsigned int Const;
+	static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
+	{
+	int ret = 0;
+	unsigned int Cmd_OffNy = 0;
+	unsigned int IntNep = 0;
+	unsigned int IntNe = 0;
+	unsigned int Const;
 
-   Cmd_OffNy = sensor_attr.total_height - value - 1;
-   ret = sensor_write(sd, 0xef, 0x01);
-   ret += sensor_write(sd, 0x0c, (unsigned char)(Cmd_OffNy >> 8));
-   ret += sensor_write(sd, 0x0d, (unsigned char)(Cmd_OffNy & 0xff));
-   ret += sensor_write(sd, 0x09, 0x01);
-   if (ret < 0)
-   return ret;
+	Cmd_OffNy = sensor_attr.total_height - value - 1;
+	ret = sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0x0c, (unsigned char)(Cmd_OffNy >> 8));
+	ret += sensor_write(sd, 0x0d, (unsigned char)(Cmd_OffNy & 0xff));
+	ret += sensor_write(sd, 0x09, 0x01);
+	if (ret < 0)
+	return ret;
 
-   return 0;
-   }
+	return 0;
+	}
 
-   static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
-   {
-   int ret = 0;
-   unsigned int gain = value;
-   ret += sensor_write(sd, 0xef, 0x01);
-   ret += sensor_write(sd, 0x83, (unsigned char)(gain & 0xff));
-   ret += sensor_write(sd, 0x09, 0x01);
+	static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
+	{
+	int ret = 0;
+	unsigned int gain = value;
+	ret += sensor_write(sd, 0xef, 0x01);
+	ret += sensor_write(sd, 0x83, (unsigned char)(gain & 0xff));
+	ret += sensor_write(sd, 0x09, 0x01);
 
-   if (ret < 0)
-   return ret;
+	if (ret < 0)
+	return ret;
 
-   return 0;
-   }
+	return 0;
+	}
 
 */
 static int sensor_set_digital_gain(struct tx_isp_subdev *sd, int value) {
@@ -933,16 +934,16 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	/*if (pwdn_gpio != -1) {
-	  ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
-	  if (!ret) {
-	  private_gpio_direction_output(pwdn_gpio, 1);
-	  private_msleep(50);
-	  private_gpio_direction_output(pwdn_gpio, 0);
-	  private_msleep(10);
-	  } else {
-	  ISP_ERROR("gpio request failed %d\n",pwdn_gpio);
-	  }
-	  }*/
+	ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+	if (!ret) {
+	private_gpio_direction_output(pwdn_gpio, 1);
+	private_msleep(50);
+	private_gpio_direction_output(pwdn_gpio, 0);
+	private_msleep(10);
+	} else {
+	ISP_ERROR("gpio request failed %d\n",pwdn_gpio);
+	}
+	}*/
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
@@ -1192,7 +1193,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

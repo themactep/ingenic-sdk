@@ -392,19 +392,20 @@ static struct regval_list sensor_stream_off[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -755,20 +756,20 @@ static int sensor_attr_check(struct tx_isp_subdev *sd) {
 
 #if 0
 	if (((rate / 1000) % 27000) != 0) {
-		    struct clk *vpll;
-		    vpll = clk_get(NULL,"vpll");
-		    if (IS_ERR(vpll)) {
-			    ISP_ERROR("get vpll failed\n");
-		    } else {
-			    rate = clk_get_rate(vpll);
-			    if (((rate / 1000) % 27000) != 0) {
-				    clk_set_rate(vpll,1080000000);
-			    }
-			    ret = clk_set_parent(sensor->mclk, vpll);
-			    if (ret < 0)
-				    ISP_ERROR("set mclk parent as epll err\n");
-		    }
-	    }
+			struct clk *vpll;
+			vpll = clk_get(NULL,"vpll");
+			if (IS_ERR(vpll)) {
+				ISP_ERROR("get vpll failed\n");
+			} else {
+				rate = clk_get_rate(vpll);
+				if (((rate / 1000) % 27000) != 0) {
+					clk_set_rate(vpll,1080000000);
+				}
+				ret = clk_set_parent(sensor->mclk, vpll);
+				if (ret < 0)
+					ISP_ERROR("set mclk parent as epll err\n");
+			}
+		}
 #endif
 
 	private_clk_set_rate(sensor->mclk, 24000000);
@@ -1048,7 +1049,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

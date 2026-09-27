@@ -605,19 +605,20 @@ static struct regval_list sensor_stream_off[] = {
 static int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -732,26 +733,26 @@ static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
 	int ret = 0;
 	int it = (value & 0xffff) * 2;
-    ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
-    if (ret < 0)
-        return ret;
+	if (ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
-    int ret = 0;
+	int ret = 0;
 	int again = sensor_again_lut[(value & 0xffff0000) >> 16].reg_value;
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(again >> 16 & 0xff));
 	ret += sensor_write(sd, 0x3e06, (unsigned char)((again >> 8 & 0xff)));
 	ret += sensor_write(sd, 0x3e07, (unsigned char)((again & 0xff)));
-    if (ret < 0)
-        return ret;
+	if (ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 #endif
 
@@ -1243,7 +1244,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 
 static struct i2c_driver sensor_driver = {
 	.driver =

@@ -236,7 +236,8 @@ struct tx_isp_sensor_attribute jxf37pa_attr = {.name = "jxf37pa",
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
 		.call_times = 1,
 		.sdelay = 0,
-	}};
+	},
+};
 
 // 12.5
 static struct regval_list jxf37pa_init_regs_1920_1080_12fps_mipi_sync3[] = {
@@ -400,19 +401,20 @@ static struct regval_list jxf37pa_stream_off_mipi[] = {
 
 int jxf37pa_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -932,7 +934,7 @@ static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_r
 					goto error;
 				} else {
 					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
-						    "!!!\n",
+							"!!!\n",
 						__func__,
 						__LINE__,
 						ppll,
@@ -1045,7 +1047,9 @@ static int jxf37pa_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id jxf37pa_id[] = {{"jxf37pa", 0}, {}};
+static const struct i2c_device_id jxf37pa_id[] = {
+	{"jxf37pa", 0}, {},
+};
 MODULE_DEVICE_TABLE(i2c, jxf37pa_id);
 
 static struct i2c_driver jxf37pa_driver = {

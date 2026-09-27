@@ -162,7 +162,7 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 
 static struct regval_list sensor_init_regs_1920_1080_30fps_dvp[] = {
 	/*
-	  @@ DVP interface 1920*1080 30fps
+	@@ DVP interface 1920*1080 30fps
 	*/
 	{0x0200, 0x0001},
 	{0x000e, 0x0008}, // 0806_4times_74.25M_30fps
@@ -1027,7 +1027,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps_dvp,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SRGGB12_1X12,
@@ -1052,19 +1053,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1212,7 +1214,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	again = (128 << 6) / (vrefh + 1);     // recalculate real again
 	dgain = total_gain * 512 / again;     // dgain
 	dgain = sensor_clip(dgain, 512, 512); // min=1x,max=8x
-					      // temp = (128<<6)%(total_gain+1);
+						// temp = (128<<6)%(total_gain+1);
 
 	if ((vrefh > Vrefh_min_tlb) && (vrefh <= 0x7f)) {
 		ret += sensor_write(sd, 0x0030, 0x00);
@@ -1681,7 +1683,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 

@@ -76,7 +76,8 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sensor_again_lut[] = {{0x00, 0},
+struct again_lut sensor_again_lut[] = {
+	{0x00, 0},
 	{0x01, 5731},
 	{0x02, 11136},
 	{0x03, 16248},
@@ -139,7 +140,8 @@ struct again_lut sensor_again_lut[] = {{0x00, 0},
 	{0x3c, 249518},
 	{0x3d, 252836},
 	{0x3e, 256041},
-	{0x3f, 259142}};
+	{0x3f, 259142},
+};
 struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
@@ -385,19 +387,20 @@ static struct regval_list sensor_stream_off[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -920,7 +923,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

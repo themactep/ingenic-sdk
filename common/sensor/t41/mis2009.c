@@ -461,7 +461,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = TISP_VI_FMT_SGRBG12_1X12,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps,
-	}};
+	},
+};
 
 static struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
@@ -476,19 +477,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -585,15 +587,15 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	ret += sensor_write(sd,  0x3100, (unsigned char)((expo >> 8)& 0xff));
 	ret += sensor_write(sd, 0x3101, (unsigned char)(expo & 0xff));
 	ret += sensor_write(sd, 0x3102, (unsigned char)(again));
-    if ((expo > 200) && (expo < 600))
-	    ret += sensor_write(sd, 0x4007, 0x78);
-    else
-	    ret += sensor_write(sd, 0x4007, 0xc4);
+	if ((expo > 200) && (expo < 600))
+		ret += sensor_write(sd, 0x4007, 0x78);
+	else
+		ret += sensor_write(sd, 0x4007, 0xc4);
 
 	ret += sensor_read(sd, 0x3100, &tmp);
-    if (tmp < 1)
+	if (tmp < 1)
 		sensor_write(sd, 0x401d, 0xa0);
-    else
+	else
 		sensor_write(sd, 0x401d, 0xa7);
 
 	if (ret < 0)
@@ -731,7 +733,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init
 
 /*
 mis2009修改帧率：
-    原厂提供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
+	原厂提供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
 */
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -1162,7 +1164,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

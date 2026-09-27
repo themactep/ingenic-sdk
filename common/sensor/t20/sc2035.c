@@ -375,7 +375,8 @@ struct again_lut sensor_again_lut[] = {
 	{0x00fd, 261029},
 	{0x00fe, 261402},
 	{0x00ff, 261773},
-	{0x0100, 262144}};
+	{0x0100, 262144},
+};
 
 struct tx_isp_sensor_attribute sensor_attr;
 
@@ -588,7 +589,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR12_1X12,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_30fps,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGRBG10_1X10,
@@ -611,20 +613,20 @@ int sensor_read(struct v4l2_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
-
+		},
+	};
 	ret = i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
 		ret = 0;
@@ -756,7 +758,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x3635, 0x54);
 		ret += sensor_write(sd, 0x3620, 0x92);
 		ret += sensor_write(sd, 0x3315, 0x02);
-	    if (ret < 0)
+		if (ret < 0)
 			return ret;
 	}
 	else {
@@ -764,7 +766,7 @@ static int sensor_set_analog_gain(struct v4l2_subdev *sd, int value) {
 		ret += sensor_write(sd, 0x3635, 0x52);
 		ret += sensor_write(sd, 0x3620, 0x62);
 		ret += sensor_write(sd, 0x3315, 0x00);
-	    if (ret < 0)
+		if (ret < 0)
 			return ret;
 	}
 */
@@ -1136,7 +1138,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

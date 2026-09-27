@@ -137,22 +137,22 @@ struct again_lut sensor_again_lut[] = {
 	{0x3e, 256041},
 	{0x3f, 259142},
 	/***not used
-	    {0x40,	262144},
-	    {0x41,	267875},
-	    {0x42,	273280},
-	    {0x43,	278392},
-	    {0x44,	283241},
-	    {0x45,	287854},
-	    {0x46,	292253},
-	    {0x47,	296456},
-	    {0x48,	300480},
-	    {0x49,	304339},
-	    {0x4a,	308048},
-	    {0x4b,	311616},
-	    {0x4c,	315054},
-	    {0x4d,	318372},
-	    {0x4e,	321577},
-	    {0x4f,	324678},
+		{0x40,	262144},
+		{0x41,	267875},
+		{0x42,	273280},
+		{0x43,	278392},
+		{0x44,	283241},
+		{0x45,	287854},
+		{0x46,	292253},
+		{0x47,	296456},
+		{0x48,	300480},
+		{0x49,	304339},
+		{0x4a,	308048},
+		{0x4b,	311616},
+		{0x4c,	315054},
+		{0x4d,	318372},
+		{0x4e,	321577},
+		{0x4f,	324678},
 	*/
 };
 
@@ -358,7 +358,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_2592_1944_15fps_mipi,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR10_1X10,
@@ -383,19 +384,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -890,7 +892,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

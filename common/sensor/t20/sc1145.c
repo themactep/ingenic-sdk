@@ -66,7 +66,8 @@ struct again_lut {
 	unsigned int gain;
 };
 
-struct again_lut sensor_again_lut[] = {{0x00, 0},
+struct again_lut sensor_again_lut[] = {
+	{0x00, 0},
 	{0x01, 5402},
 	{0x02, 10512},
 	{0x03, 15368},
@@ -129,7 +130,8 @@ struct again_lut sensor_again_lut[] = {{0x00, 0},
 	{0x7c, 247101},
 	{0x7d, 250305},
 	{0x7e, 253404},
-	{0x7f, 256410}};
+	{0x7f, 256410},
+};
 
 struct tx_isp_sensor_attribute sensor_attr;
 
@@ -261,7 +263,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SBGGR8_1X8,
@@ -284,19 +287,20 @@ int sensor_read(struct v4l2_subdev *sd, unsigned short reg, unsigned char *value
 	int ret;
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -780,7 +784,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

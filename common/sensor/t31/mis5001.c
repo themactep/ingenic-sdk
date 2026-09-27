@@ -506,14 +506,14 @@ static struct regval_list sensor_init_regs_2560_1440_25fps[] = {
 	{0x3113, 0x9d},
 	{0x3112, 0x06},
 	/*
-    {0x3115, 0x00},
-    {0x3114, 0x00},
-    {0x3117, 0xff},
-    {0x3116, 0x09},
-    {0x3111, 0x00},
-    {0x3110, 0x00},
-    {0x3113, 0xa1},
-    {0x3112, 0x05},*/
+	{0x3115, 0x00},
+	{0x3114, 0x00},
+	{0x3117, 0xff},
+	{0x3116, 0x09},
+	{0x3111, 0x00},
+	{0x3110, 0x00},
+	{0x3113, 0xa1},
+	{0x3112, 0x05},*/
 	{0x3006, 0x00},
 
 	{SENSOR_REG_END, 0x00},
@@ -693,14 +693,14 @@ static struct regval_list sensor_init_regs_2560_1440_30fps[] = {
 	{0x3113, 0x9d},
 	{0x3112, 0x06},
 	/*
-    {0x3115, 0x00},
-    {0x3114, 0x00},
-    {0x3117, 0xff},
-    {0x3116, 0x09},
-    {0x3111, 0x00},
-    {0x3110, 0x00},
-    {0x3113, 0xa1},
-    {0x3112, 0x05},*/
+	{0x3115, 0x00},
+	{0x3114, 0x00},
+	{0x3117, 0xff},
+	{0x3116, 0x09},
+	{0x3111, 0x00},
+	{0x3110, 0x00},
+	{0x3113, 0xa1},
+	{0x3112, 0x05},*/
 	{0x3006, 0x00},
 	{SENSOR_REG_END, 0x00},
 
@@ -924,19 +924,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1037,9 +1038,9 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 	ret = sensor_read(sd, 0x3100, &tmp);
 	/* if (tmp < 1) {
 		sensor_write(sd, 0x401d, 0xa0);
-       } else {
+	} else {
 		sensor_write(sd, 0x401d, 0xa7);
-       }*/
+	}*/
 	return 0;
 }
 
@@ -1087,7 +1088,7 @@ static int sensor_s_stream(struct tx_isp_subdev *sd, int enable) {
 }
 /*
 mis5001修改帧率：
-    原厂提供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
+	原厂提供直接修改VTS会出现断流情况，需要通过修改HTS实现实时修改帧率
 */
 static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
@@ -1440,7 +1441,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

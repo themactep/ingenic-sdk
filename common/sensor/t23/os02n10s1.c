@@ -257,7 +257,8 @@ struct tx_isp_sensor_attribute sensor_attr = {.name = SENSOR_NAME,
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
 		.call_times = 1,
 		.sdelay = 100,
-	}};
+	},
+};
 
 static struct regval_list sensor_init_regs_1920_1080_15fps_mipi[] = {
 	{0xfc, 0x01},
@@ -437,19 +438,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 #ifdef SENSOR_I2C_REG_8BIT
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -478,21 +480,21 @@ int sensor_write(struct tx_isp_subdev *sd, unsigned char reg, unsigned char valu
 #if 0
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
-        int ret;
-        unsigned char val;
-        while (vals->reg_num != SENSOR_REG_END) {
-                if (vals->reg_num == SENSOR_REG_DELAY) {
-                        private_msleep(vals->value);
-                } else {
-                        ret = sensor_read(sd, vals->reg_num, &val);
-                        /* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
-                        if (ret < 0)
-                                return ret;
-                }
-                vals++;
-        }
+		int ret;
+		unsigned char val;
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
+						private_msleep(vals->value);
+				} else {
+						ret = sensor_read(sd, vals->reg_num, &val);
+						/* ISP_INFO("{0x%x, 0x%x}\n", vals->reg_num, val); */
+						if (ret < 0)
+								return ret;
+				}
+				vals++;
+		}
 
-        return 0;
+		return 0;
 }
 #endif
 
@@ -519,19 +521,20 @@ int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -560,19 +563,19 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 #if 0
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
-        int ret;
-        unsigned char val;
-        while (vals->reg_num != SENSOR_REG_END) {
-                if (vals->reg_num == SENSOR_REG_DELAY) {
-                        private_msleep(vals->value);
-                } else {
-                        ret = sensor_read(sd, vals->reg_num, &val);
-                        if (ret < 0)
-                                return ret;
-                }
-                vals++;
-        }
-        return 0;
+		int ret;
+		unsigned char val;
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
+						private_msleep(vals->value);
+				} else {
+						ret = sensor_read(sd, vals->reg_num, &val);
+						if (ret < 0)
+								return ret;
+				}
+				vals++;
+		}
+		return 0;
 }
 #endif
 
@@ -649,7 +652,7 @@ static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_r
 					goto error;
 				} else {
 					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
-						    "!!!\n",
+							"!!!\n",
 						__func__,
 						__LINE__,
 						ppll,
@@ -1258,7 +1261,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

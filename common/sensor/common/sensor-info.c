@@ -201,8 +201,8 @@ void sensor_common_init(struct sensor_info *info) {
 }
 
 void sensor_common_update(struct sensor_info *info, int rst_gpio, int pwdn_gpio,
-			  int boot, int mclk, int video_interface,
-			  int i2c_adapter) {
+			int boot, int mclk, int video_interface,
+			int i2c_adapter) {
 	if (!info)
 		return;
 

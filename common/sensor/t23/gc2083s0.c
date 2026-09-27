@@ -205,7 +205,8 @@ struct tx_isp_sensor_attribute gc2083_attr = {.name = "gc2083",
 		.mode = TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE,
 		.call_times = 1,
 		.sdelay = 1000,
-	}};
+	},
+};
 
 static struct regval_list gc2083_init_regs_1920_1080_30fps_mipi[] = {
 	{0x03fe, 0xf0},
@@ -369,19 +370,20 @@ static struct regval_list gc2083_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	unsigned char buf[2] = {reg >> 8, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -963,7 +965,7 @@ static int sensor_mclk_config(struct tx_isp_sensor *sensor, unsigned long want_r
 					goto error;
 				} else {
 					ISP_WARNING("[%s %d] !!!!!!!!!!! The %s frequency has been changed to %ld "
-						    "!!!\n",
+							"!!!\n",
 						__func__,
 						__LINE__,
 						ppll,
@@ -1084,7 +1086,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id gc2083_id[] = {{"gc2083", 0}, {}};
+static const struct i2c_device_id gc2083_id[] = {
+	{"gc2083", 0}, {},
+};
 MODULE_DEVICE_TABLE(i2c, gc2083_id);
 
 static struct i2c_driver gc2083_driver = {

@@ -577,14 +577,15 @@ static struct regval_list sensor_init_regs_640_240_150fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
-								      .width = 640,
-								      .height = 480,
-								      .fps = 120 << 16 | 1,
-								      .mbus_code = TISP_VI_FMT_SBGGR10_1X10,
-								      .colorspace = TISP_COLORSPACE_SRGB,
-								      .regs = sensor_init_regs_640_480_120fps_mipi,
-							      },
+static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
+	{
+		.width = 640,
+		.height = 480,
+		.fps = 120 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = sensor_init_regs_640_480_120fps_mipi,
+	},
 	{
 		.width = 640,
 		.height = 240,
@@ -600,7 +601,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {{
 		.mbus_code = TISP_VI_FMT_SBGGR10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_640_240_150fps_mipi,
-	}};
+	},
+};
 struct tx_isp_sensor_win_setting *wsize = &sensor_win_sizes[0];
 
 static struct regval_list sensor_stream_on_mipi[] = {
@@ -616,19 +618,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -735,41 +738,41 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 	if (ret < 0)
 		return ret;
 	/*
-	   ret += sensor_write(sd, 0x3812, 0x00);
-	   if (again < 0x720) {
-	   ret += sensor_write(sd, 0x3301, 0x1c);
-	   ret += sensor_write(sd, 0x3630, 0x30);
-	   ret += sensor_write(sd, 0x3633, 0x23);
-	   ret += sensor_write(sd, 0x3622, 0xf6);
-	   ret += sensor_write(sd, 0x363a, 0x83);
-	   } else if (again < 0xf20) {
-	   ret += sensor_write(sd, 0x3301, 0x26);
-	   ret += sensor_write(sd, 0x3630, 0x23);
-	   ret += sensor_write(sd, 0x3633, 0x33);
-	   ret += sensor_write(sd, 0x3622, 0xf6);
-	   ret += sensor_write(sd, 0x363a, 0x87);
-	   } else if (again < 0x1f20) {
-	   ret += sensor_write(sd, 0x3301, 0x2c);
-	   ret += sensor_write(sd, 0x3630, 0x24);
-	   ret += sensor_write(sd, 0x3633, 0x43);
-	   ret += sensor_write(sd, 0x3622, 0xf6);
-	   ret += sensor_write(sd, 0x363a, 0x9f);
-	   } else if (again < 0x1f3f) {
-	   ret += sensor_write(sd, 0x3301, 0x38);
-	   ret += sensor_write(sd, 0x3630, 0x28);
-	   ret += sensor_write(sd, 0x3633, 0x43);
-	   ret += sensor_write(sd, 0x3622, 0xf6);
-	   ret += sensor_write(sd, 0x363a, 0x9f);
-	   } else {
-	   ret += sensor_write(sd, 0x3301, 0x44);
-	   ret += sensor_write(sd, 0x3630, 0x19);
-	   ret += sensor_write(sd, 0x3633, 0x55);
-	   ret += sensor_write(sd, 0x3622, 0x16);
-	   ret += sensor_write(sd, 0x363a, 0x9f);
-	   }
-	   ret += sensor_write(sd, 0x3812, 0x30);
-	   if (ret < 0)
-	   return ret;
+	ret += sensor_write(sd, 0x3812, 0x00);
+	if (again < 0x720) {
+	ret += sensor_write(sd, 0x3301, 0x1c);
+	ret += sensor_write(sd, 0x3630, 0x30);
+	ret += sensor_write(sd, 0x3633, 0x23);
+	ret += sensor_write(sd, 0x3622, 0xf6);
+	ret += sensor_write(sd, 0x363a, 0x83);
+	} else if (again < 0xf20) {
+	ret += sensor_write(sd, 0x3301, 0x26);
+	ret += sensor_write(sd, 0x3630, 0x23);
+	ret += sensor_write(sd, 0x3633, 0x33);
+	ret += sensor_write(sd, 0x3622, 0xf6);
+	ret += sensor_write(sd, 0x363a, 0x87);
+	} else if (again < 0x1f20) {
+	ret += sensor_write(sd, 0x3301, 0x2c);
+	ret += sensor_write(sd, 0x3630, 0x24);
+	ret += sensor_write(sd, 0x3633, 0x43);
+	ret += sensor_write(sd, 0x3622, 0xf6);
+	ret += sensor_write(sd, 0x363a, 0x9f);
+	} else if (again < 0x1f3f) {
+	ret += sensor_write(sd, 0x3301, 0x38);
+	ret += sensor_write(sd, 0x3630, 0x28);
+	ret += sensor_write(sd, 0x3633, 0x43);
+	ret += sensor_write(sd, 0x3622, 0xf6);
+	ret += sensor_write(sd, 0x363a, 0x9f);
+	} else {
+	ret += sensor_write(sd, 0x3301, 0x44);
+	ret += sensor_write(sd, 0x3630, 0x19);
+	ret += sensor_write(sd, 0x3633, 0x55);
+	ret += sensor_write(sd, 0x3622, 0x16);
+	ret += sensor_write(sd, 0x363a, 0x9f);
+	}
+	ret += sensor_write(sd, 0x3812, 0x30);
+	if (ret < 0)
+	return ret;
  */
 
 	return 0;
@@ -778,28 +781,28 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value) {
 #if 0
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value)
 {
-       int ret = 0;
+	int ret = 0;
 
-       value *= 1;
-       ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
-       ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
-       ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
-       if (ret < 0)
-	       return ret;
+	value *= 1;
+	ret += sensor_write(sd, 0x3e00, (unsigned char)((value >> 12) & 0x0f));
+	ret += sensor_write(sd, 0x3e01, (unsigned char)((value >> 4) & 0xff));
+	ret += sensor_write(sd, 0x3e02, (unsigned char)((value & 0x0f) << 4));
+	if (ret < 0)
+		return ret;
 
-       return 0;
+	return 0;
 }
 
 static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 {
-       int ret = 0;
+	int ret = 0;
 
-       ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
-       ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
-       if (ret < 0)
-	       return ret;
+	ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
+	ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
+	if (ret < 0)
+		return ret;
 
-       return 0;
+	return 0;
 }
 #endif
 
@@ -1309,7 +1312,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

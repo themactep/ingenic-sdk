@@ -1015,7 +1015,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps,
-	}};
+	},
+};
 
 static struct regval_list sensor_stream_on[] = {
 	{0xef, 0x01},
@@ -1041,19 +1042,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1338,16 +1340,16 @@ static int sensor_g_chip_ident(struct tx_isp_subdev *sd, struct tx_isp_chip_iden
 	unsigned int ident = 0;
 	int ret = ISP_SUCCESS;
 	/*if (pwdn_gpio != -1) {
-	  ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
-	  if (!ret) {
-	  private_gpio_direction_output(pwdn_gpio, 1);
-	  private_msleep(50);
-	  private_gpio_direction_output(pwdn_gpio, 0);
-	  private_msleep(10);
-	  } else {
-	  ISP_ERROR("gpio request failed %d\n",pwdn_gpio);
-	  }
-	  }*/
+	ret = private_gpio_request(pwdn_gpio,"sensor_pwdn");
+	if (!ret) {
+	private_gpio_direction_output(pwdn_gpio, 1);
+	private_msleep(50);
+	private_gpio_direction_output(pwdn_gpio, 0);
+	private_msleep(10);
+	} else {
+	ISP_ERROR("gpio request failed %d\n",pwdn_gpio);
+	}
+	}*/
 	if (reset_gpio != -1) {
 		ret = private_gpio_request(reset_gpio, "sensor_reset");
 		if (!ret) {
@@ -1582,7 +1584,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

@@ -2065,19 +2065,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -2265,7 +2266,7 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value)
 
 	//ret += sensor_write(sd, 0x3e09, (unsigned char)(value & 0xff));
 	//ret += sensor_write(sd, 0x3e08, (unsigned char)((value & 0xff00) >> 8));
-        ret += sensor_write(sd, 0x0212, (unsigned char)(value & 0xdc));
+		ret += sensor_write(sd, 0x0212, (unsigned char)(value & 0xdc));
 	if (ret < 0)
 		return ret;
 
@@ -2723,7 +2724,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

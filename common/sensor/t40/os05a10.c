@@ -2281,19 +2281,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -2322,20 +2323,20 @@ int sensor_write(struct tx_isp_subdev *sd, uint16_t reg, unsigned char value) {
 #if 0
 static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 {
-        int ret;
-        unsigned char val;
-        while (vals->reg_num != SENSOR_REG_END) {
-                if (vals->reg_num == SENSOR_REG_DELAY) {
-                        msleep(vals->value);
-                } else {
-                        ret = sensor_read(sd, vals->reg_num, &val);
-                        if (ret < 0)
-                                return ret;
-                }
-                ISP_INFO("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
-                vals++;
-        }
-        return 0;
+		int ret;
+		unsigned char val;
+		while (vals->reg_num != SENSOR_REG_END) {
+				if (vals->reg_num == SENSOR_REG_DELAY) {
+						msleep(vals->value);
+				} else {
+						ret = sensor_read(sd, vals->reg_num, &val);
+						if (ret < 0)
+								return ret;
+				}
+				ISP_INFO("vals->reg_num:0x%02x, vals->value:0x%02x\n",vals->reg_num, val);
+				vals++;
+		}
+		return 0;
 }
 #endif
 
@@ -3072,7 +3073,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

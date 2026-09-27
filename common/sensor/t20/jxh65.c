@@ -136,7 +136,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.one_line_expr_in_us = 33,
 };
 
-static struct regval_list sensor_init_regs_1280_960_25fps[] = {{0x12, 0x40},
+static struct regval_list sensor_init_regs_1280_960_25fps[] = {
+	{0x12, 0x40},
 	{0x0e, 0x11},
 	{0x0f, 0x04},
 	{0x10, 0x24},
@@ -218,7 +219,8 @@ static struct regval_list sensor_init_regs_1280_960_25fps[] = {{0x12, 0x40},
 	{SENSOR_REG_DELAY, 500},
 	{0x45, 0x19},
 	{0x1f, 0x11},
-	{SENSOR_REG_END, 0x00}};
+	{SENSOR_REG_END, 0x00},
+};
 
 static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 	/* 1280*800 */
@@ -229,7 +231,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SBGGR10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_960_25fps,
-	}};
+	},
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SGBRG8_1X8,
@@ -250,19 +253,20 @@ static struct regval_list sensor_stream_off[] = {
 int sensor_read(struct v4l2_subdev *sd, unsigned char reg, unsigned char *value) {
 	int ret;
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 
 	ret = i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -726,7 +730,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

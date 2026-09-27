@@ -260,6 +260,7 @@ struct tx_isp_sensor_attribute sensor_attr;
 
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	struct again_lut *lut = sensor_again_lut;
+
 	while (lut->gain <= sensor_attr.max_again) {
 		if (isp_gain == 0) {
 			*sensor_again = lut[0].value;
@@ -273,7 +274,6 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 				return lut->gain;
 			}
 		}
-
 		lut++;
 	}
 
@@ -591,8 +591,8 @@ static struct regval_list sensor_init_regs_2048_1536_25fps_mipi[] = {
 	{0x393a, 0x0e},
 	{0x39dc, 0x02},
 	{0x3e00, 0x00},
-	{0x3e01, 0x77}, //
-	{0x3e02, 0x80}, //
+	{0x3e01, 0x77},
+	{0x3e02, 0x80},
 	{0x3e03, 0x0b},
 	{0x3e1b, 0x2a},
 	{0x4407, 0x34},
@@ -739,9 +739,9 @@ static struct regval_list sensor_init_regs_2048_1536_25fps_hdr_mipi[] = {
 	{0x3939, 0x00},
 	{0x393a, 0x0e},
 	{0x39dc, 0x02},
-	{0x3e00, 0x00}, //
-	{0x3e01, 0xdf}, //
-	{0x3e02, 0xc0}, //
+	{0x3e00, 0x00},
+	{0x3e01, 0xdf},
+	{0x3e02, 0xc0},
 	{0x3e03, 0x0b},
 	{0x3e04, 0x0e},
 	{0x3e05, 0x00},
@@ -951,19 +951,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1004,7 +1005,6 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 		}
 		vals++;
 	}
-
 	return 0;
 }
 #endif
@@ -1059,14 +1059,14 @@ static int sensor_set_expo(struct tx_isp_subdev *sd, int value)
 	int it = (value & 0xffff);
 	int again = (value & 0xffff0000) >> 16;
 
-	// integration time
+	/* integration time */
 	ret += sensor_write(sd, 0x3e00, (unsigned char)((it >> 12) & 0x0f));
 	ret += sensor_write(sd, 0x3e01, (unsigned char)((it >> 4) & 0xff));
 	ret += sensor_write(sd, 0x3e02, (unsigned char)((it & 0x0f) << 4));
 
-	// sensor analog gain
+	/* sensor analog gain */
 	ret += sensor_write(sd, 0x3e09, (unsigned char)(((again >> 8) & 0xff)));
-	// sensor dig fine gain
+	/* sensor dig fine gain */
 	ret += sensor_write(sd, 0x3e07, (unsigned char)(again & 0xff));
 	if (ret < 0)
 		return ret;
@@ -1168,8 +1168,8 @@ static int sensor_init(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
 }
 
 static int sensor_s_stream(struct tx_isp_subdev *sd, struct tx_isp_initarg *init) {
-	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 	int ret = 0;
+	struct tx_isp_sensor *sensor = sd_to_sensor_device(sd);
 
 	if (init->enable) {
 		if (sensor->video.state == TX_ISP_MODULE_DEINIT) {
@@ -1552,9 +1552,9 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 		sensor_attr.one_line_expr_in_us = 21;
 		sensor_attr.integration_time_limit = 1920 - 4;
 		sensor_attr.max_integration_time_native = 1920 - 4;
+		sensor_attr.max_integration_time = 1920 - 4;
 		sensor_attr.total_width = 2250;
 		sensor_attr.total_height = 1920;
-		sensor_attr.max_integration_time = 1920 - 4;
 		ISP_INFO("-----------------------------> switch linear is ok <-----------------------\n");
 	} else {
 		ISP_ERROR("Can not support this data type!!!");
@@ -1566,7 +1566,6 @@ static int sensor_set_wdr_stop(struct tx_isp_subdev *sd, int wdr_en) {
 
 	return ret;
 }
-
 #endif
 
 static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, void *arg) {
@@ -1580,7 +1579,6 @@ static int sensor_sensor_ops_ioctl(struct tx_isp_subdev *sd, unsigned int cmd, v
 	}
 
 	switch (cmd) {
-
 	case TX_ISP_EVENT_SENSOR_EXPO:
 		if (arg)
 			// ret = sc301i0t_set_expo(sd, sensor_val->value);
@@ -1758,7 +1756,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

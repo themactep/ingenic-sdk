@@ -285,9 +285,9 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x9e, 0xf8},
 	{0x6e, 0x2c},
 	/*{0x70, 0x6c},
-	  {0x71, 0xed},
-	  {0x72, 0xea},
-	  {0x73, 0x56},*/
+	{0x71, 0xed},
+	{0x72, 0xea},
+	{0x73, 0x56},*/
 	{0x70, 0x6c},
 	{0x71, 0x8d},
 	{0x72, 0x88},
@@ -402,19 +402,20 @@ static struct regval_list sensor_stream_off_mipi[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -907,8 +908,8 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 
 	/* err_set_sensor_gpio:
-	   private_clk_disable(sensor->mclk);
-	   private_clk_put(sensor->mclk);  */
+	private_clk_disable(sensor->mclk);
+	private_clk_put(sensor->mclk);  */
 err_get_mclk:
 	kfree(sensor);
 
@@ -932,7 +933,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

@@ -307,6 +307,7 @@ done:
 	*regs = (regb6 << 12) | (regb1 << 8) | (regb2);
 	return gain_one1;
 }
+
 unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again) {
 	unsigned int gain_one = 0;
 	unsigned int gain_one1 = 0;
@@ -318,6 +319,7 @@ unsigned int sensor_alloc_again(unsigned int isp_gain, unsigned char shift, unsi
 	*sensor_again = regs;
 	return isp_gain1;
 }
+
 unsigned int sensor_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain) {
 	return 0;
 }
@@ -354,6 +356,7 @@ struct tx_isp_sensor_attribute sensor_attr = {
 	.sensor_ctrl.alloc_again = sensor_alloc_again,
 	.sensor_ctrl.alloc_dgain = sensor_alloc_dgain,
 };
+
 static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	/*PCLK=72Mhz Pixel_line=2434,Line_frame=1184,row_time=33.81us*/
 	/*SYS*/
@@ -488,7 +491,6 @@ static struct regval_list sensor_init_regs_1920_1080_25fps_dvp[] = {
 	{0xf3, 0x01},
 	{0xfa, 0x86},
 	{0xf2, 0x0f},
-
 	{SENSOR_REG_END, 0x00},
 
 };
@@ -627,7 +629,6 @@ static struct regval_list sensor_init_regs_1920_1080_15fps_dvp[] = {
 	{0xf3, 0x01},
 	{0xfa, 0x83},
 	{0xf2, 0x0f},
-
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -640,7 +641,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_SRGGB10_1X10,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1920_1080_25fps_dvp,
-	}};
+	}
+};
 
 static enum v4l2_mbus_pixelcode sensor_mbus_code[] = {
 	V4L2_MBUS_FMT_SRGGB10_1X10,
@@ -659,19 +661,20 @@ static struct regval_list sensor_stream_off[] = {
 
 int sensor_read(struct tx_isp_subdev *sd, unsigned char reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 1,
-						 .buf = &reg,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 1,
+			.buf = &reg,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -718,6 +721,7 @@ static int sensor_read_array(struct tx_isp_subdev *sd, struct regval_list *vals)
 	}
 	return 0;
 }
+
 static int sensor_write_array(struct tx_isp_subdev *sd, struct regval_list *vals) {
 	int ret;
 	while (vals->reg_num != SENSOR_REG_END) {
@@ -758,12 +762,14 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 static int sensor_set_integration_time(struct tx_isp_subdev *sd, int value) {
 	int ret = 0;
+
 	ret += sensor_write(sd, 0x04, value & 0xff);
 	ret += sensor_write(sd, 0x03, (value & 0x1f00) >> 8);
 	if (ret < 0) {
 		ISP_ERROR("sensor_write error %d\n", __LINE__);
 		return ret;
 	}
+
 	return 0;
 }
 
@@ -779,11 +785,12 @@ static int sensor_set_analog_gain(struct tx_isp_subdev *sd, int value) {
 		ISP_ERROR("sensor_write error %d", __LINE__);
 		return ret;
 	}
+
 	/*** dark sun ***/
 	ret += sensor_read(sd, 0xb6, &tmp);
-	if (ret < 0) {
+	if (ret < 0)
 		return ret;
-	}
+
 	if (tmp >= 0x08) {
 		ret += sensor_write(sd, 0x21, 0x2c);
 		if (ret < 0)
@@ -834,6 +841,7 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	ret = sensor_write_array(sd, wsize->regs);
 	if (ret)
 		return ret;
+
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
 	sensor->priv = wsize;
 	return 0;
@@ -884,11 +892,13 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 		ISP_ERROR("warn: fps(%x) not in range\n", fps);
 		return -1;
 	}
+
 	ret += sensor_read(sd, 0x05, &tmp);
 	hb = tmp;
 	ret += sensor_read(sd, 0x06, &tmp);
 	if (ret < 0)
 		return -1;
+
 	hb = (hb << 8) + tmp;
 	hts = hb << 2;
 
@@ -897,6 +907,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_read(sd, 0x0e, &tmp);
 	if (ret < 0)
 		return -1;
+
 	win_high = (win_high << 8) + tmp;
 	vts = wpclk * (fps & 0xffff) / hts / ((fps & 0xffff0000) >> 16);
 	vb = vts - win_high - 16;
@@ -904,6 +915,7 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	ret += sensor_write(sd, 0x07, (unsigned char)(vb >> 8));
 	if (ret < 0)
 		return -1;
+
 	sensor->video.fps = fps;
 	sensor->video.attr->max_integration_time_native = vts - 4;
 	sensor->video.attr->integration_time_limit = vts - 4;
@@ -1062,11 +1074,12 @@ static int sensor_g_register(struct tx_isp_subdev *sd, struct tx_isp_dbg_registe
 	int ret = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -1077,11 +1090,12 @@ static int sensor_s_register(struct tx_isp_subdev *sd, const struct tx_isp_dbg_r
 	int len = 0;
 
 	len = strlen(sd->chip.name);
-	if (len && strncmp(sd->chip.name, reg->name, len)) {
+	if (len && strncmp(sd->chip.name, reg->name, len))
 		return -EINVAL;
-	}
+
 	if (!private_capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
@@ -1198,7 +1212,6 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	tx_isp_set_subdevdata(sd, client);
 	tx_isp_set_subdev_hostdata(sd, sensor);
 	private_i2c_set_clientdata(client, sd);
-
 	ISP_INFO("probe ok ------->%s\n", SENSOR_NAME);
 	return 0;
 err_set_sensor_gpio:
@@ -1206,7 +1219,6 @@ err_set_sensor_gpio:
 	private_clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 
@@ -1226,7 +1238,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {
@@ -1248,6 +1262,7 @@ static __init int init_sensor(void) {
 		ISP_ERROR("Failed to init %s driver.\n", SENSOR_NAME);
 		return -1;
 	}
+
 	return private_i2c_add_driver(&sensor_driver);
 }
 

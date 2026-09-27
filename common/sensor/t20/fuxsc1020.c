@@ -115,7 +115,8 @@ static struct tx_isp_sensor_win_setting sensor_win_sizes[] = {
 		.mbus_code = V4L2_MBUS_FMT_YUYV8_1X16,
 		.colorspace = V4L2_COLORSPACE_SRGB,
 		.regs = sensor_init_regs_1280_720_25fps,
-	}};
+	},
+};
 
 static struct regval_list sensor_stream_on[] = {
 	{SENSOR_REG_END, 0x00},
@@ -175,7 +176,6 @@ static int sensor_init(struct v4l2_subdev *sd, u32 enable) {
 	sensor->video.mbus.field = V4L2_FIELD_NONE;
 	sensor->video.mbus.colorspace = wsize->colorspace;
 	sensor->video.fps = wsize->fps;
-
 	arg.value = (int)&sensor->video;
 	sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	sensor->priv = wsize;
@@ -212,6 +212,7 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 	struct v4l2_subdev *sd = &sensor->sd;
 	struct tx_isp_sensor_win_setting *wsize = NULL;
 	int ret = ISP_SUCCESS;
+
 	ISP_INFO("functiong:%s, line:%d\n", __func__, __LINE__);
 	if (value == TX_ISP_SENSOR_FULL_RES_MAX_FPS) {
 		wsize = &sensor_win_sizes[0];
@@ -230,7 +231,6 @@ static int sensor_set_mode(struct tx_isp_sensor *sensor, int value) {
 				sensor->priv = wsize;
 		}
 		sensor->video.fps = wsize->fps;
-
 		arg.value = (int)&sensor->video;
 		sd->v4l2_dev->notify(sd, TX_ISP_NOTIFY_SYNC_VIDEO_IN, &arg);
 	}
@@ -286,6 +286,7 @@ static int sensor_s_power(struct v4l2_subdev *sd, int on) {
 static long sensor_ops_private_ioctl(struct tx_isp_sensor *sensor, struct isp_private_ioctl *ctrl) {
 	struct v4l2_subdev *sd = &sensor->sd;
 	long ret = 0;
+
 	switch (ctrl->cmd) {
 	case TX_ISP_PRIVATE_IOCTL_SENSOR_INT_TIME:
 		ret = sensor_set_integration_time(sd, ctrl->value);
@@ -340,8 +341,10 @@ static int sensor_g_register(struct v4l2_subdev *sd, struct v4l2_dbg_register *r
 
 	if (!v4l2_chip_match_i2c_client(client, &reg->match))
 		return -EINVAL;
+
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	ret = sensor_read(sd, reg->reg & 0xffff, &val);
 	reg->val = val;
 	reg->size = 2;
@@ -353,8 +356,10 @@ static int sensor_s_register(struct v4l2_subdev *sd, const struct v4l2_dbg_regis
 
 	if (!v4l2_chip_match_i2c_client(client, &reg->match))
 		return -EINVAL;
+
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
+
 	sensor_write(sd, reg->reg & 0xffff, reg->val & 0xff);
 	return 0;
 }
@@ -395,6 +400,7 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_PRINT(ISP_ERROR_LEVEL, "Failed to allocate sensor subdev.\n");
 		return -ENOMEM;
 	}
+
 	memset(sensor, 0, sizeof(*sensor));
 	/* request mclk of sensor */
 	sensor->mclk = clk_get(NULL, "cgu_cim");
@@ -402,9 +408,9 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 		ISP_PRINT(ISP_ERROR_LEVEL, "Cannot get sensor input clock cgu_cim\n");
 		goto err_get_mclk;
 	}
+
 	clk_set_rate(sensor->mclk, 37125000);
 	clk_enable(sensor->mclk);
-
 	ret = set_sensor_gpio_function(sensor_gpio_func);
 	if (ret < 0)
 		goto err_set_sensor_gpio;
@@ -419,14 +425,12 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	sensor->video.vi_max_height = wsize->height;
 	v4l2_i2c_subdev_init(sd, client, &sensor_ops);
 	v4l2_set_subdev_hostdata(sd, sensor);
-
 	return 0;
 err_set_sensor_gpio:
 	clk_disable(sensor->mclk);
 	clk_put(sensor->mclk);
 err_get_mclk:
 	kfree(sensor);
-
 	return -1;
 }
 
@@ -441,13 +445,14 @@ static int sensor_remove(struct i2c_client *client) {
 
 	clk_disable(sensor->mclk);
 	clk_put(sensor->mclk);
-
 	v4l2_device_unregister_subdev(sd);
 	kfree(sensor);
 	return 0;
 }
 
-static const struct i2c_device_id sensor_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id sensor_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 MODULE_DEVICE_TABLE(i2c, sensor_id);
 
 static struct i2c_driver sensor_driver = {

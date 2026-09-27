@@ -414,14 +414,15 @@ static struct regval_list imx415_init_regs_3840_2160_20fps_mipi[] = {
 	{SENSOR_REG_END, 0x00},
 };
 
-static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {{
-								      .width = 3840,
-								      .height = 2160,
-								      .fps = 30 << 16 | 1,
-								      .mbus_code = TISP_VI_FMT_SGBRG10_1X10,
-								      .colorspace = TISP_COLORSPACE_SRGB,
-								      .regs = imx415_init_regs_3840_2160_30fps_mipi,
-							      },
+static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {
+	{
+		.width = 3840,
+		.height = 2160,
+		.fps = 30 << 16 | 1,
+		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
+		.colorspace = TISP_COLORSPACE_SRGB,
+		.regs = imx415_init_regs_3840_2160_30fps_mipi,
+	},
 	{
 		.width = 3840,
 		.height = 2160,
@@ -429,7 +430,8 @@ static struct tx_isp_sensor_win_setting imx415_win_sizes[] = {{
 		.mbus_code = TISP_VI_FMT_SGBRG10_1X10,
 		.colorspace = TISP_COLORSPACE_SRGB,
 		.regs = imx415_init_regs_3840_2160_20fps_mipi,
-	}};
+	},
+};
 struct tx_isp_sensor_win_setting *wsize = &imx415_win_sizes[0];
 
 static struct regval_list imx415_stream_on_mipi[] = {
@@ -443,19 +445,20 @@ static struct regval_list imx415_stream_off_mipi[] = {
 int sensor_read(struct tx_isp_subdev *sd, uint16_t reg, unsigned char *value) {
 	struct i2c_client *client = tx_isp_get_subdevdata(sd);
 	uint8_t buf[2] = {(reg >> 8) & 0xff, reg & 0xff};
-	struct i2c_msg msg[2] = {[0] =
-					 {
-						 .addr = client->addr,
-						 .flags = 0,
-						 .len = 2,
-						 .buf = buf,
-					 },
+	struct i2c_msg msg[2] = {
+		[0] = {
+			.addr = client->addr,
+			.flags = 0,
+			.len = 2,
+			.buf = buf,
+		},
 		[1] = {
 			.addr = client->addr,
 			.flags = I2C_M_RD,
 			.len = 1,
 			.buf = value,
-		}};
+		},
+	};
 	int ret;
 	ret = private_i2c_transfer(client->adapter, msg, 2);
 	if (ret > 0)
@@ -1068,7 +1071,9 @@ static int sensor_remove(struct i2c_client *client) {
 	return 0;
 }
 
-static const struct i2c_device_id imx415_id[] = {{SENSOR_NAME, 0}, {}};
+static const struct i2c_device_id imx415_id[] = {
+	{SENSOR_NAME, 0}, {}
+};
 
 static struct i2c_driver imx415_driver = {
 	.driver =
