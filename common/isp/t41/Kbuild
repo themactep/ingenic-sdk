@@ -10,6 +10,11 @@ endif
 SRCS := $(DIR)/tx-isp-funcs.c \
 	$(DIR)/tx-isp-module.c
 
+ifdef SENSOR_REGISTRY_IN_SDK
+    SRCS += common/isp/common/tx-isp-sinfo.c
+    ccflags-y += -DCONFIG_SOC_T41
+endif
+
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 OBJS += sdk/$(SOC_FAMILY)/$(ISP_FW_FILE)
 

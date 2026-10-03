@@ -3,6 +3,11 @@ ISP_FW_VER=1.3.1
 SRCS := $(DIR)/tx-isp-funcs.c \
 	$(DIR)/tx-isp-module.c
 
+ifdef SENSOR_REGISTRY_IN_SDK
+    SRCS += common/isp/common/tx-isp-sinfo.c
+    ccflags-y += -DCONFIG_SOC_T40
+endif
+
 OBJS := $(SRCS:%.c=%.o) $(ASM_SRCS:%.S=%.o)
 OBJS += sdk/$(SOC_FAMILY)/lib$(SOC_FAMILY)-firmware-$(ISP_FW_VER)-720-4494.a
 
