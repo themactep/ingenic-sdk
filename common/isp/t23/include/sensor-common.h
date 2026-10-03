@@ -66,20 +66,23 @@ static inline int set_sensor_gpio_function(int func_set)
     return ret;
 }
 
-#ifdef SENSOR_PROC_OWNED_BY_ISP
+#if defined(SENSOR_PROC_OWNED_BY_ISP) || defined(SENSOR_REGISTRY_IN_SDK)
 /*
- * Open ISP stack: open-tx-isp's tx_isp_sinfo publishes the pre-bind sensor
- * registry (/proc/jz/sensor/sensorN/) that Raptor reads before it binds the
- * sensor. The raw private_i2c_add_driver() registers only with the I2C core,
- * so publish the driver to the registry with its own SENSOR_I2C_ADDRESS -
- * otherwise sensorN/i2c_addr reads 0 pre-bind and rvd's autodetect fails.
+ * Two configurations publish the pre-bind sensor registry
+ * (/proc/jz/sensor/sensorN/) that Raptor reads before it binds the sensor: the
+ * open ISP stack (SENSOR_PROC_OWNED_BY_ISP, registry from open-tx-isp) and the
+ * proprietary ISP with the SDK registry (SENSOR_REGISTRY_IN_SDK). The raw
+ * private_i2c_add_driver() registers only with the I2C core, so publish the
+ * driver to the registry with its own SENSOR_I2C_ADDRESS - otherwise
+ * sensorN/i2c_addr reads 0 pre-bind and rvd's autodetect fails.
  * tx_isp_sinfo_driver_add() merges a repeat call for the same driver (t31's
  * wrapper publishes the legacy 0 first), so one macro serves every family.
- * Only defined for the open stack; the proprietary ISP has no registry and
- * keeps the flat tree the sensor module publishes.
+ * The proprietary build keeps the vendor flat tree the sensor module
+ * publishes alongside the registry; prudynt reads flat width/height/max_fps.
  */
 int tx_isp_sinfo_driver_add(struct i2c_driver *drv, int def_i2c_addr,
 			    struct module *owner);
+void tx_isp_sinfo_driver_del(struct i2c_driver *drv);
 
 static inline int __sinfo_i2c_add_driver(struct i2c_driver *drv,
 					 int def_i2c_addr,
@@ -91,8 +94,16 @@ static inline int __sinfo_i2c_add_driver(struct i2c_driver *drv,
 	return ret;
 }
 
+static inline void __sinfo_i2c_del_driver(struct i2c_driver *drv)
+{
+	tx_isp_sinfo_driver_del(drv);
+	(private_i2c_del_driver)(drv);
+}
+
 #define private_i2c_add_driver(drv) \
 	__sinfo_i2c_add_driver((drv), SENSOR_I2C_ADDRESS, THIS_MODULE)
+#define private_i2c_del_driver(drv) \
+	__sinfo_i2c_del_driver((drv))
 
 /*
  * The T23 ISP never calls tx_isp_sinfo_sensor_bind() itself, so the registry
@@ -122,5 +133,5 @@ static inline void __sinfo_subdev_deinit(struct tx_isp_subdev *sd)
 #define tx_isp_subdev_init(pdev, sd, ops) \
 	__sinfo_subdev_init((pdev), (sd), (ops))
 #define tx_isp_subdev_deinit(sd) __sinfo_subdev_deinit((sd))
-#endif /* SENSOR_PROC_OWNED_BY_ISP */
+#endif /* SENSOR_PROC_OWNED_BY_ISP || SENSOR_REGISTRY_IN_SDK */
 #endif// __TX_SENSOR_COMMON_H__
