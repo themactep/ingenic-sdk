@@ -132,8 +132,17 @@ void sensor_common_init(struct sensor_info *info) {
 	/* Create per-sensor directory: /proc/jz/sensor/<sensor_name>/ */
 	snprintf(ctx->dir_path, sizeof(ctx->dir_path), "jz/sensor/%s", info->name);
 
-	/* The platform owns /proc/jz; only create the sensor subtree here. */
+	/*
+	 * When the ISP owns the registry (open stack or the SDK registry), it has
+	 * already created /proc/jz/sensor at ISP module init. Creating it again
+	 * here registers a duplicate directory and procfs resolves the later
+	 * entry, which would shadow the registry's count/sensorN/. The registry
+	 * root is the parent for the flat files below; only create the platform
+	 * subtree when no registry owns it.
+	 */
+#if !defined(SENSOR_PROC_OWNED_BY_ISP) && !defined(SENSOR_REGISTRY_IN_SDK)
 	proc_mkdir("jz/sensor", NULL);
+#endif
 	ctx->dir = proc_mkdir(ctx->dir_path, NULL);
 
 	/* Create proc entries under /proc/jz/sensor/<sensor_name>/ */
