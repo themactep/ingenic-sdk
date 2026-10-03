@@ -1017,6 +1017,16 @@ static int sensor_detect(struct tx_isp_subdev *sd, unsigned int *ident) {
 
 	*ident = (*ident << 8) | v;
 
+	/* SC2336P and SC2337P report the same 0x9b/0x3a chip id; the low
+	 * nibble of 0x801e is the die revision (SC2336P zero, SC2337P
+	 * non-zero). Reject the other die so a wrong profile fails to bind
+	 * instead of running with the wrong init/iq. */
+	ret += sensor_read(sd, 0x801e, &v);
+	if (ret < 0)
+		return ret;
+	if ((v & 0x0f) != 0)
+		return -ENODEV;
+
 	return 0;
 }
 
