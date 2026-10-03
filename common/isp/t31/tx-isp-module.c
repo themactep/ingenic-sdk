@@ -14,11 +14,25 @@
 extern int tx_isp_init(void);
 extern void tx_isp_exit(void);
 
+#ifdef SENSOR_REGISTRY_IN_SDK
+extern int tx_isp_sinfo_init(void);
+extern void tx_isp_sinfo_exit(void);
+#endif
+
 static int __init tx_isp_module_init(void) {
-	return tx_isp_init();
+	int ret = tx_isp_init();
+
+#ifdef SENSOR_REGISTRY_IN_SDK
+	if (!ret)
+		tx_isp_sinfo_init();
+#endif
+	return ret;
 }
 
 static void __exit tx_isp_module_exit(void) {
+#ifdef SENSOR_REGISTRY_IN_SDK
+	tx_isp_sinfo_exit();
+#endif
 	tx_isp_exit();
 }
 
