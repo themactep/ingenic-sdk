@@ -27,7 +27,7 @@
 #define SENSOR_MAX_HEIGHT 720
 #define SENSOR_MAX_WIDTH 1280
 #define SENSOR_NAME "sc1a4t"
-#define SENSOR_OUTPUT_MAX_FPS 15
+#define SENSOR_OUTPUT_MAX_FPS 30
 #define SENSOR_OUTPUT_MIN_FPS 5
 #define SENSOR_REG_DELAY 0xfffe
 #define SENSOR_REG_END 0xffff
@@ -745,9 +745,6 @@ static int sensor_set_fps(struct tx_isp_subdev *sd, int fps) {
 	unsigned char val = 0;
 	unsigned int newformat = 0; // the format is 24.8
 	int ret = 0;
-
-	ISP_WARNING("[%s %d] Frame rate setting is not supported !!!\n", __func__, __LINE__);
-	return 0;
 
 	newformat = (((fps >> 16) / (fps & 0xffff)) << 8) + ((((fps >> 16) % (fps & 0xffff)) << 8) / (fps & 0xffff));
 	if (newformat > (SENSOR_OUTPUT_MAX_FPS << 8) || newformat < (SENSOR_OUTPUT_MIN_FPS << 8)) {
