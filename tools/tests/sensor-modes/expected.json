@@ -1,0 +1,1016 @@
+{
+ "baseline": null,
+ "drivers": [
+  {
+   "file": "3.10.14/sensor-src/t20/sp1409.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 0
+   },
+   "md5": "5fcd3a9d5e5e92775a2992a6cee77868",
+   "modes": [
+    {
+     "A_eq": 899,
+     "C": null,
+     "C_eq": null,
+     "T": null,
+     "T_reason": "set_fps() writes no frame-length register directly",
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 2,
+     "fps": 1638401,
+     "fps_static": null,
+     "height": 720,
+     "hts": null,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 895,
+     "lines": {
+      "max_integration_time": 196,
+      "total_height": 195,
+      "total_width": 194,
+      "win": 351
+     },
+     "max_integration_time": 895,
+     "max_integration_time_native": 895,
+     "mbus_code": "V4L2_MBUS_FMT_SRGGB10_1X10",
+     "mipi_src": null,
+     "mode": "-",
+     "notes": [],
+     "one_line_expr_in_us": 44,
+     "sclk": 20000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1280_720_25fps",
+     "total_height": 899,
+     "total_width": 1328,
+     "unknown_guard": [],
+     "width": 1280,
+     "win": "sensor_win_sizes[0]"
+    }
+   ],
+   "notes": [],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 0
+   },
+   "md5": "5ce18b197d074039629dcb2b80be6367",
+   "modes": [
+    {
+     "A_eq": 1133,
+     "C": 1133,
+     "C_eq": 1133,
+     "T": 1133,
+     "T_regs": [
+      "0x23",
+      "0x22"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 3932161,
+     "fps_static": null,
+     "height": 720,
+     "hts": 2400,
+     "image_theight": 720,
+     "image_twidth": 1280,
+     "integration_time_limit": 1129,
+     "lines": {
+      "max_integration_time": 1150,
+      "total_height": 1149,
+      "total_width": 1148,
+      "win": 601
+     },
+     "max_integration_time": 1129,
+     "max_integration_time_native": 1129,
+     "mbus_code": "V4L2_MBUS_FMT_SBGGR10_1X10",
+     "mipi_src": "sensor_1280_720_mipi",
+     "mode": "sensor_resolution=RES_100",
+     "notes": [],
+     "one_line_expr_in_us": 30,
+     "sclk": 163152000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1280_720_60fps_mipi",
+     "total_height": 1133,
+     "total_width": 2400,
+     "unknown_guard": [],
+     "width": 1280,
+     "win": "sensor_win_sizes[1]"
+    },
+    {
+     "A_eq": 1125,
+     "C": 1125,
+     "C_eq": 1125,
+     "T": 1125,
+     "T_regs": [
+      "0x23",
+      "0x22"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 3932161,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2560,
+     "image_theight": 1080,
+     "image_twidth": 1920,
+     "integration_time_limit": 1121,
+     "lines": {
+      "max_integration_time": 1141,
+      "total_height": 1140,
+      "total_width": 1139,
+      "win": 592
+     },
+     "max_integration_time": 1121,
+     "max_integration_time_native": 1121,
+     "mbus_code": "V4L2_MBUS_FMT_SBGGR10_1X10",
+     "mipi_src": "sensor_1920_1080_mipi",
+     "mode": "sensor_resolution=RES_200",
+     "notes": [],
+     "one_line_expr_in_us": 30,
+     "sclk": 172800000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_60fps_mipi",
+     "total_height": 1125,
+     "total_width": 2560,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[0]"
+    },
+    {
+     "A_eq": 400,
+     "C": 1200,
+     "C_eq": 1200,
+     "T": 1133,
+     "T_regs": [
+      "0x23",
+      "0x22"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 3932161,
+     "fps_static": null,
+     "height": 720,
+     "hts": 1200,
+     "image_theight": 360,
+     "image_twidth": 640,
+     "integration_time_limit": 396,
+     "lines": {
+      "max_integration_time": 1159,
+      "total_height": 1158,
+      "total_width": 1157,
+      "win": 601
+     },
+     "max_integration_time": 396,
+     "max_integration_time_native": 396,
+     "mbus_code": "V4L2_MBUS_FMT_SBGGR10_1X10",
+     "mipi_src": "sensor_640_360_mipi",
+     "mode": "sensor_resolution=RES_30",
+     "notes": [],
+     "one_line_expr_in_us": 30,
+     "sclk": 86400000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1280_720_60fps_mipi",
+     "total_height": 400,
+     "total_width": 3600,
+     "unknown_guard": [],
+     "width": 1280,
+     "win": "sensor_win_sizes[1]"
+    }
+   ],
+   "notes": [],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/fx_broken.c",
+   "left_out": {},
+   "md5": "9278910ee6c441da94017e5d6789512a",
+   "modes": [],
+   "notes": [],
+   "reason": "parse: the source's brackets do not pair up: '}' at line 26 closes '(' opened at line 21 (does this file compile?)",
+   "skipped_combinations": [],
+   "status": "error"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/fx_default.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 2
+   },
+   "md5": "8fb9d1e9541e3ea0cf83f8906a559700",
+   "modes": [
+    {
+     "A_eq": 2400,
+     "C": 2400,
+     "C_eq": 2400,
+     "T": 2400,
+     "T_regs": [
+      "0x320e",
+      "0x320f"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 983041,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2250,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 2396,
+     "lines": {
+      "max_integration_time": 120,
+      "total_height": 119,
+      "total_width": 67,
+      "win": 57
+     },
+     "max_integration_time": 2396,
+     "max_integration_time_native": 2396,
+     "mbus_code": 12295,
+     "mipi_src": null,
+     "mode": "sensor_max_fps=25,data_interface=MIPI",
+     "notes": [],
+     "one_line_expr_in_us": 0,
+     "sclk": 81000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_15fps_mipi",
+     "total_height": 2400,
+     "total_width": 2250,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[1]"
+    },
+    {
+     "A_eq": 1200,
+     "C": 1200,
+     "C_eq": 1200,
+     "T": 1200,
+     "T_regs": [
+      "0x320e",
+      "0x320f"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 1966081,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2250,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 1196,
+     "lines": {
+      "max_integration_time": 69,
+      "total_height": 68,
+      "total_width": 67,
+      "win": 49
+     },
+     "max_integration_time": 1196,
+     "max_integration_time_native": 1196,
+     "mbus_code": 12295,
+     "mipi_src": null,
+     "mode": "sensor_max_fps=30,data_interface=MIPI",
+     "notes": [],
+     "one_line_expr_in_us": 0,
+     "sclk": 81000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_30fps_mipi",
+     "total_height": 1200,
+     "total_width": 2250,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[0]"
+    }
+   ],
+   "notes": [
+    "2 parameter combinations left out: the driver refuses them (probe or attr_check returns an error, or a switch has no case for the value)"
+   ],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/fx_goto.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 0
+   },
+   "md5": "585da66440239926b934ab1c5f838c5c",
+   "modes": [
+    {
+     "A_eq": 1500,
+     "C": 1200,
+     "C_eq": 1200,
+     "T": 1200,
+     "T_regs": [
+      "0x320e",
+      "0x320f"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 0,
+     "fps": 1966081,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2250,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 1496,
+     "lines": {
+      "max_integration_time": 45,
+      "total_height": 44,
+      "total_width": 43,
+      "win": 33
+     },
+     "max_integration_time": 1496,
+     "max_integration_time_native": 1496,
+     "mbus_code": 12295,
+     "mipi_src": null,
+     "mode": "-",
+     "notes": [],
+     "one_line_expr_in_us": 0,
+     "sclk": 81000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_30fps_mipi",
+     "total_height": 1500,
+     "total_width": 2250,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[0]"
+    }
+   ],
+   "notes": [],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/fx_ppif.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 0
+   },
+   "md5": "63f1750b57321f947cd7c336e6eb2153",
+   "modes": [
+    {
+     "A_eq": 1200,
+     "C": 1200,
+     "C_eq": 1200,
+     "T": 1200,
+     "T_regs": [
+      "0x320e",
+      "0x320f"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 0,
+     "fps": 1966081,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2250,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 1196,
+     "lines": {
+      "max_integration_time": 58,
+      "total_height": 51,
+      "total_width": 49,
+      "win": 39
+     },
+     "max_integration_time": 1196,
+     "max_integration_time_native": 1196,
+     "mbus_code": 12295,
+     "mipi_src": null,
+     "mode": "-",
+     "notes": [],
+     "one_line_expr_in_us": 0,
+     "sclk": 81000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1280_720_30fps_mipi",
+     "total_height": 1200,
+     "total_width": 2250,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[0]"
+    }
+   ],
+   "notes": [
+    "line 29: #if FX_VERSION(4, 4, 0) > 1 is not read (unexpected ', 4, 0) '): the block is taken as false"
+   ],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 0,
+    "refused": 1
+   },
+   "md5": "0dbd2cb0070c04ce7e6693a1b02fc05d",
+   "modes": [
+    {
+     "A_eq": 1125,
+     "C": 1125,
+     "C_eq": 1125,
+     "T": 1125,
+     "T_regs": [
+      "0x41",
+      "0x42"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 2,
+     "fps": 983041,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2200,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 1117,
+     "lines": {
+      "max_integration_time": 1782,
+      "total_height": 1781,
+      "total_width": 1780,
+      "win": 1167
+     },
+     "max_integration_time": 1117,
+     "max_integration_time_native": 1117,
+     "mbus_code": 12303,
+     "mipi_src": null,
+     "mode": "sensor_max_fps=15,data_interface=DVP",
+     "notes": [],
+     "one_line_expr_in_us": 59,
+     "sclk": 37125000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_15fps_dvp",
+     "total_height": 1125,
+     "total_width": 2200,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[1]"
+    },
+    {
+     "A_eq": 1181,
+     "C": 1181,
+     "C_eq": 1181,
+     "T": 1181,
+     "T_regs": [
+      "0x41",
+      "0x42"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 983041,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2200,
+     "image_theight": 1080,
+     "image_twidth": 1920,
+     "integration_time_limit": 1173,
+     "lines": {
+      "max_integration_time": 1821,
+      "total_height": 1820,
+      "total_width": 1819,
+      "win": 1194
+     },
+     "max_integration_time": 1173,
+     "max_integration_time_native": 1173,
+     "mbus_code": 12303,
+     "mipi_src": "sensor_mipi",
+     "mode": "sensor_max_fps=15,data_interface=MIPI",
+     "notes": [],
+     "one_line_expr_in_us": 57,
+     "sclk": 39000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_15fps_mipi",
+     "total_height": 1181,
+     "total_width": 2200,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[4]"
+    },
+    {
+     "A_eq": 1308,
+     "C": 1309,
+     "C_eq": 1309,
+     "T": 1308,
+     "T_regs": [
+      "0x41",
+      "0x42"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 1638401,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2200,
+     "image_theight": 1080,
+     "image_twidth": 1920,
+     "integration_time_limit": 1300,
+     "lines": {
+      "max_integration_time": 1808,
+      "total_height": 1807,
+      "total_width": 1806,
+      "win": 1185
+     },
+     "max_integration_time": 1300,
+     "max_integration_time_native": 1300,
+     "mbus_code": 12303,
+     "mipi_src": "sensor_mipi",
+     "mode": "sensor_max_fps=25,data_interface=MIPI",
+     "notes": [],
+     "one_line_expr_in_us": 31,
+     "sclk": 72000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_25fps_mipi",
+     "total_height": 1308,
+     "total_width": 2200,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[3]"
+    },
+    {
+     "A_eq": 1350,
+     "C": 1350,
+     "C_eq": 1350,
+     "T": 1350,
+     "T_regs": [
+      "0x41",
+      "0x42"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 2,
+     "fps": 1638401,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2200,
+     "image_theight": 0,
+     "image_twidth": 0,
+     "integration_time_limit": 1342,
+     "lines": {
+      "max_integration_time": 1764,
+      "total_height": 1763,
+      "total_width": 1762,
+      "win": 1158
+     },
+     "max_integration_time": 1342,
+     "max_integration_time_native": 1342,
+     "mbus_code": 12303,
+     "mipi_src": null,
+     "mode": "sensor_max_fps=30,data_interface=DVP",
+     "notes": [],
+     "one_line_expr_in_us": 29,
+     "sclk": 74250000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_30fps_dvp",
+     "total_height": 1350,
+     "total_width": 2200,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[0]"
+    },
+    {
+     "A_eq": 1418,
+     "C": 1181,
+     "C_eq": 1181,
+     "T": 1181,
+     "T_regs": [
+      "0x41",
+      "0x42"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 1966081,
+     "fps_static": null,
+     "height": 1080,
+     "hts": 2200,
+     "image_theight": 1080,
+     "image_twidth": 1920,
+     "integration_time_limit": 1410,
+     "lines": {
+      "max_integration_time": 1795,
+      "total_height": 1794,
+      "total_width": 1793,
+      "win": 1176
+     },
+     "max_integration_time": 1410,
+     "max_integration_time_native": 1410,
+     "mbus_code": 12303,
+     "mipi_src": "sensor_mipi",
+     "mode": "sensor_max_fps=30,data_interface=MIPI",
+     "notes": [],
+     "one_line_expr_in_us": 28,
+     "sclk": 78000000,
+     "set_fps_dead": false,
+     "table": "sensor_init_regs_1920_1080_30fps_mipi",
+     "total_height": 1418,
+     "total_width": 2200,
+     "unknown_guard": [],
+     "width": 1920,
+     "win": "sensor_win_sizes[2]"
+    }
+   ],
+   "notes": [
+    "1 parameter combinations left out: the driver refuses them (probe or attr_check returns an error, or a switch has no case for the value)"
+   ],
+   "reason": "",
+   "skipped_combinations": [],
+   "status": "ok"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "left_out": {
+    "aborted": 0,
+    "goto": 0,
+    "interface-table": 2,
+    "refused": 0
+   },
+   "md5": "b4d62e376ab22fa83bfa9a59bf4829c6",
+   "modes": [
+    {
+     "A_eq": 1696,
+     "C": 1696,
+     "C_eq": 1696,
+     "T": 1696,
+     "T_as_set_fps_reads": 40966,
+     "T_regs": [
+      "0x341",
+      "0x340"
+     ],
+     "crop": [
+      0,
+      0
+     ],
+     "data_type": 0,
+     "dbus_type": 1,
+     "fps": 1310721,
+     "fps_static": null,
+     "height": 2880,
+     "hts": 2640,
+     "image_theight": 2880,
+     "image_twidth": 3840,
+     "integration_time_limit": 0,
+     "lines": {
+      "max_integration_time": null,
+      "total_height": 1591,
+      "total_width": 1590,
+      "win": 1307
+     },
+     "max_integration_time": 0,
+     "max_integration_time_native": 0,
+     "mbus_code": "TISP_VI_FMT_SGRBG10_1X10",
+     "mipi_src": "gc13b0_mipi_linear_2lane",
+     "mode": "-",
+     "notes": [
+      "T is read in the init table's byte order; in set_fps()'s order the same bytes are 40966"
+     ],
+     "one_line_expr_in_us": 0,
+     "sclk": 89548800,
+     "set_fps_dead": false,
+     "table": "gc13b0_init_regs_3840_3120_20fps_mipi_2lane",
+     "total_height": 1696,
+     "total_width": 2640,
+     "unknown_guard": [],
+     "width": 3840,
+     "win": "gc13b0_win_sizes[0]"
+    }
+   ],
+   "notes": [
+    "2 parameter combinations left out: a DVP init table with a MIPI interface setting or the reverse (listed in the JSON output)"
+   ],
+   "reason": "",
+   "skipped_combinations": [
+    {
+     "params": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP,mclk=TISP_SENSOR_MCLK0",
+     "table": "gc13b0_init_regs_3840_3120_20fps_mipi_2lane",
+     "why": "interface-table"
+    },
+    {
+     "params": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP,mclk=TISP_SENSOR_MCLK1",
+     "table": "gc13b0_init_regs_3840_3120_20fps_mipi_2lane",
+     "why": "interface-table"
+    }
+   ],
+   "status": "ok"
+  }
+ ],
+ "findings": [
+  {
+   "check": "byte-order",
+   "driver": "gc13b0",
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "kernel": "4.4.94",
+   "line": 1950,
+   "message": "set_fps() writes the frame length's high byte to reg 0x341 and its low byte to reg 0x340, but init table gc13b0_init_regs_3840_3120_20fps_mipi_2lane holds them the other way round (0x341/0x340 = 0xa0/0x06, line 748: 1696 lines read the table's way, total_height is 1696): a set_fps() call programs a wrong frame length",
+   "mode": "-",
+   "severity": "high",
+   "soc": "t32"
+  },
+  {
+   "check": "frame-length",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1158,
+   "message": "init table sensor_init_regs_1280_720_60fps_mipi programs a 1133-line frame (regs 0x23/0x22 written = 0x04/0x6d, line 400) but the mode reports total_height 400; sclk/hts at 60 fps gives 1200, a third value",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high",
+   "soc": "t31"
+  },
+  {
+   "check": "frame-length",
+   "driver": "fx_goto",
+   "file": "4.4.94/sensor-src/t31/fx_goto.c",
+   "kernel": "4.4.94",
+   "line": 44,
+   "message": "init table sensor_init_regs_1920_1080_30fps_mipi programs a 1200-line frame (regs 0x320e/0x320f written = 0x04/0xb0, line 25) but the mode reports total_height 1500; sclk/hts at 30 fps also gives 1200: the ISP's line time is 25.0% short",
+   "mode": "-",
+   "severity": "high",
+   "soc": "t31"
+  },
+  {
+   "check": "frame-length",
+   "driver": "gc2053",
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "kernel": "4.4.94",
+   "line": 1794,
+   "message": "init table sensor_init_regs_1920_1080_30fps_mipi programs a 1181-line frame (regs 0x41/0x42 written = 0x04/0x9d, line 290) but the mode reports total_height 1418; sclk/hts at 30 fps also gives 1181: the ISP's line time is 20.1% short",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "high",
+   "soc": "t31"
+  },
+  {
+   "check": "frame-short",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1158,
+   "message": "total_height 400 is less than the image height 720 of window sensor_win_sizes[1]",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high",
+   "soc": "t31"
+  },
+  {
+   "check": "frame-short",
+   "driver": "gc13b0",
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "kernel": "4.4.94",
+   "line": 1591,
+   "message": "total_height 1696 is less than the image height 2880 of window gc13b0_win_sizes[0]",
+   "mode": "-",
+   "severity": "high",
+   "soc": "t32"
+  },
+  {
+   "check": "dup-enum",
+   "driver": "gc2053",
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "kernel": "4.4.94",
+   "line": 1728,
+   "message": "sensor_max_fps is compared with TX_SENSOR_MAX_FPS_30 and TX_SENSOR_MAX_FPS_40, which have the same value here: the branch for the later one cannot be selected",
+   "mode": "sensor_max_fps",
+   "severity": "medium",
+   "soc": "t31"
+  },
+  {
+   "check": "image-size",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 601,
+   "message": "window sensor_win_sizes[1] is 1280x720 but the mipi bus copied from sensor_640_360_mipi states image 640x360 (no crop offsets set)",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium",
+   "soc": "t31"
+  },
+  {
+   "check": "line-time",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1140,
+   "message": "one_line_expr_in_us is 30 but hts / sclk = 2560 / 172800000 is 14.8 us",
+   "mode": "sensor_resolution=RES_200",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "line-time",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1149,
+   "message": "one_line_expr_in_us is 30 but hts / sclk = 2400 / 163152000 is 14.7 us",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "line-time",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1158,
+   "message": "one_line_expr_in_us is 30 but hts / sclk = 1200 / 86400000 is 13.9 us",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "max-fps",
+   "driver": "gc2053",
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "kernel": "4.4.94",
+   "line": 1448,
+   "message": "set_fps() accepts up to 40 fps in this mode, where it would program a 843-line frame for a 1080-line image (sclk 74250000, hts 2200)",
+   "mode": "sensor_max_fps=30,data_interface=DVP",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "max-fps",
+   "driver": "gc2053",
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "kernel": "4.4.94",
+   "line": 1448,
+   "message": "set_fps() accepts up to 40 fps in this mode, where it would program a 886-line frame for a 1080-line image (sclk 78000000, hts 2200)",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "table-name",
+   "driver": "fx_ppif",
+   "file": "4.4.94/sensor-src/t31/fx_ppif.c",
+   "kernel": "4.4.94",
+   "line": 39,
+   "message": "init table sensor_init_regs_1280_720_30fps_mipi is named for size 1280x720 against the window's 1920x1080",
+   "mode": "-",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "table-name",
+   "driver": "gc2053",
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "kernel": "4.4.94",
+   "line": 1158,
+   "message": "init table sensor_init_regs_1920_1080_30fps_dvp is named for 30 fps against the window's 25",
+   "mode": "sensor_max_fps=30,data_interface=DVP",
+   "severity": "low",
+   "soc": "t31"
+  },
+  {
+   "check": "table-name",
+   "driver": "gc13b0",
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "kernel": "4.4.94",
+   "line": 1307,
+   "message": "init table gc13b0_init_regs_3840_3120_20fps_mipi_2lane is named for size 3840x3120 against the window's 3840x2880",
+   "mode": "-",
+   "severity": "low",
+   "soc": "t32"
+  },
+  {
+   "check": "total-width",
+   "driver": "jxf32",
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "kernel": "3.10.14",
+   "line": 1157,
+   "message": "total_width is 3600 but set_fps() works with hts 1200",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "low",
+   "soc": "t31"
+  }
+ ],
+ "summary": {
+  "aliases_skipped": [],
+  "analysed": 7,
+  "combinations_left_out": {
+   "aborted": 0,
+   "goto": 0,
+   "interface-table": 2,
+   "refused": 3
+  },
+  "drivers": 8,
+  "errors": 1,
+  "findings": {
+   "byte-order": {
+    "high": 1,
+    "low": 0,
+    "medium": 0
+   },
+   "dup-enum": {
+    "high": 0,
+    "low": 0,
+    "medium": 1
+   },
+   "frame-length": {
+    "high": 3,
+    "low": 0,
+    "medium": 0
+   },
+   "frame-short": {
+    "high": 2,
+    "low": 0,
+    "medium": 0
+   },
+   "image-size": {
+    "high": 0,
+    "low": 0,
+    "medium": 1
+   },
+   "line-time": {
+    "high": 0,
+    "low": 3,
+    "medium": 0
+   },
+   "max-fps": {
+    "high": 0,
+    "low": 2,
+    "medium": 0
+   },
+   "table-name": {
+    "high": 0,
+    "low": 3,
+    "medium": 0
+   },
+   "total-width": {
+    "high": 0,
+    "low": 1,
+    "medium": 0
+   }
+  },
+  "modes": 14,
+  "modes_with_set_fps_frame": 13,
+  "modes_with_table_frame": 13,
+  "no_modes": 0,
+  "unique_files": 8
+ },
+ "version": "2"
+}

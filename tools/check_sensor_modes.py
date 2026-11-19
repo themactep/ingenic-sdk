@@ -40,18 +40,26 @@ above are listed by default; the summary table counts all of them.
 A finding says that two places in one driver disagree. It does not say which
 of them is right: that takes the sensor's datasheet or a measurement.
 
-Python 3.6+, standard library only.
+A run can be compared with a saved one: --write-baseline FILE records the
+findings, --baseline FILE lists only those that are not in it. With
+--fail-on, a driver that cannot be parsed fails the run like a finding.
+
+Needs Python 3.7 or later (it relies on dicts keeping insertion order);
+tested with 3.11, 3.12 and 3.14. Standard library only. The tests are in
+tools/tests/test_check_sensor_modes.py.
 """
 
 import argparse
+import collections
 import fnmatch
 import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 
-VERSION = "1"
+VERSION = "2"       # of the output format (--json, --write-baseline)
 
 SEVERITIES = ("high", "medium", "low")
 
@@ -146,37 +154,162 @@ def strip_comments(src):
     return "".join(out)
 
 
-def pp_condition(kw, rest, defines):
+def pp_condition(kw, rest, defines, unread=None, line=0):
     rest = rest.strip()
     if kw == "ifdef":
         return rest.split()[0] in defines if rest else False
     if kw == "ifndef":
         return rest.split()[0] not in defines if rest else True
-    expr = re.sub(r"defined\s*\(\s*(\w+)\s*\)|defined\s+(\w+)",
-                  lambda m: "1" if (m.group(1) or m.group(2)) in defines else "0",
-                  rest)
-
-    def ident(m):
-        name = m.group(0)
-        body = defines.get(name)
-        if body is not None:
-            try:
-                return str(int(body[0].strip("() \t") or "1", 0))
-            except ValueError:
-                return "0"
-        return "0"
-    expr = re.sub(r"[A-Za-z_]\w*", ident, expr)
-    expr = expr.replace("&&", " and ").replace("||", " or ")
-    expr = re.sub(r"!(?!=)", " not ", expr)
-    if not re.fullmatch(r"[\s0-9xXa-fA-F()<>=!+\-*andort]*", expr):
-        return False
     try:
-        return bool(eval(expr, {"__builtins__": {}}, {}))  # digits and operators only
-    except Exception:
+        return bool(pp_eval(rest, defines))
+    except ValueError as e:
+        # not an integer constant expression the checker reads: the block is
+        # left out, and the driver's notes say so
+        if unread is not None:
+            unread.append((line, rest, str(e)))
         return False
 
 
-def preprocess(text, predefined):
+_PP_TOKEN = re.compile(r"\s*(?:(0[xX][0-9a-fA-F]+|\d+)[uUlL]*|([A-Za-z_]\w*)"
+                       r"|(\|\||&&|==|!=|<=|>=|<<|>>|[-+*/%&|^~!<>()?:]))")
+
+_PP_BINARY = (("||",), ("&&",), ("|",), ("^",), ("&",), ("==", "!="),
+              ("<", "<=", ">", ">="), ("<<", ">>"), ("+", "-"), ("*", "/", "%"))
+
+
+def pp_eval(text, defines, depth=0):
+    """Value of a #if expression: integer constants, defined(), object-like
+    macros of this file, and C's integer operators. Raises ValueError for
+    anything else (a function-like macro, a division by zero, a shift by
+    64 or more), so that nothing is ever handed to eval()."""
+    if depth > 16:
+        raise ValueError("macro nesting")
+    toks = []
+    pos = 0
+    text = text.strip()
+    while pos < len(text):
+        m = _PP_TOKEN.match(text, pos)
+        if not m:
+            raise ValueError("unexpected %r" % text[pos:pos + 8])
+        toks.append((m.lastindex, m.group(m.lastindex)))
+        pos = m.end()
+    state = [0]
+
+    def peek():
+        return toks[state[0]][1] if state[0] < len(toks) else None
+
+    def take():
+        if state[0] >= len(toks):
+            raise ValueError("expression ends early")
+        t = toks[state[0]]
+        state[0] += 1
+        return t
+
+    def primary():
+        kind, t = take()
+        if kind == 1:
+            return int(t, 0)
+        if kind == 2:
+            if t == "defined":
+                paren = peek() == "("
+                if paren:
+                    take()
+                kind, name = take()
+                if kind != 2:
+                    raise ValueError("defined without a name")
+                if paren and take()[1] != ")":
+                    raise ValueError("defined( without )")
+                return 1 if name in defines else 0
+            if peek() == "(":
+                raise ValueError("function-like macro %s" % t)
+            body = defines.get(t)
+            if body is None:
+                return 0        # C: an identifier that is not a macro is 0
+            if not body[0].strip():
+                raise ValueError("macro %s has no value" % t)
+            return pp_eval(body[0], defines, depth + 1)
+        if t == "(":
+            v = ternary()
+            if take()[1] != ")":
+                raise ValueError("missing )")
+            return v
+        raise ValueError("unexpected %s" % t)
+
+    def unary():
+        t = peek()
+        if t in ("!", "~", "-", "+"):
+            take()
+            v = unary()
+            return int(not v) if t == "!" else ~v if t == "~" else -v if t == "-" else v
+        return primary()
+
+    def binary(level):
+        if level == len(_PP_BINARY):
+            return unary()
+        a = binary(level + 1)
+        while peek() in _PP_BINARY[level]:
+            op = take()[1]
+            b = binary(level + 1)
+            if op == "||":
+                a = int(bool(a) or bool(b))
+            elif op == "&&":
+                a = int(bool(a) and bool(b))
+            elif op == "|":
+                a |= b
+            elif op == "^":
+                a ^= b
+            elif op == "&":
+                a &= b
+            elif op == "==":
+                a = int(a == b)
+            elif op == "!=":
+                a = int(a != b)
+            elif op == "<":
+                a = int(a < b)
+            elif op == "<=":
+                a = int(a <= b)
+            elif op == ">":
+                a = int(a > b)
+            elif op == ">=":
+                a = int(a >= b)
+            elif op in ("<<", ">>"):
+                if not 0 <= b < 64:
+                    raise ValueError("shift by %d" % b)
+                a = (a << b) if op == "<<" else (a >> b)
+            elif op == "+":
+                a += b
+            elif op == "-":
+                a -= b
+            elif op == "*":
+                a *= b
+            else:
+                if b == 0:
+                    raise ValueError("division by zero")
+                q = abs(a) // abs(b)            # C truncates toward zero
+                q = q if (a < 0) == (b < 0) else -q
+                a = q if op == "/" else a - q * b
+            if not -(1 << 64) < a < (1 << 64):
+                raise ValueError("value out of range")
+        return a
+
+    def ternary():
+        c = binary(0)
+        if peek() == "?":
+            take()
+            a = ternary()
+            if take()[1] != ":":
+                raise ValueError("? without :")
+            b = ternary()
+            return a if c else b
+        return c
+
+    v = ternary()
+    if state[0] != len(toks):
+        raise ValueError("unexpected %s" % toks[state[0]][1])
+    return v
+
+
+def preprocess(text, predefined, unread=None):
     """Resolve #if blocks (file-local macros only), collect object-like
     #defines. Dropped lines are blanked so line numbers stay true."""
     lines = text.split("\n")
@@ -199,14 +332,14 @@ def preprocess(text, predefined):
             rest = m.group(2) if m else ""
             active = all(f[2] for f in stack)
             if kw in ("if", "ifdef", "ifndef"):
-                cond = pp_condition(kw, rest, defines) if active else False
+                cond = pp_condition(kw, rest, defines, unread, i + 1) if active else False
                 stack.append([active, cond, active and cond])
             elif kw == "elif" and stack:
                 f = stack[-1]
                 if f[1]:
                     f[2] = False
                 else:
-                    cond = pp_condition("if", rest, defines) if f[0] else False
+                    cond = pp_condition("if", rest, defines, unread, i + 1) if f[0] else False
                     f[1] = cond
                     f[2] = f[0] and cond
             elif kw == "else" and stack:
@@ -752,7 +885,7 @@ class Parser(object):
             if self.text(1) == ":":
                 self.next()
                 self.next()
-                return ("empty",)
+                return ("label", x)
             if self.is_decl_start():
                 return self.parse_decl()
         e = self.parse_expr()
@@ -854,7 +987,8 @@ class Unit(object):
     def __init__(self, path, rel, text, predefined):
         self.path = path
         self.rel = rel
-        clean, self.defines = preprocess(strip_comments(text), predefined)
+        self.unread_conditions = []
+        clean, self.defines = preprocess(strip_comments(text), predefined, self.unread_conditions)
         self.toks = tokenize(clean)
         self.funcs = {}
         self.globs = {}
@@ -1127,8 +1261,8 @@ class Interp(object):
         self.called = set()
         self.nomatch = []        # definite switch values that matched no case
         self.unknown_guard = []  # lines of unknown conditions guarding mode code
-        self.gotos = []
-        self.overflow = []
+        self.gotos = []          # (function, label, line) of jumps that were not followed
+        self.jumps = 0
         self.copies = {}
         self.dyn = set()         # global keys assigned by executed code
         # set_fps instrumentation
@@ -1339,7 +1473,6 @@ class Interp(object):
             if op == "*":
                 r = a * b
                 if isinstance(r, int) and r >= (1 << 32):
-                    self.overflow.append(r)
                     r &= 0xffffffff
                 return r
             if op in ("/", "%"):
@@ -1524,6 +1657,17 @@ class Interp(object):
     def table_read(self, reg):
         if self.table is None or not isinstance(reg, int):
             return UNK
+        if self.page_reg is not None and reg == self.page_reg:
+            # the page register itself: the page set_fps() selected, or else
+            # the one the init table leaves the sensor on. The driver now
+            # acts on that answer, so later reads are held to that page: a
+            # register the table does not write there has its reset value,
+            # which the checker does not know.
+            page = self.page_cur if self.page_cur is not None else self.table.final_page
+            if page is None:
+                return UNK
+            self.page_cur = page
+            return page
         ent = self.table.lookup(reg, self.page_cur)
         return ent[0] if ent is not None else UNK
 
@@ -1544,6 +1688,10 @@ class Interp(object):
             self.exec_block(ast[1], top)
         except ReturnEx as r:
             ret = r.value
+        except GotoEx as g:
+            # the label is inside a block the jump does not sit in: the rest
+            # of this function is not followed, and the caller is told
+            self.gotos.append((name, g.label, g.line))
         finally:
             self.depth -= 1
             if top:
@@ -1553,10 +1701,27 @@ class Interp(object):
         return ret if ret is not None else UNK
 
     def exec_block(self, stmts, top=False):
-        for s in stmts:
+        i = 0
+        while i < len(stmts):
+            s = stmts[i]
+            i += 1
             if top and self.skip_return is not None and s is self.skip_return:
                 continue
-            self.exec(s)
+            try:
+                self.exec(s)
+            except GotoEx as g:
+                # a goto is followed when its label is a statement of this
+                # block or of one that encloses it (the error-path and
+                # "goto out" idioms); the exception climbs until one has it
+                for j, t in enumerate(stmts):
+                    if t[0] == "label" and t[1] == g.label:
+                        break
+                else:
+                    raise
+                self.jumps += 1
+                if self.jumps > 64:
+                    raise Abort("goto %s at line %d taken more than 64 times" % (g.label, g.line))
+                i = j + 1
 
     def cond(self, e, node):
         c = self.truth(self.eval(e))
@@ -1597,7 +1762,6 @@ class Interp(object):
         elif k == "continue":
             raise ContinueEx()
         elif k == "goto":
-            self.gotos.append((s[1], s[2]))
             raise GotoEx(s[1], s[2])
         elif k == "for":
             if s[1] is not None:
@@ -1634,6 +1798,18 @@ class Interp(object):
                 if self.truth(self.eval(s[2])) is not True:
                     break
 
+    @staticmethod
+    def log_only(body, default):
+        """A default: branch that does nothing but log, up to its break."""
+        for st in body[default + 1:]:
+            if st[0] == "break":
+                return True
+            if st[0] in ("case", "default"):
+                continue
+            if not _only_logs(st):
+                return False
+        return True
+
     def exec_switch(self, s):
         v = self.eval(s[1])
         body = s[2][1] if s[2][0] == "block" else [s[2]]
@@ -1660,10 +1836,13 @@ class Interp(object):
                     break
             elif st[0] == "default":
                 default = i
-        if start is None:
-            self.nomatch.append((ast_text(s[1]), v, s[3]))
+        if start is None and default is not None and not self.log_only(body, default):
             start = default
         if start is None:
+            # a definite value no case takes, and no default that handles
+            # it (none at all, or one that only logs the value as
+            # unsupported): this run is not a mode of the driver
+            self.nomatch.append((ast_text(s[1]), v, s[3]))
             return
         try:
             for st in body[start + 1:]:
@@ -1672,6 +1851,15 @@ class Interp(object):
                 self.exec(st)
         except BreakEx:
             pass
+
+
+def _only_logs(st):
+    if st[0] in ("empty", "break", "label"):
+        return True
+    if st[0] == "block":
+        return all(_only_logs(x) for x in st[1])
+    return (st[0] == "expr" and st[1][0] == "call" and st[1][1][0] == "id"
+            and st[1][1][1] in LOG_FUNCS)
 
 
 def callee_relevant(f, _memo={}):
@@ -1813,7 +2001,7 @@ def header_consts(root, kver, soc):
                 v = const_eval(m.group(2), consts)
                 if v is not None:
                     consts.setdefault(m.group(1), v)
-    _CONST_CACHE[key] = (consts, hdr_dir)
+    _CONST_CACHE[key] = consts
     return _CONST_CACHE[key]
 
 
@@ -1977,10 +2165,12 @@ class DriverResult(object):
         self.modes = []
         self.findings = []
         self.notes = []
+        self.skipped = []          # parameter combinations left out as implausible
+        self.left_out = {}
         self.md5 = ""
 
 
-def analyze(root, path, rel, opts):
+def analyze(root, path, rel):
     res = DriverResult(rel)
     try:
         with open(path, "rb") as fh:
@@ -2000,8 +2190,10 @@ def analyze(root, path, rel, opts):
         predefined["CONFIG_KERNEL_4_4_94"] = ("1", 0)
     try:
         unit = Unit(path, rel, text, predefined)
-        consts, hdr_dir = header_consts(root, kver, soc)
-        _analyze_unit(unit, consts, res, opts)
+        for line, cond, why in unit.unread_conditions:
+            res.notes.append("line %d: #if %s is not read (%s): the block is taken as false"
+                             % (line, cond, why))
+        _analyze_unit(unit, header_consts(root, kver, soc), res)
     except ParseError as e:
         res.status = "error"
         res.reason = "parse: %s" % e
@@ -2073,7 +2265,7 @@ def soi_indirect(writes):
     return out
 
 
-def _analyze_unit(unit, consts, res, opts):
+def _analyze_unit(unit, consts, res):
     rel = unit.rel
     attr_g = unit.find_glob("tx_isp_sensor_attribute", False)
     win_g = unit.find_glob("tx_isp_sensor_win_setting", True)
@@ -2154,6 +2346,9 @@ def _analyze_unit(unit, consts, res, opts):
 
     seen_modes = {}
     skipped_combos = 0
+    lost_gotos = {}
+    aborted = {}
+    rejected = 0
     for env in envs(0, []):
         it = base.clone()
         for key, label, v in env:
@@ -2163,27 +2358,35 @@ def _analyze_unit(unit, consts, res, opts):
             for fn in entries:
                 if fn in it.called and fn != probe:
                     continue
-                try:
-                    it.run_func(fn, [])
-                except GotoEx:
-                    if fn == probe or fn == attr_check:
-                        ok = False
-                        break
-        except Abort:
+                seen = len(it.gotos)
+                ret = it.run_func(fn, [])
+                if fn not in (probe, attr_check):
+                    continue
+                if len(it.gotos) > seen:
+                    lost_gotos[it.gotos[-1]] = lost_gotos.get(it.gotos[-1], 0) + 1
+                    ok = False
+                    break
+                if isinstance(ret, int) and ret != 0:
+                    rejected += 1       # the driver refuses this combination itself
+                    ok = False
+                    break
+        except Abort as e:
+            aborted[str(e)] = aborted.get(str(e), 0) + 1
             ok = False
         if not ok:
             continue
-        modevars = set(k for k, _, _ in env)
-        bad = False
-        for txt, v, line in it.nomatch:
-            bad = True
-        if bad:
+        if it.nomatch:
+            rejected += 1           # a switch has no case for the value
             continue
         facts = mode_facts(unit, it, attr, win)
         if facts is None:
             continue
         if implausible(env, facts):
             skipped_combos += 1
+            res.skipped.append({
+                "params": ",".join("%s=%s" % (k.lstrip("@"), lab) for k, lab, _ in env),
+                "table": facts.get("table"),
+                "why": "interface-table"})
             continue
         key = json.dumps(facts, sort_keys=True, default=str)
         if key in seen_modes:
@@ -2192,8 +2395,19 @@ def _analyze_unit(unit, consts, res, opts):
         seen_modes[key] = {"facts": facts, "envs": [env], "interp": it}
 
     if skipped_combos:
-        res.notes.append("%d parameter combinations skipped: a DVP init table with a MIPI "
-                         "interface setting or the reverse" % skipped_combos)
+        res.notes.append("%d parameter combinations left out: a DVP init table with a MIPI "
+                         "interface setting or the reverse (listed in the JSON output)" % skipped_combos)
+    res.left_out = {"interface-table": skipped_combos, "refused": rejected,
+                    "goto": sum(lost_gotos.values()), "aborted": sum(aborted.values())}
+    if rejected:
+        res.notes.append("%d parameter combinations left out: the driver refuses them (probe or "
+                         "attr_check returns an error, or a switch has no case for the value)"
+                         % rejected)
+    for (fn, label, line), n in sorted(lost_gotos.items()):
+        res.notes.append("%d parameter combinations not analysed: %s() jumps to label %s (line %d), "
+                         "which is inside another block; such a jump is not followed" % (n, fn, label, line))
+    for why, n in sorted(aborted.items()):
+        res.notes.append("%d parameter combinations not analysed: %s" % (n, why))
     if not seen_modes:
         res.status = "no-modes"
         res.reason = "no mode could be resolved from %s" % ", ".join(entries)
@@ -2204,7 +2418,7 @@ def _analyze_unit(unit, consts, res, opts):
         m["label"] = mode_label(m["envs"], kept, len(seen_modes))
     for m in sorted(seen_modes.values(), key=lambda m: m["label"]):
         m["facts"]["mode"] = m["label"]
-        check_mode(unit, m, attr, win, set_fps, res, opts)
+        check_mode(unit, m, attr, set_fps, res)
         res.modes.append(m["facts"])
     if not set_fps:
         res.notes.append("no set_fps function: only static checks ran")
@@ -2313,14 +2527,9 @@ def run_set_fps(unit, m, set_fps, fps, inject=None, inject_var=None, skip=None):
     it.inject_param = frozenset([params[1]]) if len(params) > 1 else frozenset(["fps"])
     it.tainted = it.inject_param
     it.skip_return = skip
-    th_before = it.lines.get(it.attr_name + ".total_height")
     it.lines.pop(it.attr_name + ".total_height", None)
     args = [UNK, fps] + [UNK] * max(0, len(params) - 2)
-    ret = UNK
-    try:
-        ret = it.run_func(set_fps, args, top=True)
-    except GotoEx:
-        pass
+    ret = it.run_func(set_fps, args, top=True)
     mask = 0xffff if table is not None and table.data16 else 0xff
     writes = [(w[0], (w[1] & mask) if isinstance(w[1], int) else w[1], w[2], w[3]) for w in it.writes]
     if os.path.basename(unit.rel).startswith("jx"):
@@ -2333,14 +2542,11 @@ def run_set_fps(unit, m, set_fps, fps, inject=None, inject_var=None, skip=None):
         "th": th if isinstance(th, int) else None,
         "assigned": assigned,
         "locals": it.top_locals or {},
-        "overflow": list(it.overflow),
         "injected": it.injected,
         "table": table,
-        "th_line": it.lines.get(it.attr_name + ".total_height"),
         "reads": it.reads,
         "no_table": table is None,
-        "mit": [it.store.get(it.attr_name + "." + k) for k in
-                ("max_integration_time", "max_integration_time_native", "integration_time_limit")],
+        "gotos": list(it.gotos),
     }
 
 
@@ -2473,10 +2679,7 @@ def table_frame_readback(unit, m, set_fps, fps, skip, r0):
     it.skip_return = skip
     key = it.attr_name + ".total_height"
     it.lines.pop(key, None)
-    try:
-        it.run_func(set_fps, [UNK, fps], top=True)     # no table: every read is unknown
-    except GotoEx:
-        pass
+    it.run_func(set_fps, [UNK, fps], top=True)     # no table: every read is unknown
     if key in it.lines and isinstance(it.store.get(key), int):
         return None, None       # a constant, not a read
     regs = [r for r in r0["reads"] if isinstance(r[0], int) and isinstance(r[1], int)]
@@ -2498,14 +2701,16 @@ def table_frame_readback(unit, m, set_fps, fps, skip, r0):
     return r0["th"], detail
 
 
-def check_mode(unit, m, attr, win, set_fps, res, opts):
+def check_mode(unit, m, attr, set_fps, res):
     f = m["facts"]
     rel = unit.rel
     label = m["label"]
     fps = f["fps"]
-    A = f["total_height"] if isinstance(f["total_height"], int) else None
+    # a total_height of 0 is a mode the driver left unfilled: nothing to compare
+    A = f["total_height"] if isinstance(f["total_height"], int) and f["total_height"] > 0 else None
     W = f["total_width"] if isinstance(f["total_width"], int) else None
     ln = f["lines"]
+    f["notes"] = []
 
     guard_txt = ""
     if f.get("unknown_guard"):
@@ -2568,6 +2773,9 @@ def check_mode(unit, m, attr, win, set_fps, res, opts):
             if r1["assigned"]:
                 r0, skip, dead = r1, d, True
     f["set_fps_dead"] = dead
+    for fn, lab, line in r0["gotos"]:
+        f["notes"].append("%s() jumps to label %s (line %d), which is inside another block: "
+                          "the code after the jump was not followed" % (fn, lab, line))
     C = r0["th"] if r0["assigned"] else None
     loc = r0["locals"]
     sclk = None
@@ -2612,6 +2820,9 @@ def check_mode(unit, m, attr, win, set_fps, res, opts):
                     f["T_reason"] = None
     else:
         f["T_reason"] = "set_fps() does not set total_height from a local" if f["table"] else "init table not resolved"
+    if T is not None and T <= 0:
+        f["T_reason"] = "the init table's frame-length registers hold %d" % T
+        T = detail = None
     f["T"] = T
     if detail:
         f["T_regs"] = detail["regs"]
@@ -2630,10 +2841,21 @@ def check_mode(unit, m, attr, win, set_fps, res, opts):
     Ae = int(round(A * scale)) if A is not None else None
     Ce = int(round(C * scale)) if C is not None else None
     f["A_eq"], f["C_eq"] = Ae, Ce
-    a_txt = "%d" % A if scale == 1.0 else "%d (%d at the window's rate)" % (A, Ae) if A is not None else "?"
+    if A is None:
+        a_txt = "?"
+    elif scale == 1.0:
+        a_txt = "%d" % A
+    else:
+        a_txt = "%d (%d at the window's rate)" % (A, Ae)
     swapped = detail.get("swapped") if detail else None
     if (T is not None and Ae is not None and swapped is not None and not near(T, Ae)
             and (T > 3 * Ae or T * 3 < Ae) and near(swapped, Ae, rel=0.05)):
+        # T as set_fps() would decode the table is meaningless here; report
+        # the frame the table holds, read in the table's own byte order
+        f["T_as_set_fps_reads"] = T
+        f["T"] = swapped
+        f["notes"].append("T is read in the init table's byte order; in set_fps()'s order the same "
+                          "bytes are %d" % T)
         add("high", "byte-order", unit.funcs[set_fps].line,
             "set_fps() writes the frame length's high byte to reg %s and its low byte to reg %s, "
             "but init table %s holds them the other way round (%s = %s, line %s: %d lines read the "
@@ -2726,6 +2948,44 @@ def find_drivers(root, patterns, follow_links=False):
     return out, aliases
 
 
+def tree_identity(root):
+    """The commit the drivers were read from, when root is the top of a git
+    work tree; None otherwise (a tarball, a subdirectory, no git). "dirty"
+    says that a tracked file under the kernel-version folders, where the
+    drivers and their headers are, differs from that commit."""
+    def git(*args):
+        try:
+            r = subprocess.run(("git", "-C", root) + args, stdout=subprocess.PIPE,
+                               stderr=subprocess.DEVNULL, universal_newlines=True, timeout=30)
+        except (OSError, subprocess.SubprocessError):
+            return None
+        return r.stdout.strip() if r.returncode == 0 else None
+    top = git("rev-parse", "--show-toplevel")
+    if not top or os.path.realpath(top) != os.path.realpath(root):
+        return None
+    head = git("rev-parse", "HEAD")
+    if not head:
+        return None
+    kvers = sorted(d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d, "sensor-src")))
+    return {"commit": head,
+            "dirty": bool(git("status", "--porcelain", "--untracked-files=no", "--", *kvers))}
+
+
+def finding_key(fd):
+    """What identifies a finding from one run to the next: no line number and
+    no message, so that an unrelated edit of the file does not make it new."""
+    return (fd.rel, fd.check, fd.mode, fd.severity)
+
+
+def load_baseline(path):
+    with open(path, "r", encoding="utf-8") as fh:
+        data = json.load(fh)
+    known = collections.Counter()
+    for e in data.get("findings", []):
+        known[(e["file"], e["check"], e["mode"], e["severity"])] += 1
+    return known
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         description="Cross-check every sensor driver's modes against itself "
@@ -2736,20 +2996,31 @@ def main(argv=None):
                          "'sc2*', t31/gc2053, '4.4.94/*/t40/*' (repeatable)")
     ap.add_argument("--min-severity", choices=SEVERITIES, default="medium",
                     help="least severity to list (default: medium; the summary counts all)")
-    ap.add_argument("--check", action="append", default=[], metavar="NAME",
-                    help="only these checks (repeatable)")
+    ap.add_argument("--check", action="append", default=[], metavar="NAME", choices=sorted(CHECKS),
+                    help="only these checks (repeatable; see --list-checks)")
     ap.add_argument("--format", choices=("text", "json"), default="text")
     ap.add_argument("--json", action="store_true", help="same as --format json")
     ap.add_argument("--modes", action="store_true",
                     help="text output: also list every resolved mode with its T / A / C")
+    ap.add_argument("--notes", action="store_true",
+                    help="text output: also list, per driver, what was left out of the analysis "
+                         "(parameter combinations, #if conditions, jumps)")
     ap.add_argument("--unparsed", action="store_true",
-                    help="text output: list the drivers that could not be analysed")
+                    help="text output: also list the drivers in which no mode was found "
+                         "(drivers that cannot be parsed are always listed)")
     ap.add_argument("--follow-links", action="store_true",
                     help="also check the SoC folders that are symbolic links to another "
                          "folder (t10 -> t20, c100 -> t31): the same sources, read with "
                          "that SoC's own tx-isp-common.h")
+    ap.add_argument("--baseline", metavar="FILE",
+                    help="a file written by --write-baseline: list, and with --fail-on count, only "
+                         "the findings that are not in it")
+    ap.add_argument("--write-baseline", metavar="FILE",
+                    help="record this run's findings of --min-severity and above in FILE")
     ap.add_argument("--fail-on", choices=SEVERITIES, default=None,
-                    help="exit 1 when a finding of this severity or worse exists")
+                    help="exit 1 when a finding of this severity or worse exists (whatever "
+                         "--min-severity lists; with --baseline, a finding not in it), or when "
+                         "a driver could not be analysed")
     ap.add_argument("--list-checks", action="store_true")
     opts = ap.parse_args(argv)
     if opts.json:
@@ -2766,12 +3037,18 @@ def main(argv=None):
         sys.stderr.write("no sensor driver found under %s (run from the ingenic-sdk root, "
                          "or pass --root)\n" % root)
         return 2
-    sys.setrecursionlimit(10000)
+    known = None
+    if opts.baseline:
+        try:
+            known = load_baseline(opts.baseline)
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            sys.stderr.write("cannot read baseline %s: %s\n" % (opts.baseline, e))
+            return 2
 
     results = []
     for path, rel in drivers:
         try:
-            results.append(analyze(root, path, rel, opts))
+            results.append(analyze(root, path, rel))
         except Exception as e:      # a checker bug must not hide the other drivers
             r = DriverResult(rel)
             r.status = "error"
@@ -2786,19 +3063,61 @@ def main(argv=None):
             if not opts.check or fd.check in opts.check:
                 counted.append(fd)
     counted.sort(key=lambda fd: (rank[fd.severity], fd.check, fd.rel, fd.line))
-    findings = [fd for fd in counted if rank[fd.severity] <= limit]
+
+    # with a baseline, a finding is new unless the baseline has it
+    base_info = None
+    fresh = counted
+    if known is not None:
+        left = collections.Counter(known)
+        fresh = []
+        for fd in counted:
+            k = finding_key(fd)
+            if left[k] > 0:
+                left[k] -= 1
+            else:
+                fresh.append(fd)
+        checked = set(r.rel for r in results)
+        gone = sorted(k for k in left.elements() if k[0] in checked
+                      and (not opts.check or k[1] in opts.check))
+        base_info = {
+            "file": opts.baseline,
+            "known": len(counted) - len(fresh),
+            "new": 0,       # of the severities listed; set below
+            "gone": [{"file": k[0], "check": k[1], "mode": k[2], "severity": k[3]} for k in gone],
+        }
+    findings = [fd for fd in fresh if rank[fd.severity] <= limit]
+    if base_info:
+        base_info["new"] = len(findings)
+    tree = tree_identity(root)
+
+    if opts.write_baseline:
+        rows = sorted(finding_key(fd) for fd in counted if rank[fd.severity] <= limit)
+        with open(opts.write_baseline, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump({
+                "version": VERSION,
+                "tree": tree,
+                "min_severity": opts.min_severity,
+                "checks": sorted(opts.check) or None,
+                "findings": [{"file": k[0], "check": k[1], "mode": k[2], "severity": k[3]} for k in rows],
+            }, fh, indent=1)
+            fh.write("\n")
 
     ok = [r for r in results if r.status == "ok"]
+    errors = [r for r in results if r.status == "error"]
+    left_out = collections.Counter()
+    for r in results:
+        left_out.update(r.left_out)
     summary = {
         "drivers": len(results),
         "unique_files": len(set(r.md5 for r in results)),
         "aliases_skipped": aliases,
         "analysed": len(ok),
         "no_modes": len([r for r in results if r.status == "no-modes"]),
-        "errors": len([r for r in results if r.status == "error"]),
+        "errors": len(errors),
         "modes": sum(len(r.modes) for r in ok),
         "modes_with_table_frame": sum(1 for r in ok for m in r.modes if m.get("T") is not None),
         "modes_with_set_fps_frame": sum(1 for r in ok for m in r.modes if m.get("C") is not None),
+        "combinations_left_out": dict((k, left_out[k]) for k in sorted(left_out)),
         "findings": {},
     }
     for fd in counted:
@@ -2808,35 +3127,50 @@ def main(argv=None):
     if opts.format == "json":
         json.dump({
             "version": VERSION,
+            "tree": tree,
             "summary": summary,
+            "baseline": base_info,
             "findings": [fd.as_dict() for fd in findings],
             "drivers": [{"file": r.rel, "status": r.status, "reason": r.reason,
-                         "md5": r.md5, "notes": r.notes, "modes": r.modes} for r in results],
+                         "md5": r.md5, "notes": r.notes, "left_out": r.left_out,
+                         "skipped_combinations": r.skipped, "modes": r.modes}
+                        for r in results],
         }, sys.stdout, indent=1, default=str)
         sys.stdout.write("\n")
     else:
+        for r in errors:
+            print("%-6s %-17s %s  %s" % ("ERROR", "not-analysed", r.rel, r.reason))
         for fd in findings:
             d = fd.as_dict()
             print("%-6s %-17s %s/%s  %s:%d  [%s]  %s" % (
                 fd.severity.upper(), fd.check, d["soc"], d["driver"], fd.rel, fd.line, fd.mode, fd.message))
         if opts.modes:
             print("")
-            print("%-40s %-4s %-36s %-6s %6s %6s %6s %6s" % ("file", "win", "mode", "fps", "T", "A", "C", "width"))
+            print("%-40s %-4s %-36s %-6s %6s %6s %6s %6s  %s" % (
+                "file", "win", "mode", "fps", "T", "A", "C", "width", "note"))
             for r in ok:
                 for m in r.modes:
+                    note = ([m["T_reason"]] if m.get("T_reason") else []) + (m.get("notes") or [])
                     print("%-40s %-4s %-36s %-6s %6s %6s %6s %6s  %s" % (
                         r.rel, "[" + str(m.get("win")).split("[")[-1], m.get("mode"), fmt_fps(m.get("fps")),
                         m.get("T") if m.get("T") is not None else "-",
                         m.get("total_height") if m.get("total_height") is not None else "-",
                         m.get("C") if m.get("C") is not None else "-",
                         m.get("total_width") if m.get("total_width") is not None else "-",
-                        m.get("T_reason") or ""))
+                        "; ".join(note)))
+        if opts.notes:
+            print("")
+            for r in results:
+                for note in r.notes:
+                    print("NOTE   %s: %s" % (r.rel, note))
         if opts.unparsed:
             print("")
             for r in results:
-                if r.status != "ok":
+                if r.status == "no-modes":
                     print("%-9s %s: %s" % (r.status.upper(), r.rel, r.reason))
         print("")
+        if tree:
+            print("Tree:    %s%s" % (tree["commit"], " (with uncommitted driver changes)" if tree["dirty"] else ""))
         print("Drivers: %d files (%d distinct), %d analysed, %d without resolvable modes, %d not parsed"
               % (summary["drivers"], summary["unique_files"], summary["analysed"],
                  summary["no_modes"], summary["errors"]))
@@ -2845,6 +3179,20 @@ def main(argv=None):
                   % ", ".join(aliases))
         print("Modes:   %d resolved; init-table frame length read for %d, set_fps() frame length for %d"
               % (summary["modes"], summary["modes_with_table_frame"], summary["modes_with_set_fps_frame"]))
+        if sum(left_out.values()):
+            print("Left out: %d parameter combinations with a DVP init table and a MIPI interface "
+                  "setting or the reverse, %d the driver refuses itself, %d the checker could not "
+                  "follow (--notes lists them per driver)"
+                  % (left_out["interface-table"], left_out["refused"],
+                     left_out["goto"] + left_out["aborted"]))
+        if base_info:
+            print("Baseline: %s: %d findings known, %d new (listed above), %d of its entries no "
+                  "longer found" % (base_info["file"], base_info["known"], base_info["new"],
+                                    len(base_info["gone"])))
+            for e in base_info["gone"][:20]:
+                print("         gone: %s %s %s [%s]" % (e["severity"], e["check"], e["file"], e["mode"]))
+            if len(base_info["gone"]) > 20:
+                print("         ... and %d more (all of them in the JSON output)" % (len(base_info["gone"]) - 20))
         print("")
         print("%-18s %6s %6s %6s" % ("check", "high", "medium", "low"))
         for name in CHECKS:
@@ -2855,7 +3203,9 @@ def main(argv=None):
         print("%-18s %6d %6d %6d" % ("total", tot[0], tot[1], tot[2]))
 
     if opts.fail_on is not None:
-        if any(rank[fd.severity] <= rank[opts.fail_on] for fd in findings):
+        # every finding counts, whatever --min-severity lists; and a driver
+        # that could not be analysed is a failure, not a clean result
+        if errors or any(rank[fd.severity] <= rank[opts.fail_on] for fd in fresh):
             return 1
     return 0
 

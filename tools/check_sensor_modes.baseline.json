@@ -1,0 +1,2861 @@
+{
+ "version": "2",
+ "tree": {
+  "commit": "ad6e2903d027bcfc6bc860721c82f7d8f79fdd85",
+  "dirty": false
+ },
+ "min_severity": "medium",
+ "checks": null,
+ "findings": [
+  {
+   "file": "3.10.14/sensor-src/t20/gc1034.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t20/imx225.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t20/jxv01.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t20/sc2035.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t20/sc2300.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t21/gc2053.c",
+   "check": "fps-range",
+   "mode": "sensor_max_fps=15,data_interface=MIPI",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t21/mis2003.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t21/sc2232h.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t21/sc2300.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/c4390.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053-double.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053-double.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053s0.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053s0.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2053s1.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2063.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2063s0.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2063s0.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2063s1.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2083s0.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2083s1.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2093.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/gc2093.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf23.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_FS",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf35.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=60,data_interface=MIPI,sensor_resolution=SENSOR_RES_180,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf35.c",
+   "check": "fps-range",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_30,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf35.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=DVP,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_13,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37p.c",
+   "check": "fps-clock",
+   "mode": "sboot=0",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37p.c",
+   "check": "fps-clock",
+   "mode": "sboot=1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37pas0.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf37pas1.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxf57.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxh63p.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/jxk306p.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/mis2009.c",
+   "check": "fps-clock",
+   "mode": "data_interface=DVP,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/mis2009.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=60,data_interface=MIPI,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/os04c10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=30,sensor_resolution=RES_400,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=12,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=30,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc223a.c",
+   "check": "fps-clock",
+   "mode": "sensor_mipi_line=2",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc223a.c",
+   "check": "frame-length",
+   "mode": "sensor_mipi_line=1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc2315e.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc2336p.c",
+   "check": "image-size",
+   "mode": "sensor_resolution=RES_200",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc2337p.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc3332p.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t23/sc3336.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/gc2053.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15,data_interface=MIPI",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/jxf22.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/mis2003.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/ov2732.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_raw_mode=SENSOR_RAW_MODE_LINEAR_30FPS",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/sc2232h.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t30/sc5235.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=SENSOR_RES_500",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/bf3a03.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/bf3a03.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/c4390.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc032a.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc1054.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc2023.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc2063.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=MIPI",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc2063.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc2093.c",
+   "check": "fps-clock",
+   "mode": "data_type=0",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/gc4653.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_100,data_type=0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf23.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_FS",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf28p.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "check": "frame-short",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf32.c",
+   "check": "image-size",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf35.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=PS5270_SENSOR_MAX_FPS_30,data_interface=DVP,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_13,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf51.c",
+   "check": "fps-clock",
+   "mode": "data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxf53.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=60",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxh63.c",
+   "check": "fps-clock",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxh66.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os02d20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os03b10.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os04c10.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,sensor_resolution=SENSOR_RES_370,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os04l10.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os04l10.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=12,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=30,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=60",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a20.c",
+   "check": "frame-short",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/os05a20.c",
+   "check": "frame-short",
+   "mode": "sensor_max_fps=60",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/ov2745.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/ps5258.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/ps5268.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc1346.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc2310.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=15,data_interface=MIPI,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc2310.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15,data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc2310.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc2315e.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc2336p.c",
+   "check": "image-size",
+   "mode": "sensor_resolution=RES_200",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc3336.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc4236.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=SENSOR_RES_300",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc450ai.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc450ai.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t31/sc5235.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_400,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc02m1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc02m1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc02m1.c",
+   "check": "image-size",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc13b0.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc13b0.c",
+   "check": "frame-short",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc5613.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/gc8602.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/imx179.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/imx415.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/jxk06.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/sc4336p.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t32/sc635hai.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc2053.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc2053s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc2083.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc2083s1.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc4653.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc4653s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc5603.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/gc5603s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/imx307.c",
+   "check": "fps-range",
+   "mode": "default_boot=2",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/imx335.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/imx347.c",
+   "check": "fps-range",
+   "mode": "default_boot=0",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/imx385.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/imx386.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf23s1.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_FS",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf32.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf32.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf35.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf35.c",
+   "check": "fps-clock",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf35.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxf37s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxh63.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxh63s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=3",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "frame-short",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "frame-short",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "integration-limit",
+   "mode": "default_boot=1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk04.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/jxk08.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/mis2008.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=6,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=6,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/os05a10s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov01a1s.c",
+   "check": "fps-clock",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov01a1s.c",
+   "check": "fps-clock",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b10.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b10.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b10.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b10.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b1b.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b1b.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b1b.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ov02b1b.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/ps5258.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc031iot.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc035hgs.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc2232h.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,sensor_max_fps=15,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc2310.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc2310s1.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc2310s2.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc2310s3.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc4236.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t40/sc8238.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc2063.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023.c",
+   "check": "integration-limit",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc4663.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc5603.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=3",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc5603.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc5603s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=3",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc5603s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc8613.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/gc8613.c",
+   "check": "frame-short",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/jxk08.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/jxk08.c",
+   "check": "fps-range",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/mis2009.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/mis2009.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/ov2736.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc2210.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc301iot.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc401ais1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc401ais1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc4210.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc4210.c",
+   "check": "integration-limit",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc450ai.c",
+   "check": "image-size",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc500ai.c",
+   "check": "fps-range",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc500ai.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc500ais1.c",
+   "check": "fps-range",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc500ais1.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41/sc5239.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc2063.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc2063.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4653.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc4653.c",
+   "check": "fps-range",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/gc5603.c",
+   "check": "frame-length",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/sc401ai.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "3.10.14/sensor-src/t41zrt/sc401ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/bf3a03.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/bf3a03.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/c4390.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc032a.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc1054.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2023.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2053.c",
+   "check": "dup-enum",
+   "mode": "sensor_max_fps",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2063.c",
+   "check": "dup-enum",
+   "mode": "sensor_max_fps",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2063.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=MIPI",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2063.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_interface=MIPI",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc2093.c",
+   "check": "fps-clock",
+   "mode": "data_type=0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/gc4653.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_100,data_type=0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf23.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_FS",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf28p.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf32.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf32.c",
+   "check": "frame-short",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf32.c",
+   "check": "image-size",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf35.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=PS5270_SENSOR_MAX_FPS_30,data_interface=DVP,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf37.c",
+   "check": "fps-clock",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_13,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf51.c",
+   "check": "fps-clock",
+   "mode": "data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxf53.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=60",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxh63.c",
+   "check": "fps-clock",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxh66.c",
+   "check": "frame-length",
+   "mode": "data_interface=DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/jxk04.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os02d20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os03b10.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os04c10.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30,sensor_resolution=SENSOR_RES_370,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os04l10.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os04l10.c",
+   "check": "integration-limit",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=12,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a10.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=30,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a20.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=60",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a20.c",
+   "check": "frame-short",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/os05a20.c",
+   "check": "frame-short",
+   "mode": "sensor_max_fps=60",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/ov2745.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/ps5258.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/ps5268.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/ps5270.c",
+   "check": "fps-range",
+   "mode": "sensor_resolution=RES_30",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc1346.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc2310.c",
+   "check": "fps-clock",
+   "mode": "sensor_max_fps=15,data_interface=MIPI,data_type=DATA_TYPE_LINEAR",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc2310.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=15,data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc2310.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=MIPI,data_type=DATA_TYPE_WDR_DOL",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc2315e.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25,data_interface=DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc3336.c",
+   "check": "frame-length",
+   "mode": "sensor_resolution=RES_100",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc4236.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc450ai.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=25",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc450ai.c",
+   "check": "frame-length",
+   "mode": "sensor_max_fps=30",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t31/sc5235.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,sensor_resolution=SENSOR_RES_400,data_type=DATA_TYPE_LINEAR",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc02m1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc02m1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc02m1.c",
+   "check": "image-size",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc13b0.c",
+   "check": "frame-short",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc5613.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/gc8602.c",
+   "check": "byte-order",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/imx179.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/imx415.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/jxk06.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/sc4336p.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t32/sc635hai.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc2053.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc2053s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc2083.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc2083s1.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc4653.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc4653s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc5603.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/gc5603s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/imx307.c",
+   "check": "fps-range",
+   "mode": "default_boot=2",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/imx335.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/imx347.c",
+   "check": "fps-range",
+   "mode": "default_boot=0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/imx385.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/imx386.c",
+   "check": "fps-clock",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf23s1.c",
+   "check": "frame-length",
+   "mode": "data_interface=MIPI,data_type=DATA_TYPE_WDR_FS",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf32.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf32.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf35.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf35.c",
+   "check": "fps-clock",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf35.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxf37s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxh63.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxh63s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "frame-length",
+   "mode": "default_boot=3",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "frame-short",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "frame-short",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "integration-limit",
+   "mode": "default_boot=1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk04.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/jxk08.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/mis2008.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=6,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10.c",
+   "check": "fps-range",
+   "mode": "default_boot=6,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-clock",
+   "mode": "default_boot=5,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/os05a10s1.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov01a1s.c",
+   "check": "fps-clock",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov01a1s.c",
+   "check": "fps-clock",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b10.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b10.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b10.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b10.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b1b.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b1b.c",
+   "check": "frame-length",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b1b.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ov02b1b.c",
+   "check": "integration-limit",
+   "mode": "video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/ps5258.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc031iot.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc035hgs.c",
+   "check": "fps-range",
+   "mode": "-",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc2232h.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,sensor_max_fps=15,data_interface=DVP,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc2310.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc2310s1.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc2310s2.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc2310s3.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc4236.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t40/sc8238.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc2063.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023.c",
+   "check": "integration-limit",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=3",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4023s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc4663.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc5603.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc5603s0.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=3",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc5603s0.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc5603s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=3",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc5603s1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,fsync_mode=TX_ISP_SENSOR_FSYNC_MODE_MS_REALTIME_MISPLACE",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc8613.c",
+   "check": "frame-length",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/gc8613.c",
+   "check": "frame-short",
+   "mode": "default_boot=2",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,data_interface=MIPI,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/jxk08.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/jxk08.c",
+   "check": "fps-range",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/mis2009.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/mis2009.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/ov2736.c",
+   "check": "frame-length",
+   "mode": "-",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/ov2740.c",
+   "check": "fps-range",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc2210.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc301iot.c",
+   "check": "fps-clock",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc401ais1.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc401ais1.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc4210.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc4210.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc4210.c",
+   "check": "integration-limit",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc430ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc450ai.c",
+   "check": "image-size",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc500ai.c",
+   "check": "fps-range",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc500ai.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc500ais1.c",
+   "check": "fps-range",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc500ais1.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41/sc5239.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc2063.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc2063.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4023.c",
+   "check": "frame-length",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4653.c",
+   "check": "fps-range",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc4653.c",
+   "check": "fps-range",
+   "mode": "default_boot=1,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/gc5603.c",
+   "check": "frame-length",
+   "mode": "default_boot=1",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_DVP",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-clock",
+   "mode": "default_boot=2,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=3,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/jxf37.c",
+   "check": "fps-range",
+   "mode": "default_boot=4,video_interface=TISP_SENSOR_VI_MIPI_CSI0|TISP_SENSOR_VI_MIPI_CSI1",
+   "severity": "medium"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/sc401ai.c",
+   "check": "frame-length",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "high"
+  },
+  {
+   "file": "4.4.94/sensor-src/t41zrt/sc401ai.c",
+   "check": "integration-limit",
+   "mode": "default_boot=0,video_interface=TISP_SENSOR_VI_MIPI_CSI0",
+   "severity": "medium"
+  }
+ ]
+}
