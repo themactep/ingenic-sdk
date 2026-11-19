@@ -38,7 +38,7 @@ serializes access to the HW engine internally with a mutex.
 Files
 -----
   jz-aes.c        Kernel module. DMA AES, per-fd session state, HW
-                  mutex, key caching, byte-swap flag, combined
+                  mutex, per-operation key load, byte-swap flag, combined
                   IOCTL_AES_DO (setkey + encrypt + decrypt in one
                   ioctl for low latency).
 
@@ -50,6 +50,12 @@ Files
 
   test_aes.h      Userspace ioctl/struct definitions (same wire
                   contract as jz-aes.h but without kernel includes).
+
+  test_aes_shared.c
+                  Regression test for the shared key registers:
+                  known answers, interleaved file descriptors, CBC,
+                  DO vs PROCESSING, invalid parameters, 1000-round
+                  soak. Exit status 0 on success.
 
   test_endian.c   Endianness probe — confirmed key = BE, data = swap
                   on T31.

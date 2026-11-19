@@ -58,11 +58,6 @@ struct aes_para {
 struct aes_session {
 	struct aes_para para;
 	struct aes_operation *aes;	/* back-pointer to device */
-	/* key cache — skip re-expansion when key+mode unchanged */
-	unsigned int cached_key[8];
-	int cached_keybits;
-	int cached_mode;
-	int key_loaded;			/* 1 if hardware has this key */
 };
 
 /* Global device state — one per hardware engine */

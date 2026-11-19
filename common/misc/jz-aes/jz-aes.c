@@ -99,38 +99,18 @@ static void bswap_buf32(unsigned char *buf, int len)
 }
 
 /*
- * Check if we can skip key re-expansion (same key+mode+keybits as last time).
- */
-static int key_matches(struct aes_session *sess, struct aes_para *p, int nwords)
-{
-	if (!sess->key_loaded)
-		return 0;
-	if (sess->cached_keybits != p->keybits)
-		return 0;
-	if (sess->cached_mode != (int)p->enworkmode)
-		return 0;
-	return memcmp(sess->cached_key, p->aeskey, nwords * 4) == 0;
-}
-
-static void key_save(struct aes_session *sess, struct aes_para *p, int nwords)
-{
-	memcpy(sess->cached_key, p->aeskey, nwords * 4);
-	sess->cached_keybits = p->keybits;
-	sess->cached_mode = (int)p->enworkmode;
-	sess->key_loaded = 1;
-}
-
-/*
  * Configure hardware and run a complete AES operation.
  * Caller must hold aes->hw_mutex.
- * If sess is non-NULL, uses key caching to skip re-expansion.
+ *
+ * The key registers belong to the shared engine, not to the file descriptor
+ * that loaded them: another open can replace the key between two calls. Load
+ * the key on every operation so the ciphertext never depends on what some
+ * other session did last.
  */
-static int jz_aes_do_operation(struct aes_operation *aes, struct aes_para *p,
-			       struct aes_session *sess)
+static int jz_aes_do_operation(struct aes_operation *aes, struct aes_para *p)
 {
 	unsigned int ascr, ascr_keyl;
 	int i, nwords, timeout, offset = 0, len, ret = 0;
-	int skip_key;
 
 	/* validate */
 	if (p->datalen % 16)
@@ -139,8 +119,6 @@ static int jz_aes_do_operation(struct aes_operation *aes, struct aes_para *p,
 		return -EINVAL;
 	if (aes_keyl_config(p->keybits, &ascr_keyl, &nwords))
 		return -EINVAL;
-
-	skip_key = sess && key_matches(sess, p, nwords);
 
 	/* --- hardware init --- */
 
@@ -155,8 +133,7 @@ static int jz_aes_do_operation(struct aes_operation *aes, struct aes_para *p,
 #if defined(CONFIG_SOC_PRJ008)
 	aes_reg_write(aes, AES_ASINTM, ASINTM_DMA);
 #else
-	aes_reg_write(aes, AES_ASINTM,
-		      ASINTM_DMA | (skip_key ? 0 : ASINTM_KEY));
+	aes_reg_write(aes, AES_ASINTM, ASINTM_DMA | ASINTM_KEY);
 #endif
 
 	/* clear IV/keys, enable AES */
@@ -194,28 +171,24 @@ static int jz_aes_do_operation(struct aes_operation *aes, struct aes_para *p,
 			      aes_reg_read(aes, AES_ASCR) | ASCR_INIT_IV);
 	}
 
-	if (!skip_key) {
-		/* load key and trigger key expansion */
-		aes->hw_status = JZ_AES_STATUS_PREPARE;
-		init_completion(&aes->key_comp);
-		for (i = 0; i < nwords; i++)
-			aes_reg_write(aes, AES_ASKY, p->aeskey[i]);
-		aes_reg_write(aes, AES_ASCR,
-			      aes_reg_read(aes, AES_ASCR) | ASCR_KEYS);
+	/* load key and trigger key expansion */
+	aes->hw_status = JZ_AES_STATUS_PREPARE;
+	init_completion(&aes->key_comp);
+	for (i = 0; i < nwords; i++)
+		aes_reg_write(aes, AES_ASKY, p->aeskey[i]);
+	aes_reg_write(aes, AES_ASCR,
+		      aes_reg_read(aes, AES_ASCR) | ASCR_KEYS);
 
-		/* wait for key expansion (PRJ008 has no KEY interrupt) */
+	/* wait for key expansion (PRJ008 has no KEY interrupt) */
 #if !defined(CONFIG_SOC_PRJ008)
-		timeout = 1000;
-		while (timeout--) {
-			if (!wait_for_completion_interruptible(&aes->key_comp))
-				break;
-		}
-		if (timeout <= 0)
-			return -ETIMEDOUT;
-#endif
-		if (sess)
-			key_save(sess, p, nwords);
+	timeout = 1000;
+	while (timeout--) {
+		if (!wait_for_completion_interruptible(&aes->key_comp))
+			break;
 	}
+	if (timeout <= 0)
+		return -ETIMEDOUT;
+#endif
 
 	/* set DMA addresses */
 	aes_reg_write(aes, AES_ASSA, aes->src_addr_p);
@@ -337,7 +310,7 @@ static long aes_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 
 		/* serialize hardware access */
 		mutex_lock(&aes->hw_mutex);
-		ret = jz_aes_do_operation(aes, &sess->para, NULL);
+		ret = jz_aes_do_operation(aes, &sess->para);
 		mutex_unlock(&aes->hw_mutex);
 
 		/* return updated para (donelen, status) */
@@ -346,15 +319,12 @@ static long aes_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		return ret;
 
 	case IOCTL_AES_DO:
-		/*
-		 * Combined init + processing in one syscall.
-		 * Uses per-session key cache to skip re-expansion.
-		 */
+		/* combined init + processing in one syscall */
 		if (copy_from_user(&sess->para, argp, sizeof(sess->para)))
 			return -EFAULT;
 
 		mutex_lock(&aes->hw_mutex);
-		ret = jz_aes_do_operation(aes, &sess->para, sess);
+		ret = jz_aes_do_operation(aes, &sess->para);
 		mutex_unlock(&aes->hw_mutex);
 
 		if (copy_to_user(argp, &sess->para, sizeof(sess->para)))
