@@ -771,6 +771,7 @@ static long motor_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 }
 
 static struct file_operations motor_fops = {
+	.owner = THIS_MODULE,
 	.open = motor_open,
 	.release = motor_release,
 	.unlocked_ioctl = motor_ioctl,
