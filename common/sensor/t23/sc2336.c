@@ -468,7 +468,6 @@ static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	{0x5aff, 0x28},
 	{0x36e9, 0x53},
 	{0x37f9, 0x53},
-	{0x0100, 0x01},
 	{SENSOR_REG_END, 0x00},
 };
 
@@ -700,13 +699,22 @@ static int sensor_init(struct tx_isp_subdev *sd, int enable) {
 	 * from the first frame, independent of which ISP tuning API (if
 	 * any) a given streamer calls. Must run after the mode table above
 	 * (register 0x0103 in that table resets the sensor and would wipe
-	 * this) and is safe to fail softly - a write error here shouldn't
-	 * block streaming, just leave the image un-mirrored.
+	 * this) and before stream-on below: this register access intermittently
+	 * NAK'd (-EIO) when it ran right after the sensor had just been told to
+	 * start streaming (mode table used to end on 0x0100=0x01 itself), most
+	 * likely too little settle time after that command for another I2C
+	 * transaction. Failing here is still soft - an error just leaves the
+	 * image un-mirrored, same as before.
 	 */
 	if (shvflip) {
 		ret = sensor_set_vflip(sd, 3);
 		if (ret)
 			ISP_ERROR("%s: failed to apply shvflip (%d)\n", __func__, ret);
+	}
+
+	ret = sensor_write_array(sd, sensor_stream_on_mipi);
+	if (ret) {
+		return ret;
 	}
 
 	ret = tx_isp_call_subdev_notify(sd, TX_ISP_EVENT_SYNC_SENSOR_ATTR, &sensor->video);
