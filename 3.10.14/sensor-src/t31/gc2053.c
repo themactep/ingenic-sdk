@@ -233,8 +233,8 @@ struct tx_isp_sensor_attribute sensor_attr = {
  * mipi data rate=624mbps/lane
  * wpclk=156mhz
  * row_time=28.2us
- * frame length=1418
- * 25fps
+ * frame length=1181
+ * 30fps
  */
 static struct regval_list sensor_init_regs_1920_1080_30fps_mipi[] = {
 	/* SYS */
@@ -1789,16 +1789,16 @@ static int sensor_probe(struct i2c_client *client, const struct i2c_device_id *i
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_30)) {
 		wsize = &sensor_win_sizes[2];
 		memcpy((void *) (&(sensor_attr.mipi)), (void *) (&sensor_mipi), sizeof(sensor_mipi));
-		sensor_attr.max_integration_time_native = 0x58a - 8;
-		sensor_attr.integration_time_limit = 0x58a - 8;
+		sensor_attr.max_integration_time_native = 0x49d - 8;
+		sensor_attr.integration_time_limit = 0x49d - 8;
 		sensor_attr.total_width = 0x44c * 2;
-		sensor_attr.total_height = 0x58a;
-		sensor_attr.max_integration_time = 0x58a - 8;
+		sensor_attr.total_height = 0x49d;
+		sensor_attr.max_integration_time = 0x49d - 8;
 		sensor_attr.one_line_expr_in_us = 28;
-		vts0 = 0x05;
-		vts1 = 0x8a;
-		vtsn0 = 0x05;
-		vtsn1 = 0x8a;
+		vts0 = 0x04;
+		vts1 = 0x9d;
+		vtsn0 = 0x04;
+		vtsn1 = 0x9d;
 	} else if ((data_interface == TX_SENSOR_DATA_INTERFACE_MIPI) && (sensor_max_fps == TX_SENSOR_MAX_FPS_25)) {
 		wsize = &sensor_win_sizes[3];
 		memcpy((void *) (&(sensor_attr.mipi)), (void *) (&sensor_mipi), sizeof(sensor_mipi));
